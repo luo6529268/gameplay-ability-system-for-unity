@@ -119,7 +119,11 @@ namespace NTSD.Simulation.Ecs
             uint expectedRngStateAfterConsume,
             uint observedRngStateAfterConsume,
             ulong expectedRngCallCountAfterConsume,
-            ulong observedRngCallCountAfterConsume)
+            ulong observedRngCallCountAfterConsume,
+            bool writerEffectObserved,
+            int observedWriterTargetFrame,
+            int observedWriterTargetWaitCounter,
+            int observedWriterTargetHp)
         {
             Pass = pass;
             AttackerHandle = attackerHandle;
@@ -164,6 +168,10 @@ namespace NTSD.Simulation.Ecs
             ObservedRngStateAfterConsume = observedRngStateAfterConsume;
             ExpectedRngCallCountAfterConsume = expectedRngCallCountAfterConsume;
             ObservedRngCallCountAfterConsume = observedRngCallCountAfterConsume;
+            WriterEffectObserved = writerEffectObserved;
+            ObservedWriterTargetFrame = observedWriterTargetFrame;
+            ObservedWriterTargetWaitCounter = observedWriterTargetWaitCounter;
+            ObservedWriterTargetHp = observedWriterTargetHp;
         }
 
         public BattleHitExecutionPass Pass { get; }
@@ -210,6 +218,10 @@ namespace NTSD.Simulation.Ecs
         public uint ObservedRngStateAfterConsume { get; }
         public ulong ExpectedRngCallCountAfterConsume { get; }
         public ulong ObservedRngCallCountAfterConsume { get; }
+        public bool WriterEffectObserved { get; }
+        public int ObservedWriterTargetFrame { get; }
+        public int ObservedWriterTargetWaitCounter { get; }
+        public int ObservedWriterTargetHp { get; }
     }
 
     public readonly struct BattleHitExecutionPlanDiagnostics
@@ -238,6 +250,7 @@ namespace NTSD.Simulation.Ecs
             ulong lastConsumeEffectsDifferenceMask,
             ulong lastFirstBodyResponseDifferenceMask,
             ulong lastWriterEffectDifferenceMask,
+            string firstSoundEffectDifference,
             ulong lastLifecycleEffectDifferenceMask,
             BattleHitExecutionPlanFailureReason firstFailureReason,
             int firstFailureAttackerSlot,
@@ -269,6 +282,7 @@ namespace NTSD.Simulation.Ecs
             LastFirstBodyResponseDifferenceMask =
                 lastFirstBodyResponseDifferenceMask;
             LastWriterEffectDifferenceMask = lastWriterEffectDifferenceMask;
+            FirstSoundEffectDifference = firstSoundEffectDifference;
             LastLifecycleEffectDifferenceMask = lastLifecycleEffectDifferenceMask;
             FirstFailureReason = firstFailureReason;
             FirstFailureAttackerSlot = firstFailureAttackerSlot;
@@ -299,6 +313,7 @@ namespace NTSD.Simulation.Ecs
         public ulong LastConsumeEffectsDifferenceMask { get; }
         public ulong LastFirstBodyResponseDifferenceMask { get; }
         public ulong LastWriterEffectDifferenceMask { get; }
+        public string FirstSoundEffectDifference { get; }
         public ulong LastLifecycleEffectDifferenceMask { get; }
         public BattleHitExecutionPlanFailureReason FirstFailureReason { get; }
         public int FirstFailureAttackerSlot { get; }
@@ -391,6 +406,7 @@ namespace NTSD.Simulation.Ecs
         private ulong lastConsumeEffectsDifferenceMask;
         private ulong lastFirstBodyResponseDifferenceMask;
         private ulong lastWriterEffectDifferenceMask;
+        private string firstSoundEffectDifference;
         private ulong lastLifecycleEffectDifferenceMask;
         private BattleHitExecutionPlanFailureReason firstFailureReason;
         private int firstFailureAttackerSlot = -1;
@@ -525,6 +541,7 @@ namespace NTSD.Simulation.Ecs
                 lastConsumeEffectsDifferenceMask,
                 lastFirstBodyResponseDifferenceMask,
                 lastWriterEffectDifferenceMask,
+                firstSoundEffectDifference,
                 lastLifecycleEffectDifferenceMask,
                 firstFailureReason,
                 firstFailureAttackerSlot,
@@ -583,6 +600,7 @@ namespace NTSD.Simulation.Ecs
             lastConsumeEffectsDifferenceMask = 0;
             lastFirstBodyResponseDifferenceMask = 0;
             lastWriterEffectDifferenceMask = 0;
+            firstSoundEffectDifference = null;
             lastLifecycleEffectDifferenceMask = 0;
             firstFailureReason = BattleHitExecutionPlanFailureReason.None;
             firstFailureAttackerSlot = -1;
@@ -1639,6 +1657,11 @@ namespace NTSD.Simulation.Ecs
                 pendingExpectedWriterEffectSnapshot.HeldTargetHandle.Slot,
                 pendingExpectedWriterEffectSnapshot.StandardCreditHandle.Slot,
                 pendingExpectedWriterEffectSnapshot.NativeResourceOwnerSlot);
+            entry.RecordObservedWriterEffect(
+                actual.TargetFrame,
+                actual.TargetWaitCounter,
+                actual.TargetHp);
+            entries[pendingWriterEffectEntryIndex] = entry;
             ulong differenceMask = DifferenceMask(
                 in pendingExpectedWriterEffectSnapshot,
                 in actual);
@@ -1646,6 +1669,27 @@ namespace NTSD.Simulation.Ecs
             observedWriterEffectCount++;
             if (differenceMask != 0)
             {
+                if ((differenceMask & (1UL << 63)) != 0 &&
+                    firstSoundEffectDifference == null)
+                {
+                    firstSoundEffectDifference =
+                        "attacker=" + (attacker?.Runtime?.SlotIndex ?? -1) +
+                        ",candidate=" + entry.CandidateOrdinal +
+                        ",count=" + pendingExpectedWriterEffectSnapshot.PendingSoundCount +
+                        "/" + actual.PendingSoundCount +
+                        ",fingerprint=" + pendingExpectedWriterEffectSnapshot.PendingSoundFingerprint +
+                        "/" + actual.PendingSoundFingerprint +
+                        ",cue=" + pendingExpectedWriterEffectSnapshot.PendingSoundCue +
+                        "/" + actual.PendingSoundCue +
+                        ",worldX=" + pendingExpectedWriterEffectSnapshot.PendingSoundWorldX +
+                        "/" + actual.PendingSoundWorldX +
+                        ",tick=" + pendingExpectedWriterEffectSnapshot.PendingSoundTick +
+                        "/" + actual.PendingSoundTick +
+                        ",queued=" + pendingExpectedWriterEffectSnapshot.QueuedSoundEventCount +
+                        "/" + actual.QueuedSoundEventCount +
+                        ",rejected=" + pendingExpectedWriterEffectSnapshot.RejectedSoundEventCount +
+                        "/" + actual.RejectedSoundEventCount;
+                }
                 RecordObservationFailure(
                     BattleHitExecutionPlanFailureReason.ObservationWriterEffectMismatch,
                     attacker?.Runtime?.SlotIndex ?? -1,
@@ -3063,7 +3107,7 @@ namespace NTSD.Simulation.Ecs
             {
                 string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
                 if (!string.IsNullOrEmpty(cue))
-                    ProjectQueuedSound(world, cue, projection.AttackerXInt, ref projection);
+                    ProjectQueuedSound(world, cue, attacker, projection.AttackerXInt, ref projection);
             }
             var frame = attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
             double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
@@ -3675,10 +3719,10 @@ namespace NTSD.Simulation.Ecs
             {
                 string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
                 if (!string.IsNullOrEmpty(cue))
-                    ProjectQueuedSound(targetWorld, cue, projection.AttackerXInt, ref projection);
+                    ProjectQueuedSound(targetWorld, cue, attacker, projection.AttackerXInt, ref projection);
             }
             if (oid100)
-                ProjectQueuedSound(targetWorld, "SFX_039", projection.TargetXInt, ref projection);
+                ProjectQueuedSound(targetWorld, "SFX_039", target, projection.TargetXInt, ref projection);
             ProjectNativeStandardHitRest(attacker, target, resolvedItr, ref projection);
             if (attackerFrame.state == 1002)
             {
@@ -3738,6 +3782,7 @@ namespace NTSD.Simulation.Ecs
             ProjectQueuedSound(
                 targetWorld,
                 ResolveDamageEffectCue(resolvedItr.effect),
+                attacker,
                 attacker.Runtime.XInt,
                 ref projection);
             return true;
@@ -3961,6 +4006,7 @@ namespace NTSD.Simulation.Ecs
             ProjectQueuedSound(
                 targetWorld,
                 ResolveDamageEffectCue(resolvedItr.effect),
+                attacker,
                 attacker.Runtime.XInt,
                 ref projection);
             LF2CharacterData targetData =
@@ -3970,6 +4016,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     targetData.weapon_broken_sound,
+                    target,
                     target.Runtime.XInt,
                     ref projection);
             }
@@ -4237,6 +4284,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     "SFX_065",
+                    target,
                     target.Runtime.XInt,
                     ref projection);
             }
@@ -4265,6 +4313,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     "SFX_068",
+                    target,
                     target.Runtime.XInt,
                     ref projection);
             }
@@ -4273,6 +4322,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     "SFX_068",
+                    target,
                     target.Runtime.XInt,
                     ref projection);
             }
@@ -4794,6 +4844,7 @@ namespace NTSD.Simulation.Ecs
             ProjectQueuedSound(
                 targetWorld,
                 ResolveDamageEffectCue(resolvedItr.effect),
+                attacker,
                 attacker.Runtime.XInt,
                 ref projection);
             ProjectStandardHurtCustomSounds(
@@ -4804,6 +4855,7 @@ namespace NTSD.Simulation.Ecs
             ProjectQueuedSound(
                 targetWorld,
                 knockback ? "SFX_006" : "SFX_001",
+                knockback ? target : attacker,
                 knockback ? target.Runtime.XInt : attacker.Runtime.XInt,
                 ref projection);
 
@@ -4812,11 +4864,13 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     knockback ? "SFX_033" : "SFX_032",
+                    target,
                     target.Runtime.XInt,
                     ref projection);
                 ProjectQueuedSound(
                     targetWorld,
                     knockback ? "SFX_006" : "SFX_001",
+                    knockback ? target : attacker,
                     knockback ? target.Runtime.XInt : attacker.Runtime.XInt,
                     ref projection);
             }
@@ -4835,13 +4889,6 @@ namespace NTSD.Simulation.Ecs
             {
                 projection.TargetKnockbackVx +=
                     projection.AttackerXInt < projection.TargetXInt
-                        ? resolvedItr.dvx
-                        : -resolvedItr.dvx;
-            }
-            else if (resolvedItr.effect == 22 || resolvedItr.effect == 23)
-            {
-                projection.TargetKnockbackVx +=
-                    projection.TargetXInt <= projection.AttackerXInt
                         ? resolvedItr.dvx
                         : -resolvedItr.dvx;
             }
@@ -4866,6 +4913,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     "SFX_039",
+                    target,
                     target.Runtime.XInt,
                     ref projection);
                 if (projection.TargetKnockbackVx > 0.0 &&
@@ -5443,6 +5491,7 @@ namespace NTSD.Simulation.Ecs
                     ProjectQueuedSound(
                         targetWorld,
                         attackerData.weapon_broken_sound,
+                        attacker,
                         attacker.Runtime.XInt,
                         ref projection);
                 }
@@ -5455,6 +5504,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     leadCue,
+                    target,
                     target.Runtime.XInt,
                     ref projection);
             }
@@ -5562,9 +5612,13 @@ namespace NTSD.Simulation.Ecs
         private static void ProjectQueuedSound(
             SimulationWorld targetWorld,
             string cue,
-            int worldX,
+            LF2Entity emitter,
+            int physicalFallbackX,
             ref WriterEffectSnapshot projection)
         {
+            int worldX = emitter?.Runtime != null
+                ? emitter.Runtime.ResolveBattleSoundWorldXInt(physicalFallbackX)
+                : physicalFallbackX;
             AddPendingSoundFingerprint(
                 ref projection.PendingSoundFingerprint,
                 cue,
@@ -5592,6 +5646,7 @@ namespace NTSD.Simulation.Ecs
                 ProjectQueuedSound(
                     targetWorld,
                     attackerData.weapon_broken_sound,
+                    attacker,
                     attacker.Runtime.XInt,
                     ref projection);
             }
@@ -6841,6 +6896,10 @@ namespace NTSD.Simulation.Ecs
                 ObservedRngStateAfterConsume = 0;
                 ExpectedRngCallCountAfterConsume = 0;
                 ObservedRngCallCountAfterConsume = 0;
+                WriterEffectObserved = false;
+                ObservedWriterTargetFrame = int.MinValue;
+                ObservedWriterTargetWaitCounter = int.MinValue;
+                ObservedWriterTargetHp = int.MinValue;
             }
 
             internal BattleHitExecutionPass Pass { get; }
@@ -6893,6 +6952,10 @@ namespace NTSD.Simulation.Ecs
             private uint ObservedRngStateAfterConsume { get; set; }
             private ulong ExpectedRngCallCountAfterConsume { get; set; }
             private ulong ObservedRngCallCountAfterConsume { get; set; }
+            private bool WriterEffectObserved { get; set; }
+            private int ObservedWriterTargetFrame { get; set; }
+            private int ObservedWriterTargetWaitCounter { get; set; }
+            private int ObservedWriterTargetHp { get; set; }
 
             internal void RecordExpectedPreprocess(
                 ulong resolvedItrFingerprint,
@@ -6968,6 +7031,17 @@ namespace NTSD.Simulation.Ecs
                 ObservedRngCallCountAfterConsume = rngCallCount;
             }
 
+            internal void RecordObservedWriterEffect(
+                int targetFrame,
+                int targetWaitCounter,
+                int targetHp)
+            {
+                WriterEffectObserved = true;
+                ObservedWriterTargetFrame = targetFrame;
+                ObservedWriterTargetWaitCounter = targetWaitCounter;
+                ObservedWriterTargetHp = targetHp;
+            }
+
             internal BattleHitExecutionPlanEntryView ToView()
             {
                 return new BattleHitExecutionPlanEntryView(
@@ -7007,7 +7081,11 @@ namespace NTSD.Simulation.Ecs
                     ExpectedRngStateAfterConsume,
                     ObservedRngStateAfterConsume,
                     ExpectedRngCallCountAfterConsume,
-                    ObservedRngCallCountAfterConsume);
+                    ObservedRngCallCountAfterConsume,
+                    WriterEffectObserved,
+                    ObservedWriterTargetFrame,
+                    ObservedWriterTargetWaitCounter,
+                    ObservedWriterTargetHp);
             }
         }
 

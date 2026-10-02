@@ -13,3 +13,5 @@ Unity 首差：SimulationQueryAndLinkModule.HeldObjectProcessAll 对三种失效
 风险：旧 B6 测试/诊断读取方可能依赖重复失败计数与 preserved 事件；按实际引用逐项更新，不顺手改 unrelated schema。回滚仅本包行级改动，保留用户和前序任务全部脏文件；需回退/删除按仓库批准规则。
 
 当前出口（2026-10-01）：原Editor先RED2/2，修后聚焦7/7、完整tick失效3/3、正常持有6/6；删除多余快照刷新后的最终完整tick3/3与原Battle Scene请求式Play七例通过，Editor退出idle、Battle/Menu/GameConfig/Mode Asset四SHA稳定。正式根EXE自然同条件、完整SelfCheck未验；C043限定范围通过，Q07和总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C043-INVALID-HELD-TAIL-001/REPORT.md)。
+
+2026-10-02 后继证据覆盖“正式根自然同条件待”：正式源码/根同LFR60tick选定840/840字段一致；原Battle Scene同输入自然持有/合体/失效尾/子体退场60tick限定通过，17字段原值1015/1020，5差仅无链接空槽哨兵，限定语义化1020/1020；共用槽释放AI旧行时点的真实tick42异常已独立RED→GREEN修复，复跑退出池0/Scene clean/四SHA稳。完整SelfCheck、其它关系路径、真实物理键/全World仍未证，C043父项继续`RUNTIME_PENDING`，Q07开放。[自然Scene报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001/REPORT.md)。

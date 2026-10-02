@@ -2,15 +2,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Threading;
+using Cysharp.Threading.Tasks;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.App;
+using NTSD.Load;
 using NTSD.Simulation;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace NTSD.Test
 {
@@ -325,6 +330,135 @@ namespace NTSD.Test
             {
                 UnityEngine.Object.DestroyImmediate(host);
             }
+        }
+
+        [Test]
+        public void FormalBattleWav_UsesReleaseFileAndKeepsGenericCueOnOriginalPath()
+        {
+            using var formalContent = new FormalContentConfigScope();
+            var host = new GameObject("FormalBattleWavRoutingTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            try
+            {
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod(
+                    "GetOrPrepareCue", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(getCue, Is.Not.Null);
+
+                foreach (var entry in new[]
+                {
+                    (Id: "020", Samples: 16413),
+                    (Id: "067", Samples: 31170),
+                })
+                {
+                    string soundId = $@"data\{entry.Id}.wav";
+                    object generic = getCue.Invoke(player, new object[] { soundId, false });
+                    object battle = getCue.Invoke(player, new object[] { soundId, true });
+                    Assert.That(generic, Is.Not.Null);
+                    Assert.That(battle, Is.Not.Null);
+                    Assert.That(battle, Is.Not.SameAs(generic));
+
+                    FieldInfo sourcePath = generic.GetType().GetField("SourcePath");
+                    Assert.That(sourcePath, Is.Not.Null);
+                    string genericPath = (string)sourcePath.GetValue(generic);
+                    string battlePath = (string)sourcePath.GetValue(battle);
+                    Assert.That(Path.GetFullPath(genericPath), Is.EqualTo(Path.GetFullPath(
+                        Path.Combine(Application.dataPath, "NTSD/Sound/data", $"{entry.Id}.wav"))));
+                    Assert.That(Path.GetFullPath(battlePath), Is.EqualTo(Path.GetFullPath(
+                        Path.Combine(Application.dataPath,
+                            "NTSD/Content/LoganRuntime/vfs/data", $"{entry.Id}.wav"))));
+
+                    AudioClip imported = AssetDatabase.LoadAssetAtPath<AudioClip>(
+                        $"Assets/NTSD/Content/LoganRuntime/vfs/data/{entry.Id}.wav");
+                    Assert.That(imported, Is.Not.Null);
+                    Assert.That(imported.samples, Is.EqualTo(entry.Samples));
+                }
+
+                FieldInfo seal = typeof(NTSDSoundPlayer).GetField(
+                    "battleCatalogSealed", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(seal, Is.Not.Null);
+                seal.SetValue(player, true);
+                foreach (string id in new[] { "020", "067" })
+                {
+                    string soundId = $@"data\{id}.wav";
+                    Assert.That(getCue.Invoke(player, new object[] { soundId, true }),
+                        Is.Not.Null);
+                    Assert.That(getCue.Invoke(player, new object[] { soundId, false }),
+                        Is.Not.Null);
+                }
+                Assert.That(player.RejectedUnpreparedCueCountForDiagnostics, Is.Zero);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator FormalBattleWav_DecodesThroughBattlePlayerLoader()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                using var formalContent = new FormalContentConfigScope();
+                var host = new GameObject("FormalBattleWavDecodeTests")
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                var loadedClips = new List<AudioClip>();
+                var loadedKeys = new List<string>();
+                try
+                {
+                    NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                    MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod(
+                        "GetOrPrepareCue", BindingFlags.Instance | BindingFlags.NonPublic);
+                    MethodInfo loadCue = typeof(NTSDSoundPlayer).GetMethod(
+                        "EnsurePreparedCueLoadedAsync", BindingFlags.Instance | BindingFlags.NonPublic);
+                    Assert.That(getCue, Is.Not.Null);
+                    Assert.That(loadCue, Is.Not.Null);
+
+                    foreach (var entry in new[]
+                    {
+                        (Id: "020", Samples: 16413),
+                        (Id: "067", Samples: 31170),
+                    })
+                    {
+                        string soundId = $@"data\{entry.Id}.wav";
+                        object battle = getCue.Invoke(player, new object[] { soundId, true });
+                        Assert.That(battle, Is.Not.Null);
+                        Type cueType = battle.GetType();
+                        string cacheKey = (string)cueType.GetField("CacheKey").GetValue(battle);
+                        loadedKeys.Add(cacheKey);
+                        await (UniTask)loadCue.Invoke(player, new[] { battle });
+                        AudioClip[] clips = (AudioClip[])cueType.GetField("Clips").GetValue(battle);
+                        Assert.That(clips, Has.Length.EqualTo(1));
+                        Assert.That(clips[0], Is.Not.Null);
+                        Assert.That(clips[0].samples, Is.EqualTo(entry.Samples));
+                        loadedClips.Add(clips[0]);
+
+                        long playedBefore = player.PooledOneShotPlayCountForDiagnostics;
+                        player.PresentSound(new PendingSoundEvent(soundId, 500, 1));
+                        Assert.That(player.PooledOneShotPlayCountForDiagnostics,
+                            Is.EqualTo(playedBefore + 1), soundId);
+                        Assert.That(host.GetComponentsInChildren<AudioSource>(true),
+                            Has.Some.Property(nameof(AudioSource.clip)).SameAs(clips[0]),
+                            soundId);
+                    }
+                    Assert.That(player.FailedPreparedCueLoadCountForDiagnostics, Is.Zero);
+                }
+                finally
+                {
+                    UnityEngine.Object.DestroyImmediate(host);
+                    foreach (string key in loadedKeys)
+                        NTSD_ResourceLoader.Instance.RemoveCache(key);
+                    foreach (AudioClip clip in loadedClips)
+                    {
+                        if (clip != null)
+                            UnityEngine.Object.DestroyImmediate(clip);
+                    }
+                }
+            });
         }
 
         [Test]
@@ -747,6 +881,31 @@ namespace NTSD.Test
                     tickIndex,
                     null);
                 return frame;
+            }
+        }
+
+        private sealed class FormalContentConfigScope : IDisposable
+        {
+            private readonly FieldInfo instanceField;
+            private readonly GameConfig previous;
+            private readonly GameConfig temporary;
+
+            public FormalContentConfigScope()
+            {
+                instanceField = typeof(GameConfig).GetField(
+                    "_instance", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(instanceField, Is.Not.Null);
+                previous = (GameConfig)instanceField.GetValue(null);
+                temporary = ScriptableObject.CreateInstance<GameConfig>();
+                temporary.hideFlags = HideFlags.HideAndDontSave;
+                temporary.BattleContentRuntimeRoot = "Assets/NTSD/Content/LoganRuntime";
+                instanceField.SetValue(null, temporary);
+            }
+
+            public void Dispose()
+            {
+                instanceField.SetValue(null, previous);
+                UnityEngine.Object.DestroyImmediate(temporary);
             }
         }
 

@@ -1,0 +1,45 @@
+{
+  "requestPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q09_SameZNaturalTickPixel.request",
+  "requestDeletionOwner": "NTSD28Q09SameZFormalSpritePixelProbeEditor.Update/Finish",
+  "entries": [
+    {
+      "variant": "baseline",
+      "content": "baseline@scene-934483-20261002-01",
+      "sha256": "1C343303D9F2165224226EC1462746AA986DE62849585B83C79F56021245AB08",
+      "createdUtc": "2026-10-01T22:42:57.551416+00:00",
+      "expectedAutomaticDeletion": true,
+      "actualAutomaticDeletionObserved": true,
+      "resultPresent": true
+    },
+    {
+      "variant": "a",
+      "content": "a@scene-934483-20261002-01",
+      "sha256": "4361194AF08DBDFB06EEB1D0679412C05389470B1A58938631442D1F71E8D975",
+      "createdUtc": "2026-10-01T22:45:33.042129+00:00",
+      "expectedAutomaticDeletion": true,
+      "actualAutomaticDeletionObserved": true,
+      "resultPresent": true
+    },
+    {
+      "variant": "b",
+      "content": "b@scene-934483-20261002-01",
+      "sha256": "6791044B75F87917BE28A4D560E15231C4F500DEA6C904D30CCA8820ECB49766",
+      "createdUtc": "2026-10-01T22:47:20.906991+00:00",
+      "expectedAutomaticDeletion": true,
+      "actualAutomaticDeletionObserved": true,
+      "resultPresent": true
+    },
+    {
+      "variant": "both",
+      "content": "both@scene-934483-20261002-01",
+      "sha256": "353234797B0D2A6256AF889BF4D06674B7BE291F185DC3375489F8026A9A6CFE",
+      "createdUtc": "2026-10-01T22:49:12.615037+00:00",
+      "expectedAutomaticDeletion": true,
+      "actualAutomaticDeletionObserved": true,
+      "resultPresent": true
+    }
+  ],
+  "finalObservedUtc": "2026-10-01T22:53:00.680428+00:00",
+  "finalEditorIdle": true,
+  "finalSceneClean": true
+}

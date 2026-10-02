@@ -1,0 +1,10 @@
+{
+  "authority": "336B44 playable source audio events, separately verified original Battle Scene production pending sounds",
+  "sourceRows": 18,
+  "unityTicks": 12,
+  "sourceEvents": 10,
+  "audioAndGameplayFieldComparisons": 174,
+  "differences": [],
+  "audioSourceChannelComparable": false,
+  "audioSourceChannelNote": "Unity pending sound schema has cue/worldX/tick; source enum and channel are retained in raw CSV, not equated to a Unity field."
+}

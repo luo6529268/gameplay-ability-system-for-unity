@@ -21,6 +21,8 @@ namespace NTSD.Test.Editor
     {
         private const string RequestPath =
             "Temp/NTSD28_Q09_HanEarthquakeBattlePlay.request.json";
+        private const string PhasePairRequestPath =
+            "Temp/NTSD28_Q09_HanEarthquakePhasePair.request.json";
         private const string CandidateRequestPath =
             "Temp/NTSD28_Q07_D024_HanCandidateBranch.request.json";
         private const string FarCandidateRequestPath =
@@ -116,6 +118,7 @@ namespace NTSD.Test.Editor
         {
             public int relativeTick;
             public int driverTick;
+            public int inputPhase;
             public int hanAction;
             public int hanCollisionAction;
             public int hanSelectedCandidateCount;
@@ -152,6 +155,8 @@ namespace NTSD.Test.Editor
             public string contentRoot;
             public int startTick;
             public int endTick;
+            public int inputPhaseBeforePair;
+            public int inputPhasePaired;
             public int hanSlot = -1;
             public int leeSlot = -1;
             public int leeStartX;
@@ -212,6 +217,7 @@ namespace NTSD.Test.Editor
                 return;
 
             string requestFile = ProjectPath(RequestPath);
+            string phasePairRequestFile = ProjectPath(PhasePairRequestPath);
             string candidateRequestFile = ProjectPath(CandidateRequestPath);
             string farCandidateRequestFile = ProjectPath(FarCandidateRequestPath);
             string mappedNearRequestFile = ProjectPath(MappedNearRequestPath);
@@ -272,6 +278,20 @@ namespace NTSD.Test.Editor
                         File.ReadAllText(stageEdgeRequestFile));
                     if (edgeRequest?.requested == true)
                         requestFile = stageEdgeRequestFile;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
+            if (File.Exists(phasePairRequestFile))
+            {
+                try
+                {
+                    Request phasePairRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(phasePairRequestFile));
+                    if (phasePairRequest?.requested == true)
+                        requestFile = phasePairRequestFile;
                 }
                 catch (IOException)
                 {
@@ -355,6 +375,15 @@ namespace NTSD.Test.Editor
             {
                 Finish(request, new Report { status = "FAIL",
                     error = "Stage edge request requires mapped Z100/600, Lee X520 and one-tick mode." });
+                return;
+            }
+            if (requestFile == phasePairRequestFile &&
+                (request.captureCandidateBranch || request.stageEdgeOnly ||
+                 !request.sourceMappedPositions || request.sourceStartZ != 400 ||
+                 request.leeStartX != 520))
+            {
+                Finish(request, new Report { status = "FAIL",
+                    error = "Phase-pair request requires source-mapped X520/Z400 natural capture." });
                 return;
             }
             if (request.leeStartX != 0 && request.leeStartX != 520 &&
@@ -457,6 +486,11 @@ namespace NTSD.Test.Editor
                     "Formal battle content root is not selected.");
                 Require(world.BattleGameModeId == 0,
                     "This natural case requires battle mode 0.");
+                Require(!world.OneTuInput,
+                    "This natural case requires formal 2tu input cadence.");
+                report.inputPhaseBeforePair = world.InputPhase;
+                world.Runtime.Flow.InputPhase = 0;
+                report.inputPhasePaired = world.InputPhase;
 
                 LF2CharacterDataWrapper hanConfig =
                     world.RuntimeCharacterConfigs.Resolve(726);
@@ -613,6 +647,7 @@ namespace NTSD.Test.Editor
                     {
                         relativeTick = relativeTick,
                         driverTick = driver.CurrentTickIndex,
+                        inputPhase = world.InputPhase,
                         hanAction = han.Frame.N,
                         hanCollisionAction = han.Frame.Prev2,
                         hanSelectedCandidateCount = han.Runtime.HitCandidateCount,
@@ -643,6 +678,8 @@ namespace NTSD.Test.Editor
                             row.frameY == row.runtimeY,
                         "Runtime/frozen-frame earthquake first difference at " +
                         relativeTick);
+                    Require(row.inputPhase == (relativeTick & 1),
+                        "The paired 2tu input phase diverged from the formal LFR.");
 
                     if (request.stageEdgeOnly)
                         break;

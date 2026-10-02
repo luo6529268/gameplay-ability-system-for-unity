@@ -1,0 +1,7 @@
+{
+  "baseReportFieldsBefore": 15,
+  "baseReportFieldsAfter": 15,
+  "orderedSchemaSame": true,
+  "q10FieldsOnlyInSubclass": true,
+  "note": "Static report type audit; default Player runtime was not rerun because historical fixed-fingerprint gate is stale."
+}

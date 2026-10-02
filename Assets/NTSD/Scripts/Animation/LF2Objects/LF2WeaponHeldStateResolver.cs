@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Simulation;
+using NTSD.Simulation.Spatial;
 using UnityEngine;
 
 namespace NTSD.Animation.LF2Objects
@@ -212,6 +213,16 @@ namespace NTSD.Animation.LF2Objects
                 weapon.Runtime.SourceRuleX = sourceX;
                 weapon.Runtime.SourceRuleZ = sourceZ;
                 weapon.Runtime.SyncSourceRuleIntegerPosition();
+
+                BattleSpatialProjection projection =
+                    holder.RegisteredWorldForSimulation?.SpatialProjection ??
+                    BattleSpatialProjection.Identity;
+                weapon.Runtime.X = holder.Runtime.XInt +
+                    projection.SourceDeltaToViewX(
+                        sourceX - holder.Runtime.SourceRuleXInt);
+                weapon.Runtime.Z = holder.Runtime.ZInt +
+                    projection.SourceDeltaToViewZ(
+                        sourceZ - holder.Runtime.SourceRuleZInt);
             }
 
             weapon.Runtime.SyncIntegerPosition();

@@ -1,0 +1,15 @@
+# Q09 发布快照插值时钟限定验收（2026-10-02）
+
+状态：`VERIFIED_SCOPED_PUBLICATION_CLOCK / Q09_PARENT_OPEN`。规则权威是 SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 的正式根 EXE 及其 playable `main.cpp`、`presentation_interpolation.cpp`；项目保留固定完整背景相机和 D-024 位移比例例外。本文验证的是插值计时入口，不是正式 EXE 逐像素或全部画面一致。
+
+**最终后继补项（覆盖下方首次GREEN快照）：** 同一原Scene测试加入同tick第二次采样后再次1/1 PASS。首次120FPS alpha `0.376127274765357`，5ms后同版本 alpha `0.55314848773611236`，30FPS离散 alpha `1`，战斗逻辑checksum前后相同。[最终GREEN XML](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/green-test-run-02-later-sample.xml) SHA-256 `5426B794F84F6C5FFC850782AE5771D5C1E83FF1BDAE9FAFFB2EAEF12861D508`；原Editor退出Play后idle、`NTSD_Battle` Scene clean，四保护SHA基线4/4不变。最终两脚本生成Editor工程构建exit0/CS error0，见[最终构建日志](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/generated-editor-build-final2.log)。此前首次GREEN XML与邻近6/6仍是独立历史证据；MCP跨Play域重载job仍未给终态，已据XML和Editor状态确认后只清其孤儿job。
+
+原 Unity 首次 `ResolveDisplayAlpha` 才开始计时；同一发布版本排队后等待12ms再首次读取，原 Battle Scene 中实际首样本 alpha 为 **0.0**，不符合正式版自快照发布开始计时的调用链。[RED XML](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/red-test-run-02.xml) 保存了所选测试1/1失败与原断言；之前一轮因 Unity Test Runner 临时空场景前置失败，未进入计时断言，已单独保留在 Change Record 中而不算 RED。
+
+现在 `BattleCentralRenderSystem.QueueLatestPublishedFrame` 在新发布版本递增前记录 `Stopwatch` 单调时刻。首次 `ResolveDisplayAlpha` 用已过去的单调时间回算现有 Unity `displayClockStartedAt`；原诊断接口、alpha夹紧、30 FPS 离散规则、相邻/关系/身份/位移中断门与 D-024 映射均不改。`ResetRuntime` 清零新增时戳。只有这一个共用时钟入口和一个原 Battle Scene 测试发生脚本修改；DAT、图片、Scene、资源、战斗状态与非战斗逻辑无改动。
+
+原 Editor 2022.3.62f3 重新导入编译后，同一新测试 1/1 PASS：12ms 延迟后的首次 120 FPS alpha = **0.36562121410253884**；30 FPS 对照 alpha = **1**；Play 前后战斗逻辑快照 checksum 相同。Test Runner 的 MCP job 在域重载后仍显示 running，但 Editor 后来 idle/nonPlay，实际终态来自 [GREEN XML](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/green-test-run-01.xml)，SHA-256 `CD796C7416FCBF11B37B72B64898D7A60308FEB19D6D83A97D3EB735D7A09BEF`；随后仅清除已由 XML 证明结束的孤儿 MCP job，没有清理结果文件。邻近 motion sampler/命令偏移 EditMode 六项由新 job `0fa653d36a174121ba3b62191e3f8d12` 实时报 **6/6 PASS**，原件在 [focused XML](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/adjacent-focused-06.xml)。
+
+最终脚本的生成 `Assembly-CSharp-Editor.csproj` 构建 exit0/CS error0（已有 warnings），原 Editor 运行时与 Editor 程序集时间均晚于两脚本；[Change Ledger validator](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/change-ledger-validation-final2.txt) exit0/PASSED、1138 Records；`git -c core.safecrlf=false diff --check` exit0。原 Battle Scene 退出后 Editor idle/nonPlay，Unity MCP `manage_scene get_active` 报 `isDirty=false`；Battle/Menu/GameConfig/ProjectBattleModeConfig 四项 SHA 与此前当前场景基线 4/4 相同。原 Battle Scene SHA 仍为 `93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60`。
+
+限制：测试用原场景生产 runtime，但暂停逻辑后主动发布一帧相邻的表现快照，以控制12ms首次读取延迟；它不证明自然按键下每一帧都出现可见偏移。正式 EXE 同场景 Game View/像素、Legacy 画面、其它 Q09 阴影/火花/出血/地震和整体 Q09、Q12 继续开放。下个出口回到新版总表 G2 自然合成画面和可比视口，不重复这组时钟聚焦测试。

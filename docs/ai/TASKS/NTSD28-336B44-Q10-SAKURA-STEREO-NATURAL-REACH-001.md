@@ -1,0 +1,15 @@
+# NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001
+
+Status: `VERIFIED / SOURCE_NATURAL_EVENT_AND_FORMAL_ROOT_ACTION_SCOPED_PASS`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q10`.
+
+Authority: root `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` and its declared playable `GameSession28`, `InputRouter28`, frame-sound producer and LFR playback path. Current formal Sakura OID1 DAT has standing `hit_Ua:240`, frame240 `state:1150145` and `next:165`, frame165–172 progression, frame172 `hit_j:340`, and frame340 `sound:c\saku\w\tra.wav`; the WAV is stereo. `InputRouter28::apply_action` redirects action240 to145 when HP>150, so the follow-up reachability case uses current HP100 with MP500 and a distant opponent. These are a conditional candidate, not a proved event.
+
+Scope: add only `Tools/NTSD28Q10Diagnostics/sakura_stereo_natural_reach_probe.cpp`. Starting Sakura in action0, feed a bounded defence→depth-up→attack sequence, then one new Jump edge after reaching action172. Record selected input, action, MP, camera X, and all actual `GameSession28::last_tick().audio_events` to a fresh CSV and record the same ticks to an LFR. Search only a small declared timing grid if the first sequence misses. Refuse overwrite. Run the diagnostic twice for reproducibility; replay its LFR with the unchanged formal root EXE and compare exported action/MP/tick. The EXE trace does not export audio events, so distinguish root action proof from matched playable-source event proof.
+
+Boundaries: do not edit formal EXE/source/resources, DAT values, Unity code, WAV, Scene, GameConfig, camera, menu or result UI. Use the original project only; no second Editor or computer-use. The probe must not request Unity resource deployment, speaker output, or a Q10 phase close. It may identify a natural cue eligible for a separate minimal Unity audio task.
+
+Acceptance: compile the new probe from the locked playable 28-core source set, record compiler result and formal root SHA; obtain one action0→240→165…172→Jump→340 source event `c/saku/w/tra.wav`, or report a bounded negative with the exact timing grid. Preserve two independent run outputs and hashes. For a positive, root playback must exit successfully and selected action/MP/tick must agree; if replay transport cannot express the case, report the exact limit. Run `Tools/Validate-ChangeLedger.ps1` and `git diff --check`. Any diagnostic failure remains in a unique result path.
+
+Rollback: review the sole script and its independent evidence, then supersede by a forward correction. Do not delete or overwrite evidence or other user-owned files. Completion here only proves a selected natural event, not Unity playback or stereo device parity.
+
+Exit evidence: [REPORT](../../../artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/REPORT.md). HP100自然2/2/2键序于tick24发正式stereo cue；两次source/LFR逐SHA同，根EXE回放exit0/report PASS，55 tick 的 action/MP/camera 165/165同值。Unity播放/双声道设备待下一独立包。

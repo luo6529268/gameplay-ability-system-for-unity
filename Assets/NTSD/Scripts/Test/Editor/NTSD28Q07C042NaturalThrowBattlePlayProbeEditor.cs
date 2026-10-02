@@ -36,6 +36,7 @@ namespace NTSD.Test.Editor
         {
             public bool requested;
             public string runId;
+            public int targetX;
         }
 
         [Serializable]
@@ -50,6 +51,11 @@ namespace NTSD.Test.Editor
             public int x;
             public int y;
             public int z;
+            public bool sourcePositionInitialized;
+            public double viewX;
+            public double viewZ;
+            public double expectedViewX;
+            public double expectedViewZ;
             public double vx;
             public double vy;
             public double vz;
@@ -87,6 +93,8 @@ namespace NTSD.Test.Editor
             public string runId;
             public int actorAction;
             public int targetX;
+            public double horizontalScale;
+            public double depthScale;
             public string status;
             public string phase;
             public string error;
@@ -223,8 +231,14 @@ namespace NTSD.Test.Editor
             File.WriteAllText(requestFile, JsonUtility.ToJson(request, true));
             Require(!string.IsNullOrEmpty(request.runId) && request.runId.Length <= 80 &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'), "Invalid runId.");
-            Require(request.runId == "bee75-a355-x550-natural-scene-01",
-                "Unexpected controlled C042 runId.");
+            bool originalRun = (request.targetX == 550 || request.targetX == 650 ||
+                request.targetX == 800) &&
+                request.runId == "bee75-a355-x" + request.targetX + "-natural-scene-01";
+            bool spatialWitness = request.targetX == 650 &&
+                (request.runId == "bee75-a355-x650-spatial-witness-01" ||
+                 request.runId == "bee75-a355-x650-spatial-witness-02");
+            Require(originalRun || spatialWitness,
+                "Unexpected controlled C042 target or runId.");
             Require(!File.Exists(PathInProject(ResultRoot + request.runId + ".json")),
                 "Refusing to overwrite an existing result.");
             Require(!EditorApplication.isPlayingOrWillChangePlaymode, "Editor must be in Edit Mode.");
@@ -238,7 +252,7 @@ namespace NTSD.Test.Editor
                 startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
                 initialY = 0,
                 actorAction = 355,
-                targetX = 550 };
+                targetX = request.targetX };
             Save();
             EditorApplication.EnterPlaymode();
         }
@@ -269,6 +283,8 @@ namespace NTSD.Test.Editor
             report.contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot;
             Require(report.contentRoot == "Assets/NTSD/Content/LoganRuntime",
                 "Play World did not use staged formal content.");
+            report.horizontalScale = world.SpatialProjection.HorizontalScale;
+            report.depthScale = world.SpatialProjection.DepthScale;
             SetInitialActor(actor, report.actorAction, 500, 500, 0);
             SetInitialActor(target, 0, report.targetX, 500, 0);
             actor.RelationTeam = 1;
@@ -335,6 +351,13 @@ namespace NTSD.Test.Editor
                 x = entity.Runtime.SourceRuleXInt,
                 y = entity.Runtime.YInt,
                 z = entity.Runtime.SourceRuleZInt,
+                sourcePositionInitialized = entity.Runtime.SourceRulePositionInitialized,
+                viewX = entity.Runtime.X,
+                viewZ = entity.Runtime.Z,
+                expectedViewX = entity.Runtime.SourceRulePositionInitialized
+                    ? world.SpatialProjection.SourceToViewX(entity.Runtime.SourceRuleX) : 0.0,
+                expectedViewZ = entity.Runtime.SourceRulePositionInitialized
+                    ? world.SpatialProjection.SourceToViewZ(entity.Runtime.SourceRuleZ) : 0.0,
                 vx = entity.Runtime.Vx,
                 vy = entity.Runtime.Vy,
                 vz = entity.Runtime.Vz,

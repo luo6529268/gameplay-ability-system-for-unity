@@ -66,6 +66,8 @@ namespace NTSD.Test.Editor
             public bool captureHeldPixels;
             public bool captureHeldUnsaturated;
             public bool captureHeldAttribution;
+            public bool pairNativeInputPhase;
+            public bool initializeWeaponSource;
         }
 
         [Serializable]
@@ -148,6 +150,8 @@ namespace NTSD.Test.Editor
             public PixelEvidence earlyPixel, laterPixel;
             public int changedExclusivePixels;
             public bool captureHeldAttribution;
+            public bool pairNativeInputPhase, initializeWeaponSource;
+            public int inputPhaseBeforePair, inputPhasePaired;
             public AttributionEvidence earlyAttribution, laterAttribution;
             public int changedAttributedPixels;
             public bool focusPolicyAdjusted, focusPolicyRestored;
@@ -307,6 +311,10 @@ namespace NTSD.Test.Editor
                 if (report.phase == "NEUTRAL")
                 {
                     if (dynamicUpdates <= queuedAtUpdate) return;
+                    report.inputPhaseBeforePair = world.InputPhase;
+                    if (report.pairNativeInputPhase)
+                        world.Runtime.Flow.InputPhase = 0;
+                    report.inputPhasePaired = world.InputPhase;
                     InitializeActor(actor, 200);
                     InitializeActor(target, 1200);
                     CreateGroundWeapon();
@@ -370,6 +378,8 @@ namespace NTSD.Test.Editor
                 captureHeldPixels = request.captureHeldPixels,
                 captureHeldUnsaturated = request.captureHeldUnsaturated,
                 captureHeldAttribution = request.captureHeldAttribution,
+                pairNativeInputPhase = request.pairNativeInputPhase,
+                initializeWeaponSource = request.initializeWeaponSource,
                 startedUtc = DateTime.UtcNow.ToString("O"), phase = "STARTUP", status = "RUNNING" };
             Require(request.weaponX == 190 || request.weaponX == 800, "weaponX must be 190 or 800.");
             Require(!request.captureHeldCommand || request.weaponX == 190,
@@ -480,7 +490,7 @@ namespace NTSD.Test.Editor
             int z = world.Runtime.Stage.ZMin + 50;
             weapon.Runtime.SetPosition(report.weaponX, 0, z);
             weapon.Runtime.SyncIntegerPosition();
-            if (report.captureHeldPixels)
+            if (report.captureHeldPixels || report.initializeWeaponSource)
             {
                 weapon.Runtime.SetSourceRulePosition(report.weaponX, z);
                 weapon.Runtime.SyncSourceRuleIntegerPosition();

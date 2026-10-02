@@ -442,6 +442,16 @@ namespace NTSD.Simulation.Ecs
                 victim.Runtime.SourceRuleX = sourceX;
                 victim.Runtime.SourceRuleZ = sourceZ;
                 victim.Runtime.SyncSourceRuleIntegerPosition();
+
+                BattleSpatialProjection projection =
+                    attacker.RegisteredWorldForSimulation?.SpatialProjection ??
+                    BattleSpatialProjection.Identity;
+                victim.Runtime.X = attacker.Runtime.XInt +
+                    projection.SourceDeltaToViewX(
+                        sourceX - attacker.Runtime.SourceRuleXInt);
+                victim.Runtime.Z = attacker.Runtime.ZInt +
+                    projection.SourceDeltaToViewZ(
+                        sourceZ - attacker.Runtime.SourceRuleZInt);
             }
 
             victim.Runtime.SyncIntegerPosition();

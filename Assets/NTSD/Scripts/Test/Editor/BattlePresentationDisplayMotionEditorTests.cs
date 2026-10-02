@@ -103,6 +103,112 @@ namespace NTSD.Test
         }
 
         [UnityTest]
+        [Timeout(240000)]
+        public IEnumerator OriginalBattleScene_FirstSampleIncludesPublicationWait()
+        {
+            var scene = EditorSceneManager.GetActiveScene();
+            Assert.That(scene.isDirty, Is.False);
+            if (scene.path != "Assets/NTSD/Scene/NTSD_Battle.unity")
+                scene = EditorSceneManager.OpenScene(
+                    "Assets/NTSD/Scene/NTSD_Battle.unity");
+            yield return new EnterPlayMode();
+
+            SimulationTickDriver driver = null;
+            for (int attempt = 0; attempt < 1800; attempt++)
+            {
+                driver = SimulationTickDriver.Instance;
+                if (driver != null &&
+                    driver.LifecycleState == BattleRuntimeLifecycleState.Running &&
+                    driver.CurrentTickIndex >= 2 &&
+                    driver.World?.BattlePresentation.PublishedFrame != null)
+                {
+                    break;
+                }
+                yield return new WaitForSecondsRealtime(0.1f);
+            }
+            if (driver?.LifecycleState == BattleRuntimeLifecycleState.Running)
+                driver.SetPaused(true);
+            for (int attempt = 0; driver != null &&
+                 driver.DedicatedSimulationWorkerTickInFlightForDiagnostics &&
+                 attempt < 300; attempt++)
+            {
+                yield return null;
+            }
+
+            string failure = null;
+            double firstAlpha = double.NaN;
+            double laterAlpha = double.NaN;
+            double discreteAlpha = double.NaN;
+            string beforeChecksum = null;
+            string afterChecksum = null;
+            try
+            {
+                if (driver?.World == null ||
+                    driver.LifecycleState != BattleRuntimeLifecycleState.Running ||
+                    driver.DedicatedSimulationWorkerTickInFlightForDiagnostics)
+                {
+                    throw new System.InvalidOperationException(
+                        "The original Battle Scene runtime did not become ready.");
+                }
+
+                driver.SetPaused(true);
+                SimulationWorld world = driver.World;
+                int logicTick = driver.CurrentTickIndex;
+                beforeChecksum = world.CaptureParityFrameSnapshot(logicTick).OverallChecksum;
+                int previousTick = world.BattlePresentation.PublishedFrame.TickIndex;
+                world.ConfigureBattlePresentationDisplayPolicy(
+                    120, SimulationConstants.SIM_DT);
+                world.BattlePresentation.BeginFrame(world, previousTick + 1);
+                BattlePresentationFrame current = world.BattlePresentation.PublishedFrame;
+                if (current.PreviousMotionTickIndex != previousTick)
+                    throw new System.InvalidOperationException("Motion ticks are not adjacent.");
+
+                BattleCentralRenderSystem.QueueLatestPublishedFrameForSelfCheck(world);
+                var renderer = typeof(BattleCentralRenderSystem);
+                const BindingFlags privateStatic =
+                    BindingFlags.NonPublic | BindingFlags.Static;
+                FieldInfo versionField = renderer.GetField(
+                    "pendingPublicationVersion", privateStatic);
+                MethodInfo resolveAlpha = renderer.GetMethod(
+                    "ResolveDisplayAlpha", privateStatic);
+                if (versionField == null || resolveAlpha == null)
+                    throw new System.InvalidOperationException("Display clock entry is unavailable.");
+                int version = (int)versionField.GetValue(null);
+
+                System.Threading.Thread.Sleep(12);
+                firstAlpha = (double)resolveAlpha.Invoke(null, new object[] { world, version });
+                System.Threading.Thread.Sleep(5);
+                laterAlpha = (double)resolveAlpha.Invoke(null, new object[] { world, version });
+                world.ConfigureBattlePresentationDisplayPolicy(
+                    30, SimulationConstants.SIM_DT);
+                discreteAlpha = (double)resolveAlpha.Invoke(null, new object[] { world, version });
+                afterChecksum = world.CaptureParityFrameSnapshot(logicTick).OverallChecksum;
+            }
+            catch (System.Exception exception)
+            {
+                failure = exception.ToString();
+            }
+
+            yield return new ExitPlayMode();
+            TestContext.WriteLine(
+                $"firstAlpha={firstAlpha:R} laterAlpha={laterAlpha:R} " +
+                $"discreteAlpha={discreteAlpha:R} " +
+                $"checksumUnchanged={beforeChecksum == afterChecksum}");
+            Assert.That(failure, Is.Null);
+            Assert.That(firstAlpha, Is.InRange(0.2, 1.0),
+                "The first 120-FPS sample must include the 12-ms publication wait.");
+            Assert.That(laterAlpha, Is.InRange(firstAlpha, 1.0),
+                "The same published tick must not move backward on a later sample.");
+            if (firstAlpha < 0.95)
+                Assert.That(laterAlpha, Is.GreaterThan(firstAlpha));
+            Assert.That(discreteAlpha, Is.EqualTo(1.0),
+                "30 FPS must continue to present the current snapshot discretely.");
+            Assert.That(afterChecksum, Is.EqualTo(beforeChecksum),
+                "Sampling must not change the battle logic snapshot.");
+            Assert.That(EditorSceneManager.GetActiveScene().isDirty, Is.False);
+        }
+
+        [UnityTest]
         [Timeout(180000)]
         public IEnumerator OriginalBattleScene_RebuildsSameTickOnlyAboveThirtyFps()
         {

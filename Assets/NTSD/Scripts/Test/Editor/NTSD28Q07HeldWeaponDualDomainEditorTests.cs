@@ -166,12 +166,14 @@ namespace NTSD.Test.Editor
                             }
                             if (tick >= 2 && expected.ActorLink % 100 == 1)
                             {
-                                Assert.That(w.XInt - a.XInt,
-                                    Is.EqualTo(expected.WeaponX - expected.ActorX),
-                                    "raw WPoint X offset tick=" + tick);
-                                Assert.That(w.ZInt - a.ZInt,
-                                    Is.EqualTo(expected.WeaponZ - expected.ActorZ),
-                                    "raw WPoint Z offset tick=" + tick);
+                                Assert.That(w.X - a.X,
+                                    Is.EqualTo((expected.WeaponX - expected.ActorX) * XFactor)
+                                        .Within(1.0),
+                                    "scaled WPoint X offset tick=" + tick);
+                                Assert.That(w.Z - a.Z,
+                                    Is.EqualTo((expected.WeaponZ - expected.ActorZ) * ZFactor)
+                                        .Within(1.0),
+                                    "scaled WPoint Z offset tick=" + tick);
                                 if (tick > 2)
                                 {
                                     if (a.XInt != previousActorX && w.XInt != previousWeaponX)
@@ -267,7 +269,8 @@ namespace NTSD.Test.Editor
 
         private static NativeRow[] ReadNativeRows()
         {
-            string[] lines = File.ReadAllLines(Path.GetFullPath(Root + "/native-24-v2.csv"));
+            string[] lines = File.ReadAllLines(Path.GetFullPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-SPATIAL-AUDIT-20261002/native-336b44-24.csv"));
             Assert.That(lines.Length, Is.EqualTo(25));
             var rows = new NativeRow[24];
             for (int index = 1; index < lines.Length; index++)

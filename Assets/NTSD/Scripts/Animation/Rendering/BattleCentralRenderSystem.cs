@@ -133,6 +133,7 @@ namespace NTSD.Animation.Rendering
         private static BattlePresentationFrame pendingPublishedFrame;
         private static BattlePresentationBackendMode pendingPublishedMode;
         private static int pendingPublishedTick = -1;
+        private static long pendingPublicationTimestamp;
         private static int pendingPublicationVersion;
         private static int lastMaterializedPublicationVersion;
         private static int lastMaterializedPublishedTick = -1;
@@ -309,6 +310,8 @@ namespace NTSD.Animation.Rendering
             Volatile.Write(ref pendingPublishedFrame, frame);
             pendingPublishedMode = mode;
             Volatile.Write(ref pendingPublishedTick, tickIndex);
+            Volatile.Write(ref pendingPublicationTimestamp,
+                System.Diagnostics.Stopwatch.GetTimestamp());
             int version = Interlocked.Increment(ref pendingPublicationVersion);
             if (version <= 0)
             {
@@ -1063,13 +1066,21 @@ namespace NTSD.Animation.Rendering
                 return 1.0;
             }
 
+            long sampleTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
             double now = Time.realtimeSinceStartupAsDouble;
             if (!ReferenceEquals(displayClockWorld, world) ||
                 displayClockPublicationVersion != publicationVersion)
             {
                 displayClockWorld = world;
                 displayClockPublicationVersion = publicationVersion;
-                displayClockStartedAt = now;
+                long publishedTimestamp =
+                    Volatile.Read(ref pendingPublicationTimestamp);
+                displayClockStartedAt = publishedTimestamp > 0 &&
+                    Volatile.Read(ref pendingPublicationVersion) == publicationVersion
+                    ? now - Math.Max(0.0,
+                        (sampleTimestamp - publishedTimestamp) /
+                        (double)System.Diagnostics.Stopwatch.Frequency)
+                    : now;
             }
 
             BattlePresentationFrame frame = world.BattlePresentation?.PublishedFrame;
@@ -1602,6 +1613,7 @@ namespace NTSD.Animation.Rendering
             Volatile.Write(ref pendingPublishedFrame, null);
             pendingPublishedMode = BattlePresentationBackendMode.CentralOnly;
             Volatile.Write(ref pendingPublishedTick, -1);
+            Volatile.Write(ref pendingPublicationTimestamp, 0L);
             Volatile.Write(ref pendingPublicationVersion, 0);
             Volatile.Write(ref lastMaterializedPublicationVersion, 0);
             Volatile.Write(ref lastMaterializedPublishedTick, -1);

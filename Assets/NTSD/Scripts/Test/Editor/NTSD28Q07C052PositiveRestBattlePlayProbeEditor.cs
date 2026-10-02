@@ -12,6 +12,7 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,6 +34,7 @@ namespace NTSD.Test.Editor
         private static Report report;
         private static SimulationTickDriver driver;
         private static SimulationWorld world;
+        private static SimulationWorld shadowConfiguredWorld;
         private static LF2Character first;
         private static LF2Character second;
         private static LF2Entity attacker;
@@ -60,6 +62,11 @@ namespace NTSD.Test.Editor
             public int secondAction;
             public int secondHp;
             public int secondRest;
+            public string hitPlanEntries;
+            public int hitPlanEntryCount;
+            public bool hitPlanValid;
+            public long hitPlanFailureCount;
+            public long hitPlanObservationMismatchCount;
         }
 
         [Serializable]
@@ -68,6 +75,8 @@ namespace NTSD.Test.Editor
             public string runId;
             public int secondX;
             public int initialFirstAction;
+            public bool captureHitPlan;
+            public int shadowConfigCount;
             public string status;
             public string phase;
             public string error;
@@ -144,7 +153,12 @@ namespace NTSD.Test.Editor
                 Require(DateTime.UtcNow - DateTime.Parse(report.startedUtc).ToUniversalTime() <
                     TimeSpan.FromMinutes(10), "C052 Battle Play probe timed out.");
                 if (!EditorApplication.isPlaying) return;
-                if (report.phase == "STARTUP") { WaitForRoster(); return; }
+                if (report.phase == "STARTUP")
+                {
+                    if (report.captureHitPlan) ConfigureShadowAtResetBoundary();
+                    WaitForRoster();
+                    return;
+                }
                 Require(report.phase == "MEASURING", "Unexpected C052 probe phase.");
                 MeasureOneTick();
             }
@@ -164,7 +178,9 @@ namespace NTSD.Test.Editor
             Require(((request.initialFirstAction == 0 &&
                         (request.secondX == 530 || request.secondX == 650) &&
                         (request.runId == "x" + request.secondX + "-scene-v1" ||
-                         request.runId == "x" + request.secondX + "-scene-v2")) ||
+                         request.runId == "x" + request.secondX + "-scene-v2" ||
+                         (request.secondX == 530 &&
+                          request.runId == "x530-hit-internal-v1"))) ||
                      (request.initialFirstAction == 203 && request.secondX == 530 &&
                       (request.runId == "zero-rest-scene-v1" ||
                        request.runId == "zero-rest-scene-v2"))),
@@ -181,6 +197,7 @@ namespace NTSD.Test.Editor
                 runId = request.runId,
                 secondX = request.secondX,
                 initialFirstAction = request.initialFirstAction,
+                captureHitPlan = request.runId == "x530-hit-internal-v1",
                 status = "RUNNING",
                 phase = "STARTUP",
                 startedUtc = DateTime.UtcNow.ToString("O"),
@@ -232,6 +249,11 @@ namespace NTSD.Test.Editor
             driver = SimulationTickDriver.Instance;
             world = driver?.World;
             if (world == null || driver.CurrentTickIndex < 5) return;
+            if (report.captureHitPlan)
+                Require(ReferenceEquals(world, shadowConfiguredWorld) &&
+                    world.BattleHitExecutionPlanModeForDiagnostics ==
+                        BattleHitExecutionPlanMode.ShadowCompare,
+                    "Read-only ShadowCompare was not configured before the first tick.");
             if (!driver.IsPaused) { driver.SetPaused(true); return; }
             if (driver.DedicatedSimulationWorkerTickInFlightForDiagnostics) return;
             if (stableTick != driver.CurrentTickIndex)
@@ -270,6 +292,26 @@ namespace NTSD.Test.Editor
             report.secondSlot = second.Runtime.SlotIndex;
             report.startTick = report.endTick = driver.CurrentTickIndex;
             report.phase = "MEASURING";
+            SaveSession();
+        }
+
+        private static void ConfigureShadowAtResetBoundary()
+        {
+            SimulationTickDriver[] activeDrivers =
+                Resources.FindObjectsOfTypeAll<SimulationTickDriver>()
+                    .Where(value => value != null && value.isActiveAndEnabled &&
+                        !EditorUtility.IsPersistent(value)).ToArray();
+            if (activeDrivers.Length == 0 || activeDrivers[0].World == null) return;
+            Require(activeDrivers.Length == 1, "Expected one active production Driver.");
+            SimulationWorld candidate = activeDrivers[0].World;
+            if (ReferenceEquals(candidate, shadowConfiguredWorld)) return;
+            Require(candidate.CurrentTickIndex == 0 &&
+                activeDrivers[0].CurrentTickIndex == 0,
+                "ShadowCompare World was first observed after reset boundary.");
+            candidate.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+            shadowConfiguredWorld = candidate;
+            report.shadowConfigCount++;
             SaveSession();
         }
 
@@ -339,7 +381,7 @@ namespace NTSD.Test.Editor
             });
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected complete tick " + next);
-            report.ticks.Add(new TickRow
+            var row = new TickRow
             {
                 relativeTick = report.ticks.Count + 1,
                 globalTick = driver.CurrentTickIndex,
@@ -352,7 +394,31 @@ namespace NTSD.Test.Editor
                 secondHp = second.Health.HP,
                 secondRest = world.GetRawRestVrest(second.Runtime.SlotIndex,
                     attacker.Runtime.SlotIndex)
-            });
+            };
+            if (report.captureHitPlan)
+            {
+                BattleHitExecutionPlanDiagnostics plan =
+                    world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+                var entries = new List<string>();
+                for (int index = 0;
+                     world.TryGetBattleHitExecutionPlanEntryForDiagnostics(
+                         index, out BattleHitExecutionPlanEntryView entry);
+                     index++)
+                {
+                    if (entry.AttackerHandle.Slot != report.attackerSlot) continue;
+                    entries.Add(entry.CandidateOrdinal + ":" + entry.TargetSlot + ":" +
+                        entry.ItrIndex + ":" + entry.ExpectedDisposition + ":" +
+                        entry.ObservedDisposition + ":" + entry.PreprocessObserved +
+                        ":" + entry.ConsumeEffectsObserved + ":" +
+                        entry.WriterEffectObserved + ":" + entry.ObservedWriterTargetHp);
+                }
+                row.hitPlanEntries = string.Join(";", entries.ToArray());
+                row.hitPlanEntryCount = entries.Count;
+                row.hitPlanValid = plan.CurrentTickPlanValid;
+                row.hitPlanFailureCount = plan.FailureCount;
+                row.hitPlanObservationMismatchCount = plan.ObservationMismatchCount;
+            }
+            report.ticks.Add(row);
             report.endTick = driver.CurrentTickIndex;
             SaveSession();
         }
@@ -421,6 +487,7 @@ namespace NTSD.Test.Editor
             report = null;
             driver = null;
             world = null;
+            shadowConfiguredWorld = null;
             first = null;
             second = null;
             attacker = null;

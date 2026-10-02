@@ -29,9 +29,9 @@ namespace NTSD.Test.Editor
             Application.dataPath, "..", "artifacts", "diagnostics",
             "NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-AUDIT-20260927",
             "original-battle-natural-nameplate-play.json"));
-        private static readonly string GameViewResultPath = Path.Combine(
-            Path.GetDirectoryName(ResultPath),
-            "original-battle-natural-nameplate-gameview.json");
+        private static readonly string GameViewOutputFolder = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001"));
 
         private static readonly List<LF2Entity> Entities = new List<LF2Entity>(16);
         private static SimulationTickDriver driver;
@@ -70,7 +70,14 @@ namespace NTSD.Test.Editor
             EditorApplication.update -= Observe;
             ReleaseKey();
             captureGameView = captureScreen;
-            activeResultPath = captureScreen ? GameViewResultPath : ResultPath;
+            string runId = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + "-" +
+                Guid.NewGuid().ToString("N");
+            activeResultPath = captureScreen
+                ? Path.Combine(GameViewOutputFolder, "natural-nameplate-" + runId + ".json")
+                : ResultPath;
+            if (captureScreen && (File.Exists(activeResultPath) ||
+                                  File.Exists(Path.ChangeExtension(activeResultPath, ".png"))))
+                throw new IOException("The natural Game View output path already exists.");
             screenCapturePath = null;
             report = new Report
             {
@@ -196,8 +203,9 @@ namespace NTSD.Test.Editor
                         "The production P1 movement action is disabled.");
                     keyboard = Keyboard.current;
                     Check(keyboard != null, "No Input System keyboard is available.");
-                    Check(world.Runtime.SlotLabels.BattleSlotLabels[0, 0] != '\0',
-                        "The selected battle slot has no nameplate label.");
+                    if (!captureGameView)
+                        Check(world.Runtime.SlotLabels.BattleSlotLabels[0, 0] != '\0',
+                            "The selected battle slot has no nameplate label.");
 
                     firstX = actor.Runtime.XInt;
                     moveRight = firstX <= 1050;
@@ -266,6 +274,10 @@ namespace NTSD.Test.Editor
                     Check(report.screenCaptureWidth > 0 &&
                           report.screenCaptureHeight > 0,
                         "The actual Game View screenshot is empty.");
+                    report.tickAfterScreenCapture = driver.CurrentTickIndex;
+                    Check(driver.IsPaused &&
+                          report.tickAfterScreenCapture == report.captureTick,
+                        "The logic tick changed while the Game View screenshot was captured.");
                     Finish("PASS", "The same-tick command and Unity Game View screen capture were saved.");
                     return;
                 }
@@ -284,8 +296,9 @@ namespace NTSD.Test.Editor
                 Check(report.requestedScreenWidth > 0 &&
                       report.requestedScreenHeight > 0,
                     "The Game View screen dimensions are unavailable.");
-                screenCapturePath = Path.Combine(Path.GetDirectoryName(ResultPath),
-                    "natural-gameview-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + ".png");
+                screenCapturePath = Path.ChangeExtension(activeResultPath, ".png");
+                Check(!File.Exists(screenCapturePath),
+                    "The natural Game View screenshot path already exists.");
                 report.screenCapturePath = screenCapturePath;
                 ScreenCapture.CaptureScreenshot(screenCapturePath);
                 phase = 3;
@@ -368,6 +381,8 @@ namespace NTSD.Test.Editor
             report.hasBodyCommand = hasBody;
             report.hasLabelCommand = hasLabel;
             report.slot0Commands = string.Join(",", slotCommands);
+            if (captureGameView)
+                CaptureVisibleMotion(captured);
             int selectedSheet = entity.RelationTeam >= 1 && entity.RelationTeam <= 4
                 ? entity.RelationTeam
                 : 0;
@@ -380,8 +395,10 @@ namespace NTSD.Test.Editor
                     selectedSheet,
                     world.Runtime.SlotLabels.BattleSlotLabels[0, 0],
                     out _);
-            Check(hasBody && hasLabel,
-                "The selected actor body or the first nameplate glyph command is missing.");
+            Check(hasBody, "The selected actor body command is missing.");
+            if (!hasLabel)
+                Check(captureGameView && SceneManager.GetActiveScene().name == "NTSD_Battle",
+                    "The first nameplate glyph command is missing.");
 
             Camera camera = NTSDRenderSpace.WorldCamera;
             NTSDRenderSpace.ViewportTransformSnapshot viewport =
@@ -400,6 +417,28 @@ namespace NTSD.Test.Editor
                   entity.XInt > 794 && entity.XInt < visibleRight,
                 "The actor did not remain visible beyond the old 794-pixel clip.");
 
+            report.actorXInt = entity.XInt;
+            report.actorSourceX = actor.Runtime.SourceRuleX;
+            report.visibleLeft = visibleLeft;
+            report.visibleRight = visibleRight;
+            report.actualBodyWorldX = body.Position.x;
+            report.cameraWorldX = camera.transform.position.x;
+            report.cameraOrthographicSize = camera.orthographicSize;
+            report.cameraAspect = camera.aspect;
+            report.cameraPixelX = camera.pixelRect.x;
+            report.cameraPixelY = camera.pixelRect.y;
+            report.cameraPixelWidth = camera.pixelWidth;
+            report.cameraPixelHeight = camera.pixelHeight;
+            report.viewportLeft = viewport.Left;
+            report.viewportTop = viewport.Top;
+            report.viewportUnitsPerPixelX = viewport.UnitsPerPixelX;
+            report.viewportUnitsPerPixelY = viewport.UnitsPerPixelY;
+            Vector3 bodyScreen = camera.WorldToScreenPoint(body.Position);
+            report.bodyScreenX = bodyScreen.x;
+            report.bodyScreenY = bodyScreen.y;
+            if (!hasLabel)
+                return;
+
             int labelLength = 0;
             while (labelLength < BattleEntityOverlayLayout.SlotLabelCharacterCapacity &&
                    world.Runtime.SlotLabels.BattleSlotLabels[0, labelLength] != '\0')
@@ -417,25 +456,72 @@ namespace NTSD.Test.Editor
             Vector3 expected = viewport.ScreenPixelToWorld(
                 expectedX, entity.ZInt + entity.RenderShadowOffset10C + 3, 0f);
 
-            report.actorXInt = entity.XInt;
-            report.actorSourceX = actor.Runtime.SourceRuleX;
-            report.visibleLeft = visibleLeft;
-            report.visibleRight = visibleRight;
             report.labelLength = labelLength;
             report.expectedLabelPixelX = expectedX;
             report.expectedLabelWorldX = expected.x;
             report.actualLabelWorldX = label.Position.x;
-            report.actualBodyWorldX = body.Position.x;
-            report.cameraWorldX = camera.transform.position.x;
             Vector3 labelScreen = camera.WorldToScreenPoint(label.Position);
-            Vector3 bodyScreen = camera.WorldToScreenPoint(body.Position);
             report.labelScreenX = labelScreen.x;
             report.labelScreenY = labelScreen.y;
-            report.bodyScreenX = bodyScreen.x;
-            report.bodyScreenY = bodyScreen.y;
             Check(Mathf.Abs(label.Position.x - expected.x) < 0.00001f &&
                   Mathf.Abs(label.Position.y - expected.y) < 0.00001f,
                 "The natural same-tick nameplate command differs from the formal viewport formula.");
+        }
+
+        private static void CaptureVisibleMotion(BattlePresentationFrame frame)
+        {
+            var rows = new List<string>();
+            for (int index = 0; index < frame.MotionStateCount; index++)
+            {
+                BattlePresentationMotionState current = frame.GetMotionState(index);
+                bool hasBody = false;
+                for (int commandIndex = 0; commandIndex < frame.CommandCount; commandIndex++)
+                {
+                    BattleRenderCommand command = frame.GetCommand(commandIndex);
+                    if (command.Type == BattleRenderCommandType.Entity &&
+                        command.Handle.Equals(current.Handle))
+                    {
+                        hasBody = true;
+                        break;
+                    }
+                }
+                if (!hasBody)
+                    continue;
+
+                report.visibleMotionCount++;
+                bool hasPrevious = false;
+                BattlePresentationMotionState previous = default;
+                for (int previousIndex = 0;
+                     previousIndex < frame.PreviousMotionStateCount; previousIndex++)
+                {
+                    BattlePresentationMotionState candidate =
+                        frame.GetPreviousMotionState(previousIndex);
+                    if (candidate.Handle.Slot != current.Handle.Slot)
+                        continue;
+                    previous = candidate;
+                    hasPrevious = true;
+                    break;
+                }
+                if (!hasPrevious)
+                {
+                    rows.Add($"slot={current.Handle.Slot},oid={current.ObjectId}," +
+                        $"currentSource={current.HasSourceRulePosition},status=NoPreviousSlot");
+                    continue;
+                }
+
+                BattlePresentationMotionSampleStatus status =
+                    BattlePresentationMotionSampler.Sample(
+                        previous, current, frame.PreviousMotionTickIndex,
+                        frame.TickIndex, 0.5, 1.0, 1.0, out _);
+                if (status != BattlePresentationMotionSampleStatus.NonAdjacentTicks)
+                    report.adjacentVisibleMotionCount++;
+                if (status == BattlePresentationMotionSampleStatus.SourcePositionUnavailable)
+                    report.visibleMissingSourceCount++;
+                rows.Add($"slot={current.Handle.Slot},oid={current.ObjectId}," +
+                    $"previousSource={previous.HasSourceRulePosition}," +
+                    $"currentSource={current.HasSourceRulePosition},status={status}");
+            }
+            report.visibleMotionSamples = string.Join("|", rows);
         }
 
         private static void QueueKey(Key key)
@@ -532,6 +618,7 @@ namespace NTSD.Test.Editor
             public int captureTick;
             public int publishedTick;
             public int planTick;
+            public int tickAfterScreenCapture;
             public int directionTicks;
             public int initialX;
             public int lastX;
@@ -551,6 +638,10 @@ namespace NTSD.Test.Editor
             public bool hasBodyCommand;
             public bool hasLabelCommand;
             public string slot0Commands;
+            public int visibleMotionCount;
+            public int adjacentVisibleMotionCount;
+            public int visibleMissingSourceCount;
+            public string visibleMotionSamples;
             public int selectedWordSheet;
             public string selectedLabelChar;
             public bool hasSelectedWordBinding;
@@ -562,6 +653,16 @@ namespace NTSD.Test.Editor
             public float actualLabelWorldX;
             public float actualBodyWorldX;
             public float cameraWorldX;
+            public float cameraOrthographicSize;
+            public float cameraAspect;
+            public float cameraPixelX;
+            public float cameraPixelY;
+            public int cameraPixelWidth;
+            public int cameraPixelHeight;
+            public float viewportLeft;
+            public float viewportTop;
+            public float viewportUnitsPerPixelX;
+            public float viewportUnitsPerPixelY;
             public int requestedScreenWidth;
             public int requestedScreenHeight;
             public int screenCaptureWidth;

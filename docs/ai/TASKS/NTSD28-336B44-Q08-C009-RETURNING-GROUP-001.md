@@ -1,5 +1,7 @@
 # NTSD28-336B44-Q08-C009-RETURNING-GROUP-001
 
+2026-10-02 只读 owner 边界：正式 mode0 多组返组的 `winner_group=-1` 进入原生 render snapshot；Unity战斗停战读组 mask、计时与转场，自有 `Winner/PendingWinner` 由另一结果摘要路径写入。当前无非例外战斗规则直接消费自有赢家的证据，故不因 C009 暂停计时证书新增赢家载体或修改结果页。再次单组的根/原Scene后继仍待，C009/Q08开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-OWNER-BOUNDARY-20261002/REPORT.md)。
+
 2026-10-01 原 Scene 出口更新：原 Editor 编译后以受控正式 OID304/type3 发射者的生产工厂在原 `NTSD_Battle` Play 副本生成 OID56/team2；12 个完整生产 Driver tick 的计时、输出计时、组 mask、出生数与发射者动作对正式源码同相位 72/72 零差。Play 退出、Scene clean、四保护 SHA 稳。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURNING-GROUP-001/REPORT.md)。这是返回暂停规则的限定场景证书，非物理按键自然选招、再次单组后继、结果画面或整场证明；下文较早的“Scene 待证”以本段覆盖，C009/Q08 不整体关闭。
 
 2026-10-01 原 Scene 见证脚本前增补：新增 `Assets/NTSD/Scripts/Test/Editor/NTSD28Q08C009ReturningGroupBattlePlayProbeEditor.cs`（及 Unity 自动生成的 `.meta`），只在原项目现有 `NTSD_Battle` 的 Play 副本运行。它以 `BattleTestBootstrap` 建立单个正式 OID56/team1，暂停生产 Driver 后用既有 `LF2ObjectPointFactory.CreateObjectImmediate` 把正式 OID304/type3/action11/team2 放入生产 World，随后通过 `SimulationTickDriver.StepOneTick` 输入空包推进 12 tick，记录 `NativeResultTimer`、输出 timer、组 mask、OID304/action、OID56/team2 的出生与位置。预期前置是初态只有 team1 存活，第二 tick 产生 team2 OID56，下一 tick 起 timer 保持且 mask 两组。不得修改生产代码、DAT、Scene、模式资产、非战斗逻辑或原有 probe；不会保存 Scene。失败时保留 JSON、退出 Play 并核对 Battle/Menu/GameConfig/Mode 四资产 SHA 与 Scene clean。若原 Scene 无法以正式内容建立该条件，标 `SCENE_CONDITION_BLOCKED`，不得把源码/根证书冒充 Unity 场景通过。

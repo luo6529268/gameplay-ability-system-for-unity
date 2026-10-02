@@ -1430,6 +1430,36 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void UnifiedAuthority_LinkedSlotReleaseInvalidatesRowBeforeRelationCleanup()
+        {
+            var world = new SimulationWorld();
+            LF2Character dormantHolder =
+                RegisterCharacter(world, 1, 1, 1, 10, 0, 0, 2, false);
+            LF2Character released =
+                RegisterCharacter(world, 50, 2, 2, 90, 0, 0, 9, false);
+            dormantHolder.Runtime.LinkState = 1;
+            dormantHolder.Runtime.TargetSlotIndex = 50;
+            dormantHolder.Runtime.OidMergeDormant = true;
+
+            const int capacity = 64;
+            var included = new bool[capacity];
+            var generations = new uint[capacity];
+            var integers = new int[capacity];
+            var doubles = new double[capacity];
+            // A committed AI pass excludes the dormant holder while relation cleanup still visits it.
+            world.AiUnifiedRowPublisherForServices.BeginPass(
+                1, included, generations, integers, included,
+                integers, integers, integers, integers, integers, integers, integers,
+                integers, integers, integers, integers, integers, integers, integers,
+                doubles, integers, integers, integers, integers, integers, integers);
+
+            Assert.DoesNotThrow(() => world.Unregister(released));
+            Assert.That(dormantHolder.Runtime.LinkState, Is.Zero);
+            Assert.That(dormantHolder.Runtime.TargetSlotIndex, Is.Zero);
+            Assert.That(world.AiUnifiedRowPublisherForServices.Active, Is.False);
+        }
+
+        [Test]
         public void UnifiedAuthority_AscendingProducerRefreshMakesLowVisibleToHighWithoutRoutingLeakage()
         {
             var world = new SimulationWorld();

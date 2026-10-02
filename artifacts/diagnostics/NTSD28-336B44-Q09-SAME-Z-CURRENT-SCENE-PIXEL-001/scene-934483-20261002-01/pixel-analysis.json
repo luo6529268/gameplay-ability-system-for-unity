@@ -1,0 +1,103 @@
+{
+  "timeUtc": "2026-10-01T22:52:34.575229+00:00",
+  "scope": "current original Battle Scene four independent natural tick CentralOnly GPU captures",
+  "sceneSha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+  "runId": "scene-934483-20261002-01",
+  "imageSize": [
+    1920,
+    1080
+  ],
+  "bottomOriginOverlap": [
+    1000,
+    1069,
+    550,
+    606
+  ],
+  "pngTopOriginOverlap": [
+    1000,
+    1069,
+    474,
+    530
+  ],
+  "selectedIds": {
+    "a": 120,
+    "b": 121
+  },
+  "physicalSlots": {
+    "a": 51,
+    "b": 52
+  },
+  "centralBodyCommandIndices": {
+    "a": 3,
+    "b": 1
+  },
+  "startingRng": {
+    "baselineRngState": "3126301419",
+    "baselineRngCalls": "5",
+    "baselineNativeCrtState": "3878484156"
+  },
+  "nonWhiteOverlapCounts": {
+    "baseline": 463,
+    "a": 536,
+    "b": 635,
+    "both": 708
+  },
+  "model": "A-later: C=A+t(B-U); B-later: C=B+u(A-U), t and u least-squares clamped to [0,1], max per-channel residual <=1",
+  "metrics": {
+    "candidates": 82,
+    "fits_a_later": 82,
+    "fits_b_later": 38,
+    "only_a_later": 44,
+    "only_b_later": 0,
+    "both_models": 38,
+    "neither_model": 0,
+    "exact_a": 77,
+    "max_a_residual": 0.26693905345590707,
+    "max_b_residual": 55.0
+  },
+  "sample": {
+    "x": 1035,
+    "y": 502,
+    "baseline": [
+      130,
+      130,
+      130
+    ],
+    "a": [
+      66,
+      66,
+      66
+    ],
+    "b": [
+      102,
+      102,
+      93
+    ],
+    "both": [
+      52,
+      52,
+      47
+    ],
+    "a_residual": 0.26693905345590707,
+    "b_residual": 2.6666666666666643,
+    "a_factor": 0.5062989445011917,
+    "b_factor": 0.7604166666666666
+  },
+  "fileSha256": {
+    "baseline.result.json": "C24704A0FC1F6057A89817BE29888FA78FD09914BE138803AAD63C04E1022D1A",
+    "a.result.json": "2B3DFE0C2895752774CA33DA5988D57280E6E1616F7230319205B94E758D8E2B",
+    "b.result.json": "C7177696911C19E82CE966199FFFDC5EDA2231E817D159FC831CB7AAB1AD819D",
+    "both.result.json": "33A4CE5694E7AF6FA29FF7A2414D6A254A932EF82BB20C4DD4E8B3A200E090A2",
+    "independent-baseline.png": "67A56B1E42D665F49B3106185B2CBA3BAC180D94C6AA9FD0B15581B9165BD7EE",
+    "independent-a.png": "F7A5DB23D837E77539605A977699F658110A4DB4A45E97BBCBB89BE2CE705DE0",
+    "independent-b.png": "0C1748C4FAE6DDAB6B649EA14D7C11388B6C84D32F8034124C9A60827644B0AC",
+    "independent-both.png": "E4950EE7391FDD6C5C037C7BA1DC387A9F78E15E1B5D6935CE4348B0BF87398C"
+  },
+  "protectedAfterSha256": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  },
+  "requestAbsentAfterRuns": true
+}

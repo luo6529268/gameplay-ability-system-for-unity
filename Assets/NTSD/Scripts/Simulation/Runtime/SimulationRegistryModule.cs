@@ -704,11 +704,10 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            Ecs.BattleEntityLinkLifecycleWriter
-                .ClearReferencesToReleasedSlot(RuntimeSlots, slot);
-
             world.AiUnifiedRowPublisherForServices
                 .InvalidateAfterOccupancyChange();
+            Ecs.BattleEntityLinkLifecycleWriter
+                .ClearReferencesToReleasedSlot(RuntimeSlots, slot);
             world.IdentityWriter.Release(releasedHandle);
             world.CharacterInputWriter.Release(releasedHandle);
             world.FrameMotionWriter.Release(releasedHandle);

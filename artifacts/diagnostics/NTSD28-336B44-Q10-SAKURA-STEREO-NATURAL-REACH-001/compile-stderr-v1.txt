@@ -1,0 +1,134 @@
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\dat_document.cpp:1:10: fatal error: ntsd28/dat_document.h: No such file or directory
+    1 | #include "ntsd28/dat_document.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\dat_parser.cpp:1:10: fatal error: ntsd28/dat_parser.h: No such file or directory
+    1 | #include "ntsd28/dat_parser.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\fusion_catalog.cpp:1:10: fatal error: ntsd28/fusion_catalog.h: No such file or directory
+    1 | #include "ntsd28/fusion_catalog.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\kind_catalog.cpp:1:10: fatal error: ntsd28/kind_catalog.h: No such file or directory
+    1 | #include "ntsd28/kind_catalog.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\minibar_catalog.cpp:1:10: fatal error: ntsd28/minibar_catalog.h: No such file or directory
+    1 | #include "ntsd28/minibar_catalog.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\object_catalog.cpp:1:10: fatal error: ntsd28/object_catalog.h: No such file or directory
+    1 | #include "ntsd28/object_catalog.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\frame_machine.cpp:1:10: fatal error: ntsd28/frame_machine.h: No such file or directory
+    1 | #include "ntsd28/frame_machine.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\frame_motion.cpp:1:10: fatal error: ntsd28/frame_motion.h: No such file or directory
+    1 | #include "ntsd28/frame_motion.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\native_random.cpp:1:10: fatal error: ntsd28/native_random.h: No such file or directory
+    1 | #include "ntsd28/native_random.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\native_ai.cpp:1:10: fatal error: ntsd28/native_ai.h: No such file or directory
+    1 | #include "ntsd28/native_ai.h"
+      |          ^~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\input_routing.cpp:1:10: fatal error: ntsd28/input_routing.h: No such file or directory
+    1 | #include "ntsd28/input_routing.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\physics_integrator.cpp:1:10: fatal error: ntsd28/physics_integrator.h: No such file or directory
+    1 | #include "ntsd28/physics_integrator.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\collision_geometry.cpp:1:10: fatal error: ntsd28/collision_geometry.h: No such file or directory
+    1 | #include "ntsd28/collision_geometry.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\hit_candidates.cpp:1:10: fatal error: ntsd28/hit_candidates.h: No such file or directory
+    1 | #include "ntsd28/hit_candidates.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\hit_response.cpp:1:10: fatal error: ntsd28/hit_response.h: No such file or directory
+    1 | #include "ntsd28/hit_response.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\combat_records.cpp:1:10: fatal error: ntsd28/combat_records.h: No such file or directory
+    1 | #include "ntsd28/combat_records.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\damage_resolution.cpp:1:10: fatal error: ntsd28/damage_resolution.h: No such file or directory
+    1 | #include "ntsd28/damage_resolution.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\defense_resolution.cpp:1:10: fatal error: ntsd28/defense_resolution.h: No such file or directory
+    1 | #include "ntsd28/defense_resolution.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\armor_resolution.cpp:1:10: fatal error: ntsd28/armor_resolution.h: No such file or directory
+    1 | #include "ntsd28/armor_resolution.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\object_spawning.cpp:1:10: fatal error: ntsd28/object_spawning.h: No such file or directory
+    1 | #include "ntsd28/object_spawning.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\battle_world.cpp:1:10: fatal error: ntsd28/battle_world.h: No such file or directory
+    1 | #include "ntsd28/battle_world.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\battle_flow.cpp:1:10: fatal error: ntsd28/battle_flow.h: No such file or directory
+    1 | #include "ntsd28/battle_flow.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\simulation_tick_driver.cpp:1:10: fatal error: ntsd28/simulation_tick_driver.h: No such file or directory
+    1 | #include "ntsd28/simulation_tick_driver.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\render_snapshot.cpp:1:10: fatal error: ntsd28/render_snapshot.h: No such file or directory
+    1 | #include "ntsd28/render_snapshot.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\background_definition.cpp:1:10: fatal error: ntsd28/background_definition.h: No such file or directory
+    1 | #include "ntsd28/background_definition.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_resource_catalog.cpp:1:10: fatal error: ntsd28/native_resource_catalog.h: No such file or directory
+    1 | #include "ntsd28/native_resource_catalog.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_frame_hud.cpp:1:10: fatal error: ntsd28/native_frame_hud.h: No such file or directory
+    1 | #include "ntsd28/native_frame_hud.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_combo_hud.cpp:1:10: fatal error: ntsd28/native_combo_hud.h: No such file or directory
+    1 | #include "ntsd28/native_combo_hud.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\game_session.cpp:1:
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/game_session.h:3:10: fatal error: ntsd28/background_definition.h: No such file or directory
+    3 | #include "ntsd28/background_definition.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\selection_flow.cpp:1:
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/selection_flow.h:3:10: fatal error: ntsd28/input_state.h: No such file or directory
+    3 | #include "ntsd28/input_state.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/game_session_lfr.h:3,
+                 from J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\game_session_lfr.cpp:1:
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/game_session.h:3:10: fatal error: ntsd28/background_definition.h: No such file or directory
+    3 | #include "ntsd28/background_definition.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+In file included from J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/game_session_lfr.h:3,
+                 from I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q10Diagnostics\sakura_stereo_natural_reach_probe.cpp:1:
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include/ntsd28_playable/game_session.h:3:10: fatal error: ntsd28/background_definition.h: No such file or directory
+    3 | #include "ntsd28/background_definition.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.

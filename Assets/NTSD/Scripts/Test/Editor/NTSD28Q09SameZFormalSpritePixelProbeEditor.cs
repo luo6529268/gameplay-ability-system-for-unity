@@ -36,6 +36,7 @@ namespace NTSD.Test.Editor
         private static bool requestMode;
         private static bool naturalTickMode;
         private static string naturalVariant;
+        private static string naturalRunId;
         private static bool pauseCaptured;
         private static bool previousPaused;
         private static bool baselineCaptured;
@@ -133,6 +134,16 @@ namespace NTSD.Test.Editor
             naturalTickMode = naturalTick;
             string requestedVariant = string.IsNullOrWhiteSpace(variant)
                 ? "both" : variant.Trim().ToLowerInvariant();
+            int runSeparator = requestedVariant.IndexOf('@');
+            string requestedRunId = runSeparator < 0
+                ? "auto-" + DateTime.UtcNow.Ticks
+                : requestedVariant.Substring(runSeparator + 1);
+            if (runSeparator >= 0)
+                requestedVariant = requestedVariant.Substring(0, runSeparator);
+            bool invalidRunId = naturalTick && !IsSafeRunId(requestedRunId);
+            naturalRunId = naturalTick
+                ? (invalidRunId ? "invalid-" + DateTime.UtcNow.Ticks : requestedRunId)
+                : null;
             naturalVariant = naturalTick &&
                 (requestedVariant == "baseline" || requestedVariant == "a" ||
                  requestedVariant == "b" || requestedVariant == "both")
@@ -162,7 +173,9 @@ namespace NTSD.Test.Editor
                         naturalVariant == "a" || naturalVariant == "b" ||
                         naturalVariant == "both",
                     "Natural capture variant must be baseline, a, b, or both.");
+                Require(!invalidRunId, "Natural capture run ID must use 1-64 safe characters.");
                 report.variant = naturalVariant;
+                report.runId = naturalRunId;
                 Scene scene = SceneManager.GetSceneByName("NTSD_Battle");
                 Require(scene.IsValid() && scene.isLoaded && !scene.isDirty,
                     "The saved original NTSD_Battle Scene must be loaded and clean.");
@@ -275,12 +288,29 @@ namespace NTSD.Test.Editor
             ? NaturalRequestPath : RequestPath;
 
         private static string ActiveResultPath => naturalTickMode
-            ? "Temp/NTSD28_Q09_SameZNaturalTickPixel." + naturalVariant + ".result.json"
+            ? "artifacts/diagnostics/" + ActiveArtifactFolder + "/" +
+              naturalVariant + ".result.json"
             : ResultPath;
 
         private static string ActiveArtifactFolder => naturalTickMode
-            ? "NTSD28-Q09-SAME-Z-NATURAL-TICK-PIXEL-WITNESS-001"
+            ? "NTSD28-336B44-Q09-SAME-Z-CURRENT-SCENE-PIXEL-001/" + naturalRunId
             : "NTSD28-Q09-SAME-Z-FORMAL-SPRITE-PIXEL-WITNESS-001";
+
+        private static bool IsSafeRunId(string value)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length > 64)
+                return false;
+            for (int index = 0; index < value.Length; index++)
+            {
+                char character = value[index];
+                if ((character >= 'a' && character <= 'z') ||
+                    (character >= '0' && character <= '9') ||
+                    character == '-' || character == '_')
+                    continue;
+                return false;
+            }
+            return true;
+        }
 
         private static void BeginNaturalTick()
         {
@@ -653,6 +683,8 @@ namespace NTSD.Test.Editor
                 string imagePath = ProjectPath("artifacts/diagnostics/" +
                     ActiveArtifactFolder + "/" + fileName);
                 Directory.CreateDirectory(Path.GetDirectoryName(imagePath));
+                if (naturalTickMode && File.Exists(imagePath))
+                    throw new IOException("Natural pixel image already exists: " + imagePath);
                 File.WriteAllBytes(imagePath, readback.EncodeToPNG());
                 return pixels;
             }
@@ -770,6 +802,8 @@ namespace NTSD.Test.Editor
                         File.Delete(ProjectPath(ActiveRequestPath));
                     string path = ProjectPath(ActiveResultPath);
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
+                    if (naturalTickMode && File.Exists(path))
+                        throw new IOException("Natural pixel result already exists: " + path);
                     File.WriteAllText(path, JsonUtility.ToJson(report, true));
                     Debug.Log("[NTSD28Q09SameZFormalSpritePixel] " + report.status +
                         ": " + report.message);
@@ -781,6 +815,7 @@ namespace NTSD.Test.Editor
                     requestMode = false;
                     naturalTickMode = false;
                     naturalVariant = null;
+                    naturalRunId = null;
                     pauseCaptured = false;
                     baselineCaptured = false;
                     driver = null;
@@ -989,6 +1024,7 @@ namespace NTSD.Test.Editor
             public int realTick;
             public int naturalTick;
             public string variant;
+            public string runId;
             public bool workerPath;
             public string baselineRngState;
             public string baselineRngCalls;

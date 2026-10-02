@@ -1,0 +1,43 @@
+{
+  "schema": "ntsd28-336b44-c043-selected-source-unity/1",
+  "sourceCsv": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C043-FUSION-HELD-REACH-001\\run-07\\late_double_tap.csv",
+  "unityJson": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001\\late-double-tap-scene-03.json",
+  "ticks": 60,
+  "fieldsPerTick": 17,
+  "compared": 1020,
+  "rawDifferences": [
+    {
+      "tick": 1,
+      "field": "chi_child",
+      "source": 0,
+      "unity": -1
+    },
+    {
+      "tick": 2,
+      "field": "chi_child",
+      "source": 0,
+      "unity": -1
+    },
+    {
+      "tick": 3,
+      "field": "chi_child",
+      "source": 0,
+      "unity": -1
+    },
+    {
+      "tick": 4,
+      "field": "chi_child",
+      "source": 0,
+      "unity": -1
+    },
+    {
+      "tick": 5,
+      "field": "chi_child",
+      "source": 0,
+      "unity": -1
+    }
+  ],
+  "normalizedDifferences": [],
+  "normalization": "Unity dormant/no-link TargetSlotIndex=-1 maps to formal unlinked 0 only while chi_present=1 and chi_link=0; no active link rewritten",
+  "scope": "selected combat fields only; not full World/checksum or visual/audio parity"
+}

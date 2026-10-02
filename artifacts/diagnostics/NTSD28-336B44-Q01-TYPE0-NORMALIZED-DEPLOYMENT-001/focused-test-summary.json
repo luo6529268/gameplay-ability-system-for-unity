@@ -1,0 +1,11 @@
+{
+  "jobId": "3e70cde305c8445d84b026633cfdff14",
+  "status": "succeeded",
+  "mode": "EditMode",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "durationSeconds": 17.0630181,
+  "lastTest": "NTSD.Test.CharacterAssetDeploymentEditorTests.FormalTypeZeroCharacterDatAndImagesAreDeployed"
+}

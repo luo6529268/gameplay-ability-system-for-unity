@@ -1,3 +1,119 @@
+> 2026-10-02 G2/Q10 Sakura stereo 自然可达出口 `NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001 / VERIFIED_SCOPED`（覆盖文末PLANNED）：HP100自然防2→上2→攻2、tick23动作172、tick24新跳动作340并发正式`c/saku/w/tra.wav`；source两跑CSV/LFR逐SHA同，根336B44回放exit0/PASS且55tick动作/MP/相机165/165同。正式根trace无逐事件音频，Unity所选cue clip/voice/双声道设备待；下一独立包仅按此已证cue接正式WAV并做原Battle Scene限定播放，固定背景声像策略不自行决定。Q10/总目标开。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/REPORT.md)。
+
+**2026-10-02 G2/Q10 当前stereo内容只读复核：** 正式336B44目录13个双声道WAV在对象DAT中有17帧声明/12份DAT，当前Unity暂存DAT与正式plain SHA12/12同；现有两音频查找根0/13，但自然事件及玩家实际静音未证。下一可从Sakura OID1 frame172→340候选证正式自然事件，再独立接该cue并验stereo对角矩阵；勿批量搬WAV。Q10开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-STEREO-CUE-REACHABILITY-20261002/REPORT.md)。
+
+**2026-10-02 G2/Q10 NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001 / VERIFIED_SCOPED_MONO_OUTPUT（覆盖下方CODE_WRITTEN）：** 当前正式C053六组目标已用原Editor AudioRenderer临时mono声源实测，最大单声道误差0.001054/门槛0.002；八案例完整采样、退出并回到clean Battle，双Scene SHA稳、Ledger通过。生产NTSDSoundPlayer仍pan0，D-024完整背景声像基准等待用户回答；Q10/Q12开放。[验收](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001/ACCEPTANCE.md)。
+
+**2026-10-02 G2/Q10 NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001 / CODE_WRITTEN（覆盖下方PLANNED）：** 目标Editor脚本新增六组336B44矩阵独立菜单，旧五组/v3不变；Record/Ledger已登记。下一用原Editor刷新编译，在确保Battle无未保存状态后切Menu Play做一次AudioRenderer采样并返回Battle，保全场景SHA；Q10开放。
+
+**2026-10-02 G2/Q10 NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001 / PLANNED：** 已在脚本前登记只扩既有Editor mono AudioRenderer校准的独立入口；336B44 C053六组正式矩阵、旧v3保护、原Editor菜单Play与Scene SHA门写入Task。声像相机策略仍待用户回复；生产音频/DAT/Scene未动，Q10开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001.md)。
+
+**2026-10-02 G2/Q10 声像共用出口只读回访：** 已核当前336B44 C053十事件及生产音效源X写者，播放端pan0是已证配置首差；新增10行Unity单声道候选参数仅为代数换算，未采设备PCM。固定全背景下声像基准正在向用户确认，生产/DAT/Scene未改；Q10/Q12开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-BATTLE-STEREO-OUTLET-AUDIT-20261002/REPORT.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-STEREO-CAMERA-AUDIT-001 / VERIFIED / SOURCE_CAMERA_SCOPED_PASS`（覆盖同ID PLANNED）：原C053十自然声音事件正式相机X12tick均0，正式mono左右矩阵63/37～78/22，Unity正式cue fallback range0→2D/pan0，存在通用声像配置首差。诊断宏两跑重复，默认旧CSV SHA保持；无生产修复/设备波形。下一独立包先定固定背景/D-024的音频比例与Unity精确矩阵实现，不能对020/067特判。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-STEREO-CAMERA-AUDIT-001/REPORT.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-STEREO-CAMERA-AUDIT-001 / PLANNED`：正式main→audio_backend每tick按camera_x与world_x给左右声道矩阵；Unity正式020/067目前2D居中，无该声像。Task/Change/Ledger/STATE已在脚本前建立。下一只给现有C053离线探针加宏开关输出相机X并重复编译/两跑/旧CSV对比，生产音频不动；若需修复另包确定D-024固定背景声像适配。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q10-C053-STEREO-CAMERA-AUDIT-001.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001 / VERIFIED / WINDOWS_PLAYER_SCOPED_PASS`（覆盖同ID上一条IN_PROGRESS）：03版只在显式Q10子报告添加字段，基础Q07 15字段源码结构不变；03 Windows构建/Player正式020/067路径/采样/播放+2及有序关闭借用0/资源0再次PASS，1373逐SHA，六SHA稳。默认Q07旧固定指纹未重跑；Q10整体开放，下包按可达cue查声像/音量/设备，保持用户音频与背景例外。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001/REPORT.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001 / IN_PROGRESS`（复核覆盖同ID上一条VERIFIED）：02 Player正式音频路径/播放/关闭证据保留；Q10新字段意外改变默认Q07 JSON输出，违反本Task的默认输出不变约束。已重开同Change，下一只用显式Q10子报告并03构建/Player复验，不动生产音频或其它文件。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001 / VERIFIED / WINDOWS_PLAYER_SCOPED_PASS`（覆盖下方同ID PLANNED）：v3清单1373/1373、46,927,691字节逐SHA；原Editor正式WAV聚焦2/2，原项目唯一输出Windows Player正式020/067帧16413/31170与合成战斗播放+2，关闭池借用0、发布资源存活0。首次旧固定指纹FAIL原件保留，第二次PASS；场景/配置/旧v2清单六SHA稳。仅Windows音频路径出口，Q10及总目标开放；下个Q10包按可达自然cue核声像/音量/设备，不整包搬WAV。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001/REPORT.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-FORMAL-WAV-DEPLOY-001 / RUNTIME_PENDING / AUDIO_CONTENT_SCOPED_PASS`：正式020/067 WAV作为新文件双SHA接入，旧Sound/非战斗路径未覆盖；原Editor具名解码/AudioSource及相邻测试3/3，原Battle Scene C053自然12tick/10事件/10播放、正式clip帧16413/31170、退出clean，四保护SHA稳。首轮探针自身播放器Scene查找FAIL原件保留。声像/设备/Player/其它cue与本包未记录的shutdown pool borrower数待；Q10及总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-FORMAL-WAV-DEPLOY-001/REPORT.md)。
+
+> 2026-10-02 G2/Q10 C053自然音频事件42/42同态之后的内容首差：正式 `data\020.wav`、`data\067.wav` 与Unity `Assets/NTSD/Sound/data` 同名WAV原文件SHA/PCM不同；020 Unity多363帧。实际AudioClip与声像/设备尚未证，Q10仍开。下一独立包只针对已证自然cue的正式WAV做通用战斗路径接入，保留旧Sound/非战斗路径，不批量复制或覆盖音频。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-FORMAL-WAV-CONTENT-AUDIT-001/REPORT.md)。
+
+> 2026-10-02 G1/Q01 `resource.dat` 战斗UI只读缩域：索引27 `SCORE_BOARD4.png`按用户结果图文例外不部署，但正式EXE实际消费者未证；索引22 `PAUSE.png`未被已检战斗暂停渲染路径读取，该路径画色块。55行v3矩阵只改27范围标签，剩余19张主表与7张独立frame仍待消费者/画面条件。Q01/Q09/Q12开放；未复制或删除资源。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q01-RESOURCE-SECONDARY-CONSUMER-20261002/BATTLE-UI-ADDENDUM.md)。
+
+> 2026-10-02 G1/Q07/D-024 NTSD28-336B44-Q07-D024-CANONICAL-HELD-SPATIAL-WITNESS-001 / VERIFIED（覆盖同ID PLANNED）：正式OID8→OID420/type3自然持有同输入原Scene60tick NATURAL_GATE_PASS，21持有tick比例最大误差X0.915229/Z0.232877像素，旧22字段×60tick 1320/1320同；退出clean/借用0/六SHA稳。武器和canonical已有原Scene限定比例；指定根LFR源X/Z及存在性246/246同；下一筛其它可达首差，WPOINT父包/Q07仍开。生产/DAT/Scene/非战斗未改。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-CANONICAL-HELD-SPATIAL-WITNESS-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 NTSD28-336B44-Q07-D024-CANONICAL-HELD-SPATIAL-WITNESS-001 / PLANNED：正式OID8小樱→OID420/type3自然链第6tick出生、第7～27tick持有、第28tick融合，原C043场景探针缺画面X/Z和子体源Z。Task/Change/Ledger/STATE先于脚本齐；仅扩同探针只读坐标和唯一新runId，原Editor同60tick输入查比例/源字段与退出，生产/DAT/Scene不动，WPOINT/Q07仍开。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-D024-CANONICAL-HELD-SPATIAL-WITNESS-001.md)。
+
+> 2026-10-02 G1/Q07/D-024 NTSD28-336B44-Q07-D024-PICKUP-PHASE-SOURCE-WITNESS-001 / VERIFIED（覆盖旧PLANNED/未拾取快照）：原Battle Scene受控相位配对并初始化OID120源位置，物理J→K注入链相对tick2拾取、18持有tick比例误差X/Z<1px；前7tick当前336B44源码原值75/77同、两格空关系哨兵不同。Play退出clean/六SHA稳。下一先补canonical非武器或其它可达挂点；WPOINT父包与Q07保持开放，不改DAT/Scene/非战斗。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-PICKUP-PHASE-SOURCE-WITNESS-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-PICKUP-PHASE-SOURCE-WITNESS-001 / PLANNED`：当前正式源码拾取首相位1/动作0对原Battle Scene诊断首相位0/动作60；Q07旧探针无像素选项时临时武器缺源位置。脚本前Task/Change/Ledger/STATE齐，仅加显式测试初态配对及源出生，不改生产或DAT/Scene。待原Editor新runId物理键Play；失败留首差，WPOINT/Q07仍开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-D024-PICKUP-PHASE-SOURCE-WITNESS-001.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-WPOINT-HELD-PROJECTION-001 / RUNTIME_PENDING`（覆盖下方PLANNED）：两个现有持有WPOINT写者复用World投影，原Editor目标RED→GREEN1/1、当前336B44源码24完整tick源同态、23持有tick误差X/Z<1像素、完整SelfCheck PASS。原Battle Scene物理J键没拾取，动作首tick新60/link0对旧115/link101，入口在本包写者前；结果留原件、Scene退出clean/六保护SHA稳。下一独立Q07入口审计或可达武器场景；canonical非武器比例与真实Scene仍待，不写VERIFIED。DAT/Scene/非战斗保持。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-HELD-PROJECTION-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-WPOINT-HELD-PROJECTION-001 / PLANNED`：当前正式源码24tick同态CSV与当前Unity raw物理间距首差已封存；脚本前Task/Change/Ledger/STATE登记。下一先把现有OID120完整Driver测试切到当前336B44 CSV并改比例目标取得RED，再最小修canonical `BattleHeldObjectWriter` 与 `LF2WeaponHeldStateResolver` 共用投影；原Scene/完整自检按影响验证。DAT/Scene/非战斗与旧结果保留，Q07/目标开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-D024-WPOINT-HELD-PROJECTION-001.md)。
+
+> 2026-10-02 G1/Q07/D-024 武器WPOINT新版源码补证：现行336B44的28 core+GameSession/Selection重编只读探针，在正式runtime24完整tick拾取1次，X/Z持有移动9/7，CSV与旧源文件逐字节同SHA1398857F…C820C2；诊断重编不是正式根EXE。当前原Editor旧测试1/1 PASS但物理比例首差保留，下一须先建准确Task/Change再改canonical/Legacy挂点投影与旧断言。Q07及总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-SPATIAL-AUDIT-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 武器WPOINT只读审计：当前正式源码held-object入口与Unity canonical/Legacy持有写者已定位；当前正式内容OID120的现有24tick Editor测试1/1 PASS但旧断言要求物理原始像素距，tick2源X13/物理12.463616/比例目标19.972993，Z1/1/1.578082。历史native CSV不能充当前336B44根证书。下一独立Task先核当前根同态，再考虑共用投影修复及旧测试更新；未改生产/DAT/Scene，Q07/目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-SPATIAL-AUDIT-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-CPOINT-HELD-PROJECTION-001 / VERIFIED_SCOPED_CPOINT_HELD_PROJECTION`（覆盖下方CODE_WRITTEN）：同自然链红绿60tick共同源字段2880/2880，真正持有54tick物理比例最大偏差X0.936610/Z0.232877像素；生成/原Editor编译0错、原Battle Scene退出clean、聚焦1/1、完整SelfCheck PASS、5保护SHA稳。下一仅按正式可达性审其它挂点比例首差，不以此关闭Q07/Q09/Q12。DAT/Scene/非战斗不动。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-CPOINT-HELD-PROJECTION-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-CPOINT-HELD-PROJECTION-001 / CODE_WRITTEN`：原Scene OID75自然持有红证书首tick源X间距9/物理8.5/目标13.827457，Z也短；正式源码规则和源字段已证。脚本前Task/Change/Ledger/STATE已登记，只改共用CPOINT持有相对物理X/Z投影及既有探针绿RunId；原Scene、聚焦与保护哈希待。Q07/目标开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-D024-CPOINT-HELD-PROJECTION-001.md)。
+
+> 2026-10-02 G1/Q07/D-024自然持有物理比例首差：`NTSD28-336B44-Q07-D024-HELD-SPATIAL-WITNESS-001 / VERIFIED`诊断，正式OID75→OID2/X650原Scene60tick中旧/新源字段2880/2880同态；首持有tick源X间距9/物理8.5/按比例应13.827457，Z源-1/物理-1.232877/应-1.578082。原Editor已退出Play且Scene clean/五保护SHA稳。下一另建共用CPOINT生产修复Task/Change，以同自然链新RunId验RED/GREEN并审计武器挂点同类写者；Q07/目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-HELD-SPATIAL-WITNESS-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/D-024 `NTSD28-336B44-Q07-D024-HELD-SPATIAL-WITNESS-001 / CODE_WRITTEN`：OID75 action355→OID2/X650自然持有源坐标已证，Unity CPOINT物理DAT偏移未显式按共用比例映射，现仅为静态候选。脚本前Task/Change/Ledger/STATE已登记，下一仅给已有C042原Battle Scene探针加物理X/Z与投影期望字段，以唯一RunId实测后再决定生产修复；Q07/目标开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-D024-HELD-SPATIAL-WITNESS-001.md)。
+
+> 2026-10-02 G1/Q01 次级消费者更正：当前正式 `resource.dat` 索引7/8 BG_RANDOM/BG_FRAME 由 `selection_snapshot()` 按路径读取并交给 renderer，归属选人预览而非战斗；原55图矩阵另存v2、保留旧矩阵。48主表未证直接消费者22→20，另7独立frame未证，活跃战斗七图SHA同版。Q01非例外Game View、Q09/Q12及总目标开放；未改资源/脚本/Scene。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q01-RESOURCE-SECONDARY-CONSUMER-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q01 非对象图片最新：正式resource.dat 48主表+7独立frame逐项矩阵已留证；所检playable活跃战斗直接取WORDS0～5/SPARK七图均在Unity暂存且原始SHA同版。结果板图文按用户排除，选人/加载不扩战斗；22主表与7附加frame无本轮明确直接消费者，正式EXE实际可见与动态路径仍须条件证据，不能仅凭静态负搜索关闭。Q01/Q09/Q12开放，未搬资源/改脚本。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q01-RESOURCE-PLAYABLE-CONSUMER-20261002/REPORT.md)。
+
+> 2026-10-02 G2/Q09/P-13 输入相位续证 `NTSD28-336B44-Q09-P13-INPUT-PHASE-PAIR-001 / VERIFIED_SCOPED_INPUT_PHASE_AND_PROJECT_BACKGROUND`：正式根初始phase0→tick1不采新Attack→tick2消费；旧Scene探针从世界tick5后增角色→tick6先消费，所以旧韩轨迹早一tick。新唯一请求在诊断角色出生前配初相位0，原Battle Scene50完整tick对当前336B44根同相对tick八字段400/400，韩145/149/偏移/归零时点tick4/10/16/21同步。旧早期李两处差异归因诊断相位错配，旧原件留存。项目Map背景三图右移1输出像素/归零复原，退出/借用0/四SHA稳；正式背景Z钳位、正式EXE可见像素、全World及Q09/Q07/总目标仍开。只改诊断探针，无生产/DAT/Scene更动。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-P13-INPUT-PHASE-PAIR-001/REPORT.md)。
+
+> 2026-10-02 G2/Q09/P-13 新版续证：原Battle Scene现有韩/李请求式探针在统一源→项目比例映射后50tick `PASS_SCOPED_PLAY`，自然抓取/地震/归零及三张项目背景像素图已存；天空/地面平移1输出像素精确匹配，退出clean/零借用/四SHA稳。336B44根EXE同输入LFR报告PASS且抓取后源X/动作160/160位相映射同态，但早期李动作2差与正式stage Z钳位仍需分开归因。不能宣称正式EXE GUI像素或整个Q09已对齐；下一Q09优先正式可比可见帧及自然关系/出生断点，Q07独立留早期动作差。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-P13-HAN-NATURAL-SCENE-20261002/REPORT.md)。
+
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-PRESENTATION-CLOCK-001 / VERIFIED_SCOPED_PUBLICATION_CLOCK` 最终补项：原Battle Scene同tick首/后alpha0.376127→0.553148、30FPS=1、checksum同态；最终脚本生成/原Editor编译0错、Play退出idle/Scene clean、四保护SHA4/4、邻近6/6与Ledger通过。下方临时`LATER_SAMPLE_PENDING`为已覆盖快照；自然画面/正式EXE像素、Q09及总目标开放。[验收](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-001/ACCEPTANCE.md)。
+
+> 2026-10-02 G2/Q09 发布时钟后继验收更正：同ID `NTSD28-336B44-Q09-PRESENTATION-CLOCK-001` 暂回 `IN_PROGRESS / FIRST_SAMPLE_GREEN / LATER_SAMPLE_PENDING`。首样本RED0→GREEN0.3656、30FPS1/邻近6项仍有效；原Task还要求同tick后续采样，已给同一原Scene测试追加5ms第二读断言，待原Editor重编/Play/最终validator，生产未再改。下条限定VERIFIED为此前快照，Q09与总目标仍开。
+
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-PRESENTATION-CLOCK-001 / VERIFIED_SCOPED_PUBLICATION_CLOCK`：原Battle Scene相邻快照发布后12ms首次读取的RED alpha0；共用时戳修复后GREEN alpha0.3656212141，30FPS离散1、逻辑checksum稳、邻近6/6，生成/原Editor编译与四保护SHA/Scene clean通过。MCP跨Play域重载job状态孤儿，以Unity Test Runner XML为终态并仅清除此已结束job。仅发布时间起点子出口，Q09/总目标开放。[验收](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-001/ACCEPTANCE.md)。
+
+> 2026-10-02 G2/Q09/P-04 `NTSD28-336B44-Q09-SAME-Z-CURRENT-PIXEL-001 / VERIFIED_SCOPED_CURRENT_SCENE_CENTRAL_GPU`：当前原Scene SHA934483…的baseline/a/b/both四次独立完整tick5→6 CentralOnly GPU原件已取；82/82候选像素支持slot51后绘制，44排除反序，0反例；每次退出clean/Scene SHA稳，旧PNG与四保护SHA稳。仅当前场景同Z遮挡子出口，正式EXE像素、Legacy、其它Q09表现仍待。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-SAME-Z-CURRENT-SCENE-PIXEL-001/scene-934483-20261002-01/REPORT.md)。
+
+> 2026-10-02 G2/Q09/P-04 只读版本核对：当前336B44正式同Z排序区块与旧版SHA相同，Unity当前排序源码同向；旧四图82/82像素所用Scene SHA471396…不同于现有934483…，不可晋升新版GPU证书。下一版别新路径采原Scene自然像素并保护旧文件；P-04/Q09/总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-SAME-Z-RULE-REUSE-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q08/C009 只读 owner 复核：正式mode0返组时原生赢家-1进入render snapshot，Unity战斗前 writer/host停战读取mask/计时/转场，自有Winner/PendingWinner由结果摘要路径写入。现有84/84根、72/72原Scene只限返组暂停；再次单组与画面待。无生产/DAT/Scene修改，Q08/总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-OWNER-BOUNDARY-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C054 `NTSD28-336B44-Q07-C054-DEPTH-FRACTIONAL-REACH-001 / VERIFIED / SOURCE_SCOPED_NEGATIVE`：正式融合记录2斜向双按输入窗两轮CSV/summary同SHA，tick1合体、tick201拆分，动作310时X/Z与精确Z均不变，未形成小数。正式OID52 DAT无frame310，输入路由无帧返回；本输入窗阴性不代表其它自然路径不可达。根/Unity未测；C054/Q07及总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C054-DEPTH-FRACTIONAL-REACH-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C052 `NTSD28-336B44-Q07-C052-HIT-INTERNAL-SCENE-001 / VERIFIED / SCOPED_HIT_SEQUENCE_PASS`：只扩原Battle Scene探针新runId的只读ShadowCompare；原Editor编译0错，三候选消费/写者true→false→true对正式源码applied/rejected/nonterminate/applied按槽3/3，三tick尾21/21相同、计划失败/差异0、退出clean/四SHA稳。Unity逐候选即时rest/拒因、根逐hit内部、全World/真实键盘仍待，C052/Q07开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C052-HIT-INTERNAL-SCENE-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C042：正式OID75延迟自然抓取非零计数正例 X650/tick2抓取→tick56投前1、X800/tick4抓取→tick58投前3；正式源码/根EXE同LFR各160tick×20字段3200/3200零差，原Battle Scene各60tick×20字段1200/1200零差，退出clean/四SHA稳。`NTSD28-336B44-Q07-C042-DELAYED-CATCH-SCENE-001 / VERIFIED / NATURAL_NONZERO_SCOPED_PASS`只修改现有Editor探针请求位置；X800完整tick后计数1由帧入口重置。完整World/物理键/对象池借用计数未验，C042/Q07开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C042-DELAYED-CATCH-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q07 最新：原Editor当前336B44完整SelfCheck第八轮磁盘`PASS`，前七轮首差及独立测试口径修正原件见`artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001/SELFCHECK-336B44-20261002.md`。本轮仅改`BattleRuntimeSelfCheck.cs`，生成工程0错、Editor idle/nonPlay/noncompiling、四保护SHA稳；C043自然Scene已限定通过，但全World/物理键、C042/C044/C051/C054/C056父门和Q07总出口仍开放。下一按新版总表正式可达首差与必要真场景出口推进。
+
+> 2026-10-02 G1/Q07 SelfCheck最新：C042投掷计数和C044跨零待结算冲量两条旧测试口径按336B44修正，原Editor生成工程0 error，完整SelfCheck已越过所改方法；第四轮仍FAIL于B5 effect22终值断言，四轮结果另存C043自然Scene证据目录。四保护SHA稳，生产/DAT/Scene/非战斗未改。下一独立核B5首差，C043完整SelfCheck/Q07/总目标开放。
+
+> 2026-10-02 G1/Q07/C043 `NTSD28-336B44-Q07-C043-FUSION-HELD-REACH-001 / VERIFIED`：正式DAT自然Chi256→257生OID420/slot50并持有，晚间双按tick28合体7+8→51，正式第二轮held-refill清失效子体关系-1→0、次tick不重复。正式源码run-07/08与根EXE两回放选定840/840字段零差、root passed；DAT Lee/Chi/Pup原字节同、fusion正文换行规范后同。下一需原Battle Scene同条件生产Driver Play，物理键流、同组/HP100、退出clean/四SHA；C043父项/Q07开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-REACH-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C043 `NTSD28-336B44-Q07-C043-FUSION-HELD-REACH-001 / IN_PROGRESS`：普通despawn先清关系，融合绕过该清理构成待验入口。新增正式GameSession有界诊断前已建Task/Change/Ledger；只看正式DAT子体、融合与第二次held尾，不改Unity/DAT/Scene；C043/Q07开放。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001 / VERIFIED`：原Battle Scene第二轮tick7按槽51→52逐writer观测action156/锁存153/HP475→450，tick尾锁存156，ShadowCompare零差；正式源码两applied/effect2/Uj156，直接战斗132/132、10待播事件同态，退出clean/四保护SHA稳。首轮错误锁存断言原件保留。只闭此限定动作出口，根EXE三人同初态/自然物理键/全World及C053/Q07未闭。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001 / CODE_WRITTEN`：声明两脚本只读诊断已写，hit plan按entry保留writer后目标frame/锁存/HP，原Scene用新runId输出逐hit序列并断言两次Uj156。先生成工程编译，再核原Editor导入、原Scene Play/退出/四保护SHA；未验不得关闭C053/Q07。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001 / IN_PROGRESS`：脚本前Task/Change/Ledger/STATE已建；只在预分配hit plan entry记录每次真实writer后target action/锁存/HP，并以新runId在原Battle Scene同初态验证两次各自Uj156。保护旧结果、DAT/Scene/非战斗，编译/Play后方可升级状态。C053/Q07开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-PER-HIT-WRITER-001.md)。
+
+> 2026-10-02 G1/Q07/C053 只读逐候选复核：正式源码tick7按槽51→52两条applied/effect2/post-hit action156，Unity原Battle Scene同槽序两条Damage、consume预测/观测各一致、writer零差，末态action/锁存156、HP450。逐hit顺序与消费可确认；Unity未逐writer导出目标动作/锁存/HP，不能据末态关闭每次Uj156。下一最窄只读诊断，不重跑已证末态；C053/Q07/总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-PER-HIT-ORDER-AUDIT-20261002/REPORT.md)。
+
+> 2026-10-02 G1/Q07 `NTSD28-336B44-Q07-KIND0-EFFECT22-23-HITPLAN-001 / FOCUSED_TEST_PASS`：无甲角色effect22/23投影去误用相对X专支；夹具右向dvx1的旧-0.9终值更为正式+1.1。原Editor角色组18/18、扩展三方法34/34 PASS，生成工程0错/249 warning、程序集新鲜、非Play/idle及四保护资产SHA稳。真实写者/DAT/Scene/非战斗未改；正式DAT自然可达、根EXE、Battle Scene以及C053/Q07总出口开放。下一步按新版总表筛正式可达自然首差，不在本合成effect22/23条件上空等。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-KIND0-EFFECT22-23-HITPLAN-001.md)、[结果](../../../artifacts/diagnostics/NTSD28-336B44-Q07-KIND0-EFFECT22-23-HITPLAN-001/combined-34-status.json)。
+
+> 2026-10-02 G1/Q07 `NTSD28-336B44-Q07-KIND0-EFFECT22-23-HITPLAN-001 / PLANNED`：原Editor扩展聚焦仅余角色effect22/23两项writer mask；正式336B44无甲普通命中按攻击者朝向写完整dvx，Unity真实写者相同，ShadowCompare投影误套另一响应路线的相对X effect分支。脚本前Task/Change/Ledger/STATE已建；只修投影并定向验证，不动真实写者/DAT/Scene/非战斗。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-KIND0-EFFECT22-23-HITPLAN-001.md)。
+
+> 2026-10-02 G1/Q07 `NTSD28-336B44-Q07-TYPE3-BDEFEND-TEST-001 / FOCUSED_TEST_PASS`：只更正合成type3测试方法的45字段读取口、原生CRT夹具和type0→type3静音预期；原Editor第三轮精确15/15 PASS，前两轮失败原件保留。生成Editor工程0错/249 warning，原Editor DLL晚于脚本，四保护资产磁盘SHA稳。生产/DAT/Scene未改；另2 writer mask、正式DAT自然链和Q07整组开放。下一步按336B44正式分支审计两项剩余writer mask，再决定生产或测试是否有首差。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-TYPE3-BDEFEND-TEST-001.md)、[结果](../../../artifacts/diagnostics/NTSD28-336B44-Q07-TYPE3-BDEFEND-TEST-001/focused-status-v3.json)。
+
+> 2026-10-02 G1/Q07 `NTSD28-336B44-Q07-TYPE3-BDEFEND-TEST-001 / PLANNED`：扩展聚焦15项实际失败字段是合成type3 target.HitStateCount45/0（非vrest）；336B44正式普通命中写bdefend_accumulator45，Unity共用生产写Runtime.Bdefend45。脚本前Task/Change/Ledger/STATE已建，仅修该测试断言并定向重跑，不改生产/DAT/Scene。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-TYPE3-BDEFEND-TEST-001.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-SHADOW-SOUND-COORDINATE-001 / RUNTIME_PENDING`：17处实体音效投影共用生产源规则X入口，原Scene战斗132/132+待播42/42、ShadowCompare两自然Damage零差；直接音效focused1/1。扩展34项17项非bit63失败，独立审计待；Scene clean/四SHA稳，C053/Q07开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-SHADOW-SOUND-COORDINATE-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-SHADOW-SOUND-COORDINATE-001 / PLANNED`：RED已证只读投影X897/真实及正式X584。脚本前Task/Change/Ledger/STATE建立；下一仅将所有实体音效投影统一接现有ResolveBattleSoundWorldXInt及原Scene Green探针，不改真实队列、DAT/Scene或非战斗。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-SHADOW-SOUND-COORDINATE-001.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-SHADOW-SOUND-FIELD-001 / VERIFIED`（仅字段定位）：原Scene同正式132/132，tick7首次音频bit63期望X897/实际X584、正式同条X584，Count/Cue/Tick/Queue/Reject相同，指纹随X差。退出clean/四SHA稳，Ledger1121/3 PASS。下一独立Change修通用命中投影音效坐标，Q07仍开。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-SHADOW-SOUND-FIELD-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-SHADOW-SOUND-FIELD-001 / PLANNED`：正式/Unity实际待播事件42/42同态后，原ShadowCompare的bit63须先定位七字段具体期望/实际差；脚本前Task/Change/Ledger/STATE已建，仅改只读诊断和原Scene探针，不改writer、DAT/Scene或非战斗。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-SHADOW-SOUND-FIELD-001.md)。
+
+> 2026-10-02 G1/Q10 `NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001 / VERIFIED`（只限待播事件）：正式336B44与原Battle Scene同三人受控12tick的10音频事件逐tick路径/X/顺序42/42、战斗132/132，合计174/174首差0；正式源码双跑同SHA，原Editor退出clean、四SHA稳。旧Q07 ShadowCompare bit63属于只读投影首差候选，不是实际音效已证差异。播放/声像/设备、Q07内部观测和Q10整阶段仍开。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001/REPORT.md)。
+
+> 2026-10-02 G1/Q10 `NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001 / PLANNED`：Q07/C053只读ShadowCompare两次writer音频bit63 mismatch、战斗末态132/132稳定；现只增正式playable audio_events离线诊断与原Scene PendingSounds探针，按同初态逐tick核首差，生产/DAT/Scene不动。脚本前Task/Change/Ledger/STATE已建。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001.md)。
+
+> 2026-10-02 G1/Q07/C053→Q10 `NTSD28-336B44-Q07-C053-SHADOW-HIT-SCENE-001 / RUNTIME_PENDING`：原Scene三人自然双producer只读ShadowCompare两轮各132/132末态同336B44源，tick7两Damage/consume指纹同预测；writer音频bit63两差，代码候选为投影物理X vs 实际源X，尚无逐音效原件。原Editor退出Play clean/四SHA稳，生产/DAT/Scene未改。下步Q10同tick正式/Unity音频序列诊断，C053/Q07开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-SHADOW-HIT-SCENE-001/REPORT.md)。
+
 > 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-SHADOW-HIT-SCENE-001 / PLANNED`：已有原Scene三人自然双producer132/132，下一只在测试Play World tick0启用既有ShadowCompare，记录tick7候选顺序/实际disposition/consume与mismatch。脚本前Task/Change/Ledger/STATE已建，生产/DAT/Scene不动，首轮结果不覆盖。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-SHADOW-HIT-SCENE-001.md)。
 
 > 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-NATURAL-DOUBLE-SCENE-001 / VERIFIED_SCOPED_NATURAL_DOUBLE_SCENE`：原 Battle Scene 三人自然双producer12tick×11字段132/132同336B44 playable源码，tick7目标HP450、两攻击者rest10，原Editor idle/Scene clean/四保护SHA稳；只增测试探针，DAT/生产/Scene不动。物理键、逐hit/全World仍待，C053/Q07/总目标开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-NATURAL-DOUBLE-SCENE-001/REPORT.md)。
@@ -4613,4 +4729,35 @@ Noncharacter X-edge death product choice pending async user reply from 2026-09-2
 > 2026-10-02 `NTSD28-336B44-Q07-C053-NATURAL-SCENE-001 / CODE_WRITTEN`：原Editor首轮已导入并在原Battle Scene跑8tick、退出clean；首差tick1主角/子体水平位移反向，探针把根false朝向误配Unity left。首轮JSON保留；探针已改right/第二唯一RunId，待编译重测/逐字段比对。未改生产/DAT/Scene，C053/Q07开放。[Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-NATURAL-SCENE-001.md)。
 
 > 2026-10-02 G1/Q07/C053 `NTSD28-336B44-Q07-C053-NATURAL-DOUBLE-SCENE-001 / PLANNED`：正式源 9/9 自然双 Uj 后，原 Battle Scene 三角色生产 Driver 定向出口已在脚本前建立 Task/Change/Ledger/STATE。只新增测试探针；保留全部 dirty 文件，DAT/生产/场景不动。根 LFR 第三槽初始动作覆盖不足，不拿其作同初态对照。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-NATURAL-DOUBLE-SCENE-001.md)。
+
+> 2026-10-02 G1/Q07/C043 `NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001 / IN_PROGRESS`：正式根C043自然链已封存，原Editor当前唯一Battle Scene、非Play/idle；脚本前Task/Change/Ledger/STATE已登记，下一只新增独立探针在原Scene按同输入60tick验证自然OID420持有→tick28合体关系尾清、退出clean/四SHA。不得改DAT数值/Scene/非战斗或覆盖旧结果；C043/Q07/总目标开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001.md)。
+
+> 2026-10-02 G1/Q07/C043 `NTSD28-336B44-Q07-C043-SLOT-RELEASE-PUBLISHER-001 / IN_PROGRESS`：正式自然链原Battle Scene前41tick关键门均同态，tick42子体退场在`ReleaseRuntimeSlot`关系清理先于统一AI旧行失效，抛槽代数异常；真实结果FAIL/池残留5/四SHA稳。Task/Change/Ledger/STATE脚本前已建，下一先聚焦RED再最小移动既有失效调用并原Scene新请求复验。保护全部原件，不改DAT/Scene/非战斗；C043/Q07总目标仍开。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C043-SLOT-RELEASE-PUBLISHER-001.md)。
+
+> 2026-10-02 G1/Q07/C043 最新：共用`ReleaseRuntimeSlot`旧行失效顺序仅移动现有调用，目标RED1/1→GREEN1/1、相邻2/2，原Battle Scene同正式Lee7/Chi8输入60tick完成；前5tick空槽哨兵0/-1以外，17字段共1020项零行为首差，退出池0/Scene clean/四SHA稳。旧tick42异常结果原件保留。两个子包VERIFIED_SCOPED；完整SelfCheck/全World/物理键与C043父项/Q07仍开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001/REPORT.md)。
+
+> 2026-10-02 G1/Q07/C042 `NTSD28-336B44-Q07-C042-SELFCHECK-ORACLE-001 / IN_PROGRESS`：原Editor完整SelfCheck于旧版投掷双方计数清零断言失败，结果保留在C043自然Scene证据目录。正式336B44投掷只清抓取者，无选招被投者应保留6；Task/Record/Ledger/STATE在脚本前已登记。下一仅修 `BattleRuntimeSelfCheck.CheckCpointThrowRawAndTransformMatrix` 断言并重新验收；不动生产、DAT、Scene，父出口开放。
+
+> 2026-10-02 G1/Q07/C044 `NTSD28-336B44-Q07-C044-SELFCHECK-ORACLE-001 / IN_PROGRESS`：原Editor完整SelfCheck第二轮首差旧跨零冲量断言，结果另存02；正式336B44与当前Unity生产均先写双方HitCount1及pending X/Y、帧后结算速度。Task/Record/Ledger/STATE在脚本前登记，仅更正此方法旧断言，生产/DAT/Scene/非战斗不动，父出口开放。
+
+> 2026-10-02 G1/Q07/C051 `NTSD28-336B44-Q07-C051-EFFECT22-SELFCHECK-ORACLE-001 / IN_PROGRESS`：原Editor完整SelfCheck effect22合成条件面右/X0→X10/dvx8，旧断言要求-8，当前正式无甲普通分支和Unity C051共用writer均为+8。Task/Record/Ledger/STATE在脚本前登记，只修SelfCheck一条预期与失败信息，再用原Editor实际验收；C051/Q07开放。
+
+> 2026-10-02 G1/Q07/C056 `NTSD28-336B44-Q07-C056-FUSION-SELFCHECK-ORACLE-001 / IN_PROGRESS`：原Editor第五轮SelfCheck effect22已过，下一首差旧融合锁存/计数断言，结果另存05。正式336B44融合保留原action latch/snapshot/counter，Unity共用TryMerge已用保留入口；Task/Record/Ledger/STATE脚本前已登记，下一只修测试并实际复验。生产/DAT/Scene/非战斗不动。
+
+> 2026-10-02 G1/Q07/C054 `NTSD28-336B44-Q07-C054-DEFUSION-SELFCHECK-ORACLE-001 / IN_PROGRESS`：C056合体SelfCheck已过，第七轮首差是C054解融合伙伴精确XYZ旧预期，结果另存07。正式336B44解融合由整数XYZ重建伙伴精确XYZ，Unity C054共用写者已一致；脚本前Task/Record/Ledger/STATE已建，下一只更正两条同规则测试断言，不改生产/DAT/Scene/非战斗。
+
+> 2026-10-02 G1/Q07/C054 `NTSD28-336B44-Q07-C054-DEPTH-FRACTIONAL-REACH-001 / PLANNED`：正式OID52 DAT running_speedz3.7、input_routing跑步纵深与physics精确Z积分提供自然小数候选；旧中性/右移tick201自然拆分但全整数。脚本前Task/Change/Ledger/STATE已建；仅扩正式源码诊断一个有界斜向奔跑profile，双跑后阳性才送正式根/原Scene；生产/DAT/Scene/非战斗不改，C054/Q07开放。
+> 2026-10-02 G2/Q09/P-04 `NTSD28-336B44-Q09-SAME-Z-CURRENT-PIXEL-001 / CODE_WRITTEN`：原Scene当前SHA934483…，旧四图SHA471396…不可直接晋升；已建Task/Change/Ledger，只改既有Editor探针自然请求run ID及版本化结果/PNG路径并拒绝覆盖，未改生产/Scene/DAT。编译、四Play、像素比较待；Q09/总目标开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q09-SAME-Z-CURRENT-PIXEL-001.md)。
+
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-PRESENTATION-CLOCK-001 / IN_PROGRESS`：正式336B44发布快照即启动插值时间，Unity当前首次读取才启动。已建准确Task/Change并纳入Ledger/STATE，待原BattleScene延迟首次读取RED、共用发布时间修正及GREEN/原场景验收；此刻不称可见首差或Q09关闭。仅两声明脚本路径，不改DAT/Scene/非战斗。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q09-PRESENTATION-CLOCK-001.md)。
+
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001 / IN_PROGRESS`：原Scene当前合成图已有、同帧tick/视口缺；现有旧探针固定JSON禁止覆盖。脚本前Task/Change/Ledger/STATE已登记，仅改Q09 Editor探针Game View分支唯一JSON/PNG与只读映射字段；待编译/原Scene Play/保护哈希，正式EXE像素与Q09父项开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001.md)。
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001 / VERIFIED_SCOPED_UNITY_SAME_TICK_CAPTURE`（覆盖同ID IN_PROGRESS）：原Battle Scene物理D键自然移动同tick482的发布/计划/截图后记录及1920×1080合成PNG通过，首轮无名牌FAIL原件保留；Editor退出idle/Scene clean、旧JSON/PNG与四保护SHA稳、生成/原Editor编译0错、Ledger通过。只关Unity同帧取证；正式根EXE实际像素、直接Battle名牌与其它Q09开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001/REPORT.md)。
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-NATURAL-MOTION-SOURCE-GATE-001 / IN_PROGRESS`：336B44正式采样与Unity共用采样器静态条件性差异是Unity缺源规则坐标时拒绝插值；自然画面可达性未证。脚本前Task/Change/Ledger/STATE已建，只扩现有唯一JSON/PNG原Scene Game View探针输出前后标志与采样状态；待编译/原Editor Play。生产/DAT/Scene/非战斗不改，Q09开放。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q09-NATURAL-MOTION-SOURCE-GATE-001.md)。
+> 2026-10-02 G2/Q09 `NTSD28-336B44-Q09-NATURAL-MOTION-SOURCE-GATE-001 / VERIFIED_SCOPED_NATURAL_FRAME`（覆盖同ID IN_PROGRESS）：原Scene物理D键成功帧2152两可见OID2均前后source=true且Sampled，缺源门0；三次焦点FAIL留证，原Editor退出idle/clean、旧证据及四SHA稳、编译0错/Ledger PASS。仅单帧阴性，不推断其它实体/出生/关系/传送断点；正式EXE像素及Q09开放。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-NATURAL-MOTION-SOURCE-GATE-001/REPORT.md)。
+> 2026-10-02 G1/Q01 `NTSD28-336B44-Q01-TYPE0-NORMALIZED-DEPLOYMENT-001 / VERIFIED_SCOPED_TYPE0_DEPLOYMENT`：158份type-0角色DAT原始相同157、严格CRLF→LF后相同158，唯一OID77原始SHA差明确保留；原Editor具名EditMode1/1 PASS，两端330解析、158角色路径/帧/声明图片原始SHA检查已全走过。生成Editor编译0错，Editor idle/nonPlay、Battle Scene clean、四保护SHA及LoganRuntime稳。仅改测试脚本，不改DAT/PNG/生产/Scene；Game View、非对象图片与Q01/Q07/Q09/Q12仍待。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q01-TYPE0-NORMALIZED-DEPLOYMENT-001/REPORT.md)。
+
+> 2026-10-02 G2/Q10 `NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001 / PLANNED`：原Windows打包器旧v2清单1371文件与当前1373文件不符，且NTSDSoundPlayer在Player以Application.dataPath误定位正式WAV；25 DAT原始差均严格CRLF/LF等价，未改数据。脚本前Task/Change/Ledger/STATE已建；接下来只建v3清单并修共用内容根，原Editor聚焦+唯一Windows构建/Player运行验收，不碰旧Sound、非战斗或旧清单。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q10-C053-PLAYER-AUDIO-PATH-001.md)。
+
+> 2026-10-02 G2/Q10 Sakura 双声道自然事件门 `NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001 / PLANNED`：Task/Change/Ledger 已在脚本前建立；下一仅新增 Tools 正式 playable 离线探针，检 action0 防→上→攻→172 后新跳键是否发 `c/saku/w/tra.wav`，录LFR经根336B44核动作。根trace不公开音频、Q10仍开；不动DAT/正式源/Unity生产/Scene/WAV。
 

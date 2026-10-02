@@ -1,0 +1,23 @@
+{
+    "status": "PASS",
+    "message": "Built Windows Player selected formal sidecar, ran battle and closed cleanly.",
+    "configuredRoot": "Assets/NTSD/Content/LoganRuntime",
+    "selectionMode": "serialized",
+    "serializedRootBefore": "Assets/NTSD/Content/LoganRuntime",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07-Windows-Player\\Q10C053PlayerAudio336B44-20261002-02\\Assets\\NTSD\\Content\\LoganRuntime|868070262E6D0C7D2937BD61BBD456E05355E580A5462DC782C3F8EECA08F7C5|88EF018854B9740912714BB972FA305F7A71CBE47B88800986C77808B7CD4491",
+    "fingerprint": "868070262E6D0C7D2937BD61BBD456E05355E580A5462DC782C3F8EECA08F7C5",
+    "shutdownStage": "RuntimeMapCleared",
+    "worldObjects": 4,
+    "trackedResources": 30872,
+    "resourceSurvivors": 0,
+    "activePoolBorrowers": 0,
+    "samePublishedKeys": true,
+    "sceneConfigMatched": true,
+    "stayedStoppedAfterTwoFrames": true,
+    "q10AudioRequested": true,
+    "q10Formal020Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07-Windows-Player\\Q10C053PlayerAudio336B44-20261002-02\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\020.wav",
+    "q10Formal067Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07-Windows-Player\\Q10C053PlayerAudio336B44-20261002-02\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\067.wav",
+    "q10Formal020Samples": 16413,
+    "q10Formal067Samples": 31170,
+    "q10PlayedSounds": 2
+}

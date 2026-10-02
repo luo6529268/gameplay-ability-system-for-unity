@@ -1,0 +1,23 @@
+{
+    "runId": "ank580-ank580-jira500-formal-wav-01",
+    "status": "FAIL",
+    "phase": "DONE",
+    "error": "System.InvalidOperationException: Expected one active battle sound player.\r\n  at NTSD.Test.Editor.NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs:183 \r\n  at NTSD.Test.Editor.NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.WaitForRoster () [0x0040b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs:346 \r\n  at NTSD.Test.Editor.NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.Poll () [0x000da] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs:236 ",
+    "startedUtc": "2026-10-02T04:08:47.7552402Z",
+    "sceneHashBefore": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "sceneHashAfter": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "startTick": 0,
+    "endTick": 0,
+    "configuredBeforeStart": true,
+    "exitedPlay": true,
+    "sceneCleanAfter": true,
+    "childBirthTick": -1,
+    "attackerBirthTick": -1,
+    "difficulty": 0,
+    "battleMode": 0,
+    "shadowConfigCount": 1,
+    "q10Formal020Samples": 0,
+    "q10Formal067Samples": 0,
+    "ticks": []
+}

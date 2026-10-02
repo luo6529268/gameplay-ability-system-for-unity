@@ -12,6 +12,8 @@ namespace NTSD.Test.Editor
     {
         private const string MenuPath =
             "NTSD/Battle Diagnostics/Q10/Calibrate Mono Stereo Matrix Output";
+        private const string CurrentC053MenuPath =
+            "NTSD/Battle Diagnostics/Q10/Calibrate 336B44 C053 Mono Matrix";
         private const double MeasureBeginSeconds = 0.12;
         private const double MeasureEndSeconds = 0.42;
         private const double CaseSeconds = 0.50;
@@ -28,6 +30,20 @@ namespace NTSD.Test.Editor
             CreateNativeCandidate("native_50_50", 50, 50),
         };
 
+        private static readonly CalibrationCase[] CurrentC053Cases =
+        {
+            new CalibrationCase("full_left_reference", -1f, 1f, 1f, 0f),
+            new CalibrationCase("unity_center_reference", 0f, 1f,
+                0.70710678f, 0.70710678f),
+            CreateNativeCandidate("current_64_36", 64, 36),
+            CreateNativeCandidate("current_75_25", 75, 25),
+            CreateNativeCandidate("current_65_35", 65, 35),
+            CreateNativeCandidate("current_63_37", 63, 37),
+            CreateNativeCandidate("current_78_22", 78, 22),
+            CreateNativeCandidate("current_66_34", 66, 34),
+        };
+
+        private static CalibrationCase[] activeCases = Cases;
         private static GameObject sourceObject;
         private static AudioSource source;
         private static AudioClip clip;
@@ -47,13 +63,32 @@ namespace NTSD.Test.Editor
         [MenuItem(MenuPath)]
         public static void Run()
         {
+            RunCases(Cases,
+                "NTSD28-Q10-AUDIORENDERER-MATRIX-CALIBRATION-001",
+                "calibration-v3.json");
+        }
+
+        [MenuItem(CurrentC053MenuPath)]
+        public static void RunCurrentC053()
+        {
+            RunCases(CurrentC053Cases,
+                "NTSD28-336B44-Q10-C053-MONO-MATRIX-CALIBRATION-001",
+                "calibration-" + DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") +
+                ".json");
+        }
+
+        private static void RunCases(
+            CalibrationCase[] selectedCases,
+            string outputDirectory,
+            string outputFile)
+        {
             if (running)
                 return;
 
+            activeCases = selectedCases;
             resultPath = Path.GetFullPath(Path.Combine(
                 Application.dataPath, "..", "artifacts", "diagnostics",
-                "NTSD28-Q10-AUDIORENDERER-MATRIX-CALIBRATION-001",
-                "calibration-v3.json"));
+                outputDirectory, outputFile));
             if (File.Exists(resultPath))
             {
                 Debug.LogError("Q10 audio calibration result already exists: " + resultPath);
@@ -66,17 +101,17 @@ namespace NTSD.Test.Editor
                 initialScene = SceneManager.GetActiveScene().path,
                 speakerMode = AudioSettings.speakerMode.ToString(),
                 sampleRate = AudioSettings.outputSampleRate,
-                cases = new CaseResult[Cases.Length],
+                cases = new CaseResult[activeCases.Length],
             };
-            for (int i = 0; i < Cases.Length; i++)
+            for (int i = 0; i < activeCases.Length; i++)
             {
                 report.cases[i] = new CaseResult
                 {
-                    name = Cases[i].Name,
-                    panStereo = Cases[i].Pan,
-                    sourceVolume = Cases[i].Volume,
-                    targetLeft = Cases[i].TargetLeft,
-                    targetRight = Cases[i].TargetRight,
+                    name = activeCases[i].Name,
+                    panStereo = activeCases[i].Pan,
+                    sourceVolume = activeCases[i].Volume,
+                    targetLeft = activeCases[i].TargetLeft,
+                    targetRight = activeCases[i].TargetRight,
                 };
             }
 
@@ -165,7 +200,7 @@ namespace NTSD.Test.Editor
 
         private static void StartCase(double now)
         {
-            CalibrationCase current = Cases[caseIndex];
+            CalibrationCase current = activeCases[caseIndex];
             source.Stop();
             source.panStereo = current.Pan;
             source.volume = current.Volume;
@@ -198,7 +233,7 @@ namespace NTSD.Test.Editor
                 else if (!casePlaying && now - gapStartedAt >= GapSeconds)
                 {
                     caseIndex++;
-                    if (caseIndex == Cases.Length)
+                    if (caseIndex == activeCases.Length)
                     {
                         Finish(true, null);
                         return;

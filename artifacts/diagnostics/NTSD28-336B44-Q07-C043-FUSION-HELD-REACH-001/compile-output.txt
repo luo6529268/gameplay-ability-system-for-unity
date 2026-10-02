@@ -1,0 +1,2 @@
+G:/GoggleDownload/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.1.0/../../../../x86_64-w64-mingw32/bin/ld.exe: G:/GoggleDownload/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/../lib/gcc/x86_64-w64-mingw32/15.1.0/../../../../x86_64-w64-mingw32/lib/../lib/libmingw32.a(lib64_libmingw32_a-crtexewin.o):crtexewin.c:(.text.startup+0xc5): undefined reference to `WinMain'
+collect2.exe: error: ld returned 1 exit status

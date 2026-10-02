@@ -1,0 +1,14 @@
+{
+  "case": "a355-x800",
+  "root_passed": true,
+  "root_failure_code": 0,
+  "ticks": 160,
+  "selected_fields_compared": 3200,
+  "differences": 0,
+  "first_differences": [],
+  "exclusions": [
+    "root extra terminal tick",
+    "crtState differs due manager LFR provenance",
+    "nonselected World fields"
+  ]
+}

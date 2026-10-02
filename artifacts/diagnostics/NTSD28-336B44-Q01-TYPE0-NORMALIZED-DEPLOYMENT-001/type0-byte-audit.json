@@ -1,0 +1,16 @@
+{
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "type0Count": 158,
+  "rawEqualCount": 157,
+  "crlfNormalizedEqualCount": 158,
+  "rawDifferent": [
+    {
+      "oid": 77,
+      "path": "c/kar/kar.dat",
+      "rawEqual": false,
+      "crlfNormalizedEqual": true,
+      "formalSha256": "987696ABE0D2E562C56DC0265E999B7D37443B55324310A7A5D47D15AEAC66FF",
+      "stagedSha256": "A4500E6B40B33667460C11ABE3C47F7F5B8F07C1DCEBF39A74A9AF0E2CE21F62"
+    }
+  ]
+}

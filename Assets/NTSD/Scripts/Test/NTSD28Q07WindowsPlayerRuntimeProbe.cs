@@ -18,7 +18,7 @@ namespace NTSD.Test
     internal sealed class NTSD28Q07WindowsPlayerRuntimeProbe : MonoBehaviour
     {
         [Serializable]
-        private sealed class Report
+        private class Report
         {
             public string status;
             public string message;
@@ -35,6 +35,17 @@ namespace NTSD.Test
             public bool samePublishedKeys;
             public bool sceneConfigMatched;
             public bool stayedStoppedAfterTwoFrames;
+        }
+
+        [Serializable]
+        private sealed class Q10AudioReport : Report
+        {
+            public bool q10AudioRequested = true;
+            public string q10Formal020Path;
+            public string q10Formal067Path;
+            public int q10Formal020Samples;
+            public int q10Formal067Samples;
+            public long q10PlayedSounds;
         }
 
         private const string FormalRoot = "Assets/NTSD/Content/LoganRuntime";
@@ -73,23 +84,23 @@ namespace NTSD.Test
             probe.useSerializedRoot = useSerializedRoot;
             probe.serializedRootBefore = serializedRootBefore;
             probe.sceneConfigMatched = ReferenceEquals(config, sceneConfig);
+            probe.q10AudioRequested = args.Contains("-ntsd-q10-formal-audio-probe");
         }
 
         private GameConfig config;
         private bool useSerializedRoot;
         private string serializedRootBefore;
         private bool sceneConfigMatched;
+        private bool q10AudioRequested;
 
         private async void Start()
         {
-            var report = new Report
-            {
-                status = "RUNNING",
-                configuredRoot = config == null ? string.Empty : config.BattleContentRuntimeRoot,
-                selectionMode = useSerializedRoot ? "serialized" : "injected",
-                serializedRootBefore = serializedRootBefore,
-                sceneConfigMatched = sceneConfigMatched,
-            };
+            Report report = q10AudioRequested ? new Q10AudioReport() : new Report();
+            report.status = "RUNNING";
+            report.configuredRoot = config == null ? string.Empty : config.BattleContentRuntimeRoot;
+            report.selectionMode = useSerializedRoot ? "serialized" : "injected";
+            report.serializedRootBefore = serializedRootBefore;
+            report.sceneConfigMatched = sceneConfigMatched;
             try
             {
                 File.WriteAllText(reportPath, JsonUtility.ToJson(report, true));
@@ -121,7 +132,12 @@ namespace NTSD.Test
                 report.samePublishedKeys = !string.IsNullOrEmpty(report.sourceKey) &&
                     GameDataManager.TryGetInstance()?.PublishedVisualContentKey == report.sourceKey &&
                     CharacterUIResourceManager.TryGetInstance()?.PublishedVisualContentKey == report.sourceKey;
-                Require(report.fingerprint == FormalFingerprint && report.samePublishedKeys,
+                bool currentIdentityPublished = report.samePublishedKeys &&
+                    !string.IsNullOrEmpty(report.fingerprint) &&
+                    report.fingerprint ==
+                    manager.PublishedLoganCatalog?.ContentIdentity.SemanticFingerprint;
+                Require(q10AudioRequested ? currentIdentityPublished :
+                    report.fingerprint == FormalFingerprint && report.samePublishedKeys,
                     "The built Player did not publish the formal content to all three owners.");
                 foreach (int id in new[] { 0, 50, 52 })
                 {
@@ -141,6 +157,8 @@ namespace NTSD.Test
                 var pool = LF2ObjectPool.TryGetInstance();
                 var app = AppManager.Instance;
                 Require(app != null, "Formal Player AppManager is missing.");
+                if (q10AudioRequested)
+                    VerifyFormalBattleAudio(app.SoundPlayer, (Q10AudioReport)report);
                 bool shutdownSucceeded = app.TryShutdownBattleRuntimeBeforeSceneDestroy(
                     out BattleRuntimeShutdownReport shutdown);
                 Require(shutdownSucceeded, "Formal Player ordered shutdown failed.");
@@ -175,6 +193,55 @@ namespace NTSD.Test
                 File.WriteAllText(reportPath, JsonUtility.ToJson(report, true));
                 Application.Quit(report.status == "PASS" ? 0 : 1);
             }
+        }
+
+        private static void VerifyFormalBattleAudio(
+            NTSDSoundPlayer player, Q10AudioReport report)
+        {
+            Require(player != null && player.BattleCatalogSealedForDiagnostics,
+                "Formal Player battle sound catalog is not prepared and sealed.");
+            MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod(
+                "GetOrPrepareCue", BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(getCue != null, "Formal Player cue resolver is missing.");
+            string sidecar = Path.Combine(
+                Directory.GetParent(Application.dataPath).FullName, FormalRoot, "vfs", "data");
+            long playedBefore = player.PooledOneShotPlayCountForDiagnostics;
+            foreach (var entry in new[]
+            {
+                (Id: "020", Samples: 16413),
+                (Id: "067", Samples: 31170),
+            })
+            {
+                string soundId = $@"data\{entry.Id}.wav";
+                object cue = getCue.Invoke(player, new object[] { soundId, true });
+                Require(cue != null, "Formal Player battle cue was not prewarmed: " + soundId);
+                Type cueType = cue.GetType();
+                string actualPath = (string)cueType.GetField("SourcePath").GetValue(cue);
+                string expectedPath = Path.GetFullPath(Path.Combine(
+                    sidecar, entry.Id + ".wav"));
+                Require(string.Equals(Path.GetFullPath(actualPath), expectedPath,
+                        StringComparison.OrdinalIgnoreCase) && File.Exists(actualPath),
+                    "Formal Player battle cue resolved outside the built sidecar: " + soundId);
+                var clips = (AudioClip[])cueType.GetField("Clips").GetValue(cue);
+                Require(clips != null && clips.Length == 1 && clips[0] != null &&
+                    clips[0].samples == entry.Samples,
+                    "Formal Player battle cue did not decode expected samples: " + soundId);
+                if (entry.Id == "020")
+                {
+                    report.q10Formal020Path = actualPath;
+                    report.q10Formal020Samples = clips[0].samples;
+                }
+                else
+                {
+                    report.q10Formal067Path = actualPath;
+                    report.q10Formal067Samples = clips[0].samples;
+                }
+                player.PresentSound(new PendingSoundEvent(soundId, 500, 1));
+            }
+            report.q10PlayedSounds =
+                player.PooledOneShotPlayCountForDiagnostics - playedBefore;
+            Require(report.q10PlayedSounds == 2,
+                "Formal Player battle cues did not reach AudioSource playback.");
         }
 
         private static void Require(bool condition, string message)

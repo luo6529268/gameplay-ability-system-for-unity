@@ -1,0 +1,6 @@
+FAIL
+System.InvalidOperationException: negative release must use AttackingCounter and preserve position before the terminal fence
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33538 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckCpointEscapeAndMismatchControlFlow () [0x00172] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:11129 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x0050a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:270 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

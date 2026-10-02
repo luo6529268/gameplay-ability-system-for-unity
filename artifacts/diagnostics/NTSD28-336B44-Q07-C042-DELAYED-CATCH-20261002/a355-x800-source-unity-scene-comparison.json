@@ -1,0 +1,14 @@
+{
+  "schema": "ntsd28-c042-delayed-source-unity-scene-comparison-v1",
+  "case": "a355-x800",
+  "ticks": 60,
+  "fields_per_tick": 20,
+  "compared_values": 1200,
+  "difference_count": 0,
+  "first_differences": [],
+  "scene_status": "CAPTURED",
+  "scene_phase": "DONE",
+  "exited_play": true,
+  "scene_clean_after": true,
+  "source_root_160tick_selected_fields": 3200
+}

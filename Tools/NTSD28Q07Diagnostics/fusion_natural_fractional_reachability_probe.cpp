@@ -57,6 +57,11 @@ ntsd28::InputButtons28 input_for(const std::string& name,
         input.set(ntsd28::InputKey28::jump);
     } else if (name == "right_hold" && tick >= 2 && tick <= input_end) {
         input.set(ntsd28::InputKey28::right);
+    } else if (name == "diagonal_run" && !row0) {
+        if ((tick >= 2 && tick <= 3) || (tick >= 6 && tick <= 15))
+            input.set(ntsd28::InputKey28::right);
+        if (tick >= 6 && tick <= 15)
+            input.set(ntsd28::InputKey28::depth_up);
     }
     return input;
 }
@@ -156,7 +161,8 @@ int main(int argc, char** argv) {
                 "after_timer,after_x,after_y,after_z,after_precise_x,"
                 "after_precise_y,after_precise_z,fused,defused,unresolved,"
                 "crt_state,crt_calls,sync_counter,sync_index,sync_calls\n";
-        for (const char* name : {"neutral", "late_jump", "right_hold"}) {
+        for (const char* name : {"neutral", "late_jump", "right_hold", "diagonal_run"}) {
+            if (row0 && std::string(name) == "diagonal_run") continue;
             const auto result = run_case(root, name, rows, row0);
             summary << name << " fusion=" << result.first_fusion
                     << " split=" << result.first_split

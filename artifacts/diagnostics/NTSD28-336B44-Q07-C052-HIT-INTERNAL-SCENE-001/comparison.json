@@ -1,0 +1,77 @@
+{
+  "schema": "ntsd28-c052-source-unity-hit-internal-v1",
+  "sceneStatus": "SCOPED_PASS",
+  "scenePhase": "DONE",
+  "shadowConfigCount": 1,
+  "sceneCleanAfter": true,
+  "exitedPlay": true,
+  "tickFieldsCompared": 21,
+  "tickDifferences": [],
+  "sourceHitCount": 3,
+  "unityPlanEntryCount": 3,
+  "sourceHitUnityWriterDifferences": [],
+  "unityEntries": [
+    {
+      "ordinal": 0,
+      "targetSlot": 0,
+      "itrIndex": 0,
+      "expected": "Damage",
+      "observed": "Damage",
+      "preprocess": true,
+      "consumed": true,
+      "writer": true,
+      "writerTargetHp": 420
+    },
+    {
+      "ordinal": 1,
+      "targetSlot": 0,
+      "itrIndex": 1,
+      "expected": "Damage",
+      "observed": "Damage",
+      "preprocess": true,
+      "consumed": false,
+      "writer": false,
+      "writerTargetHp": -2147483648
+    },
+    {
+      "ordinal": 2,
+      "targetSlot": 1,
+      "itrIndex": 1,
+      "expected": "Damage",
+      "observed": "Damage",
+      "preprocess": true,
+      "consumed": true,
+      "writer": true,
+      "writerTargetHp": 420
+    }
+  ],
+  "sourceHitStatuses": [
+    {
+      "ordinal": 0,
+      "targetSlot": 1,
+      "effect": 21,
+      "status": 0,
+      "terminates": 0,
+      "message": ""
+    },
+    {
+      "ordinal": 1,
+      "targetSlot": 1,
+      "effect": 21,
+      "status": 1,
+      "terminates": 0,
+      "message": "target relation rest currently blocks this attacker"
+    },
+    {
+      "ordinal": 2,
+      "targetSlot": 2,
+      "effect": 21,
+      "status": 0,
+      "terminates": 0,
+      "message": ""
+    }
+  ],
+  "planValid": true,
+  "planFailures": 0,
+  "observationMismatches": 0
+}

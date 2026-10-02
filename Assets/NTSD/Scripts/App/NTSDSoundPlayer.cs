@@ -44,10 +44,13 @@ namespace NTSD.App
             public bool IsSingleFile;
             public bool IsLoaded;
             public bool IsLoading;
+            public bool IsFormalBattleFile;
             public AudioClip[] Clips;
         }
 
         private readonly Dictionary<string, PreparedSoundCue> preparedCues =
+            new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
+        private readonly Dictionary<string, PreparedSoundCue> preparedFormalBattleCues =
             new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
         private AudioController preparedAudioController;
         private long preparedCueBuildCount;
@@ -71,7 +74,8 @@ namespace NTSD.App
         private Transform cachedListenerTransform;
         private UnityEngine.Audio.AudioMixerGroup cachedSfxMixerGroup;
 
-        public int PreparedCueCountForDiagnostics => preparedCues.Count;
+        public int PreparedCueCountForDiagnostics =>
+            preparedCues.Count + preparedFormalBattleCues.Count;
         public long PreparedCueBuildCountForDiagnostics => preparedCueBuildCount;
         public int OneShotVoiceCountForDiagnostics => oneShotVoices.Length;
         public long PooledOneShotPlayCountForDiagnostics => pooledOneShotPlayCount;
@@ -153,6 +157,7 @@ namespace NTSD.App
             if (!ReferenceEquals(controller, preparedAudioController))
             {
                 preparedCues.Clear();
+                preparedFormalBattleCues.Clear();
                 preparedAudioController = controller;
             }
 
@@ -164,19 +169,10 @@ namespace NTSD.App
             preparedCues.EnsureCapacity(soundIds.Count);
             foreach (string soundId in soundIds)
             {
-                PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
-                if (preparedCue == null || preparedCue.IsLoaded)
-                    continue;
-
-                preparedCue.IsLoading = true;
-                try
-                {
-                    await LoadPreparedClipsAsync(preparedCue);
-                }
-                finally
-                {
-                    preparedCue.IsLoading = false;
-                }
+                PreparedSoundCue battleCue = GetOrPrepareCue(soundId, true);
+                await EnsurePreparedCueLoadedAsync(battleCue);
+                if (battleCue != null && battleCue.IsFormalBattleFile)
+                    await EnsurePreparedCueLoadedAsync(GetOrPrepareCue(soundId));
             }
 
             long skippedMissing = skippedMissingBattleCueFileCount -
@@ -202,7 +198,7 @@ namespace NTSD.App
             Transform listenerTransform,
             bool isBattleEvent)
         {
-            PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
+            PreparedSoundCue preparedCue = GetOrPrepareCue(soundId, isBattleEvent);
             if (preparedCue == null)
                 return;
 
@@ -269,7 +265,8 @@ namespace NTSD.App
             return true;
         }
 
-        private PreparedSoundCue GetOrPrepareCue(string soundId)
+        private PreparedSoundCue GetOrPrepareCue(
+            string soundId, bool isBattleEvent = false)
         {
             if (string.IsNullOrEmpty(soundId))
                 return null;
@@ -283,14 +280,23 @@ namespace NTSD.App
                     return null;
                 }
                 preparedCues.Clear();
+                preparedFormalBattleCues.Clear();
                 preparedAudioController = controller;
             }
 
-            if (preparedCues.TryGetValue(soundId, out PreparedSoundCue preparedCue))
+            if (isBattleEvent &&
+                preparedFormalBattleCues.TryGetValue(soundId, out PreparedSoundCue preparedCue))
+                return preparedCue;
+
+            if (!isBattleEvent &&
+                preparedCues.TryGetValue(soundId, out preparedCue))
                 return preparedCue;
 
             if (battleCatalogSealed)
             {
+                if (isBattleEvent &&
+                    preparedCues.TryGetValue(soundId, out preparedCue))
+                    return preparedCue;
                 rejectedUnpreparedCueCount++;
                 return null;
             }
@@ -300,22 +306,79 @@ namespace NTSD.App
             string relativeFolder = ResolveRelativeFolder(soundId, audioItem);
             string normalizedRelativeFolder = NormalizeRelativeFolder(relativeFolder);
             bool isSingleFile = IsSingleFilePath(normalizedRelativeFolder);
+            string formalSourcePath = isBattleEvent && isSingleFile
+                ? ResolveFormalBattleSoundSourcePath(normalizedRelativeFolder)
+                : null;
+            if (formalSourcePath == null &&
+                preparedCues.TryGetValue(soundId, out preparedCue))
+                return preparedCue;
+            bool isFormalBattleFile = formalSourcePath != null;
             preparedCue = new PreparedSoundCue
             {
                 AudioItem = audioItem,
                 IsSingleFile = isSingleFile,
+                IsFormalBattleFile = isFormalBattleFile,
                 CacheKey = isSingleFile
-                    ? $"NTSD.AudioFile::{normalizedRelativeFolder}"
+                    ? $"{(isFormalBattleFile ? "NTSD.FormalBattleAudioFile::" : "NTSD.AudioFile::")}{normalizedRelativeFolder}"
                     : $"NTSD.Audio::{normalizedRelativeFolder}",
-                SourcePath = Path.Combine(
-                    Application.dataPath,
-                    soundRootFolder,
-                    normalizedRelativeFolder),
+                SourcePath = formalSourcePath ?? Path.Combine(
+                    Application.dataPath, soundRootFolder, normalizedRelativeFolder),
                 Clips = isSingleFile ? new AudioClip[1] : null,
             };
-            preparedCues.Add(soundId, preparedCue);
+            if (isFormalBattleFile)
+                preparedFormalBattleCues.Add(soundId, preparedCue);
+            else
+                preparedCues.Add(soundId, preparedCue);
             preparedCueBuildCount++;
             return preparedCue;
+        }
+
+        private async UniTask EnsurePreparedCueLoadedAsync(PreparedSoundCue preparedCue)
+        {
+            if (preparedCue == null || preparedCue.IsLoaded)
+                return;
+
+            preparedCue.IsLoading = true;
+            try
+            {
+                await LoadPreparedClipsAsync(preparedCue);
+            }
+            finally
+            {
+                preparedCue.IsLoading = false;
+            }
+        }
+
+        private static string ResolveFormalBattleSoundSourcePath(string relativePath)
+        {
+            string configuredRoot = GameConfig.Instance?.BattleContentRuntimeRoot?.Trim();
+            if (string.IsNullOrWhiteSpace(relativePath) ||
+                string.IsNullOrWhiteSpace(configuredRoot))
+                return null;
+
+            try
+            {
+                string root = Path.GetFullPath(Path.Combine(
+                    Application.dataPath, "..", configuredRoot, "vfs"));
+                string candidate = Path.GetFullPath(Path.Combine(root, relativePath));
+                string rootPrefix = root.TrimEnd(Path.DirectorySeparatorChar) +
+                    Path.DirectorySeparatorChar;
+                if (!candidate.StartsWith(rootPrefix, StringComparison.OrdinalIgnoreCase))
+                    return null;
+                return File.Exists(candidate) ? candidate : null;
+            }
+            catch (ArgumentException)
+            {
+                return null;
+            }
+            catch (NotSupportedException)
+            {
+                return null;
+            }
+            catch (PathTooLongException)
+            {
+                return null;
+            }
         }
 
         private async UniTaskVoid LoadAndPlayPreparedCueAsync(

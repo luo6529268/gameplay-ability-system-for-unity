@@ -45,7 +45,13 @@ namespace NTSD.Test
                 Assert.That(deployed.RegistryIndex, Is.EqualTo(entry.RegistryIndex), $"oid {entry.Id} registry index");
                 Assert.That(deployed.SourcePath, Is.EqualTo(entry.SourcePath), $"oid {entry.Id} source path");
                 Assert.That(deployed.PublishedFolder, Is.EqualTo(entry.PublishedFolder), $"oid {entry.Id} folder");
-                Assert.That(deployed.DatSha256, Is.EqualTo(entry.DatSha256), $"oid {entry.Id} DAT bytes");
+                if (deployed.DatSha256 != entry.DatSha256)
+                {
+                    byte[] formalDat = NormalizeCrLf(File.ReadAllBytes(entry.DatPath));
+                    byte[] stagedDat = NormalizeCrLf(File.ReadAllBytes(deployed.DatPath));
+                    Assert.That(stagedDat, Is.EqualTo(formalDat),
+                        $"oid {entry.Id} DAT differs beyond CRLF line endings");
+                }
 
                 Assert.That(formalConfigs.TryGetValue(entry.Id, out LF2CharacterDataWrapper formalConfig), Is.True);
                 Assert.That(stagedConfigs.TryGetValue(entry.Id, out LF2CharacterDataWrapper stagedConfig), Is.True);
@@ -100,6 +106,20 @@ namespace NTSD.Test
                 hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", string.Empty);
             cache.Add(path, hash);
             return hash;
+        }
+
+        private static byte[] NormalizeCrLf(byte[] bytes)
+        {
+            using (var normalized = new MemoryStream(bytes.Length))
+            {
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    if (bytes[i] == '\r' && i + 1 < bytes.Length && bytes[i + 1] == '\n')
+                        continue;
+                    normalized.WriteByte(bytes[i]);
+                }
+                return normalized.ToArray();
+            }
         }
     }
 }

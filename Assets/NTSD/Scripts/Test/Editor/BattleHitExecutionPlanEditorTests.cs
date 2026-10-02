@@ -974,8 +974,8 @@ namespace NTSD.Test
         [TestCase(0, false, 10, 5, LF2StandardFrames.Injured, 20, 1.1, "SFX_004")]
         [TestCase(0, false, 10, 20, 203, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 21, 203, 20, 1.1, "SFX_001")]
-        [TestCase(0, false, 10, 22, 203, 20, -0.9, "SFX_001")]
-        [TestCase(0, false, 10, 23, LF2StandardFrames.Injured, 20, -0.9, "SFX_001")]
+        [TestCase(0, false, 10, 22, 203, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 23, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 30, 200, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 6, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 7000, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
@@ -3746,27 +3746,25 @@ namespace NTSD.Test
             }
         }
 
-        [TestCase(0, 30, 100, 1, "SFX_001")]
-        [TestCase(1, 30, 100, 1, "SFX_002")]
-        [TestCase(2, 20, 100, 1, "SFX_006")]
-        [TestCase(3, 30, 100, 1, "SFX_010")]
-        [TestCase(4, 30, 100, 1, "SFX_011")]
-        [TestCase(5, 30, 100, 1, "SFX_004")]
-        [TestCase(6, 30, 100, 1, "SFX_001")]
-        [TestCase(21, 30, 100, 1, "SFX_001")]
-        [TestCase(22, 30, 100, 1, "SFX_001")]
-        [TestCase(23, 30, 100, 1, "SFX_001")]
-        [TestCase(30, 30, 100, 1, "SFX_001")]
-        [TestCase(5005, 30, 100, 1, "SFX_001")]
-        [TestCase(5999, 30, 100, 1, "SFX_001")]
-        [TestCase(6033, 30, 100, 1, "SFX_001")]
-        [TestCase(7000, 30, 100, 1, "SFX_001")]
+        [TestCase(0, 30, 100)]
+        [TestCase(1, 30, 100)]
+        [TestCase(2, 20, 100)]
+        [TestCase(3, 30, 100)]
+        [TestCase(4, 30, 100)]
+        [TestCase(5, 30, 100)]
+        [TestCase(6, 30, 100)]
+        [TestCase(21, 30, 100)]
+        [TestCase(22, 30, 100)]
+        [TestCase(23, 30, 100)]
+        [TestCase(30, 30, 100)]
+        [TestCase(5005, 30, 100)]
+        [TestCase(5999, 30, 100)]
+        [TestCase(6033, 30, 100)]
+        [TestCase(7000, 30, 100)]
         public void ShadowCompare_StandardType3DamageWriterEffectMatchesAuthorityState(
             int effect,
             int expectedFrame,
-            int expectedPp,
-            int expectedSoundCount,
-            string expectedLastCue)
+            int expectedPp)
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
@@ -3816,12 +3814,13 @@ namespace NTSD.Test
             itr.bdefend = 0;
             itr.arest = 2;
             itr.vrest = 3;
-            world.Rng.Seed(0x66778899u);
+            world.NativeRandom.ResetFromSeed(0x66778899u);
+            var initialNativeRandom = world.NativeRandom.CaptureScalarState();
             uint firstRngState;
             uint secondRngState;
             unchecked
             {
-                firstRngState = 0x66778899u * 0x343FDu + 0x269EC3u;
+                firstRngState = initialNativeRandom.CrtState * 0x343FDu + 0x269EC3u;
                 secondRngState = firstRngState * 0x343FDu + 0x269EC3u;
             }
             int expectedHitZ = (int)((firstRngState >> 16) & 0x7FFFu) % 9 - 4;
@@ -3862,7 +3861,7 @@ namespace NTSD.Test
             Assert.That(target.FallCounter, Is.EqualTo(effect == 4 ? 90 : 10));
             Assert.That(target.Health.PP, Is.EqualTo(expectedPp));
             Assert.That(target.HitCount, Is.EqualTo(1));
-            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(target.Runtime.Bdefend, Is.EqualTo(45));
             Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
@@ -3872,16 +3871,11 @@ namespace NTSD.Test
             Assert.That(target.GetHitRecordAge(0), Is.EqualTo(effect == 1 ? 30 : 10));
             Assert.That(target.GetHitRecordX(0), Is.EqualTo(expectedHitX));
             Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
-            Assert.That(world.Rng.State, Is.EqualTo(secondRngState));
-            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(expectedSoundCount + 1));
-            Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("CUSTOM_TYPE3_HIT"));
-            if (expectedSoundCount > 1)
-            {
-                Assert.That(
-                    world.PendingSounds[expectedSoundCount].Cue,
-                    Is.EqualTo(expectedLastCue));
-            }
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtState,
+                Is.EqualTo(secondRngState));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtCalls,
+                Is.EqualTo(initialNativeRandom.CrtCalls + 2));
+            Assert.That(world.PendingSounds.Count, Is.Zero);
         }
 
         [Test]

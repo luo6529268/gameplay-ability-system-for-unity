@@ -1,0 +1,5 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\fusion_natural_fractional_reachability_probe.cpp: In function 'ntsd28::InputButtons28 {anonymous}::input_for(const std::string&, int, bool)':
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\fusion_natural_fractional_reachability_probe.cpp:64:43: error: 'up' is not a member of 'ntsd28::InputKey28'; did you mean 'jump'?
+   64 |             input.set(ntsd28::InputKey28::up);
+      |                                           ^~
+      |                                           jump

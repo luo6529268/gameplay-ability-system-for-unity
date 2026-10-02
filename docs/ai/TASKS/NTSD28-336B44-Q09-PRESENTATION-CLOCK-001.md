@@ -1,0 +1,19 @@
+# NTSD28-336B44-Q09-PRESENTATION-CLOCK-001
+
+Status: VERIFIED_SCOPED_PUBLICATION_CLOCK. Parent: BATCH-05/Q09 under `NTSD28-UNITY-BATTLE-REALIGNMENT-001`; Q09 remains open.
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`; playable `source/ntsd28_playable/src/main.cpp` publishes adjacent snapshots and immediately stamps `current_battle_snapshot_started` before rendering, then computes alpha from that stamp. `source/ntsd28_playable/src/presentation_interpolation.cpp` samples adjacent snapshots. D-024 fixed full-background camera and entity distance mapping remain user-approved exceptions.
+
+Observed Unity condition: `SimulationStageRenderModule.RenderDispatchAll` publishes a frame and calls `BattleCentralRenderSystem.QueueLatestPublishedFrame`; `ResolveDisplayAlpha` currently starts `displayClockStartedAt` at first materialization, so any publication-to-first-read delay is omitted. This is a source-level discrepancy candidate, not yet a measured original-Scene pixel difference. [Read-only audit](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-AUDIT-20261002/REPORT.md).
+
+Owned code paths: `Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs` and `Assets/NTSD/Scripts/Test/Editor/BattlePresentationDisplayMotionEditorTests.cs` only. Record a thread-safe monotonic timestamp with each new published frame version, use elapsed publication time at the first display sample while preserving the existing Unity-time `displayClockStartedAt` diagnostic interface, and retain alpha clamp, 30-FPS discrete rule, adjacency/identity/relation/discontinuity gates, camera exception and source-to-view scaling. No DAT, resource, Scene, battle-state, input, non-battle or renderer architecture change.
+
+Validation: add an original-Battle-Scene Play test that queues an adjacent publication, delays the first read while the logic driver is paused, and requires a nonzero initial alpha in a bounded range; capture a RED result before production edit, then GREEN. Verify the 30-FPS discrete and same-tick later-sample controls, generated C# build, original Editor compilation, Battle Scene Play exit/clean Scene and unchanged logic checksum/protected assets. Run ChangeLedger validator and diff check. A passing timing test alone does not close all of Q09; formal EXE pixel A/B and other presentation exits stay open.
+
+Rollback: reverse only the new publication timestamp and focused test in a separately recorded change if disproven; retain previous docs/evidence and all unrelated dirty work. No file removal or Git restore/reset/clean is authorized.
+
+Result: original Scene controlled-delay test measured first alpha 0.0 before the production edit and 0.36562121410253884 after, with 30-FPS alpha1 and unchanged logic checksum; focused neighbors 6/6 PASS, generated build/Editor import/Scene SHA/Ledger gates pass. [Acceptance](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-001/ACCEPTANCE.md). This closes only the publication-clock subtask, not natural Game View/formal pixel A/B or Q09.
+
+Correction: before final closure, the declared same-tick later-sample control must be exercised on the current code. The first-sample GREEN remains valid; the Task reopens while a second sample assertion is compiled and run. The prior acceptance is a first-sample snapshot until amended with this result.
+
+Final supplement: the same original-Scene Play test passed with first/later alpha `0.376127274765357/0.55314848773611236`, 30-FPS alpha1 and unchanged logic checksum. The additional current-script build passed with 0 compiler errors; Editor exited Play clean, four protected SHA matched. The same-tick later-sample gate is now met. [Final acceptance](../../../artifacts/diagnostics/NTSD28-336B44-Q09-PRESENTATION-CLOCK-001/ACCEPTANCE.md).

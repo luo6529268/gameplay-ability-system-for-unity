@@ -1,0 +1,32 @@
+{
+  "observedUtc": "2026-10-01T22:57:11.128760+00:00",
+  "editor": {
+    "is_focused": false,
+    "play_mode": {
+      "is_playing": false,
+      "is_paused": false,
+      "is_changing": false
+    },
+    "active_scene": {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "guid": "9a044b4462e171548a6466aaa64f92e5",
+      "name": "NTSD_Battle"
+    }
+  },
+  "activity": {
+    "phase": "idle",
+    "since_unix_ms": 1790895031270,
+    "reasons": [
+      "tick"
+    ]
+  },
+  "scene": {
+    "name": "NTSD_Battle",
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "buildIndex": 1,
+    "isDirty": false,
+    "isLoaded": true,
+    "rootCount": 13
+  },
+  "csharpCompilerErrorEntries": []
+}

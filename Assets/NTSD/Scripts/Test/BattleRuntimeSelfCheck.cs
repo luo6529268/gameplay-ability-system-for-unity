@@ -10948,8 +10948,8 @@ namespace NTSD.Test
                         $"{label}: raw throw writes must preserve wait counters");
                     Expect(attacker.Runtime.FrameWaitCounter == 15 && victim.Runtime.FrameWaitCounter == 16,
                         $"{label}: raw throw frame writes must not use the immediate-frame FWC reset path");
-                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0,
-                        $"{label}: native throw clears both frame counters");
+                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 6,
+                        $"{label}: native throw clears catcher counter and preserves victim counter without action selection");
                     float expectedVz = directionMode == 1 ? -3f : directionMode == 2 ? 3f : 6f;
                     Expect(Nearly(victim.Runtime.Vz, expectedVz),
                         $"{label}: victim Vz must change only for exclusive up/down input; expected={expectedVz}");
@@ -11076,21 +11076,22 @@ namespace NTSD.Test
             Expect(attacker.Frame.D != null && attacker.Frame.D.frameId == 0 &&
                    victim.Frame.D != null && victim.Frame.D.frameId == 181,
                 "decrease escape raw frame writes must keep Frame.D synchronized");
-            Expect(attacker.AttackingCounter == 1 && victim.AttackingCounter == 1 &&
-                   attacker.HitCount == 0 && victim.HitCount == 0,
-                "decrease<0 escape must arm both native frame counters without writing hit counters");
+            Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0 &&
+                   attacker.HitCount == 1 && victim.HitCount == 1,
+                "decrease<0 escape must arm both pending hit contributions without writing frame counters");
             Expect(Nearly(victim.KnockbackVx, -4f) && Nearly(victim.KnockbackVy, -3f),
                 "decrease<0 escape must calculate C++ raw-position knockback before weapon-sync position ownership");
-            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f),
-                "decrease escape must publish victim velocity in the same cpoint pass");
+            Expect(Nearly(victim.Runtime.Vx, 0f) && Nearly(victim.Runtime.Vy, 0f),
+                "decrease escape must defer victim velocity until frame post-process");
             Expect(attacker.CaughtSlotIndex == victim.Runtime.SlotIndex &&
                    victim.CatcherSlotIndex == attacker.Runtime.SlotIndex,
                 "decrease kind1 sub-pass must not invent runtime link cleanup");
 
             world.FramePostProcessAll();
 
-            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f) && victim.HitCount == 0,
-                $"FramePostProcess must not change already-published escape velocity; vx={victim.Runtime.Vx}, vy={victim.Runtime.Vy}, hitCount={victim.HitCount}");
+            Expect(Nearly(victim.Runtime.Vx, -4f) && Nearly(victim.Runtime.Vy, -3f) &&
+                   attacker.HitCount == 0 && victim.HitCount == 0,
+                $"FramePostProcess must publish pending escape velocity and clear hit contributions; vx={victim.Runtime.Vx}, vy={victim.Runtime.Vy}, attackerHitCount={attacker.HitCount}, victimHitCount={victim.HitCount}");
         }
 
         private static void CheckCpointEscapeAndMismatchControlFlow()
@@ -11125,16 +11126,16 @@ namespace NTSD.Test
                 "CaughtDuration<0 must commit the release actions and terminate before the throw tail");
             Expect(thrower.Runtime.FrameWaitCounter == 21 && throwVictim.Runtime.FrameWaitCounter == 22,
                 "CaughtDuration<0 raw cpoint frames must preserve both runtime frame wait counters");
-            Expect(thrower.AttackingCounter == 1 && throwVictim.AttackingCounter == 1 &&
-                   thrower.HitCount == 0 && throwVictim.HitCount == 0 &&
+            Expect(thrower.AttackingCounter == 0 && throwVictim.AttackingCounter == 0 &&
+                   thrower.HitCount == 1 && throwVictim.HitCount == 1 &&
                    Nearly(throwVictim.KnockbackVx, -4f) &&
                    Nearly(throwVictim.KnockbackVy, -3f) &&
                    Nearly(throwVictim.Runtime.X, 10f) &&
                    Nearly(throwVictim.Runtime.Y, 0f) &&
-                   Nearly(throwVictim.Runtime.Vx, -4f) &&
-                   Nearly(throwVictim.Runtime.Vy, -3f) &&
+                   Nearly(throwVictim.Runtime.Vx, 0f) &&
+                   Nearly(throwVictim.Runtime.Vy, 0f) &&
                    Nearly(throwVictim.Runtime.Vz, 0f),
-                "negative release must use AttackingCounter and preserve position before the terminal fence");
+                "negative release must arm pending hit contributions and preserve position and velocity before the terminal fence");
 
             throwWorld.FramePostProcessAll();
 
@@ -11167,10 +11168,10 @@ namespace NTSD.Test
 
             Expect(dirCatcher.Frame.N == 0 &&
                    dirVictim.Frame.N == 181 &&
-                   dirCatcher.HitCount == 0 &&
-                   dirVictim.HitCount == 0 &&
-                   dirCatcher.AttackingCounter == 1 &&
-                   dirVictim.AttackingCounter == 1 &&
+                   dirCatcher.HitCount == 1 &&
+                   dirVictim.HitCount == 1 &&
+                   dirCatcher.AttackingCounter == 2 &&
+                   dirVictim.AttackingCounter == 0 &&
                    dirCatcher.Runtime.Dir == "left",
                 "CaughtDuration<0 must terminate before dircontrol");
 
@@ -14310,9 +14311,9 @@ namespace NTSD.Test
             effect22.dvy = 20;
             StandardCharacterHitSnapshot effect22Actual = RunStandardCharacterHitCase(true, effect22, victimX: 10, victimY: -5);
             StandardCharacterHitSnapshot effect22Shared = RunStandardCharacterHitCase(false, effect22, victimX: 10, victimY: -5);
-            Expect(effect22Actual.Equals(effect22Shared) && effect22Actual.KnockbackX == -8f &&
+            Expect(effect22Actual.Equals(effect22Shared) && effect22Actual.KnockbackX == 8f &&
                    effect22Actual.KnockbackY == 12f && effect22Actual.Frame == 203,
-                "B5/C-13/C-14: effect22 must resolve final X/vertical reaction before direct post-action 203");
+                $"B5/C-13/C-14: effect22 must resolve final X/vertical reaction before direct post-action 203; actual={effect22Actual}; shared={effect22Shared}");
 
             InteractionArea effect23 = effect22.ShallowCopy();
             effect23.effect = 23;
@@ -28221,6 +28222,11 @@ itr_end:
                 self.Runtime.Vy = 7f;
                 partner.Runtime.Vy = 3f;
                 self.Trans.SyncDirectFrameData(self.Frame.D.wait, self.Frame.D.next, 37);
+                self.AttackingCounter = 7;
+                self.Runtime.NativeSoundActionLatch = 10;
+                int entryWaitCounter = self.Trans.WaitCounter;
+                int entryPrev2 = self.Frame.Prev2;
+                LF2FrameData entryPrev2D = self.Frame.Prev2D;
                 partner.ItrRest.Arest = 6;
                 partner.ItrRest.SetVrest(0, 8);
                 partner.ItrRest.SetVrest(19, 11);
@@ -28237,10 +28243,10 @@ itr_end:
                     "oid 7/8 merge must write integer midpoint X/Z");
                 Expect(Nearly(self.Runtime.Vy, 7f) && Nearly(partner.Runtime.Vy, 0f),
                     "oid 7/8 merge must preserve self Vy and zero partner Vy");
-                Expect(self.Trans.WaitCounter == 290 && self.AttackingCounter == 0 &&
-                       self.Frame.Prev2 == 290 && self.Frame.Prev2D == self.Frame.D &&
+                Expect(self.Trans.WaitCounter == entryWaitCounter && self.AttackingCounter == 7 &&
+                       self.Frame.Prev2 == entryPrev2 && self.Frame.Prev2D == entryPrev2D &&
                        self.Runtime.NativeSoundActionLatch == -1,
-                    "native merge must bind action latch/snapshot to 290, zero frame counter and clear sound latch");
+                    $"native merge must preserve entry latch/snapshot/counter and clear sound latch; wait={self.Trans.WaitCounter}/{entryWaitCounter}, prev2={self.Frame.Prev2}/{entryPrev2}, counter={self.AttackingCounter}, sound={self.Runtime.NativeSoundActionLatch}");
                 Expect(partner.ItrRest.Arest == 6 && partner.ItrRest.GetVrest(0) == 8 &&
                        partner.ItrRest.GetVrest(19) == 11,
                     "oid 7/8 merge must not clear the dormant partner's external arest/vrest state");
@@ -28406,6 +28412,10 @@ itr_end:
                 self.RelationTeam = 0;
                 partner.RelationTeam = 0;
                 self.Trans.SyncDirectFrameData(self.Frame.D.wait, self.Frame.D.next, 29);
+                self.AttackingCounter = 5;
+                int entryWaitCounter = self.Trans.WaitCounter;
+                int entryPrev2 = self.Frame.Prev2;
+                LF2FrameData entryPrev2D = self.Frame.Prev2D;
 
                 selfView = new GameObject("SelfCheck_Oid8_MirrorRenderer");
                 selfView.SetActive(false);
@@ -28431,8 +28441,9 @@ itr_end:
                 partnerRenderer.ForceRefreshPresentation();
                 Expect(self.ObjectId == 51 && self.Runtime.Unk330 == 8 && self.Runtime.Unk334 == 7,
                     "oid 8 must mirror oid 7 as an equally valid active merge owner");
-                Expect(self.Trans.WaitCounter == 290 && self.AttackingCounter == 0 && self.Frame.Prev2 == 290,
-                    "mirrored native merge must publish action latch/snapshot and reset frame counter");
+                Expect(self.Trans.WaitCounter == entryWaitCounter && self.AttackingCounter == 5 &&
+                       self.Frame.Prev2 == entryPrev2 && self.Frame.Prev2D == entryPrev2D,
+                    $"mirrored native merge must preserve entry latch/snapshot/counter; wait={self.Trans.WaitCounter}/{entryWaitCounter}, prev2={self.Frame.Prev2}/{entryPrev2}, counter={self.AttackingCounter}");
                 Expect(selfSpriteRenderer.enabled && selfSpriteRenderer.sprite == sprites51.Sprite,
                     "merged oid 51 renderer must rebind the oid 51 sprite catalog");
                 Expect(!partnerSpriteRenderer.enabled,
@@ -28470,12 +28481,12 @@ itr_end:
                     "mirrored split must bind both action latches/snapshots to 112 and reset frame counters");
                 Expect(Nearly(self.Runtime.X, 77.75) && self.Runtime.XInt == 77 &&
                        Nearly(self.Runtime.Z, 9.25) && self.Runtime.ZInt == 9 &&
-                       Nearly(partner.Runtime.X, 77.75) && partner.Runtime.XInt == 77 &&
-                       Nearly(partner.Runtime.Z, 9.25) && partner.Runtime.ZInt == 9 &&
+                       Nearly(partner.Runtime.X, 77) && partner.Runtime.XInt == 77 &&
+                       Nearly(partner.Runtime.Z, 9) && partner.Runtime.ZInt == 9 &&
                        Nearly(self.Runtime.Y, -5.5) && self.Runtime.YInt == -5 &&
-                       Nearly(partner.Runtime.Y, -5.5) && partner.Runtime.YInt == -5 &&
+                       Nearly(partner.Runtime.Y, -5) && partner.Runtime.YInt == -5 &&
                        partner.Runtime.CollisionYReference == self.Runtime.CollisionYReference,
-                    "mirrored split must preserve precise XYZ and copy their integer snapshots plus collision Y reference");
+                    $"mirrored split must preserve self precise XYZ and rebuild partner precise XYZ from integer snapshots; partner=({partner.Runtime.X},{partner.Runtime.Y},{partner.Runtime.Z}) ints=({partner.Runtime.XInt},{partner.Runtime.YInt},{partner.Runtime.ZInt})");
                 Expect(partner.RelationTeam == 0 && partner.Team == 7,
                     "split partner must inherit exact group zero while retaining its unrelated Team adapter value");
                 Expect(partner.FrameDelay == -7 &&
@@ -28602,12 +28613,12 @@ itr_end:
                     "native split must preserve self Vy/Vz and partner Vz while zeroing partner Vy");
                 Expect(Nearly(self.Runtime.X, 90.75) && self.Runtime.XInt == 90 &&
                        Nearly(self.Runtime.Z, 6.5) && self.Runtime.ZInt == 6 &&
-                       Nearly(partner.Runtime.X, 90.75) && partner.Runtime.XInt == 90 &&
-                       Nearly(partner.Runtime.Z, 6.5) && partner.Runtime.ZInt == 6 &&
+                        Nearly(partner.Runtime.X, 90) && partner.Runtime.XInt == 90 &&
+                        Nearly(partner.Runtime.Z, 6) && partner.Runtime.ZInt == 6 &&
                        Nearly(self.Runtime.Y, -3.25) && self.Runtime.YInt == -3 &&
-                       Nearly(partner.Runtime.Y, -3.25) && partner.Runtime.YInt == -3 &&
+                        Nearly(partner.Runtime.Y, -3) && partner.Runtime.YInt == -3 &&
                        partner.Runtime.CollisionYReference == -17,
-                    "native split must copy precise XYZ, integer XYZ and collision Y reference without zeroing Y");
+                    $"native split must preserve self precise XYZ and rebuild partner precise XYZ from integer snapshots; partner=({partner.Runtime.X},{partner.Runtime.Y},{partner.Runtime.Z}) ints=({partner.Runtime.XInt},{partner.Runtime.YInt},{partner.Runtime.ZInt})");
                 Expect(self.Trans.WaitCounter == 112 && partner.Trans.WaitCounter == 112 &&
                        self.AttackingCounter == 0 && partner.AttackingCounter == 0 &&
                        self.Frame.Prev2 == 112 && self.Frame.Prev2D == self.Frame.D &&

@@ -1,0 +1,26 @@
+{
+  "schema": "ntsd28-336b44-d024-canonical-held-root-unity-spatial/1",
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "rootTracePath": "artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-REACH-001/root-01/root-trace.jsonl",
+  "rootTraceSha256": "C37FC4927609AEAF0F53C27D4B8417DF3CFF39F1455F90E6D263ABFB0EC04CE1",
+  "repeatRootTraceSha256": "C37FC4927609AEAF0F53C27D4B8417DF3CFF39F1455F90E6D263ABFB0EC04CE1",
+  "rootReportPassed": true,
+  "rootReportNativeParityClaim": false,
+  "unitySceneResultPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C043-FUSION-HELD-SCENE-001/late-double-tap-d024-spatial-04.json",
+  "unitySceneResultSha256": "85ED0E2A29EE15456B3B64DE5E2D374C72A7C70D2810205A2BB4E8BFBC2FB486",
+  "rootTick0ChiZ": 400,
+  "rootTick1ChiZ": 542,
+  "unityBaselineChiSourceZ": 400,
+  "zCarrierOffset": 142,
+  "ticks": 60,
+  "counts": {
+    "chiPresence": 60,
+    "childPresence": 60,
+    "chiX": 27,
+    "chiZRelative": 27,
+    "childX": 36,
+    "childZRelative": 36
+  },
+  "compared": 246.0,
+  "differences": []
+}
