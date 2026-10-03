@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
+using Unity.Collections;
 using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Game;
@@ -28,6 +29,10 @@ namespace NTSD.Test
             "NTSD/Battle Diagnostics/Q10/Run Sakura Natural Stereo Voice Probe";
         private const string KimMenuPath =
             "NTSD/Battle Diagnostics/Q10/Run Kimimaro Natural Stereo Voice Probe";
+        private const string PcmMenuPath =
+            "NTSD/Battle Diagnostics/Q10/Run Sakura Natural Stereo PCM Probe";
+        private const string KimPcmMenuPath =
+            "NTSD/Battle Diagnostics/Q10/Run Kimimaro Natural Stereo PCM Probe";
         private const string SessionKey = "NTSD.Q10.SakuraNaturalStereoVoice";
         private const string Cue = @"c\saku\w\tra.wav";
         private const string KimCue = @"c\kim\w\j1.wav";
@@ -49,6 +54,18 @@ namespace NTSD.Test
         public static void RunKimimaro()
         {
             Start("Kimimaro");
+        }
+
+        [MenuItem(PcmMenuPath)]
+        public static void RunSakuraPcm()
+        {
+            Start("SakuraPcm");
+        }
+
+        [MenuItem(KimPcmMenuPath)]
+        public static void RunKimimaroPcm()
+        {
+            Start("KimimaroPcm");
         }
 
         private static void Start(string variant)
@@ -106,8 +123,12 @@ namespace NTSD.Test
             SimulationTickDriver driver = null;
             NTSDSoundPlayer soundPlayer = null;
             Keyboard keyboard = null;
+            PcmCapture pcmCapture = null;
             bool wasPaused = false;
-            bool kimimaro = report.variant == "Kimimaro";
+            bool kimimaro = report.variant == "Kimimaro" ||
+                             report.variant == "KimimaroPcm";
+            bool capturePcm = report.variant == "SakuraPcm" ||
+                              report.variant == "KimimaroPcm";
             string expectedCue = kimimaro ? KimCue : Cue;
             try
             {
@@ -209,7 +230,13 @@ namespace NTSD.Test
                 Require(PreparedFormalClip(soundPlayer, expectedCue) != null,
                     "Production battle prewarm omitted selected formal stereo cue.");
 
-                var sink = new ForwardingSink(driver, soundPlayer, report, expectedCue);
+                if (capturePcm)
+                {
+                    pcmCapture = new PcmCapture(report);
+                    pcmCapture.Start();
+                }
+                var sink = new ForwardingSink(driver, soundPlayer, report,
+                    expectedCue, pcmCapture);
                 Queue(keyboard);
                 driver.SetSoundPresentationSinkForDiagnostics(sink);
                 for (int relativeTick = 1; relativeTick <= 70; relativeTick++)
@@ -326,6 +353,23 @@ namespace NTSD.Test
                 Require(report.poolAfter > report.poolBefore &&
                         report.voiceAssigned && report.voicePlaying,
                     "Natural cue did not start its prepared pooled voice.");
+                if (capturePcm)
+                {
+                    await UniTask.WaitUntil(() => pcmCapture.FramesSinceCue >= 14)
+                        .Timeout(TimeSpan.FromSeconds(10));
+                    pcmCapture.Stop();
+                    Require(string.IsNullOrEmpty(report.pcmError),
+                        "Natural battle PCM capture failed: " + report.pcmError);
+                    Require(report.pcmOtherPlayingSources == 0,
+                        "Another playing AudioSource contaminates natural cue PCM.");
+                    Require(report.pcmOutputFrames > 0 &&
+                            report.pcmOutputLeftRms > 0.0001 &&
+                            report.pcmOutputRightRms > 0.0001,
+                        "Natural battle voice PCM capture was silent or empty.");
+                    Require(report.pcmRelativeLeftRightGain > 2.55 &&
+                            report.pcmRelativeLeftRightGain < 3.45,
+                        "Natural battle voice PCM differs from formal 75/25 ratio.");
+                }
                 report.status = "PASS";
             }
             catch (Exception exception)
@@ -339,6 +383,7 @@ namespace NTSD.Test
                 {
                     if (keyboard != null)
                         Queue(keyboard);
+                    pcmCapture?.Stop();
                     if (driver != null)
                     {
                         driver.SetSoundPresentationSinkForDiagnostics(null);
@@ -443,7 +488,11 @@ namespace NTSD.Test
         {
             string diagnosticId = report.variant == "Kimimaro"
                 ? "NTSD28-336B44-Q10-KIM-NATURAL-VOICE-001"
-                : "NTSD28-336B44-Q10-SAKURA-NATURAL-VOICE-001";
+                : report.variant == "KimimaroPcm"
+                    ? "NTSD28-336B44-Q10-KIM-NATURAL-VOICE-PCM-001"
+                : report.variant == "SakuraPcm"
+                    ? "NTSD28-336B44-Q10-NATURAL-VOICE-PCM-001"
+                    : "NTSD28-336B44-Q10-SAKURA-NATURAL-VOICE-001";
             string root = Path.GetFullPath(Path.Combine(Application.dataPath,
                 "..", "artifacts", "diagnostics", diagnosticId));
             Directory.CreateDirectory(root);
@@ -457,16 +506,18 @@ namespace NTSD.Test
             private readonly NTSDSoundPlayer soundPlayer;
             private readonly Report report;
             private readonly string cue;
+            private readonly PcmCapture pcmCapture;
             public bool matched;
 
             public ForwardingSink(
                 SimulationTickDriver driver, NTSDSoundPlayer soundPlayer,
-                Report report, string cue)
+                Report report, string cue, PcmCapture pcmCapture)
             {
                 this.driver = driver;
                 this.soundPlayer = soundPlayer;
                 this.report = report;
                 this.cue = cue;
+                this.pcmCapture = pcmCapture;
             }
 
             public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
@@ -513,7 +564,139 @@ namespace NTSD.Test
                     report.voicePlaying = voice.isPlaying;
                     report.voicePan = voice.panStereo;
                     report.voiceVolume = voice.volume;
+                    pcmCapture?.MarkCue(voice, clip);
                     break;
+                }
+            }
+        }
+
+        private sealed class PcmCapture
+        {
+            private readonly Report report;
+            private int previousCaptureFramerate;
+            private bool previousRunInBackground;
+            private bool started;
+            private bool cueSeen;
+            private double leftSquares;
+            private double rightSquares;
+            public int FramesSinceCue { get; private set; }
+
+            public PcmCapture(Report report)
+            {
+                this.report = report;
+            }
+
+            public void Start()
+            {
+                previousCaptureFramerate = Time.captureFramerate;
+                previousRunInBackground = Application.runInBackground;
+                Time.captureFramerate = 30;
+                Application.runInBackground = true;
+                try
+                {
+                    Require(AudioSettings.speakerMode == AudioSpeakerMode.Stereo,
+                        "PCM probe requires stereo software output.");
+                    Require(AudioRenderer.Start(),
+                        "Another AudioRenderer capture is active.");
+                    started = true;
+                    report.pcmOutputSampleRate = AudioSettings.outputSampleRate;
+                    EditorApplication.update += OnUpdate;
+                }
+                catch
+                {
+                    Stop();
+                    throw;
+                }
+            }
+
+            public void MarkCue(AudioSource voice, AudioClip clip)
+            {
+                cueSeen = true;
+                report.pcmVoiceMixerGroup = voice.outputAudioMixerGroup != null
+                    ? voice.outputAudioMixerGroup.name
+                    : "<master>";
+                foreach (AudioSource source in
+                         UnityEngine.Object.FindObjectsOfType<AudioSource>(true))
+                {
+                    if (source != null && source != voice && source.isPlaying)
+                        report.pcmOtherPlayingSources++;
+                }
+                int begin = Mathf.RoundToInt(clip.frequency * 0.12f);
+                int end = Mathf.Min(clip.samples,
+                    Mathf.RoundToInt(clip.frequency * 0.40f));
+                var samples = new float[clip.samples * clip.channels];
+                Require(clip.GetData(samples, 0),
+                    "Prepared formal PCM cannot be read for channel reference.");
+                double clipLeft = 0;
+                double clipRight = 0;
+                for (int frame = begin; frame < end; frame++)
+                {
+                    float left = samples[frame * 2];
+                    float right = samples[frame * 2 + 1];
+                    clipLeft += left * left;
+                    clipRight += right * right;
+                }
+                report.pcmClipLeftRms = Math.Sqrt(clipLeft / (end - begin));
+                report.pcmClipRightRms = Math.Sqrt(clipRight / (end - begin));
+            }
+
+            private void OnUpdate()
+            {
+                if (!started) return;
+                try
+                {
+                    EditorApplication.QueuePlayerLoopUpdate();
+                    int frames = AudioRenderer.GetSampleCountForCaptureFrame();
+                    if (frames <= 0) return;
+                    Require(frames <= 65536,
+                        "AudioRenderer returned oversized frame.");
+                    using (var buffer = new NativeArray<float>(frames * 2, Allocator.Temp))
+                    {
+                        Require(AudioRenderer.Render(buffer),
+                            "AudioRenderer failed to render battle PCM.");
+                        if (!cueSeen) return;
+                        FramesSinceCue++;
+                        if (FramesSinceCue < 4 || FramesSinceCue > 12) return;
+                        for (int frame = 0; frame < frames; frame++)
+                        {
+                            float left = buffer[frame * 2];
+                            float right = buffer[frame * 2 + 1];
+                            leftSquares += left * left;
+                            rightSquares += right * right;
+                        }
+                        report.pcmOutputFrames += frames;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    report.pcmError = exception.ToString();
+                    Stop();
+                    FramesSinceCue = 14;
+                }
+            }
+
+            public void Stop()
+            {
+                EditorApplication.update -= OnUpdate;
+                if (started)
+                {
+                    AudioRenderer.Stop();
+                    started = false;
+                }
+                Time.captureFramerate = previousCaptureFramerate;
+                Application.runInBackground = previousRunInBackground;
+                report.pcmCaptureStopped = true;
+                if (report.pcmOutputFrames <= 0) return;
+                report.pcmOutputLeftRms =
+                    Math.Sqrt(leftSquares / report.pcmOutputFrames);
+                report.pcmOutputRightRms =
+                    Math.Sqrt(rightSquares / report.pcmOutputFrames);
+                if (report.pcmOutputRightRms > 0 &&
+                    report.pcmClipLeftRms > 0 && report.pcmClipRightRms > 0)
+                {
+                    report.pcmRelativeLeftRightGain =
+                        (report.pcmOutputLeftRms / report.pcmOutputRightRms) /
+                        (report.pcmClipLeftRms / report.pcmClipRightRms);
                 }
             }
         }
@@ -570,6 +753,17 @@ namespace NTSD.Test
             public bool voicePlaying;
             public float voicePan;
             public float voiceVolume;
+            public string pcmVoiceMixerGroup;
+            public int pcmOtherPlayingSources;
+            public int pcmOutputSampleRate;
+            public int pcmOutputFrames;
+            public double pcmClipLeftRms;
+            public double pcmClipRightRms;
+            public double pcmOutputLeftRms;
+            public double pcmOutputRightRms;
+            public double pcmRelativeLeftRightGain;
+            public bool pcmCaptureStopped;
+            public string pcmError;
             public List<TickRow> ticks = new List<TickRow>();
         }
     }

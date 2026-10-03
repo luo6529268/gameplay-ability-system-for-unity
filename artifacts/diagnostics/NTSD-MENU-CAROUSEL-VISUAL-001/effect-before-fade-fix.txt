@@ -1,0 +1,158 @@
+using TMPro;
+using UnityEngine;
+
+namespace NTSD.UI.Menu
+{
+    [DisallowMultipleComponent]
+    public sealed class MenuCarouselTextEffect : MonoBehaviour
+    {
+        [Header("Center")]
+        [SerializeField, Min(1f)] private float selectedScale = 1.9f;
+        [SerializeField] private Color selectedColor = Color.white;
+        [SerializeField] private Color selectedOutline = new Color(0.85f, 0.035f, 0.025f, 1f);
+        [SerializeField, Range(0f, 1f)] private float outlineWidth = 0.18f;
+
+        [Header("Away From Center")]
+        [SerializeField, Range(0.1f, 1f)] private float normalScale = 0.95f;
+        [SerializeField, Range(0.1f, 1f)] private float edgeScale = 0.78f;
+        [SerializeField] private Color normalColor = new Color(0.58f, 0.59f, 0.64f, 0.78f);
+        [SerializeField, Range(0f, 1f)] private float edgeAlpha = 0.16f;
+        [SerializeField, Range(0f, 1f)] private float normalSoftness = 0.12f;
+        [SerializeField, Range(0f, 1f)] private float edgeSoftness = 0.28f;
+
+        private TextMeshProUGUI label;
+        private Material originalMaterial;
+        private Material ownedMaterial;
+        private Color originalColor;
+        private Vector3 originalScale;
+        private bool acquired;
+        private float lastDistance = float.NaN;
+        private float lastEdge = float.NaN;
+        private TMP_SubMeshUI[] submeshes;
+        private int cachedMaterialCount = -1;
+
+        public float MaximumScale => selectedScale;
+
+        public void Acquire()
+        {
+            if (acquired) return;
+            label = GetComponent<TextMeshProUGUI>();
+            Shader shader = Resources.Load<Shader>("UI/MenuCarouselText");
+            if (label == null || label.fontSharedMaterial == null || shader == null) return;
+
+            originalColor = label.color;
+            originalScale = transform.localScale;
+            originalMaterial = label.fontSharedMaterial;
+            ownedMaterial = new Material(originalMaterial)
+            {
+                name = originalMaterial.name + " (Menu Carousel)",
+                hideFlags = HideFlags.HideAndDontSave,
+                shader = shader,
+            };
+            ownedMaterial.shaderKeywords = new[] { "OUTLINE_ON", "UNDERLAY_ON" };
+            label.fontSharedMaterial = ownedMaterial;
+            acquired = true;
+            cachedMaterialCount = -1;
+            lastDistance = lastEdge = float.NaN;
+            Apply(0f, 0f);
+        }
+
+        public void Apply(float itemOffset, float viewportDistance)
+        {
+            if (!acquired) return;
+            float distance = Mathf.Abs(itemOffset);
+            float edge = Mathf.Clamp01(Mathf.Abs(viewportDistance));
+            if (Mathf.Approximately(distance, lastDistance) && Mathf.Approximately(edge, lastEdge)) return;
+            lastDistance = distance;
+            lastEdge = edge;
+
+            float highlight = 1f - Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(distance));
+            float peripheral = Mathf.SmoothStep(0f, 1f, edge);
+            float scale = Mathf.Lerp(Mathf.Lerp(normalScale, edgeScale, peripheral), selectedScale, highlight);
+            transform.localScale = originalScale * scale;
+            Color gray = normalColor;
+            gray.a = Mathf.Lerp(normalColor.a, edgeAlpha, peripheral);
+            Color color = Color.Lerp(gray, selectedColor, highlight);
+            // Fade the whole glyph before it relocates at the invisible cyclic seam.
+            color.a *= 1f - Mathf.SmoothStep(0.84f, 1f, edge);
+            label.color = color;
+
+            ApplyMaterial(ownedMaterial, highlight, peripheral);
+            label.UpdateMeshPadding();
+            label.SetMaterialDirty();
+            label.ForceMeshUpdate();
+            // TMP builds fallback materials from this label's unique primary material.
+            // Update those generated copies too, without touching font-asset materials.
+            Material[] rendered = label.fontSharedMaterials;
+            for (int i = 1; i < rendered.Length; i++)
+            {
+                if (rendered[i] != null && rendered[i] != originalMaterial)
+                    ApplyMaterial(rendered[i], highlight, peripheral);
+            }
+            if (cachedMaterialCount != rendered.Length)
+            {
+                submeshes = label.GetComponentsInChildren<TMP_SubMeshUI>(true);
+                cachedMaterialCount = rendered.Length;
+            }
+            foreach (TMP_SubMeshUI submesh in submeshes)
+            {
+                submesh.UpdateMeshPadding(label.extraPadding, label.isUsingBold, label);
+                SyncMaskMaterial(submesh.materialForRendering, submesh.sharedMaterial);
+            }
+            SyncMaskMaterial(label.materialForRendering, ownedMaterial);
+        }
+
+        private void ApplyMaterial(Material material, float highlight, float peripheral)
+        {
+            material.SetColor("_FaceColor", Color.white);
+            material.SetFloat("_FaceDilate", 0f);
+            material.SetColor("_OutlineColor", Color.Lerp(new Color(0.025f, 0.025f, 0.04f, 0.8f), selectedOutline, highlight));
+            material.SetFloat("_OutlineWidth", Mathf.Lerp(0.06f, outlineWidth, highlight));
+            material.SetFloat("_OutlineSoftness", Mathf.Lerp(Mathf.Lerp(normalSoftness, edgeSoftness, peripheral), 0.015f, highlight));
+            material.SetColor("_UnderlayColor", new Color(0f, 0f, 0f, Mathf.Lerp(0.55f, 0.95f, highlight)));
+            material.SetFloat("_UnderlayOffsetX", 0.45f);
+            material.SetFloat("_UnderlayOffsetY", -0.45f);
+            material.SetFloat("_UnderlayDilate", 0.18f);
+            material.SetFloat("_UnderlaySoftness", Mathf.Lerp(0.4f, 0.2f, highlight));
+        }
+
+        private static void SyncMaskMaterial(Material rendered, Material source)
+        {
+            if (rendered == null || source == null || rendered == source) return;
+            float stencil = rendered.GetFloat("_Stencil");
+            float comparison = rendered.GetFloat("_StencilComp");
+            rendered.CopyPropertiesFromMaterial(source);
+            rendered.SetFloat("_Stencil", stencil);
+            rendered.SetFloat("_StencilComp", comparison);
+        }
+
+        public void Release()
+        {
+            if (!acquired) return;
+            acquired = false;
+            if (label != null)
+            {
+                label.color = originalColor;
+                label.fontSharedMaterial = originalMaterial;
+                transform.localScale = originalScale;
+                label.UpdateMeshPadding();
+            }
+            if (ownedMaterial != null)
+            {
+                if (Application.isPlaying) Destroy(ownedMaterial);
+                else DestroyImmediate(ownedMaterial);
+            }
+            ownedMaterial = null;
+        }
+
+        private void OnDisable()
+        {
+            Release();
+        }
+
+        private void OnDestroy()
+        {
+            Release();
+        }
+    }
+}

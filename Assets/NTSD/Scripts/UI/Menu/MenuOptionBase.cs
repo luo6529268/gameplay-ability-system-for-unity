@@ -24,6 +24,12 @@ namespace NTSD.UI.Menu
         [SerializeField] protected AudioClip confirmSound;
 
         private bool _isInitialized = false;
+        private bool externalHighlight;
+
+        internal void SetExternalHighlight(bool value)
+        {
+            externalHighlight = value;
+        }
 
         protected virtual void Awake()
         {
@@ -54,6 +60,7 @@ namespace NTSD.UI.Menu
 
         public virtual void SetSelected(bool selected)
         {
+            if (externalHighlight) return;
             EnsureInitialized();
 
             switch (highlightType)

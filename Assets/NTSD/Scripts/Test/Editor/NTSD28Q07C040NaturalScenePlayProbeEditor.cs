@@ -22,8 +22,15 @@ namespace NTSD.Test.Editor
         private const string BattleScene = "Assets/NTSD/Scene/NTSD_Battle.unity";
         private const string MenuScene = "Assets/NTSD/Scene/NTSD_Menu.unity";
         private const string RequestPath = "Temp/NTSD28_Q07_C040NaturalScene.request.json";
+        private const string PlatformRequestPath =
+            "Temp/NTSD28_Q07_D024_PlatformNaturalScene.request.json";
+        private const string ViewRequestGlob = "NTSD28_Q09_C040GameView.request*.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C040-NATURAL-SCENE-001/";
+        private const string ViewResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/";
+        private const string PlatformResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001/";
         private const string SessionKey = "NTSD.Q07.C040NaturalScene";
         // FrameInputSet uses legacy physical-action names; its Jump bit reaches
         // the formal attack slot through the existing native input bridge.
@@ -87,6 +94,9 @@ namespace NTSD.Test.Editor
             public byte nativeAttack;
             public byte nativeJump;
             public byte nativeDefend;
+            public int platformYReference;
+            public int platformSourceSlot;
+            public int platformShadowOffset;
         }
 
         [Serializable]
@@ -97,12 +107,25 @@ namespace NTSD.Test.Editor
             public int inputPhase;
             public int slot0Buttons;
             public int slot1Buttons;
+            public int slot2Buttons;
             public uint crtState;
             public ulong crtCalls;
             public int customCounter;
             public int customIndex;
             public ulong customCalls;
             public List<EntitySample> entities = new List<EntitySample>();
+        }
+
+        [Serializable]
+        private sealed class ViewCapture
+        {
+            public int relativeTick;
+            public int globalTick;
+            public string path;
+            public string sha256;
+            public int width;
+            public int height;
+            public int fileBytes;
         }
 
         [Serializable]
@@ -126,6 +149,17 @@ namespace NTSD.Test.Editor
             public bool enteredPlay;
             public bool exitedPlay;
             public bool protectedHashesStable;
+            public bool orderedShutdownComplete;
+            public bool worldDetached;
+            public bool poolQuiesced;
+            public string shutdownStatus;
+            public string shutdownStage;
+            public string shutdownFailure;
+            public int remainingWorldObjects = -1;
+            public int remainingRuntimeSlots = -1;
+            public int remainingPoolBorrowers = -1;
+            public int remainingActivePoolObjects = -1;
+            public int remainingActivePoolSprites = -1;
             public string contentRoot;
             public int battleMode;
             public int difficulty;
@@ -133,6 +167,11 @@ namespace NTSD.Test.Editor
             public int endTick;
             public double sourceToViewXOne;
             public double sourceToViewZOne;
+            public bool captureGameView;
+            public int pendingViewTick;
+            public string pendingViewPath;
+            public string pendingViewStartedUtc;
+            public ViewCapture view;
             public List<FileHash> before = new List<FileHash>();
             public List<FileHash> after = new List<FileHash>();
             public List<TickSample> samples = new List<TickSample>();
@@ -173,7 +212,9 @@ namespace NTSD.Test.Editor
         private static void Save()
         {
             SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
-            string path = PathInProject(ResultRoot + report.runId + ".json");
+            string root = report.mode == "platform" ? PlatformResultRoot :
+                report.captureGameView ? ViewResultRoot : ResultRoot;
+            string path = PathInProject(root + report.runId + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
         }
@@ -193,7 +234,11 @@ namespace NTSD.Test.Editor
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             Restore();
-            if (report == null || report.mode != "run" || report.phase != "STARTUP" ||
+            if (report == null ||
+                (report.mode != "run" && report.mode != "triad" &&
+                    report.mode != "platform" &&
+                    report.mode != "view") ||
+                report.phase != "STARTUP" ||
                 !EditorApplication.isPlaying || report.configuredBeforeStart ||
                 scene.path != BattleScene) return;
             try
@@ -205,7 +250,9 @@ namespace NTSD.Test.Editor
                 FieldInfo field = typeof(BattleTestBootstrap).GetField("overrideCharacterIds",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(field != null, "BattleTestBootstrap overrideCharacterIds is missing.");
-                field.SetValue(matches[0], new[] { 25, 75, 97 });
+                field.SetValue(matches[0], report.mode == "platform"
+                    ? new[] { 36, 56, 2 } : report.mode == "triad"
+                    ? new[] { 21, 75, 97 } : new[] { 25, 75, 97 });
                 report.configuredBeforeStart = true;
                 Save();
             }
@@ -215,7 +262,10 @@ namespace NTSD.Test.Editor
         private static void OnPlayMode(PlayModeStateChange state)
         {
             Restore();
-            if (report == null || report.mode != "run") return;
+            if (report == null ||
+                (report.mode != "run" && report.mode != "triad" &&
+                    report.mode != "platform" &&
+                    report.mode != "view")) return;
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
                 report.enteredPlay = true;
@@ -236,6 +286,7 @@ namespace NTSD.Test.Editor
                 Restore();
                 if (report == null) { TryStart(); return; }
                 if (report.phase == "OPENING") { EnterBattlePlay(); return; }
+                if (report.phase == "WAITING_VIEW") { WaitForGameView(); return; }
                 if (report.phase == "EXITING")
                 {
                     if (!EditorApplication.isPlayingOrWillChangePlaymode) Finish();
@@ -253,7 +304,15 @@ namespace NTSD.Test.Editor
 
         private static void TryStart()
         {
-            string path = PathInProject(RequestPath);
+            string viewPath = Directory.GetFiles(PathInProject("Temp"), ViewRequestGlob)
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .FirstOrDefault(candidate =>
+                    JsonUtility.FromJson<Request>(File.ReadAllText(candidate))?.requested == true);
+            string platformPath = PathInProject(PlatformRequestPath);
+            if (!File.Exists(platformPath) ||
+                JsonUtility.FromJson<Request>(File.ReadAllText(platformPath))?.requested != true)
+                platformPath = null;
+            string path = viewPath ?? platformPath ?? PathInProject(RequestPath);
             if (!File.Exists(path)) return;
             Request request = JsonUtility.FromJson<Request>(File.ReadAllText(path));
             if (request == null || !request.requested) return;
@@ -261,8 +320,17 @@ namespace NTSD.Test.Editor
             File.WriteAllText(path, JsonUtility.ToJson(request, true));
             Require(!string.IsNullOrEmpty(request.runId) && request.runId.Length <= 80 &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'), "Invalid runId.");
-            Require(request.mode == "preflight" || request.mode == "run", "Invalid request mode.");
-            Require(!File.Exists(PathInProject(ResultRoot + request.runId + ".json")),
+            Require(request.mode == "preflight" || request.mode == "run" ||
+                request.mode == "triad" || request.mode == "view" ||
+                request.mode == "platform",
+                "Invalid request mode.");
+            Require(request.mode != "view" || path == viewPath,
+                "Game View mode requires its independent request path.");
+            Require(request.mode != "platform" || path == platformPath,
+                "Platform mode requires its independent request path.");
+            string root = request.mode == "platform" ? PlatformResultRoot :
+                request.mode == "view" ? ViewResultRoot : ResultRoot;
+            Require(!File.Exists(PathInProject(root + request.runId + ".json")),
                 "Refusing to overwrite existing result.");
             Require(string.Equals(Path.GetFullPath(Application.dataPath).Replace('\\', '/'),
                 "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets",
@@ -281,6 +349,7 @@ namespace NTSD.Test.Editor
                 editorCompiling = EditorApplication.isCompiling,
                 editorUpdating = EditorApplication.isUpdating,
                 sceneCount = SceneManager.sceneCount,
+                captureGameView = request.mode == "view",
                 before = HashProtectedFiles()
             };
             Save();
@@ -336,8 +405,15 @@ namespace NTSD.Test.Editor
                 return;
             }
             if (++stableUpdates < 3) return;
-            int[] ids = { 25, 75, 97 };
-            int[] sourceX = { 500, 540, 560 };
+            bool triad = report.mode == "triad";
+            bool platform = report.mode == "platform";
+            int[] ids = platform ? new[] { 36, 56, 2 } :
+                triad ? new[] { 21, 75, 97 } : new[] { 25, 75, 97 };
+            int[] sourceX = platform ? new[] { 100, 200, 185 } :
+                triad ? new[] { 500, 620, 640 } :
+                new[] { 500, 540, 560 };
+            int[] actions = triad ? new[] { 415, 73, 0 } :
+                new[] { 0, 0, 0 };
             int[] teams = { 1, 2, 1 };
             for (int slot = 0; slot < 3; slot++)
             {
@@ -352,7 +428,7 @@ namespace NTSD.Test.Editor
                 "Play World did not use staged formal content.");
             for (int slot = 0; slot < 3; slot++)
             {
-                SetInitialActor(actors[slot], sourceX[slot]);
+                SetInitialActor(actors[slot], sourceX[slot], actions[slot]);
                 actors[slot].RelationTeam = teams[slot];
                 world.Runtime.Roster.Slots[slot].Team = teams[slot];
             }
@@ -361,7 +437,8 @@ namespace NTSD.Test.Editor
             Require(world.Runtime.NativeWorldClock != null, "Native world clock unavailable.");
             world.Runtime.NativeWorldClock.Reset();
             world.Runtime.Match.Difficulty = 0;
-            world.NativeRandom.ResetFromSeed(0u);
+            world.NativeRandom.ResetFromSeed(platform ? 0x28A55A5Au :
+                triad ? 682973786u : 0u);
             report.battleMode = world.BattleGameModeId;
             report.difficulty = world.Difficulty;
             Require(report.battleMode == 0 && report.difficulty == 0,
@@ -373,10 +450,11 @@ namespace NTSD.Test.Editor
             Save();
         }
 
-        private static void SetInitialActor(LF2Character actor, int sourceX)
+        private static void SetInitialActor(LF2Character actor, int sourceX,
+            int action)
         {
             actor.Initialize(500, 500);
-            actor.ImmediateFrame(0);
+            actor.ImmediateFrame(action);
             actor.Runtime.MP = 500;
             actor.Runtime.PP = 500;
             actor.ClearBattleEntryInputState();
@@ -391,7 +469,8 @@ namespace NTSD.Test.Editor
             actor.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(sourceX), 0,
                 world.SpatialProjection.SourceToViewZ(400));
             AppManager.SyncParticipantBirthPosition(actor, sourceX, 400);
-            Require(actor.Frame.N == 0 && actor.Runtime.SourceRuleXInt == sourceX &&
+            Require(actor.Frame.N == action &&
+                actor.Runtime.SourceRuleXInt == sourceX &&
                 actor.Runtime.YInt == 0 && actor.Runtime.SourceRuleZInt == 400,
                 "Initial action or source-rule position was not established.");
         }
@@ -424,7 +503,10 @@ namespace NTSD.Test.Editor
                 legacyDefend = entity.Runtime.KeyDefend,
                 nativeAttack = entity.Runtime.NativeInputProxy.Current[4],
                 nativeJump = entity.Runtime.NativeInputProxy.Current[5],
-                nativeDefend = entity.Runtime.NativeInputProxy.Current[6]
+                nativeDefend = entity.Runtime.NativeInputProxy.Current[6],
+                platformYReference = entity.Runtime.CollisionYReference,
+                platformSourceSlot = entity.Runtime.PlatformSourceSlotF4,
+                platformShadowOffset = entity.Runtime.RenderShadowOffset10C
             };
         }
 
@@ -434,21 +516,37 @@ namespace NTSD.Test.Editor
                 !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics,
                 "Production World changed or tick boundary is not stable.");
             Require(driver.CurrentTickIndex == report.endTick, "Unobserved tick while paused.");
-            if (report.samples.Count == 40) { CompleteMeasurement(); return; }
+            int targetTicks = report.mode == "platform" ? 96 :
+                report.mode == "triad" ? 16 : 40;
+            if (report.samples.Count == targetTicks)
+            {
+                CompleteMeasurement();
+                return;
+            }
             int tick = report.samples.Count + 1;
             int next = driver.CurrentTickIndex + 1;
-            SimulationInputButtons kakuzu = tick == 19 || tick == 20
+            SimulationInputButtons kakuzu = report.mode == "platform"
+                ? tick <= 2 ? SimulationInputButtons.Attack :
+                    tick <= 4 ? SimulationInputButtons.Up :
+                    tick <= 6 ? FormalAttackButton : SimulationInputButtons.None
+                : report.mode == "triad"
+                ? SimulationInputButtons.None : tick == 19 || tick == 20
                 ? FormalAttackButton
                 : tick == 21 || tick == 22 ? SimulationInputButtons.Defend :
                     SimulationInputButtons.None;
-            SimulationInputButtons bee = tick <= 2 || tick == 9 || tick == 10 ||
+            SimulationInputButtons bee = report.mode == "platform" ||
+                report.mode == "triad"
+                ? SimulationInputButtons.None : tick <= 2 || tick == 9 || tick == 10 ||
                 tick == 17 || tick == 18 ? FormalAttackButton :
                     SimulationInputButtons.None;
+            SimulationInputButtons target = report.mode == "platform" &&
+                (tick == 9 || tick == 10) ? SimulationInputButtons.Defend :
+                SimulationInputButtons.None;
             var input = new FrameInputSet(next, new[]
             {
                 new SimulationPlayerInput(0, kakuzu),
                 new SimulationPlayerInput(1, bee),
-                new SimulationPlayerInput(2, SimulationInputButtons.None)
+                new SimulationPlayerInput(2, target)
             });
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected complete tick " + next);
@@ -460,6 +558,7 @@ namespace NTSD.Test.Editor
                 inputPhase = world.InputPhase,
                 slot0Buttons = (int)kakuzu,
                 slot1Buttons = (int)bee,
+                slot2Buttons = (int)target,
                 crtState = rng.CrtState,
                 crtCalls = rng.CrtCalls,
                 customCounter = rng.SynchronizedCounter,
@@ -475,17 +574,129 @@ namespace NTSD.Test.Editor
             }
             report.samples.Add(sample);
             report.endTick = driver.CurrentTickIndex;
+            if (report.captureGameView && tick == 25)
+            {
+                string relativePath = ViewResultRoot + report.runId + "/game-view-tick25.png";
+                string output = PathInProject(relativePath);
+                Require(!File.Exists(output), "Refusing to overwrite C040 Game View capture.");
+                Directory.CreateDirectory(Path.GetDirectoryName(output));
+                report.pendingViewTick = tick;
+                report.pendingViewPath = relativePath;
+                report.pendingViewStartedUtc = DateTime.UtcNow.ToString("O");
+                report.phase = "WAITING_VIEW";
+                ScreenCapture.CaptureScreenshot(output);
+            }
+            Save();
+        }
+
+        private static void WaitForGameView()
+        {
+            Require(report.captureGameView && report.pendingViewTick == 25 &&
+                driver.IsPaused && driver.CurrentTickIndex == report.endTick &&
+                report.samples.Count == 25,
+                "C040 screenshot wait advanced the production simulation.");
+            Require(DateTime.UtcNow -
+                DateTime.Parse(report.pendingViewStartedUtc).ToUniversalTime() <
+                TimeSpan.FromSeconds(90), "C040 Game View screenshot timed out.");
+            string output = PathInProject(report.pendingViewPath);
+            if (!File.Exists(output) || new FileInfo(output).Length < 32) return;
+            byte[] bytes;
+            try { bytes = File.ReadAllBytes(output); }
+            catch (IOException) { return; }
+            Require(bytes.Length >= 32 && bytes[0] == 137 && bytes[1] == 80 &&
+                bytes[2] == 78 && bytes[3] == 71 && bytes[4] == 13 &&
+                bytes[5] == 10 && bytes[6] == 26 && bytes[7] == 10,
+                "C040 Game View capture is not a PNG.");
+            int width = bytes[16] << 24 | bytes[17] << 16 | bytes[18] << 8 | bytes[19];
+            int height = bytes[20] << 24 | bytes[21] << 16 | bytes[22] << 8 | bytes[23];
+            Require(width > 0 && height > 0,
+                "C040 Game View dimensions are invalid.");
+            using (SHA256 hash = SHA256.Create())
+            {
+                report.view = new ViewCapture
+                {
+                    relativeTick = 25,
+                    globalTick = report.endTick,
+                    path = report.pendingViewPath,
+                    sha256 = BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", ""),
+                    width = width,
+                    height = height,
+                    fileBytes = bytes.Length
+                };
+            }
+            report.pendingViewTick = 0;
+            report.pendingViewPath = null;
+            report.pendingViewStartedUtc = null;
+            report.phase = "MEASURING";
             Save();
         }
 
         private static void CompleteMeasurement()
         {
-            report.status = report.samples.Count == 40 &&
-                report.samples.All(value => value.entities.Count == 3)
+            report.status = report.samples.Count ==
+                (report.mode == "platform" ? 96 :
+                    report.mode == "triad" ? 16 : 40) &&
+                report.samples.All(value => value.entities.Count == 3) &&
+                (!report.captureGameView || report.view != null)
                 ? "CAPTURED" : "INCOMPLETE";
+            Save();
+            if (!CaptureOrderedShutdown()) return;
             report.phase = "EXITING";
             Save();
             EditorApplication.ExitPlaymode();
+        }
+
+        private static bool CaptureOrderedShutdown()
+        {
+            try
+            {
+                LF2ObjectPool pool = LF2ObjectPool.TryGetInstance();
+                BattleRuntimeShutdownReport shutdown = driver.ShutdownBattleRuntime();
+                bool mapCleared = true;
+                if (shutdown.RuntimeStagesCompleted)
+                {
+                    foreach (BattleBootstrap bootstrap in
+                        Resources.FindObjectsOfTypeAll<BattleBootstrap>())
+                    {
+                        if (bootstrap == null || EditorUtility.IsPersistent(bootstrap) ||
+                            !bootstrap.gameObject.scene.IsValid()) continue;
+                        bootstrap.DisablePresentation();
+                        mapCleared &= bootstrap.IsRuntimeMapCleared;
+                    }
+                    shutdown = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(mapCleared);
+                }
+                report.shutdownStatus = shutdown.Status.ToString();
+                report.shutdownStage = shutdown.CompletedStage.ToString();
+                report.shutdownFailure = shutdown.FailureReason;
+                report.remainingWorldObjects = shutdown.RemainingWorldObjects;
+                report.remainingRuntimeSlots = shutdown.RemainingRuntimeSlots;
+                report.remainingPoolBorrowers = shutdown.RemainingPoolBorrowers;
+                report.remainingActivePoolObjects =
+                    pool?.ActiveObjectCountForAcceptance ?? 0;
+                report.remainingActivePoolSprites =
+                    pool?.ActiveSpriteCountForAcceptance ?? 0;
+                report.poolQuiesced = pool == null || pool.IsQuiescedForDiagnostics;
+                report.worldDetached = driver.World == null;
+                report.orderedShutdownComplete = shutdown.IsComplete &&
+                    shutdown.CompletedStage == BattleRuntimeShutdownStage.RuntimeMapCleared &&
+                    report.worldDetached && report.poolQuiesced &&
+                    report.remainingWorldObjects == 0 &&
+                    report.remainingRuntimeSlots == 0 &&
+                    report.remainingPoolBorrowers == 0 &&
+                    report.remainingActivePoolObjects == 0 &&
+                    report.remainingActivePoolSprites == 0;
+                if (!report.orderedShutdownComplete)
+                    report.error = "Ordered shutdown did not reach zero-residue postconditions.";
+            }
+            catch (Exception error)
+            {
+                report.error = "Ordered shutdown exception: " + error;
+            }
+            if (report.orderedShutdownComplete) return true;
+            report.status = "FAIL";
+            report.phase = "CLEANUP_BLOCKED";
+            Save();
+            return false;
         }
 
         private static bool HashesMatch() => HashesMatch(report.after, report.before);

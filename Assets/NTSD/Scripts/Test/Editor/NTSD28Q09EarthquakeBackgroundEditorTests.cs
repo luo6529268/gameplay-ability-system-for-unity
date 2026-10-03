@@ -2,6 +2,7 @@
 
 using System.Reflection;
 using NTSD.App;
+using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
 using UnityEngine;
@@ -13,6 +14,64 @@ namespace NTSD.Test.Editor
     {
         private const int TestLayer = 29;
         private const int CaptureSize = 64;
+
+        [Test]
+        public void FixedFullViewProjectsSourceEarthquakeOffsetAtShaderOutlet()
+        {
+            var mapObject = new GameObject("Q09 Projected Earthquake Map");
+            Texture2D texture = null;
+            Sprite sprite = null;
+            try
+            {
+                mapObject.hideFlags = HideFlags.HideAndDontSave;
+                texture = CreateSolidTexture(Color.red);
+                sprite = Sprite.Create(texture, new Rect(0f, 0f, 8f, 8f),
+                    new Vector2(0.5f, 0.5f), 100f);
+                SpriteRenderer renderer = mapObject.AddComponent<SpriteRenderer>();
+                renderer.sprite = sprite;
+                BattleBackgroundPlatformPresentation presentation =
+                    mapObject.AddComponent<BattleBackgroundPlatformPresentation>();
+                presentation.EditorLiveCameraFrame = false;
+                SetField(presentation, "sourceRenderer", renderer);
+                Material originalMaterial = renderer.sharedMaterial;
+                var frame = new BattlePresentationFrame
+                {
+                    EarthquakeBackgroundOffsetX = 2,
+                    EarthquakeBackgroundOffsetY = 1,
+                };
+                BattleSpatialProjection projection =
+                    BattleSpatialProjection.FromReferenceViewport(2048, 1152);
+                MethodInfo apply = typeof(BattleBackgroundPlatformPresentation)
+                    .GetMethod("ApplyProjectedEarthquakeFrameForDiagnostics",
+                        BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(apply, Is.Not.Null);
+                apply.Invoke(presentation, new object[] { frame, projection });
+
+                Material projectedMaterial = renderer.sharedMaterial;
+                Assert.That(projectedMaterial, Is.Not.SameAs(originalMaterial));
+                Vector4 localOffset = projectedMaterial.GetVector(
+                    Shader.PropertyToID("_EarthquakeLocalOffset"));
+                Assert.That(localOffset.x,
+                    Is.EqualTo(2.0 * 2048.0 / 1333.0 / 100.0).Within(0.000001));
+                Assert.That(localOffset.y,
+                    Is.EqualTo(-1152.0 / 730.0 / 100.0).Within(0.000001));
+                Assert.That(frame.EarthquakeBackgroundOffsetX, Is.EqualTo(2));
+                Assert.That(frame.EarthquakeBackgroundOffsetY, Is.EqualTo(1));
+
+                apply.Invoke(presentation,
+                    new object[] { new BattlePresentationFrame(), projection });
+                Assert.That(renderer.sharedMaterial, Is.SameAs(originalMaterial));
+                Assert.That(mapObject.transform.position, Is.EqualTo(Vector3.zero));
+            }
+            finally
+            {
+                Object.DestroyImmediate(mapObject);
+                if (sprite != null)
+                    Object.DestroyImmediate(sprite);
+                if (texture != null)
+                    Object.DestroyImmediate(texture);
+            }
+        }
 
         [Test]
         public void FrozenOffsetMovesOnlyMapPixelsAndRestoresDefaultFrame()

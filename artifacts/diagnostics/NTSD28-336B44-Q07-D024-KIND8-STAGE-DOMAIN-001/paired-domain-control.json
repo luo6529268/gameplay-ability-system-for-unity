@@ -1,0 +1,46 @@
+{
+  "legacyDefaultBg23ByteIdentical": {
+    "source-ticks.csv": true,
+    "relation-hits.csv": true,
+    "source-rng.csv": true,
+    "source-packets.lfr": true,
+    "summary.txt": true
+  },
+  "matchedDomainBg1Z400": {
+    "480": {
+      "repeatHashesEqual": {
+        "source-ticks.csv": true,
+        "relation-hits.csv": true,
+        "source-rng.csv": true,
+        "source-packets.lfr": true,
+        "summary.txt": true
+      },
+      "sourceRootSelectedFields": {
+        "matched": 260,
+        "expected": 260,
+        "firstDifferences": []
+      },
+      "kind8AppliedTicks": [
+        1
+      ],
+      "rootPlaybackPassed": true
+    },
+    "1200": {
+      "repeatHashesEqual": {
+        "source-ticks.csv": true,
+        "relation-hits.csv": true,
+        "source-rng.csv": true,
+        "source-packets.lfr": true,
+        "summary.txt": true
+      },
+      "sourceRootSelectedFields": {
+        "matched": 260,
+        "expected": 260,
+        "firstDifferences": []
+      },
+      "kind8AppliedTicks": [],
+      "rootPlaybackPassed": true
+    }
+  },
+  "pass": true
+}

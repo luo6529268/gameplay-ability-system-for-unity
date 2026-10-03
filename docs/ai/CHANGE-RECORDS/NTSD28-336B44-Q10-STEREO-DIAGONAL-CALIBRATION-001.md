@@ -1,0 +1,16 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q10-STEREO-DIAGONAL-CALIBRATION-001
+status: VERIFIED
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q10StereoDiagonalCalibrationEditor.cs
+authority: 336B44 playable audio_backend.cpp native_stereo_mix28 and two-channel SetOutputMatrix; natural Sakura/Kimimaro stereo events
+evidence: docs/ai/TASKS/NTSD28-336B44-Q10-STEREO-DIAGONAL-CALIBRATION-001.md
+-->
+
+# NTSD28-336B44-Q10-STEREO-DIAGONAL-CALIBRATION-001
+
+Created before the sole new Editor diagnostic script. Existing Unity `NTSDSoundPlayer.PlayPreparedCue` sets `panStereo=0` on stereo battle voices, while current playable source requests a channel-independent two-input/two-output matrix. The existing mono `AudioRenderer` calibration cannot establish stereo cross-channel behavior. The Task limits this change to temporary stereo signal generation and measurement in the original Editor, with file/Scene protection and no production consumer modification. Expected side effects are a temporary Editor Play session and an immutable diagnostic JSON. Evidence must distinguish measured Unity mixer output from unmeasured hardware PCM. Forward-only correction; no destructive rollback of user files.
+
+Code-written update 2026-10-03: added only `NTSD28Q10StereoDiagonalCalibrationEditor.cs` and `.meta`. The opt-in MenuItem generates separate temporary left-only and right-only stereo PCM clips, records stereo AudioRenderer output at center and six pan settings, normalizes each output RMS against its own input-channel center reference, and writes create-new JSON. It checks original-project identity, sole clean Menu Play, stereo speaker mode, no other playing voice and four protected file hashes. Completion and interruption paths stop AudioRenderer, restore timing overrides and destroy temporary objects. Build, original Editor import, actual capture, Play exit and result interpretation remain pending; no production playback, audio content or nonbattle code was edited.
+
+Verification update 2026-10-03 (supersedes pending clause): same declared Editor probe gained two direct candidate cases and `sourceVolume` metadata; no other script changed. Generated Editor build `dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q` succeeded with 0 errors/270 warnings. Original Editor import succeeded; first 14-case sweep and second 16-case direct capture both `CAPTURE_COMPLETE`. Second raw JSON SHA `359A2EFE6477EB6CDE0739737B3ED3F23A7D553FD6DFC3ACB7D2827C4FE3D957`; input-left at pan -2/3, volume .75 measured `[.7502690452,0]`, input-right `[0,.2499297554]`, maximum target difference <.000270 versus .002 criterion. Cleanup flags true, four protected hashes unchanged, original Editor returned to idle clean Menu Scene. Actual changed files: only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q10StereoDiagonalCalibrationEditor.cs` and `.meta`; report/Task/Record/ledger/state/handoff/master document only. Risk/unknown: no formal EXE speaker PCM, project Mixer/device measurement, moving-camera policy, or production voice fix. Evidence [report](../../../artifacts/diagnostics/NTSD28-336B44-Q10-STEREO-DIAGONAL-CALIBRATION-001/REPORT.md). Forward correction, no destructive rollback.

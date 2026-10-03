@@ -1,0 +1,70 @@
+{
+  "initialSourceZ": 400,
+  "declaredTicks": 24,
+  "preBoundaryThroughTick": 20,
+  "preBoundaryFields": 336,
+  "preBoundaryMatchedFields": 336,
+  "fullComparedFields": 400,
+  "fullMatchedFields": 392,
+  "firstDifferences": [
+    {
+      "tick": 21,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 484
+    },
+    {
+      "tick": 21,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 484
+    },
+    {
+      "tick": 22,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 488
+    },
+    {
+      "tick": 22,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 488
+    },
+    {
+      "tick": 23,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 492
+    },
+    {
+      "tick": 23,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 492
+    },
+    {
+      "tick": 24,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 496
+    },
+    {
+      "tick": 24,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 496
+    }
+  ],
+  "unityMaxProjectionError": 2.8273972602742106,
+  "orderedShutdownComplete": true,
+  "protectedHashesStable": true
+}

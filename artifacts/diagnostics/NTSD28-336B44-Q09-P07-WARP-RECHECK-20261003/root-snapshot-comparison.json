@@ -1,0 +1,37 @@
+{
+  "formalRootExit": 0,
+  "formalRootPassed": true,
+  "formalRootNativeParityClaim": false,
+  "sourceSnapshotSha256": "ACACEBAC6779C3C402E62B5AA11A6F5342BE5735E9A724F5B8B6B66CF59C8D2B",
+  "ticks": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "childRowsMatched": 40,
+  "childRowsTotal": 40,
+  "selectedFieldsPerRow": [
+    "oid",
+    "owner",
+    "action",
+    "pic"
+  ],
+  "firstDifference": null,
+  "spriteCountTicksMatched": [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "sourceChildShadowsAtTick6": 0,
+  "rootShadowCommandsObservable": false
+}

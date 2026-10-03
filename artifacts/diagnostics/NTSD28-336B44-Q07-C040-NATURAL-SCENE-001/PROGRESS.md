@@ -23,3 +23,7 @@
 后续查明原 Editor 已完成 domain reload；端口6400被 AssetImportWorker15 占用，原 Editor PID105896 的监听移至6401。先前超时不能证明 Editor 卡死。通过原 Editor 完成 `NTSD28_B6_CatchRelation` 25/25 聚焦测试；抓取画面X的共用投影修复属于独立 `NTSD28-336B44-Q07-D024-GRAB-VIEW-PROJECTION-001`，不属于本测试探针的生产改动。
 
 修复后第五次 `kakuzu-bee-guy-natural-scene-20261003-05.json` 再在原 Battle Scene 完成40个完整Driver tick，正式源/根/Unity选定16字段640/640首差0，tick25自然抓取正例保持。双方X投影最大偏差由旧+3.471117779画面像素降为角都0、奇拉比0.528882221像素；第三名凯为0，Z最大0.232876712像素。第五次退出Play返回干净Menu，Battle/Menu/两配置文件本次前后SHA稳定。剩余不足1像素与后继CPoint物理整数锚点取整有关；未进行Game View像素、物理按键及pool borrower验收，因此本包仍为 `RUNTIME_PENDING`，Q07不关闭。详细对照见独立D-024 `ACCEPTANCE.md`。
+
+## 第六次有序关闭补证（覆盖本文件旧 RUNTIME_PENDING）
+
+原Editor新run-06完整40tick `samples` 数组与正式源/根已配对640/640字段的run-05逐值完全相同。新增的测试专用退出见证调用现有生产有序关闭，得到`Completed/RuntimeMapCleared`，World对象、运行槽、池借用、活动池对象和Sprite均为0，pool quiesced、World detached；退出回干净Menu，四保护SHA稳定。此 Scene 载体状态升为`VERIFIED_SCOPED_DISCRETE_SCENE`；实际物理设备整链、Game View像素、其它C040/Q07/Q09/Q12及总目标仍开。完整数值、哈希和边界见[RUN-06-REPORT.md](RUN-06-REPORT.md)。

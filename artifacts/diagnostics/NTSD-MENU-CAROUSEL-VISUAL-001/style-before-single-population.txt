@@ -1,0 +1,49 @@
+using TMPro;
+using UnityEngine;
+
+namespace NTSD.UI.Menu
+{
+    [CreateAssetMenu(menuName = "NTSD/UI/Menu Carousel Style")]
+    public sealed class MenuCarouselStyle : ScriptableObject
+    {
+        [SerializeField] private TMP_FontAsset fallbackFont;
+        private TMP_FontAsset runtimeFallback;
+        private int borrowers;
+
+        public TMP_FontAsset FallbackFont => fallbackFont;
+
+        public TMP_FontAsset AcquireFallback(string characters)
+        {
+            if (fallbackFont == null || fallbackFont.sourceFontFile == null) return null;
+            if (runtimeFallback == null)
+            {
+                runtimeFallback = TMP_FontAsset.CreateFontAsset(fallbackFont.sourceFontFile);
+                runtimeFallback.name = "Menu Carousel Runtime Fallback";
+                runtimeFallback.hideFlags = HideFlags.HideAndDontSave;
+                runtimeFallback.material.hideFlags = HideFlags.HideAndDontSave;
+                foreach (Texture2D atlas in runtimeFallback.atlasTextures)
+                    atlas.hideFlags = HideFlags.HideAndDontSave;
+            }
+            // The local TMP fork does not populate fallback glyphs automatically.
+            runtimeFallback.TryAddCharacters(characters);
+            borrowers++;
+            return runtimeFallback;
+        }
+
+        public void ReleaseFallback()
+        {
+            if (borrowers <= 0) return;
+            if (--borrowers != 0 || runtimeFallback == null) return;
+            foreach (Texture2D atlas in runtimeFallback.atlasTextures) DestroyOwned(atlas);
+            DestroyOwned(runtimeFallback.material);
+            DestroyOwned(runtimeFallback);
+            runtimeFallback = null;
+        }
+
+        private static void DestroyOwned(Object instance)
+        {
+            if (Application.isPlaying) Destroy(instance);
+            else DestroyImmediate(instance);
+        }
+    }
+}

@@ -1,0 +1,68 @@
+{
+    "revision": 1,
+    "runId": "oid92-direct-motion-v1",
+    "mode": "run",
+    "status": "RUNNING",
+    "phase": "PREFLIGHT",
+    "error": "",
+    "startedUtc": "2026-10-03T09:16:03.5160107Z",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "finalScene": "",
+    "initialSceneDirty": false,
+    "finalSceneDirty": false,
+    "editorPlaying": false,
+    "editorCompiling": false,
+    "editorUpdating": false,
+    "sceneCount": 1,
+    "targetX": 1200,
+    "caseName": "direct-motion",
+    "openedBattle": false,
+    "ownsPlay": false,
+    "configuredBeforeStart": false,
+    "enteredPlay": false,
+    "exitedPlay": false,
+    "noLiveDriverWorldAfterExit": false,
+    "protectedHashesStable": false,
+    "contentRoot": "",
+    "battleMode": 0,
+    "difficulty": 0,
+    "startTick": 0,
+    "endTick": 0,
+    "sourceToViewZOne": 0.0,
+    "projectedZAssertion": false,
+    "measuredViewDeltaZ": 0.0,
+    "maxProjectionError": 0.0,
+    "orderedShutdownComplete": false,
+    "shutdownStatus": "",
+    "shutdownStage": "",
+    "shutdownFailure": "",
+    "remainingWorldObjects": -1,
+    "remainingRuntimeSlots": -1,
+    "remainingPoolBorrowers": -1,
+    "remainingActivePoolObjects": -1,
+    "remainingActivePoolSprites": -1,
+    "poolQuiesced": false,
+    "worldDetached": false,
+    "resetContract": "Two human roster actors, HP/MP/PP, action, velocity, source/view position, owner/team/link and input history; Flow FrameToggle/InputPhase=0; NativeWorldClock.Reset; NativeRandom seed 0x28A55A5A; difficulty0. Global Driver tick is retained.",
+    "evidenceLimit": "Production Driver and simulation projection in original Battle Scene. No physical keyboard or Game View pixel capture.",
+    "before": [
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+        },
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+        },
+        {
+            "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+            "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+        },
+        {
+            "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+            "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+        }
+    ],
+    "after": [],
+    "samples": []
+}

@@ -27,13 +27,13 @@ void write_entity(std::ofstream& stream, int tick, const char* phase,
            << entity->battle_group << ',' << entity->frame.frame_counter << '\n';
 }
 
-ntsd28_playable::BattleConfig28 make_config(int target_x) {
+ntsd28_playable::BattleConfig28 make_config(int target_x, int background_id) {
     ntsd28_playable::BattleConfig28 config;
     config.random_seed = 0x28A55A5Au;
     config.battle_mode = 0;
     config.character_id = 7;
     config.enemy_id = 2;
-    config.background_id = 23;
+    config.background_id = background_id;
     config.bgm_selection_49f18c = 2;
 
     ntsd28_playable::CombatantConfig28 lee;
@@ -58,10 +58,11 @@ ntsd28_playable::BattleConfig28 make_config(int target_x) {
 }  // namespace
 
 int wmain(int argc, wchar_t** argv) {
-    if (argc != 4) return 2;
+    if (argc != 4 && argc != 5) return 2;
     const std::filesystem::path root(argv[1]);
     const std::filesystem::path output(argv[2]);
     int target_x = 0;
+    int background_id = 23;
     try {
         std::size_t parsed = 0;
         const std::wstring value(argv[3]);
@@ -69,11 +70,20 @@ int wmain(int argc, wchar_t** argv) {
         if (parsed != value.size() || target_x < 350 || target_x > 1200)
             return 2;
     } catch (...) { return 2; }
+    if (argc == 5) {
+        try {
+            std::size_t parsed = 0;
+            const std::wstring value(argv[4]);
+            background_id = std::stoi(value, &parsed);
+            if (parsed != value.size() ||
+                (background_id != 1 && background_id != 23)) return 2;
+        } catch (...) { return 2; }
+    }
     if (std::filesystem::exists(output)) return 3;
 
     ntsd28_playable::GameSession28 session(root, root);
     std::string error;
-    if (!session.initialize(make_config(target_x), error)) {
+    if (!session.initialize(make_config(target_x, background_id), error)) {
         std::cerr << "initialize: " << error << '\n';
         return 4;
     }
@@ -154,9 +164,13 @@ int wmain(int argc, wchar_t** argv) {
     if (!summary) return 13;
     summary << "target_x=" << target_x << " ticks=" << kTicks
             << " first_kind8_tick=" << first_kind8
-            << " kind8_applied_count=" << applied_count << '\n';
+            << " kind8_applied_count=" << applied_count;
+    if (argc == 5) summary << " background_id=" << background_id;
+    summary << '\n';
     std::cout << "target_x=" << target_x
               << " first_kind8_tick=" << first_kind8
-              << " kind8_applied_count=" << applied_count << '\n';
+            << " kind8_applied_count=" << applied_count;
+    if (argc == 5) std::cout << " background_id=" << background_id;
+    std::cout << '\n';
     return 0;
 }

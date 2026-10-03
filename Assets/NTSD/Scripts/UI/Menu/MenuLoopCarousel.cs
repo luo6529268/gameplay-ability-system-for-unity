@@ -169,11 +169,18 @@ namespace NTSD.UI.Menu
             scroll.enabled = false;
             if (layout != null) layout.enabled = false;
             if (fitter != null) fitter.enabled = false;
+            var fallbackCharacters = new System.Text.StringBuilder();
             foreach (ItemState item in items)
+                foreach (MenuCarouselTextEffect effect in item.Effects)
+                    fallbackCharacters.Append(effect.GetComponent<TMPro.TextMeshProUGUI>().text);
+            string characters = fallbackCharacters.ToString();
+            for (int i = 0; i < items.Count; i++)
             {
+                ItemState item = items[i];
+                list.GetOption(i).SetExternalHighlight(true);
                 item.State = new RectState(item.Rect);
                 item.Pointer.enabled = true;
-                foreach (MenuCarouselTextEffect effect in item.Effects) effect.Acquire();
+                foreach (MenuCarouselTextEffect effect in item.Effects) effect.Acquire(characters);
             }
             ownsLayout = true;
             dragSurface.gameObject.SetActive(true);
@@ -186,10 +193,13 @@ namespace NTSD.UI.Menu
             ownsLayout = false;
             dragPointerId = int.MinValue;
             motion.Reset(items.Count, 0);
-            foreach (ItemState item in items)
+            for (int i = 0; i < items.Count; i++)
             {
+                ItemState item = items[i];
                 foreach (MenuCarouselTextEffect effect in item.Effects)
                     if (effect != null) effect.Release();
+                if (list != null && list.GetOption(i) != null)
+                    list.GetOption(i).SetExternalHighlight(false);
                 if (item.Rect != null) item.State.Restore(item.Rect);
                 if (item.Pointer != null) item.Pointer.enabled = item.PointerEnabled;
             }

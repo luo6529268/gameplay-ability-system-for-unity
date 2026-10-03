@@ -1,0 +1,11 @@
+# NTSD-MENU-FONT-3500-REBIND-001
+
+Authority: user on 2026-10-03 explicitly requested replacing every GameObject using the exact 0480 SDF asset with the exact 3500 SDF asset.
+
+Observed pre-change: old font GUID 325e772b4b89e0e4191bbf6bf9968e23 appears only in Assets/NTSD/Scene/NTSD_Menu.unity among serialized Unity GameObjects/Scenes/Prefabs: 25 TMP m_fontAsset, 21 material references and one TMP_InputField m_GlobalFontAsset. One already user-rebound menu row points at new GUID 49d14565a67c6c843880c34b5f61e3d5; preserve it. The scene is dirty in Git but clean in the active Editor. The target SDF is an untracked user asset with four prepopulated characters and dynamic atlas; its source TTF has 3501 cmap entries. The old font asset and TTF deletion are pre-existing user work.
+
+Scope: rebind only existing old-font TMP labels and the matching input field in NTSD_Menu; update their old default material to the 3500 material, and retarget only scene-local old-font material instances to the new atlas while preserving their style properties. Populate the target SDF with supported characters used by affected labels, so rebind renders actual text. Update the carousel's Editor test fixture to use the new SDF. No other scenes, prefabs, font resources, Battle logic, or mode callbacks.
+
+Verification: exact scene and asset reference inventory before/after, source TTF character coverage, generated Editor compile, focused Menu tests, real original Menu Play screenshot, clean exit and protected-file hashes. Report unsupported Latin/fullwidth punctuation separately.
+
+Pre-change manifest and exact backups: artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/prechange-manifest.json. Operation audit: docs/ai/FILE-OPERATIONS/NTSD-MENU-FONT-3500-REBIND-001-PREPARE/RECORD.md. No Git reset/restore/clean or deletion.

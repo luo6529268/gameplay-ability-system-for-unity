@@ -1,0 +1,23 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q10-BATTLE-STEREO-MATRIX-OUTLET-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/SoundPresentationDispatchEditorTests.cs
+authority: 336B44 playable audio_backend.cpp native_stereo_mix28 and user fixed-full-view D-024 decision
+evidence: docs/ai/TASKS/NTSD28-336B44-Q10-BATTLE-STEREO-MATRIX-OUTLET-001.md
+-->
+
+# Q10 battle-only stereo matrix outlet
+
+Created before either declared script edit. Formal current playable emits source-rule event X and applies an integer left/right output matrix relative to the native battle camera. The fixed full-view Unity exception keeps current audio camera at zero unless the user chooses a separate audio camera. Existing production `NTSDSoundPlayer.PresentSound` receives the queued source X but drops it before playback; battle fallback voices then use pan0, volume1. Sakura/Kim natural stereo WAVs at X500 therefore have a known voice-configuration first difference against formal 75/25. The Task defines exact scope, authority, original state, expected battle-only side effects, invariants, validation, limitations and forward-correction rollback. Do not change the event, simulation, checksum, cameras, DAT/WAV, configured AudioItem assets, nonbattle player path or unrelated dirty work.
+
+Actual code paths, before/after responsibilities, tests, result status and any exception will be appended after implementation. Status PLANNED.
+
+Test-first update 2026-10-03: changed only the declared `SoundPresentationDispatchEditorTests.cs`. Added eleven formal integer boundary cases, a mono/stereo pooled battle-voice parameter/active-volume-retune check and a nonbattle control; the player implementation is still unchanged, so the new matrix-method assertion should be RED. Generated Editor project build succeeded, 0 errors/270 warnings. Original Editor focused RED and production edit remain pending.
+
+Production update 2026-10-03 (supersedes pending test/implementation sentence): original Editor focused RED job `b19ffd48a73c43d5aa68ce45b578ec43` executed precisely 12 selected cases, 12 failed as expected: eleven because the formal integer matrix method did not exist, one because the X500 mono battle voice still had pan0 instead of −0.8. Only the declared `NTSDSoundPlayer.cs` was then edited. `PresentSound` carries source-rule X through loaded/async battle playback, the private exact-integer 333/666 boundary method computes L/R, mono/stereo use their separately measured Unity inverses, and the matrix gain is stored in the existing base-volume pool slot for later native battle-volume retuning. Nonbattle public `PlaySfx` passes no battle event and continues to reset to pan0 with configured range. Generated Editor build after both scripts: 0 errors/301 warnings. Original Editor GREEN, natural Scene/PCM and protected hashes still pending.
+
+First original Editor GREEN job `449bd8c00220463899c8af71c32e6260`: formal matrix 11/11 PASS; voice case reached its F6/F7 assertion but expected 99% native volume dB step −37 while the existing integer `((99−100)*0xED8)/100` is −38. The observed voice gain equals the −38 branch. Corrected only this test expectation; production matrix code unchanged. Re-run pending.
+
+Final scoped result 2026-10-03 (supersedes pending re-run/Scene statements above): final original Editor focused job `6e63989004214a3bb9b98b46db37f68e` 12/12 PASS, adjacent formal WAV/pool/native-volume job `6d99d6f1f5a04d1e9c1c4fad37ce6b92` 4/4 PASS. Generated Editor build 0 error/270 warning. Original Battle Scene natural Sakura physical-input Play `play-20261003-024350-823.json` PASS: relative tick24/global tick58 queued two-channel `c/saku/w/tra.wav`, source X500, played on a production voice with pan −0.6666666865 and volume .75; pool play count 3→4. This confirms event-to-voice configuration, not production output PCM or formal EXE speaker PCM. Original Editor returned to non-Play clean Menu; Menu, Battle, GameConfig and ProjectBattleModeConfig protected SHA-256 values matched before/after. Actual modified scripts are exactly the two declared `code-path` files. No DAT, WAV, Scene, AudioItem, simulation event/checksum, menu or nonbattle production edits. Remaining: capture actual battle-voice PCM through project Mixer, other reachable mono/stereo cues, unpreheated async path, and resolve dynamic audio-camera policy if user directs it. Rollback remains a forward correction of the two declared scripts, retaining this evidence and unrelated dirty work. [Report](../../../artifacts/diagnostics/NTSD28-336B44-Q10-STEREO-MATRIX-PRODUCTION-001/REPORT.md).

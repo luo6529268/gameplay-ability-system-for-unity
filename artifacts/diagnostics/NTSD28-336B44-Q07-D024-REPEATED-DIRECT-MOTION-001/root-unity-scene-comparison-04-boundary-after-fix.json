@@ -1,0 +1,98 @@
+{
+  "initialSourceZ": 400,
+  "declaredTicks": 24,
+  "preBoundaryThroughTick": 20,
+  "preBoundaryComparedFields": 336,
+  "preBoundaryMatchedFields": 336,
+  "fullComparedFields": 400,
+  "fullMatchedFields": 392,
+  "firstDifferences": [
+    {
+      "tick": 21,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 484
+    },
+    {
+      "tick": 21,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 484
+    },
+    {
+      "tick": 22,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 488
+    },
+    {
+      "tick": 22,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 488
+    },
+    {
+      "tick": 23,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 492
+    },
+    {
+      "tick": 23,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 492
+    },
+    {
+      "tick": 24,
+      "slot": 0,
+      "field": "sourceZ",
+      "unity": 481,
+      "root": 496
+    },
+    {
+      "tick": 24,
+      "slot": 0,
+      "field": "sourceRuleZ",
+      "unity": 481.59722222222223,
+      "root": 496
+    }
+  ],
+  "oldMaxProjectionError": 2.8273972602742106,
+  "newMaxProjectionError": 1.1368683772161603e-13,
+  "newBoundarySamples": [
+    {
+      "tick": 20,
+      "sourceZ": 480.0,
+      "viewZ": 757.4794520547946
+    },
+    {
+      "tick": 21,
+      "sourceZ": 481.59722222222223,
+      "viewZ": 760.0000000000001
+    },
+    {
+      "tick": 22,
+      "sourceZ": 481.59722222222223,
+      "viewZ": 760.0000000000001
+    },
+    {
+      "tick": 23,
+      "sourceZ": 481.59722222222223,
+      "viewZ": 760.0000000000001
+    },
+    {
+      "tick": 24,
+      "sourceZ": 481.59722222222223,
+      "viewZ": 760.0000000000001
+    }
+  ],
+  "newOrderedShutdownComplete": true,
+  "newProtectedHashesStable": true
+}

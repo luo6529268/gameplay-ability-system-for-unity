@@ -1,0 +1,61 @@
+{
+  "runId": "f02-kind10-scene-20261003-07",
+  "scope": "original Battle Scene Z400 initial+45 ticks and ordered shutdown",
+  "stateFields": {
+    "expected": 2346,
+    "matched": 2346,
+    "firstDifferences": []
+  },
+  "events": {
+    "formalKind10": [
+      31,
+      32,
+      33,
+      34,
+      34,
+      35,
+      35
+    ],
+    "unityKind10": [
+      31,
+      32,
+      33,
+      34,
+      34,
+      35,
+      35
+    ],
+    "kind10Match": true,
+    "formalFrame40To41": [
+      30,
+      39
+    ],
+    "unityFrame40To41": [
+      30,
+      39
+    ],
+    "frameMatch": true
+  },
+  "shutdown": {
+    "orderedShutdownComplete": true,
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "shutdownFailure": "",
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "remainingActivePoolObjects": 0,
+    "remainingActivePoolSprites": 0,
+    "poolQuiesced": true,
+    "worldDetached": true,
+    "enteredPlay": true,
+    "exitedPlay": true,
+    "noLiveDriverWorldAfterExit": true,
+    "protectedHashesStable": true,
+    "initialSceneDirty": false,
+    "finalSceneDirty": false,
+    "finalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "error": ""
+  },
+  "pass": true
+}

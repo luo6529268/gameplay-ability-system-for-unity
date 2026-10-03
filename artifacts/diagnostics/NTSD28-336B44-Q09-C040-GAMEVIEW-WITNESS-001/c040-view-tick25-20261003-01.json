@@ -1,0 +1,88 @@
+{
+    "runId": "c040-view-tick25-20261003-01",
+    "mode": "view",
+    "status": "FAIL",
+    "phase": "DONE",
+    "error": "System.InvalidOperationException: Play clone was not configured before Start.\r\n  at NTSD.Test.Editor.NTSD28Q07C040NaturalScenePlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C040NaturalScenePlayProbeEditor.cs:222 \r\n  at NTSD.Test.Editor.NTSD28Q07C040NaturalScenePlayProbeEditor.WaitForRoster () [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C040NaturalScenePlayProbeEditor.cs:372 \r\n  at NTSD.Test.Editor.NTSD28Q07C040NaturalScenePlayProbeEditor.Poll () [0x00120] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07C040NaturalScenePlayProbeEditor.cs:284  Initial clean Editor Scene was not restored.",
+    "startedUtc": "2026-10-03T08:07:02.8957530Z",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "finalScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialSceneDirty": false,
+    "finalSceneDirty": false,
+    "editorPlaying": false,
+    "editorCompiling": false,
+    "editorUpdating": false,
+    "sceneCount": 1,
+    "configuredBeforeStart": false,
+    "enteredPlay": false,
+    "exitedPlay": false,
+    "protectedHashesStable": true,
+    "orderedShutdownComplete": false,
+    "worldDetached": false,
+    "poolQuiesced": false,
+    "shutdownStatus": "",
+    "shutdownStage": "",
+    "shutdownFailure": "",
+    "remainingWorldObjects": -1,
+    "remainingRuntimeSlots": -1,
+    "remainingPoolBorrowers": -1,
+    "remainingActivePoolObjects": -1,
+    "remainingActivePoolSprites": -1,
+    "contentRoot": "",
+    "battleMode": 0,
+    "difficulty": 0,
+    "startTick": 0,
+    "endTick": 0,
+    "sourceToViewXOne": 0.0,
+    "sourceToViewZOne": 0.0,
+    "captureGameView": true,
+    "pendingViewTick": 0,
+    "pendingViewPath": "",
+    "pendingViewStartedUtc": "",
+    "view": {
+        "relativeTick": 0,
+        "globalTick": 0,
+        "path": "",
+        "sha256": "",
+        "width": 0,
+        "height": 0,
+        "fileBytes": 0
+    },
+    "before": [
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+        },
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+        },
+        {
+            "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+            "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+        },
+        {
+            "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+            "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+        }
+    ],
+    "after": [
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+        },
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+        },
+        {
+            "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+            "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+        },
+        {
+            "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+            "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+        }
+    ],
+    "samples": []
+}

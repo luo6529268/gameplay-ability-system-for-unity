@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": true,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-ENTRY-001\\source-run-04\\landing_x185.lfr",
+  "failureCode": 0,
+  "failureStage": "",
+  "error": "",
+  "declaredTicks": 96,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 0, "slot1": 0},
+  "initialFacingOverrides": {"slot0": 0, "slot1": 0},
+  "initialMpOverrides": {"slot0": 500, "slot1": 500},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 97,
+  "scene": {"p1ObjectId": 36, "p2ObjectId": 56, "backgroundId": 1},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 3, "firstTick": 29, "lastTick": 31, "uniqueSlots": [2], "samples": [{"tick":29,"slot":2,"objectId":2,"action":212,"yReference0F0":-50,"sourceSlot0F4":1,"shadowOffset10C":-50,"delayTimer134":0},{"tick":30,"slot":2,"objectId":2,"action":212,"yReference0F0":-58,"sourceSlot0F4":1,"shadowOffset10C":-58,"delayTimer134":0},{"tick":31,"slot":2,"objectId":2,"action":215,"yReference0F0":-64,"sourceSlot0F4":1,"shadowOffset10C":-64,"delayTimer134":0}]},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-ENTRY-001\\root-playback-landing_x185-v2\\root-trace.jsonl", "rows": 98, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

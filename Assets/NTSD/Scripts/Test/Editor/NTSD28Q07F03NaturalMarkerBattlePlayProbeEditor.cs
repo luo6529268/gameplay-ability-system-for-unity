@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using Unity.Collections;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.App;
@@ -26,6 +27,12 @@ namespace NTSD.Test.Editor
         private const string AudioResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-VOICE-001/";
         private const string AudioRunId = "tay36-a243-x550-c032-voice-01";
+        private const string MonoPcmRunIdV1 = "tay36-a243-x550-c032-mono-pcm-01";
+        private const string MonoPcmRunIdV2 = "tay36-a243-x550-c032-mono-pcm-02";
+        private const string MonoPcmRunIdV3 = "tay36-a243-x550-c032-mono-pcm-03";
+        private const string MonoPcmRunId = "tay36-a243-x550-c032-mono-pcm-04";
+        private const string MonoPcmResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-MONO-PCM-001/";
         private const string SessionKey = "NTSD.Q07.F03NaturalMarkerBattlePlay";
         private static Report report;
         private static SimulationTickDriver driver;
@@ -33,6 +40,7 @@ namespace NTSD.Test.Editor
         private static LF2Character actor;
         private static LF2Character target;
         private static NTSDSoundPlayer soundPlayer;
+        private static MonoPcmCapture pcmCapture;
         private static int stableTick = -1;
         private static int stableUpdates;
 
@@ -103,6 +111,19 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
+        private sealed class AudioSourceWitness
+        {
+            public string gameObject;
+            public string parent;
+            public string clip;
+            public string mixerGroup;
+            public float volume;
+            public float pan;
+            public int timeSamples;
+            public bool loop;
+        }
+
+        [Serializable]
         private sealed class Report
         {
             public string runId;
@@ -132,6 +153,20 @@ namespace NTSD.Test.Editor
             public int initialY;
             public bool configuredBeforeStart;
             public bool audioVoiceProbe;
+            public bool monoPcmProbe;
+            public string pcmMixerGroup;
+            public int pcmOtherPlayingSources;
+            public int pcmMutedOtherSources;
+            public int pcmOtherUnmutedDuringCapture;
+            public bool pcmMuteRestored;
+            public List<AudioSourceWitness> pcmOtherSources = new List<AudioSourceWitness>();
+            public int pcmOutputSampleRate;
+            public int pcmOutputFrames;
+            public double pcmLeftRms;
+            public double pcmRightRms;
+            public double pcmLeftRightRatio;
+            public bool pcmCaptureStopped;
+            public string pcmError;
             public bool sceneCleanAfter;
             public bool exitedPlay;
             public List<Sample> samples = new List<Sample>();
@@ -168,6 +203,9 @@ namespace NTSD.Test.Editor
         }
 
         private static string ResultRootForRunId(string runId) =>
+            runId == MonoPcmRunId || runId == MonoPcmRunIdV3 ||
+            runId == MonoPcmRunIdV2 ||
+            runId == MonoPcmRunIdV1 ? MonoPcmResultRoot :
             runId == AudioRunId ? AudioResultRoot : ResultRoot;
 
         private static void Restore()
@@ -231,6 +269,7 @@ namespace NTSD.Test.Editor
                     "Battle Play probe timed out.");
                 if (!EditorApplication.isPlaying) return;
                 if (report.phase == "STARTUP") { WaitForRoster(); return; }
+                if (report.phase == "CAPTURING_PCM") { WaitForMonoPcm(); return; }
                 Require(report.phase == "MEASURING", "Unexpected probe phase.");
                 MeasureOneTick();
             }
@@ -248,7 +287,9 @@ namespace NTSD.Test.Editor
             Require(!string.IsNullOrEmpty(request.runId) && request.runId.Length <= 80 &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'), "Invalid runId.");
             Require(request.runId == "tay36-a243-x550-natural-scene-03" ||
-                request.runId == AudioRunId,
+                request.runId == AudioRunId || request.runId == MonoPcmRunId ||
+                request.runId == MonoPcmRunIdV3 || request.runId == MonoPcmRunIdV2 ||
+                request.runId == MonoPcmRunIdV1,
                 "Unexpected controlled C032 runId.");
             Require(!File.Exists(PathInProject(ResultRootForRunId(request.runId) +
                 request.runId + ".json")),
@@ -262,7 +303,13 @@ namespace NTSD.Test.Editor
                 "Requires sole clean saved NTSD_Battle Scene.");
             report = new Report { runId = request.runId, phase = "STARTUP", status = "RUNNING",
                 startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
-                initialY = 0, audioVoiceProbe = request.runId == AudioRunId };
+                initialY = 0, audioVoiceProbe = request.runId == AudioRunId ||
+                    request.runId == MonoPcmRunId || request.runId == MonoPcmRunIdV3 ||
+                    request.runId == MonoPcmRunIdV2 ||
+                    request.runId == MonoPcmRunIdV1,
+                monoPcmProbe = request.runId == MonoPcmRunId ||
+                    request.runId == MonoPcmRunIdV3 || request.runId == MonoPcmRunIdV2 ||
+                    request.runId == MonoPcmRunIdV1 };
             Save();
             EditorApplication.EnterPlaymode();
         }
@@ -386,6 +433,11 @@ namespace NTSD.Test.Editor
             });
             long poolBefore = report.audioVoiceProbe
                 ? soundPlayer.PooledOneShotPlayCountForDiagnostics : 0;
+            if (report.monoPcmProbe && report.samples.Count == 59)
+            {
+                pcmCapture = new MonoPcmCapture(report);
+                pcmCapture.Start();
+            }
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected complete tick " + next);
             NTSD28NativeRandomScalarState rng = world.NativeRandom.CaptureScalarState();
@@ -417,18 +469,27 @@ namespace NTSD.Test.Editor
                 });
             }
             if (report.audioVoiceProbe)
-                CaptureLandingVoice(sample, poolBefore);
+            {
+                AudioSource landingVoice = CaptureLandingVoice(sample, poolBefore);
+                if (report.monoPcmProbe && sample.relativeTick == 60)
+                {
+                    Require(landingVoice != null && landingVoice.isPlaying,
+                        "First natural landing voice is not playing.");
+                    pcmCapture.MarkCue(landingVoice);
+                    report.phase = "CAPTURING_PCM";
+                }
+            }
             report.samples.Add(sample);
             report.endTick = driver.CurrentTickIndex;
             Save();
         }
 
-        private static void CaptureLandingVoice(Sample sample, long poolBefore)
+        private static AudioSource CaptureLandingVoice(Sample sample, long poolBefore)
         {
             SoundSample landing = sample.sounds.FirstOrDefault(value =>
                 string.Equals(value.cue?.Replace('\\', '/'), "data/016.wav",
                     StringComparison.OrdinalIgnoreCase));
-            if (landing == null) return;
+            if (landing == null) return null;
             MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod("GetOrPrepareCue",
                 BindingFlags.Instance | BindingFlags.NonPublic);
             Require(getCue != null, "Production battle cue resolver is unavailable.");
@@ -448,14 +509,40 @@ namespace NTSD.Test.Editor
                 frequency = clip.frequency,
                 samples = clip.samples
             };
+            AudioSource landingSource = null;
             foreach (AudioSource source in soundPlayer.GetComponentsInChildren<AudioSource>(true))
             {
                 if (source == null || source.clip != clip) continue;
+                if (report.monoPcmProbe && !source.isPlaying) continue;
                 voice.assigned = true;
                 voice.playing = source.isPlaying;
+                landingSource = source;
                 break;
             }
             report.voices.Add(voice);
+            return landingSource;
+        }
+
+        private static void WaitForMonoPcm()
+        {
+            Require(pcmCapture != null && driver.IsPaused &&
+                report.samples.Count == 60 && driver.CurrentTickIndex == report.endTick,
+                "PCM capture advanced the production simulation.");
+            if (pcmCapture.FramesSinceCue < 9) return;
+            pcmCapture.Stop();
+            pcmCapture = null;
+            Require(string.IsNullOrEmpty(report.pcmError),
+                "Natural mono PCM capture failed: " + report.pcmError);
+            Require(report.pcmMutedOtherSources == report.pcmOtherPlayingSources &&
+                report.pcmOtherUnmutedDuringCapture == 0 && report.pcmMuteRestored,
+                "Another audible AudioSource contaminates isolated mono landing PCM.");
+            Require(report.pcmOutputFrames > 0 && report.pcmRightRms > 0,
+                "Natural mono landing PCM is silent or empty.");
+            double expectedRatio = 94.0 / 6.0;
+            Require(Math.Abs(report.pcmLeftRightRatio / expectedRatio - 1.0) <= 0.20,
+                "Natural mono landing PCM differs from formal L94/R6 matrix.");
+            report.phase = "MEASURING";
+            Save();
         }
 
         private static void CompleteMeasurement()
@@ -472,6 +559,10 @@ namespace NTSD.Test.Editor
                      value.channels == 1 && value.frequency == 22100 &&
                      value.samples == 8158 && value.assigned && value.playing));
             report.status = voicePass &&
+                (!report.monoPcmProbe ||
+                 report.pcmCaptureStopped && report.pcmOutputFrames > 0 &&
+                 report.pcmOtherUnmutedDuringCapture == 0 &&
+                 report.pcmMuteRestored) &&
                 at1 != null && at1.oid == 2 && at1.action == 182 &&
                 at1.state == 12 && at1.environmentState320 == -20 &&
                 at60 != null && at60.action == 185 && at60.state == 12 &&
@@ -487,6 +578,8 @@ namespace NTSD.Test.Editor
 
         private static void Fail(string message)
         {
+            pcmCapture?.Stop();
+            pcmCapture = null;
             if (report == null) { Debug.LogError("[Q07 F03 natural marker Play] " + message); return; }
             report.status = "FAIL";
             report.error = message;
@@ -501,6 +594,8 @@ namespace NTSD.Test.Editor
         private static void Finish()
         {
             if (report == null || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            pcmCapture?.Stop();
+            pcmCapture = null;
             report.exitedPlay = true;
             report.sceneHashAfter = HashScene();
             Scene scene = SceneManager.GetActiveScene();
@@ -522,6 +617,155 @@ namespace NTSD.Test.Editor
             soundPlayer = null;
             stableTick = -1;
             stableUpdates = 0;
+        }
+
+        private sealed class MonoPcmCapture
+        {
+            private readonly Report capturedReport;
+            private int previousCaptureFramerate;
+            private bool previousRunInBackground;
+            private bool started;
+            private bool settingsChanged;
+            private bool cueSeen;
+            private AudioSource targetVoice;
+            private readonly List<KeyValuePair<AudioSource, bool>> mutedSources =
+                new List<KeyValuePair<AudioSource, bool>>();
+            private double leftSquares;
+            private double rightSquares;
+            public int FramesSinceCue { get; private set; }
+
+            public MonoPcmCapture(Report result)
+            {
+                capturedReport = result;
+            }
+
+            public void Start()
+            {
+                previousCaptureFramerate = Time.captureFramerate;
+                previousRunInBackground = Application.runInBackground;
+                Time.captureFramerate = 30;
+                Application.runInBackground = true;
+                settingsChanged = true;
+                try
+                {
+                    Require(AudioSettings.speakerMode == AudioSpeakerMode.Stereo,
+                        "Mono PCM witness requires stereo software output.");
+                    Require(AudioRenderer.Start(), "Another AudioRenderer capture is active.");
+                    started = true;
+                    capturedReport.pcmOutputSampleRate = AudioSettings.outputSampleRate;
+                    EditorApplication.update += OnUpdate;
+                }
+                catch
+                {
+                    Stop();
+                    throw;
+                }
+            }
+
+            public void MarkCue(AudioSource voice)
+            {
+                cueSeen = true;
+                targetVoice = voice;
+                capturedReport.pcmMixerGroup = voice.outputAudioMixerGroup != null
+                    ? voice.outputAudioMixerGroup.name : "<master>";
+                foreach (AudioSource source in UnityEngine.Object.FindObjectsOfType<AudioSource>(true))
+                {
+                    if (source != null && source != voice && source.isPlaying)
+                    {
+                        capturedReport.pcmOtherPlayingSources++;
+                        capturedReport.pcmOtherSources.Add(new AudioSourceWitness
+                        {
+                            gameObject = source.gameObject.name,
+                            parent = source.transform.parent != null
+                                ? source.transform.parent.name : "",
+                            clip = source.clip != null ? source.clip.name : "",
+                            mixerGroup = source.outputAudioMixerGroup != null
+                                ? source.outputAudioMixerGroup.name : "<master>",
+                            volume = source.volume,
+                            pan = source.panStereo,
+                            timeSamples = source.timeSamples,
+                            loop = source.loop
+                        });
+                        mutedSources.Add(new KeyValuePair<AudioSource, bool>(source, source.mute));
+                        source.mute = true;
+                        capturedReport.pcmMutedOtherSources++;
+                    }
+                }
+            }
+
+            private void OnUpdate()
+            {
+                if (!started) return;
+                try
+                {
+                    EditorApplication.QueuePlayerLoopUpdate();
+                    int frames = AudioRenderer.GetSampleCountForCaptureFrame();
+                    if (frames <= 0) return;
+                    Require(frames <= 65536, "AudioRenderer returned oversized frame.");
+                    using (var buffer = new NativeArray<float>(frames * 2, Allocator.Temp))
+                    {
+                        Require(AudioRenderer.Render(buffer),
+                            "AudioRenderer failed to render mono landing PCM.");
+                        if (!cueSeen) return;
+                        foreach (AudioSource source in
+                                 UnityEngine.Object.FindObjectsOfType<AudioSource>(true))
+                        {
+                            if (source != null && source != targetVoice &&
+                                source.isPlaying && !source.mute)
+                                capturedReport.pcmOtherUnmutedDuringCapture++;
+                        }
+                        FramesSinceCue++;
+                        if (FramesSinceCue < 2 || FramesSinceCue > 7) return;
+                        for (int frame = 0; frame < frames; frame++)
+                        {
+                            float left = buffer[frame * 2];
+                            float right = buffer[frame * 2 + 1];
+                            leftSquares += left * left;
+                            rightSquares += right * right;
+                        }
+                        capturedReport.pcmOutputFrames += frames;
+                    }
+                }
+                catch (Exception exception)
+                {
+                    capturedReport.pcmError = exception.ToString();
+                    Stop();
+                    FramesSinceCue = 9;
+                }
+            }
+
+            public void Stop()
+            {
+                EditorApplication.update -= OnUpdate;
+                if (started)
+                {
+                    AudioRenderer.Stop();
+                    started = false;
+                }
+                foreach (KeyValuePair<AudioSource, bool> source in mutedSources)
+                {
+                    if (source.Key != null)
+                        source.Key.mute = source.Value;
+                }
+                capturedReport.pcmMuteRestored = mutedSources.TrueForAll(source =>
+                    source.Key == null || source.Key.mute == source.Value);
+                mutedSources.Clear();
+                if (settingsChanged)
+                {
+                    Time.captureFramerate = previousCaptureFramerate;
+                    Application.runInBackground = previousRunInBackground;
+                    settingsChanged = false;
+                }
+                capturedReport.pcmCaptureStopped = true;
+                if (capturedReport.pcmOutputFrames <= 0) return;
+                capturedReport.pcmLeftRms =
+                    Math.Sqrt(leftSquares / capturedReport.pcmOutputFrames);
+                capturedReport.pcmRightRms =
+                    Math.Sqrt(rightSquares / capturedReport.pcmOutputFrames);
+                if (capturedReport.pcmRightRms > 0)
+                    capturedReport.pcmLeftRightRatio =
+                        capturedReport.pcmLeftRms / capturedReport.pcmRightRms;
+            }
         }
     }
 }

@@ -1,0 +1,20 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q09-P13-QUAKE-VIEW-RATIO-001
+status: VERIFIED
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/App/BattleBackgroundPlatformPresentation.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q09EarthquakeBackgroundEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q09HanEarthquakeBattlePlayProbeEditor.cs
+authority: 336B44 playable earthquake background draw plus user fixed full-background D-024 relative-distance decision
+evidence: docs/ai/TASKS/NTSD28-336B44-Q09-P13-QUAKE-VIEW-RATIO-001.md
+-->
+
+# NTSD28-336B44-Q09-P13-QUAKE-VIEW-RATIO-001
+
+Created before either declared script is edited. Current runtime `BattleBackgroundPlatformPresentation.ApplyEarthquakeFrame` passes the formal source integer offset directly to the project Bg shader divided only by sprite pixels-per-unit. Under the user-retained 2048×1152 full fixed view, the formal (+2,0) earthquake therefore covers 2/2048 rather than 2/1333 of the viewport width. The editable boundary is only the final battle-background presentation outlet and its focused test. Use the existing `BattleSpatialProjection` configured on the active World; do not add a second ratio constant, change deterministic earthquake state, move the scene/map/camera, touch native background/DAT, or edit nonbattle modules. Expected side effect is a larger project-map-only shader displacement that preserves relative viewport distance, with no logical coordinate or checksum change. The Task declares authority, symbols, acceptance and forward-correction rollback; actual edits and evidence will be appended after implementation.
+
+Code-written update 2026-10-03: only the two declared scripts changed. `OnBeginCameraRendering` now passes the running World’s existing `SpatialProjection` to the Bg shader outlet, while the existing diagnostic method explicitly retains identity behavior. The shader X offset uses `SourceDeltaToViewX`; screen-down Y uses the same viewport-height scale as `SourceDeltaToViewZ`, with the existing Unity sign conversion. New focused test checks 2048×1152 vector values, source frame immutability, zero-offset material restore; existing 64×64 GPU identity test remains. Generated Editor build `dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q` returned 0 errors/301 warnings. Original Editor import/focused/Scene Play remain pending; no production state, DAT, Scene or nonbattle changes under this ID.
+
+Pre-Scene addendum: the older phase-pair request file is consumed evidence. Before modifying the Han Editor probe, this record and Task declare its third code path for a separate opt-in request with the same phase-pair guard. Focused original Editor EditMode tests are 2/2 PASS; new Scene Play remains pending.
+
+Verified scoped exit 2026-10-03 (supersedes pending sentence above): actual changed code paths are precisely the three declared paths in this Record. Generated Editor build after all three edits returned 0 errors/270 warnings; original Unity Editor Q09 background tests 2/2 PASS. Original clean Battle Scene opt-in Han/Lee 50-tick phase-paired Play returned PASS_SCOPED_PLAY; eight selected source/input/relationship fields match current 336B44 root 400/400, earthquake (+2,0) starts at relative tick16 and resets at tick21. Project-map sky/ground interior active image is baseline translated exactly +2 output pixels (315,580 pixels, zero channel error), reset equals baseline; previous unprojected evidence translated +1. Shader-vector fractional ratio is asserted in the focused test. World source frame was unchanged, map/camera stayed fixed, capture material/camera restored, ordered exit completed with zero pool borrowers. Returned to original clean Menu; Menu/Battle/GameConfig/ProjectBattleModeConfig SHA-256 unchanged 4/4. Full report: `artifacts/diagnostics/NTSD28-336B44-Q09-P13-QUAKE-VIEW-RATIO-001/REPORT.md`. Formal EXE GUI pixel parity, native background/stage Z, other Q09 effects and Q12 remain unverified. Rollback remains a forward correction limited to these three paths; prior evidence retained.

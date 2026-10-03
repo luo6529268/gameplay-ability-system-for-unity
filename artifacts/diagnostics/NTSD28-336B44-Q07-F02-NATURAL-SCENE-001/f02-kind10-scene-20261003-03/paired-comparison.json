@@ -1,0 +1,51 @@
+{
+  "authority": "336B44 formal EXE LFR bg1 z400",
+  "unityRun": "f02-kind10-scene-20261003-03",
+  "initialPlusTicks": 46,
+  "entitiesPerTick": 3,
+  "fieldsPerEntity": [
+    "oid",
+    "objectType",
+    "action",
+    "state",
+    "sourceX",
+    "sourceY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "interaction",
+    "parent",
+    "child",
+    "weaponFlightCounter"
+  ],
+  "declaredChecks": 1794,
+  "checkedUntilFirstDifference": 1794,
+  "firstDifference": null,
+  "sourceToViewXScale": 1.536384096024006,
+  "sourceToViewZScale": 1.5780821917808219,
+  "maxXProjectionResidualPx": {
+    "value": 0.8132033008259896,
+    "tick": 45,
+    "slot": 2
+  },
+  "maxZProjectionResidualPx": {
+    "value": 0.23287671232878893,
+    "tick": 45,
+    "slot": 2
+  },
+  "tick39Weapon": {
+    "unityAction": 41,
+    "rootAction": 41
+  },
+  "exit": {
+    "cleanScene": true,
+    "sceneRestored": true,
+    "protectedHashesStable": true,
+    "noLiveDriverWorldAfterExit": true
+  },
+  "limitations": [
+    "kind10 applied and intra-tick action40 to 41 observed in root only; Unity tick-tail state paired",
+    "simulation view projection, not Game View pixels",
+    "physical keyboard and complete pool counters unmeasured"
+  ]
+}

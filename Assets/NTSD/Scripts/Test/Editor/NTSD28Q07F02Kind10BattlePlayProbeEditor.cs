@@ -7,12 +7,15 @@ using System.Reflection;
 using System.Security.Cryptography;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NTSD.Test.Editor
@@ -41,6 +44,7 @@ namespace NTSD.Test.Editor
         private static SimulationTickDriver driver;
         private static SimulationWorld world;
         private static readonly LF2Entity[] actors = new LF2Entity[3];
+        private static int observingTick = -1;
         private static int stableTick = -1;
         private static int stableUpdates;
 
@@ -52,6 +56,9 @@ namespace NTSD.Test.Editor
             public string runId;
             public bool editorIdleConfirmed;
             public int sourceZ;
+            public bool captureGameView;
+            public bool captureNoControlsView;
+            public bool captureCentralAlpha;
         }
 
         [Serializable]
@@ -75,12 +82,14 @@ namespace NTSD.Test.Editor
             public double vy;
             public double vz;
             public int action;
+            public int frameEntryAction;
             public int state;
             public int counter;
             public int sourceX;
             public int sourceY;
             public int sourceZ;
             public int weaponFlightCounter;
+            public int vrestFromSlot1;
             public double sourceRuleX;
             public double sourceRuleZ;
             public double viewX;
@@ -118,6 +127,78 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
+        private sealed class ViewCapture
+        {
+            public int relativeTick;
+            public int globalTick;
+            public string path;
+            public string sha256;
+            public int width;
+            public int height;
+            public long fileBytes;
+        }
+
+        [Serializable]
+        private sealed class AlphaSample
+        {
+            public string texture;
+            public int pixelCount;
+            public int alphaZero;
+            public int alphaPartial;
+            public int alphaOpaque;
+            public string error;
+        }
+
+        [Serializable]
+        private sealed class CentralCommandEvidence
+        {
+            public int index;
+            public string type;
+            public int runtimeSlot;
+            public int stableId;
+            public int visualDataId;
+            public int effectivePic;
+            public string position;
+            public string size;
+            public string pivot;
+            public string color;
+            public int sortOrder;
+            public string sourceSheetPath;
+            public string sourcePixelRect;
+            public string bindingMode;
+        }
+
+        [Serializable]
+        private sealed class CentralAlphaEvidence
+        {
+            public string status;
+            public string error;
+            public int simulationTick;
+            public int displayTick;
+            public int frameTick;
+            public int commandCount;
+            public int narutoStableId;
+            public int visualDataId;
+            public int effectivePic;
+            public string commandPosition;
+            public string commandSize;
+            public string commandPivot;
+            public string sourceSheetPath;
+            public string sourcePixelRect;
+            public string bindingMode;
+            public string bindingPixelRect;
+            public int atlasPage;
+            public int atlasSlice;
+            public AlphaSample sourceAlpha;
+            public AlphaSample boundAlpha;
+            public int submittedDrawCount;
+            public bool submittedPixelsLastFrame;
+            public string submissionReason;
+            public List<CentralCommandEvidence> commands =
+                new List<CentralCommandEvidence>();
+        }
+
+        [Serializable]
         private sealed class Report
         {
             public int revision;
@@ -131,7 +212,17 @@ namespace NTSD.Test.Editor
             public bool pickupAttempted;
             public bool throwAttempted;
             public string resetContract = "Initial actors HP/MP/PP, action, velocity, source/view position, owner/team/link, input history; Flow FrameToggle/InputPhase=0; NativeWorldClock.Reset; NativeRandom seed 0x28A55A5A; difficulty0. Global Driver tick is retained.";
-            public string evidenceLimit = "Tick-tail capture only: kind10 attribution and intra-tick action40->41 remain unpaired until separately observed. View fields are simulation projection, not GPU pixels. Physical keyboard is not exercised.";
+            public string evidenceLimit = "Event rows are Editor-only observations around the production tick; view fields are simulation projection, not GPU pixels. Physical keyboard and Game View pixels are not exercised.";
+            public bool captureGameView;
+            public bool captureNoControlsView;
+            public bool captureCentralAlpha;
+            public bool battleControlsTemporarilyDisabled;
+            public string centralEffectivePixelMode;
+            public string narutoSpriteSourceSheetPath;
+            public string narutoSpritePixelRect;
+            public int pendingViewTick;
+            public string pendingViewPath;
+            public string pendingViewStartedUtc;
             public string runId;
             public string mode;
             public string status;
@@ -158,9 +249,24 @@ namespace NTSD.Test.Editor
             public int initialSourceZ;
             public double sourceToViewXOne;
             public double sourceToViewZOne;
+            public bool orderedShutdownComplete;
+            public string shutdownStatus;
+            public string shutdownStage;
+            public string shutdownFailure;
+            public int remainingWorldObjects = -1;
+            public int remainingRuntimeSlots = -1;
+            public int remainingPoolBorrowers = -1;
+            public int remainingActivePoolObjects = -1;
+            public int remainingActivePoolSprites = -1;
+            public bool poolQuiesced;
+            public bool worldDetached;
             public List<FileHash> before = new List<FileHash>();
             public List<FileHash> after = new List<FileHash>();
             public List<TickSample> samples = new List<TickSample>();
+            public List<string> eventRows = new List<string>();
+            public List<ViewCapture> views = new List<ViewCapture>();
+            public ViewCapture controlsHiddenView;
+            public CentralAlphaEvidence centralAlpha;
         }
 
         [InitializeOnLoadMethod]
@@ -265,15 +371,31 @@ namespace NTSD.Test.Editor
                 Restore();
                 if (report == null) { TryStart(); return; }
                 if (report.phase == "OPENING") { EnterBattlePlay(); return; }
+                if (report.enteredPlay && !EditorApplication.isPlayingOrWillChangePlaymode &&
+                    (report.phase == "STARTUP" || report.phase == "MEASURING" ||
+                     report.phase == "WAITING_VIEW" ||
+                     report.phase == "WAITING_NO_CONTROLS_VIEW"))
+                {
+                    Fail("Editor left Play Mode before the F02 measurement completed.");
+                    Finish();
+                    return;
+                }
                 if (report.phase == "EXITING")
                 {
                     if (!EditorApplication.isPlayingOrWillChangePlaymode) Finish();
                     return;
                 }
+                if (report.phase == "CLEANUP_BLOCKED") return;
                 Require(DateTime.UtcNow - DateTime.Parse(report.startedUtc).ToUniversalTime() <
                     TimeSpan.FromMinutes(10), "F02 kind10 Scene probe timed out.");
                 if (!EditorApplication.isPlaying) return;
                 if (report.phase == "STARTUP") { WaitForRoster(); return; }
+                if (report.phase == "WAITING_VIEW" ||
+                    report.phase == "WAITING_NO_CONTROLS_VIEW")
+                {
+                    WaitForGameView();
+                    return;
+                }
                 Require(report.phase == "MEASURING", "Unexpected probe phase.");
                 MeasureOneTick();
             }
@@ -299,6 +421,10 @@ namespace NTSD.Test.Editor
             Require(!string.IsNullOrEmpty(request.runId) && request.runId.Length <= 80 &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'), "Invalid runId.");
             Require(request.mode == "preflight" || request.mode == "run", "Invalid request mode.");
+            Require(!request.captureNoControlsView || request.captureGameView,
+                "No-controls screenshot requires the baseline Game View screenshot.");
+            Require(!request.captureCentralAlpha || request.captureGameView,
+                "Central alpha sample requires the baseline Game View screenshot.");
             Require(request.sourceZ == 0 || request.sourceZ >= 180 && request.sourceZ <= 542,
                 "Source Z is outside the declared diagnostic domain.");
             Require(!Directory.Exists(PathInProject(ResultRoot + request.runId)),
@@ -315,6 +441,12 @@ namespace NTSD.Test.Editor
                 phase = "PREFLIGHT",
                 startedUtc = DateTime.UtcNow.ToString("O"),
                 initialSourceZ = request.sourceZ == 0 ? 542 : request.sourceZ,
+                captureGameView = request.captureGameView,
+                captureNoControlsView = request.captureNoControlsView,
+                captureCentralAlpha = request.captureCentralAlpha,
+                evidenceLimit = request.captureGameView
+                    ? "Opt-in PNGs capture Unity Game View after selected production ticks; formal EXE pixel parity and physical keyboard input are not exercised."
+                    : "Event rows are Editor-only observations around the production tick; view fields are simulation projection, not GPU pixels. Physical keyboard and Game View pixels are not exercised.",
                 initialScene = scene.path,
                 initialSceneDirty = scene.isDirty,
                 editorPlaying = EditorApplication.isPlayingOrWillChangePlaymode,
@@ -490,12 +622,14 @@ namespace NTSD.Test.Editor
                 vy = entity.Runtime.Vy,
                 vz = entity.Runtime.Vz,
                 action = entity.Frame.N,
+                frameEntryAction = entity.Trans?.WaitCounter ?? -1,
                 state = entity.Frame.D.state,
                 counter = entity.AttackingCounter,
                 sourceX = entity.Runtime.SourceRuleXInt,
                 sourceY = entity.Runtime.YInt,
                 sourceZ = entity.Runtime.SourceRuleZInt,
                 weaponFlightCounter = entity.Runtime.WeaponFlightCounter,
+                vrestFromSlot1 = entity.ItrRest?.GetVrest(1) ?? 0,
                 sourceRuleX = entity.Runtime.SourceRuleX,
                 sourceRuleZ = entity.Runtime.SourceRuleZ,
                 viewX = entity.Runtime.X,
@@ -558,6 +692,22 @@ namespace NTSD.Test.Editor
             return sample;
         }
 
+        private static void ObserveFrameWrite(LF2Entity entity, int fromAction, int toAction)
+        {
+            if (report == null || observingTick < 0 || entity?.Runtime?.SlotIndex != 2 ||
+                report.eventRows.Count >= 512) return;
+            report.eventRows.Add(observingTick + ",frame,2," + fromAction + "," + toAction);
+        }
+
+        private static void ObserveKind10Dispatch(
+            LF2Entity attacker, LF2Entity target, int kind, bool applied)
+        {
+            if (report == null || observingTick < 0 || report.eventRows.Count >= 512) return;
+            report.eventRows.Add(observingTick + ",kind10," +
+                (attacker?.Runtime?.SlotIndex ?? -1) + "," +
+                (target?.Runtime?.SlotIndex ?? -1) + "," + kind + "," + applied);
+        }
+
         private static void MeasureOneTick()
         {
             Require(driver != null && ReferenceEquals(driver.World, world) && driver.IsPaused &&
@@ -597,25 +747,342 @@ namespace NTSD.Test.Editor
                 new SimulationPlayerInput(0, buttons),
                 new SimulationPlayerInput(1, SimulationInputButtons.None)
             });
-            Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
-                "Production Driver rejected complete tick " + next);
+            Require(LF2Entity.FrameWriteObserverForDiagnostics == null &&
+                BattleHitCandidateSequenceRunner.Kind10DispatchObserverForDiagnostics == null,
+                "Another Editor diagnostic owns the battle event observer.");
+            observingTick = tick;
+            LF2Entity.FrameWriteObserverForDiagnostics = ObserveFrameWrite;
+            BattleHitCandidateSequenceRunner.Kind10DispatchObserverForDiagnostics =
+                ObserveKind10Dispatch;
+            try
+            {
+                Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
+                    "Production Driver rejected complete tick " + next);
+            }
+            finally
+            {
+                LF2Entity.FrameWriteObserverForDiagnostics = null;
+                BattleHitCandidateSequenceRunner.Kind10DispatchObserverForDiagnostics = null;
+                observingTick = -1;
+            }
             Require(driver.CurrentTickIndex == next, "Driver did not advance exactly one tick.");
             if (report.pickupTick < 0 && actor.Runtime.LinkState == 4 &&
                 actor.Runtime.TargetSlotIndex == 2) report.pickupTick = tick;
             if (report.pickupTick >= 0 && reason == "none") ++report.neutralAfterPickup;
             report.samples.Add(CaptureTick(tick, buttons, reason));
             report.endTick = driver.CurrentTickIndex;
+            if (tick == 39 && report.captureNoControlsView)
+            {
+                BattleSpriteEntry entry = actor.Sprite?.CurrentEntry;
+                report.narutoSpriteSourceSheetPath = entry?.SourceSheetPath;
+                report.narutoSpritePixelRect = entry?.PixelRect.ToString();
+                report.centralEffectivePixelMode =
+                    BattleCentralRenderSystem.Diagnostics.EffectivePixelMode.ToString();
+            }
+            if (report.captureGameView && (tick == 30 || tick == 39))
+            {
+                string relativePath = ResultRoot + report.runId +
+                    "/game-view-tick" + tick.ToString("D2") + ".png";
+                string output = PathInProject(relativePath);
+                Require(!File.Exists(output), "Refusing to overwrite F02 Game View capture.");
+                report.pendingViewTick = tick;
+                report.pendingViewPath = relativePath;
+                report.pendingViewStartedUtc = DateTime.UtcNow.ToString("O");
+                report.phase = "WAITING_VIEW";
+                ScreenCapture.CaptureScreenshot(output);
+            }
             Save();
+        }
+
+        private static void WaitForGameView()
+        {
+            bool noControls = report.phase == "WAITING_NO_CONTROLS_VIEW";
+            Require(report.captureGameView && report.pendingViewTick > 0 &&
+                driver.IsPaused && driver.CurrentTickIndex == report.endTick &&
+                report.samples.Count == report.pendingViewTick + 1,
+                "F02 Game View capture advanced the production simulation.");
+            Require(DateTime.UtcNow - DateTime.Parse(report.pendingViewStartedUtc).ToUniversalTime() <
+                TimeSpan.FromSeconds(90), "F02 Game View screenshot timed out.");
+            string output = PathInProject(report.pendingViewPath);
+            if (!File.Exists(output) || new FileInfo(output).Length < 32) return;
+            byte[] bytes;
+            try { bytes = File.ReadAllBytes(output); }
+            catch (IOException) { return; }
+            Require(bytes.Length >= 32 && bytes[0] == 137 && bytes[1] == 80 &&
+                bytes[2] == 78 && bytes[3] == 71 && bytes[4] == 13 &&
+                bytes[5] == 10 && bytes[6] == 26 && bytes[7] == 10,
+                "F02 Game View capture is not a PNG.");
+            int width = bytes[16] << 24 | bytes[17] << 16 | bytes[18] << 8 | bytes[19];
+            int height = bytes[20] << 24 | bytes[21] << 16 | bytes[22] << 8 | bytes[23];
+            Require(width > 0 && height > 0, "F02 Game View dimensions are invalid.");
+            ViewCapture capture;
+            using (SHA256 hash = SHA256.Create())
+            {
+                capture = new ViewCapture
+                {
+                    relativeTick = report.pendingViewTick,
+                    globalTick = report.endTick,
+                    path = report.pendingViewPath,
+                    sha256 = BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", ""),
+                    width = width,
+                    height = height,
+                    fileBytes = bytes.Length
+                };
+            }
+            if (noControls)
+                report.controlsHiddenView = capture;
+            else
+                report.views.Add(capture);
+            report.pendingViewTick = 0;
+            report.pendingViewPath = null;
+            report.pendingViewStartedUtc = null;
+            if (!noControls && capture.relativeTick == 39 &&
+                report.captureCentralAlpha)
+                report.centralAlpha = CaptureCentralAlpha();
+            if (!noControls && capture.relativeTick == 39 &&
+                report.captureNoControlsView)
+            {
+                GameObject controls = GameObject.Find("BattleControls");
+                Require(controls != null && controls.scene.path == BattleScene &&
+                    controls.activeSelf, "Active BattleControls were not found.");
+                controls.SetActive(false);
+                report.battleControlsTemporarilyDisabled = true;
+                string relativePath = ResultRoot + report.runId +
+                    "/game-view-tick39-no-controls.png";
+                string hiddenOutput = PathInProject(relativePath);
+                Require(!File.Exists(hiddenOutput),
+                    "Refusing to overwrite F02 no-controls Game View capture.");
+                report.pendingViewTick = 39;
+                report.pendingViewPath = relativePath;
+                report.pendingViewStartedUtc = DateTime.UtcNow.ToString("O");
+                report.phase = "WAITING_NO_CONTROLS_VIEW";
+                ScreenCapture.CaptureScreenshot(hiddenOutput);
+                Save();
+                return;
+            }
+            if (noControls)
+                RestoreBattleControls();
+            report.phase = "MEASURING";
+            Save();
+        }
+
+        private static void RestoreBattleControls()
+        {
+            if (report == null || !report.battleControlsTemporarilyDisabled)
+                return;
+            GameObject controls = Resources.FindObjectsOfTypeAll<GameObject>()
+                .FirstOrDefault(value => value != null &&
+                    value.name == "BattleControls" &&
+                    value.scene.IsValid() && value.scene.path == BattleScene);
+            Require(controls != null, "Temporarily hidden BattleControls were lost.");
+            controls.SetActive(true);
+            report.battleControlsTemporarilyDisabled = false;
+        }
+
+        private static CentralAlphaEvidence CaptureCentralAlpha()
+        {
+            var evidence = new CentralAlphaEvidence { status = "INCOMPLETE" };
+            try
+            {
+                BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
+                evidence.simulationTick = plan.SimulationTick;
+                evidence.displayTick = plan.DisplayTick;
+                BattlePresentationFrame frame = plan.CapturedFrame;
+                Require(plan.UsesCentralPixels && frame != null &&
+                    frame.CommandsMaterialized, "Central pixel frame was not materialized.");
+                evidence.frameTick = frame.TickIndex;
+                evidence.commandCount = frame.CommandCount;
+                BattleCentralRuntimeDiagnostics diagnostics =
+                    BattleCentralRenderSystem.Diagnostics;
+                evidence.submittedDrawCount = diagnostics.LastSubmissionDrawCount;
+                evidence.submittedPixelsLastFrame =
+                    diagnostics.SubmittedPixelsLastFrame;
+                evidence.submissionReason = diagnostics.Reason;
+                BattleRenderCommand command = default;
+                bool found = false;
+                CharacterAnimtorManager manager =
+                    CharacterAnimtorManager.TryGetInstance();
+                BattleSpriteCatalog catalog = manager?.SpriteCatalog;
+                for (int index = 0; index < frame.CommandCount; index++)
+                {
+                    BattleRenderCommand candidate = frame.GetCommand(index);
+                    var row = new CentralCommandEvidence
+                    {
+                        index = index,
+                        type = candidate.Type.ToString(),
+                        runtimeSlot = candidate.RuntimeSlot,
+                        stableId = candidate.StableId,
+                        visualDataId = candidate.VisualDataId,
+                        effectivePic = candidate.EffectivePic,
+                        position = candidate.Position.ToString("F4"),
+                        size = candidate.Size.ToString("F4"),
+                        pivot = candidate.Pivot.ToString("F4"),
+                        color = candidate.Color.ToString(),
+                        sortOrder = candidate.SortOrder
+                    };
+                    if (candidate.Type == BattleRenderCommandType.Entity &&
+                        catalog != null && catalog.TryGet(candidate.VisualDataId,
+                            candidate.EffectivePic, out BattleSpriteEntry rowEntry))
+                    {
+                        row.sourceSheetPath = rowEntry.SourceSheetPath;
+                        row.sourcePixelRect = rowEntry.PixelRect.ToString("F4");
+                        row.bindingMode = rowEntry.CentralBinding.Mode.ToString();
+                    }
+                    evidence.commands.Add(row);
+                    if (found || candidate.Type != BattleRenderCommandType.Entity ||
+                        candidate.RuntimeSlot != 0) continue;
+                    command = candidate;
+                    found = true;
+                }
+                Require(found, "Naruto slot-0 Entity command is absent.");
+                evidence.narutoStableId = command.StableId;
+                evidence.visualDataId = command.VisualDataId;
+                evidence.effectivePic = command.EffectivePic;
+                evidence.commandPosition = command.Position.ToString("F4");
+                evidence.commandSize = command.Size.ToString("F4");
+                evidence.commandPivot = command.Pivot.ToString("F4");
+                BattleSpriteEntry entry = null;
+                Require(catalog != null &&
+                    catalog.TryGet(command.VisualDataId,
+                        command.EffectivePic, out entry),
+                    "Current Naruto catalog entry is missing.");
+                BattleSpriteCentralBinding binding = entry.CentralBinding;
+                Require(binding.IsValid, "Current Naruto central binding is invalid.");
+                evidence.sourceSheetPath = entry.SourceSheetPath;
+                evidence.sourcePixelRect = entry.PixelRect.ToString("F4");
+                evidence.bindingMode = binding.Mode.ToString();
+                evidence.bindingPixelRect = binding.AtlasContentPixelRect.ToString("F4");
+                evidence.atlasPage = binding.AtlasPageIndex;
+                evidence.atlasSlice = binding.AtlasSlice;
+                evidence.sourceAlpha = ReadAlpha(entry.SharedTexture,
+                    entry.PixelRect, 0);
+                evidence.boundAlpha = ReadAlpha(binding.Texture,
+                    binding.AtlasContentPixelRect, binding.AtlasSlice);
+                evidence.status = plan.DisplayTick == report.endTick &&
+                    frame.TickIndex == report.endTick &&
+                    evidence.sourceAlpha.error == null &&
+                    evidence.boundAlpha.error == null
+                    ? "CAPTURED" : "INCOMPLETE";
+                if (evidence.status != "CAPTURED")
+                    evidence.error = "Presentation tick or GPU readback did not match the paused production tick.";
+            }
+            catch (Exception error)
+            {
+                evidence.error = error.ToString();
+            }
+            return evidence;
+        }
+
+        private static AlphaSample ReadAlpha(Texture texture, Rect rect, int slice)
+        {
+            var sample = new AlphaSample { texture = texture != null ? texture.name : "<null>" };
+            try
+            {
+                Require(texture != null, "Alpha source texture is missing.");
+                int x = Mathf.RoundToInt(rect.x);
+                int y = Mathf.RoundToInt(rect.y);
+                int width = Mathf.RoundToInt(rect.width);
+                int height = Mathf.RoundToInt(rect.height);
+                Require(width > 0 && height > 0 && x >= 0 && y >= 0 &&
+                    x + width <= texture.width && y + height <= texture.height,
+                    "Alpha sample rect exceeds its texture.");
+                AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(
+                    texture, 0, x, width, y, height, slice, 1,
+                    TextureFormat.RGBA32);
+                request.WaitForCompletion();
+                Require(!request.hasError, "GPU alpha readback failed.");
+                var pixels = request.GetData<Color32>();
+                Require(pixels.Length == width * height,
+                    "GPU alpha readback length differs from the sprite cell.");
+                sample.pixelCount = pixels.Length;
+                for (int index = 0; index < pixels.Length; index++)
+                {
+                    byte alpha = pixels[index].a;
+                    if (alpha == 0) sample.alphaZero++;
+                    else if (alpha == 255) sample.alphaOpaque++;
+                    else sample.alphaPartial++;
+                }
+            }
+            catch (Exception error)
+            {
+                sample.error = error.ToString();
+            }
+            return sample;
         }
 
         private static void CompleteMeasurement()
         {
             report.status = report.samples.Count == 46 &&
-                report.samples.All(value => value.entities.Count == 3)
+                report.samples.All(value => value.entities.Count == 3) &&
+                (!report.captureGameView || report.views.Count == 2 &&
+                 report.views[0].relativeTick == 30 &&
+                 report.views[1].relativeTick == 39) &&
+                (!report.captureNoControlsView ||
+                 report.controlsHiddenView != null &&
+                 report.controlsHiddenView.relativeTick == 39 &&
+                 !report.battleControlsTemporarilyDisabled) &&
+                (!report.captureCentralAlpha ||
+                 report.centralAlpha != null &&
+                 report.centralAlpha.status == "CAPTURED")
                 ? "CAPTURED" : "INCOMPLETE";
+            Save();
+            if (!CaptureOrderedShutdown()) return;
             report.phase = "EXITING";
             Save();
             EditorApplication.ExitPlaymode();
+        }
+
+        private static bool CaptureOrderedShutdown()
+        {
+            try
+            {
+                LF2ObjectPool pool = LF2ObjectPool.TryGetInstance();
+                BattleRuntimeShutdownReport shutdown = driver.ShutdownBattleRuntime();
+                bool mapCleared = true;
+                if (shutdown.RuntimeStagesCompleted)
+                {
+                    foreach (BattleBootstrap bootstrap in
+                        Resources.FindObjectsOfTypeAll<BattleBootstrap>())
+                    {
+                        if (bootstrap == null || EditorUtility.IsPersistent(bootstrap) ||
+                            !bootstrap.gameObject.scene.IsValid()) continue;
+                        bootstrap.DisablePresentation();
+                        mapCleared &= bootstrap.IsRuntimeMapCleared;
+                    }
+                    shutdown = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(mapCleared);
+                }
+                report.shutdownStatus = shutdown.Status.ToString();
+                report.shutdownStage = shutdown.CompletedStage.ToString();
+                report.shutdownFailure = shutdown.FailureReason;
+                report.remainingWorldObjects = shutdown.RemainingWorldObjects;
+                report.remainingRuntimeSlots = shutdown.RemainingRuntimeSlots;
+                report.remainingPoolBorrowers = shutdown.RemainingPoolBorrowers;
+                report.remainingActivePoolObjects =
+                    pool?.ActiveObjectCountForAcceptance ?? 0;
+                report.remainingActivePoolSprites =
+                    pool?.ActiveSpriteCountForAcceptance ?? 0;
+                report.poolQuiesced = pool == null || pool.IsQuiescedForDiagnostics;
+                report.worldDetached = driver.World == null;
+                report.orderedShutdownComplete = shutdown.IsComplete &&
+                    shutdown.CompletedStage == BattleRuntimeShutdownStage.RuntimeMapCleared &&
+                    report.worldDetached && report.poolQuiesced &&
+                    report.remainingWorldObjects == 0 &&
+                    report.remainingRuntimeSlots == 0 &&
+                    report.remainingPoolBorrowers == 0 &&
+                    report.remainingActivePoolObjects == 0 &&
+                    report.remainingActivePoolSprites == 0;
+                if (!report.orderedShutdownComplete)
+                    report.error = "Ordered shutdown did not reach zero-residue postconditions.";
+            }
+            catch (Exception error)
+            {
+                report.error = "Ordered shutdown exception: " + error;
+            }
+            if (report.orderedShutdownComplete) return true;
+            report.status = "FAIL";
+            report.phase = "CLEANUP_BLOCKED";
+            Save();
+            return false;
         }
 
         private static bool HashesMatch() => HashesMatch(report.after, report.before);
@@ -632,6 +1099,14 @@ namespace NTSD.Test.Editor
         private static void Fail(string message)
         {
             if (report == null) { Debug.LogError("[Q07 F02 kind10 Scene] " + message); return; }
+            if (report.battleControlsTemporarilyDisabled)
+            {
+                try { RestoreBattleControls(); }
+                catch (Exception restoreError)
+                {
+                    message += " BattleControls restore failed: " + restoreError;
+                }
+            }
             report.status = "FAIL";
             report.error = message;
             report.phase = "EXITING";
@@ -686,6 +1161,9 @@ namespace NTSD.Test.Editor
 
         private static void Clear()
         {
+            LF2Entity.FrameWriteObserverForDiagnostics = null;
+            BattleHitCandidateSequenceRunner.Kind10DispatchObserverForDiagnostics = null;
+            observingTick = -1;
             SessionState.EraseString(SessionKey);
             report = null;
             driver = null;

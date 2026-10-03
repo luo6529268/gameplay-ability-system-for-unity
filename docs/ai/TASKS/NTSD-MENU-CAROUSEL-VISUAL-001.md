@@ -7,3 +7,5 @@ Implement selected white brush text with red border/black shadow, unselected sma
 Exact script scope and acceptance are in the same-ID Change Record. Scene and font assets are protected; runtime-only integration avoids saving the scene. Current baseline SHA replaces no historical facts and does not attribute prior unknown scene writes.
 
 Pre-change backup: docs/ai/FILE-OPERATIONS/NTSD-MENU-CAROUSEL-VISUAL-001-PREPARE/manifest-before.json.
+
+Final delivery: RUNTIME_PENDING for physical input/Player/user art acceptance; implemented effect with focused12/12 and original Menu Play08 1/1 PASS, real screenshots and protected Scene SHA. Full report: artifacts/diagnostics/NTSD-MENU-CAROUSEL-VISUAL-001/REPORT.md. Original motion/input scope retained.

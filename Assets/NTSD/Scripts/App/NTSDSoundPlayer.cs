@@ -188,7 +188,7 @@ namespace NTSD.App
 
         public void PlaySfx(string soundId, Vector3? position = null, Transform parent = null)
         {
-            PlaySfx(soundId, position, parent, ResolveListenerTransform(), false);
+            PlaySfx(soundId, position, parent, ResolveListenerTransform(), false, 0);
         }
 
         private void PlaySfx(
@@ -196,7 +196,8 @@ namespace NTSD.App
             Vector3? position,
             Transform parent,
             Transform listenerTransform,
-            bool isBattleEvent)
+            bool isBattleEvent,
+            int battleSourceWorldX)
         {
             PreparedSoundCue preparedCue = GetOrPrepareCue(soundId, isBattleEvent);
             if (preparedCue == null)
@@ -205,7 +206,7 @@ namespace NTSD.App
             if (preparedCue.IsLoaded)
             {
                 PlayPreparedCue(preparedCue, position, parent, listenerTransform,
-                    isBattleEvent);
+                    isBattleEvent, battleSourceWorldX);
                 return;
             }
 
@@ -221,7 +222,8 @@ namespace NTSD.App
                 position,
                 parent,
                 listenerTransform,
-                isBattleEvent).Forget();
+                isBattleEvent,
+                battleSourceWorldX).Forget();
         }
 
         public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
@@ -247,7 +249,8 @@ namespace NTSD.App
                 new Vector3(groundPoint.x, groundPoint.y, 0f),
                 null,
                 listenerTransform,
-                true);
+                true,
+                sound.WorldX);
         }
 
         public bool TryGetPreparedSingleFileWrapperForDiagnostics(
@@ -386,13 +389,14 @@ namespace NTSD.App
             Vector3? position,
             Transform parent,
             Transform listenerTransform,
-            bool isBattleEvent)
+            bool isBattleEvent,
+            int battleSourceWorldX)
         {
             try
             {
                 await LoadPreparedClipsAsync(preparedCue);
                 PlayPreparedCue(preparedCue, position, parent, listenerTransform,
-                    isBattleEvent);
+                    isBattleEvent, battleSourceWorldX);
             }
             finally
             {
@@ -405,7 +409,8 @@ namespace NTSD.App
             Vector3? position,
             Transform parent,
             Transform listenerTransform,
-            bool isBattleEvent)
+            bool isBattleEvent,
+            int battleSourceWorldX)
         {
             AudioItem audioItem = preparedCue.AudioItem;
 
@@ -423,7 +428,9 @@ namespace NTSD.App
             audioItem.lastTimePlayed = Time.time;
 
             Vector3 playbackPosition = position ?? (listenerTransform != null ? listenerTransform.position : Vector3.zero);
-            Transform attachTarget = audioItem.range > 0f ? parent : null;
+            Transform attachTarget = !isBattleEvent && audioItem.range > 0f
+                ? parent
+                : null;
             float volume = Mathf.Clamp(
                 audioItem.volume +
                 UnityEngine.Random.Range(
@@ -439,6 +446,38 @@ namespace NTSD.App
                 -3f,
                 3f);
 
+            float matrixPan = 0f;
+            float matrixGain = 1f;
+            if (isBattleEvent)
+            {
+                // Alignment contract: NTSD28-336B44-Q10-BATTLE-STEREO-MATRIX-OUTLET-001.
+                // D-024 keeps the complete view fixed, so source-rule X is localized
+                // against the fixed view origin without altering queued battle state.
+                Vector2Int mix = ComputeNativeBattleStereoPercentages(
+                    battleSourceWorldX, 0);
+                float left = mix.x * 0.01f;
+                float right = mix.y * 0.01f;
+                if (clip.channels == 1)
+                {
+                    float leftPower = left * left;
+                    float rightPower = right * right;
+                    float totalPower = leftPower + rightPower;
+                    matrixGain = Mathf.Sqrt(totalPower);
+                    matrixPan = totalPower > 0f
+                        ? (rightPower - leftPower) / totalPower
+                        : 0f;
+                }
+                else
+                {
+                    matrixGain = Mathf.Max(left, right);
+                    matrixPan = matrixGain > 0f
+                        ? left >= right
+                            ? right / matrixGain - 1f
+                            : 1f - left / matrixGain
+                        : 0f;
+                }
+            }
+
             AudioSource voice = AcquireOneShotVoice(out int voiceIndex, isBattleEvent);
             if (voice == null)
             {
@@ -451,16 +490,16 @@ namespace NTSD.App
             voice.transform.position = playbackPosition;
             voice.clip = clip;
             voice.pitch = pitch;
-            oneShotVoiceBaseVolumes[voiceIndex] = volume;
-            voice.volume = volume * nativeBattleSfxGain;
-            voice.spatialBlend = audioItem.range > 0f ? 1f : 0f;
+            oneShotVoiceBaseVolumes[voiceIndex] = volume * matrixGain;
+            voice.volume = oneShotVoiceBaseVolumes[voiceIndex] * nativeBattleSfxGain;
+            voice.spatialBlend = !isBattleEvent && audioItem.range > 0f ? 1f : 0f;
             voice.rolloffMode = AudioRolloffMode.Custom;
             voice.minDistance = audioItem.range > 3f
                 ? audioItem.range - 3f
                 : 0f;
             voice.maxDistance = audioItem.range > 0f ? audioItem.range : 500f;
             voice.loop = audioItem.loop;
-            voice.panStereo = 0f;
+            voice.panStereo = matrixPan;
             voice.bypassEffects = false;
             voice.bypassListenerEffects = false;
             voice.bypassReverbZones = false;
@@ -490,6 +529,34 @@ namespace NTSD.App
                 loopFallbackPlayCount++;
             else
                 pooledOneShotPlayCount++;
+        }
+
+        private static Vector2Int ComputeNativeBattleStereoPercentages(
+            int sourceWorldX,
+            int audioCameraX)
+        {
+            long relative = (long)sourceWorldX - audioCameraX;
+            if (relative < -333)
+                return Vector2Int.zero;
+            if (relative < 0)
+                return new Vector2Int((int)((333 + relative) * 100 / 333), 0);
+
+            relative -= 333;
+            if (relative < 0)
+                return new Vector2Int(100, 0);
+            relative -= 666;
+            if (relative < 0)
+            {
+                int right = (int)((relative + 666) * 100 / 666);
+                return new Vector2Int(100 - right, right);
+            }
+            relative -= 333;
+            if (relative < 0)
+                return new Vector2Int(0, 100);
+            relative -= 333;
+            return relative < 0
+                ? new Vector2Int(0, (int)(-relative * 100 / 333))
+                : Vector2Int.zero;
         }
 
         private AudioSource AcquireOneShotVoice(

@@ -1,0 +1,80 @@
+{
+  "source": "336B44 formal root LFR bg1 z400",
+  "unityRun": "f02-kind10-scene-20261003-03",
+  "ticksIncludingInitial": 46,
+  "slots": 3,
+  "fieldPairs": [
+    [
+      "oid",
+      "oid"
+    ],
+    [
+      "objectType",
+      "type"
+    ],
+    [
+      "action",
+      "action"
+    ],
+    [
+      "state",
+      "state"
+    ],
+    [
+      "sourceX",
+      "x"
+    ],
+    [
+      "sourceY",
+      "y"
+    ],
+    [
+      "sourceZ",
+      "z"
+    ],
+    [
+      "vx",
+      "vx"
+    ],
+    [
+      "vy",
+      "vy"
+    ],
+    [
+      "interaction",
+      "interaction"
+    ],
+    [
+      "parent",
+      "parent"
+    ],
+    [
+      "child",
+      "child"
+    ],
+    [
+      "weaponFlightCounter",
+      "weaponHp31C"
+    ],
+    [
+      "hp",
+      "hp"
+    ],
+    [
+      "team",
+      "team"
+    ],
+    [
+      "catchTarget",
+      "catchTargetSlot8C"
+    ],
+    [
+      "catchSource",
+      "catchSourceSlot90"
+    ]
+  ],
+  "declaredChecks": 2346,
+  "checkedUntilFirstDifference": 2346,
+  "firstDifference": null,
+  "limits": "Tick-tail selected fields; does not directly observe Unity intra-tick kind10 status or frame40-to-41 event."
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Menu/MenuLoopCarousel.cs",
+    "bytes": 14104,
+    "sha256": "90A20003A128DE44185B8FD8C737403B10497800C64E3C579E3C4E0CE3E64022"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Menu/MenuOptionBase.cs",
+    "bytes": 2590,
+    "sha256": "830A0F2D1F49BA96AC49DCD14C17913493C7E61C9E1F79767BC4650B55B7CF15"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Menu/MenuCarouselTextEffect.cs",
+    "bytes": 9122,
+    "sha256": "E4972A0569AA42433E59672A4EAD1FB14ED7D2E27974208DD3F8AC946D359E4E"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Menu/MenuCarouselStyle.cs",
+    "bytes": 1895,
+    "sha256": "870E740A8BB6826363098342DE43FB4AA60556202E10F5F387A2F26DA684199B"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/MenuCarouselVisualEditorTests.cs",
+    "bytes": 12580,
+    "sha256": "B52B698A1C59685732C3B215D73E9FD5DEF89BD056F30560F86989322615D250"
+  },
+  {
+    "path": "Assets/NTSD/Resources/UI/MenuCarouselText.shader",
+    "bytes": 7803,
+    "sha256": "621A9DDB125D329FF847957FF6E4AD726FCC160C01EFB6A903BB218D2995141B"
+  },
+  {
+    "path": "Assets/NTSD/Resources/UI/MenuCarouselStyle.asset",
+    "bytes": 490,
+    "sha256": "CAC9CBABACEE7AAECDCC9DE563212631AB20D10BBB7CA6EB16C5EB92F6015C67"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "bytes": 542008,
+    "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "bytes": 67132,
+    "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+  },
+  {
+    "path": "Packages/manifest.json",
+    "bytes": 2923,
+    "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+  }
+]

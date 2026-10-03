@@ -1,0 +1,33 @@
+{
+  "sourceRun": "source-run-02",
+  "rootRun": "root-playback-01",
+  "ticksCompared": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "selectedFields": [
+    "source_action",
+    "source_x",
+    "source_y",
+    "target_action",
+    "target_x",
+    "target_y",
+    "target_collision_y_reference",
+    "target_platform_slot",
+    "target_shadow_offset"
+  ],
+  "compared": 99,
+  "matched": 99,
+  "firstDifference": null,
+  "differences": [],
+  "boundary": "Controlled initial action182 and exact two-entity state; root headless playback passed but nativeParityClaim=false."
+}

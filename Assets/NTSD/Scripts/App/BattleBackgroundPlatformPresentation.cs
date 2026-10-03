@@ -312,12 +312,15 @@ namespace NTSD.App
                 return;
 
             SimulationTickDriver driver = SimulationTickDriver.Instance;
-            BattlePresentationFrame frame =
+            SimulationWorld world =
                 driver != null &&
                 driver.LifecycleState == BattleRuntimeLifecycleState.Running
-                    ? driver.World?.BattlePresentation?.PublishedFrame
+                    ? driver.World
                     : null;
-            ApplyEarthquakeFrame(frame);
+            BattlePresentationFrame frame =
+                world?.BattlePresentation?.PublishedFrame;
+            ApplyEarthquakeFrame(frame,
+                world?.SpatialProjection ?? BattleSpatialProjection.Identity);
         }
 
         private void OnEndCameraRendering(
@@ -331,11 +334,19 @@ namespace NTSD.App
 #if UNITY_EDITOR
         private void ApplyEarthquakeFrameForDiagnostics(BattlePresentationFrame frame)
         {
-            ApplyEarthquakeFrame(frame);
+            ApplyEarthquakeFrame(frame, BattleSpatialProjection.Identity);
+        }
+
+        private void ApplyProjectedEarthquakeFrameForDiagnostics(
+            BattlePresentationFrame frame,
+            BattleSpatialProjection projection)
+        {
+            ApplyEarthquakeFrame(frame, projection);
         }
 #endif
 
-        private void ApplyEarthquakeFrame(BattlePresentationFrame frame)
+        private void ApplyEarthquakeFrame(BattlePresentationFrame frame,
+            BattleSpatialProjection projection)
         {
             if (sourceRenderer == null || sourceRenderer.sprite == null ||
                 frame == null ||
@@ -362,10 +373,13 @@ namespace NTSD.App
             }
 
             // Alignment contract: NTSD28-Q09-P13-PROJECT-BACKGROUND-VISUAL-CONSUMER-001.
-            // Native screen Y is downward; this shader changes only drawn vertices.
+            // Native screen Y is downward; the depth scale is the same viewport-height
+            // scale used for a vertical screen-pixel displacement.
             earthquakeMaterial.SetVector(EarthquakeLocalOffsetId, new Vector4(
-                frame.EarthquakeBackgroundOffsetX / pixelsPerUnit,
-                -frame.EarthquakeBackgroundOffsetY / pixelsPerUnit,
+                (float)projection.SourceDeltaToViewX(
+                    frame.EarthquakeBackgroundOffsetX) / pixelsPerUnit,
+                -(float)projection.SourceDeltaToViewZ(
+                    frame.EarthquakeBackgroundOffsetY) / pixelsPerUnit,
                 0f,
                 0f));
         }

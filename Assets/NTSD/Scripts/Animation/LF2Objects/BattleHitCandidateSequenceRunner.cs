@@ -25,6 +25,10 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     internal static class BattleHitCandidateSequenceRunner
     {
+#if UNITY_EDITOR
+        internal static System.Action<LF2Entity, LF2Entity, int, bool>
+            Kind10DispatchObserverForDiagnostics;
+#endif
         internal static bool TryConsume(IBattleHitCandidateConsumer consumer)
         {
             LF2Entity attacker = consumer?.Attacker;
@@ -383,6 +387,11 @@ namespace NTSD.Animation.LF2Objects
                     dispatched,
                     dispatched && abortAfterSuccessfulHit);
             }
+#if UNITY_EDITOR
+            if (runtimeItr.kind == 10)
+                Kind10DispatchObserverForDiagnostics?.Invoke(
+                    attacker, target, runtimeItr.kind, dispatched);
+#endif
 
             return dispatched && abortAfterSuccessfulHit;
         }

@@ -1,0 +1,13 @@
+using TMPro;
+using UnityEngine;
+
+namespace NTSD.UI.Menu
+{
+    [CreateAssetMenu(menuName = "NTSD/UI/Menu Carousel Style")]
+    public sealed class MenuCarouselStyle : ScriptableObject
+    {
+        [SerializeField] private TMP_FontAsset fallbackFont;
+
+        public TMP_FontAsset FallbackFont => fallbackFont;
+    }
+}

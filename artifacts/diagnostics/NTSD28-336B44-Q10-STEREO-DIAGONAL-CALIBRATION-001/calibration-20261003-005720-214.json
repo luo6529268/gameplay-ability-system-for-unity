@@ -1,0 +1,267 @@
+{
+    "status": "CAPTURE_COMPLETE",
+    "error": "",
+    "startedUtc": "2026-10-03T00:57:20.2165914Z",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sceneDirtyAtStart": false,
+    "sceneCountAtStart": 1,
+    "speakerMode": "Stereo",
+    "sampleRate": 48000,
+    "initialGameFrame": 1199,
+    "finalGameFrame": 1695,
+    "initialDspTime": 22056.469333333334,
+    "finalDspTime": 22073.002666666667,
+    "editorUpdateCalls": 496,
+    "nonzeroCaptureFrames": 496,
+    "captureStopped": true,
+    "temporaryObjectsDestroyed": true,
+    "timingRestored": true,
+    "protectedHashesStable": true,
+    "matrixLimit": "AudioRenderer software mixer output with temporary left-only/right-only stereo PCM. No hardware or native EXE PCM capture; output Mixer group is null.",
+    "before": [
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+        },
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+        },
+        {
+            "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+            "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+        },
+        {
+            "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+            "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+        }
+    ],
+    "after": [
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+        },
+        {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "sha256": "5D79DBB7F3C6E9FF790413A8D6C0D9942A093F5D9E1B69FC351468C05EC0052D"
+        },
+        {
+            "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+            "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+        },
+        {
+            "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+            "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+        }
+    ],
+    "samples": [
+        {
+            "name": "left_center_reference",
+            "inputChannel": 0,
+            "panStereo": 0.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 159.91127000886923,
+            "rightSquares": 0.0,
+            "leftRms": 0.0883638358204408,
+            "rightRms": 0.0,
+            "leftGainRelative": 1.0,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_center_reference",
+            "inputChannel": 1,
+            "panStereo": 0.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 19456,
+            "leftSquares": 0.0,
+            "rightSquares": 152.11016459242448,
+            "leftRms": 0.0,
+            "rightRms": 0.08842037232799069,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 1.0
+        },
+        {
+            "name": "left_pan_minus_1",
+            "inputChannel": 0,
+            "panStereo": -1.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 160.11434357824616,
+            "rightSquares": 0.0,
+            "leftRms": 0.08841992525744155,
+            "rightRms": 0.0,
+            "leftGainRelative": 1.0006347555703075,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_minus_1",
+            "inputChannel": 1,
+            "panStereo": -1.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 0.0,
+            "rightSquares": 0.0,
+            "leftRms": 0.0,
+            "rightRms": 0.0,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "left_pan_minus_0_75",
+            "inputChannel": 0,
+            "panStereo": -0.75,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 160.11434357824616,
+            "rightSquares": 0.0,
+            "leftRms": 0.08841992525744155,
+            "rightRms": 0.0,
+            "leftGainRelative": 1.0006347555703075,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_minus_0_75",
+            "inputChannel": 1,
+            "panStereo": -0.75,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 0.0,
+            "rightSquares": 10.007146473640385,
+            "leftRms": 0.0,
+            "rightRms": 0.022104981314360389,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.24999873595151954
+        },
+        {
+            "name": "left_pan_minus_2_3",
+            "inputChannel": 0,
+            "panStereo": -0.6666666865348816,
+            "sourceVolume": 1.0,
+            "sampleFrames": 19456,
+            "leftSquares": 151.99941602493466,
+            "rightSquares": 0.0,
+            "leftRms": 0.08838817785673729,
+            "rightRms": 0.0,
+            "leftGainRelative": 1.0002754750975949,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_minus_2_3",
+            "inputChannel": 1,
+            "panStereo": -0.6666666865348816,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 0.0,
+            "rightSquares": 17.790480347369355,
+            "leftRms": 0.0,
+            "rightRms": 0.02947330653678671,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.333331626646595
+        },
+        {
+            "name": "left_native_75_25_candidate",
+            "inputChannel": 0,
+            "panStereo": -0.6666666865348816,
+            "sourceVolume": 0.75,
+            "sampleFrames": 21504,
+            "leftSquares": 94.51536778450549,
+            "rightSquares": 0.0,
+            "leftRms": 0.06629665072774763,
+            "rightRms": 0.0,
+            "leftGainRelative": 0.7502690451607978,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_native_75_25_candidate",
+            "inputChannel": 1,
+            "panStereo": -0.6666666865348816,
+            "sourceVolume": 0.75,
+            "sampleFrames": 21504,
+            "leftSquares": 0.0,
+            "rightSquares": 10.501706058667713,
+            "leftRms": 0.0,
+            "rightRms": 0.022098882026147936,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.24992975537552934
+        },
+        {
+            "name": "left_pan_minus_0_5",
+            "inputChannel": 0,
+            "panStereo": -0.5,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 160.11434357824616,
+            "rightSquares": 0.0,
+            "leftRms": 0.08841992525744155,
+            "rightRms": 0.0,
+            "leftGainRelative": 1.0006347555703075,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_minus_0_5",
+            "inputChannel": 1,
+            "panStereo": -0.5,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 0.0,
+            "rightSquares": 40.02858589456154,
+            "leftRms": 0.0,
+            "rightRms": 0.044209962628720778,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.49999747190303908
+        },
+        {
+            "name": "left_pan_plus_0_5",
+            "inputChannel": 0,
+            "panStereo": 0.5,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 40.02858589456154,
+            "rightSquares": 0.0,
+            "leftRms": 0.044209962628720778,
+            "rightRms": 0.0,
+            "leftGainRelative": 0.5003173777851537,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_plus_0_5",
+            "inputChannel": 1,
+            "panStereo": 0.5,
+            "sourceVolume": 1.0,
+            "sampleFrames": 20480,
+            "leftSquares": 0.0,
+            "rightSquares": 160.11434357824616,
+            "leftRms": 0.0,
+            "rightRms": 0.08841992525744155,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.9999949438060781
+        },
+        {
+            "name": "left_pan_plus_1",
+            "inputChannel": 0,
+            "panStereo": 1.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 19456,
+            "leftSquares": 0.0,
+            "rightSquares": 0.0,
+            "leftRms": 0.0,
+            "rightRms": 0.0,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.0
+        },
+        {
+            "name": "right_pan_plus_1",
+            "inputChannel": 1,
+            "panStereo": 1.0,
+            "sourceVolume": 1.0,
+            "sampleFrames": 14336,
+            "leftSquares": 0.0,
+            "rightSquares": 112.05916415614195,
+            "leftRms": 0.0,
+            "rightRms": 0.08841169019997637,
+            "leftGainRelative": 0.0,
+            "rightGainRelative": 0.9999018085110283
+        }
+    ]
+}

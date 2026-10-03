@@ -1,0 +1,18 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q07-C040-TRIAD-UNITY-SCENE-001
+status: VERIFIED
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040NaturalScenePlayProbeEditor.cs
+authority: 336B44 formal root and playable controlled Jiraiya-Bee-Guy C040 triad
+evidence: docs/ai/TASKS/NTSD28-336B44-Q07-C040-TRIAD-UNITY-SCENE-001.md
+-->
+
+# NTSD28-336B44-Q07-C040-TRIAD-UNITY-SCENE-001
+
+Created before modifying the existing C040 Editor-only request probe. Its current `run` mode hardcodes Kakuzu/Bee/Guy ordinary inputs and already passed 40-tick/ordered-shutdown scoped verification; it cannot express the independent formal Jiraiya/Bee/Guy controlled-action C040 positive. Extend only that declared test script with a separate request mode, retaining original modes, output identities and preflight. Expected side effect is one short original Editor Battle Play and a unique diagnostic JSON; protected Scene/config hashes and user dirty work must remain unchanged. The Task specifies authority, initial state, affected symbols (`Request.mode`, roster configuration, `WaitForRoster`, `SetInitialActor`, `MeasureOneTick`), validation and forward-correction rollback. Do not edit production gameplay or nonbattle logic. Status remains PLANNED until code is actually written.
+
+Code-written update 2026-10-03: changed only the declared C040 Editor probe. The new `triad` request mode configures 21/75/97, X500/620/640, actions415/73/0, team1/2/1, seed682973786 and 16 neutral complete ticks; `run` retains its original 25/75/97, X500/540/560, action0, seed0 and 40-tick input schedule. The existing clean-Scene guards, full sample capture and ordered shutdown remain shared. Generated Editor build `dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q` passed 0 errors/270 warnings. Original Editor import/Play, formal comparison and four-SHA exit remain pending. No production, DAT, Scene, Menu or other script was modified under this ID.
+
+Verified scoped update 2026-10-03 (supersedes the pending items above): original Editor import and original Battle Scene 16-tick Play passed. Formal root/Unity 528/528 declared entity fields and formal source/Unity 80/80 RNG fields match; armor hit tick1 and grab tick2 match. Projection residual X<0.58/Z<0.24 output pixels; existing ordered shutdown reports Completed/RuntimeMapCleared with zero World, runtime slots, pool borrowers, active pooled objects and sprites, pool quiesced and World detached. Exited Play to clean Menu with four protected hashes stable. Formal root LFR `crtState` differs from source/Unity in all 16 ticks and its own report says `nativeParityClaim=false`; full RNG/root parity is not verified and remains separate follow-up. Physical-key reach, Game View pixels and C040/Q07 parent remain open. Rollback remains a forward correction confined to the test-only probe; no user work or previous evidence overwritten. [Report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-NATURAL-SCENE-001/TRIAD-RUN-01-REPORT.md).
+
+Read-only carrier correction 2026-10-03: the LFR playback restores its synchronized table/index but has no source CRT seed; `BattleConfig28.random_seed` defaults to 0 while the source probe and Unity use 682973786. The formal CRT LCG at 3000 setup calls reproduces root tick0 state 3374725112, and at 3002 calls reproduces root tick1 2270971442 versus source/Unity tick1 2524509468. This explains the reported carrier difference without a production edit; the preceding paragraph's "separate follow-up" means only that this LFR cannot certify full CRT parity, not an unexplained Unity defect.

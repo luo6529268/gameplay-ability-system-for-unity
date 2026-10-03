@@ -1,6 +1,9 @@
 #include "ntsd28/battle_world.h"
+#include "ntsd28_playable/d3d11_renderer.h"
 #include "ntsd28_playable/game_session.h"
 #include "ntsd28_playable/game_session_lfr.h"
+
+#include <objbase.h>
 
 #include <cmath>
 #include <cstdint>
@@ -44,20 +47,21 @@ void write_row(std::ofstream& csv, int tick, const char* phase,
 }
 
 ntsd28_playable::BattleConfig28 make_config(int weapon_x, bool kind10,
-                                            int opponent_x) {
+                                            int opponent_x, int source_z,
+                                            int background_id) {
     ntsd28_playable::BattleConfig28 config;
     config.random_seed = 0x28A55A5Au;
     config.battle_mode = 0;
     config.character_id = 2;
     config.enemy_id = kind10 ? 36 : 7;
-    config.background_id = 23;
+    config.background_id = background_id;
     config.bgm_selection_49f18c = 2;
 
     ntsd28_playable::CombatantConfig28 naruto;
     naruto.slot = 0;
     naruto.object_id = 2;
     naruto.x = 200;
-    naruto.z = 542;
+    naruto.z = source_z;
     naruto.hp = naruto.base_hp = naruto.mp = 500;
     naruto.team = 1;
 
@@ -73,7 +77,7 @@ ntsd28_playable::BattleConfig28 make_config(int weapon_x, bool kind10,
     weapon.object_id = 600;
     weapon.x = weapon_x;
     weapon.y = -20;
-    weapon.z = 542;
+    weapon.z = source_z;
     weapon.hp = weapon.base_hp = 250;
     weapon.mp = 0;
     weapon.team = 1;
@@ -85,25 +89,41 @@ ntsd28_playable::BattleConfig28 make_config(int weapon_x, bool kind10,
 }  // namespace
 
 int wmain(int argc, wchar_t** argv) {
-    if (argc != 4 && argc != 5) return 2;
+    if (argc < 4 || argc > 8) return 2;
     const std::filesystem::path root(argv[1]);
     const std::filesystem::path output(argv[2]);
     const std::wstring mode(argv[3]);
-    const bool kind10 = mode == L"kind10" && argc == 5;
+    const bool kind10 = mode == L"kind10" && argc >= 5 && argc <= 8;
+    const bool capture_offscreen = kind10 && argc == 8 &&
+                                   std::wstring(argv[7]) == L"--offscreen-tick39";
     if ((mode != L"near" && mode != L"far" && !kind10) ||
-        (!kind10 && argc != 4)) return 2;
+        (!kind10 && argc != 4 && argc != 5 && argc != 6) ||
+        (argc == 8 && !capture_offscreen)) return 2;
     int opponent_x = 0;
+    int source_z = 542;
+    int background_id = 23;
     if (kind10) {
         try { opponent_x = std::stoi(argv[4]); }
         catch (...) { return 2; }
         if (opponent_x < 350 || opponent_x > 800) return 2;
+    }
+    if (argc >= (kind10 ? 6 : 5)) {
+        try { source_z = std::stoi(argv[kind10 ? 5 : 4]); }
+        catch (...) { return 2; }
+        if (source_z < 180 || source_z > 542) return 2;
+    }
+    if (argc == (kind10 ? 7 : 6) || capture_offscreen) {
+        try { background_id = std::stoi(argv[kind10 ? 6 : 5]); }
+        catch (...) { return 2; }
+        if (background_id != 1 && background_id != 23) return 2;
     }
     if (std::filesystem::exists(output)) return 3;
 
     ntsd28_playable::GameSession28 session(root, root);
     std::string error;
     if (!session.initialize(make_config(mode == L"far" ? 800 : 190,
-                                        kind10, opponent_x), error)) {
+                                        kind10, opponent_x, source_z,
+                                        background_id), error)) {
         std::cerr << "initialize: " << error << '\n';
         return 4;
     }
@@ -200,6 +220,54 @@ int wmain(int argc, wchar_t** argv) {
         if (!recorder.capture_after_step(session, error)) {
             std::cerr << "record tick " << tick << ": " << error << '\n';
             return 9;
+        }
+        if (capture_offscreen && tick == 39) {
+            const auto snapshot = session.snapshot(false);
+            int naruto_count = 0;
+            int pic3_count = 0;
+            int pic8_count = 0;
+            std::ofstream geometry(output / "tick39-sprites.csv", std::ios::binary);
+            if (!geometry) return 14;
+            geometry << "slot,oid,pic,screen_left,screen_top,width,height,"
+                        "source_x,source_y,source_path\n";
+            for (const auto& sprite : snapshot.sprites) {
+                geometry << sprite.slot << ',' << sprite.object_id << ','
+                         << sprite.pic << ',' << sprite.screen_left << ','
+                         << sprite.screen_top << ',' << sprite.frame.width << ','
+                         << sprite.frame.height << ',' << sprite.frame.source_x
+                         << ',' << sprite.frame.source_y << ','
+                         << sprite.frame.source_path.u8string() << '\n';
+                if (sprite.slot == 0 && sprite.object_id == 2 && sprite.pic == 1)
+                    ++naruto_count;
+                if (sprite.slot == 51 && sprite.object_id == 219 && sprite.pic == 3)
+                    ++pic3_count;
+                if (sprite.slot == 50 && sprite.object_id == 219 && sprite.pic == 8)
+                    ++pic8_count;
+            }
+            geometry.close();
+            if (!geometry || snapshot.sprites.size() != 5 ||
+                naruto_count != 1 || pic3_count != 1 || pic8_count != 1) {
+                std::cerr << "formal tick39 sprite identity gate failed\n";
+                return 15;
+            }
+            const HRESULT com = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+            if (FAILED(com)) {
+                std::cerr << "COM initialization failed\n";
+                return 16;
+            }
+            bool rendered = false;
+            {
+                ntsd28_playable::D3D11Renderer28 renderer;
+                rendered = renderer.initialize_offscreen(1333, 730, error) &&
+                           renderer.render(snapshot, false, error) &&
+                           renderer.save_offscreen_png(
+                               output / "tick39-offscreen.png", error);
+            }
+            CoUninitialize();
+            if (!rendered) {
+                std::cerr << "formal tick39 offscreen render: " << error << '\n';
+                return 17;
+            }
         }
         write_row(csv, tick, "after", input, *session.world());
         if (kind10) {

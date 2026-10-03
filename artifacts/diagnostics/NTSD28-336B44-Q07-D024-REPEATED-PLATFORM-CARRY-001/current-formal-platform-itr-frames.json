@@ -1,0 +1,245 @@
+{
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "scope": "decoded_dat/*.dat frame body ITR kinds 30/40/50/60; static inventory only",
+  "count": 17,
+  "frames": [
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "130 picked_caught",
+      "kind": 50,
+      "fields": {
+        "state": "10",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "131 picked_caught",
+      "kind": 50,
+      "fields": {
+        "state": "10",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "132 picked_caught",
+      "kind": 50,
+      "fields": {
+        "state": "10",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "133 picked_caught",
+      "kind": 50,
+      "fields": {
+        "state": "10",
+        "wait": "2",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "134 picked_caught",
+      "kind": 50,
+      "fields": {
+        "state": "10",
+        "wait": "2",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "180 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "181 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "182 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "6",
+        "next": "0",
+        "dvx": "-3",
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "183 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "184 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "185 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "186 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "187 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "188 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "189 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "190 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    },
+    {
+      "path": "c/hid/rea.dat",
+      "frame": "191 falling",
+      "kind": 50,
+      "fields": {
+        "state": "12",
+        "wait": "3",
+        "next": "0",
+        "dvx": null,
+        "dvy": null,
+        "dvz": null
+      },
+      "datSha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+    }
+  ]
+}

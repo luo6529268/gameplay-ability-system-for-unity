@@ -1,0 +1,6 @@
+{
+  "isError": false,
+  "content": [
+    "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"20c52ca156b0436cb04ca97b80a13f29\",\"status\":\"failed\",\"mode\":\"EditMode\",\"started_unix_ms\":1791022714701,\"finished_unix_ms\":1791022724275,\"last_update_unix_ms\":1791022724275,\"progress\":{\"completed\":4,\"total\":8822,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791022723801,\"last_finished_test_full_name\":\"NTSD.Test.NTSD28Q06FrameMotionTailEditorTests.RepeatedLinkedPlatformCarryPreservesSourceViewRatio(True,True)\",\"last_finished_unix_ms\":1791022723803,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"NTSD.Test.NTSD28Q06FrameMotionTailEditorTests.RepeatedLinkedPlatformCarryPreservesSourceViewRatio(True,False)\",\"message\":\"  view X drift after 24 linked carries: 3.62415603900973\\r\\n  Expected: less than 1.0d\\r\\n  But was:  3.6241560390097334d\\r\\n\"},{\"full_name\":\"NTSD.Test.NTSD28Q06FrameMotionTailEditorTests.RepeatedLinkedPlatformCarryPreservesSourceViewRatio(True,True)\",\"message\":\"  view X drift after 24 linked carries: 3.07051762940733\\r\\n  Expected: less than 1.0d\\r\\n  But was:  3.070517629407334d\\r\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":null},\"hint\":null}"
+  ]
+}

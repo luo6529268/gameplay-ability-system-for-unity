@@ -1,0 +1,79 @@
+{
+  "changeId": "NTSD28-336B44-Q07-D024-KIND8-SCENE-001",
+  "authoritySha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "sourceDomain": "formal background1/Z400; Unity project-owned stage/Z400",
+  "cases": {
+    "near": {
+      "unityReport": "artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-SCENE-001/d024-kind8-near-20261003-01/00023.json",
+      "unityReportSha256": "E106578F7D8308FBDCAFE0892FA66A71EA762AEC89011026C9B676FF8E0B76E5",
+      "rootTrace": "artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-STAGE-DOMAIN-001/root-bg1-x480/root-trace.jsonl",
+      "rootTraceSha256": "7C003043A755C13D85BD6D5E4E905A2837146E8748738916F62CA12BB03B68D4",
+      "status": "CAPTURED",
+      "phase": "DONE",
+      "samples": 13,
+      "selectedFields": 260,
+      "matchedFields": 260,
+      "firstDifferences": [],
+      "tick1FormalEvent": [
+        {
+          "kind": "relation_hit",
+          "status": "applied",
+          "attacker": 0,
+          "target": 1,
+          "candidate": 0,
+          "itrKind": 8,
+          "attackerAction": 33,
+          "targetAction": -1
+        }
+      ],
+      "tick1SourceZ": [
+        401,
+        400
+      ],
+      "tick1ViewZ": [
+        632.8109589041096,
+        631.2328767123288
+      ],
+      "sourceToViewZOne": 1.5780821917808219,
+      "projectedZAssertion": true,
+      "shutdownStatus": "Completed",
+      "orderedShutdownComplete": true,
+      "protectedHashesStable": true,
+      "noLiveDriverWorldAfterExit": true,
+      "finalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "finalSceneDirty": false,
+      "passed": true
+    },
+    "far": {
+      "unityReport": "artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-SCENE-001/d024-kind8-far-20261003-01/00023.json",
+      "unityReportSha256": "A51B4F09B34384C51A56186499666B5CD4D32BD47A684D00CF640D73A2B8DAC9",
+      "rootTrace": "artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-STAGE-DOMAIN-001/root-bg1-x1200/root-trace.jsonl",
+      "rootTraceSha256": "0465EA35196ABD334F5E2403E8DE2E15ED36DBAD362E0069DB5535306FF8D423",
+      "status": "CAPTURED",
+      "phase": "DONE",
+      "samples": 13,
+      "selectedFields": 260,
+      "matchedFields": 260,
+      "firstDifferences": [],
+      "tick1FormalEvent": [],
+      "tick1SourceZ": [
+        400,
+        400
+      ],
+      "tick1ViewZ": [
+        631.2328767123288,
+        631.2328767123288
+      ],
+      "sourceToViewZOne": 1.5780821917808219,
+      "projectedZAssertion": true,
+      "shutdownStatus": "Completed",
+      "orderedShutdownComplete": true,
+      "protectedHashesStable": true,
+      "noLiveDriverWorldAfterExit": true,
+      "finalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "finalSceneDirty": false,
+      "passed": true
+    }
+  },
+  "passed": true
+}

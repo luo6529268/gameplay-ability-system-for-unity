@@ -21,6 +21,101 @@ namespace NTSD.Test
 {
     public sealed class SoundPresentationDispatchEditorTests
     {
+        [TestCase(-334, 0, 0)]
+        [TestCase(-333, 0, 0)]
+        [TestCase(-1, 99, 0)]
+        [TestCase(0, 100, 0)]
+        [TestCase(333, 100, 0)]
+        [TestCase(499, 76, 24)]
+        [TestCase(500, 75, 25)]
+        [TestCase(998, 1, 99)]
+        [TestCase(999, 0, 100)]
+        [TestCase(1332, 0, 100)]
+        [TestCase(1664, 0, 0)]
+        public void BattleStereoMatrix_UsesFormalIntegerBoundaries(
+            int sourceWorldX, int expectedLeft, int expectedRight)
+        {
+            MethodInfo compute = typeof(NTSDSoundPlayer).GetMethod(
+                "ComputeNativeBattleStereoPercentages",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(compute, Is.Not.Null);
+            Vector2Int mix = (Vector2Int)compute.Invoke(null,
+                new object[] { sourceWorldX, 0 });
+            Assert.That(mix.x, Is.EqualTo(expectedLeft));
+            Assert.That(mix.y, Is.EqualTo(expectedRight));
+        }
+
+        [Test]
+        public void BattleStereoVoice_UsesClipSpecificMatrixAndRetainsGainAfterVolumeChange()
+        {
+            var host = new GameObject("BattleStereoMatrixVoiceTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            AudioClip mono = null;
+            AudioClip stereo = null;
+            try
+            {
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                mono = AudioClip.Create("BattleMatrixMono", 44100, 1, 44100, false);
+                stereo = AudioClip.Create("BattleMatrixStereo", 44100, 2, 44100, false);
+                PrepareLoadedCue(player, "__TEST_PREPARED__/battle-mono.wav", mono);
+                PrepareLoadedCue(player, "__TEST_PREPARED__/battle-stereo.wav", stereo);
+
+                player.PresentSound(new PendingSoundEvent(
+                    "__TEST_PREPARED__/battle-mono.wav", 500, 1));
+                AudioSource monoVoice = FindVoiceWithClip(host, mono);
+                Assert.That(monoVoice, Is.Not.Null);
+                Assert.That(monoVoice.panStereo, Is.EqualTo(-0.8f).Within(0.0001f));
+                Assert.That(monoVoice.volume,
+                    Is.EqualTo(Mathf.Sqrt(0.75f * 0.75f + 0.25f * 0.25f))
+                        .Within(0.0001f));
+                Assert.That(monoVoice.spatialBlend, Is.Zero);
+
+                player.PresentSound(new PendingSoundEvent(
+                    "__TEST_PREPARED__/battle-stereo.wav", 500, 2));
+                AudioSource stereoVoice = FindVoiceWithClip(host, stereo);
+                Assert.That(stereoVoice, Is.Not.Null);
+                Assert.That(stereoVoice.panStereo,
+                    Is.EqualTo(-2f / 3f).Within(0.0001f));
+                Assert.That(stereoVoice.volume, Is.EqualTo(0.75f).Within(0.0001f));
+                Assert.That(stereoVoice.spatialBlend, Is.Zero);
+
+                AdvanceNativeBattleVolume(player,
+                    NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+                float gain = Mathf.Pow(10f, -38f / 2000f);
+                Assert.That(stereoVoice.volume,
+                    Is.EqualTo(0.75f * gain).Within(0.0001f));
+                Assert.That(monoVoice.volume,
+                    Is.EqualTo(Mathf.Sqrt(0.625f) * gain).Within(0.0001f));
+
+                player.PlaySfx("__TEST_PREPARED__/battle-stereo.wav");
+                AudioSource nonbattleVoice = host.GetComponentsInChildren<AudioSource>(true)
+                    [2];
+                Assert.That(nonbattleVoice.clip, Is.SameAs(stereo));
+                Assert.That(nonbattleVoice.panStereo, Is.Zero);
+                Assert.That(nonbattleVoice.volume, Is.EqualTo(gain).Within(0.0001f));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(host);
+                if (mono != null)
+                    UnityEngine.Object.DestroyImmediate(mono);
+                if (stereo != null)
+                    UnityEngine.Object.DestroyImmediate(stereo);
+            }
+        }
+
+        private static AudioSource FindVoiceWithClip(GameObject host, AudioClip clip)
+        {
+            foreach (AudioSource voice in host.GetComponentsInChildren<AudioSource>(true))
+            {
+                if (voice.clip == clip)
+                    return voice;
+            }
+            return null;
+        }
+
         [Test]
         public void EntityBattleSoundWorldX_UsesInitializedRuleXAndPreservesPhysicalFallback()
         {

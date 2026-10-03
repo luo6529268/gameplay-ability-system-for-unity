@@ -1,0 +1,17 @@
+# 文件操作与未计划缺失索引
+
+执行删除、移动、覆盖或丢弃内容前，先按 [审计合同](../file-removal-audit-contract.md) 建立记录并登记本表。状态变化追加到记录中，不删除历史事实。
+
+| Operation / Event ID | 类型 | 状态 | 记录与证据 |
+|---|---|---|---|
+| NTSD28-C050-SCENE-REQUEST-20261001-001 | 本包新建 C050 Scene Play 临时请求消费后自动清理 | VERIFIED（仅临时请求生命周期） | [操作记录](NTSD28-C050-SCENE-REQUEST-20261001-001/RECORD.md) |
+| NTSD28-C051-ARMOR-SCENE-REQUEST-20261001-001 | 本轮新建护甲 Scene Play 临时请求消费后自动清理 | VERIFIED（仅临时请求生命周期） | [操作记录](NTSD28-C051-ARMOR-SCENE-REQUEST-20261001-001/RECORD.md) |
+| NTSD28-C051-ARMOR-RAW-REQUEST-LIFECYCLE-20261001-001 | 本轮新建的护甲/无甲raw临时请求消费后自动清理 | VERIFIED（仅临时请求生命周期） | [操作记录](NTSD28-C051-ARMOR-RAW-REQUEST-LIFECYCLE-20261001-001/RECORD.md) |
+| NTSD28-C051-RAW-REQUEST-LIFECYCLE-20261001-001 | C051左右诊断新生成的单一临时请求消费后清理 | VERIFIED（仅临时请求生命周期） | [操作记录](NTSD28-C051-RAW-REQUEST-LIFECYCLE-20261001-001/RECORD.md) |
+| NTSD28-LOGAN-CONTENT-DISAPPEARANCE-20261001 | 未计划缺失；恢复尝试；外部恢复观察 | 原因/执行者未证；本任务恢复命令REJECTED；当前文件存在且Git无差异 | [调查记录](../../../artifacts/diagnostics/NTSD28-LOGAN-CONTENT-DISAPPEARANCE-20261001/REPORT.md)、[2974项清单](../../../artifacts/diagnostics/NTSD28-LOGAN-CONTENT-DISAPPEARANCE-20261001/deleted-tracked-paths.txt)、[96项保护哈希](../../../artifacts/diagnostics/NTSD28-LOGAN-CONTENT-DISAPPEARANCE-20261001/survivor-sha256-before.json) |
+
+| NTSD-MENU-LOOP-CAROUSEL-001-PREPARE | 有审计的代码准备及文档追加 | PLANNED | [记录](NTSD-MENU-LOOP-CAROUSEL-001-PREPARE/RECORD.md) |
+
+
+| NTSD-MENU-LOOP-CAROUSEL-001-SCENE-OBSERVATION | Menu末次磁盘SHA变化，写入者未证 | UNKNOWN_CAUSE | [记录](NTSD-MENU-LOOP-CAROUSEL-001-SCENE-OBSERVATION/RECORD.md) |
+| NTSD-MENU-CAROUSEL-VISUAL-001-PREPARE | 有备份的循环列表视觉代码修改与治理追加 | VERIFIED | [记录](NTSD-MENU-CAROUSEL-VISUAL-001-PREPARE/RECORD.md) |

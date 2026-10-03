@@ -1,0 +1,18 @@
+{
+  "case": "landing_x185",
+  "ticks": 96,
+  "selectedFieldsPerTick": 15,
+  "comparedFields": 1440,
+  "expectedFields": 1440,
+  "firstDifference": null,
+  "sourceToViewXOne": 1.536384096024006,
+  "maxAbsoluteProjectionResidualX": 2.2737367544323206e-13,
+  "projectionResidualBySlot": {
+    "0": 0,
+    "1": 2.2737367544323206e-13,
+    "2": 0
+  },
+  "sceneStatus": "CAPTURED",
+  "orderedShutdownComplete": true,
+  "protectedHashesStable": true
+}

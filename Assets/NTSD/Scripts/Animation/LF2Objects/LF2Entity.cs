@@ -24,6 +24,9 @@ namespace NTSD.Animation.LF2Objects
     /// </summary>
     public abstract class LF2Entity : ILF2Entity, ILF2FrameCacheObserver
     {
+#if UNITY_EDITOR
+        internal static System.Action<LF2Entity, int, int> FrameWriteObserverForDiagnostics;
+#endif
         private readonly NTSDInputStateModule sharedCharacterDatInputModule = new NTSDInputStateModule();
         private CharacterMechanics compatibilityCharacterMechanics;
         private int requiredRuntimeSlot = -1;
@@ -1229,9 +1232,16 @@ namespace NTSD.Animation.LF2Objects
             if (Frame == null)
                 return;
 
+#if UNITY_EDITOR
+            int previousFrameId = Frame.N;
+#endif
             Frame.N = frameId;
             if (Runtime != null)
                 Runtime.Frame = frameId;
+#if UNITY_EDITOR
+            if (previousFrameId != frameId)
+                FrameWriteObserverForDiagnostics?.Invoke(this, previousFrameId, frameId);
+#endif
         }
 
         /// <summary>按帧 ID 获取帧数据。</summary>
@@ -7116,15 +7126,19 @@ namespace NTSD.Animation.LF2Objects
             {
                 Runtime.Vx = 0.0;
                 double displacement = (Runtime.IsFacingLeft ? -frame.dx : frame.dx) * scale;
-                Runtime.X = Runtime.XInt + displacement *
-                    (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
-                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+                // Alignment contract: NTSD28-336B44-Q07-D024-REPEATED-DIRECT-MOTION-001.
+                double viewScale = RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0;
                 if (Runtime.SourceRulePositionInitialized)
                 {
                     // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001.
+                    double previousSourceX = Runtime.SourceRuleX;
                     Runtime.SourceRuleX = Runtime.SourceRuleXInt + displacement;
                     Runtime.SourceRuleXInt = RoundPlatformCoordinate(Runtime.SourceRuleX);
+                    Runtime.X += (Runtime.SourceRuleX - previousSourceX) * viewScale;
                 }
+                else
+                    Runtime.X = Runtime.XInt + displacement * viewScale;
+                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
             }
             if (frame.dy != 0.0)
             {
@@ -7136,14 +7150,17 @@ namespace NTSD.Animation.LF2Objects
             {
                 Runtime.Vz = 0.0;
                 double displacement = frame.dz * scale;
-                Runtime.Z = Runtime.ZInt + displacement *
-                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
-                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+                double viewScale = RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0;
                 if (Runtime.SourceRulePositionInitialized)
                 {
+                    double previousSourceZ = Runtime.SourceRuleZ;
                     Runtime.SourceRuleZ = Runtime.SourceRuleZInt + displacement;
                     Runtime.SourceRuleZInt = RoundPlatformCoordinate(Runtime.SourceRuleZ);
+                    Runtime.Z += (Runtime.SourceRuleZ - previousSourceZ) * viewScale;
                 }
+                else
+                    Runtime.Z = Runtime.ZInt + displacement * viewScale;
+                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
             }
         }
 
@@ -7170,27 +7187,34 @@ namespace NTSD.Animation.LF2Objects
                 double displacement = x > 500.0 ? x - 550.0 : x;
                 if (x <= 500.0 && platform.Runtime.IsFacingLeft)
                     displacement = -displacement;
-                Runtime.X = Runtime.XInt + displacement *
-                    (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
-                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+                double viewScale = RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0;
                 if (Runtime.SourceRulePositionInitialized)
                 {
                     // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001.
+                    // Alignment contract: NTSD28-336B44-Q07-D024-REPEATED-PLATFORM-CARRY-001.
+                    double previousSourceX = Runtime.SourceRuleX;
                     Runtime.SourceRuleX = Runtime.SourceRuleXInt + displacement;
                     Runtime.SourceRuleXInt = RoundPlatformCoordinate(Runtime.SourceRuleX);
+                    Runtime.X += (Runtime.SourceRuleX - previousSourceX) * viewScale;
                 }
+                else
+                    Runtime.X = Runtime.XInt + displacement * viewScale;
+                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
             }
             if (z != 0.0)
             {
                 double displacement = z > 500.0 ? z - 550.0 : z;
-                Runtime.Z = Runtime.ZInt + displacement *
-                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
-                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+                double viewScale = RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0;
                 if (Runtime.SourceRulePositionInitialized)
                 {
+                    double previousSourceZ = Runtime.SourceRuleZ;
                     Runtime.SourceRuleZ = Runtime.SourceRuleZInt + displacement;
                     Runtime.SourceRuleZInt = RoundPlatformCoordinate(Runtime.SourceRuleZ);
+                    Runtime.Z += (Runtime.SourceRuleZ - previousSourceZ) * viewScale;
                 }
+                else
+                    Runtime.Z = Runtime.ZInt + displacement * viewScale;
+                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
             }
             if (y != 0.0)
             {

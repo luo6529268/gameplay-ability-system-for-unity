@@ -1,0 +1,170 @@
+{
+  "status": "PAIRED_SCOPED_WITH_ROOT_RNG_CARRIER_DIFFERENCE",
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "inputs": {
+    "formalRootTraceSha256": "28A6822FC27971B5FDDC1200C2C99AEFC5985853C08A8E0CBE6074ADB3C76BDE",
+    "formalSourceRngSha256": "971C163413300E303268D7442BC9781EA858FA7FC6FB0BC92E4AD19363875CC5",
+    "formalSourceTicksSha256": "283E8233D4CAE9B5B5D815AEC7D4CF4B55D62A2FC2CC69E0F62D137B0957A092",
+    "unitySceneSha256": "30CC8613C62208087B82936B7CABF234CA28F2ACDCE32FDC75B5FDD8348EA428"
+  },
+  "ticks": 16,
+  "entityFieldsPerSlot": [
+    "oid",
+    "action",
+    "state",
+    "x",
+    "y",
+    "z",
+    "hp",
+    "motionHoldTimerB4",
+    "catchTargetSlot8C",
+    "catchSourceSlot90",
+    "team"
+  ],
+  "slots": 3,
+  "rootUnityEntityFieldsCompared": 528,
+  "rootUnityEntityDifferences": [],
+  "rngFields": [
+    "crtState",
+    "crtCalls",
+    "customCounter",
+    "customIndex",
+    "customCalls"
+  ],
+  "sourceUnityRngFieldsCompared": 80,
+  "sourceUnityRngDifferences": [],
+  "rootUnityRngFieldsCompared": 80,
+  "rootUnityRngDifferences": [
+    {
+      "tick": 1,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 2,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 3,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 4,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 5,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 6,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 7,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 8,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 9,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 10,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 11,
+      "field": "crtState",
+      "formalRoot": 2270971442,
+      "unity": 2524509468
+    },
+    {
+      "tick": 12,
+      "field": "crtState",
+      "formalRoot": 2015516220,
+      "unity": 1334545526
+    },
+    {
+      "tick": 13,
+      "field": "crtState",
+      "formalRoot": 3379885718,
+      "unity": 3309792928
+    },
+    {
+      "tick": 14,
+      "field": "crtState",
+      "formalRoot": 2031692224,
+      "unity": 2551935514
+    },
+    {
+      "tick": 15,
+      "field": "crtState",
+      "formalRoot": 2031692224,
+      "unity": 2551935514
+    },
+    {
+      "tick": 16,
+      "field": "crtState",
+      "formalRoot": 2031692224,
+      "unity": 2551935514
+    }
+  ],
+  "positive": {
+    "tick1FormalSourceArmorApplied": 1,
+    "tick1UnityBeeHold": 3,
+    "tick1UnityGuyHp": 497,
+    "tick2FormalSourceKind3Applied": 1,
+    "tick2FormalSourceSettlementActive": 1,
+    "tick2FormalSourceSettlementSynchronized": 1,
+    "tick2UnityBeeAction": 130,
+    "tick2UnityBeeHold": 2,
+    "tick2UnityCatchTarget": 1,
+    "tick2UnityCatchSource": 0
+  },
+  "projection": {
+    "sourceToViewXOne": 1.536384096024006,
+    "sourceToViewZOne": 1.5780821917808219,
+    "maxAbsViewXMinusProjectedPreciseSourceX": 0.5791447861965935,
+    "maxAbsViewZMinusProjectedPreciseSourceZ": 0.23287671232878893
+  },
+  "shutdown": {
+    "orderedShutdownComplete": true,
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "remainingActivePoolObjects": 0,
+    "remainingActivePoolSprites": 0,
+    "poolQuiesced": true,
+    "worldDetached": true,
+    "exitedPlay": true,
+    "finalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "finalSceneDirty": false,
+    "protectedHashesStable": true
+  },
+  "scope": "Formal source RNG and root trace entities match Unity in stated fields. Root LFR CRT state differs from both source and Unity; do not claim full RNG parity or hardware-input/Game View equivalence."
+}

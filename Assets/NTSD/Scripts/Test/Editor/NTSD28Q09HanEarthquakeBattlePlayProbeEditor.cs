@@ -23,6 +23,8 @@ namespace NTSD.Test.Editor
             "Temp/NTSD28_Q09_HanEarthquakeBattlePlay.request.json";
         private const string PhasePairRequestPath =
             "Temp/NTSD28_Q09_HanEarthquakePhasePair.request.json";
+        private const string QuakeViewRatioRequestPath =
+            "Temp/NTSD28_Q09_P13_QuakeViewRatio.request.json";
         private const string CandidateRequestPath =
             "Temp/NTSD28_Q07_D024_HanCandidateBranch.request.json";
         private const string FarCandidateRequestPath =
@@ -218,6 +220,8 @@ namespace NTSD.Test.Editor
 
             string requestFile = ProjectPath(RequestPath);
             string phasePairRequestFile = ProjectPath(PhasePairRequestPath);
+            string quakeViewRatioRequestFile =
+                ProjectPath(QuakeViewRatioRequestPath);
             string candidateRequestFile = ProjectPath(CandidateRequestPath);
             string farCandidateRequestFile = ProjectPath(FarCandidateRequestPath);
             string mappedNearRequestFile = ProjectPath(MappedNearRequestPath);
@@ -292,6 +296,20 @@ namespace NTSD.Test.Editor
                         File.ReadAllText(phasePairRequestFile));
                     if (phasePairRequest?.requested == true)
                         requestFile = phasePairRequestFile;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
+            if (File.Exists(quakeViewRatioRequestFile))
+            {
+                try
+                {
+                    Request ratioRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(quakeViewRatioRequestFile));
+                    if (ratioRequest?.requested == true)
+                        requestFile = quakeViewRatioRequestFile;
                 }
                 catch (IOException)
                 {
@@ -377,7 +395,8 @@ namespace NTSD.Test.Editor
                     error = "Stage edge request requires mapped Z100/600, Lee X520 and one-tick mode." });
                 return;
             }
-            if (requestFile == phasePairRequestFile &&
+            if ((requestFile == phasePairRequestFile ||
+                 requestFile == quakeViewRatioRequestFile) &&
                 (request.captureCandidateBranch || request.stageEdgeOnly ||
                  !request.sourceMappedPositions || request.sourceStartZ != 400 ||
                  request.leeStartX != 520))

@@ -23,6 +23,10 @@ namespace NTSD.UI.Menu
         private TextMeshProUGUI label;
         private Material originalMaterial;
         private Material ownedMaterial;
+        private TMP_FontAsset originalFont;
+        private TMP_FontAsset ownedFont;
+        private MenuCarouselStyle style;
+        private bool borrowedFallback;
         private Color originalColor;
         private Vector3 originalScale;
         private bool acquired;
@@ -30,10 +34,12 @@ namespace NTSD.UI.Menu
         private float lastEdge = float.NaN;
         private TMP_SubMeshUI[] submeshes;
         private int cachedMaterialCount = -1;
+        private readonly System.Collections.Generic.Dictionary<GameObject, bool> submeshActiveStates =
+            new System.Collections.Generic.Dictionary<GameObject, bool>();
 
         public float MaximumScale => selectedScale;
 
-        public void Acquire()
+        public void Acquire(string fallbackCharacters = null)
         {
             if (acquired) return;
             label = GetComponent<TextMeshProUGUI>();
@@ -43,6 +49,7 @@ namespace NTSD.UI.Menu
             originalColor = label.color;
             originalScale = transform.localScale;
             originalMaterial = label.fontSharedMaterial;
+            originalFont = label.font;
             ownedMaterial = new Material(originalMaterial)
             {
                 name = originalMaterial.name + " (Menu Carousel)",
@@ -50,6 +57,21 @@ namespace NTSD.UI.Menu
                 shader = shader,
             };
             ownedMaterial.shaderKeywords = new[] { "OUTLINE_ON", "UNDERLAY_ON" };
+            style = Resources.Load<MenuCarouselStyle>("UI/MenuCarouselStyle");
+            TMP_FontAsset fallback = style != null ? style.AcquireFallback(fallbackCharacters ?? label.text) : null;
+            borrowedFallback = fallback != null;
+            if (fallback != null && originalFont != null)
+            {
+                ownedFont = Instantiate(originalFont);
+                ownedFont.hideFlags = HideFlags.HideAndDontSave;
+                ownedFont.fallbackFontAssetTable = originalFont.fallbackFontAssetTable != null
+                    ? new System.Collections.Generic.List<TMP_FontAsset>(originalFont.fallbackFontAssetTable)
+                    : new System.Collections.Generic.List<TMP_FontAsset>();
+                if (!ownedFont.fallbackFontAssetTable.Contains(fallback))
+                    ownedFont.fallbackFontAssetTable.Add(fallback);
+                ownedFont.material = ownedMaterial;
+                label.font = ownedFont;
+            }
             label.fontSharedMaterial = ownedMaterial;
             acquired = true;
             cachedMaterialCount = -1;
@@ -74,7 +96,7 @@ namespace NTSD.UI.Menu
             gray.a = Mathf.Lerp(normalColor.a, edgeAlpha, peripheral);
             Color color = Color.Lerp(gray, selectedColor, highlight);
             // Fade the whole glyph before it relocates at the invisible cyclic seam.
-            color.a *= 1f - Mathf.SmoothStep(0.84f, 1f, edge);
+            color.a *= 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.84f, 1f, edge));
             label.color = color;
 
             ApplyMaterial(ownedMaterial, highlight, peripheral);
@@ -96,6 +118,9 @@ namespace NTSD.UI.Menu
             }
             foreach (TMP_SubMeshUI submesh in submeshes)
             {
+                if (!submeshActiveStates.ContainsKey(submesh.gameObject))
+                    submeshActiveStates.Add(submesh.gameObject, submesh.gameObject.activeSelf);
+                if (!submesh.gameObject.activeSelf) submesh.gameObject.SetActive(true);
                 submesh.UpdateMeshPadding(label.extraPadding, label.isUsingBold, label);
                 SyncMaskMaterial(submesh.materialForRendering, submesh.sharedMaterial);
             }
@@ -133,6 +158,7 @@ namespace NTSD.UI.Menu
             if (label != null)
             {
                 label.color = originalColor;
+                label.font = originalFont;
                 label.fontSharedMaterial = originalMaterial;
                 transform.localScale = originalScale;
                 label.UpdateMeshPadding();
@@ -143,6 +169,17 @@ namespace NTSD.UI.Menu
                 else DestroyImmediate(ownedMaterial);
             }
             ownedMaterial = null;
+            if (ownedFont != null)
+            {
+                if (Application.isPlaying) Destroy(ownedFont);
+                else DestroyImmediate(ownedFont);
+            }
+            ownedFont = null;
+            if (borrowedFallback && style != null) style.ReleaseFallback();
+            borrowedFallback = false;
+            foreach (var pair in submeshActiveStates)
+                if (pair.Key != null) pair.Key.SetActive(pair.Value);
+            submeshActiveStates.Clear();
         }
 
         private void OnDisable()

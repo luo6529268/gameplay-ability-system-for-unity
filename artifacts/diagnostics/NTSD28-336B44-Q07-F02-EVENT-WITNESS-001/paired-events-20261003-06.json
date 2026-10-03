@@ -1,0 +1,53 @@
+{
+  "scope": "original Battle Scene, initial plus 45 ticks, formal root bg1/Z400",
+  "unityRunId": "f02-kind10-scene-20261003-06",
+  "formalAuthority": "336B44 formal root EXE LFR bg1 z400",
+  "eventComparison": {
+    "formalKind10AppliedTicks": [
+      31,
+      32,
+      33,
+      34,
+      34,
+      35,
+      35
+    ],
+    "unityKind10AppliedTicks": [
+      31,
+      32,
+      33,
+      34,
+      34,
+      35,
+      35
+    ],
+    "kind10ExactMatch": true,
+    "formalSlot2Frame40To41Ticks": [
+      30,
+      39
+    ],
+    "unitySlot2Frame40To41Ticks": [
+      30,
+      39
+    ],
+    "frameExactMatch": true
+  },
+  "tickTailComparison": {
+    "samples": 46,
+    "slots": 3,
+    "fieldsPerSlot": 17,
+    "compared": 2346,
+    "matched": 2346,
+    "firstDifferences": []
+  },
+  "editorSafety": {
+    "enteredPlay": true,
+    "exitedPlay": true,
+    "noLiveDriverWorldAfterExit": true,
+    "protectedHashesStable": true,
+    "initialSceneDirty": false,
+    "finalSceneDirty": false,
+    "error": ""
+  },
+  "pass": true
+}

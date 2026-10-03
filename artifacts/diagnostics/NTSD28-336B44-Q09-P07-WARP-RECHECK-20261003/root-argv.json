@@ -1,0 +1,19 @@
+[
+  "--resource-root",
+  "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+  "--complete-vfs-root",
+  "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+  "--headless-playback-lfr",
+  "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-LEE-NATURAL-NONSOUND-CHILD-001\\run2\\lee-natural-child.lfr",
+  "--headless-playback-report",
+  "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-P07-WARP-RECHECK-20261003\\root-report.json",
+  "--headless-playback-trace",
+  "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-P07-WARP-RECHECK-20261003\\root-trace.jsonl",
+  "--character",
+  "7",
+  "--enemy",
+  "2",
+  "--background",
+  "23",
+  "--p2-human"
+]
