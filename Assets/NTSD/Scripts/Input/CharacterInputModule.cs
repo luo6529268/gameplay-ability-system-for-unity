@@ -33,6 +33,8 @@ namespace NTSD.Game
         public InputAction DefendAction { get; private set; }
 
         private Vector2 _currentMoveInput = Vector2.zero;
+        private Vector2 _deviceMoveInput;
+        private Vector2 _uiMoveInput;
         public Vector2 CurrentMoveInput => _currentMoveInput;
 
         // 方向键追踪：支持同帧多方向变化，并写入 tick 对齐输入缓冲。
@@ -121,6 +123,8 @@ namespace NTSD.Game
             _inputBound = false;
             _inputModule = null;
             _currentMoveInput = Vector2.zero;
+            _deviceMoveInput = Vector2.zero;
+            _uiMoveInput = Vector2.zero;
             _lastDirectionMask = FuncKeyMask.None;
             _leftPressed = false;
             _rightPressed = false;
@@ -222,40 +226,8 @@ namespace NTSD.Game
         {
             if (context.action == MoveAction)
             {
-                Vector2 value = context.ReadValue<Vector2>();
-                _currentMoveInput = value;
-                FuncKeyMask newDirectionMask = FuncKeyMask.None;
-
-                if (value.x < -DIRECTION_DEADZONE)
-                {
-                    newDirectionMask |= FuncKeyMask.left;
-                }
-                if (value.x > DIRECTION_DEADZONE)
-                {
-                    newDirectionMask |= FuncKeyMask.right;
-                }
-                if (value.y > DIRECTION_DEADZONE)
-                {
-                    newDirectionMask |= FuncKeyMask.up;
-                }
-                if (value.y < -DIRECTION_DEADZONE)
-                {
-                    newDirectionMask |= FuncKeyMask.down;
-                }
-
-                _leftPressed = (newDirectionMask & FuncKeyMask.left) != 0;
-                _rightPressed = (newDirectionMask & FuncKeyMask.right) != 0;
-                _topPressed = (newDirectionMask & FuncKeyMask.up) != 0;
-                _downPressed = (newDirectionMask & FuncKeyMask.down) != 0;
-
-                if (newDirectionMask != _lastDirectionMask)
-                {
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.left, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.right, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.up, _lastDirectionMask, newDirectionMask);
-                    CheckAndEnqueueDirectionChange(FuncKeyMask.down, _lastDirectionMask, newDirectionMask);
-                    _lastDirectionMask = newDirectionMask;
-                }
+                _deviceMoveInput = context.ReadValue<Vector2>();
+                RefreshMoveInput();
 
                 return;
             }
@@ -300,30 +272,44 @@ namespace NTSD.Game
 
             if (context.action == MoveAction)
             {
-                if ((_lastDirectionMask & FuncKeyMask.left) != 0)
-                {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.left, down: false);
-                    _leftPressed = false;
-                }
-                if ((_lastDirectionMask & FuncKeyMask.right) != 0)
-                {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.right, down: false);
-                    _rightPressed = false;
-                }
-                if ((_lastDirectionMask & FuncKeyMask.up) != 0)
-                {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.up, down: false);
-                    _topPressed = false;
-                }
-                if ((_lastDirectionMask & FuncKeyMask.down) != 0)
-                {
-                    InputBuffer?.EnqueueForNextTick(FuncKeyMask.down, down: false);
-                    _downPressed = false;
-                }
-
-                _currentMoveInput = Vector2.zero;
-                _lastDirectionMask = FuncKeyMask.None;
+                _deviceMoveInput = Vector2.zero;
+                RefreshMoveInput();
             }
+        }
+
+        void IPlayerActionInputSink.SetMoveInput(Vector2 value)
+        {
+            _uiMoveInput = value;
+            RefreshMoveInput();
+        }
+
+        private static FuncKeyMask GetDirectionMask(Vector2 value)
+        {
+            FuncKeyMask mask = FuncKeyMask.None;
+            if (value.x < -DIRECTION_DEADZONE) mask |= FuncKeyMask.left;
+            if (value.x > DIRECTION_DEADZONE) mask |= FuncKeyMask.right;
+            if (value.y > DIRECTION_DEADZONE) mask |= FuncKeyMask.up;
+            if (value.y < -DIRECTION_DEADZONE) mask |= FuncKeyMask.down;
+            return mask;
+        }
+
+        private void RefreshMoveInput()
+        {
+            // UI release must not release a direction still held by the device.
+            FuncKeyMask mask = GetDirectionMask(_deviceMoveInput) | GetDirectionMask(_uiMoveInput);
+            _leftPressed = (mask & FuncKeyMask.left) != 0;
+            _rightPressed = (mask & FuncKeyMask.right) != 0;
+            _topPressed = (mask & FuncKeyMask.up) != 0;
+            _downPressed = (mask & FuncKeyMask.down) != 0;
+            _currentMoveInput = _uiMoveInput == Vector2.zero ? _deviceMoveInput : new Vector2(
+                (_rightPressed ? 1 : 0) - (_leftPressed ? 1 : 0),
+                (_topPressed ? 1 : 0) - (_downPressed ? 1 : 0));
+            if (mask == _lastDirectionMask) return;
+            CheckAndEnqueueDirectionChange(FuncKeyMask.left, _lastDirectionMask, mask);
+            CheckAndEnqueueDirectionChange(FuncKeyMask.right, _lastDirectionMask, mask);
+            CheckAndEnqueueDirectionChange(FuncKeyMask.up, _lastDirectionMask, mask);
+            CheckAndEnqueueDirectionChange(FuncKeyMask.down, _lastDirectionMask, mask);
+            _lastDirectionMask = mask;
         }
 
         // Unity action names describe the physical layout; NTSD uses the crossed internal fields below.

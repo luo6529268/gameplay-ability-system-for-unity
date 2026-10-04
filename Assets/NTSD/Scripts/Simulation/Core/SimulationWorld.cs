@@ -2599,7 +2599,7 @@ namespace NTSD.Simulation
                 HudChanges.UnbindPlayer(playerIndex);
                 return;
             }
-            HudChanges.Bind(playerIndex, entity.Runtime, handle);
+            HudChanges.Bind(playerIndex, entity.Runtime, handle, slot.InputId);
         }
 
         public void ResetRuntimeState()

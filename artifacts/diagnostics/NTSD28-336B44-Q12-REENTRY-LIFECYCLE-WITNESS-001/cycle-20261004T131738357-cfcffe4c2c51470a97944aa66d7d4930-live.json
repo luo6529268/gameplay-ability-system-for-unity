@@ -1,0 +1,21 @@
+{
+    "runId": "20261004T131738357-cfcffe4c2c51470a97944aa66d7d4930",
+    "phase": "LIVE",
+    "utc": "2026-10-04T13:17:38.3679290Z",
+    "scenePath": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sceneSha256": "F585EBCC4F170DEC8C8B1C372F5D3BF99E55B74889119102E620C9110F79F910",
+    "sceneDirty": false,
+    "driverCount": 1,
+    "driverInstanceId": 64412,
+    "worldPresent": true,
+    "driverTick": 419,
+    "worldTick": 419,
+    "activeEntities": 4,
+    "activeCharacters": 2,
+    "referencePoolActive": 4,
+    "poolCount": 1,
+    "activePooledObjects": 2,
+    "activePooledSprites": 0,
+    "poolQuiesced": false,
+    "noLiveWorld": false
+}

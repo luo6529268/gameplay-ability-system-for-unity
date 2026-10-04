@@ -1,0 +1,4 @@
+System.Exception: authored directional ring raycast bubbles to gesture
+  at ComboValidation.Check (System.Boolean ok, System.String why) [0x00009] in C:\Users\Logan\AppData\Local\Temp\NTSDDirectionValidation-001\Assets\Editor\ComboValidation.cs:12 
+  at ComboValidation+<Execute>d__16.MoveNext () [0x00ceb] in C:\Users\Logan\AppData\Local\Temp\NTSDDirectionValidation-001\Assets\Editor\ComboValidation.cs:52 
+  at ComboValidation.Advance () [0x00002] in C:\Users\Logan\AppData\Local\Temp\NTSDDirectionValidation-001\Assets\Editor\ComboValidation.cs:16 

@@ -68,3 +68,7 @@ NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / VERIFIED: original saved BattleScene ph
 NTSD-BATTLE-COMBO-EXISTING-POOL-001 / PLANNED: replace Combo UI Instantiate with existing MMMiniObjectPooler; preserve latest user edits pending confirmation. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-EXISTING-POOL-001.md.
 
 NTSD-BATTLE-COMBO-FIXED-SLOTS-001 / PLANNED: user-authored6icon/5arrow slots, remove View pooling. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-FIXED-SLOTS-001.md; file audit docs/ai/FILE-OPERATIONS/NTSD-BATTLE-COMBO-FIXED-SLOTS-001/RECORD.md.
+
+NTSD-BATTLE-CONTROLS-BINDING-001 / PLANNED: wire Controls to selected-human immutable HUD InputId. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-CONTROLS-BINDING-001.md; audit docs/ai/FILE-OPERATIONS/NTSD-BATTLE-CONTROLS-BINDING-001/RECORD.md.
+
+| NTSD-BATTLE-DIRECTION-HYBRID-001 | Direction UI adapter edits, hookup and audited temporary probe removal | VERIFIED | [Record](NTSD-BATTLE-DIRECTION-HYBRID-001/RECORD.md) |

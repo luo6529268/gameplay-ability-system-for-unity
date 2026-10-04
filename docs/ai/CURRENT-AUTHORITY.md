@@ -1,3 +1,9 @@
+> **2026-10-04 最新恢复入口：** 336B44权威及用户例外不变；Q12同版重进和新增Q10我爱罗j4/043原Scene自然voice各限定通过。tick27余下SFX因项目地图Z/目标状态不可同态裁决，当前无新增必跑ONE；详[总表文首](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)。
+
+> **2026-10-04 Q12最新恢复提示：** 当前正式336B44权威、D-023及用户表现例外不变；[总表文首](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)已将Q12同冻结版重进子门记为限定通过。原Editor两轮生产World/tick 419/256、各2角色，退出后Scene World解绑/活动池对象和sprite零且Scene clean，六身份稳定；[四份原件](../../artifacts/diagnostics/NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/REPORT.md)。合成输入诊断假设失败并已回滚，不是生产战斗首差。代表矩阵限定通过但正式同帧Present、真人手按和未覆盖模式不能称完全一致；只由可复现非例外首差触发新包。50份未关闭Record去重调度保持REUSE35/TRIGGER15/P0与ONE零。以下旧恢复提示按时间阅读。
+
+> **2026-10-04 Q12恢复提示：** 正式336B44权威与内容/表现例外不变；当前只按[总表文首](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)推进Q12同冻结版退出后重进。原Editor合成输入首断点为键盘L状态可见但P1 Defend Action等待、本地包0；诊断脚本的Dynamic＋临时失焦路由合取已编译/导入，因并行Play切换与Battle Scene磁盘身份变化尚未有效运行。[原件及停点](../../artifacts/diagnostics/NTSD28-336B44-Q12-DYNAMIC-INPUT-DIAG-20261004/REPORT.md)。暂停竞争原Editor，待独占和稳定Scene后一轮定向验证；不得由失败输入包推断战斗规则差异。
+
 > **2026-10-04 Q12最新恢复提示：** 当前正式336B44权威不变；Q12自然键发现旧Q07下游重复映射，已经按[总表文首](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)更正并原Scene首窗口通过。旧Q07直接注入证书已`SUPERSEDED`，不得再据其安排批量测试或解释玩家键位；仅Q12剩余最小代表矩阵开放。
 
 > **2026-10-04 执行队列优先级：** 用户要求先去除多余/不必要/过度的对齐任务，再继续实施。当前唯一执行顺序是 [336B44 总表文首“当前执行入口”](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)；本文件下方、总表历史日期段和单个旧 Task/Change Record 中的“下一步”均只是当时快照，不可自动排队。未列入文首保留队列的 `RUNTIME_PENDING`/`FOCUSED_TEST_PASS` 仅保留证据或条件触发，不因状态未关而全量重测。正式 EXE 权威和用户内容/表现例外均不变。
@@ -1237,3 +1243,4 @@ owner propagation仍不得抢先并入。
 > 2026-10-01 16:13（+08:00）资源状态更正：原缺失清单2974文件当前全部存在，LoganRuntime Git状态无差异，96项现存保护文件SHA-256全部保持。此次还原非本任务执行，执行者/实际命令未证；此前“仍缺失/资源阻塞”仅为历史观察。删除前两处未提交meta修改的值是否恢复未证。C051原Editor GREEN及左右raw仍未验，Q07不据此关闭。证据见 `artifacts/diagnostics/NTSD28-LOGAN-CONTENT-DISAPPEARANCE-20261001/REPORT.md`。
 
 > 2026-10-01 Q07/C051接续：`NTSD28-336B44-Q07-C051-UNARMORED-DIRECTION-001 / RUNTIME_PENDING / SCOPED_DRIVER_PASS`。共用无甲effect22/23方向已修；原Editor6/6 GREEN，左右各12完整Driver tick分别99动作/HP/Vx及33OID字段同336B44根，四保护SHA保持、LoganRuntime无Git差异。相邻旧反射参数在独立 `NTSD28-336B44-Q07-C051-REDUCED-TEST-CALL-001 / VERIFIED` 中仅补可选默认值，新17/17 PASS。0用例筛选、历史左根v1误选和客户端关闭错误均保留并更正。仍缺effect22/护甲根同条件、Battle Scene Play及自然键；C051/Q07与总目标未闭。下一按当前新版总表继续这些实际出口，不回到旧B1E13计划。证据 `artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/ACCEPTANCE-C051-UNARMORED-DIRECTION-001.md`。临时请求两周期已按FILE-REMOVAL-AUDIT登记并验证，仅清理本次新生成请求，payload与旧证据保留。
+> **2026-10-04 Q10执行增量：** 正式336B44权威、D-023与用户例外不变。[总表文首](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)新增我爱罗自然j4/043可达证据；两正式WAV已暂存/导入，原Battle Scene自然voice见证仍是唯一ONE。Q12两轮退出后重进已限定通过，无需再次运行。以下旧恢复提示按时间阅读。

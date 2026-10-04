@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Asset info retrieved.",
+    "data": {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/c/gaa/w/j4.wav",
+      "guid": "7e804651287748ad99bde41503d1d183",
+      "assetType": "UnityEngine.AudioClip",
+      "name": "j4",
+      "fileName": "j4.wav",
+      "isFolder": false,
+      "instanceID": 66454,
+      "lastWriteTimeUtc": "2026-10-04T15:00:44.1235643Z",
+      "previewBase64": null,
+      "previewWidth": 0,
+      "previewHeight": 0
+    }
+  }
+}

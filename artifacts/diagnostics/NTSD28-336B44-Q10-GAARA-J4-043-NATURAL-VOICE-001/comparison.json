@@ -1,0 +1,89 @@
+{
+  "schema": "ntsd28-q10-gaara-j4-043-scene-pair/1",
+  "sourceRows": 40,
+  "unityRows": 40,
+  "comparedFields": [
+    "phase",
+    "action",
+    "mp",
+    "x",
+    "y"
+  ],
+  "comparisonCount": 200,
+  "differenceCount": 0,
+  "firstDifference": null,
+  "sourceEvents": [
+    {
+      "tick": 10,
+      "cue": "data/007.wav"
+    },
+    {
+      "tick": 13,
+      "cue": "c/gaa/w/j4.wav"
+    },
+    {
+      "tick": 15,
+      "cue": "data/043.wav"
+    },
+    {
+      "tick": 27,
+      "cue": "data/033.wav"
+    },
+    {
+      "tick": 27,
+      "cue": "data/069.wav"
+    },
+    {
+      "tick": 30,
+      "cue": "c/lee/w/p4.wav"
+    }
+  ],
+  "unityEvents": [
+    {
+      "tick": 10,
+      "cue": "data/007.wav"
+    },
+    {
+      "tick": 13,
+      "cue": "c/gaa/w/j4.wav"
+    },
+    {
+      "tick": 15,
+      "cue": "data/043.wav"
+    },
+    {
+      "tick": 27,
+      "cue": "SFX_001"
+    },
+    {
+      "tick": 27,
+      "cue": "data/033.wav"
+    },
+    {
+      "tick": 27,
+      "cue": "SFX_006"
+    },
+    {
+      "tick": 27,
+      "cue": "data/069.wav"
+    },
+    {
+      "tick": 30,
+      "cue": "c/lee/w/p4.wav"
+    }
+  ],
+  "eventPathsEqual": false,
+  "zDifferences": 40,
+  "zFirstDifference": {
+    "tick": 1,
+    "source": 650,
+    "unity": 481
+  },
+  "zBoundary": "Unity project walkable map clamps initial Z650 to Z481; user-approved project-map exception, not counted in comparable fields",
+  "sceneStatus": "MEASURED_COMPARE_PENDING",
+  "sceneCleanAfter": true,
+  "j4PendingTick": 13,
+  "j4VoiceTick": 13,
+  "043PendingTick": 15,
+  "043VoiceTick": 15
+}

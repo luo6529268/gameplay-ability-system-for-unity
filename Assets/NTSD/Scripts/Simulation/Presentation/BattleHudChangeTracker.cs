@@ -15,6 +15,7 @@ namespace NTSD.Simulation
         public readonly long Session;
         public readonly long Version;
         public readonly int PlayerIndex;
+        public readonly int InputId;
         public readonly RuntimeEntityHandle Handle;
         public readonly int StableId;
         public readonly int ObjectId;
@@ -24,9 +25,9 @@ namespace NTSD.Simulation
 
         internal BattleHudValues(long session, long version, int playerIndex,
             RuntimeEntityHandle handle, int stableId, int objectId,
-            int hp, int hpBound, int hpMax, int mp, int mpMax, BattleHudChanges changes)
+            int hp, int hpBound, int hpMax, int mp, int mpMax, BattleHudChanges changes, int inputId = -1)
         {
-            Session = session; Version = version; PlayerIndex = playerIndex;
+            Session = session; Version = version; PlayerIndex = playerIndex; InputId = inputId;
             Handle = handle; StableId = stableId; ObjectId = objectId;
             Hp = hp; HpBound = hpBound; HpMax = hpMax; Mp = mp; MpMax = mpMax;
             Changes = changes;
@@ -41,7 +42,7 @@ namespace NTSD.Simulation
             internal NTSDEntityRuntime Runtime;
             internal NativeInputHistorySnapshot ComboInput;
             internal RuntimeEntityHandle Handle;
-            internal int StableId, ObjectId, Hp, HpBound, HpMax, Mp, MpMax;
+            internal int InputId, StableId, ObjectId, Hp, HpBound, HpMax, Mp, MpMax;
         }
 
         private static long nextSession;
@@ -59,13 +60,13 @@ namespace NTSD.Simulation
                 participants[i] = new Participant();
         }
 
-        internal void Bind(int playerIndex, NTSDEntityRuntime runtime, RuntimeEntityHandle handle)
+        internal void Bind(int playerIndex, NTSDEntityRuntime runtime, RuntimeEntityHandle handle, int inputId = -1)
         {
             if (!accepting || (uint)playerIndex >= participants.Length || runtime == null || !handle.IsValid)
                 return;
             Participant entry = participants[playerIndex];
             if (ReferenceEquals(entry.Runtime, runtime) && entry.Handle.Equals(handle) &&
-                entry.StableId == runtime.StableId && entry.ObjectId == runtime.ObjectId)
+                entry.StableId == runtime.StableId && entry.ObjectId == runtime.ObjectId && entry.InputId == inputId)
                 return;
             for (int i = 0; i < participants.Length; i++)
                 if (i != playerIndex && ReferenceEquals(participants[i].Runtime, runtime))
@@ -74,6 +75,7 @@ namespace NTSD.Simulation
             entry.Runtime = runtime;
             entry.ComboInput = default;
             entry.Handle = handle;
+            entry.InputId = inputId;
             entry.StableId = runtime.StableId;
             entry.ObjectId = runtime.ObjectId;
             entry.Hp = runtime.HP; entry.HpBound = runtime.HPBound; entry.HpMax = runtime.HP3;
@@ -180,7 +182,7 @@ namespace NTSD.Simulation
             values = new BattleHudValues(session, ++version, selected,
                 entry?.Handle ?? RuntimeEntityHandle.Invalid, entry?.StableId ?? -1, entry?.ObjectId ?? 0,
                 entry?.Hp ?? 0, entry?.HpBound ?? 0, entry?.HpMax ?? 0,
-                entry?.Mp ?? 0, entry?.MpMax ?? 0, pending);
+                entry?.Mp ?? 0, entry?.MpMax ?? 0, pending, entry?.InputId ?? -1);
             pending = BattleHudChanges.None;
             return true;
         }

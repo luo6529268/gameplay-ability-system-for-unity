@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace NTSD.App
@@ -13,6 +14,7 @@ namespace NTSD.App
     internal interface IPlayerActionInputSink
     {
         void SetActionPressed(BattleInputAction action, bool pressed);
+        void SetMoveInput(Vector2 value);
     }
 
     public class InputModule
@@ -64,6 +66,15 @@ namespace NTSD.App
                 return false;
 
             inputSink.SetActionPressed(battleAction, pressed);
+            return true;
+        }
+
+        public bool TrySetMoveInput(int playerId, Vector2 value)
+        {
+            if (!playerActionInputs.TryGetValue(playerId, out IPlayerActionInputSink inputSink))
+                return false;
+
+            inputSink.SetMoveInput(value);
             return true;
         }
 

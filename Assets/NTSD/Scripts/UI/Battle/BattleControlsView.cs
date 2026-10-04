@@ -1,15 +1,16 @@
 using System.Collections.Generic;
+using MoreMountains.Tools;
 using NTSD.App;
+using NTSD.Simulation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace NTSD.UI.Battle
 {
     /// <summary>
-    /// NTSD_Battle 场景中攻击、跳跃和防御三个触摸按钮的 View。
-    /// Player ID 由外部战斗流程在进入场景后分配，本类不查找角色或 Roster。
+    /// Routes scene action buttons to the selected human player's published input binding.
     /// </summary>
-    public sealed class BattleControlsView : MonoBehaviour
+    public sealed class BattleControlsView : MonoBehaviour, MMEventListener<BattleHudChangedEvent>
     {
         private const int ControlCount = 3;
 
@@ -31,6 +32,7 @@ namespace NTSD.UI.Battle
         private int playerId = -1;
         private bool warnedMissingBinding;
         private bool listening;
+        private BattleHudValues binding;
 
         public int PlayerId => playerId;
         public bool IsPlayerBound => playerId > 0 && actionMap != null;
@@ -48,18 +50,47 @@ namespace NTSD.UI.Battle
         private void OnEnable()
         {
             SetListening(true);
+            this.MMEventStartListening<BattleHudChangedEvent>();
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver != null && driver.TryGetCurrentBattleHud(out BattleHudChangedEvent value))
+                ApplyBinding(value.Values);
+            else
+                UnbindPlayer();
         }
 
         private void OnDisable()
         {
             SetListening(false);
-            ReleaseAllActions();
+            this.MMEventStopListening<BattleHudChangedEvent>();
+            UnbindPlayer();
         }
 
         private void OnDestroy()
         {
             SetListening(false);
-            ReleaseAllActions();
+            this.MMEventStopListening<BattleHudChangedEvent>();
+            UnbindPlayer();
+        }
+
+        public void OnMMEvent(BattleHudChangedEvent value)
+        {
+            if (!isActiveAndEnabled) return;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver != null && driver.IsCurrentBattleHudEvent(value))
+                ApplyBinding(value.Values);
+        }
+
+        private void ApplyBinding(BattleHudValues value)
+        {
+            if (!value.IsVisible || value.InputId < 1)
+            {
+                UnbindPlayer();
+                return;
+            }
+            if (IsPlayerBound && playerId == value.InputId && binding.Session == value.Session &&
+                binding.Handle.Equals(value.Handle) && binding.StableId == value.StableId)
+                return;
+            if (BindPlayer(value.InputId)) binding = value;
         }
 
         private void SetListening(bool value)
@@ -106,7 +137,7 @@ namespace NTSD.UI.Battle
             }
 
             InputActionMap resolvedMap =
-                AppManager.Instance.InputModule.GetActionMapByPlayerID(assignedPlayerId);
+                inputModule.GetActionMapByPlayerID(assignedPlayerId);
             if (resolvedMap == null)
             {
                 Debug.LogWarning(
@@ -236,6 +267,7 @@ namespace NTSD.UI.Battle
 
         private void ClearPlayerBinding()
         {
+            binding = default;
             playerId = -1;
             actionMap = null;
             inputModule = null;

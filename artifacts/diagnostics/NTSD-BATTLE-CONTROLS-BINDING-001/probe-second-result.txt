@@ -1,0 +1,4 @@
+System.Exception: keyboard survives UI release AttackBtn
+  at ComboValidation.Check (System.Boolean ok, System.String why) [0x00009] in C:\Users\Logan\AppData\Local\Temp\NTSDControlsValidation-001\Assets\Editor\ComboValidation.cs:12 
+  at ComboValidation+<Execute>d__16.MoveNext () [0x00e34] in C:\Users\Logan\AppData\Local\Temp\NTSDControlsValidation-001\Assets\Editor\ComboValidation.cs:42 
+  at ComboValidation.Advance () [0x00002] in C:\Users\Logan\AppData\Local\Temp\NTSDControlsValidation-001\Assets\Editor\ComboValidation.cs:16 

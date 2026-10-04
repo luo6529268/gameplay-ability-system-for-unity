@@ -1,0 +1,42 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleControlsView.cs",
+    "sha256": "8465cf82535810378673b8599afc8b7068273b02c44ce94b19d1b2146c122670",
+    "unchanged": false
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "bf9a5047363a097b2f94208437ee9764a73d785baa7c0cea90f51129e4824ad4",
+    "unchanged": false
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "sha256": "aec731ce3e155031fed1507d8870be0cc8d947e39c192c05f3a3ac92fe3f5d35",
+    "unchanged": false
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "876c025831bf0b45611aecdb426e5ef6af09e84f28603846ed0272e19108a421",
+    "unchanged": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs",
+    "sha256": "460e9b685b4d1733e88ab7de5dbdb6c297f7104be10773f1f884ade051181a55",
+    "unchanged": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "a2b8c98d4bcd6ad951aae1c1fd6294e982fa9500a59abfabe1d06bc414182947",
+    "unchanged": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButton.cs",
+    "sha256": "ee592bb3a6efb49ced09b09f2b36965cfa8aae549ecc03e2f55571828d49fa76",
+    "unchanged": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs",
+    "sha256": "04b44a3c2e0b7e47014bc5975caaa59bdbb69a1ef7bb89820e8214785d3ec22b",
+    "unchanged": true
+  }
+]

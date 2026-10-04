@@ -1,0 +1,68 @@
+{
+  "status": "FAIL",
+  "error": "System.Exception: hybrid immediate click\r\n  at NTSD.Test.Editor.DirectionSceneValidationTemporary.Check (System.Boolean ok, System.String label) [0x0001b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\DirectionSceneValidationTemporary.cs:36 \r\n  at NTSD.Test.Editor.DirectionSceneValidationTemporary+<Run>d__24.MoveNext () [0x0041b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\DirectionSceneValidationTemporary.cs:156 \r\n  at NTSD.Test.Editor.DirectionSceneValidationTemporary.Advance () [0x00027] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\DirectionSceneValidationTemporary.cs:83 ",
+  "checks": 11,
+  "rows": [
+    {
+      "assertion": "actual scene controls automatically bound",
+      "passed": true
+    },
+    {
+      "assertion": "actual authored buttons enabled and bound",
+      "passed": true
+    },
+    {
+      "assertion": "real EventSystem present",
+      "passed": true
+    },
+    {
+      "assertion": "same selected human InputId as published HUD",
+      "passed": true
+    },
+    {
+      "phase": "bound",
+      "playerId": 1,
+      "playerSlot": 0,
+      "actor": 2,
+      "scene": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    },
+    {
+      "assertion": "actual direction component binds selected human",
+      "passed": true
+    },
+    {
+      "assertion": "authored ring and knob bound",
+      "passed": true
+    },
+    {
+      "phase": "direction raycast",
+      "hits": [
+        "ControBg"
+      ]
+    },
+    {
+      "assertion": "actual ring raycast routes to new parent component",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "hybrid immediate click",
+      "passed": false
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.IO;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using NTSD.Simulation;
+using NTSD.UI.Battle;
+using NTSD.UI;
+using UnityEngine.EventSystems;
+using NTSD.Animation.LF2Objects;
+namespace NTSD.Test.Editor
+{
+    public static class DirectionSceneValidationTemporary
+    {
+        static readonly BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+        static readonly string Output = Path.GetFullPath("artifacts/diagnostics/NTSD-BATTLE-DIRECTION-HYBRID-001");
+        static readonly List<object> Rows = new List<object>();
+        static IEnumerator steps;
+        static SimulationTickDriver driver;
+        static LF2Character actor;
+        static BattleControlsView view;
+        static BattleDirectionControl gesture;
+        static NTSDButton[] buttons;
+        static int checks;
+        static bool oldPaused;
+        static double started;
+        static object Field(object o, string name) { return o.GetType().GetField(name, Flags).GetValue(o); }
+        static void Check(bool ok, string label) { Rows.Add(new { assertion = label, passed = ok }); if (!ok) throw new Exception(label); checks++; }
+        [InitializeOnLoadMethod]
+        static void Install()
+        {
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool("DirectionSceneProbe", false))
+                {
+                    SessionState.SetBool("DirectionSceneProbe", false);
+                    started = EditorApplication.timeSinceStartup;
+                    steps = Run();
+                    EditorApplication.update += Advance;
+                }
+                if (state == PlayModeStateChange.EnteredEditMode && File.Exists(Output + "/result.json"))
+                {
+                    File.WriteAllText(Output + "/postplay.json", JsonConvert.SerializeObject(new { dirty = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty, scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path }, Formatting.Indented));
+                }
+            };
+        }
+        [MenuItem("NTSD/Temporary/Bind Original Direction Scene")]
+        public static void Setup()
+        {
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if (EditorApplication.isPlaying || scene.isDirty || scene.name != "NTSD_Battle") throw new Exception("Requires saved nonplaying Battle scene");
+            var go = GameObject.Find("BattleControls");
+            if (go == null || go.GetComponent<BattleDirectionControl>() != null) throw new Exception("Unexpected direction hierarchy or already bound");
+            var component = go.AddComponent<BattleDirectionControl>();
+            var serialized = new SerializedObject(component);
+            serialized.FindProperty("directionRing").objectReferenceValue = go.transform.Find("ControBg") as RectTransform;
+            serialized.FindProperty("knob").objectReferenceValue = go.transform.Find("ControPoint") as RectTransform;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(scene);
+            if (!UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene)) throw new Exception("Scene save failed");
+        }
+        [MenuItem("NTSD/Temporary/Validate Original Direction Scene")]
+        public static void Begin()
+        {
+            if (EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty) throw new Exception("Requires saved nonplaying scene");
+            EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView")).Focus();
+            SessionState.SetBool("DirectionSceneProbe", true);
+            EditorApplication.EnterPlaymode();
+        }
+        static void Advance()
+        {
+            try
+            {
+                if (EditorApplication.timeSinceStartup - started > 300) throw new TimeoutException("Scene fixture initialization/validation timeout");
+                if (steps.MoveNext()) return;
+                Finish("PASS", null);
+            }
+            catch (Exception e) { Finish("FAIL", e.ToString()); }
+        }
+        static void Finish(string status, string error)
+        {
+            EditorApplication.update -= Advance;
+            if (Keyboard.current != null) { InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState()); InputSystem.Update(); }
+            if (driver != null) driver.SetPaused(oldPaused);
+            try { File.WriteAllText(Output + "/result.json", JsonConvert.SerializeObject(new { status, error, checks, rows = Rows }, Formatting.Indented)); }
+            finally { EditorApplication.ExitPlaymode(); }
+        }
+        static void Queue(params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState(keys));
+            InputSystem.Update();
+        }
+        static void Tick(int count = 2)
+        {
+            for (int i = 0; i < count; i++) Check(driver.StepOneTick(ignorePaused: true), "actual local provider tick");
+        }
+        static void Pointer(int index, bool down, int id = 1)
+        {
+            var e = new PointerEventData(EventSystem.current) { pointerId = id, button = PointerEventData.InputButton.Left };
+            if (down) ExecuteEvents.Execute(buttons[index].gameObject, e, ExecuteEvents.pointerDownHandler);
+            else ExecuteEvents.Execute(buttons[index].gameObject, e, ExecuteEvents.pointerUpHandler);
+        }
+        static void Reset()
+        {
+            gesture?.CancelGesture(); Queue(); for (int i = 0; i < 3; i++) Pointer(i, false);
+            Tick(); actor.PS.y = actor.PS.groundY; actor.PS.vy = 0; actor.HitStun = 0; actor.ImmediateFrame(0);
+            typeof(NTSDEntityRuntime).Assembly.GetType("NTSD.Simulation.NTSD28NativeComboStateMachine").GetMethod("InitializeNativeHistory", BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{actor.Runtime});
+            Tick();
+        }
+        static byte KeyAt(int index) => actor.Runtime.NativeInputProxy.Current[4 + index];
+        static IEnumerator Run()
+        {
+            while (true)
+            {
+                driver = SimulationTickDriver.Instance;
+                var boot = UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
+                actor = boot == null ? null : Field(boot,"firstPlayerLf2") as LF2Character;
+                if (actor != null && driver != null && driver.World != null && driver.CurrentTickIndex > 2) break;
+                yield return null;
+            }
+            oldPaused = driver.IsPaused; driver.SetPaused(true);
+            view = UnityEngine.Object.FindObjectOfType<BattleControlsView>();
+            Check(view != null && view.IsPlayerBound, "actual scene controls automatically bound");
+            buttons = new[] { (NTSDButton)Field(view,"attackButton"), (NTSDButton)Field(view,"jumpButton"), (NTSDButton)Field(view,"defendButton") };
+            Check(buttons.All(x=>x!=null&&x.isActiveAndEnabled&&x.IsInteractable()),"actual authored buttons enabled and bound");
+            Check(EventSystem.current!=null,"real EventSystem present");
+            driver.TryGetCurrentBattleHud(out var current);Check(view.PlayerId==current.Values.InputId,"same selected human InputId as published HUD");
+            Rows.Add(new{phase="bound",playerId=view.PlayerId,playerSlot=current.Values.PlayerIndex,actor=actor.ObjectId,scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene().path});
+            Canvas.ForceUpdateCanvases();
+            gesture = UnityEngine.Object.FindObjectOfType<BattleDirectionControl>();
+            Check(gesture != null && gesture.PlayerId == current.Values.InputId, "actual direction component binds selected human");
+            var ring = (RectTransform)Field(gesture,"directionRing");
+            var knob = (RectTransform)Field(gesture,"knob");
+            Check(ring != null && knob != null,"authored ring and knob bound");
+            var canvas = ring.GetComponentInParent<Canvas>();
+            var camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            PointerEventData Event(Vector2 p,int id=77)
+            {
+                var screen = RectTransformUtility.WorldToScreenPoint(camera,ring.TransformPoint(p));
+                return new PointerEventData(EventSystem.current){pointerId=id,button=PointerEventData.InputButton.Left,position=screen,pointerPressRaycast=new RaycastResult{module=ring.GetComponentInParent<GraphicRaycaster>()}};
+            }
+            void Down(Vector2 p,int id=77)=>ExecuteEvents.Execute(gesture.gameObject,Event(p,id),ExecuteEvents.pointerDownHandler);
+            void Drag(Vector2 p,int id=77)=>ExecuteEvents.Execute(gesture.gameObject,Event(p,id),ExecuteEvents.dragHandler);
+            void Up(int id=77)=>ExecuteEvents.Execute(gesture.gameObject,Event(Vector2.zero,id),ExecuteEvents.pointerUpHandler);
+            var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(Event(new Vector2(70,0)),hits);
+            Rows.Add(new{phase="direction raycast",hits=hits.Select(x=>x.gameObject.name).ToArray()});
+            Check(hits.Count>0&&ExecuteEvents.GetEventHandler<IPointerDownHandler>(hits[0].gameObject)==gesture.gameObject,"actual ring raycast routes to new parent component");
+            Reset();gesture.SetMode(BattleDirectionMode.Hybrid);Down(new Vector2(70,0));Check(gesture.Direction==Vector2.right&&!gesture.IsDragging,"hybrid immediate click");
+            var e=Event(new Vector2(70,0));e.position+=new Vector2(0,11);ExecuteEvents.Execute(gesture.gameObject,e,ExecuteEvents.dragHandler);Check(!gesture.IsDragging&&gesture.Direction==Vector2.right,"11screen pixel jitter stays click");
+            float before=actor.PS.x;Tick(8);Check(actor.Runtime.NativeInputProxy.Current[3]==1&&actor.PS.x>before,"actual native right movement");Rows.Add(new{phase="right movement",from=before,to=actor.PS.x,tick=driver.CurrentTickIndex});
+            Down(new Vector2(-70,0),88);Drag(new Vector2(-90,0),88);Up(88);Check(gesture.Direction==Vector2.right&&!gesture.IsDragging,"second finger does not steal");
+            Drag(new Vector2(-90,0));Check(gesture.IsDragging&&gesture.Direction==Vector2.left,"cross threshold switches to left joystick");Tick(8);Check(actor.Runtime.NativeInputProxy.Current[2]==1&&actor.Runtime.NativeInputProxy.Current[3]==0,"new joystick direction replaces click");
+            Drag(Vector2.zero);Tick();Check(gesture.IsDragging&&actor.Runtime.NativeInputProxy.Current.Take(4).All(x=>x==0),"center deadzone remains latched drag");Up();Check(knob.anchoredPosition==Vector2.zero,"release restores knob");
+            foreach(var mode in new[]{BattleDirectionMode.ClickOnly,BattleDirectionMode.JoystickOnly})
+            {
+                gesture.SetMode(mode);
+                for(int i=0;i<8;i++)
+                {
+                    Reset();var v=new Vector2(Mathf.Cos(i*45*Mathf.Deg2Rad),Mathf.Sin(i*45*Mathf.Deg2Rad));var expected=new Vector2(Mathf.Round(v.x),Mathf.Round(v.y));Down(v*70);Tick();
+                    var keys=actor.Runtime.NativeInputProxy.Current;
+                    Check(gesture.Direction==expected&&keys[0]==(expected.y>0?1:0)&&keys[1]==(expected.y<0?1:0)&&keys[2]==(expected.x<0?1:0)&&keys[3]==(expected.x>0?1:0),"actual native sector "+mode+"/"+i);Up();Tick();Check(keys.Take(4).All(x=>x==0),"native release "+mode+"/"+i);
+                }
+            }
+            gesture.SetMode(BattleDirectionMode.Hybrid);
+            for(int b=0;b<3;b++)
+            {
+                Reset();Down(new Vector2(70,0));Pointer(b,true,100+b);Tick();Check(actor.Runtime.NativeInputProxy.Current[3]==1&&KeyAt(b)==1,"direction plus actual action "+b);Rows.Add(new{phase="direction plus action",button=buttons[b].name,frame=actor.Frame.N,y=actor.PS.y,vy=actor.PS.vy});
+                Check(b==0?(actor.Frame.N==60||actor.Frame.N==65):actor.Frame.N==(b==1?210:110),"native combined action frame "+b+"="+actor.Frame.N);
+                Up();Tick();Check(KeyAt(b)==1,"direction release preserves action "+b);Pointer(b,false,100+b);Tick();
+            }
+            Reset();Queue(Key.D);Down(new Vector2(70,0));Up();Tick();Check(actor.Runtime.NativeInputProxy.Current[3]==1,"keyboard right survives UI release");Down(new Vector2(70,0));Queue();Tick();Check(actor.Runtime.NativeInputProxy.Current[3]==1,"UI right survives keyboard release");Up();Tick();
+            Down(new Vector2(70,0));gesture.SetMode(BattleDirectionMode.ClickOnly);Tick();Check(actor.Runtime.NativeInputProxy.Current.Take(4).All(x=>x==0),"mode change clears native input");
+            Down(new Vector2(70,0));gesture.enabled=false;Tick();Check(actor.Runtime.NativeInputProxy.Current.Take(4).All(x=>x==0),"disable clears native direction");gesture.enabled=true;Check(gesture.PlayerId==current.Values.InputId,"enable replays human binding");
+            gesture.SetMode(BattleDirectionMode.JoystickOnly);Down(Vector2.zero);Drag(new Vector2(70,70));Tick();ScreenCapture.CaptureScreenshot(Output+"/original-direction.png");yield return null;yield return null;Up();Tick();
+        }
+    }
+}
+#endif

@@ -1,0 +1,1095 @@
+{
+  "status": "PASS",
+  "error": null,
+  "checks": 259,
+  "rows": [
+    {
+      "assertion": "actual scene controls automatically bound",
+      "passed": true
+    },
+    {
+      "assertion": "actual authored buttons enabled and bound",
+      "passed": true
+    },
+    {
+      "assertion": "real EventSystem present",
+      "passed": true
+    },
+    {
+      "assertion": "same selected human InputId as published HUD",
+      "passed": true
+    },
+    {
+      "phase": "bound",
+      "playerId": 1,
+      "playerSlot": 0,
+      "actor": 2,
+      "scene": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    },
+    {
+      "assertion": "actual direction component binds selected human",
+      "passed": true
+    },
+    {
+      "assertion": "authored ring and knob bound",
+      "passed": true
+    },
+    {
+      "phase": "direction raycast",
+      "hits": [
+        "ControBg"
+      ]
+    },
+    {
+      "assertion": "actual ring raycast routes to new parent component",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "first press diagnostics",
+      "focused": true,
+      "paused": false,
+      "owns": true,
+      "dx": 1.0,
+      "dy": 0.0,
+      "screenX": 352.0,
+      "screenY": 122.399887,
+      "camera": "HUDCamera",
+      "eventCamera": "HUDCamera"
+    },
+    {
+      "assertion": "hybrid immediate click",
+      "passed": true
+    },
+    {
+      "assertion": "11screen pixel jitter stays click",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native right movement",
+      "passed": true
+    },
+    {
+      "phase": "right movement",
+      "from": 800.74652099609375,
+      "to": 849.91081206886156,
+      "tick": 17
+    },
+    {
+      "assertion": "second finger does not steal",
+      "passed": true
+    },
+    {
+      "assertion": "cross threshold switches to left joystick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "new joystick direction replaces click",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "center deadzone remains latched drag",
+      "passed": true
+    },
+    {
+      "assertion": "release restores knob",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/3",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/3",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/4",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/4",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/5",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/5",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/6",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/6",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector ClickOnly/7",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release ClickOnly/7",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/3",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/3",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/4",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/4",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/5",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/5",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/6",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/6",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual native sector JoystickOnly/7",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "native release JoystickOnly/7",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction plus actual action 0",
+      "passed": true
+    },
+    {
+      "phase": "direction plus action",
+      "button": "AttackBtn",
+      "frame": 60,
+      "y": 0.0,
+      "vy": 0.0
+    },
+    {
+      "assertion": "native combined action frame 0=60",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction release preserves action 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction plus actual action 1",
+      "passed": true
+    },
+    {
+      "phase": "direction plus action",
+      "button": "JumpBtn",
+      "frame": 210,
+      "y": 0.0,
+      "vy": 0.0
+    },
+    {
+      "assertion": "native combined action frame 1=210",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction release preserves action 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction plus actual action 2",
+      "passed": true
+    },
+    {
+      "phase": "direction plus action",
+      "button": "DefendBtn",
+      "frame": 110,
+      "y": 0.0,
+      "vy": 0.0
+    },
+    {
+      "assertion": "native combined action frame 2=110",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "direction release preserves action 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "keyboard right survives UI release",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "UI right survives keyboard release",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "mode change clears native input",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "disable clears native direction",
+      "passed": true
+    },
+    {
+      "assertion": "enable replays human binding",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    }
+  ]
+}

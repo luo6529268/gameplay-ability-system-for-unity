@@ -1,5 +1,9 @@
 # 336B44 未关闭 Change Record 执行队列清点（2026-10-04）
 
+> **Q12最终增量调度（覆盖下文 51/ONE1 的历史快照）：** `DYNAMIC-INPUT-PROBE-001` 的稳定原 Scene 合取假设失败，脚本增量已精确撤回，Record 为 `ROLLED_BACK`；`REENTRY-LIFECYCLE-WITNESS-001` 两轮原 Scene 生产 World/tick/退出零残留已限定验收，Record 为 `VERIFIED`。[四份原件](../../artifacts/diagnostics/NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/REPORT.md)。两份均不计未关闭；原去重基线继续为 **50 份：REUSE35、TRIGGER15、P0/DEP/ONE 均 0**。正式同帧 Present、真人手按和 a7 自身实播属按真实首差触发的未知边界；不得借“未关闭”重新排 50 次 Play。
+
+> **Q12当前增量调度：** 原50份旧记录分类不变（TRIGGER15/REUSE35）；失焦策略试验`NTSD28-336B44-Q12-UNFOCUSED-PHYSICAL-PROBE-001`已`ROLLED_BACK`，不计未关闭。新增仅Editor诊断的`NTSD28-336B44-Q12-DYNAMIC-INPUT-PROBE-001 / RUNTIME_PENDING / ONE`，故当前逐ID未关闭**51份**：P0 0、DEP 0、ONE 1、TRIGGER 15、REUSE 35。设备L到Action首断点已在原Scene见证；合取失焦路由尚未在稳定Play中执行，待原Editor/Scene独占。它不是新生产战斗规则差异，也不启动其他50份重测。[原件与安全停点](../../artifacts/diagnostics/NTSD28-336B44-Q12-DYNAMIC-INPUT-DIAG-20261004/REPORT.md)。下方50份说明是新增前基线快照。
+
 > **Q12代表矩阵再去重：** 50项原调度不变（P0/DEP/ONE均0、TRIGGER15、REUSE35）。C053受控战斗与实际消费随机状态、C040原Game View、078正式cue实际播放、C056有序退出复用既有限定证据；a7实播只在可复现缺声或共用写者变化时触发，不再作为Q12另一个必跑cue。无关整张随机表一致、逐cue设备PCM和每项旧Record再Play均不是当前出口。同冻结版退出后重进仍待，正式Present及真人按键未知。详[Q12 Task](TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md)。
 
 > **增量调度 2026-10-04（覆盖下方发现前快照）：** Q12原Scene自然键揭示旧Q07双重换算，已由 `NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001 / RUNTIME_PENDING / REUSE` 精确修正并在自然首窗口取证；旧 `Q07-HUMAN-BUTTON-NATIVE-INGRESS-001` 标 `SUPERSEDED`。当前仍为50份未关闭：P0 0、DEP 0、ONE 0、TRIGGER 15、REUSE 35。本表原50行中的旧Q07行须按新Q12行替换读取，不因这次首差重新展开其余49项。
@@ -8,12 +12,14 @@
 
 - `P0`：保留给当前正式同初态、非例外战斗规则的已证首差；本轮输入修复后无此类新项。
 - `DEP`：依赖 P0 的下游验证；本轮攻击/伤害/血点链恢复后无此类新项。
-- `ONE`：有正式受控正例与共用生产修复、但局部原 Scene 出口仍未证时的一次定向 Play；C040/D024在本轮复查中已由既有原Scene证据覆盖，当前没有此类待办。
+- `ONE`：有准确前置和单一原 Scene 出口的一次定向验证；原C040/D024及Q12同版重进均已由证据覆盖，当前 0 项。
 - `TRIGGER`：阳性自然可达、同态载体或用户暂缓条件尚缺；保留 owner/证据，当前不延长阴性筛选。
 - `REUSE`：已有局部证据或当前没有新的生产首差；仅对应共享写者改动、用户真实复现或 Q12 代表场景触发相邻回归，不为抬高 Record 状态逐个补全物理键/全 World/GPU/设备 PCM。
 
 | Change ID | 原状态 | 调度 |
 | --- | --- | --- |
+| `NTSD28-336B44-Q12-DYNAMIC-INPUT-PROBE-001` | `ROLLED_BACK` | `CLOSED_DIAGNOSTIC` |
+| `NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001` | `VERIFIED` | `CLOSED_SCOPED_REENTRY` |
 | `NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001` | `RUNTIME_PENDING` | `REUSE` |
 | `NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001` | `RUNTIME_PENDING` | `REUSE` |
 | `NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001` | `RUNTIME_PENDING` | `REUSE` |

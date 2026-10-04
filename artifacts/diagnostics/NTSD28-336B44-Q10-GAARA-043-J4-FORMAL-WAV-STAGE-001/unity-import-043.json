@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Asset info retrieved.",
+    "data": {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/data/043.wav",
+      "guid": "98b6fdb935174deca74dda87ce74552a",
+      "assetType": "UnityEngine.AudioClip",
+      "name": "043",
+      "fileName": "043.wav",
+      "isFolder": false,
+      "instanceID": 66456,
+      "lastWriteTimeUtc": "2026-10-04T15:00:44.1245644Z",
+      "previewBase64": null,
+      "previewWidth": 0,
+      "previewHeight": 0
+    }
+  }
+}

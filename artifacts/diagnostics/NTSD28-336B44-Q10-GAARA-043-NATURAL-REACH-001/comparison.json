@@ -1,0 +1,20 @@
+{
+  "schema": "ntsd28-q10-gaara-043-root-pair/1",
+  "sourceTicks": 40,
+  "rootTraceRows": 42,
+  "comparedFields": [
+    "phase",
+    "action",
+    "mp",
+    "x",
+    "y",
+    "z"
+  ],
+  "comparisonCount": 240,
+  "firstDifference": null,
+  "differenceCount": 0,
+  "first240Tick": 6,
+  "first244Tick": 15,
+  "first043Tick": 15,
+  "rootAudioFieldPresent": false
+}

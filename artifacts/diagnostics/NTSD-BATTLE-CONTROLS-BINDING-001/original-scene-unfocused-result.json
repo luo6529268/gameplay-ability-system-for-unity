@@ -1,0 +1,63 @@
+{
+  "status": "FAIL",
+  "error": "System.Exception: real NTSDButton press 0\r\n  at NTSD.Test.Editor.ControlsSceneValidationTemporary.Check (System.Boolean ok, System.String label) [0x0001b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\ControlsSceneValidationTemporary.cs:35 \r\n  at NTSD.Test.Editor.ControlsSceneValidationTemporary+<Run>d__22.MoveNext () [0x003bb] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\ControlsSceneValidationTemporary.cs:128 \r\n  at NTSD.Test.Editor.ControlsSceneValidationTemporary.Advance () [0x00027] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\ControlsSceneValidationTemporary.cs:66 ",
+  "checks": 9,
+  "rows": [
+    {
+      "assertion": "actual scene controls automatically bound",
+      "passed": true
+    },
+    {
+      "assertion": "actual authored buttons enabled and bound",
+      "passed": true
+    },
+    {
+      "assertion": "real EventSystem present",
+      "passed": true
+    },
+    {
+      "assertion": "same selected human InputId as published HUD",
+      "passed": true
+    },
+    {
+      "phase": "bound",
+      "playerId": 1,
+      "playerSlot": 0,
+      "actor": 2,
+      "scene": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    },
+    {
+      "phase": "raycast",
+      "button": "AttackBtn",
+      "pointX": 1534.44434,
+      "pointY": 122.613991,
+      "hits": [
+        "AttackBtn"
+      ]
+    },
+    {
+      "assertion": "real scene raycast hits AttackBtn",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "real NTSDButton press 0",
+      "passed": false
+    }
+  ]
+}

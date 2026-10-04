@@ -1,0 +1,610 @@
+{
+  "status": "PASS",
+  "error": null,
+  "checks": 137,
+  "rows": [
+    {
+      "assertion": "actual scene controls automatically bound",
+      "passed": true
+    },
+    {
+      "assertion": "actual authored buttons enabled and bound",
+      "passed": true
+    },
+    {
+      "assertion": "real EventSystem present",
+      "passed": true
+    },
+    {
+      "assertion": "same selected human InputId as published HUD",
+      "passed": true
+    },
+    {
+      "phase": "bound",
+      "playerId": 1,
+      "playerSlot": 0,
+      "actor": 2,
+      "scene": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    },
+    {
+      "phase": "raycast",
+      "button": "AttackBtn",
+      "pointX": 1534.44434,
+      "pointY": 122.613991,
+      "hits": [
+        "AttackBtn"
+      ]
+    },
+    {
+      "assertion": "real scene raycast hits AttackBtn",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "real NTSDButton press 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "pressed",
+      "button": "AttackBtn",
+      "frame": 60,
+      "keys": "AAAAAAEAAA==",
+      "tick": 10
+    },
+    {
+      "assertion": "button reaches native key 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual character action 0 frame=60",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "button release reaches native key 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "second finger preserves hold 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "last finger releases 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "keyboard survives UI release 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "UI survives keyboard release 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "both sources released 0",
+      "passed": true
+    },
+    {
+      "phase": "raycast",
+      "button": "JumpBtn",
+      "pointX": 1671.6001,
+      "pointY": 122.609932,
+      "hits": [
+        "JumpBtn"
+      ]
+    },
+    {
+      "assertion": "real scene raycast hits JumpBtn",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "real NTSDButton press 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "pressed",
+      "button": "JumpBtn",
+      "frame": 210,
+      "keys": "AAAAAAABAA==",
+      "tick": 36
+    },
+    {
+      "assertion": "button reaches native key 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual character action 1 frame=210",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "button release reaches native key 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "second finger preserves hold 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "last finger releases 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "keyboard survives UI release 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "UI survives keyboard release 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "both sources released 1",
+      "passed": true
+    },
+    {
+      "phase": "raycast",
+      "button": "DefendBtn",
+      "pointX": 1814.69385,
+      "pointY": 122.613991,
+      "hits": [
+        "DefendBtn"
+      ]
+    },
+    {
+      "assertion": "real scene raycast hits DefendBtn",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "real NTSDButton press 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "pressed",
+      "button": "DefendBtn",
+      "frame": 110,
+      "keys": "AAAAAAAAAQ==",
+      "tick": 62
+    },
+    {
+      "assertion": "button reaches native key 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual character action 2 frame=110",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "button release reaches native key 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "second finger preserves hold 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "last finger releases 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "keyboard survives UI release 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "UI survives keyboard release 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "both sources released 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "disable releases and unbinds",
+      "passed": true
+    },
+    {
+      "assertion": "reenable replays binding",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "reenable accepts fresh button press",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "explicit unbind releases old sink",
+      "passed": true
+    },
+    {
+      "assertion": "binding restored from current snapshot",
+      "passed": true
+    }
+  ]
+}

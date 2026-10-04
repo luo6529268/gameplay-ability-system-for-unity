@@ -266,7 +266,7 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a76a1749-72c1-4c2d-aabc-9c876b18e20c"",
-                    ""path"": ""<Keyboard>/numpad1"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -277,7 +277,7 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2a02cda2-a1d5-4f4e-919c-a85ec2b0203b"",
-                    ""path"": ""<Keyboard>/numpad2"",
+                    ""path"": ""<Keyboard>/b"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -288,7 +288,7 @@ public partial class @NTSDInputConfig: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e30a908a-185d-4980-9bf7-94267f322efc"",
-                    ""path"": ""<Keyboard>/numpad3"",
+                    ""path"": ""<Keyboard>/n"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

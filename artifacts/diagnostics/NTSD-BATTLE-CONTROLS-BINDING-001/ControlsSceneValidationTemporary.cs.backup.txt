@@ -1,0 +1,143 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.IO;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using NTSD.Simulation;
+using NTSD.UI.Battle;
+using NTSD.UI;
+using UnityEngine.EventSystems;
+using NTSD.Animation.LF2Objects;
+namespace NTSD.Test.Editor
+{
+    public static class ControlsSceneValidationTemporary
+    {
+        static readonly BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+        static readonly string Output = Path.GetFullPath("artifacts/diagnostics/NTSD-BATTLE-CONTROLS-BINDING-001");
+        static readonly List<object> Rows = new List<object>();
+        static IEnumerator steps;
+        static SimulationTickDriver driver;
+        static LF2Character actor;
+        static BattleControlsView view;
+        static NTSDButton[] buttons;
+        static int checks;
+        static bool oldPaused;
+        static double started;
+        static object Field(object o, string name) { return o.GetType().GetField(name, Flags).GetValue(o); }
+        static void Check(bool ok, string label) { Rows.Add(new { assertion = label, passed = ok }); if (!ok) throw new Exception(label); checks++; }
+        [InitializeOnLoadMethod]
+        static void Install()
+        {
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool("ControlsSceneProbe", false))
+                {
+                    SessionState.SetBool("ControlsSceneProbe", false);
+                    started = EditorApplication.timeSinceStartup;
+                    steps = Run();
+                    EditorApplication.update += Advance;
+                }
+                if (state == PlayModeStateChange.EnteredEditMode && File.Exists(Output + "/result.json"))
+                {
+                    File.WriteAllText(Output + "/postplay.json", JsonConvert.SerializeObject(new { dirty = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty, scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path }, Formatting.Indented));
+                }
+            };
+        }
+        [MenuItem("NTSD/Temporary/Validate Original Controls Scene")]
+        public static void Begin()
+        {
+            if (EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty) throw new Exception("Requires saved nonplaying scene");
+            EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView")).Focus();
+            SessionState.SetBool("ControlsSceneProbe", true);
+            EditorApplication.EnterPlaymode();
+        }
+        static void Advance()
+        {
+            try
+            {
+                if (EditorApplication.timeSinceStartup - started > 300) throw new TimeoutException("Scene fixture initialization/validation timeout");
+                if (steps.MoveNext()) return;
+                Finish("PASS", null);
+            }
+            catch (Exception e) { Finish("FAIL", e.ToString()); }
+        }
+        static void Finish(string status, string error)
+        {
+            EditorApplication.update -= Advance;
+            if (Keyboard.current != null) { InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState()); InputSystem.Update(); }
+            if (driver != null) driver.SetPaused(oldPaused);
+            try { File.WriteAllText(Output + "/result.json", JsonConvert.SerializeObject(new { status, error, checks, rows = Rows }, Formatting.Indented)); }
+            finally { EditorApplication.ExitPlaymode(); }
+        }
+        static void Queue(params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState(keys));
+            InputSystem.Update();
+        }
+        static void Tick(int count = 2)
+        {
+            for (int i = 0; i < count; i++) Check(driver.StepOneTick(ignorePaused: true), "actual local provider tick");
+        }
+        static void Pointer(int index, bool down, int id = 1)
+        {
+            var e = new PointerEventData(EventSystem.current) { pointerId = id, button = PointerEventData.InputButton.Left };
+            if (down) ExecuteEvents.Execute(buttons[index].gameObject, e, ExecuteEvents.pointerDownHandler);
+            else ExecuteEvents.Execute(buttons[index].gameObject, e, ExecuteEvents.pointerUpHandler);
+        }
+        static void Reset()
+        {
+            Queue(); for (int i = 0; i < 3; i++) Pointer(i, false);
+            Tick(); actor.PS.y = actor.PS.groundY; actor.PS.vy = 0; actor.HitStun = 0; actor.ImmediateFrame(0);
+            typeof(NTSDEntityRuntime).Assembly.GetType("NTSD.Simulation.NTSD28NativeComboStateMachine").GetMethod("InitializeNativeHistory", BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{actor.Runtime});
+            Tick();
+        }
+        static byte KeyAt(int index) => actor.Runtime.NativeInputProxy.Current[4 + index];
+        static IEnumerator Run()
+        {
+            while (true)
+            {
+                driver = SimulationTickDriver.Instance;
+                var boot = UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
+                actor = boot == null ? null : Field(boot,"firstPlayerLf2") as LF2Character;
+                if (actor != null && driver != null && driver.World != null && driver.CurrentTickIndex > 2) break;
+                yield return null;
+            }
+            oldPaused = driver.IsPaused; driver.SetPaused(true);
+            view = UnityEngine.Object.FindObjectOfType<BattleControlsView>();
+            Check(view != null && view.IsPlayerBound, "actual scene controls automatically bound");
+            buttons = new[] { (NTSDButton)Field(view,"attackButton"), (NTSDButton)Field(view,"jumpButton"), (NTSDButton)Field(view,"defendButton") };
+            Check(buttons.All(x=>x!=null&&x.isActiveAndEnabled&&x.IsInteractable()),"actual authored buttons enabled and bound");
+            Check(EventSystem.current!=null,"real EventSystem present");
+            driver.TryGetCurrentBattleHud(out var current);Check(view.PlayerId==current.Values.InputId,"same selected human InputId as published HUD");
+            Rows.Add(new{phase="bound",playerId=view.PlayerId,playerSlot=current.Values.PlayerIndex,actor=actor.ObjectId,scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene().path});
+            Canvas.ForceUpdateCanvases();
+            for (int b=0;b<3;b++)
+            {
+                var canvas=buttons[b].GetComponentInParent<Canvas>();var camera=canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera;
+                var point=RectTransformUtility.WorldToScreenPoint(camera,buttons[b].transform.position);
+                var hits=new List<RaycastResult>();EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current){position=point},hits);
+                Rows.Add(new{phase="raycast",button=buttons[b].name,pointX=point.x,pointY=point.y,hits=hits.Select(x=>x.gameObject.name).ToArray()});
+                Check(hits.Count>0&&ExecuteEvents.GetEventHandler<IPointerDownHandler>(hits[0].gameObject)==buttons[b].gameObject,"real scene raycast hits "+buttons[b].name);
+                Reset();Pointer(b,true);Check(buttons[b].IsPointerPressed,"real NTSDButton press "+b);Tick();
+                Rows.Add(new{phase="pressed",button=buttons[b].name,frame=actor.Frame.N,keys=actor.Runtime.NativeInputProxy.Current.ToArray(),tick=driver.CurrentTickIndex});
+                Check(KeyAt(b)==1,"button reaches native key "+b);
+                Check(b==0?(actor.Frame.N==60||actor.Frame.N==65):actor.Frame.N==(b==1?210:110),"actual character action "+b+" frame="+actor.Frame.N);
+                Pointer(b,false);Tick();Check(KeyAt(b)==0,"button release reaches native key "+b);
+                Reset();Pointer(b,true,11);Pointer(b,true,12);Pointer(b,false,11);Tick();Check(KeyAt(b)==1,"second finger preserves hold "+b);Pointer(b,false,12);Tick();Check(KeyAt(b)==0,"last finger releases "+b);
+                Reset();var key=b==0?Key.J:b==1?Key.K:Key.L;Queue(key);Pointer(b,true);Pointer(b,false);Tick();Check(KeyAt(b)==1,"keyboard survives UI release "+b);Pointer(b,true);Queue();Tick();Check(KeyAt(b)==1,"UI survives keyboard release "+b);Pointer(b,false);Tick();Check(KeyAt(b)==0,"both sources released "+b);
+            }
+            Reset();Pointer(0,true);Tick();view.enabled=false;Tick();Check(KeyAt(0)==0&&!view.IsPlayerBound,"disable releases and unbinds");view.enabled=true;Check(view.IsPlayerBound,"reenable replays binding");Pointer(0,false);Pointer(0,true);Tick();Check(KeyAt(0)==1,"reenable accepts fresh button press");Pointer(0,false);Tick();
+            Reset();Pointer(1,true);Tick();view.UnbindPlayer();Tick();Check(KeyAt(1)==0&&!view.IsPlayerBound,"explicit unbind releases old sink");view.enabled=false;view.enabled=true;Check(view.IsPlayerBound,"binding restored from current snapshot");Pointer(1,false);
+            ScreenCapture.CaptureScreenshot(Output+"/original-controls.png");yield return null;
+        }
+    }
+}
+#endif

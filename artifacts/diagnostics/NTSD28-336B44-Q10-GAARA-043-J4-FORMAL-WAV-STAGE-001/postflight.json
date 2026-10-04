@@ -1,0 +1,65 @@
+{
+  "cueRows": [
+    {
+      "cue": "c/gaa/w/j4.wav",
+      "formalSha256": "8F03A8D8D136FA028B1350C8247D4CC37002369C638A8999177FA282BBC4C85F",
+      "stagedSha256": "8F03A8D8D136FA028B1350C8247D4CC37002369C638A8999177FA282BBC4C85F",
+      "equal": true
+    },
+    {
+      "cue": "data/043.wav",
+      "formalSha256": "3067E2A50603F6500F93E93779C0AA812A028169A77BA46E09F1612F6DAB95FD",
+      "stagedSha256": "3067E2A50603F6500F93E93779C0AA812A028169A77BA46E09F1612F6DAB95FD",
+      "equal": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "beforeSha256": "2E548FC0949EE66122FE85D0155F1E614A1F0D46539DDF351017F556A811C8C5",
+      "afterSha256": "2E548FC0949EE66122FE85D0155F1E614A1F0D46539DDF351017F556A811C8C5",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "beforeSha256": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+      "afterSha256": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "beforeSha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+      "afterSha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "beforeSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "afterSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Sound/data/043.wav",
+      "beforeSha256": "A44224A3CB8EED7B18D78CCBA5AC13C934E60315600AE53D953586E4E494C4F0",
+      "afterSha256": "A44224A3CB8EED7B18D78CCBA5AC13C934E60315600AE53D953586E4E494C4F0",
+      "equal": true
+    }
+  ],
+  "meta": [
+    {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/c/gaa/w.meta",
+      "guid": "1f06b98199c343a9801922b9f46c8821"
+    },
+    {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/c/gaa/w/j4.wav.meta",
+      "guid": "7e804651287748ad99bde41503d1d183"
+    },
+    {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/data/043.wav.meta",
+      "guid": "98b6fdb935174deca74dda87ce74552a"
+    }
+  ],
+  "guidsUnique": true,
+  "allCueHashesEqual": true,
+  "allProtectedStable": true
+}
