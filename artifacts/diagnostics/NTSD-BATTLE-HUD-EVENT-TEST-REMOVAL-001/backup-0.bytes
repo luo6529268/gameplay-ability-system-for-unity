@@ -164,7 +164,15 @@ namespace NTSD.Test.Editor
             typeof(LF2Character).GetProperty("FrameCache",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 .SetValue(character, cache);
-            cache.Load(new LF2CharacterDataWrapper(1, data));
+            var config = new LF2CharacterDataWrapper(1, data);
+            cache.Load(config);
+            var world = new SimulationWorld();
+            world.RuntimeDataCatalog.Prepare(
+                new[] { new ObjectDefinition { id = 1, type = 0 } }, _ => config);
+            world.RuntimeDataCatalog.Seal();
+            typeof(LF2Entity).GetField("registeredWorld", BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(character, world);
+            character.Runtime.ObjectId = 1;
             character.Frame.D = idle;
             character.Frame.N = 0;
             character.Runtime.InputLocalResourceEnabled49D034 = true;

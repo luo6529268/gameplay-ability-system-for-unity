@@ -1,0 +1,13 @@
+{
+  "schema": "ntsd28-c053-tobi-source-unity-14tick/1.0",
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "formalSourceCsvSha256": "1277C36FB7FC5A0172E7E2257FBAB552CDE350D1BB8D1B88A13F6AB2A7625AC4",
+  "unityResultSha256": "EF1481133E80E10552F94CFDDC84DDCA4C22082549D74D9E70AC9DEC348C8081",
+  "ticks": 14,
+  "fieldsPerTick": 8,
+  "compared": 112,
+  "differences": 0,
+  "firstDifferences": [],
+  "inputProjection": "formal raw mask 0/32/88 mapped to existing Unity legacy FrameInputSet mask 0/64/49; sampled_mask not observed in Unity",
+  "scope": "input schedule, input phase, Tobi action/Y, OID251 slot/action/X/Y; not all World fields or physical device input"
+}

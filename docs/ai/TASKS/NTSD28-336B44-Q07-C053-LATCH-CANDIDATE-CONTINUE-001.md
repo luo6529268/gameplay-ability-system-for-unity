@@ -1,8 +1,14 @@
 # NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001
 
+2026-10-04 v2 相邻聚焦结果：用户确认原Editor保存后，曾再见Battle Scene dirty；等到MCP复查clean/空闲后，仅运行已登记的 latch-only 原Scene Play。v2原件 `artifacts/diagnostics/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001/latch-only-original-editor-20261004-v2.json` 为PASS，两个有序角色候选目标HP100/100、vrest0/0、HitConfirm2=0、锁存true，清理后对象4→4、槽2→2、池2→2；只读`latchCharacterCandidates`为实测，其余通用矩阵字段为未运行分支默认值。退出非Play、唯一Scene clean，但Scene磁盘SHA在运行前后`2BF4047C…D67C1`→`8CC56145…269047E`，已有并行UI `RippleRing`改动，写入者未证；本包未保存/回退。相邻锁存子门限定通过，Scene文件稳定门未通过，R8全矩阵在更早统计归属断言失败并未测到锁存。详[本包报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001/REPORT.md)。
+
 状态：`RUNTIME_PENDING / SCOPED_GREEN`。父目标 `NTSD28-UNITY-BATTLE-REALIGNMENT-001`，G1/BATCH-04/Q07/C053。仅修共享命中候选消费顺序，不涉及非战斗。原Editor已重新编译并完成受控辅助type3独立默认模式12tick定向Play，正式源码/Unity 261/261 可比数值同，第7tick90伤恢复；前三份RED原件保留。相邻纯角色锁存、自然物理键与其它C053出口仍待。运行内Battle Scene SHA稳定且clean，随后独立查询又dirty而磁盘SHA不变，保留内存内容。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/REPORT.md)。
 
 2026-10-04 相邻回归只读复核：正式源码 `battle_world_tests.cpp::test_world_special_hit_latch_blocks_queued_standard_character_hit` 仅直接断言一个已排队角色候选被拒且目标HP500；`SimulationTickDriver28` 在此拒绝后没有全攻击者终止标记。Unity现有 `BattleCollisionHitDamagePlayModeProbeEditor` 的 `hitConfirmFirst/Second` 两角色矩阵仍断言两者HP均100，生产循环对每个被锁存的角色候选逐项返回`false`，静态调用链不会因此写伤害。但这不是实际运行该Unity相邻探针；需在原Editor Battle Scene重新clean后单独运行聚焦Play，不能用C053辅助type3 GREEN代替。当前 Scene磁盘包含另一项按钮预览Prefab实例，且Editor内存`isDirty=true`；未保存、切场景或启动Play，保留其内容。
+
+2026-10-04 相邻聚焦入口调整（脚本修改前登记）：用户确认原Editor Battle Scene已保存且空闲，本轮独立复核clean、当前测试程序集较新后运行既有R8矩阵；原件 `artifacts/diagnostics/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001/r8-matrix-original-editor-20261004.json` 在其角色伤害统计断言处失败，尚未执行锁存断言，清理后对象数恢复基线，退出Play场景clean/SHA稳。仅在已登记的 `BattleCollisionHitDamagePlayModeProbeEditor.cs` 中新增独立菜单/结果路径和 `ExecuteLatchOnly`，复用现有基线快照、注册/清理与生产碰撞 pass，只构建一名锁存攻击者和两名角色目标，检查两个候选顺序、两目标HP与vrest均不变、锁存和命中确认未被误写。新结果拒绝覆盖，旧R8/C048菜单及结果合同保持。验收为生成工程0错、原Editor只跑此聚焦Play、清理/退出/Scene哈希稳定；不修改生产、DAT、Scene、非战斗或正式权威。若新案在候选前置或清理失败，保留RED并定位，不能把它当规则失败。
+
+2026-10-04 证据字段更正（再次改脚本前登记）：首个独立 latch-only 原Editor结果为PASS、候选2、两目标HP100、清理完全恢复、Scene退出clean且SHA稳；但复用旧 `hitConfirmAbort` DTO 会序列化未被本案直接测量的 `attackerAborted=false`/`firstSkippedOnly=false` 占位字段。它们不能作为“未终止整攻击者”的证据。下一仅将新分支的报告换为独立 `latchCharacterCandidates` DTO，记录实际读取的两目标HP、两对vrest、SpecialHitLatch0EB与HitConfirm2；旧R8/C048 DTO和旧结果不改。使用新结果路径拒绝覆盖，原Editor重新编译后仅重跑这一聚焦场景；生产、DAT、Scene、非战斗不改。此前PASS保留为旧格式限定证据，不能自动晋升新结果。
 
 权威：336B44正式根EXE同LFR在tick7记录slot50候选0→角色slot0 `rejected`、候选1→type3 slot2 `applied/90伤`；正式playable `BattleWorld28::classify_ordinary_hit_eligibility` 在`special_hit_latch_0eb && target->object_type==0`只返回拒绝，`SimulationTickDriver28`只在`terminates_attacker_invocation`等明确条件下跳出候选循环。本拒绝分支没有设置终止标记。Unity `BattleHitCandidateSequenceRunner.TryConsumeCandidate`相同锁存/角色条件却返回`true`，由`TryConsumeCaptured`解释为`break`。
 

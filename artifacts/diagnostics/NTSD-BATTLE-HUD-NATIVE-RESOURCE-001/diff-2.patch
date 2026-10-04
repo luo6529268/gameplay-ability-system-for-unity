@@ -1,0 +1,142 @@
+--- before/Assets\NTSD\Scripts\Test\Editor\BattleHudEventEditorTests.cs
++++ Assets\NTSD\Scripts\Test\Editor\BattleHudEventEditorTests.cs
+@@ -3,6 +3,9 @@
+ using System.Collections.Generic;
+ using System.IO;
+ using NTSD.App;
++using NTSD.Animation;
++using NTSD.Animation.LF2Objects;
++using NTSD.Simulation.Ecs;
+ using UnityEditor;
+ using UnityEngine.TestTools;
+ using System.Reflection;
+@@ -32,7 +35,7 @@
+         {
+             var tracker = new BattleHudChangeTracker();
+             var runtime = Runtime();
+-            runtime.HP = runtime.HPBound = runtime.HP3 = runtime.MP = runtime.MPMax = 500;
++            runtime.HP = runtime.HPBound = runtime.HP3 = runtime.PP = runtime.MPMax = 500;
+             tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+             Assert.That(tracker.TryConsume(out var value), Is.True);
+             Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.All));
+@@ -70,13 +73,13 @@
+             var runtime = Runtime();
+             tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+             tracker.TryConsume(out _);
+-            runtime.MP = 125;
++            runtime.PP = 125;
+             runtime.MPMax = 250;
+             Assert.That(tracker.TryConsume(out var value), Is.True);
+             Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.Mp | BattleHudChanges.MpMax));
+             Assert.That(value.Mp, Is.EqualTo(125));
+             Assert.That(value.MpMax, Is.EqualTo(250));
+-            runtime.MP = 125; runtime.MPMax = 250;
++            runtime.PP = 125; runtime.MPMax = 250;
+             Assert.That(tracker.TryConsume(out _), Is.False);
+         }
+ 
+@@ -97,7 +100,7 @@
+             tracker.Capture(0, oldHandle, BattleHudChanges.Mp, 1);
+             tracker.Release(oldHandle);
+             Assert.That(tracker.TryConsume(out _), Is.False);
+-            next.MP = 88;
++            next.PP = 88;
+             Assert.That(tracker.TryConsume(out value), Is.True);
+             Assert.That(value.Mp, Is.EqualTo(88));
+         }
+@@ -136,7 +139,7 @@
+             tracker.Reset(stop: true);
+             Assert.That(tracker.TryConsume(out var cleared), Is.True);
+             Assert.That(cleared.IsVisible, Is.False);
+-            runtime.MP = 12;
++            runtime.PP = 12;
+             tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 2));
+             Assert.That(tracker.TryConsume(out _), Is.False);
+             var nextWorld = new BattleHudChangeTracker();
+@@ -146,6 +149,69 @@
+             Assert.That(next.Mp, Is.EqualTo(12));
+         }
+ 
++        [Test]
++        public void NativeSkillRecoveryAndSpawnPublishCanonicalResourceValues()
++        {
++            var idle = new LF2FrameData { frameId = 0, state = 0 };
++            var skill = new LF2FrameData { frameId = 1, state = 3, mp = 75, cmp = 20, chp = 9 };
++            var data = new LF2CharacterData
++            {
++                type_sub = 0,
++                frames = new List<LF2FrameData> { idle, skill },
++            };
++            var character = new LF2Character();
++            var cache = new LF2FrameCache();
++            typeof(LF2Character).GetProperty("FrameCache",
++                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
++                .SetValue(character, cache);
++            var config = new LF2CharacterDataWrapper(1, data);
++            cache.Load(config);
++            var world = new SimulationWorld();
++            world.RuntimeDataCatalog.Prepare(
++                new[] { new ObjectDefinition { id = 1, type = 0 } }, _ => config);
++            world.RuntimeDataCatalog.Seal();
++            typeof(LF2Entity).GetField("registeredWorld", BindingFlags.Instance | BindingFlags.NonPublic)
++                .SetValue(character, world);
++            character.Runtime.ObjectId = 1;
++            character.Frame.D = idle;
++            character.Frame.N = 0;
++            character.Runtime.InputLocalResourceEnabled49D034 = true;
++            character.Runtime.PP = 300;
++            character.Runtime.MP = 500;
++            var tracker = new BattleHudChangeTracker();
++            tracker.Bind(0, character.Runtime, new RuntimeEntityHandle(0, 1));
++            tracker.TryConsume(out var initial);
++            Assert.That(initial.Mp, Is.EqualTo(300));
++
++            Assert.That(new BattleCharacterActionWriter().ApplyNativeInputAction(character, 1).Applied, Is.True);
++            Assert.That(tracker.TryConsume(out var spent), Is.True);
++            Assert.That(spent.Mp, Is.EqualTo(225));
++            Assert.That(spent.Changes, Is.EqualTo(BattleHudChanges.Mp));
++            character.Runtime.MP = 9;
++            Assert.That(tracker.TryConsume(out _), Is.False, "Legacy MP must not corrupt the blue resource cache.");
++
++            BattleRecoveryStatusWriter.ApplyMpRecovery(character, 0, 1, false);
++            Assert.That(tracker.TryConsume(out var recovered), Is.True);
++            Assert.That(recovered.Mp, Is.EqualTo(245));
++            Assert.That(recovered.Changes, Is.EqualTo(BattleHudChanges.Mp));
++
++            character.Health.HP = 400;
++            character.Health.HPBound = 450;
++            tracker.TryConsume(out _);
++            BattleRecoveryStatusWriter.ApplyHpRecovery(character, 0, 1);
++            Assert.That(tracker.TryConsume(out var healed), Is.True);
++            Assert.That(healed.Hp, Is.EqualTo(409));
++            Assert.That(healed.HpBound, Is.EqualTo(453));
++            Assert.That(healed.Changes, Is.EqualTo(BattleHudChanges.Hp | BattleHudChanges.HpBound));
++
++            BattleSpawnVitalsWriter.Apply(character, new ObjectPoint { hp = 150, mp = 180 });
++            Assert.That(tracker.TryConsume(out var spawned), Is.True);
++            Assert.That(spawned.HpMax, Is.EqualTo(150));
++            Assert.That(spawned.Mp, Is.EqualTo(180));
++            Assert.That(spawned.MpMax, Is.EqualTo(180));
++            tracker.Reset(stop: true);
++        }
++
+         private sealed class Listener : MMEventListener<BattleHudChangedEvent>
+         {
+             internal readonly List<int> Threads = new List<int>();
+@@ -164,14 +230,14 @@
+             int mainThread = Thread.CurrentThread.ManagedThreadId;
+             try
+             {
+-                Task.Run(() => { runtime.HP = 211; runtime.MP = 97; }).GetAwaiter().GetResult();
++                Task.Run(() => { runtime.HP = 211; runtime.PP = 97; }).GetAwaiter().GetResult();
+                 Assert.That(listener.Threads, Is.Empty);
+                 Assert.That(tracker.TryConsume(out var value), Is.True);
+                 MMEventManager.TriggerEvent(new BattleHudChangedEvent(value, "Role", null));
+                 Assert.That(listener.Threads, Is.EqualTo(new[] { mainThread }));
+                 Assert.That(value.Hp, Is.EqualTo(211));
+                 Assert.That(value.Mp, Is.EqualTo(97));
+-                runtime.MP = 5;
++                runtime.PP = 5;
+                 Assert.That(value.Mp, Is.EqualTo(97), "Published payload must be a value snapshot.");
+             }
+             finally { listener.MMEventStopListening<BattleHudChangedEvent>(); }

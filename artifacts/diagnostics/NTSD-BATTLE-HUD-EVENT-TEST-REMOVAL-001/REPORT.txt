@@ -1,0 +1,8 @@
+
+Executed2026-10-04T06:44:18+00:00 by PowerShellPID73768: exact two guarded nonrecursive Remove-Item commands succeeded, execution.json exit0/absent=true. Full source and meta backups include uncommitted changes. Source and meta were both tracked; no untracked target existed.
+Removed classes BattleHudEventEditorTests and BattleHudScenePlayEditorTests, embedded Runtime/Listener fixture helpers and Play teardown/session-state code. No external live production/test runner references required editing. Tracked Assets/Tools/.agents scan exit1(no matches), untracked live source/resource scan empty for both classes/sessionkey/GUID. Historical audit/diagnostic files retain references deliberately. Previously deleted BattleHudViewEditorTests remains absent.
+639 protected production/test/Scene files SHA unchanged, including PP fix source, HUD view, buttons and ripple. No scene/Editor operation, no source behavior edits, no commits/push.
+Independent full Editor MSBuild compilation PASS275warnings0errors. Generated IDE csproj still listed deleted test; validation-only exclude-deleted-test.targets removes that exact Compile item without editing Unity-generated project or touching original Editor. Output/obj isolated in this operation artifact directory. No new gameplay tests needed or run for deletion. Not original Unity Editor compilation or Play acceptance.
+Operation VERIFIED for deletion/hash/reference/compile; governance validator receipt follows. Restore source/meta only from manifest-named byte backups after checking for newer files, using a separately audited restore operation.
+
+Tools/Validate-ChangeLedger.ps1 final PASS exit0; receipt artifacts/diagnostics/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001/ledger-validation.txt. Historical warnings retained.

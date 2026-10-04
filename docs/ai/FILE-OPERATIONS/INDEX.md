@@ -50,3 +50,11 @@ NTSD-BUTTON-PRESS-CONSISTENCY-001 / VERIFIED file operation: exact source backup
 - NTSD-BUTTON-RIPPLE-POOL-001 / VERIFIED: audited source/prefab update and isolated actual preview; [NTSD-BUTTON-RIPPLE-POOL-001](NTSD-BUTTON-RIPPLE-POOL-001/RECORD.md).
 
 - NTSD-BATTLE-HUD-NATIVE-RESOURCE-001 / PLANNED: [NTSD-BATTLE-HUD-NATIVE-RESOURCE-001](NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/RECORD.md).
+
+NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001 / IN_PROGRESS: user-authorized exact HUD event test+meta removal, protected PP chain/other tests/Scenes; [Record](docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001.md), operation docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001/RECORD.md.
+
+NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001 / VERIFIED: exact HUD event test+meta deleted with recoverable byte backups; no live references;639 protected hashes unchanged; independent Editor compile0errors. Supersedes retention of event tests in earlier records only; PP fix and historical evidence retained. Evidence artifacts/diagnostics/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001/REPORT.txt.
+
+NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / IN_PROGRESS: input-key history view, completed-frame main-thread events; Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md.
+
+NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / RUNTIME_PENDING (original Scene/device/worker): input-sequence event UI implemented; approved ComboPanel7sprite bindings only; independent compile0errors +isolated Unity35assertions PASS, actual DRA screenshot. PP/buttons/ripple unchanged. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md; artifacts/diagnostics/NTSD-BATTLE-COMBO-INPUT-HISTORY-001/REPORT.txt.

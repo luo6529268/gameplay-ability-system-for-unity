@@ -1,0 +1,2558 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "de3e64b21e06e7ea600ca9a1d47a997f3e3df6eeac24185f4350e0021f9badf9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "8c0e2b3ff0acf60eb65b18ddda508146b85b2e9052a8678035a781f19dd83b2a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "a2b8c98d4bcd6ad951aae1c1fd6294e982fa9500a59abfabe1d06bc414182947"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButton.cs",
+    "sha256": "ee592bb3a6efb49ced09b09f2b36965cfa8aae549ecc03e2f55571828d49fa76"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs",
+    "sha256": "4237a587cf691e92caca4c94922c7770b0d86f7ac3bbb6ea6d99c1b0d26251b8"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "8cc5614574321908cdb89baeb6be60e41616eb3ca6f6ddef35b34f723269047e"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "9eaaa0b4782974d74a017c367c9d5c77326c31d4281a2d820d1cbba76986c1ba"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "sha256": "ce1ed1d6b97041b91ea559c0072d44335fd5c5bd93760c961ccc22c9c01666d4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheckCore.cs",
+    "sha256": "75420514cd27411a9cb95febd4edb1efdc3c21a1fa31bdf0f85c636933fd492c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleSinglePlayerRuntimeValidation.cs",
+    "sha256": "2478554d5506d711c274196b3dc98d7d164a86693c86375b20168738f6ae92dc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "sha256": "6173b2fe8af48b6070f747be6850646ef22b145029fb3f118224f78cbc6e19a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/NTSD28B11SourceCallerPlaySetup.cs",
+    "sha256": "313090b8ed36a537a9c8f81addf9fbed335c6c7b86334ef661ed64f3422f890d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/NTSD28Q07MenuFirstWindowsPlayerProbe.cs",
+    "sha256": "cb0770784a311d97b5f82b5d5d008d0da2fe3dd15101fcde0bcb699fee88cd86"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/NTSD28Q07WindowsNaturalSkillProbe.cs",
+    "sha256": "e38b1cd7172c65c89a0d2243117ab2395b72e659c3c5fec182f88d77b33ef4e9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/NTSD28Q07WindowsPlayerRuntimeProbe.cs",
+    "sha256": "ae13e15d43bdd57be35e0ad49f8b75b62242d65e6c6828eb7b8dd3ec9e4553ce"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/NTSD28Q08F4PlayerCloseProbe.cs",
+    "sha256": "5619028b1b4d1c7abfb8e5a7dbebe1ea5bc5b82a2284adba28452fd2ebb2cba0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/ProCamera2DTestPanel.cs",
+    "sha256": "b6e9d746acb284e32862933b853fcf8e9d684d4b0260e214d2a8c45ffeceaf28"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiCharacterDecisionFullDispatcherEditorTests.cs",
+    "sha256": "84c6a6291352c893a71c457027e15732bcfc9c8678afcf58ae24cad387967859"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiCharacterDecisionModuleEditorTests.cs",
+    "sha256": "d01f283052ba1b74f068a90d0dcab80c6e6dcf0a597ee93565610b96a45f46c9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiCharacterDecisionPositions17To28EditorTests.cs",
+    "sha256": "c27ac51842a0d94ff5bb2f13cfa82168092f1707cdd1b65e1e08c5624e7a875c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiCharacterDecisionPositions29To37EditorTests.cs",
+    "sha256": "5031b75df1692180e10836dbf37a99c951ceec98cc42b92be2dbe4847b898710"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionAuthorityChainContractEditorTests.cs",
+    "sha256": "0129d4dc588e4588a9ecd56e86162173ee020707450819203b9a252d4bca561b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionKernelEditorTests.cs",
+    "sha256": "d7c6380ad13bb5eba2aea25d275a36b05369122dea6319a077ae4c74ebca21fe"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "sha256": "57b666b3b1d00049729c038bc56c974cd9695bf3e4def6b7446a80f9cd32c693"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiMoveModeSnapshotEditorTests.cs",
+    "sha256": "47d917c7263972df8e770db9e59fe23327c35f663f3b457058e1a560cb2f1d7f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiNearestSpecializedFilterEditorTests.cs",
+    "sha256": "bc2bcd9a6c01640c3969329b5109cf0b059c95fd543a48768acdb1df6be7b5e7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AirRoleNearestEditorTests.cs",
+    "sha256": "871c45b0c6207879e2f754cf0028fb94d66d26eca0e15004af15713d001fb82e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingKernelEditorTests.cs",
+    "sha256": "4a337db6bdfc27a4ac3c12fcb72243f1c8acc856f0783971ccaa9849f6324f15"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoACandidateEditorTests.cs",
+    "sha256": "f7c11d9776608a003e3821927456427c14548fe7c8b46b45b1f767af758b0baa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoAShadowEditorTests.cs",
+    "sha256": "bc9a56b51bcd63824a959ef2f6ea8a320aed3658e25462c041a466c3bdee0554"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleAuthoredStateResidualPlayModeProbeEditor.cs",
+    "sha256": "20bab5f9824a40a126b8a9ce8a142b27ccb904b0b6e33d50525ccdad8d9dec3f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleBackgroundPlatformPresentationEditorTests.cs",
+    "sha256": "56b0ebf777eb670231b7b73fe93bcce0611e8c7a0ed6e87404807a82e6c6acb9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralFailClosedOwnershipPlayModeProbeEditor.cs",
+    "sha256": "c336cddc84127b0527d66c2bb8358b7ba6a452af6068044f6e0ba7f2da65c861"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralGameVisibilityPlayModeProbeEditor.cs",
+    "sha256": "994e988c450355738aa20e9ad8e2b2223aa628e656b86b76bb9b7ab9b6ae5626"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralLivenessIdentityVisibilityPlayModeProbeEditor.cs",
+    "sha256": "4ec5ebd178ab88ff6e0b60508b9754361862862f61d268262a28024425e12e5b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralSceneViewPixelPlayModeProbeEditor.cs",
+    "sha256": "cc2e39ab81f150041ffbefda0ddb91359f2a51413134b680030dd10e1bf53913"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs",
+    "sha256": "bd1795607459d7f06d7dafac0d021334baca34103c9b7cbb9270189f48d8e61b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleComboPlayModeProbeEditor.cs",
+    "sha256": "a03f3b969fc2f881523771b5d8218c54b9823e3d72e63cd30c3d6bb4c3e0d486"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+    "sha256": "0feea4aac7a8830fb67eac5ca2aa3b82d4040d068e40346c5e851588f4c5dbf6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleDynamicMeshSubmeshGrowthEditorTests.cs",
+    "sha256": "03413c79b937c64e775a3446900d385468125594447a3eb1224f7f06072bf30c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPostFrameTailPassEditorTests.cs",
+    "sha256": "9f6cd8ff28d00210e419908d06515e24769d7134328c257486c331c691c6d142"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPreFrameBoundsPassEditorTests.cs",
+    "sha256": "9d0be98e4a4efc214869d607e9b80832006ef4b8ce7d22a518e57f1c8b8409eb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterStageZPassEditorTests.cs",
+    "sha256": "ff8a57498968bcbf420ed11cb559344bd75aaeb6cd896ed76adb98d3ac3bd8c4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsCooldownPassEditorTests.cs",
+    "sha256": "0fb3e2538632891fd2a09421d808b9817361acea36c82255f3183daf500cac89"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyCharacterHitConsumeEditorTests.cs",
+    "sha256": "d7c05a52edfa8ca61a9a904aad73101b08ddc6da2ddf3577d4ed6d57dc03d275"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyObjectHitConsumeEditorTests.cs",
+    "sha256": "7ae779eae327d5c8caf8423d99d3eb34761eab0a15f0abfae5ce7dce0f8134cd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsFramePostProcessPassEditorTests.cs",
+    "sha256": "6d19e2f033cf95bb8b96d68836cf4660321d3073ea33a078fed87579ca1c954d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsLateTailNoOpEditorTests.cs",
+    "sha256": "b1c821ab759baa8fd7e2c7a344314ab2145292f6363ef7a2b4937a0e37bda9f5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsPositiveLinkValidationPassEditorTests.cs",
+    "sha256": "6bed395e1c10fa3e68316dcb97efed6c175f58075ba44e6880ef1e94f0dc151f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsReadOnlyShadowEditorTests.cs",
+    "sha256": "e572d228a4f8e80c3f9192702005f5440c3511f54b14415e3063f92b4ddf32cb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleFunctionKeyModeEditorTests.cs",
+    "sha256": "0286d32d0423a48af88832e6ac0cd70164af5363dd1f6f24baabacb433d93236"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleFunctionKeyPlayModeProbeEditor.cs",
+    "sha256": "d9a4e8d60c552514a5e8da1459be1496aedb6a3d982af03500a8dc7cefe839ea"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleGrabCpointLinkPlayModeProbeEditor.cs",
+    "sha256": "d54f576f3cd68862573a77277ebd7e38b395fe9e9d55a5d223f6276d554eb07b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs",
+    "sha256": "6a4f0f2e15c6cfbac0a84d86f87f782b0eb5527e94686ee396d64cbe66f632c3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "sha256": "db0ac55714ffaec40f2265466fe16c8f8b9b44177f0c47c61e96b47edbccdea0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitRecordWritebackPlayModeProbeEditor.cs",
+    "sha256": "2ffe5e0f0dec600d96754640de8c54cec424f629c7cc3670ae6db9376c627290"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHostControlPlayModeProbeEditor.cs",
+    "sha256": "7e9dfc10530df9218a97d3c6753ca013a5606e5f36ded68ac0456add28e7a2b9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleLockstepChecksumEditorTests.cs",
+    "sha256": "859739152a9d6ede4e0add06c160908ff83232c7b63fbd66ae9f526b1b2eada2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleLockstepReplayJournalEditorTests.cs",
+    "sha256": "453039996ae04a1c0fc270a73f6059c5cb60fb0269339f41bf17ac3bc8f720c8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleLockstepSessionEditorTests.cs",
+    "sha256": "0afc051b88d570415c9625d7f6bd7fe10e2cf2a1b51c12015db53aba615cad02"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicReferencePoolEditorTests.cs",
+    "sha256": "fbd9e208e668de4e3ff1f4a2a563e888b45190e3fee87e40e7fc755ee158a077"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleManagedMemoryBoundaryEditorTests.cs",
+    "sha256": "a6b4d1ea8d22485a6c7f27c030ab168f08ca40b4c95a3d5e32e9a1de31e59a04"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleMapAssetConfigurationEditorTests.cs",
+    "sha256": "292ed3a49ea45da20a058151979b7b51233a871870275084c0b047dca5045d5b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleMapBoundaryAuthoringEditorTests.cs",
+    "sha256": "6758de60ef5132ad6a96f2bd0b71ed435f263923ef191066f85a22b5d69ed639"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleMapBoundaryRuntimeSourceEditorTests.cs",
+    "sha256": "df63d69526898f062282468f7ac3b1cd44b4f95fb0ea6d59f7693f574e6c1b23"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleMapStartupConfigurationEditorTests.cs",
+    "sha256": "5f86fa3d1fd0a88095e2b025b27f3b9f2a4ad15149aad9b80a4721aa41265bfd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleOid5152MergeSplitPlayModeProbeEditor.cs",
+    "sha256": "96f3b88cd0cc874365bd9f0ea37dba2060087e3c453d3a7dda96738335c9e88a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleOpointLifecyclePlayModeProbeEditor.cs",
+    "sha256": "6cb903bb064b7a0772e5b1cbe962035f1f19fb680865b5175fc26aef8f93e55c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleP1P2PhysicalInputPlayModeProbeEditor.cs",
+    "sha256": "456569eb218c773cf0f659d1f50f98aca900edf7d8ff8910f02ad005df9116a3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleParityStructuralWitnessEditorTests.cs",
+    "sha256": "e43dfb5b3079ac34e64e948814ccc8ad5e0bc5d91e5ad51ec47560af3ee6d311"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleParityTraceEditor.cs",
+    "sha256": "beccab6a0dff0ea8567be219806fd5d5af118cdcb8354c3fa85cdd2d4882ab68"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePhysicalMovementPlayModeProbeEditor.cs",
+    "sha256": "1d664e395723d016879408a6e15f6f34ea780e3d3825d2aec58d64b340f43aff"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationBeginFrameReuseEditorTests.cs",
+    "sha256": "184d9088fa9044f1db281a2c68213c9ceb8830678a7dddbdeb04762d2488c0bc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCommandWriterEditorTests.cs",
+    "sha256": "ee2ea27a8a17b93592e81e767ae08a0c69259ba0ed7307375937dcc46b7c5efc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationDisplayMotionEditorTests.cs",
+    "sha256": "50ac7b31fbde782be2b1b7a93e74dd963a6bc32bb88d0a7792ac10b1790ee853"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationDisplayMotionPlayModeProbeEditor.cs",
+    "sha256": "33b176391495449f75010e30be403227409790f82bbc75cdb9eee64a6e8d3e89"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationInitializationEditorTests.cs",
+    "sha256": "59f139559f95914c9ee9098dd62bc1a5d50debe7277cd770ac5302c6e056b363"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationMotionSamplerEditorTests.cs",
+    "sha256": "01f8fe4f721eb9770d93a5b59c67be128101537078c2d7a43a736808b4149bea"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleRandomWeaponLateEffectPlayModeProbeEditor.cs",
+    "sha256": "13b6eb66f6b1befc59c0f7da4b20742ea9d78b9d44e3afaa0e7fba3ef8abc2e2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsActivationResetAlignmentEditorTests.cs",
+    "sha256": "636741f4adfaebfcc8c6ea97f2cadef57cf91df8005bfa5c03e82556ae498c61"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsOutcomeHostWriterSeamEditorTests.cs",
+    "sha256": "5be78724ab5604c1222eed745b5e5cbb606b98377c47221ecc2d7a9780d313b7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsReserveTerminalIntegrationEditorTests.cs",
+    "sha256": "902b531add0fceeca68c5abcfd5f5daa673cd3013349e56c73d93d747a300046"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsReserveTransactionSeamEditorTests.cs",
+    "sha256": "7b748735b2dd31348b846425ddff6346d9965b50962977c6089383ee0bb9f6cb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsSceneHostTickAlignmentEditorTests.cs",
+    "sha256": "ce5bc9fc0647478071a5eadecbf958c6614ba7fe8c030207818040ddc2a036f8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleRosterLabelBootstrapSeamEditorTests.cs",
+    "sha256": "9812a5194db68ff3dea0f548e7240a1c93b3c8457dcd564e68926bcb8b8c38ea"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleRuntimeOrderedShutdownEditorTests.cs",
+    "sha256": "46d1c3335e8b5eb1268e5e6c2691fa01d6c9f5ed96026f565bd1a52a56db07bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleRuntimeSelfCheckEditor.cs",
+    "sha256": "9ff97944af5f0f09333cc4c6dcd9dac2645963376f28f02441a3a217a76698a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleRuntimeStructureGuardEditorTests.cs",
+    "sha256": "27ab0592dc82da0297e53cc6a62f566a5c8db77e13047e0a5941c934b8a2fe78"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs",
+    "sha256": "cef98797cfb00d7d8ed290886e10d69452ce6e539e781d2315e584cbf6fb2607"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSinglePlayerRuntimeValidationBuild.cs",
+    "sha256": "a98e31437c2a9f4bdf9de887569db5600f18a76d36c0859e9aba29d84d055f0b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSinglePlayerRuntimeValidationEditorTests.cs",
+    "sha256": "058ab55bd7237a04ae60416310dc5c57093f82782444e77df34a626813794c8b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpriteCatalogGpuPlayModeProbeEditor.cs",
+    "sha256": "3009f0e86472a0c8ecf9a2105d75a8c2805c05a034303b5cc0feeb9d912af2c1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpriteCatalogPlayModeProbeEditor.cs",
+    "sha256": "c013a3af48908635672774a0c7291c1eadbcdf3eb63d1e95849ae841aec440af"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpriteOverlappingRangeEditorTests.cs",
+    "sha256": "34cbe68dce3113dc0698a0fd4571ca7e973989e0e87ff4d4c8f6049ed5e71a61"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleStageCampaignLoaderDefaultsEditorTests.cs",
+    "sha256": "2c9e9344146703230b3dd87a583bae2f6a09abcb3f790d7c560009d5bc9307b1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleStageHostSnapshotBoundaryEditorTests.cs",
+    "sha256": "d6fe5a388682711821887f486feacfc76fdfee13e21594f82f69010e021e557c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleStateSnapshotEditorTests.cs",
+    "sha256": "d9839199e606806d7a1617640cf839723d7d8f24b1a6a0089e271f3442d93f77"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleStateSnapshotRestoreEditorTests.cs",
+    "sha256": "845efc2e1eb37ddda780d271bb7c77bfe77d9a154f4d1b70f03efba492ff3ab0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleU6ProductionOwnershipEditorTests.cs",
+    "sha256": "8aef92e97350cd30b1e81a203d8b2f8379d10a5ee841aa50af498793672377cc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldCharacterShellSnapshotEditorTests.cs",
+    "sha256": "397dcbb20c2fed12880cdc3aebb1fcca36208d7426dc90adf2a7e28aed6ad1aa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldCoreScalarSnapshotEditorTests.cs",
+    "sha256": "12c7457c892d1f1df1a4cae0fbf32e1bf4cf47d9d9029275476641f6e020379e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityBaseShellSnapshotEditorTests.cs",
+    "sha256": "cbbf22fc14b68b90b02c41b280b7ae4d896766ebd2ede03433044bdb0775de60"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityRuntimeSnapshotEditorTests.cs",
+    "sha256": "de2ad01551c45f7f4e48800dca4119f8290729e152a2a4676c97fc3e9ea31b97"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldLivingShellSnapshotEditorTests.cs",
+    "sha256": "6e2158fcfc4426432a276db3c30848c4601c3bb86523f493b10adc4994f0f749"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldPendingEventSnapshotEditorTests.cs",
+    "sha256": "6e2ff7d2c51014aa57d3167cf01f553ec94037ae12e034c1b487b6cd4b148916"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRestSnapshotEditorTests.cs",
+    "sha256": "1c688dee7980e2ddb4face95940b5599cbda63020dfb96bc78e4e1e1d748558e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRosterResultsSnapshotEditorTests.cs",
+    "sha256": "847bce0858f320a30c7be5561aca2a67067ca7032f13b8a500c2f23b8faacf3f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRuntimeSlotSnapshotEditorTests.cs",
+    "sha256": "d4f0e37a7603599befbc2256c13f4bce8cb2c36ccb03e201c208879a484a5c69"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldScalarStateSeamEditorTests.cs",
+    "sha256": "6e99d59c6c8f635da9c3ae18c5996ed34eda471ff60dbb26219b8a9b25150c4d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldSpecialOtherShellSnapshotEditorTests.cs",
+    "sha256": "b1965d378ac8e719fa72af1e7f661e15edec34f236cd68e7dab9d41e3924888a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldStageSpawnSnapshotEditorTests.cs",
+    "sha256": "6b3a9d9e051fb53e9a9e3eb1d7c62f5a606a31159114cb4f783f18c63867a815"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldWeaponShellSnapshotEditorTests.cs",
+    "sha256": "2d7b46a958adcfec0900e1a016b3c58894cb1a77aaf5260eb81a54424ce21505"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterAssetDeploymentEditorTests.cs",
+    "sha256": "a804a00ab06c17aa55c16ce87ed710e19ec7ae7ef4d18bb2056d2072ebca799f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "sha256": "662549e7d0ba0479f39318245d9da6c20ffa9a62f0e515d3f6e6ab19c75b34ae"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CollisionSnapshotRuntimeSyncEditorTests.cs",
+    "sha256": "a9cca79921ae32252cd677b8f29727afb719b968bd84b9df143bc5f7f248f789"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CPointResolvedHurtActionAlignmentEditorTests.cs",
+    "sha256": "e5505565bcb8a65597bbbc1683b45960f26a0acf23d0da7012f9261412fdc549"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/EarlyFrameAdvanceOptimizationEditorTests.cs",
+    "sha256": "999470df4dc9048c1dcc6c55c645d501b1effa3f9624ea41f7e9bb9bf3a7f095"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalContentClosureResourcePatcher.cs",
+    "sha256": "117c1c113c664798095a73ee2ab2efd2dab06d06c08c55951e6af4ed54a157d5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelBloodPointCatalogSeamEditorTests.cs",
+    "sha256": "f7d5fab8a65afbf808fdf8b47ae1985b75ee4d6cf1d8b24bffdf99a248b278c6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelBodyBoxValueSeamEditorTests.cs",
+    "sha256": "3e83a068f30eee7992ce9f2c784dfe0f6ffb24e8ea4b1910fed6933b9aa011c9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelCatchPointValueSeamEditorTests.cs",
+    "sha256": "b25082133f88fe09ed2c51675c99e5d36537587537940b4bd3eab4bdee846de1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelFullReturnCommitSeamEditorTests.cs",
+    "sha256": "25a1f9432955edad5110651ebef9e91f24dfda34b5c482321e29d11a53bcc74b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelObjectPointValueSeamEditorTests.cs",
+    "sha256": "79191ba15be95f8e5c84e08e383b6e73718c68a20b131458ab24c5ced667e40b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelStageContainerSeamEditorTests.cs",
+    "sha256": "7299a4cbe4e8f29654adc8e79533d6deecec1ab3232493b997dcd4d62d7edf0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelStageSpawnValueSeamEditorTests.cs",
+    "sha256": "1c030c27c16c55b892523f599c7f109f1ece98bfc72d6f327177dd6f29dc666c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelWeaponPointValueSeamEditorTests.cs",
+    "sha256": "98714aff403bd2db3190867a696535ab27628b2ae818adef9ed5ac0bb7f5339c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelWorldBootstrapFactorySeamEditorTests.cs",
+    "sha256": "6eb9f982cb88b03f1c1cf8f49a462cbcd0350b3434ac15cfd732e83a92d412ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "sha256": "0337accc572eee9c7fdfaa746a3a386c21df4d1f6f0ac353783ee19e3978db2d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameInputSetSeamEditorTests.cs",
+    "sha256": "8659a1a32fdfbc20b2f2f1677fea7d9cbd33ff76ab96f9019267a70e41bc5c52"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameMultivalueParserAlignmentEditorTests.cs",
+    "sha256": "00ee30a51f961e4cb80d83c34ecd2f04f124bf970147915f98ac62cd55ee22c0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/GroundRoleNearestEditorTests.cs",
+    "sha256": "d90db3a076d15fc1016a8e93e747d3058d6a0ec4087592131c99ec863626315f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs",
+    "sha256": "94f711fd8e2328dbe6df91feb9fb9cf4d3e06d549b1bc6ba074650707c2df3c3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/ItrParserDefaultsAlignmentEditorTests.cs",
+    "sha256": "3d786a40ac0d1f93284ad6aa4097ed6795d3bb996f0bc4ae5c94474ab687e3ae"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LateOpointRuntimeSlotCapacityEditorTests.cs",
+    "sha256": "00573161135099d6c4f7751c807fb5327d68fe2d637d02c4c1bdb0e1515c3afd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LateRuntimeSnapshotBoundaryEditorTests.cs",
+    "sha256": "6d08992b259e8c98745e9aeb2a06bacff73367d61266f8246773246ff953668a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LocalFrameInputProviderEditorTests.cs",
+    "sha256": "8dd4270c20c0e1b1d6529b926b61e8caea90c142ea9891502d025e378400cc39"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LockstepChecksumHistoryRingEditorTests.cs",
+    "sha256": "c9f33582bb4a0814b6a0ebb6354678c273c8400ca3e7f0849936bbb5d2642f65"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LockstepFrameHistoryRingEditorTests.cs",
+    "sha256": "345a8cdac72919230a2932a2b7a8ce6fc1255ccbfd73e7584cbeed2d32bcedeb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LockstepSnapshotRingEditorTests.cs",
+    "sha256": "73c7a3249b8d894abc8bb4ad36eea6480f670e3d911ae5a4cb7ef40508857c19"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LooseQuadtreeNearestEditorTests.cs",
+    "sha256": "f3006091de2c1038d872ca51a19405a9cfd3a129fdee813dc46086142aeac77a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/MenuCarouselVisualEditorTests.cs",
+    "sha256": "0582c0941047ea83a477805e4a01f0eca2deddf1f443aebd5bead499b51dffa0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs",
+    "sha256": "f180695a0fc277dd55ff33714f107d4be4512b134bda42f5fe3e5ae4418b6a72"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/MenuLoopCarouselEditorTests.cs",
+    "sha256": "8f507529d4fbf13b9b37b52e961afff92601be05cace186d4fe2890dafe5f3bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiHeldRandomEditorTests.cs",
+    "sha256": "df44427281a68852f917f712ab8ffa7b41bff0b839d5a9a21744f73a4754ec0c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiOrdinaryNonHeldRandomEditorTests.cs",
+    "sha256": "5da92ead95dc497335c4984a161b89c68e0378869543953dbe74481395f45911"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiPickupRandomEditorTests.cs",
+    "sha256": "05a3ed4c06960f997fcab659525580cfd2fd218d543bc725afaa697bdd945632"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiRenderPhaseConsumerEditorTests.cs",
+    "sha256": "e9cf941d4eb4f435e9a7319c92152666c74ee56cb12062ca5084cfba8ea71b77"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiSampleProxyTwoPassEditorTests.cs",
+    "sha256": "ac0e937f77082446d7e6627819232f7165c2cb20c0f8c9c6626c42c8ac69e874"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiScriptedRandomTransactionEditorTests.cs",
+    "sha256": "d1e0eb842523ad016ea7b66e5f1096c7047d55fe32094d81f523fb23dc700701"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiSpecialProfileRandomEditorTests.cs",
+    "sha256": "325f4a7a879d1aecf2d43e55741a74e0ecaa3b54b2589a858c758118dc0d823f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiSynchronizedRandomStreamEditorTests.cs",
+    "sha256": "a07bbdb7c6a3864afcdf52416e384ea225581de06be3c3b0733bf967fb65ee34"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiTargetPrefixRandomEditorTests.cs",
+    "sha256": "fbc77bc61900c648f5fe2e71e82c2e9008c24e62bf86dcd0e6c267199b864109"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AppParticipantSourceBirthEditorTests.cs",
+    "sha256": "b89869934849eba428a89def005c4b83908b5b9dd7224bed6a94887288cb28d8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0DirectEntitySelfOwnerProductionEditorTests.cs",
+    "sha256": "82892f1f7c9010041da96fa7c607381b97757aa29b56e0e80c0b04b78ac82b23"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0DirectRevivalDefaultsProductionEditorTests.cs",
+    "sha256": "7b7fce75366d984a7defa4417ee420b42b6000daaddde6a8dac4b4739cdb2c92"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0F8Owner99ProductionEditorTests.cs",
+    "sha256": "34167daba6e3f4372b3f89462bafc627283162547422c42419d1082c7721d0c2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0ObjectAiTarget3F8DeconflictionEditorTests.cs",
+    "sha256": "ff4a8bed4e09bc01084de3049bda3b1a5a2d1c60a17ab981f320d994ffdcfc28"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0OpointOwnerPropagationProductionEditorTests.cs",
+    "sha256": "e8e3dfa55b7af6f46327887dc1871917e6a3e91d95322e8295bd4a268ae5b455"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B0OwnerSlotProductionExitEditorTests.cs",
+    "sha256": "047bad12c23352b9db3da2361cb1a1767611fffb63b409218ae5ab87ad6c0f15"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+    "sha256": "8965561f1600fcc59ecef99b945f4f996942b273a27ef23e0e3a5ea35bbe1c1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11ContentSourceEditorTests.cs",
+    "sha256": "dcc3e289ac2643816782af8defd5b654abbec3eb612477cfb7ef882ed9289cbf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11LoganCatalogEditorTests.cs",
+    "sha256": "f710a4c55543026a08a548bc17213a60911d74eda4ae5ad99607aace60d051d6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11NativePublicationPlayProbeEditor.cs",
+    "sha256": "e37c83a7bc7e74accf00ebc63f8320ea4bc0bb64d7b1854bf641876b3cb500f7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11NativeSpriteRangeEditorTests.cs",
+    "sha256": "d6321c2ef31510f55384fb19d0a5233d5c1be6136eba3a40e1eedf1d563e466b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11PngSheetAlphaEditorTests.cs",
+    "sha256": "2f5a39d43628581ce918e9113769014e0f8d5451f4ddefaf166f8a2138902f78"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11PngWorkerDecodeEditorTests.cs",
+    "sha256": "253050d724e15dad1bc3615ec13d4b3304164d23db6dedcc848f002953ab7571"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs",
+    "sha256": "4ba182bb3227b9a3d72b5e4830c308b54ff3f9139f0711ff6b602c0250e0a213"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCallerPlayProbeEditor.cs",
+    "sha256": "6b66912ef3d39b01a6856de854f8258c94fb4cf23a0b551f68ea57c4f8fc105d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11VisualContentCandidateEditorTests.cs",
+    "sha256": "9e5ad174b8b22a758bdf3bd842413995d05fce4e8275c63573b3f4ab472f9a6d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B2AiOwnerSlotRuntimeAcceptanceEditorTests.cs",
+    "sha256": "fd541bf220f62bd0402ae59b0e8fa75c1821718764a26a1c8af5089c3d45fbf0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B3LegacyLifecycleChildRetirementEditorTests.cs",
+    "sha256": "ef281e66a87641cf28ae2da4ff1f1a874e950ea52ca3396a2d360d1f0bb3e4cd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B3State501RetirementEditorTests.cs",
+    "sha256": "8177059935fef16f3310bd2f31e979c9ab2a393275323907ee603faa0b960995"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4DerivedWeaponReferenceEditorTests.cs",
+    "sha256": "001e87800e46fc8aca1866133f15f95c7e8253ef7a179a431dbffe59d4c3376a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4FrameMotionKernelEditorTests.cs",
+    "sha256": "15100dee7d08d5c66c67b1ca293d5446c4a64e3d274dc59c2f65f397ae39301c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4HardMotionConsumerEditorTests.cs",
+    "sha256": "1c14c47c8d5319b5ab2392e9aee9d4d0e94b7d789d9a6c88df37cdd5b9bc7487"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4IdentityXExtrasEditorTests.cs",
+    "sha256": "aeaa5da4c12f4841159a393e8232b5f32a4160799fd71bbfee0c02904bd6b6f5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4RevivalExitAuditEditorTests.cs",
+    "sha256": "7487fd289060c5271b0e23b2d38d3b2e422ced6c1cc17b93bf7c9d5aff7c7fa6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4RevivalNormalFloorRngProductionEditorTests.cs",
+    "sha256": "9067d8ff7bbc0a24dc67be43d01e1bfbbcd659e0329a25a75ac53b62cb2483d8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4RevivalParticipantGateCorrectionEditorTests.cs",
+    "sha256": "57405cafc226c2c62a0a1678bb46d427220e603b84aed5f1d6da1b21c99ed47e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4RevivalQueuedContinuationProductionEditorTests.cs",
+    "sha256": "a72872628ec725e1a01f7da12a45bb1ae6b703beec713bfaef1af55d0d4f3810"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4SharedType1ReferenceEditorTests.cs",
+    "sha256": "0319831b95ec7f7268fa72275cffc70bfef8d8f1370a96df7c7cacbf5c232b53"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4SharedType246ReferenceEditorTests.cs",
+    "sha256": "a7d501de5e308c371be93ffc94e82ffb19fd4e349671fc8ff616f4dc952d3257"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218AirborneEditorTests.cs",
+    "sha256": "9482ee6c724956a960acd8830af6b2353312fa2786d9c1c1abd6928b3f4be290"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218ContactActionEditorTests.cs",
+    "sha256": "8031b8dffac9685e396dbe24cad66c4b329af70ef4a8013157ef433022499b85"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218EnvironmentCreditEditorTests.cs",
+    "sha256": "7aea2da6c757565de0897ad7be20ba8b8bd58a7c8b9fb1f494ca2ddfacad4dcd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4StatusMotionCarrierEditorTests.cs",
+    "sha256": "e57efd96477b832a810a3ce38f598e57db0d46019d6c4f5f33a3d9113c7ad70f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type0OrdinaryLandingEditorTests.cs",
+    "sha256": "859daf6d0aa8080aca3d45d42d4eaa9f50a7e26c38f4f12cb3b7f9614f229b21"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type0PhysicsCoreEditorTests.cs",
+    "sha256": "2bd82e8c795be14aa93bb648ed6167681d493dae52d2e1401eada6600c4238c6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type1LandingEditorTests.cs",
+    "sha256": "3e65f5f2b51d549ceb6c425131afdcecd82fed69a60c4cc81eaed1bb82f10a0d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type3Oid999ReferenceEditorTests.cs",
+    "sha256": "0d16695aef6e46517603083c2b4c42d41a55c85c0bf092d7cac5bd9be2e22b4e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5CandidateEffectTypeProductionFilterEditorTests.cs",
+    "sha256": "15c4c789b7ce071ca55828703fbb86916f2e2f81f5f29cc7b65b162ff234aaf6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5CandidateEffectTypePureCoreEditorTests.cs",
+    "sha256": "364749f22067e2eeae289ffc95980981a7d1c4109f9afe0827981e54a4366dc5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5DefinitionAttackingCarrierEditorTests.cs",
+    "sha256": "913bfaf1fe87870e9807d9757bdc231ae251db1ed56606761dc30cfb6b0498bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5EffectActionOverrideEditorTests.cs",
+    "sha256": "c723a98d81a718846bbc492bdc4348b686595215b74e0c0f9d08cc9c5f8db444"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5F6ResourceGateProjectionEditorTests.cs",
+    "sha256": "a7c7bb4a68e4618072cb2a8888aead33a5240cbb21c4dd7afc83d6ef1058ba75"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5FirstBodyResponseAtomicProductionIntegrationEditorTests.cs",
+    "sha256": "16e98762fd377ccff8249e24751df45f4b4df38d4ee54619efd257d8046623ad"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5FirstBodyResponseCarrierEditorTests.cs",
+    "sha256": "5d832eb6cc07a991c07e5de47affeb972013dbe3ca43cfb65d7e107c1e9d899b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5FirstBodyResponsePureCoreEditorTests.cs",
+    "sha256": "f6b0e16292306b06c5f7ced74715560a32d9068b59dc76d99271d3e7e7c1669d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitCandidatePairSnapshotCarrierEditorTests.cs",
+    "sha256": "58aa10060bcbcf7494a680376ec5eb69d19fa8e46856f31936f0b67774ec0e7e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitDisplayStepProducerEditorTests.cs",
+    "sha256": "2326155d8e8b49ec765684d925e482cc6f257d7112f2150bb0d0dacf489269a7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitGroupEligibilityAtomicProductionEditorTests.cs",
+    "sha256": "c62ff623a71e41f62481debec8b59c1e3ecc3cf97ae2bd60ac08c08ab2bac05b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitGroupEligibilityPureCoreEditorTests.cs",
+    "sha256": "1e1bd5e11d4b3c56c50e8169c868e8508a23fb5102ccf9eb3ae71f53ff118337"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitResourceSuppressionCarrierEditorTests.cs",
+    "sha256": "4e8060a04d1072efbf31fa0bcec1578e3493cb91cb40fe99dfb2b68ad5c7767e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5InputHpCostCompatSharedTransactionEditorTests.cs",
+    "sha256": "839283fd0c51c5249fb13837ee4afa6346a568dd1ecc2d3a6d9bcb6911bc4f26"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs",
+    "sha256": "d55275845b8d6abe8d5b89ea7dd1fac60eb60ecac4762d5eb5ed892115a04537"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ItrStatusFieldCarrierEditorTests.cs",
+    "sha256": "28a0704f521f6a04ed22722833bfd1c657109a84890fd29d282cf205c0a34cc8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind0DirectPostEffectActionEditorTests.cs",
+    "sha256": "0c4788163b522ca628d55ac2b63b79a422520fb881551f305cf394af158f9388"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4AtomicProductionIntegrationEditorTests.cs",
+    "sha256": "6aa1cacc886b6e68cb32095b9e643a0e4e117a32fa0e8c2757a8308cfba07a1a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4SourceCountCarrierEditorTests.cs",
+    "sha256": "b007cc9df8c42a7be3b78f6c0f50815ac13cc0d2e8ec20c7630be672b6013cbe"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+    "sha256": "c3ed82434ba0566187d6cbeaae0f887a1820323d5ae53315c91e2788e4d6be6e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs",
+    "sha256": "09ae4f9b2402301a63038392eb951cd252b0a6cea8fd67d296bd32777ece22ba"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind8EligibilityPureCoreEditorTests.cs",
+    "sha256": "e04b807400ff519fcf09aa7057d441ecf0c24a345d59de0236ce7c29387291fb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5LegacyKind16RetirementEditorTests.cs",
+    "sha256": "3b8459caf8de5120789709f78b404bf74f2fd64dac258d53fc338c8a4dd86a1a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+    "sha256": "dbe565d25fe2acc76e134e36a1690645960375629a87c4db65eb1ab1e7c4a927"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NativeComboCarriersEditorTests.cs",
+    "sha256": "7f3790eeb5ec9bd01a3438b7d214f86967d01eefc2fad124f7edba61a1c5f6e4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NativeComboExpiryEditorTests.cs",
+    "sha256": "034a7a7d311c9d5abefcee9c778476769a3b4cace772fae43941335516261c6a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NativeComboOrdinaryProducerEditorTests.cs",
+    "sha256": "d56f726e305bcb5d43f1e62f84cf89a96f0e4ff2d5338b0c65d54f2bf5516339"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NegativeEnvironmentRecoveryProductionEditorTests.cs",
+    "sha256": "32d71cce7151f284bc816ff2ea2979bab304e723353abcf76f9873e57065e73e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NegativeEnvironmentRuleCarrierEditorTests.cs",
+    "sha256": "c950230012140850c86ee3abed2d02801e333c30cff7e89206f87ebfca264811"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NonCharUnarmoredDamageScaleEditorTests.cs",
+    "sha256": "1ed9ce20215b895ba342fbdabb505b3b04288627269e9984d1c2403fc3411bc4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NonType0EncodedJoinEditorTests.cs",
+    "sha256": "0e7fdb1b13bb3dd7cf4624c81b916958b08d6a5c8c6fbccf8b43668dcd3031e2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NonType0HitMotionArmEditorTests.cs",
+    "sha256": "47838e90351a7cd4ee752c91dc619c4205a763275bcfb4bee10482743fcce8fd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs",
+    "sha256": "63a1b32481e3bfdb4bf37ad2c633559fdc1aedfb50d2a3f02bf7545c2fdefcc5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryDefensePureResolverEditorTests.cs",
+    "sha256": "3cf997cb91d4d833a8acaf106cf55dca1a8e34468f494e1a464a9eb272c0fd8a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryDefenseReducedHitProductionIntegrationEditorTests.cs",
+    "sha256": "420aeedf3b66b5ca7d0028a7943e4dd52ca14e09ca980730f7c93caca150ea1d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5RecoveryStatusConsumerEditorTests.cs",
+    "sha256": "b3c7851a112d3a14e9aa73ea405a7a9ec591fa6075c489077f5aaff44b83db34"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ReducedHitDamagePureCoreEditorTests.cs",
+    "sha256": "6ec2d09c07df4a870b1a7748563bd4be6fa830e6045e0bb2c59d464ad70012ad"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ReducedHitRestPureResolverEditorTests.cs",
+    "sha256": "9727c5464e1f22c61f03edc02762e569526bc5f8c161abe6a4316ac304dd80b6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ReducedState2000AwayDampingEditorTests.cs",
+    "sha256": "a2354036adf49a746f91958120a980f66c8409b378dbde466f725b7dd8971015"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceAttackerResolverEditorTests.cs",
+    "sha256": "8261d020012eb3a0c11d1d9d957547afe092d483f6a73062a69efadd67d8099d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceInjuryPureCoreEditorTests.cs",
+    "sha256": "8ff9ff8de9bf00915732a04d32548f0b3f37a7a7f4c1b31a9d3045922acbe31e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceTransactionPureCoreEditorTests.cs",
+    "sha256": "6cac036a2fcbee2305e6c40e4f363f38aebbc709e7bc6995efd1bde714581d57"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchAtomicProductionIntegrationEditorTests.cs",
+    "sha256": "c24299f7bf5c41e1de2f4ae8d7de2459f98be5939a1fd6a149ea09049c899c9a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs",
+    "sha256": "d5e4e51b2130f0e2755f7318fa39dcc0ad102cdb3bfb910676f70a4033e49b10"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardHitRestDataCarrierEditorTests.cs",
+    "sha256": "bc022bbfc72a702b0f0d5f9eef5379da52f284cd98352ac9e435414bb7781ff5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardHitRestProductionIntegrationEditorTests.cs",
+    "sha256": "dfd210ab87f3e9b4f333ed792a4a397a2d5531978f97413f5abf5a81e418e203"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardHitRestPureResolverEditorTests.cs",
+    "sha256": "8e6b224eb5309252ae1aec46de3cd68cc86deed129615d3423f6fb924c156f1a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardReducedKnockoutProducerEditorTests.cs",
+    "sha256": "38a47422a02adde7600c279b3d2d1bfafaf9f386490f704fa0fb561fbfc1dc0e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SystemTableAttackerTerminalProductionEditorTests.cs",
+    "sha256": "9226a817bba4f3feaa2e00fc20273ca04d06cef64da100540b4672a345a245bc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type0EncodedStatusEditorTests.cs",
+    "sha256": "bd10de692279a9438d86465fb7301a1d31160afcd484ff47f04e83b2f69a5a32"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type0HitMotionArmEditorTests.cs",
+    "sha256": "281cf1c970055a906b24ae5f8d98ce8558d0928c88781982ec61cd4485c8cf5c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type0JoinMimicSideEffectsEditorTests.cs",
+    "sha256": "776f6bf77ed10040158d4ca69f8da232601660eb9b6cbabd1653003bb18d4bef"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type0UnarmoredDamageScaleEditorTests.cs",
+    "sha256": "c7892ee123a78266c15b46846181576febc205b1d0a23bac0214cf9d8706fa20"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorActivationPureCoreEditorTests.cs",
+    "sha256": "49db184d950493232b22724e74f12362a65066d2c32d970e56006d6e47ea7b54"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorAtomicProductionIntegrationEditorTests.cs",
+    "sha256": "c136ac22ae27d4fa991da67b259382dd9741a3d61d7b98ec84c423d8a510b2ff"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorBreakVerticalOrderEditorTests.cs",
+    "sha256": "511b0225d2081f11ada44e907e643c4c2c41da28f411f6ca65d75692cf55fdad"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorDataContractEditorTests.cs",
+    "sha256": "5533f4ac39b1add03128b8c6adf69df963cfae328a6dcaa996b9a9bce64111fa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorHitPlanRuntimeCarriersEditorTests.cs",
+    "sha256": "d41bec186796d2e891290b1ac60d9234b07757a36e5aa9e78be6a1bd13c698dc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorMatchPureCoreEditorTests.cs",
+    "sha256": "5817d325b053790539c8b722ac438df7881e1a74641a1213b6ee3075e586d699"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorRuntimeProfileIntegrationEditorTests.cs",
+    "sha256": "fa27c85dd8a7568e861409718747fd9051a593bbd4e59b79535b5adb1b9505e4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "sha256": "40dedd9c142ee6e4151150d5846cee6fe102c82074046248789bb70fc0d8e1bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "sha256": "505ade503ef8e9988feaaa051687a907d93e92c8421f62afc31037e785342d5d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+    "sha256": "5e254b9eb59c40418233ace8769e5d0aa59f71f44144222a7f64d177161d0a73"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "sha256": "22de4bcc4c8a22ef3b3d1a7eeb9aa535d374f862d60fe6e780950d870ed16947"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "sha256": "cffbe5fde4ffa75a7fe1e47e32a7e2b465039704277c5593d0d783b184e5a235"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "sha256": "d6dcc0c555e7646a9252550c7c9b843ba0e1852eaf59dc489a1fda9d8e122bef"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs",
+    "sha256": "20c6b22a4ad2241d25dd1915f0307c31e35982b2c37312a5789296b89d78f467"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5UnarmoredHpConsumptionProductionEditorTests.cs",
+    "sha256": "63d894756cca8ced989b7d50110de72c3680955af3af8550def9ca37118abfbf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WeaponDurabilityAttackingInjuryProductionEditorTests.cs",
+    "sha256": "3bd73c810d00044593f2b1d345f7cf68866c5d8902cdf7369f794e7fe6bff754"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WorldHitGroupModeGateCarrierEditorTests.cs",
+    "sha256": "11f14512026253cfb4f0dacd29deb1b122ad9d16205ec8522bf3d6623e36c972"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WorldHitResourceRulesCarrierEditorTests.cs",
+    "sha256": "30d0a8db848f52d59ad843e479b58994661c41a6e077648a34a922b01a137a4a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchExactConsumerAndAdvanceOrderProductionEditorTests.cs",
+    "sha256": "0235ec56ee123d58b336e2838a28d61db9c34cb34b68509e2b522fc02a7c639e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchRelationExactFieldsProductionEditorTests.cs",
+    "sha256": "fcbc91760aa7ece9bac8576c30cc61f37f46cc7da2b0f8cb89e707a1312bbfde"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.cs",
+    "sha256": "c6232770dd2d6437442f067dfe88701b97649edecbd54227da88ef810e56a760"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CompatWeaponActionSelectorEditorTests.cs",
+    "sha256": "9e7502540c209f1a7947333991da4209a3de765cce29944288def64eb8b3936e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CpointKind2HurtConsumerRetirementEditorTests.cs",
+    "sha256": "dc116f62ede713d32d5715357ed55ecc0e8c35782bef1f2e60e33ae9ee38fac7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CpointThrowAtomicProductionEditorTests.cs",
+    "sha256": "98d716e4db1cf11ffeeec17656b08a8f21dbbdcc88e462bc3eef9faf16803598"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs",
+    "sha256": "df927f3c7b64122fd7b62427bef35115b4cf97364a947fee84fda7418e0380e4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+    "sha256": "2393d0b9768965b49a0f46d847a2fd73d8296681812a005a544a7cc3a4edd985"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryCaughtActEventProductionEditorTests.cs",
+    "sha256": "a164c58c42d0b5863038ac156098407817c5d92c0bbc08c4468be95f97c27d3a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldNegativeFrameLifecycleGuardProductionEditorTests.cs",
+    "sha256": "1451a00bb82b23e77fab2d019ed5ae392724ae525bd064687a548e76748b72f2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldRefillMpExhaustionPlayModeProbeEditor.cs",
+    "sha256": "44da638be141c44884e854abac3d2563d6a43cb5b1596d5b988d8d740922bdb6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldRefillMpExhaustionProductionEditorTests.cs",
+    "sha256": "e76a5ae17cf573a0476d46cdca1f034c62c41f86e7499f1749df6a52209d4cc6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+    "sha256": "90067371435d531f597bc9fb42531c939bedbfcd0e9d198847365612b65f672c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupPureTransactionProductionEditorTests.cs",
+    "sha256": "d4387e6d413aa68fb373db6eb69eddb4f63d0d5f53fc0a17a65c4d5bd83f000c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupRelationCountSystemRulesProductionEditorTests.cs",
+    "sha256": "7c33822b3af1052e262494e3f000dcbbc37ac8334886e19c7b01086e98e4eef0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+    "sha256": "1be97b33c48a0db6ad2664949e29a28d86e0804956012009601cb431216332e8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+    "sha256": "fc7ab66f0f7bbc781d7b197cfb188f434f043850fb25aefee83d3ce10b855ef6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+    "sha256": "7e07efab00e8846241430c1b66dc1896597545722e3b14d2a77f3d0cdbd03dce"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyTrackerRetirementEditorTests.cs",
+    "sha256": "86a9882189b1f827cd81de4a28ddd5a1cbbe1598914beed23a4eff31e2e21ef2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+    "sha256": "7e195d38a881ff96b6101f5f6586f0c3515cf0c1c05ee7a3d710e58a395a3eac"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NativeImpactAtomicIntegrationEditorTests.cs",
+    "sha256": "d9806e371aad7ccd52c5c06b2b4e8898a512cfe913ebd2d0c9f585ae127aea39"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NativeImpactHitPlanCarriersEditorTests.cs",
+    "sha256": "c8f1b3eafe5304d463f92c8b069516ac41b4b3d6dc7c9b9bce5b90d24378a0f4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NativeImpactPureCoreEditorTests.cs",
+    "sha256": "81139db254f311ce51fb082f07fe88dfe6738a78561f0594021b740dca1ecc23"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs",
+    "sha256": "9e707ab0a4c448bfb7f300e9e1636e4bf9a4c61e8ea7eed119d883ecb2cea5e9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6PositiveLinkValidationRetirementProductionEditorTests.cs",
+    "sha256": "342bf4a0a84d366d9bef79ddb29184f6b2585feeb57517eb5477f7076d77f3c4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+    "sha256": "0c1a6652f59d72ba8ae7a20b4d4d16b51d05e3e37d742a1cdd8339576750d807"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs",
+    "sha256": "2d85ddd61e4e4f8243d5c25ccb4b9871e5dad833c1382543527fbf93edf2a810"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "sha256": "751d964aedb2b83c03e8a119013e6c32525d4321f698687dc936dfa178d2e6df"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs",
+    "sha256": "d73c7e1fec8992f712d4534f2635075a4574dc75d158a3899a2f93aa1496e7b6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs",
+    "sha256": "0c92dd9274fc367413e6e00ddd0732924994543818348cfac3073b257bd5d259"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattleActualPhaseSequenceEditorTests.cs",
+    "sha256": "e107356a03bb1fde09805ba24d21d7c2cc61380d9aebcf48a48e634b42ef6593"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattlePassOrderEditorTests.cs",
+    "sha256": "69bc82f874af2316edc84fd3f6682e0a4ec23368201e14f172f565c95a631ded"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C022Kind2FrameGateEditorTests.cs",
+    "sha256": "a3f755fc4ae73a28c1fe94cca1569e92677de398a0b6f7b8247757aedb19c220"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C023AirborneIdleFrameEditorTests.cs",
+    "sha256": "9fae9c74d89a8bf4b86fa2ce873bfc193d679e858d83455136f5c08151f5cbb2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C024RelativeNextEditorTests.cs",
+    "sha256": "45b28c879bad039834f0445086d7ae76cb1c5bb0d03d845e6d3dc08cf615436c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C02C03ProductionPlacementEditorTests.cs",
+    "sha256": "8898183b09107fdaaefd29c77fd1c83a7a4a9d40dcb01f7d831a5c842a101bf9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C04FrameMotionProductionOwnerEditorTests.cs",
+    "sha256": "347fa2b7bd2871c12c5af4b185b58620506aa6ea529e74e67c9455af07dc0845"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "sha256": "c65750e36f76628a11bd8e940e1ef8985f831db53186d8050e74f552ecb46564"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportProductionEditorTests.cs",
+    "sha256": "3826f2b102beb4ab8abd572442563aec7b42fac830b4d3ce307a621a0de33901"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsPlayModeProbeEditor.cs",
+    "sha256": "b2f60ceed98e6fe8ee63be149828f83ec64dd316e626a62b554c43ef19108440"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsProductionEditorTests.cs",
+    "sha256": "394af5767072c32f6b2ac4836351b58ab228fc32604454a939fd334de07bf02b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalPlacementPlayModeProbeEditor.cs",
+    "sha256": "4d92842f571536fe82c0cbef9bd054f704d84ff2805d03f573f719932b88b955"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalProductionPlacementEditorTests.cs",
+    "sha256": "5f4205528f9110128a6cd529147f07900c41ee11f6af0334922d41887ceb7a29"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementEditorTests.cs",
+    "sha256": "c82903438cbc807304c73c85d839b840abee7ad108ea6580d17890ccd343cf64"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementPlayModeProbeEditor.cs",
+    "sha256": "d6dbe4c5ffc00df2379e02c8ffdf7863ceab17ccdcaf611fef448db45393c767"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementEditorTests.cs",
+    "sha256": "bb3b98174fb9d9714634767ccaabf8d6d4329d5f1022960f5aae5fc33c51b68b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementPlayModeProbeEditor.cs",
+    "sha256": "7b386c38fd3906be29aa4e505f36f8b0da56622e47629dc1138cb9cd43366a96"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+    "sha256": "8ad3e6718db84726836f1e05a5264b8101498fc66a423b42f49503c0a7bb02ab"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementPlayModeProbeEditor.cs",
+    "sha256": "541e4b1b6b6e503f50b54cfd0edd8424d3d7326d2cf1ffed047445737afcd223"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementEditorTests.cs",
+    "sha256": "99fd8c86813c26abdf47419506cfd65600975573fe0da30002d5b5f7a2c708a2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementPlayModeProbeEditor.cs",
+    "sha256": "7d1685f6b2d9fa4466497870bd2be58ee5b927068ef4c2e36bf32fb187938d6e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+    "sha256": "f3c71e37f5b6d64f7b0815e6ecc706fea22ea44a556aa28259b394a764ea0b3b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "sha256": "bf2874e69227d41d984b4823ad51956e1ad4982b9cda874d3c8773b5909384d3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C13ActiveWeaponCountPlacementEditorTests.cs",
+    "sha256": "719e9e2705b40f7c645e7f9e7fc8eb5da5b985a2015d625111e4191e7505ad65"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C13ActiveWeaponCountPlacementPlayModeProbeEditor.cs",
+    "sha256": "60918ad49df15ca05459825abea6cfd9b4378dc7de849185a84e1893c01c5088"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C14TypeZeroHitPlacementEditorTests.cs",
+    "sha256": "5905e139faa5ef307ec284259794ae67306d380354b18bbef3e06658fee330c7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C14TypeZeroHitPlacementPlayModeProbeEditor.cs",
+    "sha256": "ea0e13ba51c061177b2284f42c19fa26423e318b2e323c42630e682a28caa513"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C21C22PlacementEditorTests.cs",
+    "sha256": "b75d2f927bd736cd5a02850860b092a6c198286b7dc1962f58e7c07ce022c0f6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C21C22PlacementPlayModeProbeEditor.cs",
+    "sha256": "91fa6e3d36239081a767a999d99514cefc35d8034cdc62588d07ecfdb81bbbde"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs",
+    "sha256": "02a87adc4a950d810483dbfe4e985028f1ccf4ab429b74d84ab832af29f3c7ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockPlayModeProbeEditor.cs",
+    "sha256": "e9984bcb6eedaf9b8d95ce44ab123e8a660b218c7e5943b9b81381ddd27638e1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionCloneEditorTests.cs",
+    "sha256": "47b0b91247f1e6e1c8f5fbe24cdac68cd5137aa2756b9f2353776130ec7a3da7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionClonePlayModeProbeEditor.cs",
+    "sha256": "c90cacfb548762a85b376b9c1f390e44d2f539a48f78e52341862d2a8c964c18"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FHJTimerOwnerEditorTests.cs",
+    "sha256": "be4a23035ef4385d6e40d42d39890fd94a62af047878e4fd4276740c55a3b648"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FJStateCarrierEditorTests.cs",
+    "sha256": "3877fe101dd67d11f3b3bb6c6184e2a90cc474d0afaeee351708af4cbe9e27bb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25GFrameBodyEditorTests.cs",
+    "sha256": "19c3d7d1174670bdf60c7eac24df0eadd934761ad678f9e36c26ccee79f2983f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25IArmorRecoveryEditorTests.cs",
+    "sha256": "a15578a0beba63e1e175f5dceaa56952ae82e42bae16f689a286a2758f652476"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25LState18ParticleOwnerEditorTests.cs",
+    "sha256": "d7d1a424b02c2745e9cdfed840708246bcfa6c49d005e99a630aaff30113c2d3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25MPreviousActionCommitEditorTests.cs",
+    "sha256": "f5cd2fed3bd5895fb3c132caca950a1842cdb16c768617a87740b1b598a92680"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25NestedTailSkeletonEditorTests.cs",
+    "sha256": "106d91602f0536a53b0511481a1c422e5f4cb54447e056df6618a775c27e0459"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25NestedTailSkeletonPlayModeProbeEditor.cs",
+    "sha256": "53d216a00fceeb271b2dc317ce93d0f91980c088589c5a97d48249c7964360f4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25PHealingOwnerEditorTests.cs",
+    "sha256": "4acec527e0510f35d9846bc9e74c8885d35c7f8657b0608df38aa8b2ec20da3a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25ResourceDisplayCarrierEditorTests.cs",
+    "sha256": "8fce1e478bbd675a8f988cfdb70b17150f66d93ad6a7b1835a39458da88550d5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+    "sha256": "c5f6df2cff2d30974ef1aa54bf6611f5661286e6f79fa5e10b08467fa19d5235"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CooldownWriterExtractionEditorTests.cs",
+    "sha256": "5ee5d38004b12b7f4fd852b046b8ab56ff20577bee8e969b33f83062733ef400"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28D024AiChildScenePlayProbeEditor.cs",
+    "sha256": "9da8155774a059c35dda4a2745dc6ad637a0ea317c6a5cadd0f49f7f25f64fb2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28D024NonCharacterXBoundaryWitnessEditorTests.cs",
+    "sha256": "9fc2c0c0c6bb3ea7fefb4d65bb6762f06c399a7da9ebc9510fa793288021cfc8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28D024ProtectedXSceneWitnessEditor.cs",
+    "sha256": "f17d74176893992d38e166146cd1da3099b366cac3dff4a2cbd7f25f195fab4a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28D024UnifiedSpatialProjectionEditorTests.cs",
+    "sha256": "0d5996a6bb429212fb80b6e740fde88717e52fc676e72a39dd4bc05ee2c544dc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28DefendReentryExactFrameRefreshEditorTests.cs",
+    "sha256": "f1691aa352c74b21585bde3f3d98eff0fa7ccc40de2022db8cb7247b0e5d0c85"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28EnvironmentStateCarrierEditorTests.cs",
+    "sha256": "5278b90140aa6e06c7096f4ed219c5a993675337a7bbc1c45dabffbbea42f1d4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28FixedViewRunRatioEditorTests.cs",
+    "sha256": "c4dd81cc7ceec3f81852ddcb8a1d22572e16577a9f8e4f5e97b0b7e989530558"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28InputPhaseCadenceEditorTests.cs",
+    "sha256": "71efd0884a8ea4132f2705efcb66a1cc51b01f4e4807dfba59ed729ef44c373b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28InputProxyBlockEditorTests.cs",
+    "sha256": "7943bc740439150073744ace2dc35ce97107f9a90fb769a8750e7356fe549a6f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28InputProxyControlLifecycleEditorTests.cs",
+    "sha256": "e08ff43a969e4c8d9cc54b794ea0fe8b4eb47f134821fa3bc1632d9ec6e706e9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs",
+    "sha256": "4fe903ab7e41e319c579ccf3dd095ca802edfb13ae623545351edccafc5904d7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeComboActionTransactionEditorTests.cs",
+    "sha256": "e57bb7aee00da5229e5ec4a887bbe85c179753f5fa9069f624cae97fb091f43e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeComboRouteSelectorEditorTests.cs",
+    "sha256": "7f7faf16737197edcaf3545b659f15ee1c9970a4b2d37125a29522512c23ebe4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeComboStateMachineEditorTests.cs",
+    "sha256": "70afe68a06d4c51010236b0d8fa8d216e90f146ccf45cbeb647193c1b132e3fa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeDirectHoldDirectionRoutingEditorTests.cs",
+    "sha256": "4ff5bacc1840b355ac79e4f6c680f883fc601008b0ca6978901fd0845f2bc0a1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeyPhysicalPlayModeProbeEditor.cs",
+    "sha256": "c8b9ee6c9f8706d09ae60fe6001ccb3b851491c7101339e3ccd70c91b08e207c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeyProductionIntegrationEditorTests.cs",
+    "sha256": "2e09f9a7066d0c39722fb80638ec49774325e09d8789b78b46a842ae8d0066b5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeyRouterEditorTests.cs",
+    "sha256": "a7bc96dbe3ba7c59358f37564f2d908293b78a11e5453984da3179fae6fa29a5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeySessionStateEditorTests.cs",
+    "sha256": "9ffadd21f9b31aaf0648e998337890af7b9622a288eca4d9da58c6b7ba5b3422"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeInputProducerMigrationEditorTests.cs",
+    "sha256": "bacf3e43263d484ca016e86dd156aca0a385a472d652bc1a85cd110884bcb773"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeInputStateCarrierEditorTests.cs",
+    "sha256": "c932a77b60f7cd25df43dfaa6244604ef3d37568bda91e40708d6d6fc604b3f6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeRandomBattleBootstrapEditorTests.cs",
+    "sha256": "6cb01069ba6345e19b02584a768d1b71503a167b75359070f7de4a3c28ff0063"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeRandomDirectCallTraceEditorTests.cs",
+    "sha256": "a08ba966a6807af5f563b8f0d82c109cc64843bdded2d06722cbfcec0f50b072"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeRandomEditorTests.cs",
+    "sha256": "dc24b7793c8e9a7223959b8bc468487b26e67c8fff7569e3279d75b301e5fc80"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeRandomWorldStateEditorTests.cs",
+    "sha256": "799fbedfdab581af41cacab35327563d1bc2eda4ae073f133ab79e08e51928d2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeSparkC01IntegrationEditorTests.cs",
+    "sha256": "f8c687c795b88b7a40e09fe9ca9ee28a2a9b027d9a4cebfa8670c996bf905ed2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeSparkLifecycleCoreEditorTests.cs",
+    "sha256": "11dfbfdaa89824b3f8c97c6095cd38aefe57be2fed602127c42fe843fe51deef"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0AirDashRedirectBuiltinsEditorTests.cs",
+    "sha256": "704573ba1f2fa5e30f8f9af9252217ac959836cd6e938982dd8e8bb7c365d3d5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0BuiltinDataSeamsEditorTests.cs",
+    "sha256": "0f64745accb00e03da00dc3e098a7d00597cd968ab5a4b5c5742748b52b8e031"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0BuiltinProductionIntegrationEditorTests.cs",
+    "sha256": "f1868452dfbc3eb702c2b11aaa9262a09ae819da0e6972cca158f4b24e10eed0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "sha256": "b859c3ff54720b668e50efcb7ed593d145888b2fc9afde5b3abe8d7141fc505c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NonCharacterWalkablePlayProbeEditor.cs",
+    "sha256": "0739edbdbaa7982e3076303e0796b45344a65289a3d9f32f6e1920e745a5dea6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NonCharacterWalkableTtlEditorTests.cs",
+    "sha256": "6200367fcfb660b688d21916d45775bb1d85013d439380bf1a74da4fe7a68e46"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+    "sha256": "64320ec481b3ff0e0647a072729930d2c9d9a7edabbba3df860660afd389d347"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28PreparingShutdownOwnerEditorTests.cs",
+    "sha256": "1a1fc79c3dd5187fd2d49f6133e9fdf505a5f4975b09303fbd0d9f4688b39246"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q01WordsGameViewRequestEditor.cs",
+    "sha256": "21f54e4d5f712d6062edc5d13bfc896cc9a8812aba2d447609c8c27b4cbda81a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q03GeometryWitnessEditorTests.cs",
+    "sha256": "35baac1c9acac7553dc1d3504e21d79be7da1f8fec9648c2494f90f732178feb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionGateEditorTests.cs",
+    "sha256": "f2ab263ed4a03f6b6a8996e46c3237ba5ce8c49e3753d737d3b3b81265c98805"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionPlayProbeEditor.cs",
+    "sha256": "5bc0f8e7553ddefa06aad0119fb016d772b936ccda005453920122f1d9a95078"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillateConsumerEditorTests.cs",
+    "sha256": "d9b961d5bfb7b03f79ff365325786f2b158ebece29010bf908446afa8b89e365"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillatePlayProbeEditor.cs",
+    "sha256": "5da356bb42e267a34b20add93811cfa7691effa981ed90be87c7a636af89cbfa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q052F8CarrierEditorTests.cs",
+    "sha256": "355f7f24995439f4b0729a531292b120cca8d800b43c71af797bc90e43d4e73a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ArmorPieceSourceEditorTests.cs",
+    "sha256": "6e5adb3fe94d75b25762be700d79a1738560e292454bfc1b0915cb9745addb4e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05BmpStatsSourceEditorTests.cs",
+    "sha256": "48397055ebc11396f14a51b3072c3489bdc807285a054bc7388d7c6fc4b4b3c2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05CpointContentEditorTests.cs",
+    "sha256": "ee62e24702c14ca9abf7fde72fc47009f4c88595ad44aba00685e17023eece58"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05DefinitionAuditEditorTests.cs",
+    "sha256": "170fa0b1c0230582e1091c91dab09fbbdf1604a4acea2e3b6b406d539a80b955"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05DefinitionFieldSetEditorTests.cs",
+    "sha256": "c6d9a10b9e3477c9c4ee94cbe08f5c1bc0ce211b5926cc6603c099c422bd1394"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05FrameAstEditorTests.cs",
+    "sha256": "d7510ae2038609351ed4a8546dcd763a2ee8fe22513c216d1922416acc720e37"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05GeometryContentEditorTests.cs",
+    "sha256": "ea5c0dad5924633c57baaa17e781824cf8b98a87d745677398c4722a84c19216"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05GrabTrackerCarrierEditorTests.cs",
+    "sha256": "d571d77c3d42db6024677c5de79832436a9e42a69a293f77a0fe34aff0fc470c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05HolderCopyCarrierEditorTests.cs",
+    "sha256": "a69f03ce268bc8bea7afea781e869661d90b9c004444a2e41aa28f7aae9f2288"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ItrStrengthContentEditorTests.cs",
+    "sha256": "93d96b19a8c4cdeb3469f468790a49dfd3c2507998c1a422521a8f980663f733"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05JointSnapshotVersionEditorTests.cs",
+    "sha256": "b038a6bf1ddc8647f98cfa63d5ef327291d0c35ed11d69c0b481b17abe4b55a2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05LoganReplayEditorTests.cs",
+    "sha256": "f48dac25c93a21de6720dc5bc3f050aedbaf1243cf0dac0770b0395886a5d9a5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05MassOscillateCarrierEditorTests.cs",
+    "sha256": "1f4bbfd87ad5bd9c5d6cdee82846c69bf08989630eccd35d3abb94cfdfb29ad4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05NumericDecoderEditorTests.cs",
+    "sha256": "c12a6b859e20a8a32efc5fd54efce2b4a88dc4b52e436195b58d365038cbbe9b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointContentEditorTests.cs",
+    "sha256": "c53185496fccdff0ad00efe9a688b8fd03a513bf283a0d154869f70f2792f133"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointSnapshotBoundaryEditorTests.cs",
+    "sha256": "2ef2052bb5c659e2f7789856876eebe6f3737764cefcc999a4ee3768df02f240"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ReleaseTickCarrierEditorTests.cs",
+    "sha256": "89fb4f053b348102c565d700adb21357e0088888a7fef094ad7d82f480215676"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SemanticContentIdentityEditorTests.cs",
+    "sha256": "928f8a4b9d5074d26397a8afdbb9cd692e403b16c0880cc3bb41a7617f03f16f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRendererRegistryEditorTests.cs",
+    "sha256": "8e1c35648942cf58fa3780e5b5366c182d607894af3501cc04871f8218125e25"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRetiredShellPoolEditorTests.cs",
+    "sha256": "266a04e9d91b2b93aaf77be859ffd163463f53d5bf2f1f4c9897296e03d7bf23"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05StrengthTableEditorTests.cs",
+    "sha256": "ee572c98bbef85a5387b6354d7bb1eeef41617f5c36a3f778358997fa4ddd6a7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TraceIdentityEditorTests.cs",
+    "sha256": "1ca9f4e236e080177f4336d6dbbb09304125c3479f9baaabee886fd7fa572707"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TypedFrameEditorTests.cs",
+    "sha256": "d46b26780b88d902f94cc54d503dd9ef46c7147bb54ba456dc4ee1615562f60b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05UnclaimedRawRestoreEditorTests.cs",
+    "sha256": "aedc03b331e79503137af0f1ce9ff6e989da85047f8f7c9738c2410d4f801823"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05WeaponStateCarrierEditorTests.cs",
+    "sha256": "1b4c71ffadec82e46ca7eac193cd4bb5769453e5c091e1b5484e8266cde1c34b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06BdefendFieldFamilyEditorTests.cs",
+    "sha256": "5cb94686e99169fe036447c56e55c34969ba34a7dcc43d7c36c6e15e75fe124f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06BdefendPlayProbe.cs",
+    "sha256": "4aa58b81a631c5c785c2ee32b486c757ad96832a371ecee34bfa6d5b592540ec"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CandidateCollisionReferenceResetEditorTests.cs",
+    "sha256": "e7d8c6849aec9ab2d683bf7c4b15beb4adc93b0ae1c9181f67245fafc0cb812e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CanonicalCharacterPhysicsTailEditorTests.cs",
+    "sha256": "9826e73a4d853a3b0621bd54e4559eb44df72d9cd3861f8e23de797b9f85fbd5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CollisionFrameLookupEditorTests.cs",
+    "sha256": "273e98c989096aefa370096ee0623c591af32ff1b25935cec0d504a72710368b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CollisionQualificationEditorTests.cs",
+    "sha256": "2262b9bdfa166d88c83400d9758a6090ca4a5cc492b752b2f2d2f2c819e7a09d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointInputSelectionEditorTests.cs",
+    "sha256": "938fb6c6fddc3acf0d120eabb4fbd1bf8e714b03dcd92c26cee51d10992be0c2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointSelectionPlayProbe.cs",
+    "sha256": "1026aab95ffd5c6afad3cf760339af90302fb6b1dfab5b290fb16a44a37feadd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointSettlementRemainderEditorTests.cs",
+    "sha256": "f7725bcf61f677c0349d534ce81d2fb2500740afdb48da593a9e77eb5faf4403"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointSettlementRemainderPlayProbe.cs",
+    "sha256": "18cb9ec74edc219ae020f1d9e3b15a046a9faaa502e357612035a734c1f4647e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointThrowRawBindingEditorTests.cs",
+    "sha256": "6e9492c6c78ad818ade67e721f2f0d24223e6dc7115f1c4a3d967096fa4821e2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06DamageSpecialKindsEditorTests.cs",
+    "sha256": "d3219577681bf92b977fbba7132e0061f616241fcad262f0a40a7665a00f3a57"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06DeadCharacterPreludeEditorTests.cs",
+    "sha256": "6fdfdf7eb772881798453879485b046f7cb9455bc7a884470d58c2500bd8f2a3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06DestroyPoolOwnerEditorTests.cs",
+    "sha256": "ecde8186bcae8729029fff28c0504724514c5f8620597667fe5ec1bc9e5d2fec"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06DestroyPoolOwnerPlayProbe.cs",
+    "sha256": "fbebf91e8c008d7325413ae58fbc159528bf871eafc3e354b544d95e71cd8d03"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06EffectOverrideNativeFrameAccessEditorTests.cs",
+    "sha256": "a2a9cb80c51afb83618dff66063627d874008205c831afd59feee4b3a66369a8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FirstBdyNativeFrameBindingEditorTests.cs",
+    "sha256": "019fa80b1037a23690edf391a0d46f852774ef1b3fe07706c8b273bd1a65a9a7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FrameMotionTailEditorTests.cs",
+    "sha256": "f44d1de77adacd7fd128c7cadaba47daae79f265e4fd7fd5e102ede8baeb3aa1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FullFrameDriverEditorTests.cs",
+    "sha256": "ca226333fda0a3f2f2cef3b2a58997febba006e1a330abc3b60a575f9e80c44f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionBirthIdentityEditorTests.cs",
+    "sha256": "f6a8623be2c4e6bbc99d92e18e3d43b5619821cf4d663e5ba59a588e2ec900df"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionCatalogParserEditorTests.cs",
+    "sha256": "999f309c7c3905073bba01865cd2db18d263280ab9bd354d7883786d52e7aafc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionCompositeContentIdentityEditorTests.cs",
+    "sha256": "e4d22862745d34fbd38dfabfbeaeca69bdc8318a83ceef3ee606cb20db052de0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionFeatureProjectionEditorTests.cs",
+    "sha256": "ce344de9e7f4d1ad89219d6cb716b4cbb69acba5d478c1278ef3362960980adc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionInputFreezeEditorTests.cs",
+    "sha256": "19befc123e16e8d256499eed211dd4805248cedb6e3c179807418620461ef275"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionPersistentCarriersEditorTests.cs",
+    "sha256": "d019ce5fca159c0f5c56c8058e538307809f4a36db5ea938881fbdc720098dfb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionPreparedWorldCatalogEditorTests.cs",
+    "sha256": "0ccaba783177b522f8295f4a5cbb4cdab7b2540519f7e479678b0062431f2c3a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionRecordTransactionEditorTests.cs",
+    "sha256": "a08295e611ba0befa494cf8c38499dd405b870b10da41180a3be1db83081a4ce"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionSelfCheckOracleEditorTests.cs",
+    "sha256": "d5a92df7d2fbe0ad7624a478bc603312d24dcb3510d6a48adca016f62f2f7b35"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06HeldNativeFrameBindingEditorTests.cs",
+    "sha256": "8f4935b15654036b7a7e45d1862050ddc82ff93aa8a814cf6ae3d9433964a735"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06HeldQueryRelationEditorTests.cs",
+    "sha256": "437201a4af195f998efad367a90fa73e0f79367a323eb72583e930045c80d581"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06HitSparkEditorTests.cs",
+    "sha256": "fd038488f8b0c6f4aa80cece54c3c73ed7b31d88ea691fb93b9f234d1bb40be8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06ImpactNativeFrameBindingEditorTests.cs",
+    "sha256": "0fd2add99e7dbe701839fe2a7869ada5d28dee5e1466e2d1f9508c595981d1a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind0PostEffectNativeFrameAccessEditorTests.cs",
+    "sha256": "ecd233dcdcb3894957d0d8b83b3d02872eaa9b78e1f9207896737fc812b99d7d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind2FrameLookupEditorTests.cs",
+    "sha256": "9d796d22883626693abf23779ae35a350a185949ede4425a79843c63f5e3a3c3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind3FrameLookupEditorTests.cs",
+    "sha256": "32d583de39f9d27254017287781287680505044fba1dbd0f95762dedb0c6c143"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind8NativeRawBindingEditorTests.cs",
+    "sha256": "740f69c1bc869a3fcbd78593678e626d4670d1f11f5d4fe9abef46784a3a6ff8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06LockedKindNativeFrame40AdmissionEditorTests.cs",
+    "sha256": "b40c7125235acf89fc34e06191c9e75008df28852f175aa880920a8d86dcac03"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06MissingPhysicsFrameEditorTests.cs",
+    "sha256": "6ae3aa392ca1a7e6274576a12ea26122886c70676634909236c7f425f072b98c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeAiAliasTickEditorTests.cs",
+    "sha256": "049ddd89b3c87bbda51157c615891ee66ec3c7dab941ad7863a028660207dfdf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeAiPersistedAliasEditorTests.cs",
+    "sha256": "d235f81b4266465324e761ae8d7ec667aa0bfa1e260ff87d2f634e4fc611fbb2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeDisplayEditorTests.cs",
+    "sha256": "291c6fc681f690c588b02e3709949e12b8652fc647988b3ca7c30d4c3ee89553"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "sha256": "816117e3fbec16836e118b4d9b3bf2953f22651e68bddb95f6ad781957c89a58"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameSnapshotEditorTests.cs",
+    "sha256": "86d56845f9e4e60aa8830cddc6efd185eef95f025c0ce379eba541528e789421"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameTransactionEditorTests.cs",
+    "sha256": "5ea0c0a0615a61d609d0b6ff63ba554dc211062b1dbb52f09076e5850427ac5a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs",
+    "sha256": "59e9a3be073cb1d5da4d281e289ca9389772b8ea024638550ace6e11d011df9f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeInputActionCostEditorTests.cs",
+    "sha256": "04dfaac818392d10d66fa1b57558cd33750d3c2a2621a7f2a451d98aa5a89158"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeInputMissingStateEditorTests.cs",
+    "sha256": "0c7fab4ff10e6401e714380c4500ce1271687bc8b50d118b16002d8960c7d03e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeLifecycleCarrierEditorTests.cs",
+    "sha256": "0492f6667484953b66d5cd9d781d30283060ad86d52affb77840cced01f76231"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeMpResourceEditorTests.cs",
+    "sha256": "2b7d9ec0a18ac8117f6f28b1832f658cf49a8394337bbe960482a48cef20021c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativePostDisplayResourceEditorTests.cs",
+    "sha256": "ad9e6c90aacab414390de0454e645e5ae5ca1c3a64062b6b691292e70a6a3369"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeSoundLatchEditorTests.cs",
+    "sha256": "e507926e9d1418e06334c30d678988519d793b884a5614cb325f2c888628aa49"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeWeaponPieceEditorTests.cs",
+    "sha256": "bcbb62d837692c1f2e9eb99ac9c29864bb14c63cfdbae906ca20b016079859fd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NoncharacterReducedEditorTests.cs",
+    "sha256": "fdf49a556cbfce355f5347da38b8c381151ef46e426e50624cb054e57b7475e4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OpointDepthLivesEditorTests.cs",
+    "sha256": "fee7cb1e918c93ec3950d30bb161754d8c674cdea4693bebe10b981c4d890bc1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OpointMaterializerEditorTests.cs",
+    "sha256": "3b9ac8db88bbd56bed719c96151519bd5f31b1239eaec7960fce446d2c139c28"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OpointMaterializerPlayProbe.cs",
+    "sha256": "7cb8da5394867adecc749abde30c39c21425fc20a6bf485ffaf629705144c6bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OpointWeaponHpEditorTests.cs",
+    "sha256": "e892e22127950621071c350c212823b26b31ff3caa9355217c31cdee6350e8ae"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OpointZeroFrameSlotVisibilityEditorTests.cs",
+    "sha256": "d7ca8c441917d1226d6010fb063d29571d505b9dab4618e5e144382fac95a3df"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OrdinaryLandingNativeFrameEditorTests.cs",
+    "sha256": "9a1c02a33b294af8194e875d587c297e7ecc7a6bf743d31afd7151da268f83c2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06OrdinaryStageDisplayBirthEditorTests.cs",
+    "sha256": "1c488fc928a1be381cb5188655d125aa943dc8a3acdfa6775f05146f4ffa4530"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PendingMotionEditorTests.cs",
+    "sha256": "eb79ed2d0d1464d8682749c96b2608afffb3fea51de699fb19c40bfd164d50bd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PlatformMixedCandidateEditorTests.cs",
+    "sha256": "34fe4b3064360a697b85b571aeabba04f25781d5bfb2f0b76c8f0c7b9d82f498"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PlatformMotionPlayProbe.cs",
+    "sha256": "a287f5ba21b3817af0033f1eca5f44a8b4e92d873acdbea8a2ae4b3593c8e113"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PlatformTransactionEditorTests.cs",
+    "sha256": "cb9a829fd097f2a8492ffdd9dfddea23e58818e0f578f4a8403f934e34ce418b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PrearmorFeedbackEditorTests.cs",
+    "sha256": "6abdd8c886901d52f62c7cd83d390ec3d0a90fac93cc73643cfe535587750260"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06SpawnVitalsEditorTests.cs",
+    "sha256": "e1ab1571717bd16bb3d39a60954aaf2ba9d6b0a8622ffb7a40ef05f9347358cf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06StandardHitFall80PreservationEditorTests.cs",
+    "sha256": "82d8382313f54b3f6238a7eb14a6ef0d20e3a7cab8b5ccf70d2faf4b53157f34"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State1218AirborneNativeFrameEditorTests.cs",
+    "sha256": "7b7e5bdfd811a52077e9cb16340512ddce72ab0a599d929a769b89666a472d99"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State1218ContactNativeFrameEditorTests.cs",
+    "sha256": "787ba697518f3695821302175cccdcd63adacd1741876077456b22bd7e2239a6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State13ExitPlayProbe.cs",
+    "sha256": "1701b6ba5c01cd169e142882fed1d9bdaa34ebf5db134b3bd598622fae743095"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State13ExitTailEditorTests.cs",
+    "sha256": "db4f73c6e3cb8b03b38696ada3e673dd7d0107f952b158c251efe75df8707978"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State18SpawnEditorTests.cs",
+    "sha256": "22f8f0d1cc0b3130852f4921fb2f6e997be6df3a7b2ee3f0ea1bb602ebc7e469"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State9996DirectSpawnEditorTests.cs",
+    "sha256": "f79b3170a10c76dc4ec12ddb75d22206830a466cbfbee7ba6c85a3636080e45c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State9996DirectSpawnPlayProbe.cs",
+    "sha256": "5eb5f85d9fd8c0c84e88a7f41c03f5cfb74f6e39052e52a23705db40a5297e8e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06State9998LifetimeEditorTests.cs",
+    "sha256": "004a2acd12dc76d9ea18620bf31e081fe507c4d3f83e17ec3b375c0039b6e5cb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type2LandingFacingEditorTests.cs",
+    "sha256": "06c3897c34fa0a8dfabdac13fd6f987da8196476207a74e10a157854fc5ce415"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type3AttackerPostHitNativeFrameAccessEditorTests.cs",
+    "sha256": "58ef17b163ce420ae280a520af09970f5e9f6548a5a76b6068048206534e9c5c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs",
+    "sha256": "8681b66aa12fced36a2e1fdd8d0c3b52d6fde1949522f6b889110df065236c81"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type5MatchedPairEditorTests.cs",
+    "sha256": "8e098121e545dbdd34fe93448654b2f7fd3835e5f619b1bf3e5963e3b79af0c0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type5UnarmoredEditorTests.cs",
+    "sha256": "b608e243167b0aa87ab87775feaaa11bd0c2c88c3f8e400afa7132ac40391256"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06WeaponPieceAdmissionEditorTests.cs",
+    "sha256": "696f534a9b501dfb09dbc76adf91a68dbaeb19ec66923ba4c6be995ee887a854"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06WeaponReactionEditorTests.cs",
+    "sha256": "eda3ba7d0fe1485474a51f160f1e2f2a9c213bc7b65f237bd32bac5e6766a983"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07AirborneIdleBattlePlayProbeEditor.cs",
+    "sha256": "4f9bc7016b29b361c25d4c772ad0cd5d4ec6129e338876f9f1c7e55ccba9a896"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040FullTickScenePlayProbeEditor.cs",
+    "sha256": "1f5cf914855302afe1fb20e3ac4f85fbe72d1b136546c68cf7a20b0fe569f379"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040NaturalScenePlayProbeEditor.cs",
+    "sha256": "4cc61ee03d11f5c439b585be81d7b65bd03706b3fe75410dae933d6338df4f98"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C042NaturalThrowBattlePlayProbeEditor.cs",
+    "sha256": "77d460e44a9eaebb0a013ae95c90ad260d1a298db89813e29665ee0f05bbfa43"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C043FusionHeldBattlePlayProbeEditor.cs",
+    "sha256": "ecb75d25e85d1f5f8950407174c20381703e115ca570f58525ca439f12e6ca15"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C044KisameNaturalBattlePlayProbeEditor.cs",
+    "sha256": "21b8818ade2b2c8cafb6b4add97d8ab382010f675e0b2dac88f900166d0da30b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C045NaturalGrabBattlePlayProbeEditor.cs",
+    "sha256": "1ef6df03003149f2f5f18657db9e5635a3df251780634ea33d89567c52b3a835"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C050VerticalSkipScenePlayProbeEditor.cs",
+    "sha256": "f7318d5dd4b006c071ea0a748eb62310ab1dff908214aeed1f75ea41b5c17fa1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C051OroScenePlayProbeEditor.cs",
+    "sha256": "9a820a46d15517e0308ffc99473bd8459b9b93d44c16291d2fadd4a74468d76c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C052HayateNaturalBattlePlayProbeEditor.cs",
+    "sha256": "e5c941256fd45dc6bb0b5839f7c611978e27b0ad9670e72621b0eed4869fe46a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C052HayatePhysicalBattlePlayProbeEditor.cs",
+    "sha256": "3406c36c5cd5096737d231f10114099a5ea50acd52b6ba95909effac1c5b8a63"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C052PositiveRestBattlePlayProbeEditor.cs",
+    "sha256": "a19da862711b7ec9542e5cb57b48db34d3fc34a2ac4cb2b0001a843b9f8228fc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053DoubleUjBattlePlayProbeEditor.cs",
+    "sha256": "ada85a381a58db3e293e7c3a75722f7a96e89cb1ede872b24c1f18cfac4fdbcd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs",
+    "sha256": "5c66e24c29ca9e85035de67ccd19afae0328b9c6c7691492160320a65e5a59cc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053NaturalSceneProbeEditor.cs",
+    "sha256": "cf0dba3e4bcdf3d216e41c270fbed494f2b97aae9549fcd7e45153d77bb20a4a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C056FusionHoldBattlePlayProbeEditor.cs",
+    "sha256": "86b79348737e9787da181f776e8c61c4fde5c94b665d383d0284d46ff939b41f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ChiyoNaturalBattlePlayProbeEditor.cs",
+    "sha256": "3a1c7f5f7fe9dba57549e98116af31212df86f88388368806858a43fceb1ab95"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07CloneCentralPixelProbeEditor.cs",
+    "sha256": "e8a3bde6d50949be81cbf545589fd32b53aa87974a75cbc08b738b5352144811"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ControlOnlyItrCandidateEditorTests.cs",
+    "sha256": "9b52735e9fafcf387ba92643547a09689a8336f27371ac194f46df009a4d38aa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07D024Kind8BattlePlayProbeEditor.cs",
+    "sha256": "f6ae6b7e73e9e5f1c76b3eb3f0bad9bce260e2af4ff518fd2745f585ae0a8c4d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07D024PlatformBattlePlayProbeEditor.cs",
+    "sha256": "e955365fe65eae4993ebba0cf98ed102902118682ac887c1e4d0ed11d4e65d6e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07F02Kind10BattlePlayProbeEditor.cs",
+    "sha256": "05feea8cddda03e5b5a1f128ebe5c994bb14b4b6ad45cff4b8c073a5a625307b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07F03NaturalMarkerBattlePlayProbeEditor.cs",
+    "sha256": "a81b6fbce31c6eea3cf77ed76798bb049aa49c7b1c5891fe7999e794b72f8a7d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07F05NaturalTerminalBattlePlayProbeEditor.cs",
+    "sha256": "72300fee8d905137c2317e293dc99acc7f720f447001c3eeb98d39a4369ea77f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07FormalFixtureProjectionEditorTests.cs",
+    "sha256": "3c64e1babe407bf60a358577ad75505baa32e6e08e08050ef583b5edb1945908"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07FormalSelfCheckGeometryEditorTests.cs",
+    "sha256": "b519066343544060050f1d0d509fc0116eb185061041546c5d578bbe11818f44"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07FramePreviewFormalIndexEditorTests.cs",
+    "sha256": "b6b03af97992f6407bb1700b3e975c130c425264bac803ca4869f7dfa70e0a4e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07FusionFullDriverEditorTests.cs",
+    "sha256": "4ec1e917d71df49d8f53603fcb2dbf3709b9e8aabc65bad938274696130a67a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07GurenCagBattlePlayProbeEditor.cs",
+    "sha256": "adbffa0cc7479d3b38ce98dfdd0f16a3ab4b0a486b89bce975fe635fa58d499c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07HeldWeaponDualDomainEditorTests.cs",
+    "sha256": "aa55d3ff29fa264fedf1fa831f75f6b307b8dea39ac3cd085f46679acf9080d2"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07HidanNaturalCatchRelationEditorTests.cs",
+    "sha256": "b1c75ec0b459fa7eca5d107159017863ea08771871228bbed8eed36fdda39b25"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07HidanPhysicalBattlePlayProbeEditor.cs",
+    "sha256": "525354492bbc2f3c49634830ad0063d116c612b4a1a78832a7e765a0598a805f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07HitFa5FullDriverEditorTests.cs",
+    "sha256": "c2f6202585c0d53c6235d3c7d13f13f0f40a970ee51a38529a51561aa9daab07"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Kind2CatchBattlePlayProbeEditor.cs",
+    "sha256": "fa8d06e0ca4432d89b3b64b0b6799a72211dde047590bcb00f9128891855b6fc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07KindCatalogInputEditorTests.cs",
+    "sha256": "095e0e56fc6fe146d6af4276c2fd56128e76344892305e8e40677e8360558e28"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07KindDatLiveSceneTickProbeEditor.cs",
+    "sha256": "70c4d886f4420e946ada5d6131c90a179704378175bb1185cb081abc07da249e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07KindIdentityPublicationEditorTests.cs",
+    "sha256": "7a690f47b757dbc7aa64d84303b7f8e8915aa3372599bcae76d53cfb68e83e11"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07KnockoutFeedProductionRowEditorTests.cs",
+    "sha256": "f74716444be7129570f68fa9ab78feb12b8870057daf73bcfe85ff54c0f0da89"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07LeeChildDualDomainEditorTests.cs",
+    "sha256": "855ab30f656548eb7a6069cc222366726b8980ef771fe55fb2ae50f39435da43"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07LeeJlBattlePlayProbeEditor.cs",
+    "sha256": "2f572b0905f39d8b80f68f2e9bccb25cc3c00a2dc6177fb843245e2ed95fa545"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07LegacyDataLazyLoadEditorTests.cs",
+    "sha256": "85f541fbd46e143e3e7c9c6923eedfc9484ab2918409f04b08df253dc09ddae6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs",
+    "sha256": "82e3de3f6cf27c44ad71d1936bc131f416b50a0929918a372293ea3f64ea8ae6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ModeComboPublishedActivationEditorTests.cs",
+    "sha256": "a8b0898ddabbd4891ada0c28d757852ff5d9ef082844049a15361e6e32af0fc3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NarutoHeldAirActionProbeEditor.cs",
+    "sha256": "66e959f001a904366b0cc2e05beb21e13d0dc596e1960b55befab7e4ae32c5c1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NarutoPhysicalPickupBattlePlayProbeEditor.cs",
+    "sha256": "7575244cadef8061968ddbc6c444a169f7ded80cc98c2c34f740616178df32af"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NativeClampedCellEditorTests.cs",
+    "sha256": "61dcc8f4eb63d683fdcfa98fbc2fb0008259c1ef585d7694f76a3ff0bf5ce3d9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+    "sha256": "6132dd5781366cc559ae3cec3faca9a790a8ad4901e4ebfd74a3ecf6a0cc4998"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32BoundarySpriteEditorTests.cs",
+    "sha256": "643d21d2096a8d85c583170405b4e7d031bda5d352cf60f3c56f52e146f29c76"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32EntityPixelProbeEditor.cs",
+    "sha256": "6d0cc91589cf27cc72aef33dc44ba8e1885d1e7eeff23db745590cb467b4eb39"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32PublishedCatalogProbeEditor.cs",
+    "sha256": "c9afbd9aa1aa0e3ac6d34f1849b4a869cadd0c94c676e14c692545f15fd34c2a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid434NaturalBindingProbeEditor.cs",
+    "sha256": "e503686799bbb87be726217b5b6a1814f112d919d45be73f98b8035b3452ae05"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid434PublishedSpriteProbeEditor.cs",
+    "sha256": "badd13cc53285748d7f573c187cdc682b0d0a73d3d7ab1b1e0da1e6d7078aad8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07PoisonZeroHpBattlePlayProbeEditor.cs",
+    "sha256": "757f5062efea648e3720eea59d6763ee1a7e49456fdd8e40cc988b16449ac342"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ProjectBattleModeConfigEditorTests.cs",
+    "sha256": "21611cdb0b3d6cf5fa7258a23f79b9fe2a15d9f7c79164d9343fa716c558d8c9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ProjectModePublicationEditorTests.cs",
+    "sha256": "8ab178fec45c985f3fc9314970b65798957e81aea692014d4adf57c4c50a0216"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07RelativeNextBattlePlayProbeEditor.cs",
+    "sha256": "9a0de168e4825b4a10ebc33700adfbfe5a0316cc54da2b624ac624afff0bf921"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07RevivalPeerFullDriverEditorTests.cs",
+    "sha256": "f7f92bd94f0d681bc998b67e61f634b9b2c57eaccd816d7cde3cd08bd4dc10f8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07SasukeNeedleCameraProbeEditor.cs",
+    "sha256": "9500347c3971707aa7c6d77a0784c0ff3c8072452a2e387f33247cca38d54238"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07SasukeProjectileDualDomainEditorTests.cs",
+    "sha256": "7b9e43bc733a674f405a4dd33705181d77e45f2d5b9ce21abf84656923d9988a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07SpecialHitLatchBattlePlayProbeEditor.cs",
+    "sha256": "6ea93afa94a2c2a0713912ba819e94a8b0b4f201b6e477dfd6c0ce80a9a65d6b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07StagedCandidateIdentityEditorTests.cs",
+    "sha256": "5bd9da250619793913cf650cd5633a4254709c82620f85c98bca2b7ee504ed1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07StagedPublicationEditorTests.cs",
+    "sha256": "fb9e5affda17372697746882edaac12cccd2ceb1c00892268764733351c2d7ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07StrictFloorBattlePlayProbeEditor.cs",
+    "sha256": "eda9574cd2c5fd449bc9c0435946160c4938c916afc7aae9ffb1e853a34c8080"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07TeleportDatBattlePlayProbeEditor.cs",
+    "sha256": "e8abb55951658dd541180df704574bc04b6e6f97567ace8ff24e00b387c4087c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07WindowsBuildProbeEditor.cs",
+    "sha256": "b6864ab9567f3351f98c4ac275e007703791f0d8930733c45f52567156d01411"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07WindowsContentBuildProcessor.cs",
+    "sha256": "079bb670fdd08c5a20785bddfc725362ddc41ed60130fee97c7851b8d439fc48"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08BattleFlowRedProbeEditorTests.cs",
+    "sha256": "4b082f754b1f742d3eb8f741a267dfada0177168b12d29b1651432db3bbf67b0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08BattleOnlyRematchRedPlayModeTests.cs",
+    "sha256": "123657c49debaa8257b0c5e0d73f47029938dcca7da09525cdc45d90ac3d5f66"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08C009ReturningGroupBattlePlayProbeEditor.cs",
+    "sha256": "9082cda96c6a193801248c3fe9bce0d787117aee2be7e4056cbed912e5c7f30c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08CombatLethalPrecombatTimingEditorTests.cs",
+    "sha256": "4467474d4d8497c30ca3aa17488b124ce1c3d1eaf3bda69c5bae36bd6f80bfbf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08DirectBattleNaturalKoTwoCyclePlayModeTests.cs",
+    "sha256": "bc38387b2dfded077daff9d48dc609e482c2575410d38bf8f181eea7ee797cdf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08DirectBattleResultHostPlayModeTests.cs",
+    "sha256": "04c31d4e27805f6f22b92eed7b72d8f77de79843deff79eff030d00dffae752c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08FormalSourcePixelPlayModeTests.cs",
+    "sha256": "06862b724d55c1dffc99bfd6868d4cdacb83cd31e083f060ad6f1a59b33d0697"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08HeldCpointKoFullTickEditorTests.cs",
+    "sha256": "2ef0e1a3daf395f64e322a24912a37319c36ca2efdb01a73a165b1db218e4f16"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08KnockoutFeedLifetimeFullTickEditorTests.cs",
+    "sha256": "65df0ba617cad895cdc3cd774b9f7d3f9dad80e9e596e66764c4fd258159129a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08KoMissingOwnerCreditEditorTests.cs",
+    "sha256": "6f723dbffffa4d61a5164d2ae29bb0ab6b2004157c9958724f37c621d3192b04"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08NativeKnockoutEventStateEditorTests.cs",
+    "sha256": "14d9cb8ad9ca438180a6c1f99a2bd91c2561536c2820fc0f3dd191e26db8ab1d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08NegativeEnvironmentKoFullTickEditorTests.cs",
+    "sha256": "2ac3910468f6d100b67a919237b14c2cb693d1e61b4dee01751be69b76ba5f2a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.cs",
+    "sha256": "aabef5b713f38f5e696a804921214ae7087c01a4f694fb3cde121f9847f5c77e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests.cs",
+    "sha256": "6bde0b653fb3076bbc14cf5c546ce5cb31df75777328dc680aea2f5e0cd6184a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08StageGateBattlePlayProbeEditor.cs",
+    "sha256": "e7d8a31f374626498d9f1f6c0f73bd68bd500af1113b091638ac09943bf15b79"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q08State12KoFullTickEditorTests.cs",
+    "sha256": "e84afb16333799f58669369898e42ac5a974264fcfeb79d0a79f151f6fabf8e4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09BPointBleedLegacyPixelProbeEditor.cs",
+    "sha256": "174a4f37cde162d1229d7e966bef78ae45bc946ab6926b646205606032e61875"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09BPointBleedScenePixelProbeEditor.cs",
+    "sha256": "38b77e19fec5feed97cf5fecb539814c28ed100be37d3f96298c72da6bfee477"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09BPointNaturalHitBattlePlayProbeEditor.cs",
+    "sha256": "658f2767059b47c17530d100e0589ba10530baa2aa7729e081eebb1ed0835501"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09EarthquakeBackgroundEditorTests.cs",
+    "sha256": "1aec17323fb5f456313fdb49c6884335d129e1e7443f83e7c7f789b7930d30ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09EarthquakeStatePublicationEditorTests.cs",
+    "sha256": "fbab1945d57e1323ec37fba261dbfcbc28937fb3d47b942e025f0b0444f96d63"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor.cs",
+    "sha256": "ee1efd1265ed99415c3ba9c31da45dac012a2225fe41341401526a397ddb6e05"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09Etc998FallbackBattlePlayProbeEditor.cs",
+    "sha256": "82759a65aa0e5af1e931b33030b94eef8255cbd37f8278e4ac88c809390bd7da"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09FormalPlatformDriverPlayProbeEditor.cs",
+    "sha256": "a67322fea6395b01a086292793e484c2718085f83534e50047e031c201b0154f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09HanEarthquakeBattlePlayProbeEditor.cs",
+    "sha256": "4913a7e8e794e899d0e8dab145286760abb07016087916ff55d0e2a66019226e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KarinState9997BattlePlayProbeEditor.cs",
+    "sha256": "b1d8c073a62bd29cc27889db4e102c707a9953e9d67646e1f843ca0f0736281c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KillIconInputIdentityEditorTests.cs",
+    "sha256": "885c904490736e94507fbac2a79685597e5b18d802c82ea44421d6665808a728"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KillIconPublicationEditorTests.cs",
+    "sha256": "321ad8978b0e641f41cf591223ed65eaaa833821e58fc73ae02ada77d34d85a5"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KilltextModeInputEditorTests.cs",
+    "sha256": "8fab064f47126cd2d9f233f1e63a964eebdcfa08ba63ffee8f4903e12a17f3ed"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KnockoutFeedRowSnapshotEditorTests.cs",
+    "sha256": "dc8abd9e1b35970c572a663ed877255675e90bdd9f96fd637881de8049dd36a6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09LegacyShadowPrewarmEditorTests.cs",
+    "sha256": "57bb67058696df7ab441173a15226e0b4defcafb8ae7ebf57675deaa9737de77"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09NameplateNaturalPlayProbeEditor.cs",
+    "sha256": "01b6b95de6c8c01fbefdc5af7f9bd6a5d5f62c0c33ab0cf03a8b6aee397e097a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09NativeShadowGateEditorTests.cs",
+    "sha256": "32ec40874ad4c88fd41353af4de861a3a4f8461b8bbf0eb5074b81c38d1eca28"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs",
+    "sha256": "34b1a2eebe626515f66f763e031c2b0d0005bb5f7cedf11a8c0e8d8afd710664"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P20LoganGridCapacityEditorTests.cs",
+    "sha256": "f9573bff479d2e236ab663d50166d1eddaea38556f4a209a2fe5af26e3518b6f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09ReviveLivesGlyphAnchorEditorTests.cs",
+    "sha256": "eb38fb95ddeaa76b8ff57da9adf656d62323cc5e29edc2809a0d811ae59080e1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09SameZFormalSpritePixelProbeEditor.cs",
+    "sha256": "aee6c12a1669be59f8e616aacc6aa93ec75ee24730997f98896285a518c82534"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09SameZSceneOrderPlayProbeEditor.cs",
+    "sha256": "7d2e033e88a84031086c9229a9eaff1ab34a34a13ce74b2a0cae1e826d5d10ce"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09SelectedMode0BattlePlayProbeEditor.cs",
+    "sha256": "cac53dad99fa29aeb7ec13c4dfce91be2cd891a5e2ce8859d62425a92316e63f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09WordsInputIdentityEditorTests.cs",
+    "sha256": "f2c567605477e542ab383a79698a54df4fce2129e7d9aa06b185674a6911af6f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09WordsPublishedCatalogEditorTests.cs",
+    "sha256": "17c7d260d16828b29a0bacee5273189a460f470bb29f3cc884f79f247db12c85"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10AudioRendererMatrixCalibrationEditor.cs",
+    "sha256": "feefd3fb23d236e5e290e02642d4b8242f032181a2521247e7973f1802c7c5ef"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10KnockoutModeSoundEditorTests.cs",
+    "sha256": "26b023be3ed06e3530ae5592a826ee7667bd268fe7f0a2e62fb1d56181b76c64"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10NativeBattleVolumePhysicalPlayProbeEditor.cs",
+    "sha256": "873390466a8808688da2fd308b3c0221601e6adbb1e8f80aa8ccee2c13d1e2ea"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10SakuraNaturalStereoPlayModeTests.cs",
+    "sha256": "d27204bec3315b7ca32a93e04c2c7b5ea2c3d08970513266d363bed30c1fa343"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10SelectedRunCuePlayProbeEditor.cs",
+    "sha256": "e591080d0e8299bcda04ce9376a73532c3d1e2463da3103126704e505f715351"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q10StereoDiagonalCalibrationEditor.cs",
+    "sha256": "c4c4c4d262e15355b6d393b2da608dd5a4089f17bb5ebfc23b06d2891cd8753e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28R06NaturalRevivalEditorTests.cs",
+    "sha256": "f83d6d71328021995c8d6ef1634d73a3bbeecb92df5d339dc7d2be33e1df56fd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ResidualSerialTailRehomeEditorTests.cs",
+    "sha256": "cacc6c0bcdc74af2ae5752dfa7bfa44e63eddd193f731df6f0703932758bb38d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ResidualSerialTailRehomePlayModeProbeEditor.cs",
+    "sha256": "75a551ca07ee423381d51032ce978d42b910aacfc175473ad3c97f6800648611"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs",
+    "sha256": "b6dfc1496340258df85f507619a123ef883ff3596e18597b54c20f23711fd5fd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCoordinatePhysicsEditorTests.cs",
+    "sha256": "14d28198ae12025a0176f3fbb12713e3bf8462c56320bb4ac7c69cbc2af00e4d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceKind14FlagsEditorTests.cs",
+    "sha256": "34a742cd9523d8d403fe974f8df75b95e41810d92d6f05ffa7bf39048e8061ad"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceStageDepthEditorTests.cs",
+    "sha256": "7fc958926d2a8f7e14b311616974e4dd2cb5690b26e0aae229a5a8ff8a7a5e73"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28TraceContentIdentity.cs",
+    "sha256": "78a7cb6a1a055bd0c339ed54a45879ed843b6b7ccc0eda585e4653a1bed89e49"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityEntityRawCaptureEditorTests.cs",
+    "sha256": "1e52b63b36fe9d95d74876fbd1d7a8c126a42c32d549392071e7550342dd607c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+    "sha256": "4100394c9bd4a0ac6a5c53c9b6553f9c291fc6bc40e0f34442f3444b5fda5d6a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditorTests.cs",
+    "sha256": "9d6be6eb9a92c1158a1bec5e918cbd4b69162efa5527df4d05c18f05041d181c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UserRasenganPhysicalPlayProbeEditor.cs",
+    "sha256": "118f78929df7b01ee6e9828382f56da24c3777333292c12e44c7542034ede980"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UserRasenganWindowEditorTests.cs",
+    "sha256": "501f3a1332752779ab83724f2c9429140d448c746e06c33177a6ab9f78bcbc2f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSDResourceLoaderAllocationEditorTests.cs",
+    "sha256": "393f6fc2afc196fc52b63b6f533ecffbb2151945d676c7b14f82a5fcfb04e944"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/P1P2PhysicalInputSourceEditorTests.cs",
+    "sha256": "4bc2183056044426e373e79f1094718f4873b76e65861e3d0668e3654a89d9f8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PendingDestroySlotAdmissionEditorTests.cs",
+    "sha256": "724432fefa7593677fc2f2ec02767b82847c356f3e62e03b2bbcd469860e8e85"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PlayDomainReloadPoolLifecycleEditorTests.cs",
+    "sha256": "3cb97ede23a0093d16e5faa8654a118a7d95022b04b10eac11c1b9f9e5fd67ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PooledEntityReuseAllocationEditorTests.cs",
+    "sha256": "d2b4bdf92cc2189e0d492d73aac80e91cee4144b0c520ef264117a6121d5851c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PreInteractionNoOpProofEditorTests.cs",
+    "sha256": "264e5230b8ee31cc429b5a72b6320e3d549c71cf8936c68bfca9186fc26faabf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/ProductionEntityStressBatchExit.cs",
+    "sha256": "628a05287dd59c0ad652b8b8cc9dc59dd25c0affdeb88d0a353b82872abd69cc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/ProductionEntityStressCapacityPressureEditorTests.cs",
+    "sha256": "ac09d4e8202aa808df9ff8d36a44bba1ccab96f47276d4c2564eaaddae6aabfb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/ProductionEntityStressPlayerBuild.cs",
+    "sha256": "b5befa321a650ead29b4415051d94768dbc3eb3d860bd83b6a0d3df74b260323"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "sha256": "bb14cf6836519fb63d3deb041c0ad5c1df80789394ffe587bc77fc1df4a78db1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareFormalParticipantBufferEditorTests.cs",
+    "sha256": "6778dae87d05199ef380c5f531bd16bac8627d142f296cc7b5e8f373b2d4c174"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RuntimeRestStateSeamEditorTests.cs",
+    "sha256": "47cee10aacf652a933e084d60b324178e2ee583d6dd02cc100a0bf6b2c13955d"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RuntimeSlotLifecycleSeamEditorTests.cs",
+    "sha256": "7edb1899e06e1f8bb7441eb0f708e1ed487aa092e7d18e09125cae769dae4171"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SimulationQueryAndLinkModuleEditorTests.cs",
+    "sha256": "f87b17de3be89f45771149c945a8c891c7df48bab313fdb3b309edc8b4f903bc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SimulationTickHostPolicyEditorTests.cs",
+    "sha256": "079a8d9e25e9bd908c6481ef6f28f0a5ec2cee1a27028a3d4fcc4f38a06c2929"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SimulationWorldExtractedPassModuleEditorTests.cs",
+    "sha256": "b50a669896fe5ddaa363a6b0d9a8787f02e3b52ab087e5e1fbe646778979ea8e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SimulationWorldModuleArchitectureEditorTests.cs",
+    "sha256": "5dd97c00a88faf6327fd2f7a7b9709b6099eac0fb6f04c127327eec2fe8f1705"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SoundPresentationDispatchEditorTests.cs",
+    "sha256": "2ec9cbf5b762a3a545ef22e077eb6e746723154ee9b9b3a9b719fe8dac3689a7"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/StableIdDeterminismEditorTests.cs",
+    "sha256": "f3e6974bb857b97f572b79f227939bace9e2c19667633180e85bfbb16d477376"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/StageBoundsRuntimeSyncEditorTests.cs",
+    "sha256": "1fa8ab1140d12d8b50da7a8860a6bf4c6bf97126e5aac96ffd7cd4df371d82f1"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/StageSpawnRestAlignmentEditorTests.cs",
+    "sha256": "2b30573a177958850d8cabe75bb13244446db33d7a17dee1dffc4a486d814441"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/StrictDelayedInputBufferEditorTests.cs",
+    "sha256": "61bfc5b930e704354b93240bed58995255f27cf88901c6cf842c4fffb51261d0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/TeamPartitionGroundNearestEditorTests.cs",
+    "sha256": "852db27c1f41b34be8f8131b85983c5785189e27259508d88941231ec5a7cec4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/UnityPresentContentAuthorityEditorTests.cs",
+    "sha256": "d5f5932006b9a2452a9a35db13ba56eb3053681282bb48cfa66f5707334245cb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/W05OpointLifecycleEditorTests.cs",
+    "sha256": "3aad11a1e41b2213aec1c84f6591a028f4605860da4266f84fa3d35782b003a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/W06CollisionHitResolveWitnessEditorTests.cs",
+    "sha256": "854e067605d6205b371549830374434ac9abf2ecb88d5ec2fc94ecfdc83d1b56"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/W08PresentationPurityEditorTests.cs",
+    "sha256": "e2c56e8be72e00fb138ef1f99ae1f99ec67567bcdacee858f8dc442dbc689954"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/WPointDefaultAlignmentEditorTests.cs",
+    "sha256": "c92728ba885d85d354289042d7813dc9b630a86ecadc230d5acf9f2c0cccccbe"
+  }
+]

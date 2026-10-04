@@ -1,0 +1,47 @@
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset"
+ M Assets/NTSD/Scene/NTSD_Battle.unity
+ M Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs
+ D Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs
+ D Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs.meta
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs
+ M Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs
+ M Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs
+ M Assets/NTSD/Sprite/UIPanels/BattleHud/ButtonRippleRing.png.meta
+ M artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/build/Assembly-CSharp-Editor.dll
+ M artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/editor-obj/Assembly-CSharp-Editor.dll
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.md
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053TobiNaturalBattlePlayProbeEditor.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053TobiNaturalBattlePlayProbeEditor.cs.meta
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-INPUT-HISTORY-001/
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-INVESTIGATION-001/
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001/
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/HudNativeValidation.cs.txt
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/REPORT.txt
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/compile-editor-final.txt
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/diff-0.patch
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/diff-1.patch
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/diff-2.patch
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/ledger-validation.txt
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/postchange.json
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/unity-result.txt
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001/
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001/
+?? docs/ai/TASKS/NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001.md

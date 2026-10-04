@@ -36,6 +36,10 @@ namespace NTSD.Test.Editor
             "Temp/NTSD28_Q07_C053AuxType3Green.request.json";
         private const string AuxResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/";
+        private const string AuxWorld40ResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/";
+        private const string AuxWorld40ResidualPath =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/world40-postplay.json";
         private const string SessionKey = "NTSD.Q07.C053PerHitWriter02";
         private const string RunId = "ank580-ank580-jira500-per-hit-writer-02";
         private const string Q10RunId = "ank580-ank580-jira500-formal-wav-03";
@@ -43,10 +47,12 @@ namespace NTSD.Test.Editor
         private const string AuxDefaultRunId = "ank610-jira500-firz700-yminus60-default-02";
         private const string AuxPlanRunId = "ank610-jira500-firz700-yminus60-plan-03";
         private const string AuxGreenRunId = "ank610-jira500-firz700-yminus60-green-04";
+        private const string AuxWorld40RunId = "ank610-jira500-firz700-yminus60-world40-01";
 
         private static bool IsAuxRun(string runId) =>
             runId == AuxRunId || runId == AuxDefaultRunId ||
-            runId == AuxPlanRunId || runId == AuxGreenRunId;
+            runId == AuxPlanRunId || runId == AuxGreenRunId ||
+            runId == AuxWorld40RunId;
 
         private static Report report;
         private static SimulationTickDriver driver;
@@ -138,6 +144,33 @@ namespace NTSD.Test.Editor
             public int customCounter;
             public int customIndex;
             public ulong customCalls;
+            public WorldSlotSample[] worldSlots;
+        }
+
+        [Serializable]
+        private sealed class WorldSlotSample
+        {
+            public int slot;
+            public bool active;
+            public int oid = -1;
+            public int action = -1;
+            public int hp = -1;
+            public int x = -1;
+            public int y = -1;
+            public int z = -1;
+        }
+
+        [Serializable]
+        private sealed class ResidualReport
+        {
+            public string status;
+            public string sceneHashInPlayResult;
+            public string sceneHashNow;
+            public bool sceneDirty;
+            public int sceneRootCount;
+            public int sceneDriverCount;
+            public int sceneDriverWithWorldCount;
+            public int scenePoolCount;
         }
 
         [Serializable]
@@ -190,14 +223,92 @@ namespace NTSD.Test.Editor
         private static void Save()
         {
             SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
+            if (report.runId == AuxWorld40RunId && report.phase != "DONE") return;
             string path = PathInProject(ResultPath(report.runId));
             Directory.CreateDirectory(Path.GetDirectoryName(path));
+            if (report.runId == AuxWorld40RunId)
+            {
+                using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write,
+                           FileShare.None))
+                using (var writer = new StreamWriter(stream))
+                    writer.Write(JsonUtility.ToJson(report, true));
+                return;
+            }
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
         }
 
         private static string ResultPath(string runId) =>
             (runId == Q10RunId ? Q10ResultRoot :
+                runId == AuxWorld40RunId ? AuxWorld40ResultRoot :
                 IsAuxRun(runId) ? AuxResultRoot : ResultRoot) + runId + ".json";
+
+        [MenuItem("NTSD/Validation/Q07/C053 Auxiliary World 40 Tick Battle Probe")]
+        private static void StartAuxWorld40()
+        {
+            Restore();
+            Require(report == null && !EditorApplication.isPlayingOrWillChangePlaymode &&
+                !EditorApplication.isCompiling && !EditorApplication.isUpdating,
+                "C053 probe or Editor activity is already running.");
+            Require(string.Equals(Path.GetFullPath(Application.dataPath).Replace('\\', '/'),
+                    "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets",
+                    StringComparison.OrdinalIgnoreCase), "This probe requires the original project.");
+            Scene scene = SceneManager.GetActiveScene();
+            Require(scene.path == BattleScene && !scene.isDirty && SceneManager.sceneCount == 1,
+                "This probe requires one saved Battle Scene.");
+            Require(!File.Exists(PathInProject(ResultPath(AuxWorld40RunId))),
+                "Refusing to overwrite the C053 40 tick result.");
+            report = new Report { runId = AuxWorld40RunId, phase = "STARTUP",
+                status = "RUNNING", startedUtc = DateTime.UtcNow.ToString("O"),
+                sceneHashBefore = HashScene() };
+            Save();
+            EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Q07/C053 Auxiliary World 40 Tick Post Play Residual")]
+        private static void CheckAuxWorld40Residual()
+        {
+            Restore();
+            Require(report == null && !EditorApplication.isPlayingOrWillChangePlaymode &&
+                !EditorApplication.isCompiling && !EditorApplication.isUpdating,
+                "Post-Play residual check requires an idle EditMode Editor.");
+            Scene scene = SceneManager.GetActiveScene();
+            Require(scene.path == BattleScene && SceneManager.sceneCount == 1,
+                "Post-Play residual check requires the original Battle Scene.");
+            string resultPath = PathInProject(ResultPath(AuxWorld40RunId));
+            Require(File.Exists(resultPath), "The original C053 40 tick result is missing.");
+            string residualPath = PathInProject(AuxWorld40ResidualPath);
+            Require(!File.Exists(residualPath), "Refusing to overwrite residual result.");
+            Report prior = JsonUtility.FromJson<Report>(File.ReadAllText(resultPath));
+            Require(prior != null && prior.phase == "DONE" && prior.exitedPlay,
+                "The original C053 40 tick result is not complete.");
+            SimulationTickDriver[] drivers =
+                Resources.FindObjectsOfTypeAll<SimulationTickDriver>()
+                    .Where(value => value != null && !EditorUtility.IsPersistent(value) &&
+                        value.gameObject.scene == scene).ToArray();
+            LF2ObjectPool[] pools = Resources.FindObjectsOfTypeAll<LF2ObjectPool>()
+                .Where(value => value != null && !EditorUtility.IsPersistent(value) &&
+                    value.gameObject.scene == scene).ToArray();
+            var residual = new ResidualReport
+            {
+                sceneHashInPlayResult = prior.sceneHashAfter,
+                sceneHashNow = HashScene(),
+                sceneDirty = scene.isDirty,
+                sceneRootCount = scene.rootCount,
+                sceneDriverCount = drivers.Length,
+                sceneDriverWithWorldCount = drivers.Count(value => value.World != null),
+                scenePoolCount = pools.Length
+            };
+            residual.status = prior.sceneCleanAfter && !residual.sceneDirty &&
+                residual.sceneHashInPlayResult == residual.sceneHashNow &&
+                residual.sceneDriverCount == 1 &&
+                residual.sceneDriverWithWorldCount == 0 && residual.scenePoolCount == 0
+                    ? "SCOPED_PASS" : "INCONCLUSIVE";
+            Directory.CreateDirectory(Path.GetDirectoryName(residualPath));
+            using (var stream = new FileStream(residualPath, FileMode.CreateNew,
+                       FileAccess.Write, FileShare.None))
+            using (var writer = new StreamWriter(stream))
+                writer.Write(JsonUtility.ToJson(residual, true));
+        }
 
         private static void Restore()
         {
@@ -263,7 +374,8 @@ namespace NTSD.Test.Editor
                 if (!EditorApplication.isPlaying) return;
                 if (report.phase == "STARTUP")
                 {
-                    if (report.runId != AuxDefaultRunId && report.runId != AuxGreenRunId)
+                    if (report.runId != AuxDefaultRunId && report.runId != AuxGreenRunId &&
+                        report.runId != AuxWorld40RunId)
                         ConfigureShadowAtResetBoundary();
                     WaitForRoster();
                     return;
@@ -323,7 +435,8 @@ namespace NTSD.Test.Editor
             driver = SimulationTickDriver.Instance;
             world = driver?.World;
             if (world == null || driver.CurrentTickIndex < 5) return;
-            if (report.runId == AuxDefaultRunId || report.runId == AuxGreenRunId)
+            if (report.runId == AuxDefaultRunId || report.runId == AuxGreenRunId ||
+                report.runId == AuxWorld40RunId)
                 Require(world.BattleHitExecutionPlanModeForDiagnostics ==
                     BattleHitExecutionPlanMode.Disabled,
                     "Default hit plan mode changed before the first battle tick.");
@@ -517,13 +630,28 @@ namespace NTSD.Test.Editor
             return null;
         }
 
+        private static WorldSlotSample CaptureWorldSlot(int slot)
+        {
+            LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
+            var sample = new WorldSlotSample { slot = slot, active = entity != null };
+            if (entity == null) return sample;
+            sample.oid = entity.ObjectId;
+            sample.action = entity.Frame.N;
+            sample.hp = entity.Runtime.HP;
+            sample.x = entity.Runtime.SourceRuleXInt;
+            sample.y = entity.Runtime.YInt;
+            sample.z = entity.Runtime.SourceRuleZInt;
+            return sample;
+        }
+
         private static void MeasureOneTick()
         {
             Require(ReferenceEquals(driver.World, world) && driver.IsPaused &&
                 !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics,
                 "Production World changed or tick boundary is not stable.");
             Require(driver.CurrentTickIndex == report.endTick, "Unobserved tick while paused.");
-            if (report.ticks.Count == 12) { CompleteMeasurement(); return; }
+            int targetTickCount = report.runId == AuxWorld40RunId ? 40 : 12;
+            if (report.ticks.Count == targetTickCount) { CompleteMeasurement(); return; }
             int next = driver.CurrentTickIndex + 1;
             long q10PlayedBefore = report.runId == Q10RunId
                 ? soundPlayer.PooledOneShotPlayCountForDiagnostics
@@ -698,7 +826,11 @@ namespace NTSD.Test.Editor
                 crtCalls = rng.CrtCalls,
                 customCounter = rng.SynchronizedCounter,
                 customIndex = rng.SynchronizedIndex,
-                customCalls = rng.SynchronizedCalls
+                customCalls = rng.SynchronizedCalls,
+                worldSlots = report.runId == AuxWorld40RunId
+                    ? new[] { CaptureWorldSlot(0), CaptureWorldSlot(1),
+                        CaptureWorldSlot(2), CaptureWorldSlot(50), CaptureWorldSlot(51) }
+                    : null
             };
             if (child != null && report.childBirthTick < 0)
                 report.childBirthTick = row.relativeTick;
@@ -712,6 +844,21 @@ namespace NTSD.Test.Editor
         private static void CompleteMeasurement()
         {
             TickRow seventh = report.ticks.Single(value => value.relativeTick == 7);
+            if (report.runId == AuxWorld40RunId)
+            {
+                Require(report.ticks.Count == 40 && report.childBirthTick == 1 &&
+                    report.attackerBirthTick == 4 && seventh.auxiliarySlot == 2 &&
+                    seventh.auxiliaryAction == 20 && seventh.auxiliaryHp == 368 &&
+                    seventh.childSlot == 50 && seventh.childAction == 156 &&
+                    seventh.childHp == 440 && seventh.attackerSlot == 51 &&
+                    seventh.attackerAction == 11,
+                    "C053 controlled tick7 witness differs before 40 tick CSV comparison.");
+                report.status = "MEASURED_COMPARE_PENDING";
+                report.phase = "EXITING";
+                Save();
+                EditorApplication.ExitPlaymode();
+                return;
+            }
             bool matched;
             if (report.runId == AuxDefaultRunId || report.runId == AuxGreenRunId)
             {

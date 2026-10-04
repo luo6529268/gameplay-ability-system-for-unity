@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "authority": "336B44 formal source capture-a; source/root slot fields certified separately",
+  "sourceCsv": "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001/capture-a/source-ticks.csv",
+  "unityJson": "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/ank610-jira500-firz700-yminus60-world40-01.json",
+  "sourceSha256": "71C1725185963ECA535AB38522E14633FDCDE0423496DC515BEC8BB917CA83FF",
+  "unitySha256": "6E063785FFA4AD40219172D7101CDA3A363772F756AC0DD29384AABBFBE477A6",
+  "ticks": 40,
+  "slots": [
+    0,
+    1,
+    2,
+    50,
+    51
+  ],
+  "comparableSlotValues": 1136,
+  "slotDifferences": 0,
+  "firstSlotDifference": [],
+  "slotDifferencesPreview": [],
+  "perFieldComparable": {
+    "active": 200,
+    "oid": 156,
+    "action": 156,
+    "hp": 156,
+    "x": 156,
+    "y": 156,
+    "z": 156
+  },
+  "rngScalarCompared": 200,
+  "rngScalarDifferences": 0,
+  "firstRngScalarDifference": [],
+  "notes": [
+    "Inactive slot payload skipped; active flag always compared.",
+    "Controlled auxiliary OID251/action0 is not natural player input reachability."
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "status": "SCOPED_MATCH",
+  "sourceCsv": "../NTSD28-336B44-Q10-ORASENGAN-JUMP-ROOT-LFR-20261004/source-01/run/jump_first253-source.csv",
+  "unityJson": "naruto-078-scene-01.json",
+  "fields": {
+    "inputPhase": {
+      "matched": 55,
+      "total": 55,
+      "mismatches": []
+    },
+    "narutoAction": {
+      "matched": 55,
+      "total": 55,
+      "mismatches": []
+    },
+    "narutoPp": {
+      "matched": 55,
+      "total": 55,
+      "mismatches": []
+    },
+    "combo1": {
+      "matched": 55,
+      "total": 55,
+      "mismatches": []
+    },
+    "pending078Count": {
+      "matched": 55,
+      "total": 55,
+      "mismatches": []
+    }
+  },
+  "matchedFieldValues": 275,
+  "totalFieldValues": 275,
+  "first078PendingTick": 34,
+  "first078VoiceTick": 34,
+  "formalVoicePlayingAtTick34": true,
+  "formalCueSourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\078.wav",
+  "legacyCueSourcePath": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\078.wav",
+  "formalClip": {
+    "samples": 54104,
+    "channels": 1,
+    "frequency": 22050
+  },
+  "sixProtectedHashesSameWithinPlay": true,
+  "note": "Unity Health.PP is compared with formal actor_mp; Runtime.MP is a distinct diagnostic field and not the authoritative consumed PP in this path."
+}

@@ -1,0 +1,21 @@
+diff --git a/Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs b/Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs
+index b92343b2..445bc370 100644
+--- a/Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs
+@@ -164,7 +164,15 @@ namespace NTSD.Test.Editor
+             typeof(LF2Character).GetProperty("FrameCache",
+                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                 .SetValue(character, cache);
+-            cache.Load(new LF2CharacterDataWrapper(1, data));
++            var config = new LF2CharacterDataWrapper(1, data);
++            cache.Load(config);
++            var world = new SimulationWorld();
++            world.RuntimeDataCatalog.Prepare(
++                new[] { new ObjectDefinition { id = 1, type = 0 } }, _ => config);
++            world.RuntimeDataCatalog.Seal();
++            typeof(LF2Entity).GetField("registeredWorld", BindingFlags.Instance | BindingFlags.NonPublic)
++                .SetValue(character, world);
++            character.Runtime.ObjectId = 1;
+             character.Frame.D = idle;
+             character.Frame.N = 0;
+             character.Runtime.InputLocalResourceEnabled49D034 = true;

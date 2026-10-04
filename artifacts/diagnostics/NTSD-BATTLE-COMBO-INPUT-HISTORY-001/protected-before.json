@@ -1,0 +1,30 @@
+[
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "8cc5614574321908cdb89baeb6be60e41616eb3ca6f6ddef35b34f723269047e"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "9eaaa0b4782974d74a017c367c9d5c77326c31d4281a2d820d1cbba76986c1ba"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "de3e64b21e06e7ea600ca9a1d47a997f3e3df6eeac24185f4350e0021f9badf9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "8c0e2b3ff0acf60eb65b18ddda508146b85b2e9052a8678035a781f19dd83b2a"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButton.cs",
+    "sha256": "ee592bb3a6efb49ced09b09f2b36965cfa8aae549ecc03e2f55571828d49fa76"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs",
+    "sha256": "04b44a3c2e0b7e47014bc5975caaa59bdbb69a1ef7bb89820e8214785d3ec22b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs",
+    "sha256": "863bf64ca4df2c9266daf1fe9187e67ae1e4389b205d3042295969fdbb526041"
+  }
+]

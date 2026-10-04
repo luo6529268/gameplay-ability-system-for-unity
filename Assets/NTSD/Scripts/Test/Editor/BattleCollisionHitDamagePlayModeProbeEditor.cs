@@ -22,10 +22,14 @@ namespace NTSD.Test.Editor
             "NTSD/验证/R8/运行碰撞命中伤害Abort Play探针";
         private const string C048MenuPath =
             "NTSD/验证/Q07/C048首BDY防御累计Play探针";
+        private const string LatchOnlyMenuPath =
+            "NTSD/Validation/Q07/C053 Latch Only Play Probe";
         private const string ResultRelativePath =
             "Temp/NTSD_R8_WP01C_04_CollisionHitDamage.result.json";
         private const string C048ResultRelativePath =
             "Temp/NTSD28_Q07_C048_FirstBody.result.json";
+        private const string LatchOnlyResultRelativePath =
+            "Temp/NTSD28_Q07_C053_LatchOnly_20261004_v2.result.json";
         private const int TickTimeoutEditorUpdates = 1800;
         private const int MaximumBaselineEntities = 64;
         private const int ProbeOidBase = 8200;
@@ -53,13 +57,26 @@ namespace NTSD.Test.Editor
         private static bool baselineCaptured;
         private static bool running;
         private static bool c048Only;
+        private static bool latchOnly;
         private static int editorUpdates;
 
         [MenuItem(MenuPath)]
         public static void RunFromMenu()
         {
+            StartProbe(latchOnlyRequest: false);
+        }
+
+        private static void StartProbe(bool latchOnlyRequest)
+        {
             StopObservation();
             ResetProbeState();
+            latchOnly = latchOnlyRequest;
+            if (latchOnly && File.Exists(Path.GetFullPath(Path.Combine(
+                    Application.dataPath, "..", LatchOnlyResultRelativePath))))
+            {
+                Debug.LogError("[BattleCollisionHitDamagePlayModeProbe] Refusing to overwrite the C053 latch-only result.");
+                return;
+            }
             if (!EditorApplication.isPlaying)
             {
                 WriteImmediateFailure("Play Mode is not active.");
@@ -93,6 +110,12 @@ namespace NTSD.Test.Editor
         {
             RunFromMenu();
             c048Only = running;
+        }
+
+        [MenuItem(LatchOnlyMenuPath)]
+        public static void RunLatchOnlyFromMenu()
+        {
+            StartProbe(latchOnlyRequest: true);
         }
 
         private static void Observe()
@@ -137,7 +160,8 @@ namespace NTSD.Test.Editor
 
             try
             {
-                result.matrix = c048Only ? ExecuteC048Only() : ExecuteMatrix();
+                result.matrix = latchOnly ? ExecuteLatchOnly() :
+                    c048Only ? ExecuteC048Only() : ExecuteMatrix();
                 FinishSuccess();
             }
             catch (Exception exception)
@@ -518,6 +542,57 @@ namespace NTSD.Test.Editor
                     hp = target.Health.HP,
                     bdefend = target.Runtime.Bdefend,
                     vrest = vrest,
+                },
+            };
+        }
+
+        private static MatrixEvidence ExecuteLatchOnly()
+        {
+            ProbeCharacter attacker = RegisterOwned(new ProbeCharacter(
+                "Q07C053_LatchAttacker", ProbeOidBase + 100,
+                AttackItr(0, 10, 3, 0), false));
+            ProbeCharacter first = RegisterOwned(new ProbeCharacter(
+                "Q07C053_LatchFirst", ProbeOidBase + 101, null, true));
+            ProbeCharacter second = RegisterOwned(new ProbeCharacter(
+                "Q07C053_LatchSecond", ProbeOidBase + 102, null, true));
+            ConfigureTriple(attacker, first, second, 110000);
+
+            int tick = driver.CurrentTickIndex + 400;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.TickCollisionPairVRestAll();
+            world.CollectCollisionCandidatesAll();
+            RequireBaselineHasNoCandidates();
+            Require(RequireCandidateOrder(attacker, first, second) == 2,
+                "C053 latch fixture did not collect two ordered character candidates.");
+
+            attacker.Runtime.SpecialHitLatch0EB = true;
+            attacker.HitConfirm2 = 0;
+            world.PostInteractionTickAll(tick);
+
+            int firstRest = world.GetRawRestVrest(
+                first.Runtime.SlotIndex, attacker.Runtime.SlotIndex);
+            int secondRest = world.GetRawRestVrest(
+                second.Runtime.SlotIndex, attacker.Runtime.SlotIndex);
+            Require(first.Health.HP == 100 && second.Health.HP == 100 &&
+                    firstRest == 0 && secondRest == 0 &&
+                    attacker.Runtime.SpecialHitLatch0EB && attacker.HitConfirm2 == 0,
+                "C053 latch must reject each queued character candidate without writers.");
+
+            return new MatrixEvidence
+            {
+                tick = tick,
+                totalCandidates = 2,
+                latchCharacterCandidates = new LatchCharacterEvidence
+                {
+                    attackerSlot = attacker.Runtime.SlotIndex,
+                    firstTargetSlot = first.Runtime.SlotIndex,
+                    secondTargetSlot = second.Runtime.SlotIndex,
+                    firstHp = first.Health.HP,
+                    secondHp = second.Health.HP,
+                    firstVrest = firstRest,
+                    secondVrest = secondRest,
+                    hitConfirm2 = attacker.HitConfirm2,
+                    specialHitLatch0eb = attacker.Runtime.SpecialHitLatch0EB,
                 },
             };
         }
@@ -907,10 +982,12 @@ namespace NTSD.Test.Editor
         private static void FinishSuccess()
         {
             result.status = "PASS";
-            result.message = c048Only
-                ? "Formal OID301 first-BDY response and Bdefend45 passed."
-                : "Live collision collect, ordered hit consumption, damage/stat, " +
-                  "durability, vrest and abort matrices passed.";
+            result.message = latchOnly
+                ? "C053 latch preserved both character targets' HP, vrest, and hit-confirm state."
+                : c048Only
+                    ? "Formal OID301 first-BDY response and Bdefend45 passed."
+                    : "Live collision collect, ordered hit consumption, damage/stat, " +
+                      "durability, vrest and abort matrices passed.";
             result.endTick = driver.CurrentTickIndex;
             result.producedSoundCount = world.PendingSounds.Count - BaselineSounds.Count;
             result.rngCallsDuringMatrix = world.Rng.CallCount - baselineRngCalls;
@@ -1072,7 +1149,8 @@ namespace NTSD.Test.Editor
             string path = Path.GetFullPath(Path.Combine(
                 Application.dataPath,
                 "..",
-                c048Only ? C048ResultRelativePath : ResultRelativePath));
+                latchOnly ? LatchOnlyResultRelativePath :
+                    c048Only ? C048ResultRelativePath : ResultRelativePath));
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? string.Empty);
             File.WriteAllText(path, JsonUtility.ToJson(probeResult, true));
         }
@@ -1101,6 +1179,7 @@ namespace NTSD.Test.Editor
             baselineCaptured = false;
             running = false;
             c048Only = false;
+            latchOnly = false;
             editorUpdates = 0;
             OwnedEntities.Clear();
             BaselineEntities.Clear();
@@ -1408,6 +1487,7 @@ namespace NTSD.Test.Editor
             public HitEvidence special;
             public FirstBodyResponseEvidence formalCriminalFirstBody;
             public GateEvidence hitConfirmAbort;
+            public LatchCharacterEvidence latchCharacterCandidates;
             public GateEvidence caughtGate;
             public GateEvidence effect21Abort;
             public RawFrameEvidence rawFrame;
@@ -1464,6 +1544,20 @@ namespace NTSD.Test.Editor
             public int secondHp;
             public bool attackerAborted;
             public bool firstSkippedOnly;
+            public bool specialHitLatch0eb;
+        }
+
+        [Serializable]
+        private sealed class LatchCharacterEvidence
+        {
+            public int attackerSlot;
+            public int firstTargetSlot;
+            public int secondTargetSlot;
+            public int firstHp;
+            public int secondHp;
+            public int firstVrest;
+            public int secondVrest;
+            public int hitConfirm2;
             public bool specialHitLatch0eb;
         }
 

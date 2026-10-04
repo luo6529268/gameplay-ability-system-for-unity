@@ -41,7 +41,7 @@ namespace NTSD.UI
         private void Awake()
         {
             button = GetComponent<NTSDButton>();
-            ringImage = this.GetComponent<Image>();
+            ringImage = this.transform.GetChild(0).GetComponent<Image>();
             if (ringImage == null)
                 return;
 

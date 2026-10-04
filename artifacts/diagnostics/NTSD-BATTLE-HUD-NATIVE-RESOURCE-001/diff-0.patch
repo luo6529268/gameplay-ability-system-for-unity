@@ -1,0 +1,21 @@
+--- before/Assets\NTSD\Scripts\Simulation\Core\NTSDEntityRuntime.cs
++++ Assets\NTSD\Scripts\Simulation\Core\NTSDEntityRuntime.cs
+@@ -464,7 +464,7 @@
+         private int mp = 500;
+         [UnityEngine.SerializeField, UnityEngine.Serialization.FormerlySerializedAs("MPMax")]
+         private int mpMax = 500;
+-        public int MP { get => mp; set => SetHudVitalValue(ref mp, value, BattleHudChanges.Mp); }
++        public int MP { get => mp; set => mp = value; }
+         public int MPMax { get => mpMax; set => SetHudVitalValue(ref mpMax, value, BattleHudChanges.MpMax); }
+         private int pp = 500;
+         public int PPMax = 500;
+@@ -508,7 +508,8 @@
+             vitalStore?.CaptureChangedField(vitalStoreSlot, changedField, value);
+             BattleHudChanges hudField = changedField == RuntimeVitalField.Hp ? BattleHudChanges.Hp :
+                 changedField == RuntimeVitalField.HpBound ? BattleHudChanges.HpBound :
+-                changedField == RuntimeVitalField.Hp3 ? BattleHudChanges.HpMax : BattleHudChanges.None;
++                changedField == RuntimeVitalField.Hp3 ? BattleHudChanges.HpMax :
++                changedField == RuntimeVitalField.Pp ? BattleHudChanges.Mp : BattleHudChanges.None;
+             if (hudField != BattleHudChanges.None)
+                 hudChanges?.Capture(hudPlayerIndex, hudHandle, hudField, value);
+         }

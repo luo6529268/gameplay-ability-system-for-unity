@@ -116,7 +116,7 @@ namespace NTSD.UI
         {
             if (characterUISprites.TryGetValue(characterId, out CharacterUISprites sprites))
             {
-                return sprites.HeadSprite;
+                return sprites.SmallSprite;
             }
             return null;
         }

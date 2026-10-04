@@ -1,0 +1,17 @@
+{
+  "command": "Remove-Item -LiteralPath <two exact SHA-guarded manifest paths>",
+  "endUtc": "2026-10-04T06:44:18.6896837+00:00",
+  "processId": 73768,
+  "absent": [
+    {
+      "absent": true,
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleHudEventEditorTests.cs"
+    },
+    {
+      "absent": true,
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleHudEventEditorTests.cs.meta"
+    }
+  ],
+  "exitCode": 0,
+  "startUtc": "2026-10-04T06:44:18.6819106+00:00"
+}

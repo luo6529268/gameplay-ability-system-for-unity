@@ -1,0 +1,37 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "de3e64b21e06e7ea600ca9a1d47a997f3e3df6eeac24185f4350e0021f9badf9",
+    "matches_before": false
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "8c0e2b3ff0acf60eb65b18ddda508146b85b2e9052a8678035a781f19dd83b2a",
+    "matches_before": false
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs",
+    "sha256": "a003b5fb095ff3557a01df0f1a57660dda303f72ac0747ac395b34995d21e7bb",
+    "matches_before": false
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "2bf4047cb7de3d27cbb407003c7bbde0e7cb4baddc11a30db1bc79a62e1d67c1",
+    "matches_before": false
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "9eaaa0b4782974d74a017c367c9d5c77326c31d4281a2d820d1cbba76986c1ba",
+    "matches_before": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "a2b8c98d4bcd6ad951aae1c1fd6294e982fa9500a59abfabe1d06bc414182947",
+    "matches_before": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs",
+    "sha256": "d2fb45dda35937f75d9b892d592faeb5bba91813ecf5e317d9fc34cc77bc020e",
+    "matches_before": true
+  }
+]

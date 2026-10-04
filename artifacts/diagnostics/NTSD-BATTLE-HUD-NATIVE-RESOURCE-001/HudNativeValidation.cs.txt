@@ -1,0 +1,58 @@
+
+using System;using System.IO;using System.Linq;using System.Reflection;using System.Collections.Generic;
+public class HudNativeValidation {
+ static Assembly a;static BindingFlags all=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+ static object New(string n)=>Activator.CreateInstance(a.GetType(n,true),true);
+ static object Call(object o,string n,params object[] args)=>o.GetType().GetMethods(all).Single(m=>m.Name==n&&m.GetParameters().Length==args.Length).Invoke(o,args);
+ static object Get(object o,string n)=>o.GetType().GetField(n,all)?.GetValue(o)??o.GetType().GetProperty(n,all).GetValue(o);
+ static void Set(object o,string n,object v){var f=o.GetType().GetField(n,all);if(f!=null)f.SetValue(o,v);else o.GetType().GetProperty(n,all).SetValue(o,v);}
+ static object Act(string s)=>Enum.Parse(a.GetType("NTSD.App.BattleInputAction"),s);
+ static void UI(object o,string s,bool p)=>Call(o,"NTSD.App.IPlayerActionInputSink.SetActionPressed",Act(s),p);
+ static void Device(object o,string s,bool p)=>Call(o,"Set"+s+"ActionPressed",p);
+ static object Held(object o)=>Call(o,"NTSD.Simulation.ILocalFrameInputSource.CaptureHeldSimulationButtons");
+ static void Check(bool ok,string s){if(!ok)throw new Exception(s);UnityEngine.Debug.Log("PASS "+s);}
+ public static void Run(){ try { Execute(); Focused(); UnityEditor.EditorApplication.Exit(0); } catch(Exception ex) { UnityEngine.Debug.LogException(ex); File.WriteAllText(@"C:\Users\Logan\AppData\Local\Temp\NTSDHudNativeValidation-001\result.txt",ex.ToString()); UnityEditor.EditorApplication.Exit(2); } }
+
+ static void Focused(){
+ var root=@"I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity";
+ Assembly.LoadFrom(Path.Combine(root,"Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll"));
+ var ed=Assembly.LoadFrom(Path.Combine(root,"artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/build/Assembly-CSharp-Editor.dll"));
+ var t=ed.GetType("NTSD.Test.Editor.BattleHudEventEditorTests",true);var test=Activator.CreateInstance(t);int count=0;
+ foreach(var m in t.GetMethods(BindingFlags.Public|BindingFlags.Instance|BindingFlags.DeclaredOnly)) { if(m.GetParameters().Length!=0)continue;m.Invoke(test,null);UnityEngine.Debug.Log("FOCUSED PASS "+m.Name);count++; }
+ File.AppendAllText(@"C:\Users\Logan\AppData\Local\Temp\NTSDHudNativeValidation-001\result.txt","\nFocused test methods passed: "+count);
+ }
+ static void Execute(){
+ var root=@"I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity";var dirs=new[]{Path.Combine(root,"artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/build"),Path.Combine(root,"Library/ScriptAssemblies"),@"D:\Unity\HubEditor\2022.3.62f3\Editor\Data\Managed\UnityEngine",@"D:\Unity\HubEditor\2022.3.62f3\Editor\Data\Managed"};
+ AppDomain.CurrentDomain.AssemblyResolve+=(s,e)=>{var n=new AssemblyName(e.Name).Name+".dll";foreach(var d in dirs){var p=Path.Combine(d,n);if(File.Exists(p))return Assembly.LoadFrom(p);}return null;};
+ a=Assembly.LoadFrom(Path.Combine(dirs[0],"Assembly-CSharp.dll"));UnityEngine.Debug.Log("Actual managed assembly: "+a.Location);
+
+ var parser=New("NTSD.DatParser.Lf2DatParserV2");var converter=a.GetType("NTSD.DatParser.Lf2DatConverter");var writer=New("NTSD.Simulation.Ecs.BattleCharacterActionWriter");
+
+ var path=Path.Combine(root,"Assets/NTSD/Content/LoganRuntime/decoded_dat/c/ank/ank.dat");var parsed=Call(parser,"ParseLoganContent",File.ReadAllText(path),path);var data=New("NTSD.Animation.LF2CharacterData");var frames=(System.Collections.IList)Get(data,"frames");foreach(var block in (System.Collections.IEnumerable)Get(parsed,"Frames"))frames.Add(converter.GetMethod("ConvertLoganFrameData").Invoke(null,new[]{block}));
+ var wrap=Activator.CreateInstance(a.GetType("NTSD.Animation.LF2CharacterDataWrapper"),new object[]{1,data});var ch=New("NTSD.Animation.LF2Objects.LF2Character");var cache=New("NTSD.Animation.LF2FrameCache");Set(ch,"FrameCache",cache);Call(cache,"Load",wrap);var rt=Get(ch,"Runtime");var fi=Get(ch,"Frame");Set(fi,"D",Call(cache,"GetNativeFrameDataById",0));Set(fi,"N",0);Set(rt,"HP",500);Set(rt,"PP",500);Set(rt,"InputLocalResourceEnabled49D034",true);
+  var world=New("NTSD.Simulation.SimulationWorld");var cat=Get(world,"RuntimeDataCatalog"); var prepare=cat.GetType().GetMethod("Prepare"); var def=Activator.CreateInstance(prepare.GetParameters()[0].ParameterType.GetGenericArguments()[0]); Set(def,"id",1); Set(def,"type",0); var defs=Array.CreateInstance(def.GetType(),1);defs.SetValue(def,0); var funcType=prepare.GetParameters()[1].ParameterType; var resolver=System.Linq.Expressions.Expression.Lambda(funcType,System.Linq.Expressions.Expression.Constant(wrap,wrap.GetType()),System.Linq.Expressions.Expression.Parameter(typeof(int))).Compile(); prepare.Invoke(cat,new object[]{defs,resolver,Activator.CreateInstance(prepare.GetParameters()[2].ParameterType),null});Call(cat,"Seal");a.GetType("NTSD.Animation.LF2Objects.LF2Entity").GetField("registeredWorld",all).SetValue(ch,world);Set(rt,"ObjectId",1);Set(data,"name","Anko"); var driverType=a.GetType("NTSD.Simulation.SimulationTickDriver"); var host=new UnityEngine.GameObject("IsolatedHudHost");host.SetActive(false); var driver=host.AddComponent(driverType);driverType.BaseType.GetProperty("Instance").SetValue(null,driver);Set(driver,"_world",world);Set(driver,"lifecycleState",Enum.Parse(a.GetType("NTSD.Simulation.BattleRuntimeLifecycleState"),"Running"));
+ var hud=new UnityEngine.GameObject("IsolatedHUD");hud.SetActive(false);var view=hud.AddComponent(a.GetType("NTSD.UI.Battle.BattleHudView"));
+ UnityEngine.UI.Image MakeImage(string name){var go=new UnityEngine.GameObject(name,typeof(UnityEngine.RectTransform),typeof(UnityEngine.UI.Image));go.transform.SetParent(hud.transform);var img=go.GetComponent<UnityEngine.UI.Image>();img.type=UnityEngine.UI.Image.Type.Filled;img.fillMethod=UnityEngine.UI.Image.FillMethod.Horizontal;return img;}
+ var hpImg=MakeImage("HP");var mpImg=MakeImage("MP");var boundImg=MakeImage("HPBound");Set(view,"hpImage",hpImg);Set(view,"mpImage",mpImg);Set(view,"hpPreviewImage",boundImg);
+ var evtType=a.GetType("NTSD.UI.Battle.BattleHudChangedEvent");var eventManager=Assembly.Load("MoreMountains.Tools").GetType("MoreMountains.Tools.MMEventManager");var trigger=eventManager.GetMethods(all).Single(m=>m.Name=="TriggerEvent"&&m.IsGenericMethod).MakeGenericMethod(evtType);
+ object Dispatch(){Call(driver,"DispatchBattleHudChanges",false);return Get(Get(driver,"lastBattleHudEvent"),"Values");}
+
+ void VerifyImages(object vals,string label){Check(Math.Abs(hpImg.fillAmount-UnityEngine.Mathf.Clamp01((float)(int)Get(vals,"Hp")/(int)Get(vals,"HpMax")))<.001,label+" HP Image");Check(Math.Abs(mpImg.fillAmount-UnityEngine.Mathf.Clamp01((float)(int)Get(vals,"Mp")/(int)Get(vals,"MpMax")))<.001,label+" MP Image");}
+ var tracker=Get(world,"HudChanges");var handle=Activator.CreateInstance(tracker.GetType().GetMethod("Bind",all).GetParameters()[2].ParameterType,new object[]{0,(uint)1});Call(tracker,"Bind",0,rt,handle);object[] consume={null};consume[0]=Dispatch();var firstEvent=Get(driver,"lastBattleHudEvent");Call(view,"OnEnable");VerifyImages(consume[0],"initial bind");
+
+ void Snapshot(string label,int expectedHp,int expectedMp){long old=(long)Get(Get(driver,"lastBattleHudEvent"),"Values").GetType().GetField("Version").GetValue(Get(Get(driver,"lastBattleHudEvent"),"Values"));var vals=Dispatch();Check((long)Get(vals,"Version")>old,label+" event");Check((int)Get(vals,"Hp")==expectedHp&&(int)Get(vals,"Mp")==expectedMp,label+" values HP="+Get(vals,"Hp")+" PP="+Get(vals,"Mp")+" mask="+Get(vals,"Changes"));VerifyImages(vals,label);}
+
+ var result=Call(writer,"ApplyNativeInputAction",ch,353);Check((bool)Get(result,"Applied")&&(int)Get(rt,"PP")==425,"actual Anko353 mp75 consumption");Snapshot("skill1",500,425);
+ result=Call(writer,"ApplyNativeInputAction",ch,353);Check((bool)Get(result,"Applied"),"second actual skill applied");Snapshot("skill2",500,350);
+ Set(rt,"MP",7);consume[0]=null;Check(!(bool)tracker.GetType().GetMethod("TryConsume",all).Invoke(tracker,consume),"legacyMP write cannot overwrite blue cache");
+Set(fi,"D",Call(cache,"GetNativeFrameDataById",0));Set(fi,"N",0);Set(rt,"OrdinaryCreditGate2F4",-1);var recovery=a.GetType("NTSD.Simulation.Ecs.BattleRecoveryStatusWriter");recovery.GetMethod("ApplyMpRecovery",all).Invoke(null,new object[]{ch,0,0,false});Snapshot("native MP regeneration",500,351);
+ var damage=a.GetType("NTSD.Simulation.Ecs.BattleDamageWriter");var other=New("NTSD.Simulation.NTSDEntityRuntime");Set(other,"ObjType",0);Set(rt,"ObjType",0);damage.GetMethod("ApplyNativeHitResourceTransaction",all).Invoke(null,new object[]{other,rt,0,0,25,0,true,0,0,500});Snapshot("native hit resource drain",500,326);
+ damage.GetMethod("ApplyStandardVitalAndStatWrites",all).Invoke(null,new object[]{world,ch,ch,30});Snapshot("actual standard HP damage transaction",470,326);
+ recovery.GetMethod("ApplyHpRecovery",all).Invoke(null,new object[]{ch,0,0});Snapshot("native HP recovery",471,326);
+ var point=New("NTSD.Animation.ObjectPoint");Set(point,"hp",150);Set(point,"mp",180);a.GetType("NTSD.Simulation.Ecs.BattleSpawnVitalsWriter").GetMethod("Apply",all).Invoke(null,new[]{ch,point});Snapshot("actual spawn vitals/maxima",150,180);
+ Set(rt,"MPMax",360);Snapshot("MP max only",150,180);Set(rt,"HP3",300);Snapshot("HP max only",150,180);
+ Call(view,"OnDisable");Check(hpImg.fillAmount==0&&mpImg.fillAmount==0,"disable clears");Set(rt,"PP",90);object[] disabled={null};disabled[0]=Dispatch();Check(mpImg.fillAmount==0,"disabled unsubscribed");Call(view,"OnEnable");VerifyImages(disabled[0],"reenable cached full resync");trigger.Invoke(null,new[]{firstEvent});VerifyImages(disabled[0],"stale version ignored");
+ var replacement=New("NTSD.Simulation.NTSDEntityRuntime");Set(replacement,"PP",123);Set(replacement,"HP",321);Set(replacement,"ObjectId",2);Call(tracker,"Bind",0,replacement,Activator.CreateInstance(handle.GetType(),new object[]{0,(uint)2}));object[] rebound={null};rebound[0]=Dispatch();VerifyImages(rebound[0],"generation rebind");Set(rt,"PP",80);object[] detached={null};Check(!(bool)tracker.GetType().GetMethod("TryConsume",all).Invoke(tracker,detached),"old entity detached");
+ Call(view,"OnDisable");Call(tracker,"Reset",true);File.WriteAllText(@"C:\Users\Logan\AppData\Local\Temp\NTSDHudNativeValidation-001\result.txt", "GREEN COMPLETE"); UnityEngine.Debug.Log("GREEN COMPLETE");
+ }
+}

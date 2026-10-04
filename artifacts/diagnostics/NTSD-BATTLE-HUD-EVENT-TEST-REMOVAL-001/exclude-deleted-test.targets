@@ -1,0 +1,1 @@
+<Project><Target Name="ExcludeDeletedHudTestForValidation" BeforeTargets="CoreCompile"><ItemGroup><Compile Remove="Assets\NTSD\Scripts\Test\Editor\BattleHudEventEditorTests.cs" /></ItemGroup></Target></Project>
