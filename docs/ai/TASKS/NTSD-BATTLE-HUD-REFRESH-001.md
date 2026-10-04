@@ -1,0 +1,2 @@
+# NTSD-BATTLE-HUD-REFRESH-001
+Implement current HUD fields and existing scene bindings for first active human roster participant, character name (not nickname), existing HP/recoverable HP and MP. Script paths and invariants in corresponding Change Record. Excluded: scenes, prefabs, DAT, font, images, menus, combat behavior. Validation pending. Runtime and worker shutdown ownership remain unchanged.

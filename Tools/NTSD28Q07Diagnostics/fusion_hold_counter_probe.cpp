@@ -46,6 +46,11 @@ void run_case(const std::filesystem::path& root, std::ofstream& output,
         const auto* entity = world->entity(0);
         const auto* child = world->entity(2);
         const auto* last = session.last_tick();
+        int live_oid213 = 0;
+        for (std::size_t slot = 0; slot < ntsd28::EngineProfile28::maximum_slots; ++slot) {
+            const auto* active = world->entity(slot);
+            if (active && active->object_id == 213) ++live_oid213;
+        }
         output << initial_counter << ',' << initial_hold << ',' << tick << ','
                << (entity ? entity->object_id : -1) << ','
                << (entity ? entity->frame.action : -1) << ','
@@ -55,7 +60,8 @@ void run_case(const std::filesystem::path& root, std::ofstream& output,
                << (entity ? entity->motion_hold_timer : -999) << ','
                << (child ? child->object_id : -1) << ','
                << (last ? last->fusions.fused : 0) << ','
-               << (last ? last->spawns.spawned : 0) << '\n';
+               << (last ? last->spawns.spawned : 0) << ','
+               << live_oid213 << ',' << world->active_count() << '\n';
     };
     emit(0);
     for (int tick = 1; tick <= 3; ++tick) {
@@ -79,7 +85,7 @@ int main(int argc, char** argv) {
         std::ofstream rows(output);
         if (!rows) throw std::runtime_error("cannot open output");
         rows << "initial_counter,initial_hold,tick,oid,action,latch,snapshot,"
-                "counter,hold,slot2_oid,fused,spawned\n";
+                "counter,hold,slot2_oid,fused,spawned,live_oid213,world_active_count\n";
         run_case(root, rows, 7, 3);
         run_case(root, rows, 7, 0);
         run_case(root, rows, 0, 3);

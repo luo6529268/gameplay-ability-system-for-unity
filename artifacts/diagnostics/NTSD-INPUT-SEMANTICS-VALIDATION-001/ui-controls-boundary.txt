@@ -1,0 +1,11 @@
+PASS enable idempotent subscription
+PASS press repeat suppressed and release routed
+PASS disabled view releases and rejects callbacks/direct presses
+PASS reenable accepts new press
+PASS missing sink release clears local pressed state
+PASS rebind releases old player before switching
+PASS old pointer release not sent to new player
+PASS new player receives next press
+PASS unbind release idempotent
+PASS destroy fallback releases and unsubscribes once
+TOTAL 10 PASS; actual View source with dependency stubs, not Unity runtime.

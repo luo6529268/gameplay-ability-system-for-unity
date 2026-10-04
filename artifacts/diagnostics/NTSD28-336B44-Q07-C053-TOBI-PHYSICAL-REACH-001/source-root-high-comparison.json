@@ -1,0 +1,17 @@
+{
+  "scenario": "controlled_212_high",
+  "ticks": 40,
+  "fields": [
+    "actor_action",
+    "actor_y",
+    "child_action",
+    "child_x",
+    "child_y",
+    "phase"
+  ],
+  "compared": 240,
+  "differences": 0,
+  "examples": [],
+  "root_report": "root-f-controlled_212_high/report.json",
+  "source_csv": "run-f/controlled_212_high-ticks.csv"
+}

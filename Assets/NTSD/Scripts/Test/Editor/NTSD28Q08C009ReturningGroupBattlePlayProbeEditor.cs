@@ -22,8 +22,15 @@ namespace NTSD.Test.Editor
     {
         private const string BattleScene = "Assets/NTSD/Scene/NTSD_Battle.unity";
         private const string RequestPath = "Temp/NTSD28_Q08_C009ReturningGroupBattlePlay.request.json";
+        private const string ResumeV2RequestPath =
+            "Temp/NTSD28_Q08_C009ReturnResumeWorldWitnessV2.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURNING-GROUP-001/";
+        private const string ResumeResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001/";
+        private const string ReturnRunId = "c009-oid304-return-scene-v1";
+        private const string ResumeRunId = "c009-oid220-resume-scene-v1";
+        private const string ResumeV2RunId = "c009-oid220-resume-scene-v2";
         private const string SessionKey = "NTSD.Q08.C009ReturningGroupBattlePlay";
         private static readonly string[] ProtectedPaths =
         {
@@ -44,6 +51,8 @@ namespace NTSD.Test.Editor
             public int outputTimer;
             public ulong groupMask;
             public int emitterAction;
+            public bool emitterInWorld;
+            public int emitterSlotAction;
             public int group2CharacterCount;
         }
 
@@ -97,6 +106,12 @@ namespace NTSD.Test.Editor
 
         private static string[] HashProtected() => ProtectedPaths.Select(Hash).ToArray();
 
+        private static bool IsResumeRun(string runId) =>
+            runId == ResumeRunId || runId == ResumeV2RunId;
+
+        private static string ResultPath(string runId) =>
+            ProjectPath((IsResumeRun(runId) ? ResumeResultRoot : ResultRoot) + runId + ".json");
+
         private static void Require(bool value, string message)
         {
             if (!value) throw new InvalidOperationException(message);
@@ -105,7 +120,7 @@ namespace NTSD.Test.Editor
         private static void Save()
         {
             SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
-            string path = ProjectPath(ResultRoot + report.runId + ".json");
+            string path = ResultPath(report.runId);
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
         }
@@ -175,14 +190,23 @@ namespace NTSD.Test.Editor
                 !string.Equals(Path.GetFullPath(Application.dataPath).Replace('\\', '/'),
                     "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets",
                     StringComparison.OrdinalIgnoreCase)) return;
-            string requestPath = ProjectPath(RequestPath);
-            if (!File.Exists(requestPath)) return;
-            Request request = JsonUtility.FromJson<Request>(File.ReadAllText(requestPath, Encoding.UTF8));
+            string requestPath = ProjectPath(ResumeV2RequestPath);
+            Request request = File.Exists(requestPath)
+                ? JsonUtility.FromJson<Request>(File.ReadAllText(requestPath, Encoding.UTF8))
+                : null;
+            if (request == null || !request.requested)
+            {
+                requestPath = ProjectPath(RequestPath);
+                if (!File.Exists(requestPath)) return;
+                request = JsonUtility.FromJson<Request>(File.ReadAllText(requestPath, Encoding.UTF8));
+            }
             if (request == null || !request.requested) return;
             request.requested = false;
             File.WriteAllText(requestPath, JsonUtility.ToJson(request, true));
-            Require(request.runId == "c009-oid304-return-scene-v1", "Unexpected C009 runId.");
-            Require(!File.Exists(ProjectPath(ResultRoot + request.runId + ".json")),
+            Require(request.runId == ReturnRunId || request.runId == ResumeRunId ||
+                request.runId == ResumeV2RunId,
+                "Unexpected C009 runId.");
+            Require(!File.Exists(ResultPath(request.runId)),
                 "Refusing to overwrite existing C009 Scene result.");
             Scene scene = SceneManager.GetActiveScene();
             Require(scene.path == BattleScene && !scene.isDirty && SceneManager.sceneCount == 1,
@@ -231,21 +255,24 @@ namespace NTSD.Test.Editor
             world.Runtime.NativeWorldClock.Reset();
             world.Runtime.Results.ResetNativeResultFlow();
             world.NativeRandom.ResetFromSeed(682973786u);
-            emitter = SpawnEmitter();
-            Require(emitter.ObjectId == 304 && emitter.Runtime.EntityType == 3 &&
-                emitter.RelationTeam == 2 && emitter.Frame.N == 11,
-                "Formal OID304/type3/action11/team2 was not established.");
+            bool resumeRun = IsResumeRun(report.runId);
+            int emitterId = resumeRun ? 220 : 304;
+            int emitterAction = resumeRun ? 0 : 11;
+            emitter = SpawnEmitter(emitterId, emitterAction);
+            Require(emitter.ObjectId == emitterId && emitter.Runtime.EntityType == 3 &&
+                emitter.RelationTeam == 2 && emitter.Frame.N == emitterAction,
+                "Formal type3/team2 emitter was not established.");
             report.startTick = report.endTick = driver.CurrentTickIndex;
             report.phase = "MEASURING";
             Save();
         }
 
-        private static LF2Entity SpawnEmitter()
+        private static LF2Entity SpawnEmitter(int emitterId, int action)
         {
             Require(world.FindEntityByRuntimeSlotForQuery(50) == null,
-                "Required OID304 slot50 is occupied.");
+                "Required type3 emitter slot50 is occupied.");
             OPointCreateTask task = LF2ReferencePool.Instance.Fetch<OPointCreateTask>();
-            task.opoint = new ObjectPoint { kind = 1, oid = 304, action = 11, facing = 0 };
+            task.opoint = new ObjectPoint { kind = 1, oid = emitterId, action = action, facing = 0 };
             task.targetWorld = world;
             task.requiredRuntimeSlot = 50;
             task.team = 2;
@@ -266,9 +293,9 @@ namespace NTSD.Test.Editor
             try { result = LF2ObjectPointFactory.Instance.CreateObjectImmediate(task); }
             finally { LF2ReferencePool.Instance.Recycle(task); }
             Require(result != null && result.Runtime.SlotIndex == 50,
-                "Production object factory did not spawn OID304 at slot50.");
+                "Production object factory did not spawn type3 emitter at slot50.");
             result.Team = result.RelationTeam = 2;
-            result.ImmediateFrame(11);
+            result.ImmediateFrame(action);
             result.FrameDelay = 0;
             result.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(900), 0,
                 world.SpatialProjection.SourceToViewZ(650));
@@ -283,7 +310,8 @@ namespace NTSD.Test.Editor
                 !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics,
                 "Production Driver tick boundary is not stable.");
             Require(driver.CurrentTickIndex == report.endTick, "Unobserved tick while paused.");
-            if (report.rows.Count == 12) { CompleteMeasurement(); return; }
+            int expectedTicks = IsResumeRun(report.runId) ? 20 : 12;
+            if (report.rows.Count == expectedTicks) { CompleteMeasurement(); return; }
             int next = driver.CurrentTickIndex + 1;
             var input = new FrameInputSet(next, new[]
             {
@@ -292,11 +320,13 @@ namespace NTSD.Test.Editor
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected tick " + next);
             BattleResultsRuntimeState results = world.Runtime.Results;
+            int childId = IsResumeRun(report.runId) ? 9 : 56;
             int children = 0;
+            LF2Entity emitterSlotEntity = world.FindEntityByRuntimeSlotForQuery(50);
             for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
             {
                 LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
-                if (entity != null && entity.ObjectId == 56 && entity.Runtime.EntityType == 0 &&
+                if (entity != null && entity.ObjectId == childId && entity.Runtime.EntityType == 0 &&
                     entity.RelationTeam == 2 && entity.Runtime.HP > 0) children++;
             }
             report.rows.Add(new TickRow
@@ -307,6 +337,8 @@ namespace NTSD.Test.Editor
                 outputTimer = results.NativeResultOutputTimer,
                 groupMask = results.NativeLivingGroupMask,
                 emitterAction = emitter == null ? -1 : emitter.Frame.N,
+                emitterInWorld = ReferenceEquals(emitterSlotEntity, emitter),
+                emitterSlotAction = emitterSlotEntity?.Frame.N ?? -1,
                 group2CharacterCount = children
             });
             report.endTick = driver.CurrentTickIndex;
@@ -315,15 +347,26 @@ namespace NTSD.Test.Editor
 
         private static void CompleteMeasurement()
         {
-            bool pass = report.rows.Count == 12;
+            bool resumeRun = IsResumeRun(report.runId);
+            bool pass = report.rows.Count == (resumeRun ? 20 : 12);
             for (int index = 0; index < report.rows.Count; index++)
             {
                 TickRow row = report.rows[index];
-                int expectedTimer = index < 2 ? index + 1 : 2;
-                ulong expectedMask = index < 2 ? 1UL << 1 : (1UL << 1) | (1UL << 2);
+                int expectedTimer = resumeRun
+                    ? (index < 4 ? 1 : index - 2)
+                    : (index < 2 ? index + 1 : 2);
+                ulong expectedMask = resumeRun
+                    ? (index >= 1 && index <= 3 ? (1UL << 1) | (1UL << 2) : 1UL << 1)
+                    : (index < 2 ? 1UL << 1 : (1UL << 1) | (1UL << 2));
+                int expectedChildren = resumeRun ? (index < 3 ? 1 : 0) : (index == 0 ? 0 : 1);
                 pass &= row.timer == expectedTimer && row.outputTimer == expectedTimer &&
                     row.groupMask == expectedMask &&
-                    row.group2CharacterCount == (index == 0 ? 0 : 1);
+                    row.group2CharacterCount == expectedChildren;
+                if (report.runId == ResumeV2RunId)
+                {
+                    pass &= row.emitterInWorld == (index == 0) &&
+                        row.emitterSlotAction == (index == 0 ? 1 : -1);
+                }
             }
             report.status = pass ? "PASS" : "DIFFERENCE";
             report.phase = "EXITING";

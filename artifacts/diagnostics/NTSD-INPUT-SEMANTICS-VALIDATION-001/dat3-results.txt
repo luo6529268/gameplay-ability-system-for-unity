@@ -1,0 +1,62 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+Only this standalone process Unity logger disabled to avoid native logging ECall; gameplay code unchanged.
+DAT BLOCKED nar System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.Object.FindObjectsOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType[T]()
+   at MoreMountains.Tools.MMSingleton`1.get_Instance()
+   at NTSD.Animation.LF2Objects.LF2Entity.ResolveCurrentDataObjectType(LF2Entity entity) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4846
+   at NTSD.Animation.LF2Objects.LF2Entity.GetCurrentDataObjectTypeForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4758
+   at NTSD.Animation.LF2Objects.LF2Entity.PublishIdentityMetadataForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 248
+   at NTSD.Animation.LF2Objects.LF2Entity.NTSD.Animation.ILF2FrameCacheObserver.OnFrameCacheIdentityChanged() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 242
+   at NTSD.Animation.LF2FrameCache.Load(LF2CharacterDataWrapper wrapper) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\Character\LF2FrameCache.cs:line 77
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Call(Object o, String n, Object[] args) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 6
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 25
+DAT BLOCKED ita System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.Object.FindObjectsOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType[T]()
+   at MoreMountains.Tools.MMSingleton`1.get_Instance()
+   at NTSD.Animation.LF2Objects.LF2Entity.ResolveCurrentDataObjectType(LF2Entity entity) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4846
+   at NTSD.Animation.LF2Objects.LF2Entity.GetCurrentDataObjectTypeForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4758
+   at NTSD.Animation.LF2Objects.LF2Entity.PublishIdentityMetadataForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 248
+   at NTSD.Animation.LF2Objects.LF2Entity.NTSD.Animation.ILF2FrameCacheObserver.OnFrameCacheIdentityChanged() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 242
+   at NTSD.Animation.LF2FrameCache.Load(LF2CharacterDataWrapper wrapper) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\Character\LF2FrameCache.cs:line 77
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Call(Object o, String n, Object[] args) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 6
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 25
+DAT BLOCKED ank System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.Object.FindObjectsOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType[T]()
+   at MoreMountains.Tools.MMSingleton`1.get_Instance()
+   at NTSD.Animation.LF2Objects.LF2Entity.ResolveCurrentDataObjectType(LF2Entity entity) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4846
+   at NTSD.Animation.LF2Objects.LF2Entity.GetCurrentDataObjectTypeForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4758
+   at NTSD.Animation.LF2Objects.LF2Entity.PublishIdentityMetadataForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 248
+   at NTSD.Animation.LF2Objects.LF2Entity.NTSD.Animation.ILF2FrameCacheObserver.OnFrameCacheIdentityChanged() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 242
+   at NTSD.Animation.LF2FrameCache.Load(LF2CharacterDataWrapper wrapper) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\Character\LF2FrameCache.cs:line 77
+   at InvokeStub_LF2FrameCache.Load(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Call(Object o, String n, Object[] args) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 6
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat3\Program.cs:line 25
+DAT EXECUTION COMPLETE

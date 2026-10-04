@@ -1,0 +1,5 @@
+# NTSD-BUTTON-PRESS-CONSISTENCY-001
+Before: custom pressed state accepts right/middle down/up although base ignores them; Selectable.OnApplicationFocus clears base pressed visual through virtual InstantClearState but custom state remains true.
+Change: match left-button filtering on down/up; override InstantClearState, call base then SetPressed(false) so built-in focus/disable clearing and custom state agree. Keep OnDisable fallback, PointerExit release, OnPointerClick/OnSubmit/UnityEvent untouched. No fields/serialization changes.
+Only known subscriber BattleControlsView; no derived NTSDButton classes or serialized GUID instances found under Assets. No automatic scene wiring. Multiple-pointer aggregation/ownership, navigation Cancel semantics and application pause policy lack established contract and remain unchanged; normal pointer-up/exit and existing disable cleanup retained.
+Acceptance: independent runtime compile, actual source with temporary dependency-stub tests, diff/ledger checks. No Editor/real touch claims. Existing shutdown disable hook remains, no manager/queue/stage changes. Rollback exact before-0.txt and audit.

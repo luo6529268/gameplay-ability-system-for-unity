@@ -1,0 +1,17 @@
+{
+  "formalRootSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "declaredTicks": 20,
+  "fields": [
+    "world_tick",
+    "timer",
+    "timer_after",
+    "winner",
+    "world_groups",
+    "child_count",
+    "emitter_action"
+  ],
+  "compared": 140,
+  "same": 140,
+  "differences": [],
+  "boundary": "selected post-step fields only; terminal root tick21 excluded; no Unity Scene claim"
+}

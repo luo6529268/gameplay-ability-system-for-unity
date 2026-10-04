@@ -1,0 +1,60 @@
+{
+  "schema": "ntsd28-q10-sakura-049-j2-preflight/1",
+  "utc": "2026-10-04T01:11:43.533115+00:00",
+  "exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "files": {
+    "data/049.wav": {
+      "formal": {
+        "sha256": "10ADC639123FA69CBB64DD430BE49D04314C50260D383FC22E98513D6E68D0C6",
+        "size": 32952,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "sample_rate": 22050,
+          "frames": 32908,
+          "pcm_sha256": "E18426555E4D524692AF998907D811FDDA78C6D220D33873C0EFAB8F300740A4"
+        }
+      },
+      "old": {
+        "exists": true,
+        "sha256": "0279D6450A8EA10B4FFB5AE147997B1262306887C28D514B69F4D0B4192ECF98",
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate": 22050,
+          "frames": 32908,
+          "pcm_sha256": "DF6ABA9750CB916FF67054993545DD8F8C9EBA724B9AB5EC960C12EBA390695C"
+        }
+      },
+      "target_absent": true,
+      "meta_absent": true
+    },
+    "c/saku/w/j2.wav": {
+      "formal": {
+        "sha256": "73C3904DB1151FA86727860A4D6BD8B7FA52C70A5209D6B0211C59803780A908",
+        "size": 7912,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "sample_rate": 22050,
+          "frames": 7868,
+          "pcm_sha256": "8A06CD7AD543013650A10850382FB97EBDB8DF43F11FE51CF4188C79337151E6"
+        }
+      },
+      "old": {
+        "exists": false,
+        "sha256": null,
+        "wave": null
+      },
+      "target_absent": true,
+      "meta_absent": true
+    }
+  },
+  "protected_sha256": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "D88AD2111715AB2D970A85DDDAFFAAB206DFFD3BB54B9DF071AD25901D76CDF6",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  },
+  "target_git_status": ""
+}

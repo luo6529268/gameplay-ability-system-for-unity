@@ -156,7 +156,7 @@ namespace NTSD.Test.Editor
             child.transform.SetParent(parent.transform, false);
             var label = child.AddComponent<TextMeshProUGUI>();
             label.font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(
-                UnityEditor.AssetDatabase.GUIDToAssetPath("49d14565a67c6c843880c34b5f61e3d5"));
+                UnityEditor.AssetDatabase.GUIDToAssetPath("c10a07540530f01408fcb83191a6f0f3"));
             Assert.IsNotNull(label.font);
             label.text = "1";
             label.fontSize = 50;

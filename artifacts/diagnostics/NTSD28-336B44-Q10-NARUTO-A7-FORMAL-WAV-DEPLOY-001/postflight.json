@@ -1,0 +1,36 @@
+{
+  "sourceSha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+  "targetSha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+  "targetMatchesFormal": true,
+  "targetBytes": 3096,
+  "folderGuidFound": true,
+  "wavGuidFound": true,
+  "protected": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "D88AD2111715AB2D970A85DDDAFFAAB206DFFD3BB54B9DF071AD25901D76CDF6",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+    "Assets/NTSD/Content/LoganRuntime/vfs/data/078.wav": "D8CAB6CE5CCF129FD689F9FD0170D06B21E04B930BE77EF9AAC9AD4B563F3560"
+  },
+  "protectedUnchanged": true,
+  "guidFiles": {
+    "6ee9b2da8d114f6da2a5b917522a9887": [
+      "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\nar\\w.meta"
+    ],
+    "b2e104f471f640c8a906a21a3afc4af9": [
+      "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\nar\\w\\a7.wav.meta"
+    ]
+  },
+  "editor": {
+    "observed": 1791074442150,
+    "play": false,
+    "tests": false,
+    "compiling": true,
+    "lastCompileFinished": null
+  },
+  "scene": {
+    "name": "NTSD_Battle",
+    "isDirty": false,
+    "isLoaded": true
+  }
+}

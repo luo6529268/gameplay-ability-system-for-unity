@@ -1,0 +1,471 @@
+{
+  "schema": "ntsd28-q10-observed-cue-content-coverage/1",
+  "utc": "2026-10-04T01:18:18.293429+00:00",
+  "root_exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "rows": [
+    {
+      "cue": "c/kim/w/j1.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-KIM-J1-NATURAL-REACH-001/run-03/source-events.csv",
+      "sample_scope": "Kim natural input",
+      "formal": {
+        "file_sha256": "86A7F48012EF4A2C1E3E578CCCE37E95F033D1BEEB7C47A8444B651A3D33BD65",
+        "pcm_sha256": "7ADD0F1CF8500E675831E7CECA0F35F4A579D870C29BDBBF467740A620F0DB64",
+        "format": {
+          "channels": 2,
+          "sample_width": 2,
+          "rate": 48000,
+          "frames": 80454
+        }
+      },
+      "staged": {
+        "file_sha256": "86A7F48012EF4A2C1E3E578CCCE37E95F033D1BEEB7C47A8444B651A3D33BD65",
+        "pcm_sha256": "7ADD0F1CF8500E675831E7CECA0F35F4A579D870C29BDBBF467740A620F0DB64",
+        "format": {
+          "channels": 2,
+          "sample_width": 2,
+          "rate": 48000,
+          "frames": 80454
+        }
+      },
+      "old": null,
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "c/nar/w/a7.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001/run-06/naruto-held-right-jump-source.csv",
+      "sample_scope": "Naruto held direction+jump",
+      "formal": {
+        "file_sha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+        "pcm_sha256": "788576DA25344AB3DA2D4FBA882B5C3FB1B96DDF8AAFF8B480DF032A60982663",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 3052
+        }
+      },
+      "staged": {
+        "file_sha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+        "pcm_sha256": "788576DA25344AB3DA2D4FBA882B5C3FB1B96DDF8AAFF8B480DF032A60982663",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 3052
+        }
+      },
+      "old": null,
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "c/saku/w/j2.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/source-run-04/source-events.csv",
+      "sample_scope": "Sakura HP500 control",
+      "formal": {
+        "file_sha256": "73C3904DB1151FA86727860A4D6BD8B7FA52C70A5209D6B0211C59803780A908",
+        "pcm_sha256": "8A06CD7AD543013650A10850382FB97EBDB8DF43F11FE51CF4188C79337151E6",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 7868
+        }
+      },
+      "staged": {
+        "file_sha256": "73C3904DB1151FA86727860A4D6BD8B7FA52C70A5209D6B0211C59803780A908",
+        "pcm_sha256": "8A06CD7AD543013650A10850382FB97EBDB8DF43F11FE51CF4188C79337151E6",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 7868
+        }
+      },
+      "old": null,
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "c/saku/w/tra.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/source-run-05/source-events.csv",
+      "sample_scope": "Sakura HP100 natural input",
+      "formal": {
+        "file_sha256": "A6D36A499DBEAB218690BC3FDEE5071E5B97165D5DB34427116A3CDE8660EBC7",
+        "pcm_sha256": "71E9AF50F6050B2BA50A80DD2002976F461827BBF93FD94A73370A50E547EB0A",
+        "format": {
+          "channels": 2,
+          "sample_width": 2,
+          "rate": 44100,
+          "frames": 123466
+        }
+      },
+      "staged": {
+        "file_sha256": "A6D36A499DBEAB218690BC3FDEE5071E5B97165D5DB34427116A3CDE8660EBC7",
+        "pcm_sha256": "71E9AF50F6050B2BA50A80DD2002976F461827BBF93FD94A73370A50E547EB0A",
+        "format": {
+          "channels": 2,
+          "sample_width": 2,
+          "rate": 44100,
+          "frames": 123466
+        }
+      },
+      "old": null,
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/007.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/source-run-04/source-events.csv",
+      "sample_scope": "Sakura HP500 control",
+      "formal": {
+        "file_sha256": "D8E7BBEE32A2A582A07D53F43DB50C0C6C6E579ED322AA2369BE8859B6385002",
+        "pcm_sha256": "1A4317C153D6DC3652F55BA29167989069178AB9B8A58811390F2A3DBDD74D4F",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 2099
+        }
+      },
+      "staged": null,
+      "old": {
+        "file_sha256": "53C2EE3777EE23573902CD2344A5BFA60FC18A525E3C14925B21261674C2CA90",
+        "pcm_sha256": "1A4317C153D6DC3652F55BA29167989069178AB9B8A58811390F2A3DBDD74D4F",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 2099
+        }
+      },
+      "classification": "OLD_PCM_AND_FORMAT_EQUAL"
+    },
+    {
+      "cue": "data/012.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001/tay36-a243-x550-source-audio-01/source-audio.csv",
+      "sample_scope": "Tayuya→Naruto natural hit",
+      "formal": {
+        "file_sha256": "04E2B02AB4415827045D25CB9C7DADDA70DA23FC8637BEAC13123A34DCE7F95C",
+        "pcm_sha256": "457C15D607A2254E1EA7433F9E3AECFD8FC2CE76A8854A830B5DB38896F2B6FB",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 2085
+        }
+      },
+      "staged": null,
+      "old": {
+        "file_sha256": "CEBDB14BB0DBBCCB18CAEB8C055CF8465BE8C25299E662EA4960F8808615E77F",
+        "pcm_sha256": "457C15D607A2254E1EA7433F9E3AECFD8FC2CE76A8854A830B5DB38896F2B6FB",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 2085
+        }
+      },
+      "classification": "OLD_PCM_AND_FORMAT_EQUAL"
+    },
+    {
+      "cue": "data/016.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001/ACCEPTANCE.md",
+      "sample_scope": "C032 builtin channel6 resolved by sound.dat",
+      "formal": {
+        "file_sha256": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810",
+        "pcm_sha256": "50A75E61ACBF4CD2A985CAD642E2B2901EF1835661441BBB2ED3818046121A6C",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22100,
+          "frames": 8158
+        }
+      },
+      "staged": null,
+      "old": {
+        "file_sha256": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE",
+        "pcm_sha256": "50A75E61ACBF4CD2A985CAD642E2B2901EF1835661441BBB2ED3818046121A6C",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22100,
+          "frames": 8158
+        }
+      },
+      "classification": "OLD_PCM_AND_FORMAT_EQUAL"
+    },
+    {
+      "cue": "data/017.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001/run-06/naruto-held-right-jump-source.csv",
+      "sample_scope": "Naruto held direction+jump",
+      "formal": {
+        "file_sha256": "43030D58B00F98999AF6635C9966294FB9B5B6889D03FD1DCA8F46BFEDF3B5A6",
+        "pcm_sha256": "772F9459859C61D04F2C24FB38BE4D9FB9BA0781E0FB00069640414F0F303FD6",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 15106
+        }
+      },
+      "staged": null,
+      "old": {
+        "file_sha256": "895634229D4A6DAAD048DE76C04F7BD0175D34AF8E83D219EDA73172763845C7",
+        "pcm_sha256": "772F9459859C61D04F2C24FB38BE4D9FB9BA0781E0FB00069640414F0F303FD6",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 15106
+        }
+      },
+      "classification": "OLD_PCM_AND_FORMAT_EQUAL"
+    },
+    {
+      "cue": "data/020.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001/source-audio-run-02.csv",
+      "sample_scope": "C053 controlled double hit",
+      "formal": {
+        "file_sha256": "4872410C3601F31931CCD2EB5335093ACC132AC73C0BAE7FB15AEB118A482E73",
+        "pcm_sha256": "C7823ECFE4282ED7464E29F7B02FF4FA3FC24D05395EFFB672367E7CF504E9F2",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 16413
+        }
+      },
+      "staged": {
+        "file_sha256": "4872410C3601F31931CCD2EB5335093ACC132AC73C0BAE7FB15AEB118A482E73",
+        "pcm_sha256": "C7823ECFE4282ED7464E29F7B02FF4FA3FC24D05395EFFB672367E7CF504E9F2",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 16413
+        }
+      },
+      "old": {
+        "file_sha256": "969BBFD0E0AD2043902366DA0EEC9DB5C1450255E9F552220130A46A5364B5BF",
+        "pcm_sha256": "066F17068CEB28E54A5477689024FBF468A71C8597A38958D34E535766BF3411",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 16776
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/021.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-KIM-J1-NATURAL-REACH-001/run-03/source-events.csv",
+      "sample_scope": "Kim natural input",
+      "formal": {
+        "file_sha256": "AE2ED083B8A94665266AC32522E8A1648B9918CAB12062D838F1CDACC605637E",
+        "pcm_sha256": "07F03DAEEB8BC4F5A6F68BB2EC1EACF0CFB50C4404256D84324350B74B2DE95A",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 38400,
+          "frames": 34310
+        }
+      },
+      "staged": {
+        "file_sha256": "AE2ED083B8A94665266AC32522E8A1648B9918CAB12062D838F1CDACC605637E",
+        "pcm_sha256": "07F03DAEEB8BC4F5A6F68BB2EC1EACF0CFB50C4404256D84324350B74B2DE95A",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 38400,
+          "frames": 34310
+        }
+      },
+      "old": {
+        "file_sha256": "CA6D6EEED9D7D95C2E72EFA93EDC3D080133C946241DEB76A49FA08F29EBECE9",
+        "pcm_sha256": "2ED31E89D63F1415AA2D02FC794FA16EDCBBCC5BE516242A7CF8F82DAB04E19C",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 38400,
+          "frames": 34310
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/049.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001/source-run-04/source-events.csv",
+      "sample_scope": "Sakura HP500 control",
+      "formal": {
+        "file_sha256": "10ADC639123FA69CBB64DD430BE49D04314C50260D383FC22E98513D6E68D0C6",
+        "pcm_sha256": "E18426555E4D524692AF998907D811FDDA78C6D220D33873C0EFAB8F300740A4",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 32908
+        }
+      },
+      "staged": {
+        "file_sha256": "10ADC639123FA69CBB64DD430BE49D04314C50260D383FC22E98513D6E68D0C6",
+        "pcm_sha256": "E18426555E4D524692AF998907D811FDDA78C6D220D33873C0EFAB8F300740A4",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 32908
+        }
+      },
+      "old": {
+        "file_sha256": "0279D6450A8EA10B4FFB5AE147997B1262306887C28D514B69F4D0B4192ECF98",
+        "pcm_sha256": "DF6ABA9750CB916FF67054993545DD8F8C9EBA724B9AB5EC960C12EBA390695C",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 32908
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/067.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C053-DOUBLE-HIT-AUDIO-AUDIT-001/source-audio-run-02.csv",
+      "sample_scope": "C053 controlled double hit",
+      "formal": {
+        "file_sha256": "D8D7B12EE94AE2EC26AEC9A93A44B65540FC69194E53E21AB44655E89451C757",
+        "pcm_sha256": "AD209620B3A4C332B6B6814299CD8720211DC5CD025441905E20D6272DD24D3F",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 31170
+        }
+      },
+      "staged": {
+        "file_sha256": "D8D7B12EE94AE2EC26AEC9A93A44B65540FC69194E53E21AB44655E89451C757",
+        "pcm_sha256": "AD209620B3A4C332B6B6814299CD8720211DC5CD025441905E20D6272DD24D3F",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 31170
+        }
+      },
+      "old": {
+        "file_sha256": "B335D60273C64B14D003DF7EA99F8BD80BC2958EA4B4128FE4B09E13F6DDEAE9",
+        "pcm_sha256": "8ED90A01FDEB5318FEC6BCF3E34CC836385AFEFF18ACDD6D9EDD6D526AF495BA",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 31170
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/078.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-JUMP-ROOT-LFR-20261004/source-01/run/jump_first253-source.csv",
+      "sample_scope": "Naruto Rasengan follow-up Jump count",
+      "formal": {
+        "file_sha256": "D8CAB6CE5CCF129FD689F9FD0170D06B21E04B930BE77EF9AAC9AD4B563F3560",
+        "pcm_sha256": "B2C9A46EC782A37F0F1AEBEAA749EC8DC2D5DE12DB2FAD9B192C761A83F13F0E",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 54104
+        }
+      },
+      "staged": {
+        "file_sha256": "D8CAB6CE5CCF129FD689F9FD0170D06B21E04B930BE77EF9AAC9AD4B563F3560",
+        "pcm_sha256": "B2C9A46EC782A37F0F1AEBEAA749EC8DC2D5DE12DB2FAD9B192C761A83F13F0E",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 22050,
+          "frames": 54104
+        }
+      },
+      "old": {
+        "file_sha256": "78688CFD046DCA0A33F36A10F589EC2ADDE83301AF58BD99FE0C9A5823A69DF5",
+        "pcm_sha256": "3150732A644B8341E0641741C66BA36BFDD3D897E2D0E286E4529852A1D94E39",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 22050,
+          "frames": 54104
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    },
+    {
+      "cue": "data/101.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001/tay36-a243-x550-source-audio-01/source-audio.csv",
+      "sample_scope": "Tayuya→Naruto natural hit",
+      "formal": {
+        "file_sha256": "632A7AD94F5225F82F190F1119724440AFA3A9F3C8E35B668D7958B6B0880D2F",
+        "pcm_sha256": "EC1715A4F4E961F1D7DE0FED9F924E69BD34D851916B103A4A694C6A451765DD",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 16000,
+          "frames": 7060
+        }
+      },
+      "staged": null,
+      "old": {
+        "file_sha256": "ADF598403BAD64D75294DE1E9EC231EB9DDA00617D4F11ACF0D2A7B6AEB3C868",
+        "pcm_sha256": "EC1715A4F4E961F1D7DE0FED9F924E69BD34D851916B103A4A694C6A451765DD",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 16000,
+          "frames": 7060
+        }
+      },
+      "classification": "OLD_PCM_AND_FORMAT_EQUAL"
+    },
+    {
+      "cue": "data/102.wav",
+      "source_evidence": "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001/tay36-a243-x550-source-audio-01/source-audio.csv",
+      "sample_scope": "Tayuya→Naruto natural hit",
+      "formal": {
+        "file_sha256": "F0BF315E2CF8C0402D26C9928810F0F6E12233C851C61FE4B23C5CD1BA7E5603",
+        "pcm_sha256": "2424F3E23857673BDA43E44F27BB5F053CAC4273C982A0FDDED31DB2B51CF800",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 16000,
+          "frames": 35777
+        }
+      },
+      "staged": {
+        "file_sha256": "F0BF315E2CF8C0402D26C9928810F0F6E12233C851C61FE4B23C5CD1BA7E5603",
+        "pcm_sha256": "2424F3E23857673BDA43E44F27BB5F053CAC4273C982A0FDDED31DB2B51CF800",
+        "format": {
+          "channels": 1,
+          "sample_width": 1,
+          "rate": 16000,
+          "frames": 35777
+        }
+      },
+      "old": {
+        "file_sha256": "23E93668437F66F74B14C295F8EED922110EBFCDBD56874D6A99B6D5A6948F9E",
+        "pcm_sha256": "68959927A1CF8A959B736553BE339F1322FAB883F7CC129DA4F238BC184302B8",
+        "format": {
+          "channels": 1,
+          "sample_width": 2,
+          "rate": 16000,
+          "frames": 35777
+        }
+      },
+      "classification": "STAGED_FORMAL_EXACT"
+    }
+  ],
+  "counts": {
+    "STAGED_FORMAL_EXACT": 10,
+    "OLD_PCM_AND_FORMAT_EQUAL": 5
+  },
+  "scope": "15 named cue paths in archived current-source event samples, not exhaustive DAT reachability or Unity voice proof"
+}

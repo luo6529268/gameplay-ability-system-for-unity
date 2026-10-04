@@ -344,6 +344,7 @@ namespace NTSD.App
                 {
                     rosterSlot.RuntimeSlotIndex = lf2.Runtime.SlotIndex;
                     rosterSlot.StableId = lf2.Runtime.StableId;
+                    world.NotifyBattleHudParticipantReady(i, lf2);
                 }
             }
         }

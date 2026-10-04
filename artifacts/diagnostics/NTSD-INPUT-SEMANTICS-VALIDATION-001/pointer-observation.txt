@@ -1,0 +1,11 @@
+PASS non-left down ignored
+PASS non-left up cannot release left hold
+PASS duplicate press suppressed
+PASS left release
+PASS exit releases once
+PASS base focus clearing also clears custom state
+PASS disable repeated clear and later up emit one release
+PASS inherited click/submit retained
+PASS hook/event edge counts agree
+OBSERVATION p1 down, p2 down, p2 up: IsPointerPressed=False while p1 has not released; no new policy selected.
+TOTAL 9 PASS; actual NTSDButton source, stub uGUI base; not real EventSystem test.

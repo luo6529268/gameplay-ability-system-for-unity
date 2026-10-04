@@ -5359,7 +5359,7 @@ namespace NTSD.Test
             for (int team = 0; team <= 5; team++)
             {
                 Expect(BattleEntityOverlayLayout.TryBuild(Slot(0, -1, team), labels, states, glyphs, out int count) &&
-                       count == 3 && glyphs[0].SheetIndex == (team >= 1 && team <= 4 ? team : 0),
+                       count == 3 && glyphs[0].SheetIndex == (team >= 1 && team <= 5 ? team : 0),
                     "Batch6 overlay relation palette contract changed");
             }
             Expect(BattleEntityOverlayLayout.TryBuild(Slot(0, 20, 5, 0, 29), labels, states, glyphs, out int specialCount) &&

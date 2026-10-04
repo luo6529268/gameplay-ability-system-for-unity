@@ -1,0 +1,247 @@
+{
+    "runId": "c009-oid220-resume-scene-v2",
+    "status": "PASS",
+    "phase": "DONE",
+    "error": "",
+    "startedUtc": "2026-10-04T05:08:03.7265009Z",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "hashesBefore": [
+        "CACF6664F3E58C352536D7CC344C2DFE213DF887AD73008D1C1C213C235E4DB8",
+        "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+        "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+        "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    ],
+    "hashesAfter": [
+        "CACF6664F3E58C352536D7CC344C2DFE213DF887AD73008D1C1C213C235E4DB8",
+        "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+        "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+        "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    ],
+    "startTick": 5,
+    "endTick": 25,
+    "configuredBeforeStart": true,
+    "exitedPlay": true,
+    "sceneCleanAfter": true,
+    "rows": [
+        {
+            "relativeTick": 1,
+            "globalTick": 6,
+            "timer": 1,
+            "outputTimer": 1,
+            "groupMask": 2,
+            "emitterAction": 1,
+            "emitterInWorld": true,
+            "emitterSlotAction": 1,
+            "group2CharacterCount": 1
+        },
+        {
+            "relativeTick": 2,
+            "globalTick": 7,
+            "timer": 1,
+            "outputTimer": 1,
+            "groupMask": 6,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 1
+        },
+        {
+            "relativeTick": 3,
+            "globalTick": 8,
+            "timer": 1,
+            "outputTimer": 1,
+            "groupMask": 6,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 1
+        },
+        {
+            "relativeTick": 4,
+            "globalTick": 9,
+            "timer": 1,
+            "outputTimer": 1,
+            "groupMask": 6,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 5,
+            "globalTick": 10,
+            "timer": 2,
+            "outputTimer": 2,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 6,
+            "globalTick": 11,
+            "timer": 3,
+            "outputTimer": 3,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 7,
+            "globalTick": 12,
+            "timer": 4,
+            "outputTimer": 4,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 8,
+            "globalTick": 13,
+            "timer": 5,
+            "outputTimer": 5,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 9,
+            "globalTick": 14,
+            "timer": 6,
+            "outputTimer": 6,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 10,
+            "globalTick": 15,
+            "timer": 7,
+            "outputTimer": 7,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 11,
+            "globalTick": 16,
+            "timer": 8,
+            "outputTimer": 8,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 12,
+            "globalTick": 17,
+            "timer": 9,
+            "outputTimer": 9,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 13,
+            "globalTick": 18,
+            "timer": 10,
+            "outputTimer": 10,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 14,
+            "globalTick": 19,
+            "timer": 11,
+            "outputTimer": 11,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 15,
+            "globalTick": 20,
+            "timer": 12,
+            "outputTimer": 12,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 16,
+            "globalTick": 21,
+            "timer": 13,
+            "outputTimer": 13,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 17,
+            "globalTick": 22,
+            "timer": 14,
+            "outputTimer": 14,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 18,
+            "globalTick": 23,
+            "timer": 15,
+            "outputTimer": 15,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 19,
+            "globalTick": 24,
+            "timer": 16,
+            "outputTimer": 16,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        },
+        {
+            "relativeTick": 20,
+            "globalTick": 25,
+            "timer": 17,
+            "outputTimer": 17,
+            "groupMask": 2,
+            "emitterAction": 1000,
+            "emitterInWorld": false,
+            "emitterSlotAction": -1,
+            "group2CharacterCount": 0
+        }
+    ]
+}

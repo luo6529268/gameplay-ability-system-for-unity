@@ -1,0 +1,237 @@
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-0480 SDF.asset"
+ M "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500 SDF.asset"
+ M Assets/NTSD/Scene/NTSD_Battle.unity
+ M Assets/NTSD/Scene/NTSD_Menu.unity
+ M Assets/NTSD/Scripts/App/AppManager.cs
+ M Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
+ M Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
+ M Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs
+ M Assets/NTSD/Scripts/Simulation/Input/SimulationFrameInputModule.cs
+ M Assets/NTSD/Scripts/Simulation/Presentation/BattleEntityOverlayLayout.cs
+ M Assets/NTSD/Scripts/Simulation/Runtime/SimulationRegistryModule.cs
+ M Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+ M Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattlePresentationCommandWriterEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/MenuCarouselVisualEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040NaturalScenePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C056FusionHoldBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07F02Kind10BattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q08C009ReturningGroupBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q09NameplateNaturalPlayProbeEditor.cs
+ M Assets/NTSD/Scripts/UI/Battle/BattleControlsView.cs
+ M Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs
+ M Assets/NTSD/Scripts/UI/Battle/BattleUiContracts.cs
+ M Assets/NTSD/Scripts/UI/NTSDButton.cs
+ M Assets/NTSD/Sprite/UIPanels/BattleHud/HUD-BG.png
+ M "Assets/TextMeshPro/Resources/TextMeshPro/FontAssets/LiberationSans SDF.asset"
+ M Tools/NTSD28Q07Diagnostics/c040_all_natural_triad_probe.cpp
+ M Tools/NTSD28Q07Diagnostics/f02_pickup_throw_entry_probe.cpp
+ M Tools/NTSD28Q07Diagnostics/fusion_hold_counter_probe.cpp
+ M artifacts/diagnostics/NTSD28-336B44-Q07-C053-NATURAL-PRODUCER-001/REPORT.md
+ M artifacts/diagnostics/NTSD28-336B44-Q07-C056-FUSION-SCENE-PLAY-001/REPORT.md
+ M artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-DEPTH-PROJECTION-AUDIT-20261003/REPORT.md
+ M artifacts/diagnostics/NTSD28-B11-PNG-WORKER-DECODE-001/largest-sheet-worker-memory.txt
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-MENU-FONT-3500-REBIND-001.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-MENU-FONT-3500-REBIND-001-PREPARE/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD-MENU-FONT-3500-REBIND-001.md
+?? Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w.meta
+?? Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w/
+?? Assets/NTSD/Content/LoganRuntime/vfs/c/saku/w/j2.wav
+?? Assets/NTSD/Content/LoganRuntime/vfs/c/saku/w/j2.wav.meta
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/021.wav
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/021.wav.meta
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/049.wav
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/049.wav.meta
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/078.wav
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/078.wav.meta
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/102.wav
+?? Assets/NTSD/Content/LoganRuntime/vfs/data/102.wav.meta
+?? "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset"
+?? "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset.meta"
+?? Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/TTF/JifengBladeArtSC-3500-Plus.ttf
+?? Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/TTF/JifengBladeArtSC-3500-Plus.ttf.meta
+?? Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs
+?? Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs
+?? Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q01WordsGameViewRequestEditor.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q01WordsGameViewRequestEditor.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs.meta
+?? Tools/NTSD28Q07Diagnostics/c053_aux_type3_double_probe.cpp
+?? Tools/NTSD28Q07Diagnostics/c053_tobi_firz_reach_probe.cpp
+?? Tools/NTSD28Q07Diagnostics/c053_tobi_physical_reach_probe.cpp
+?? Tools/NTSD28Q08Diagnostics/return_resume_lfr_probe.cpp
+?? Tools/NTSD28Q10Diagnostics/naruto_held_jump_043_probe.cpp
+?? artifacts/diagnostics/NTSD-BATTLE-CONTROLS-LIFECYCLE-001/
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-EVENTS-001/
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-REFRESH-001/
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001/
+?? artifacts/diagnostics/NTSD-BUTTON-MULTIPOINTER-001/
+?? artifacts/diagnostics/NTSD-BUTTON-PRESS-CONSISTENCY-001/
+?? artifacts/diagnostics/NTSD-INPUT-SEMANTICS-VALIDATION-001/
+?? artifacts/diagnostics/NTSD-MENU-CAROUSEL-VISUAL-001/center-tournament-143135248.png
+?? artifacts/diagnostics/NTSD-MENU-CAROUSEL-VISUAL-001/center-vs-143133032.png
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-PLUS-REBIND-001/
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/REPORT.md
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/change-ledger-scoped-validation.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/change-ledger-validation-delivery.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/change-ledger-validation-final.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/change-ledger-validation.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-atlas-expansion.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-fallback-fix.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-fallback-init.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-glyph-api-fix.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-glyph-index-fix.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-after-import.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/compile-material-cleanup.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/font-after-external-change.asset.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/font-prepared-01.asset.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/font-prepared-02.asset.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/label-texts-before.json
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-focused-tests-first.xml
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-focused-tests-isolated-failures.xml
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-scene-after-external-change.unity.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-scene-after-second-external-change.unity.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-scene-prepared-01.unity.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-scene-prepared-02.unity.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-scene-stable-before-write.unity.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-tool-before-glyph-api-fix.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-tool-before-prepared-manifest.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-tool-before-probe-diagnostics.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-tool-before-scene-rebase.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/menu-tool-before-snapshot-guard.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/prepared-manifest-01.json.txt
+?? artifacts/diagnostics/NTSD-MENU-FONT-3500-REBIND-001/prepared-manifest.json
+?? artifacts/diagnostics/NTSD28-336B44-ORIGINAL-EDITOR-COMPILE-RECOVERY-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-BATTLE-RESOURCE-CALLSITE-CLOSURE-20261003/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-CURRENT-CONTENT-RECHECK-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-CURRENT-PLAY-20261003/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q01-WORDS-GAMEVIEW-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-OID251-PRODUCER-AUDIT-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-ROOT-HIT-EVENT-REINTERPRET-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C056-FUSION-SCENE-PLAY-001/fusion-hold-c0-shutdown-20261004-01/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-EDITOR-COMPILE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-F02-NATURAL-SCENE-001/f02-alpha-one-20261004-01/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-F02-NATURAL-SCENE-001/f02-kind10-scene-20261003-08/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-F02-NATURAL-SCENE-001/f02-preflight-20261003-08/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-WINDOW-RECHECK-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q01-spark-natural-20261004-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q01-spark-natural-20261004-01/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-F02-INTERPOLATION-ALPHA-AUDIT-20261003/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001/natural-nameplate-20261003-144054-221-32e11521e4bc47b1b5b50f683c2020b9.json
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-BPOINT-CONTENT-RECHECK-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-EQUAL-HP-ROOT-LFR-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-EQUAL-HP-WARP-RECHECK-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-NATURAL-BLEED-OFFSCREEN-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-PLAYABLE-BLEED-RECHECK-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-021-102-FORMAL-WAV-STAGE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-CUE-AVAILABILITY-REFRESH-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-OBSERVED-CUE-CONTENT-COVERAGE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-FORMAL-WAV-DEPLOY-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-JUMP-ROOT-LFR-20261004/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-049-J2-FORMAL-WAV-STAGE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-HIGHHP-049-J2-ROOT-001/
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/bpoint-ita-336b44-current-20261004-01-high.png
+?? artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/bpoint-ita-336b44-current-20261004-01-low.png
+?? artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/bpoint-ita-336b44-current-20261004-01.json
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-CONTROLS-LIFECYCLE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-EVENTS-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-REFRESH-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-BUTTON-PRESS-CONSISTENCY-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-MENU-FONT-3500-PLUS-REBIND-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q01-WORDS-GAMEVIEW-REQUEST-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q08-C009-RETURN-RESUME-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-CONTROLS-LIFECYCLE-001/
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-EVENTS-001/
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-REFRESH-001/
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001/
+?? docs/ai/FILE-OPERATIONS/NTSD-BUTTON-PRESS-CONSISTENCY-001/
+?? docs/ai/FILE-OPERATIONS/NTSD-MENU-FONT-3500-PLUS-REBIND-001-PREPARE/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-EDITOR-COMPILE-001/
+?? docs/ai/TASKS/NTSD-BATTLE-CONTROLS-LIFECYCLE-001.md
+?? docs/ai/TASKS/NTSD-BATTLE-HUD-EVENTS-001.md
+?? docs/ai/TASKS/NTSD-BATTLE-HUD-REFRESH-001.md
+?? docs/ai/TASKS/NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001.md
+?? docs/ai/TASKS/NTSD-BUTTON-PRESS-CONSISTENCY-001.md
+?? docs/ai/TASKS/NTSD-MENU-FONT-3500-PLUS-REBIND-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q01-WORDS-GAMEVIEW-REQUEST-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-ROOT-HIT-EVENT-REINTERPRET-20261004.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q08-C009-RETURN-RESUME-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-P08-NATURAL-BLEED-OFFSCREEN-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-021-102-FORMAL-WAV-STAGE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-OBSERVED-CUE-CONTENT-COVERAGE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-ORASENGAN-078-FORMAL-WAV-DEPLOY-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-SAKURA-049-J2-FORMAL-WAV-STAGE-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q10-SAKURA-HIGHHP-049-J2-ROOT-001.md

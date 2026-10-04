@@ -1,0 +1,13 @@
+# NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001
+
+Status: `VERIFIED` for the bounded first-observed-difference diagnostic only. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / G1 / Q07`; Q01 WORDS Game View witness supplied the triggering observation.
+
+The 2026-10-03 strict Q09 nameplate probe entered the original Editor's Menu→Battle path and observed 174 direction ticks while P1 stayed at X620. Its report did not record the synthetic keyboard state, InputAction value, canonical FrameInputSet or character motion state, so a gameplay-input failure is not established. A separate Q01 visible-only run showed the formal WORDS1 glyph and also left X620 stationary. Diagnose the first missing handoff before any production change.
+
+Scope: only append bounded first-tick input observations to `Assets/NTSD/Scripts/Test/Editor/NTSD28Q09NameplateNaturalPlayProbeEditor.cs` and rerun the existing Q01 request bridge once from a clean, saved Menu in the original Editor. Record keyboard D/A state, MoveAction value and callback-backed CurrentMoveInput, PlayerSlot0 LastAppliedFrameInput held/pressed/released, native key/CD, frame/state, source and projected X/Vx for at most the first twelve observed ticks. Do not alter queue timing, production input mapping, battle rules, DAT, character images, Scene, camera or nonbattle code. Keep the strict Q09 viewport assertion unchanged.
+
+Acceptance: generated Editor assembly and original Editor compile with zero errors; one unique Menu→Battle request produces a JSON trace that distinguishes physical injection, action mapping, canonical tick input and movement state, then returns to the sole clean Menu with four protected hashes unchanged. Preserve failure artifacts and report the first observed break, or mark insufficient evidence if snapshots skip a decisive tick. Only a proved shared production fault may lead to a separate implementation package; this Task itself is diagnostic.
+
+Risk: the Editor can receive concurrent user edits. The existing request bridge fails closed unless one clean saved Menu is idle; the probe's cleanup owns additive Battle unload and Play exit. Rollback, if needed, is a separately audited removal of this diagnostic addition, with no deletion in this Task.
+
+2026-10-03 exit: original Editor trace at observed ticks4–7 shows keyboard D pressed while enabled MoveAction still reads zero, so callback input, canonical tick buttons and X also stay zero. The run exited to a clean Menu with four protected hashes stable. Cause is not yet proved; the probe's immediate `InputSystem.Update()` is a separate test-harness hypothesis. [Report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001/REPORT.md).

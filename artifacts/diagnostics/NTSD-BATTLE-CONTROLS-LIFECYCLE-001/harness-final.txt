@@ -1,0 +1,14 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\UI\Battle\BattleControlsView.cs(25,45): warning CS0649: 浠庢湭瀵瑰瓧娈碘€淏attleControlsView.jumpButton鈥濊祴鍊硷紝瀛楁灏嗕竴鐩翠繚鎸佸叾榛樿鍊?null [I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-CONTROLS-LIFECYCLE-001\harness-net10\Harness.csproj]
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\UI\Battle\BattleControlsView.cs(26,45): warning CS0649: 浠庢湭瀵瑰瓧娈碘€淏attleControlsView.defendButton鈥濊祴鍊硷紝瀛楁灏嗕竴鐩翠繚鎸佸叾榛樿鍊?null [I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-CONTROLS-LIFECYCLE-001\harness-net10\Harness.csproj]
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\UI\Battle\BattleControlsView.cs(24,45): warning CS0649: 浠庢湭瀵瑰瓧娈碘€淏attleControlsView.attackButton鈥濊祴鍊硷紝瀛楁灏嗕竴鐩翠繚鎸佸叾榛樿鍊?null [I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-CONTROLS-LIFECYCLE-001\harness-net10\Harness.csproj]
+PASS enable idempotent subscription
+PASS press repeat suppressed and release routed
+PASS disabled view releases and rejects callbacks/direct presses
+PASS reenable accepts new press
+PASS missing sink release clears local pressed state
+PASS rebind releases old player before switching
+PASS old pointer release not sent to new player
+PASS new player receives next press
+PASS unbind release idempotent
+PASS destroy fallback releases and unsubscribes once
+TOTAL 10 PASS; actual View source with dependency stubs, not Unity runtime.

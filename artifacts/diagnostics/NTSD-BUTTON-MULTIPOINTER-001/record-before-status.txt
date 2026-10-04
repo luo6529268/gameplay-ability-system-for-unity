@@ -1,0 +1,14 @@
+<!-- CHANGE-RECORD
+id: NTSD-BUTTON-MULTIPOINTER-001
+status: IN_PROGRESS
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/UI/NTSDButton.cs
+authority: User explicit 2026-10-04 04:49 UTC any-held multi-pointer and abnormal-release request
+evidence: docs/ai/FILE-OPERATIONS/NTSD-BUTTON-MULTIPOINTER-001/RECORD.md
+-->
+# NTSD-BUTTON-MULTIPOINTER-001
+User authority: approved any-held pointerId policy, 2026-10-04 04:49 UTC. Before: one boolean, any up/exit clears; no explicit pause/unconditional focus cleanup. Scope ONLY NTSDButton production source. HashSet pointer membership; first/last edge; no reenter press. Clear membership and base state on disable/destroy/focus/pause/noninteractable transition. Preserve left-button filter and inherited Click/Submit. No combat sampling, DAT, Scene, fonts or menu changes.
+Dependencies: installed uGUI1.0.0 Selectable uses private single isPointerDown; final member release calls base up, intermediate release does not. Disabled transition observes interactable/CanvasGroup changes. No update loop, worker, queue or persistent service; OnDisable/OnDestroy clear local managed state idempotently as existing renderer teardown proceeds, no new shutdown phase.
+Acceptance: actual source isolated behavioral harness with uGUI substitutes, compile against real installed Unity API, final diff and ChangeLedger validation. Unity EventSystem/Play/real multitouch pending because Editor ownership not acquired. Risks: Unity message dispatch, pointer ID reuse cannot distinguish an old callback from a new gesture with same ID without an event-generation token; no invented click semantics. Rollback exact before-0.txt with later-change guard and audited restore. No irreversible action.
+
+CODE_WRITTEN: HashSet membership and first/last edge; base up delayed until final tracked release, final exit also releases base down flag. Disable/destroy/InstantClearState/focus/pause clear set; Disabled visual transition clears held pointers. Click/Submit inherited. Validation pending.

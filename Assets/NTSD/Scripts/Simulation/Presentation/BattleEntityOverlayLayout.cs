@@ -281,7 +281,7 @@ namespace NTSD.Simulation.Presentation
 
         private static int ResolveRelationSheet(int relationTeam)
         {
-            return relationTeam >= 1 && relationTeam <= 4 ? relationTeam : 0;
+            return relationTeam >= 1 && relationTeam <= 5 ? relationTeam : 0;
         }
 
         private static void ResolveLabelOrigin(

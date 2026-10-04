@@ -1,0 +1,18 @@
+{
+  "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\078.wav",
+  "sourceSha256": "D8CAB6CE5CCF129FD689F9FD0170D06B21E04B930BE77EF9AAC9AD4B563F3560",
+  "sourceBytes": 54148,
+  "target": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\078.wav",
+  "targetExisted": false,
+  "meta": "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\078.wav.meta",
+  "metaExisted": false,
+  "plannedGuid": "41e218017ff74c2bbe904c17ab66df57",
+  "oldSound": "Assets\\NTSD\\Sound\\data\\078.wav",
+  "oldSoundSha256": "78688CFD046DCA0A33F36A10F589EC2ADDE83301AF58BD99FE0C9A5823A69DF5",
+  "protected": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "D88AD2111715AB2D970A85DDDAFFAAB206DFFD3BB54B9DF071AD25901D76CDF6",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  }
+}

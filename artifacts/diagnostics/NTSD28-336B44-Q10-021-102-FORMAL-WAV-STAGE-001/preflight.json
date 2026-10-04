@@ -1,0 +1,72 @@
+{
+  "schema": "ntsd28-q10-formal-wav-stage-preflight/1",
+  "utc": "2026-10-04T00:58:27.091985+00:00",
+  "root_exe_sha256_expected": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "files": {
+    "021.wav": {
+      "formal": {
+        "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\021.wav",
+        "sha256": "AE2ED083B8A94665266AC32522E8A1648B9918CAB12062D838F1CDACC605637E",
+        "size": 34354,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "sample_rate": 38400,
+          "frames": 34310,
+          "pcm_sha256": "07F03DAEEB8BC4F5A6F68BB2EC1EACF0CFB50C4404256D84324350B74B2DE95A"
+        }
+      },
+      "old": {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Sound\\data\\021.wav",
+        "sha256": "CA6D6EEED9D7D95C2E72EFA93EDC3D080133C946241DEB76A49FA08F29EBECE9",
+        "size": 34446,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "sample_rate": 38400,
+          "frames": 34310,
+          "pcm_sha256": "2ED31E89D63F1415AA2D02FC794FA16EDCBBCC5BE516242A7CF8F82DAB04E19C"
+        }
+      },
+      "target": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\021.wav",
+      "target_absent": true,
+      "meta_absent": true
+    },
+    "102.wav": {
+      "formal": {
+        "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\102.wav",
+        "sha256": "F0BF315E2CF8C0402D26C9928810F0F6E12233C851C61FE4B23C5CD1BA7E5603",
+        "size": 35822,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "sample_rate": 16000,
+          "frames": 35777,
+          "pcm_sha256": "2424F3E23857673BDA43E44F27BB5F053CAC4273C982A0FDDED31DB2B51CF800"
+        }
+      },
+      "old": {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Sound\\data\\102.wav",
+        "sha256": "23E93668437F66F74B14C295F8EED922110EBFCDBD56874D6A99B6D5A6948F9E",
+        "size": 71690,
+        "wave": {
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate": 16000,
+          "frames": 35777,
+          "pcm_sha256": "68959927A1CF8A959B736553BE339F1322FAB883F7CC129DA4F238BC184302B8"
+        }
+      },
+      "target": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\102.wav",
+      "target_absent": true,
+      "meta_absent": true
+    }
+  },
+  "protected_sha256": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "D88AD2111715AB2D970A85DDDAFFAAB206DFFD3BB54B9DF071AD25901D76CDF6",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "9EAAA0B4782974D74A017C367C9D5C77326C31D4281A2D820D1CBBA76986C1BA",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  },
+  "target_git_status": ""
+}

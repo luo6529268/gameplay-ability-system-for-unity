@@ -1,0 +1,86 @@
+{
+  "schema": "ntsd28-q10-sakura-highhp-root-comparison/1",
+  "utc": "2026-10-04T01:10:05.386906+00:00",
+  "declared_tick_count": 55,
+  "compared_fields": 165,
+  "first_difference": null,
+  "difference_count": 0,
+  "source_events": [
+    {
+      "tick": 6,
+      "path": "data/007.wav",
+      "source": "1",
+      "x": "500"
+    },
+    {
+      "tick": 12,
+      "path": "data/007.wav",
+      "source": "1",
+      "x": "500"
+    },
+    {
+      "tick": 19,
+      "path": "data/007.wav",
+      "source": "1",
+      "x": "500"
+    },
+    {
+      "tick": 21,
+      "path": "c/saku/w/j2.wav",
+      "source": "1",
+      "x": "500"
+    },
+    {
+      "tick": 49,
+      "path": "data/049.wav",
+      "source": "1",
+      "x": "500"
+    }
+  ],
+  "files": {
+    "data/049.wav": {
+      "formal": {
+        "sha256": "10ADC639123FA69CBB64DD430BE49D04314C50260D383FC22E98513D6E68D0C6",
+        "pcm_sha256": "E18426555E4D524692AF998907D811FDDA78C6D220D33873C0EFAB8F300740A4",
+        "format": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "rate": 22050,
+          "frames": 32908
+        }
+      },
+      "old": {
+        "sha256": "0279D6450A8EA10B4FFB5AE147997B1262306887C28D514B69F4D0B4192ECF98",
+        "pcm_sha256": "DF6ABA9750CB916FF67054993545DD8F8C9EBA724B9AB5EC960C12EBA390695C",
+        "format": {
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "rate": 22050,
+          "frames": 32908
+        }
+      },
+      "staged": null
+    },
+    "c/saku/w/j2.wav": {
+      "formal": {
+        "sha256": "73C3904DB1151FA86727860A4D6BD8B7FA52C70A5209D6B0211C59803780A908",
+        "pcm_sha256": "8A06CD7AD543013650A10850382FB97EBDB8DF43F11FE51CF4188C79337151E6",
+        "format": {
+          "channels": 1,
+          "sample_width_bytes": 1,
+          "rate": 22050,
+          "frames": 7868
+        }
+      },
+      "old": null,
+      "staged": null
+    }
+  },
+  "root_report": {
+    "passed": true,
+    "failureCode": 0,
+    "declaredTicks": 55,
+    "completedTicks": 56
+  },
+  "root_audio_trace_available": false
+}

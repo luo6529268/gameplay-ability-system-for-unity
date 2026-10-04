@@ -1,0 +1,52 @@
+PASS first down only False
+PASS intermediate up False
+PASS final up False
+PASS two edges False
+PASS first down only True
+PASS intermediate up True
+PASS final up True
+PASS two edges True
+PASS one exits other holds
+PASS late up/unknown exit preserves other
+PASS last exit releases base and custom
+PASS reenter does not press
+PASS exit/up dedupe
+PASS duplicate down and unknown up
+PASS duplicate up no event
+PASS disable clears
+PASS disable one release and stale callbacks ignored
+PASS disable rejects input while blocked
+PASS disable fresh gesture resumes
+PASS disable resumed edges
+PASS destroy clears
+PASS destroy one release and stale callbacks ignored
+PASS destroy fresh gesture resumes
+PASS destroy resumed edges
+PASS focus clears
+PASS focus one release and stale callbacks ignored
+PASS focus rejects input while blocked
+PASS focus fresh gesture resumes
+PASS focus resumed edges
+PASS pause clears
+PASS pause one release and stale callbacks ignored
+PASS pause rejects input while blocked
+PASS pause fresh gesture resumes
+PASS pause resumed edges
+PASS interactable clears
+PASS interactable one release and stale callbacks ignored
+PASS interactable rejects input while blocked
+PASS interactable fresh gesture resumes
+PASS interactable resumed edges
+PASS clear clears
+PASS clear one release and stale callbacks ignored
+PASS clear fresh gesture resumes
+PASS clear resumed edges
+PASS nonleft does not clear left
+PASS inherited click and submit
+PASS submit visual finishes
+PASS submit finish preserves active pointer
+PASS selection callback disabling cannot revive press
+PASS invalidated down no events
+PASS focus regain while paused remains blocked
+PASS combined pause focus recovery
+TOTAL 51 PASS. Actual NTSDButton source; uGUI dependency substitutes, not Unity EventSystem/Play.

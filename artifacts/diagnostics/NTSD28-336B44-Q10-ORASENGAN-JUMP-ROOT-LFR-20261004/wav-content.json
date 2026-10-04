@@ -1,0 +1,20 @@
+{
+  "formal": {
+    "bytes": 54148,
+    "sha256": "D8CAB6CE5CCF129FD689F9FD0170D06B21E04B930BE77EF9AAC9AD4B563F3560",
+    "channels": 1,
+    "sampleWidthBytes": 1,
+    "sampleRate": 22050,
+    "frames": 54104,
+    "pcmSha256": "B2C9A46EC782A37F0F1AEBEAA749EC8DC2D5DE12DB2FAD9B192C761A83F13F0E"
+  },
+  "unityOld": {
+    "bytes": 108344,
+    "sha256": "78688CFD046DCA0A33F36A10F589EC2ADDE83301AF58BD99FE0C9A5823A69DF5",
+    "channels": 1,
+    "sampleWidthBytes": 2,
+    "sampleRate": 22050,
+    "frames": 54104,
+    "pcmSha256": "3150732A644B8341E0641741C66BA36BFDD3D897E2D0E286E4529852A1D94E39"
+  }
+}

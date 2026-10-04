@@ -1,0 +1,38 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "14c7be0928448e72e465abc16b909d7e6506f7f406fc1ad83fbd0436a8c3932b"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha256": "0b87d26743e8793179b9e2ab25671961daf493e376952d70faed0efb074e59a7"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha256": "5876b4b745c42926b3ab754cf8e36c1e1933f674bae91f00f951a249060e210a"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha256": "d0dfe61e96b82f7b7298cea2ac974c554d4e6f0cf5b9d726be699414ea49c62d"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha256": "7b19371534edd358130ed863b1afd86609a633d8ceaf0c402bb74c9cfd7a208a"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha256": "c39044f2c29c955d6a3db1f2de09370aad6b62cc4a5978c299e59e64c2a34b20"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs",
+    "sha256": "fda75bbbd6098d1cc1584e11fe5c39b22af00378e82bed095c738d7f19dad5cb"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs.meta",
+    "sha256": "179df3f5ea29d04f5975af5d1944b706f8541552498e7687fdfcc4d1b693dd8c"
+  },
+  {
+    "path": "docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-REFRESH-001.md",
+    "sha256": "7186fc9ea5524ca42ab99915f1c40f257c211c973f632bd9a91798c839ffac43"
+  }
+]

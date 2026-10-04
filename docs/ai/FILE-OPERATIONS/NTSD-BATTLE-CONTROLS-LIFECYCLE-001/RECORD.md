@@ -1,0 +1,5 @@
+# NTSD-BATTLE-CONTROLS-LIFECYCLE-001 / PLANNED
+User explicitly authorizes two BattleControlsView lifecycle fixes, source thread 01a0ef91-2a9a-763b-af75-4367dfcd1020. Executor current Codex. Root I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity. UTC 2026-10-03T23:10:24.532685+00:00.
+Exact overwritten/append paths and verified byte backups: artifacts/diagnostics/NTSD-BATTLE-CONTROLS-LIFECYCLE-001/prechange.json. Planned Python literal replacement of BattleControlsView.cs after SHA check; docs append. No deletion, scene/asset/NTSDButton/InputModule changes. Restore exact backups only after later-change check under separate operation. New temporary local harness and build evidence under artifact folder; no Assets tests or Editor interaction.
+
+VERIFIED file operation: Python UTF-8 literal edit completed; initial default-codepage read failed before mutation, retry after SHA check succeeded. Only declared script/doc paths overwritten/appended, no deletion. New harness/build/receipts in artifacts; existing dependency DLLs copied to empty artifact destinations only. Final script hash postchange.json. Independent compile and10-check harness pass; Editor untouched.

@@ -1,0 +1,26 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+Only this standalone process Unity logger disabled to avoid native logging ECall; gameplay code unchanged.
+Fixture uses actual standalone cache without Scene identity observer; no full World registration.
+DAT=I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets/NTSD/Content/LoganRuntime/decoded_dat/c/nar/nar.dat frames=498 source=0 target=240 targetMp=0 targetState=3
+Naruto routed frame=240
+PASS real parser+combo+writer applies Naruto240
+Fixture uses actual standalone cache without Scene identity observer; no full World registration.
+DAT=I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets/NTSD/Content/LoganRuntime/decoded_dat/c/ita/ita.dat frames=485 source=318 target=359 targetMp=0 targetState=15
+PASS ita no hold => no input route
+ita held requested=359 actualFrame=359
+PASS ita held route applied incl encoded-state redirect
+PASS ita prior-held/current-up sample still satisfies hold field
+PASS ita next fully released sample cannot hold-route
+PASS ita action lock rejects route
+Fixture uses actual standalone cache without Scene identity observer; no full World registration.
+DAT=I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets/NTSD/Content/LoganRuntime/decoded_dat/c/ank/ank.dat frames=394 source=439 target=470 targetMp=0 targetState=1150443
+PASS ank no hold => no input route
+ank held requested=470 actualFrame=443
+PASS ank held route applied incl encoded-state redirect
+PASS ank prior-held/current-up sample still satisfies hold field
+PASS ank next fully released sample cannot hold-route
+PASS ank action lock rejects route
+PASS Anko HP150 does not redirect encoded1150443
+Anko353 lowPP failure=ResourceRejected
+PASS real DAT Anko353 mp75 rejected with PP0
+DAT EXECUTION COMPLETE

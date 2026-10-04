@@ -3,6 +3,20 @@ using UnityEngine;
 
 namespace NTSD.UI.Battle
 {
+    public readonly struct BattleHudChangedEvent
+    {
+        public readonly NTSD.Simulation.BattleHudValues Values;
+        public readonly string DisplayName;
+        public readonly Sprite HeadSprite;
+
+        public BattleHudChangedEvent(NTSD.Simulation.BattleHudValues values, string displayName, Sprite headSprite)
+        {
+            Values = values;
+            DisplayName = displayName ?? string.Empty;
+            HeadSprite = headSprite;
+        }
+    }
+
     [Serializable]
     public sealed class BattleHudState
     {

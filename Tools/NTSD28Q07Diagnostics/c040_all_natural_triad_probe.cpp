@@ -1,6 +1,8 @@
 #include "ntsd28_playable/game_session_lfr.h"
+#include "ntsd28_playable/d3d11_renderer.h"
 #include "ntsd28/combat_records.h"
 
+#include <objbase.h>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -55,8 +57,11 @@ std::string case_name(const ProbeCase& test) {
 }  // namespace
 
 int main(int argc, char** argv) {
-    if (argc != 3) {
-        std::cerr << "usage: c040_all_natural_triad_probe <formal_root> <new_output_directory>\n";
+    const bool capture_spark = argc == 4 &&
+        std::string(argv[3]) == "--offscreen-first-positive";
+    if (argc != 3 && !capture_spark) {
+        std::cerr << "usage: c040_all_natural_triad_probe <formal_root> "
+                     "<new_output_directory> [--offscreen-first-positive]\n";
         return 2;
     }
     const std::filesystem::path output(argv[2]);
@@ -83,15 +88,19 @@ int main(int argc, char** argv) {
         {9, 18}, {10, 16}, {10, 17}, {10, 18}
     };
     std::vector<ProbeCase> cases;
-    for (const auto schedule : bee_schedules) {
-        for (int kakuzu_start = 13; kakuzu_start <= 19; ++kakuzu_start) {
-            cases.push_back({schedule.first, schedule.second,
-                             kakuzu_start, 540, 560});
-            cases.push_back({schedule.first, schedule.second,
-                             kakuzu_start, 560, 580});
+    if (capture_spark) {
+        cases.push_back({9, 17, 19, 540, 560});
+    } else {
+        for (const auto schedule : bee_schedules) {
+            for (int kakuzu_start = 13; kakuzu_start <= 19; ++kakuzu_start) {
+                cases.push_back({schedule.first, schedule.second,
+                                 kakuzu_start, 540, 560});
+                cases.push_back({schedule.first, schedule.second,
+                                 kakuzu_start, 560, 580});
+            }
         }
+        cases.push_back({7, 16, 15, 1200, 1220});
     }
-    cases.push_back({7, 16, 15, 1200, 1220});
     const auto runtime_root = std::filesystem::path(argv[1]) /
                               "resources" / "runtime";
     bool emitted_lfr = false;
@@ -163,6 +172,67 @@ int main(int argc, char** argv) {
             const auto* victim = world == nullptr ? nullptr : world->entity(1);
             const auto* armored = world == nullptr ? nullptr : world->entity(2);
             if (!result || !actor || !victim || !armored) return 8;
+            if (capture_spark && tick == 25) {
+                const auto snapshot = session.snapshot(false);
+                std::ofstream sparks(output / "tick25-sparks.csv", std::ios::binary);
+                std::ofstream commands(output / "tick25-entity-commands.csv",
+                                       std::ios::binary);
+                if (!sparks || !commands) return 13;
+                sparks << "index,host_slot,spark_id,screen_x,screen_y,depth,"
+                          "source_x,source_y,width,height,drawable,available,path\n";
+                for (std::size_t i = 0; i < snapshot.sparks.size(); ++i) {
+                    const auto& spark = snapshot.sparks[i];
+                    sparks << i << ',' << spark.host_slot << ','
+                           << spark.native_spark_id << ',' << spark.screen_x << ','
+                           << spark.screen_y << ',' << spark.depth_order << ','
+                           << spark.source_x << ',' << spark.source_y << ','
+                           << spark.width << ',' << spark.height << ','
+                           << spark.drawable << ',' << spark.resource_available
+                           << ',' << spark.resource_path.u8string() << '\n';
+                }
+                commands << "phase,kind,index,slot,depth\n";
+                std::size_t spark_commands = 0;
+                for (const auto& command : snapshot.entity_commands) {
+                    commands << command.phase_order << ','
+                             << static_cast<int>(command.kind) << ','
+                             << command.item_index << ',' << command.slot << ','
+                             << command.depth_order << '\n';
+                    if (command.kind == ntsd28::RenderEntityCommandKind28::spark)
+                        ++spark_commands;
+                }
+                sparks.close();
+                commands.close();
+                if (!sparks || !commands || spark_commands == 0) {
+                    std::cerr << "formal tick25 has no drawable spark command\n";
+                    return 14;
+                }
+                const HRESULT com = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+                if (FAILED(com)) return 15;
+                bool rendered = false;
+                {
+                    ntsd28_playable::D3D11Renderer28 renderer;
+                    rendered = renderer.initialize_offscreen(1333, 730, error) &&
+                               renderer.render(snapshot, false, error) &&
+                               renderer.save_offscreen_png(
+                                   output / "tick25-offscreen.png", error);
+                }
+                if (rendered) {
+                    auto without_spark = snapshot;
+                    without_spark.sparks.clear();
+                    ntsd28_playable::D3D11Renderer28 control_renderer;
+                    rendered = control_renderer.initialize_offscreen(1333, 730,
+                                                                      error) &&
+                               control_renderer.render(without_spark, false,
+                                                       error) &&
+                               control_renderer.save_offscreen_png(
+                                   output / "tick25-no-spark.png", error);
+                }
+                CoUninitialize();
+                if (!rendered) {
+                    std::cerr << "formal tick25 offscreen render: " << error << '\n';
+                    return 16;
+                }
+            }
             if (victim->frame.action == 70 && first_bee70 < 0) first_bee70 = tick;
             if (victim->frame.action == 73 && first_bee73 < 0) first_bee73 = tick;
             bool armor_hit = false;

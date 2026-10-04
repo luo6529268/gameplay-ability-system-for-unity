@@ -1,0 +1,82 @@
+{
+  "case": "b9-17-k19-x540-g560",
+  "tick": 25,
+  "viewport": [
+    1333,
+    730
+  ],
+  "logic": {
+    "source-ticks.csv": {
+      "exact_to_old_case": true,
+      "sha256": "602c8ab639b66fcf8677a04f55c9e1cbf79ad8a6988975f19fc58e42504580a0",
+      "rows": 40
+    },
+    "source-rng.csv": {
+      "exact_to_old_case": true,
+      "sha256": "f954a67ff20e5fd814ce026929c91b03671cca7c17005e42e3b5d4d885a998ce",
+      "rows": 40
+    },
+    "summary.csv": {
+      "exact_to_old_case": true,
+      "sha256": "887e448e7781584466a9f9a57eeb9f7881200c2cc4e606522867265397c1905f",
+      "rows": 1
+    },
+    "first-positive.lfr": {
+      "exact_to_first_run": true,
+      "sha256": "afac056e5d16e81c839360cb9b41ee851f225741fe8158aba614091158ce4bc1"
+    },
+    "tick25-offscreen.png": {
+      "exact_to_first_run": true,
+      "sha256": "06a246284dba3a3d91de2b3acae0f01dcde88c984a58af7bbe0ff9a85ca62b55"
+    }
+  },
+  "ablation": {
+    "changed_pixels": 73,
+    "bounding_box_inclusive": [
+      566,
+      338,
+      574,
+      355
+    ],
+    "changed_colors_rgba": [
+      {
+        "rgba": [
+          232,
+          112,
+          0,
+          255
+        ],
+        "count": 26
+      },
+      {
+        "rgba": [
+          248,
+          224,
+          120,
+          255
+        ],
+        "count": 23
+      },
+      {
+        "rgba": [
+          248,
+          160,
+          48,
+          255
+        ],
+        "count": 19
+      },
+      {
+        "rgba": [
+          248,
+          248,
+          248,
+          255
+        ],
+        "count": 5
+      }
+    ],
+    "outside_nominal_spark_rect": 0,
+    "without_spark_sha256": "cf7a2477fe523e20fc0b6575157bf537196a0e7ada8350301392ceeea9bb19dc"
+  }
+}

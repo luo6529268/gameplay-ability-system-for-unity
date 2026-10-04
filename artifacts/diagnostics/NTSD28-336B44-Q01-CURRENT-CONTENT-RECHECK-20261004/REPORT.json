@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-03T18:37:52.140293+00:00",
+  "formal_exe_sha256": "336b44e58bea637246b65204afc50fd8734c9aa38969b82836fa685497eb7bd3",
+  "dat": {
+    "rows": 338,
+    "formal_original_match": 338,
+    "staged_original_match": 338,
+    "current_normalized_equal": 338,
+    "missing": [],
+    "drift": []
+  },
+  "png": {
+    "rows": 1031,
+    "formal_original_match": 1031,
+    "staged_original_match": 1031,
+    "current_equal": 1031,
+    "missing": [],
+    "drift": []
+  },
+  "catalog": {
+    "catalog.csv": {
+      "formal": "0aab4a0ffee70f17d31ddf952254c798dfef185fedd55cacec28c7a66181e6fe",
+      "staged": "0aab4a0ffee70f17d31ddf952254c798dfef185fedd55cacec28c7a66181e6fe",
+      "equal": true
+    },
+    "decoded_dat/data/data.txt": {
+      "formal": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0",
+      "staged": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0",
+      "equal": true
+    }
+  },
+  "count": {
+    "staged_dat": 338,
+    "staged_png": 1031,
+    "formal_dat": 405,
+    "formal_png": 1255
+  }
+}

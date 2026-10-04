@@ -1,0 +1,142 @@
+{
+  "authorityExecutableSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "cases": {
+    "first253": {
+      "checks": 330,
+      "mismatches": [],
+      "sourceCsvSha256": "161E804093D32AD59713FF1CF34F7917A07ACE282E4C044D1C626AFDE275398F",
+      "lfrSha256": "B26D37E9D131A0165C283B84612E1D6C016F2031E9808D8D99BBE6AED1145139",
+      "rootTraceSha256": "6EEDD5F3047E9C6A0FCD9DF93ECECB6E1F12428573041621C3B3DAD62D062871",
+      "milestones": [
+        {
+          "tick": 33,
+          "sourceInput": "none",
+          "phase": 1,
+          "action": 253,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 34,
+          "sourceInput": "attack",
+          "phase": 0,
+          "action": 301,
+          "mp": 250,
+          "currentAttack": true,
+          "previousAttack": false
+        },
+        {
+          "tick": 35,
+          "sourceInput": "attack",
+          "phase": 1,
+          "action": 301,
+          "mp": 250,
+          "currentAttack": true,
+          "previousAttack": true
+        },
+        {
+          "tick": 36,
+          "sourceInput": "none",
+          "phase": 0,
+          "action": 302,
+          "mp": 250,
+          "currentAttack": false,
+          "previousAttack": true
+        }
+      ]
+    },
+    "second253": {
+      "checks": 330,
+      "mismatches": [],
+      "sourceCsvSha256": "20299FF1AF12FCC301F7B52FC0C1EF6AA428A56DF5A32BA05C78A85570461CD5",
+      "lfrSha256": "684107D01200F697801C5922F3083AA23713CCD61F2ED1F861F16FC804A10152",
+      "rootTraceSha256": "60FC1D85C140371F6DB6ED8394A5796F82721B37F22DAC661FB37EAA0754CE28",
+      "milestones": [
+        {
+          "tick": 33,
+          "sourceInput": "none",
+          "phase": 1,
+          "action": 253,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 34,
+          "sourceInput": "none",
+          "phase": 0,
+          "action": 253,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 35,
+          "sourceInput": "attack",
+          "phase": 1,
+          "action": 254,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 36,
+          "sourceInput": "attack",
+          "phase": 0,
+          "action": 254,
+          "mp": 350,
+          "currentAttack": true,
+          "previousAttack": false
+        }
+      ]
+    },
+    "after254": {
+      "checks": 330,
+      "mismatches": [],
+      "sourceCsvSha256": "AFA594BC7A39BE785EB8870097672DCF86994C13D6BE426D3B09ED442A353299",
+      "lfrSha256": "684107D01200F697801C5922F3083AA23713CCD61F2ED1F861F16FC804A10152",
+      "rootTraceSha256": "60FC1D85C140371F6DB6ED8394A5796F82721B37F22DAC661FB37EAA0754CE28",
+      "milestones": [
+        {
+          "tick": 33,
+          "sourceInput": "none",
+          "phase": 1,
+          "action": 253,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 34,
+          "sourceInput": "none",
+          "phase": 0,
+          "action": 253,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 35,
+          "sourceInput": "none",
+          "phase": 1,
+          "action": 254,
+          "mp": 350,
+          "currentAttack": false,
+          "previousAttack": false
+        },
+        {
+          "tick": 36,
+          "sourceInput": "attack",
+          "phase": 0,
+          "action": 254,
+          "mp": 350,
+          "currentAttack": true,
+          "previousAttack": false
+        }
+      ]
+    }
+  },
+  "totalChecks": 990,
+  "totalMismatches": 0
+}

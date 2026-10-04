@@ -1,0 +1,5 @@
+NTSD.Test.Editor.BattleHudEventEditorTests.LateEnableResyncDisableUnsubscribeAndReenableRestoresCurrentState
+  Expected: "Naruto"
+  But was:  null
+
+at NTSD.Test.Editor.BattleHudEventEditorTests.LateEnableResyncDisableUnsubscribeAndReenableRestoresCurrentState () [0x001a9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleHudEventEditorTests.cs:207

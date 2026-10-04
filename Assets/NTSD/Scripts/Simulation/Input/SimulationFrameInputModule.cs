@@ -184,6 +184,7 @@ namespace NTSD.Simulation
             if (rosterSlot == null || !rosterSlot.Active ||
                 (requireHuman && !rosterSlot.IsHuman))
             {
+                world.HudChanges.UnbindPlayer(playerSlot);
                 return false;
             }
 
@@ -212,10 +213,14 @@ namespace NTSD.Simulation
             }
 
             if (entity == null)
+            {
+                world.HudChanges.UnbindPlayer(playerSlot);
                 return false;
+            }
 
             rosterSlot.RuntimeSlotIndex = entity.Runtime.SlotIndex;
             rosterSlot.StableId = entity.Runtime.StableId;
+            world.NotifyBattleHudParticipantReady(playerSlot, entity);
             return true;
         }
 

@@ -1,0 +1,8 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+Unhandled exception. System.TypeLoadException: Could not resolve type 'NTSD.Simulation.BattleCharacterActionWriter' in assembly 'Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null'.
+   at System.Reflection.TypeNameResolver.GetType(String escapedTypeName, ReadOnlySpan`1 nestedTypeNames, TypeName parsedName)
+   at System.Reflection.TypeNameResolver.GetSimpleType(TypeName typeName)
+   at System.Reflection.TypeNameResolver.Resolve(TypeName typeName)
+   at System.Reflection.TypeNameResolver.GetType(String typeName, Boolean throwOnError, Boolean ignoreCase, Assembly topLevelAssembly)
+   at Program.New(String n) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat\Program.cs:line 5
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat\Program.cs:line 19

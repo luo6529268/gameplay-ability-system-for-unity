@@ -1,0 +1,60 @@
+{
+  "formal_exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "source_csv_sha256": "C66FA78C95E3B584AB7BF7C251CA535CBA5C41A537DA918468252811B889421C",
+  "root_trace_sha256": "A96827B9A19D35C5FE38EA2784EAEA3038184737004F0F806BDCF515861B3F37",
+  "root_report_sha256": "39937B97557C50AFE8188FC3AE99ED4B7D8F51EE9653263BC39AB5094AB857A6",
+  "root_report": {
+    "passed": true,
+    "failureCode": 0,
+    "declaredTicks": 40,
+    "completedTicks": 41
+  },
+  "compared_ticks": 40,
+  "matching_hit_counts": 40,
+  "source_positive_hit_tick": 7,
+  "source_hit_token": "51:0:2:156",
+  "root_hit": {
+    "kind": "hit",
+    "status": "applied",
+    "attacker": 51,
+    "target": 50,
+    "candidate": 0,
+    "hpDamage": 25,
+    "mpDamage": 0
+  },
+  "root_target_after_tick7": {
+    "slot": 50,
+    "oid": 808,
+    "action": 156,
+    "hp": 475,
+    "opointActionLatch": 153
+  },
+  "source_tick7": {
+    "oid808_action": 156,
+    "oid808_hit_count": 1,
+    "oid808_applied": 1,
+    "oid808_uj": 1,
+    "oid808_frame_action_latch": 156
+  },
+  "field_boundary": "Root event has no effect or Uj, and root opointActionLatch is not the source CSV frame.action_latch field; do not equate them.",
+  "all_root_hits_tick7": [
+    {
+      "kind": "hit",
+      "status": "applied",
+      "attacker": 50,
+      "target": 0,
+      "candidate": 0,
+      "hpDamage": 90,
+      "mpDamage": 0
+    },
+    {
+      "kind": "hit",
+      "status": "applied",
+      "attacker": 51,
+      "target": 50,
+      "candidate": 0,
+      "hpDamage": 25,
+      "mpDamage": 0
+    }
+  ]
+}

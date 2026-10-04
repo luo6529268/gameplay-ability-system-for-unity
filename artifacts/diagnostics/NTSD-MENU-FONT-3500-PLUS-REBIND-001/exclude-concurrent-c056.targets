@@ -1,0 +1,7 @@
+<Project>
+  <Target Name="ExcludeConcurrentC056" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <Compile Remove="Assets\NTSD\Scripts\Test\Editor\NTSD28Q07C056FusionHoldBattlePlayProbeEditor.cs" />
+    </ItemGroup>
+  </Target>
+</Project>

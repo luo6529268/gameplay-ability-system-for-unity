@@ -1,0 +1,41 @@
+NTSD INPUT SEMANTICS VALIDATION / 2026-10-04
+Status: managed-layer evidence obtained; Unity Play and formal EXE parity NOT VERIFIED. No production code/DAT/scene edits. Existing UI source + both scenes match pre-run hashes.
+
+Execution layers:
+1. matrix-results.txt: actual previously compiled Assembly-CSharp.dll, real CharacterInputModule, SimInputBuffer, NTSDInputStateModule, NTSDEntityRuntime, NTSD28NativeComboStateMachine, NTSD28NativeComboRouteSelector. No replacement implementations of these classes. Reflection only supplies fixture inputs. Source and assembly identities in manifests. The console process is .NET10, not Unity Mono/IL2CPP. Actual World/Host scheduling is not executed.
+2. delivery-results.txt: same actual input/combo classes; OS callback batching/render times/cadence scheduling are explicitly deterministic fixture assumptions, NOT observed rendering or hardware latency. Normal logic interval33ms, not1000/30ms. Input callbacks delivered before each modeled frame; debt clamp66ms, up to2 ticks.
+3. dat4-results.txt: real ParseLoganContent + ConvertLoganFrameData + LF2Character + LF2FrameCache + BattleCharacterActionWriter. Real decoded DAT unchanged. Cache uses actual public no-observer constructor to avoid Scene singleton lookup; no World registration. Only standalone-process Unity logger disabled. Parser/action code unchanged. Actions update managed frame state; no animation, collision, spawn, rendering or engine lifecycle was run. Previous failed namespace/native-ECall attempts retained as dat-results/dat2-results/dat3-results.
+4. ui-button-boundary.txt and ui-controls-boundary.txt: rerun9+10 prior actual-source tests with uGUI/InputModule dependency substitutes. PointerExit, Disable, repeated events and reenable verified at this layer only. pointer-observation.txt records existing two-pointer behavior, not a selected policy.
+
+Short-tap evidence:
+- Actual CharacterInputModule UI Attack down then up produces raw buffer2 events, but CaptureHeldSimulationButtons returns None. UI Attack maps to logical Jump at legacy boundary; native sample remaps to attack index4. Existing crossed mapping preserved.
+- Exact sampling times0,33,66,99ms: down10/up12 and down10/up20 yield no rising edge; down32/up34 yields rising edge5 at33, release at66 while window4 remains. down33.1/up33.2 missed; down65.9/up66.1 detected only in ideal66ms-sampling fixture.
+- Real SimInputBuffer.DiscardTick removes raw down/up. Real NTSDInputStateModule.UpdateFromBuffer collapses same-tick direct down/up to final false, and complete false packet takes precedence over direct true event.
+- Source link: LocalSimulationFrameInputProvider.GetFrameInput obtains final held state, derives pressed/released by comparing snapshots; BeforeSimTick discards direct tick after canonical capture. SimulationFrameInputModule.ApplyFrameInputSet enqueues complete key states. These whole provider/world methods were source-reviewed, not executed end-to-end in this harness.
+- Render-aware fixture distinguishes crucial case: down65.9/up66.1 both delivered before60Hz frame66.6667 => no press, although ideal66ms fixture detected it. A stalled frame at66ms sees down32/up34 already released and two catch-up ticks cannot recreate press. No claim of actual OS timestamps/Unity frame timings.
+- Therefore sub-sample tap loss is reproducible managed behavior, not merely conjecture. Whether it is an alignment defect versus formal EXE is still UNCONFIRMED; do not add latching or change sampling without comparison/authorization.
+
+Held/released/repeated/combined sources:
+Actual combo first down sets window5; continued hold gives4,3,2,1,0 without new rising edge. Release has no rising edge. UI release while device holds, and device release while UI holds, both retain effective held; both released clears. Repeated press suppression covered in boundary harness. New press after sampled release is independent of UI Click. Multi-tick delivery fixture10..150ms held captures ticks1..4; release observed tick5 at166.6667ms.
+
+DAT observations (input action routing only):
+Naruto nar.dat frame0 hit_Fj240: actual D,right,J rising sequence selects and writes frame240; D-only selector does not select it. target240 state3,mp0; full rasengan execution not tested.
+Itachi ita.dat frame318 hold_a359: no hold => frame318 unchanged; prior/current attack held =>359. PreviousAttack1/CurrentAttack0 also routes359 on first released sample; next previous/current0 sample does not route. InputActionLock130=1 blocks transition. target359 state15,mp0.
+Anko ank.dat frame439 hold_j470: no hold =>439. Held requests470 but target state1150443 redirects to443 when HP500 (>150). HP150 retains470. First-release sample previousJump1 still routes; subsequent released sample does not. Action lock blocks. Separate real Anko target353 mp75 with PP0 returns ResourceRejected. Resources here are runtime HP/PP used by actual writer, not assumed HUD MP equivalence. Broader skill-chain costs/spawns not executed.
+These results correct any simplified claim that hold only uses current held or that requesting470 always ends at470.
+
+Editor/EXE limits:
+Existing PID105896 Battle title, responsive. Passive screenshot editor-readonly.png shows no highlighted Play, no busy progress window, and no visible dirty asterisk. Exact scene.isDirty/TestRunner job ownership was not callable through the established safe read channel; current Battle ownership remained unresolved from prior task. Recent MCP connections visible in Console; they are evidence of connections, not proof of concurrent test ownership. No focus/control/start/stop/save actions taken. No second Editor. Touch controls still had known unbound scene/player wiring; no assets modified to enable them. Formal EXE not launched/controlled; no parity claims.
+
+Next verification:
+Use an available, clean, exclusively allocated Editor session to record actual InputSystem callbacks and sample ticks for same cases without changing default sampling. Then formal EXE same timing/input comparison determines whether short-tap loss is intended. Test full Naruto/Itachi/Anko action chains and resource/state conditions in real Play. Choose multi-pointer policy separately. Do not patch DAT/wait or latch inputs based solely on this fixture.
+
+PASS counts (overlapping runs, do not sum as unique tests):
+{
+  "managed-first.txt": 8,
+  "matrix-results.txt": 18,
+  "delivery-results.txt": 7,
+  "dat4-results.txt": 13,
+  "ui-button-boundary.txt": 9,
+  "ui-controls-boundary.txt": 10
+}

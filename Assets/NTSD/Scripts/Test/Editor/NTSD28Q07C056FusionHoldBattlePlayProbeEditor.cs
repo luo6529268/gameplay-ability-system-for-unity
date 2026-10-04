@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Game;
@@ -23,6 +24,8 @@ namespace NTSD.Test.Editor
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C056-FUSION-SCENE-PLAY-001/";
         private const string SessionKey = "NTSD.Q07.C056FusionHoldBattlePlay";
+        private const string ShutdownRunId = "fusion-hold-c0-shutdown-20261004-01";
+        private const string ShutdownRequestSessionKey = SessionKey + ".ShutdownRunId";
 
         private static Report report;
         private static SimulationTickDriver driver;
@@ -31,6 +34,7 @@ namespace NTSD.Test.Editor
         private static LF2Character partner;
         private static int stableTick = -1;
         private static int stableUpdates;
+        private static int shutdownSaveSequence;
 
         [Serializable]
         private sealed class Request
@@ -89,6 +93,20 @@ namespace NTSD.Test.Editor
             public int poolActiveBeforeExit;
             public int poolActiveAfterExit = -1;
             public int shutdownStageAfterExit = -1;
+            public int shutdownTriggerTick = -1;
+            public int shutdownActivePuppetCount = -1;
+            public string shutdownStatus;
+            public string shutdownStage;
+            public string shutdownFailure;
+            public int remainingWorldObjects = -1;
+            public int remainingRuntimeSlots = -1;
+            public int remainingPoolBorrowers = -1;
+            public int remainingActivePoolObjects = -1;
+            public int remainingActivePoolSprites = -1;
+            public bool poolQuiesced;
+            public bool worldDetached;
+            public bool orderedShutdownComplete;
+            public bool noLiveWorldAfterExit;
             public List<TickRow> ticks = new List<TickRow>();
         }
 
@@ -116,6 +134,26 @@ namespace NTSD.Test.Editor
         private static void Save()
         {
             SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
+            if (IsShutdownRun())
+            {
+                string directory = PathInProject(ResultRoot + report.runId);
+                Directory.CreateDirectory(directory);
+                string snapshotPath;
+                do
+                {
+                    snapshotPath = Path.Combine(directory,
+                        "snapshot-" + shutdownSaveSequence.ToString("D4") + ".json");
+                    shutdownSaveSequence++;
+                }
+                while (File.Exists(snapshotPath));
+
+                using (FileStream stream = new FileStream(
+                    snapshotPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                using (StreamWriter writer = new StreamWriter(stream))
+                    writer.Write(JsonUtility.ToJson(report, true));
+                return;
+            }
+
             string path = PathInProject(ResultRoot + report.runId + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
@@ -131,6 +169,12 @@ namespace NTSD.Test.Editor
         private static void Require(bool condition, string message)
         {
             if (!condition) throw new InvalidOperationException(message);
+        }
+
+        private static bool IsShutdownRun()
+        {
+            return report != null && report.initialCounter == 0 &&
+                string.Equals(report.runId, ShutdownRunId, StringComparison.Ordinal);
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -171,6 +215,7 @@ namespace NTSD.Test.Editor
             {
                 Restore();
                 if (report == null) { TryStart(); return; }
+                if (report.phase == "CLEANUP_BLOCKED") return;
                 if (report.phase == "EXITING")
                 {
                     if (!EditorApplication.isPlayingOrWillChangePlaymode) Finish();
@@ -198,14 +243,28 @@ namespace NTSD.Test.Editor
             if (!File.Exists(requestFile)) return;
             Request request = JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
             if (request == null || !request.requested) return;
-            Require(request.initialCounter == 7 || request.initialCounter == 0,
-                "Only the source counter7/counter0 controls are allowed.");
-            Require(request.runId == "fusion-hold-c" + request.initialCounter + "-scene-02",
-                "Unexpected C056 run ID.");
-            Require(!File.Exists(PathInProject(ResultRoot + request.runId + ".json")),
-                "Refusing to overwrite an existing C056 result.");
-            request.requested = false;
-            File.WriteAllText(requestFile, JsonUtility.ToJson(request, true));
+            bool shutdownRun = request.initialCounter == 0 &&
+                string.Equals(request.runId, ShutdownRunId, StringComparison.Ordinal);
+            if (shutdownRun)
+            {
+                if (Directory.Exists(PathInProject(ResultRoot + request.runId))) return;
+                if (string.Equals(SessionState.GetString(ShutdownRequestSessionKey, ""),
+                    request.runId, StringComparison.Ordinal)) return;
+                SessionState.SetString(ShutdownRequestSessionKey, request.runId);
+            }
+            else
+            {
+                Require(request.initialCounter == 7 || request.initialCounter == 0,
+                    "Only the source counter7/counter0 controls are allowed.");
+                Require(request.runId == "fusion-hold-c" + request.initialCounter + "-scene-02",
+                    "Unexpected C056 run ID.");
+                Require(!File.Exists(PathInProject(ResultRoot + request.runId + ".json")),
+                    "Refusing to overwrite an existing C056 result.");
+                request.requested = false;
+                File.WriteAllText(requestFile, JsonUtility.ToJson(request, true));
+            }
+
+            shutdownSaveSequence = 0;
             report = new Report
             {
                 runId = request.runId, initialCounter = request.initialCounter,
@@ -352,10 +411,80 @@ namespace NTSD.Test.Editor
                 report.ticks.Select((row, index) => row.spawnDelta == expected[index]).All(value => value);
             report.status = matched ? "SCOPED_PASS" : "FIRST_DIFFERENCE";
             if (!matched) report.error = "Fusion action/counter/hold or per-tick structural spawn differs from source.";
+
+            if (IsShutdownRun())
+            {
+                Require(report.ticks[2].activePuppetCount == 2 && CountPuppets() == 2,
+                    "Shutdown witness requires two live OID213 entities after the third full tick.");
+                report.shutdownTriggerTick = report.endTick;
+                report.shutdownActivePuppetCount = report.ticks[2].activePuppetCount;
+                report.poolActiveBeforeExit = world.LogicReferencePool.ActiveCount;
+                if (!CaptureOrderedShutdown()) return;
+                report.phase = "EXITING";
+                Save();
+                EditorApplication.ExitPlaymode();
+                return;
+            }
+
             report.poolActiveBeforeExit = world.LogicReferencePool.ActiveCount;
             report.phase = "EXITING";
             Save();
             EditorApplication.ExitPlaymode();
+        }
+
+        private static bool CaptureOrderedShutdown()
+        {
+            try
+            {
+                LF2ObjectPool pool = LF2ObjectPool.TryGetInstance();
+                BattleRuntimeShutdownReport shutdown = driver.ShutdownBattleRuntime();
+                bool mapCleared = true;
+                if (shutdown.RuntimeStagesCompleted)
+                {
+                    foreach (BattleBootstrap bootstrap in
+                        Resources.FindObjectsOfTypeAll<BattleBootstrap>())
+                    {
+                        if (bootstrap == null || EditorUtility.IsPersistent(bootstrap) ||
+                            !bootstrap.gameObject.scene.IsValid()) continue;
+                        bootstrap.DisablePresentation();
+                        mapCleared &= bootstrap.IsRuntimeMapCleared;
+                    }
+                    shutdown = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(mapCleared);
+                }
+
+                report.shutdownStatus = shutdown.Status.ToString();
+                report.shutdownStage = shutdown.CompletedStage.ToString();
+                report.shutdownFailure = shutdown.FailureReason;
+                report.remainingWorldObjects = shutdown.RemainingWorldObjects;
+                report.remainingRuntimeSlots = shutdown.RemainingRuntimeSlots;
+                report.remainingPoolBorrowers = shutdown.RemainingPoolBorrowers;
+                report.remainingActivePoolObjects =
+                    pool?.ActiveObjectCountForAcceptance ?? 0;
+                report.remainingActivePoolSprites =
+                    pool?.ActiveSpriteCountForAcceptance ?? 0;
+                report.poolQuiesced = pool == null || pool.IsQuiescedForDiagnostics;
+                report.worldDetached = driver.World == null;
+                report.orderedShutdownComplete = shutdown.IsComplete &&
+                    shutdown.CompletedStage == BattleRuntimeShutdownStage.RuntimeMapCleared &&
+                    report.worldDetached && report.poolQuiesced &&
+                    report.remainingWorldObjects == 0 &&
+                    report.remainingRuntimeSlots == 0 &&
+                    report.remainingPoolBorrowers == 0 &&
+                    report.remainingActivePoolObjects == 0 &&
+                    report.remainingActivePoolSprites == 0;
+                if (!report.orderedShutdownComplete)
+                    report.error = "Ordered shutdown did not reach zero-residue postconditions.";
+            }
+            catch (Exception error)
+            {
+                report.error = "Ordered shutdown exception: " + error;
+            }
+
+            if (report.orderedShutdownComplete) return true;
+            report.status = "FAIL";
+            report.phase = "CLEANUP_BLOCKED";
+            Save();
+            return false;
         }
 
         private static void Fail(string message)
@@ -363,6 +492,14 @@ namespace NTSD.Test.Editor
             if (report == null)
             {
                 Debug.LogError("[Q07 C056 fusion Play] " + message);
+                return;
+            }
+            if (IsShutdownRun())
+            {
+                report.status = "CLEANUP_BLOCKED";
+                report.error = message;
+                report.phase = "CLEANUP_BLOCKED";
+                Save();
                 return;
             }
             report.status = "FAIL";
@@ -380,6 +517,16 @@ namespace NTSD.Test.Editor
             Scene scene = SceneManager.GetActiveScene();
             report.sceneCleanAfter = scene.path == BattleScene && !scene.isDirty &&
                 report.sceneHashAfter == report.sceneHashBefore;
+            if (IsShutdownRun())
+            {
+                report.noLiveWorldAfterExit = Resources.FindObjectsOfTypeAll<SimulationTickDriver>()
+                    .All(value => value == null || value.World == null);
+                if (!report.noLiveWorldAfterExit)
+                {
+                    report.status = "FAIL";
+                    report.error += " Live Driver World remains after exit.";
+                }
+            }
             if (world?.LogicReferencePool != null)
                 report.poolActiveAfterExit = world.LogicReferencePool.ActiveCount;
             if (driver != null)
@@ -395,6 +542,7 @@ namespace NTSD.Test.Editor
             report.phase = "DONE";
             Save();
             SessionState.EraseString(SessionKey);
+            if (IsShutdownRun()) SessionState.EraseString(ShutdownRequestSessionKey);
             report = null;
             driver = null;
             world = null;
@@ -402,6 +550,7 @@ namespace NTSD.Test.Editor
             partner = null;
             stableTick = -1;
             stableUpdates = 0;
+            shutdownSaveSequence = 0;
         }
     }
 }

@@ -47,6 +47,9 @@ namespace NTSD.Test.Editor
         private static int observingTick = -1;
         private static int stableTick = -1;
         private static int stableUpdates;
+        private static readonly FieldInfo BuiltDisplayAlphaField =
+            typeof(BattleCentralRenderSystem).GetField(
+                "lastBuiltDisplayAlpha", BindingFlags.Static | BindingFlags.NonPublic);
 
         [Serializable]
         private sealed class Request
@@ -59,6 +62,7 @@ namespace NTSD.Test.Editor
             public bool captureGameView;
             public bool captureNoControlsView;
             public bool captureCentralAlpha;
+            public bool captureAlphaOneView;
         }
 
         [Serializable]
@@ -176,6 +180,8 @@ namespace NTSD.Test.Editor
             public int simulationTick;
             public int displayTick;
             public int frameTick;
+            public int generation;
+            public double builtDisplayAlpha;
             public int commandCount;
             public int narutoStableId;
             public int visualDataId;
@@ -216,6 +222,7 @@ namespace NTSD.Test.Editor
             public bool captureGameView;
             public bool captureNoControlsView;
             public bool captureCentralAlpha;
+            public bool captureAlphaOneView;
             public bool battleControlsTemporarilyDisabled;
             public string centralEffectivePixelMode;
             public string narutoSpriteSourceSheetPath;
@@ -374,6 +381,7 @@ namespace NTSD.Test.Editor
                 if (report.enteredPlay && !EditorApplication.isPlayingOrWillChangePlaymode &&
                     (report.phase == "STARTUP" || report.phase == "MEASURING" ||
                      report.phase == "WAITING_VIEW" ||
+                     report.phase == "WAITING_ALPHA_ONE" ||
                      report.phase == "WAITING_NO_CONTROLS_VIEW"))
                 {
                     Fail("Editor left Play Mode before the F02 measurement completed.");
@@ -394,6 +402,11 @@ namespace NTSD.Test.Editor
                     report.phase == "WAITING_NO_CONTROLS_VIEW")
                 {
                     WaitForGameView();
+                    return;
+                }
+                if (report.phase == "WAITING_ALPHA_ONE")
+                {
+                    WaitForAlphaOneView();
                     return;
                 }
                 Require(report.phase == "MEASURING", "Unexpected probe phase.");
@@ -425,6 +438,9 @@ namespace NTSD.Test.Editor
                 "No-controls screenshot requires the baseline Game View screenshot.");
             Require(!request.captureCentralAlpha || request.captureGameView,
                 "Central alpha sample requires the baseline Game View screenshot.");
+            Require(!request.captureAlphaOneView ||
+                request.captureGameView && request.captureCentralAlpha,
+                "Alpha-one screenshot requires central evidence and Game View capture.");
             Require(request.sourceZ == 0 || request.sourceZ >= 180 && request.sourceZ <= 542,
                 "Source Z is outside the declared diagnostic domain.");
             Require(!Directory.Exists(PathInProject(ResultRoot + request.runId)),
@@ -444,6 +460,7 @@ namespace NTSD.Test.Editor
                 captureGameView = request.captureGameView,
                 captureNoControlsView = request.captureNoControlsView,
                 captureCentralAlpha = request.captureCentralAlpha,
+                captureAlphaOneView = request.captureAlphaOneView,
                 evidenceLimit = request.captureGameView
                     ? "Opt-in PNGs capture Unity Game View after selected production ticks; formal EXE pixel parity and physical keyboard input are not exercised."
                     : "Event rows are Editor-only observations around the production tick; view fields are simulation projection, not GPU pixels. Physical keyboard and Game View pixels are not exercised.",
@@ -788,9 +805,39 @@ namespace NTSD.Test.Editor
                 report.pendingViewTick = tick;
                 report.pendingViewPath = relativePath;
                 report.pendingViewStartedUtc = DateTime.UtcNow.ToString("O");
-                report.phase = "WAITING_VIEW";
-                ScreenCapture.CaptureScreenshot(output);
+                report.phase = tick == 39 && report.captureAlphaOneView
+                    ? "WAITING_ALPHA_ONE" : "WAITING_VIEW";
+                if (report.phase == "WAITING_VIEW")
+                    ScreenCapture.CaptureScreenshot(output);
             }
+            Save();
+        }
+
+        private static double ReadBuiltDisplayAlpha()
+        {
+            Require(BuiltDisplayAlphaField != null,
+                "Central built display alpha diagnostic field is absent.");
+            return (double)BuiltDisplayAlphaField.GetValue(null);
+        }
+
+        private static void WaitForAlphaOneView()
+        {
+            Require(report.captureAlphaOneView && report.pendingViewTick == 39 &&
+                driver.IsPaused && driver.CurrentTickIndex == report.endTick &&
+                report.samples.Count == 40,
+                "Alpha-one wait advanced the production simulation.");
+            DateTime started = DateTime.Parse(report.pendingViewStartedUtc).ToUniversalTime();
+            Require(DateTime.UtcNow - started < TimeSpan.FromSeconds(90),
+                "F02 alpha-one central frame timed out.");
+            if (DateTime.UtcNow - started < TimeSpan.FromMilliseconds(100)) return;
+            BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
+            if (!plan.UsesCentralPixels || plan.DisplayTick != report.endTick ||
+                plan.CapturedFrame == null || !plan.CapturedFrame.CommandsMaterialized ||
+                ReadBuiltDisplayAlpha() < 1.0) return;
+            string output = PathInProject(report.pendingViewPath);
+            Require(!File.Exists(output), "Refusing to overwrite F02 alpha-one Game View capture.");
+            report.phase = "WAITING_VIEW";
+            ScreenCapture.CaptureScreenshot(output);
             Save();
         }
 
@@ -887,6 +934,8 @@ namespace NTSD.Test.Editor
                 BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
                 evidence.simulationTick = plan.SimulationTick;
                 evidence.displayTick = plan.DisplayTick;
+                evidence.generation = plan.Generation;
+                evidence.builtDisplayAlpha = ReadBuiltDisplayAlpha();
                 BattlePresentationFrame frame = plan.CapturedFrame;
                 Require(plan.UsesCentralPixels && frame != null &&
                     frame.CommandsMaterialized, "Central pixel frame was not materialized.");
@@ -960,6 +1009,7 @@ namespace NTSD.Test.Editor
                     binding.AtlasContentPixelRect, binding.AtlasSlice);
                 evidence.status = plan.DisplayTick == report.endTick &&
                     frame.TickIndex == report.endTick &&
+                    (!report.captureAlphaOneView || evidence.builtDisplayAlpha == 1.0) &&
                     evidence.sourceAlpha.error == null &&
                     evidence.boundAlpha.error == null
                     ? "CAPTURED" : "INCOMPLETE";

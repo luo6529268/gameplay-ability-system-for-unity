@@ -1,0 +1,24 @@
+NTSD.Test.Editor.BattleHudScenePlayEditorTests.BattleHudInitialDisableEnableShutdownAndReentry
+Unhandled log message: '[Exception] InvalidOperationException: This cannot be used during play mode.'. Use UnityEngine.TestTools.LogAssert.Expect
+UnityEditor.TestTools.TestRunner.EditModeLauncher.OpenNewScene (UnityEditor.SceneManagement.SceneSetup[]& previousSceneSetup) (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:94)
+UnityEditor.TestTools.TestRunner.EditModeLauncher.Run () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:59)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.LegacyEditModeRunTask+<Execute>d__1.MoveNext () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/Tasks/LegacyEditModeRunTask.cs:18)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner.ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:124)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions()
+
+NTSD.Test.Editor.BattleHudScenePlayEditorTests.BattleHudInitialDisableEnableShutdownAndReentry
+Unhandled log message: '[Exception] InvalidOperationException: This cannot be used during play mode.'. Use UnityEngine.TestTools.LogAssert.Expect
+UnityEditor.TestTools.TestRunner.EditModeLauncher.OpenNewScene (UnityEditor.SceneManagement.SceneSetup[]& previousSceneSetup) (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:94)
+UnityEditor.TestTools.TestRunner.EditModeLauncher.Run () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:59)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.LegacyEditModeRunTask+<Execute>d__1.MoveNext () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/Tasks/LegacyEditModeRunTask.cs:18)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner.ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:124)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions()
+
+NTSD.Test.Editor.BattleHudScenePlayEditorTests.BattleHudInitialDisableEnableShutdownAndReentry
+Unhandled log message: '[Exception] InvalidOperationException: This cannot be used during play mode.'. Use UnityEngine.TestTools.LogAssert.Expect
+UnityEditor.TestTools.TestRunner.EditModeLauncher.OpenNewScene (UnityEditor.SceneManagement.SceneSetup[]& previousSceneSetup) (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:94)
+UnityEditor.TestTools.TestRunner.EditModeLauncher.Run () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestLaunchers/EditModeLauncher.cs:59)
+UnityEditor.TestTools.TestRunner.TestRun.Tasks.LegacyEditModeRunTask+<Execute>d__1.MoveNext () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/Tasks/LegacyEditModeRunTask.cs:18)
+UnityEditor.TestTools.TestRunner.TestRun.TestJobRunner.ExecuteStep () (at ./Library/PackageCache/com.unity.test-framework@1.1.33/UnityEditor.TestRunner/TestRun/TestJobRunner.cs:124)
+UnityEditor.EditorApplication:Internal_CallUpdateFunctions()
+

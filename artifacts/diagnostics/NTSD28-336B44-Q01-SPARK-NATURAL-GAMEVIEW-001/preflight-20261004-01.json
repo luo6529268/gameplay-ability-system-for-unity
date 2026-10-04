@@ -1,0 +1,32 @@
+{
+  "utc": "2026-10-03T16:24:41.2222316Z",
+  "runId": "q01-spark-natural-20261004-01",
+  "scene": {
+    "name": "NTSD_Menu",
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "buildIndex": 0,
+    "isDirty": false,
+    "isLoaded": true,
+    "rootCount": 8
+  },
+  "assemblyUtc": "2026-10-03T16:21:23.2613271Z",
+  "sourceUtc": "2026-10-03T16:07:52.9686375Z",
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "75CA65FAAFD2A6339881DD0230C26BE016C04408E314434D30E275707E06A612"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ]
+}

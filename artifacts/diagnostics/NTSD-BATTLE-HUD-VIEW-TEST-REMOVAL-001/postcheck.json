@@ -1,0 +1,36 @@
+{
+  "deleted": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs",
+      "absent": true,
+      "backupVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs.meta",
+      "absent": true,
+      "backupVerified": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+      "sha256": "c421d69ca05217d8bb1eaae4da16a99fb0fe92bd4b9704874e238c376e1cd754",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs",
+      "sha256": "d0b3171522ac996398d39225c440e3f07c1132ce84bd509a2ca35a433c8a8972",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "d8c01fd32fd41cbdfc55bbe9d642b43b3251898a4e6390f71efad865e45afe7f",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "9eaaa0b4782974d74a017c367c9d5c77326c31d4281a2d820d1cbba76986c1ba",
+      "unchanged": true
+    }
+  ]
+}

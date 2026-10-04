@@ -1,6 +1,10 @@
 # Q07/D-024 kind8 纵深同步的比例域候选
 
-状态：`STATIC_FIRST_DIFFERENCE_CANDIDATE / FORMAL_REACH_AND_UNITY_SCENE_PENDING`。本报告只读当前正式 playable 源码、正式及暂存 DAT、Unity 生产写者与现有测试；没有运行同条件正式 EXE 或 Unity Play，也没有修改脚本、DAT 数值、图片、Scene 或配置。
+> **2026-10-04 后继状态纠正：** 下文是 2026-10-03 修复前的只读快照，不能再读成当前生产首差。`NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001` 已让 canonical writer 与 ECS plan 共用 `SpatialProjection.SourceDeltaToViewZ(1.0)`，原 Editor 聚焦1/1＋相邻7/7通过；当前正式336B44 Lee近/远源根各260/260，随后原 Battle Scene 同源Z400近/远各260/260，近例物理Z差实测 `1152/730`、远例为0，有序关闭/场景保护通过。这个**限定kind8投影子门**已关闭；物理按键、Game View像素、其它D-024实体与Q07仍开放。[修复与聚焦](../NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001/REPORT.md)、[原Scene配对](../NTSD28-336B44-Q07-D024-KIND8-SCENE-001/paired-scene-comparison-20261003.json)。
+
+> **2026-10-04 旧解析器到达性复核：** `LF2CharacterDatHitResolver.ResolveHit` 的 kind8 分支仍直接写 `target.Z+1`，`LF2CharacterHitResolver.ResolveHit` 亦然；不能因这两处旧代码就撤销上述 canonical 子门验收。正式完整 tick 的角色、技能和武器候选消费者均进入 `BattleHitCandidateSequenceRunner.TryConsume`；其 `Kind8` disposition 在 `consumer.Dispatch` 之前交给 `BattleKind8ControlRelationWriter.TryApply`。已检索到的持有武器直接 `character.Hit` 旁路只合成 `itr.kind=0`，不触及 kind8；`LF2CharacterHitResolver` 仅被构造，当前生产代码未找到 `ResolveHit` 调用。`BattleDamageWriter.TryApplyCurrentDatTargetHit` 对外仍可直达旧 DAT resolver，但当前发现的普通生产调用位于上述候选消费者内部；不能把“未找到其它调用”升级为全部潜在调用不可达的运行时证明。若以后新增直接命中入口，应以同一投影/源坐标合同审查该旁路，不能复制裸 `+1`。本次只读核查没有改变脚本或既有验收范围。
+
+原审计时状态（已被上方后继证据覆盖）：`STATIC_FIRST_DIFFERENCE_CANDIDATE / FORMAL_REACH_AND_UNITY_SCENE_PENDING`。下文记录该次只读审计，当时没有运行同条件正式 EXE 或 Unity Play，也没有修改脚本、DAT 数值、图片、Scene 或配置。
 
 权威身份：本轮重算根目录正式 `NTSD2.8-Logan.exe` SHA-256 为 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`。当前 playable `BattleWorld28::resolve_special_relation_hit` 在 `source/ntsd28_core/src/simulation/battle_world.cpp:5800-5817` 规范化 `dvy` 为同步模式；只要不是 `-1`，它令攻击者精确纵深为目标精确纵深 `+1.0`，整数镜像留给后续物理。这里的 `1.0` 是正式规则坐标差，不是 Unity 固定完整背景视口中的显示像素。
 

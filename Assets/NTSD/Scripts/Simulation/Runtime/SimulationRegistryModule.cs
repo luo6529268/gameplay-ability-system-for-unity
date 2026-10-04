@@ -646,6 +646,7 @@ namespace NTSD.Simulation
                     world.FrameMotionWriter.Release(releasedHandle);
                     world.RelationLinkWriter.Release(releasedHandle);
                     world.VitalWriter.Release(releasedHandle);
+                    world.HudChanges.Release(releasedHandle);
                     world.StructuralWriter.RecordGenerationRelease(
                         entity,
                         releasedHandle);
@@ -713,6 +714,7 @@ namespace NTSD.Simulation
             world.FrameMotionWriter.Release(releasedHandle);
             world.RelationLinkWriter.Release(releasedHandle);
             world.VitalWriter.Release(releasedHandle);
+            world.HudChanges.Release(releasedHandle);
             world.StructuralWriter.RecordGenerationRelease(
                 entity,
                 releasedHandle);

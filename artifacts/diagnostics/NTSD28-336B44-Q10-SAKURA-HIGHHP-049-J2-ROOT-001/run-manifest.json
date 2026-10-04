@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-04T01:08:54.799479+00:00",
+  "exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "lfr_sha256": "2C0F6334667A98DE5E38B131316CAF17600249164213A6DBCF079AA88B46FA7E",
+  "source_csv_sha256": "AD15A6BF4F9C12A4352361AE17B3BFCC8BA64615364F68AA7F1E02B8A0FB7120",
+  "args": [
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+    "--resource-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--complete-vfs-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--headless-playback-lfr",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-SAKURA-STEREO-NATURAL-REACH-001\\source-run-04\\source-packets.lfr",
+    "--headless-playback-report",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-SAKURA-HIGHHP-049-J2-ROOT-001\\root-report.json",
+    "--headless-playback-trace",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-SAKURA-HIGHHP-049-J2-ROOT-001\\root-trace.jsonl"
+  ]
+}

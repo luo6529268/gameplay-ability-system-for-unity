@@ -1,0 +1,23 @@
+Read-only authority follow-up, 2026-10-04
+Authority root: J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan
+Root executable SHA256 rechecked: 336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3.
+README_SOURCE declares the source corresponds to this release. No rebuild, promotion, EXE run, Editor interaction, production source edit or Scene edit was performed in this follow-up. No claim of whole-source-tree byte identity with earlier captures.
+Build participation: source/ntsd28_playable/scripts/build.ps1 lines65,69,79,81 lists frame_machine/input_routing/battle_world/simulation_tick_driver; lines666-676 combines coreSources with game_session.cpp and main.cpp in the playable compiler command.
+
+Input chain (paths relative to source):
+ntsd28_playable/src/main.cpp:1914-1927 clears keys on WM_KILLFOCUS, updates boolean on WM_KEYDOWN; 2026-2032 clears key on WM_KEYUP. 2451-2458 drains messages before snapshot. 2494-2509 captures held input and sets session input; 2512-2526 gates session.step by cadence. Ordinary battle inputs do not latch a down event until a later simulation sample.
+ntsd28_playable/src/game_session.cpp:2447-2450 set_input overwrites slot input; 3243-3251 copies it to entity pending before tick_driver.step.
+ntsd28_core/src/simulation/battle_world.cpp:1414-1421 advances phase: one_tu forces zero, otherwise alternating zero/one.
+ntsd28_core/src/simulation/simulation_tick_driver.cpp:497-506 samples human input with update_current only on advanced phase zero.
+ntsd28_core/src/simulation/input_routing.cpp:1503-1508 always previous=current; updates current=pending only when requested. 65-101 decrements edge windows and detects !previous && current, initializes rising window to5. 1543-1556 runs sampled edges/combos before combo fields/three-button fields/directions/builtins.
+Same file:524-560 routes hit_* from relative edge-window priority, hold_* from previous booleans compared with the other two buttons' edge windows. Successful field routing clears winning previous byte. Therefore previous=1/current=0 can select a hold field; current is not a required predicate. Actual target resolution still depends on DAT, action locks, resources and state redirects. No universal milliseconds-based short/long press threshold was found in this path.
+
+Charge example: official resources/runtime/decoded_dat/c/nar/nar.dat is byte-identical to the staged Unity decoded DAT (checked this run). Lines1817-1849 frame290 wait9 ->620; frames292/293 wait3 loop with hit_a/hit_d/hit_j ->294; lines3338-3349 frame620 wait1 ->619 with hit_a621; frame621 mp-25 ->291. These are frame-driven charge stages and button branches, not a generic button long-press classifier. This example does not establish every character's charge mechanic.
+FrameMachine28::step, ntsd28_core/src/simulation/frame_machine.cpp:23,36-45 increments frame counter and holds while counter<=wait; subsequent next resolution is simulation logic. Do not convert a charge label or wait to a universal wall-clock input threshold.
+
+Correction to earlier fixture scope:
+The ideal 33ms and render-delivery matrices in REPORT.txt modeled current refreshed every tick (1tu-style sampling). They do not test phase-one skipped current updates in 2tu, native Win32 message delivery or real Unity EventSystem scheduling. Their PASS means that fixture passed, not full EXE parity. Under 2tu the normal effective human current sampling opportunity is every second tick (normally66ms), subject to host timing. Intersample down/up can be absent from sampled state in the authority too; that observation alone is not a Unity bug.
+
+Recommendation:
+Keep NTSDButton a boolean press/release adapter with the existing left-button filtering and custom-state clear when Selectable clears. Do not add minimum-one-tick hold, delayed release, release-triggered attack or a generic charge timer. Do not replace previous with current in the simulation hold route. The existing multi-pointer release policy is a separate touch UX choice with no native keyboard equivalent; no policy change is authorized here. Engine lifecycle/focus/multi-touch behavior still needs a controlled real Unity run before claiming acceptance.
+Earlier isolated managed/parser/writer tests and UI dependency-stub tests remain evidence only at their declared layers; no fresh Unity compilation, SelfCheck, Play Mode, full skill sequence or formal EXE A/B test was run in this follow-up.

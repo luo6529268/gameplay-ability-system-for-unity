@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
@@ -25,9 +27,13 @@ namespace NTSD.Test.Editor
         private const string Q10RequestPath = "Temp/NTSD28_Q10_C053FormalWav.request.json";
         private const string Q10ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q10-C053-FORMAL-WAV-DEPLOY-001/";
+        private const string AuxRequestPath = "Temp/NTSD28_Q07_C053AuxType3.request.json";
+        private const string AuxResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/";
         private const string SessionKey = "NTSD.Q07.C053PerHitWriter02";
         private const string RunId = "ank580-ank580-jira500-per-hit-writer-02";
         private const string Q10RunId = "ank580-ank580-jira500-formal-wav-03";
+        private const string AuxRunId = "ank610-jira500-firz700-yminus60-01";
 
         private static Report report;
         private static SimulationTickDriver driver;
@@ -35,6 +41,7 @@ namespace NTSD.Test.Editor
         private static LF2Character anko;
         private static LF2Character secondAnko;
         private static LF2Character jiraiya;
+        private static LF2Entity auxiliary;
         private static SimulationWorld shadowConfiguredWorld;
         private static NTSDSoundPlayer soundPlayer;
         private static AudioClip formal020Clip;
@@ -78,8 +85,15 @@ namespace NTSD.Test.Editor
             public int childY;
             public int childZ;
             public int childHp;
+            public int auxiliarySlot = -1;
+            public int auxiliaryAction = -1;
+            public int auxiliaryHp;
+            public int auxiliaryX;
+            public int auxiliaryY;
+            public int auxiliaryZ;
             public int victimRestFromAttacker;
             public int victimRestFromSecondAttacker;
+            public int victimRestFromAuxiliary;
             public string targetHitPlanEntries;
             public int targetHitPlanEntryCount;
             public string targetHitWriterEntries;
@@ -168,7 +182,8 @@ namespace NTSD.Test.Editor
         }
 
         private static string ResultPath(string runId) =>
-            (runId == Q10RunId ? Q10ResultRoot : ResultRoot) + runId + ".json";
+            (runId == Q10RunId ? Q10ResultRoot :
+                runId == AuxRunId ? AuxResultRoot : ResultRoot) + runId + ".json";
 
         private static void Restore()
         {
@@ -197,7 +212,9 @@ namespace NTSD.Test.Editor
                 FieldInfo field = typeof(BattleTestBootstrap).GetField("overrideCharacterIds",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(field != null, "BattleTestBootstrap overrideCharacterIds is missing.");
-                field.SetValue(matches[0], new[] { 65, 702, 65 });
+                field.SetValue(matches[0], report.runId == AuxRunId
+                    ? new[] { 65, 702 }
+                    : new[] { 65, 702, 65 });
                 report.configuredBeforeStart = true;
                 Save();
             }
@@ -258,6 +275,7 @@ namespace NTSD.Test.Editor
             {
                 (Path: Q10RequestPath, Id: Q10RunId),
                 (Path: RequestPath, Id: RunId),
+                (Path: AuxRequestPath, Id: AuxRunId),
             })
             {
                 string candidatePath = PathInProject(choice.Path);
@@ -304,28 +322,35 @@ namespace NTSD.Test.Editor
                 first is LF2Character, "OID65 roster entity is missing.");
             Require(world.TryResolveRosterInputEntity(1, out LF2Entity second) &&
                 second is LF2Character, "OID702 roster entity is missing.");
-            Require(world.TryResolveRosterInputEntity(2, out LF2Entity third) &&
-                third is LF2Character, "Second OID65 roster entity is missing.");
             anko = (LF2Character)first;
             jiraiya = (LF2Character)second;
-            secondAnko = (LF2Character)third;
+            bool auxiliaryCase = report.runId == AuxRunId;
+            if (!auxiliaryCase)
+            {
+                Require(world.TryResolveRosterInputEntity(2, out LF2Entity third) &&
+                    third is LF2Character, "Second OID65 roster entity is missing.");
+                secondAnko = (LF2Character)third;
+            }
             Require(anko.ObjectId == 65 && jiraiya.ObjectId == 702 &&
-                secondAnko.ObjectId == 65,
-                "Play clone roster is not formal OID65/702/65 trio.");
+                (auxiliaryCase || secondAnko.ObjectId == 65),
+                "Play clone roster differs from the selected formal case.");
             report.contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot;
             Require(report.contentRoot == "Assets/NTSD/Content/LoganRuntime",
                 "Play World did not use staged formal content.");
             Require(FindEntity(808, out _) == null && FindEntity(875, out _) == null,
                 "Natural child or attacker already occupies the World.");
-            SetInitialCharacter(anko, 511, 580);
+            SetInitialCharacter(anko, 511, auxiliaryCase ? 610 : 580);
             SetInitialCharacter(jiraiya, 553, 500);
-            SetInitialCharacter(secondAnko, 511, 580);
+            if (auxiliaryCase)
+                auxiliary = CreateFormalAuxiliary();
+            else
+                SetInitialCharacter(secondAnko, 511, 580);
             anko.RelationTeam = 1;
             jiraiya.RelationTeam = 2;
-            secondAnko.RelationTeam = 1;
+            if (!auxiliaryCase) secondAnko.RelationTeam = 1;
             world.Runtime.Roster.Slots[0].Team = 1;
             world.Runtime.Roster.Slots[1].Team = 2;
-            world.Runtime.Roster.Slots[2].Team = 1;
+            if (!auxiliaryCase) world.Runtime.Roster.Slots[2].Team = 1;
             world.Runtime.Flow.FrameToggle = 0;
             world.Runtime.Flow.InputPhase = 0;
             NTSD28NativeWorldClockState nativeClock = world.Runtime.NativeWorldClock;
@@ -413,6 +438,47 @@ namespace NTSD.Test.Editor
                 "Character initial action or source X differs.");
         }
 
+        private static LF2Entity CreateFormalAuxiliary()
+        {
+            Require(world.FindEntityByRuntimeSlotForQuery(2) == null,
+                "Controlled auxiliary slot 2 is already occupied.");
+            var task = new OPointCreateTask
+            {
+                targetWorld = world,
+                requiredRuntimeSlot = 2,
+                dir = "right",
+                team = 1,
+                ownerEntityIndex = 2,
+                useExplicitRelationIdentity = true,
+                relationTeam = 1,
+                preserveActionZero = true,
+                skipPostInitZOffset = true,
+                useDirectRuntimePosition = true,
+                directX = world.SpatialProjection.SourceToViewX(700),
+                directY = -60,
+                directZ = world.SpatialProjection.SourceToViewZ(400),
+                useSourceRulePosition = true,
+                sourceRuleX = 700,
+                sourceRuleZ = 400,
+                useExplicitInitialVitals = true,
+                initialHp = 500,
+                initialMp = 500,
+                opoint = new ObjectPoint { oid = 251, kind = 1, action = 0, facing = 0 }
+            };
+            LF2Entity entity = world.LogicEntityFactory.Create(task, out var failure);
+            Require(entity != null, "Formal OID251 creation rejected: " + failure);
+            Require(entity.Runtime.SlotIndex == 2 && entity.ObjectId == 251 &&
+                entity.Frame.N == 0 && entity.Runtime.SourceRuleXInt == 700 &&
+                entity.Runtime.YInt == -60 && entity.Runtime.SourceRuleZInt == 400,
+                "Controlled OID251 initial slot/action/source position differs.");
+            entity.RelationTeam = 1;
+            entity.Runtime.HP = 500;
+            entity.Runtime.MP = 500;
+            entity.Runtime.PP = 500;
+            entity.Runtime.Vx = entity.Runtime.Vy = entity.Runtime.Vz = 0;
+            return entity;
+        }
+
         private static LF2Entity FindEntity(int oid, out int slot)
         {
             for (int index = 50; index < world.RuntimeSlotCapacityForDiagnostics; index++)
@@ -439,12 +505,19 @@ namespace NTSD.Test.Editor
             long q10PlayedBefore = report.runId == Q10RunId
                 ? soundPlayer.PooledOneShotPlayCountForDiagnostics
                 : 0;
-            var input = new FrameInputSet(next, new[]
-            {
-                new SimulationPlayerInput(0, SimulationInputButtons.None),
-                new SimulationPlayerInput(1, SimulationInputButtons.None),
-                new SimulationPlayerInput(2, SimulationInputButtons.None)
-            });
+            SimulationPlayerInput[] inputs = report.runId == AuxRunId
+                ? new[]
+                {
+                    new SimulationPlayerInput(0, SimulationInputButtons.None),
+                    new SimulationPlayerInput(1, SimulationInputButtons.None)
+                }
+                : new[]
+                {
+                    new SimulationPlayerInput(0, SimulationInputButtons.None),
+                    new SimulationPlayerInput(1, SimulationInputButtons.None),
+                    new SimulationPlayerInput(2, SimulationInputButtons.None)
+                };
+            var input = new FrameInputSet(next, inputs);
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected complete tick " + next);
             LF2Entity child = FindEntity(808, out int childSlot);
@@ -514,10 +587,10 @@ namespace NTSD.Test.Editor
                 relativeTick = report.ticks.Count + 1,
                 globalTick = driver.CurrentTickIndex,
                 ankoAction = anko.Frame.N,
-                secondAnkoAction = secondAnko.Frame.N,
+                secondAnkoAction = secondAnko?.Frame.N ?? -1,
                 jiraiyaAction = jiraiya.Frame.N,
                 ankoX = anko.Runtime.SourceRuleXInt,
-                secondAnkoX = secondAnko.Runtime.SourceRuleXInt,
+                secondAnkoX = secondAnko?.Runtime.SourceRuleXInt ?? 0,
                 jiraiyaX = jiraiya.Runtime.SourceRuleXInt,
                 attackerCount = attackerCount,
                 owner0Count = owner0Count,
@@ -537,10 +610,18 @@ namespace NTSD.Test.Editor
                 childY = child?.Runtime.YInt ?? 0,
                 childZ = child?.Runtime.SourceRuleZInt ?? 0,
                 childHp = child?.Runtime.HP ?? 0,
+                auxiliarySlot = auxiliary?.Runtime.SlotIndex ?? -1,
+                auxiliaryAction = auxiliary?.Frame.N ?? -1,
+                auxiliaryHp = auxiliary?.Runtime.HP ?? 0,
+                auxiliaryX = auxiliary?.Runtime.SourceRuleXInt ?? 0,
+                auxiliaryY = auxiliary?.Runtime.YInt ?? 0,
+                auxiliaryZ = auxiliary?.Runtime.SourceRuleZInt ?? 0,
                 victimRestFromAttacker = child == null || attacker == null ? 0 :
                     world.GetRawRestVrest(childSlot, attackerSlot),
                 victimRestFromSecondAttacker = child == null || secondAttackerSlot < 0 ? 0 :
                     world.GetRawRestVrest(childSlot, secondAttackerSlot),
+                victimRestFromAuxiliary = child == null || auxiliary == null ? 0 :
+                    world.GetRawRestVrest(childSlot, auxiliary.Runtime.SlotIndex),
                 targetHitPlanEntries = string.Join(";", targetEntries),
                 targetHitPlanEntryCount = targetEntries.Count,
                 targetHitWriterEntries = string.Join(";", writerRows),
@@ -589,22 +670,46 @@ namespace NTSD.Test.Editor
         private static void CompleteMeasurement()
         {
             TickRow seventh = report.ticks.Single(value => value.relativeTick == 7);
-            bool matched = report.childBirthTick == 1 && report.attackerBirthTick == 4 &&
-                seventh.attackerCount == 2 && seventh.owner0Count == 1 &&
-                seventh.owner2Count == 1 && seventh.childAction == 156 &&
-                seventh.childHp == 450 && seventh.victimRestFromAttacker > 0 &&
-                seventh.victimRestFromSecondAttacker > 0 &&
-                seventh.targetHitPlanEntryCount == 2 &&
-                seventh.targetHitPlanEntries.StartsWith("51:2:50:0:Damage:Damage:") &&
-                seventh.targetHitPlanEntries.Contains(";52:2:50:0:Damage:Damage:") &&
-                seventh.targetHitWriterEntryCount == 2 &&
-                seventh.targetHitWriterEntries.StartsWith("51:156:153:475") &&
-                seventh.targetHitWriterEntries.Contains(";52:156:153:450") &&
-                seventh.childWaitCounter == 156 &&
-                seventh.observationMismatchCount == 0 &&
-                seventh.hitPlanFailureCount == 0 && seventh.hitPlanValid &&
-                seventh.writerEffectDifferenceMask == 0 &&
-                string.IsNullOrEmpty(seventh.firstSoundEffectDifference);
+            bool matched;
+            if (report.runId == AuxRunId)
+            {
+                matched = report.childBirthTick == 1 && report.attackerBirthTick == 4 &&
+                    seventh.attackerCount == 1 && seventh.owner0Count == 1 &&
+                    seventh.auxiliarySlot == 2 && seventh.auxiliaryAction == 20 &&
+                    seventh.childSlot == 50 && seventh.attackerSlot == 51 &&
+                    seventh.childAction == 156 && seventh.childHp == 440 &&
+                    seventh.victimRestFromAuxiliary > 0 &&
+                    seventh.victimRestFromAttacker > 0 &&
+                    seventh.targetHitPlanEntryCount == 2 &&
+                    seventh.targetHitPlanEntries.StartsWith("2:2:50:0:Damage:Damage:") &&
+                    seventh.targetHitPlanEntries.Contains(";51:2:50:0:Damage:Damage:") &&
+                    seventh.targetHitWriterEntryCount == 2 &&
+                    seventh.targetHitWriterEntries.StartsWith("2:156:153:465") &&
+                    seventh.targetHitWriterEntries.Contains(";51:156:153:440") &&
+                    seventh.observationMismatchCount == 0 &&
+                    seventh.hitPlanFailureCount == 0 && seventh.hitPlanValid &&
+                    seventh.writerEffectDifferenceMask == 0 &&
+                    string.IsNullOrEmpty(seventh.firstSoundEffectDifference);
+            }
+            else
+            {
+                matched = report.childBirthTick == 1 && report.attackerBirthTick == 4 &&
+                    seventh.attackerCount == 2 && seventh.owner0Count == 1 &&
+                    seventh.owner2Count == 1 && seventh.childAction == 156 &&
+                    seventh.childHp == 450 && seventh.victimRestFromAttacker > 0 &&
+                    seventh.victimRestFromSecondAttacker > 0 &&
+                    seventh.targetHitPlanEntryCount == 2 &&
+                    seventh.targetHitPlanEntries.StartsWith("51:2:50:0:Damage:Damage:") &&
+                    seventh.targetHitPlanEntries.Contains(";52:2:50:0:Damage:Damage:") &&
+                    seventh.targetHitWriterEntryCount == 2 &&
+                    seventh.targetHitWriterEntries.StartsWith("51:156:153:475") &&
+                    seventh.targetHitWriterEntries.Contains(";52:156:153:450") &&
+                    seventh.childWaitCounter == 156 &&
+                    seventh.observationMismatchCount == 0 &&
+                    seventh.hitPlanFailureCount == 0 && seventh.hitPlanValid &&
+                    seventh.writerEffectDifferenceMask == 0 &&
+                    string.IsNullOrEmpty(seventh.firstSoundEffectDifference);
+            }
             if (report.runId == Q10RunId)
             {
                 TickRow first = report.ticks[0];
@@ -618,7 +723,7 @@ namespace NTSD.Test.Editor
             }
             report.status = matched ? "SCOPED_PASS" : "FIRST_DIFFERENCE";
             if (!matched)
-                report.error = "Per-hit writer or Q10 formal audio witness differs; inspect tick rows.";
+                report.error = "C053 per-hit writer or formal audio witness differs; inspect tick rows.";
             report.phase = "EXITING";
             Save();
             EditorApplication.ExitPlaymode();
@@ -661,6 +766,7 @@ namespace NTSD.Test.Editor
             anko = null;
             secondAnko = null;
             jiraiya = null;
+            auxiliary = null;
             shadowConfiguredWorld = null;
             soundPlayer = null;
             formal020Clip = null;

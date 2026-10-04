@@ -731,6 +731,30 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void FifthBattleGroupNameplate_UsesWords5WhileReviveCounterUsesWords0()
+        {
+            var labels = new char[
+                BattleEntityOverlayLayout.SlotCount,
+                BattleEntityOverlayLayout.SlotLabelCharacterCapacity];
+            labels[0, 0] = 'A';
+            var states = new int[BattleEntityOverlayLayout.SlotCount];
+            var glyphs = new BattleEntityOverlayGlyph[
+                BattleEntityOverlayLayout.MaximumGlyphCount];
+            var slot = new BattleEntityOverlayRuntimeSlot(
+                0, 2, 5, 0, 2, 0, 200, 0, 300, 0, 0, 0);
+
+            Assert.That(BattleEntityOverlayLayout.TryBuild(
+                in slot, labels, states, glyphs, out int count), Is.True);
+            Assert.That(count, Is.EqualTo(3));
+            Assert.That(glyphs[0].CharCode, Is.EqualTo('x'));
+            Assert.That(glyphs[0].SheetIndex, Is.EqualTo(0));
+            Assert.That(glyphs[1].CharCode, Is.EqualTo('2'));
+            Assert.That(glyphs[1].SheetIndex, Is.EqualTo(0));
+            Assert.That(glyphs[2].CharCode, Is.EqualTo('A'));
+            Assert.That(glyphs[2].SheetIndex, Is.EqualTo(5));
+        }
+
+        [Test]
         public void OverlayLayoutSelfCheck_UsesFormalInclusiveRightEdge()
         {
             MethodInfo check = typeof(BattleRuntimeSelfCheck).GetMethod(

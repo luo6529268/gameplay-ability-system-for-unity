@@ -1,0 +1,232 @@
+#if UNITY_EDITOR
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using MoreMountains.Tools;
+using NUnit.Framework;
+using NTSD.Simulation;
+using NTSD.Tools;
+using NTSD.UI.Battle;
+using TMPro;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class BattleHudEventEditorTests
+    {
+        private static NTSDEntityRuntime Runtime(int slot = 0, int stableId = 11)
+        {
+            return new NTSDEntityRuntime { SlotIndex = slot, StableId = stableId, ObjectId = 7 };
+        }
+
+        [Test]
+        public void SameDefaultInitializationStillPublishesFullBindingOnce()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var runtime = Runtime();
+            runtime.HP = runtime.HPBound = runtime.HP3 = runtime.MP = runtime.MPMax = 500;
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            Assert.That(tracker.TryConsume(out var value), Is.True);
+            Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.All));
+            Assert.That(value.Hp, Is.EqualTo(500));
+            Assert.That(value.Mp, Is.EqualTo(500));
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            Assert.That(tracker.TryConsume(out _), Is.False);
+        }
+
+        [Test]
+        public void HpChangesAndSameValueAssignmentsPreserveIndependentMasks()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var runtime = Runtime();
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            tracker.TryConsume(out _);
+            runtime.HP = 123;
+            Assert.That(tracker.TryConsume(out var value), Is.True);
+            Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.Hp));
+            Assert.That(value.Hp, Is.EqualTo(123));
+            runtime.HP = 123;
+            Assert.That(tracker.TryConsume(out _), Is.False);
+            runtime.HPBound = 200;
+            runtime.HP3 = 450;
+            Assert.That(tracker.TryConsume(out value), Is.True);
+            Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.HpBound | BattleHudChanges.HpMax));
+            Assert.That(value.HpBound, Is.EqualTo(200));
+            Assert.That(value.HpMax, Is.EqualTo(450));
+        }
+
+        [Test]
+        public void MpAndMaximumChangesAreCapturedWithoutHpWrites()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var runtime = Runtime();
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            tracker.TryConsume(out _);
+            runtime.MP = 125;
+            runtime.MPMax = 250;
+            Assert.That(tracker.TryConsume(out var value), Is.True);
+            Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.Mp | BattleHudChanges.MpMax));
+            Assert.That(value.Mp, Is.EqualTo(125));
+            Assert.That(value.MpMax, Is.EqualTo(250));
+            runtime.MP = 125; runtime.MPMax = 250;
+            Assert.That(tracker.TryConsume(out _), Is.False);
+        }
+
+        [Test]
+        public void ReusedSlotRejectsOldGenerationAndDetachedRuntimeWrites()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var oldRuntime = Runtime();
+            var oldHandle = new RuntimeEntityHandle(0, 1);
+            tracker.Bind(0, oldRuntime, oldHandle);
+            tracker.TryConsume(out _);
+            tracker.Release(oldHandle);
+            var next = Runtime(0, 22);
+            tracker.Bind(0, next, new RuntimeEntityHandle(0, 2));
+            Assert.That(tracker.TryConsume(out var value), Is.True);
+            Assert.That(value.StableId, Is.EqualTo(22));
+            oldRuntime.HP = 1;
+            tracker.Capture(0, oldHandle, BattleHudChanges.Mp, 1);
+            tracker.Release(oldHandle);
+            Assert.That(tracker.TryConsume(out _), Is.False);
+            next.MP = 88;
+            Assert.That(tracker.TryConsume(out value), Is.True);
+            Assert.That(value.Mp, Is.EqualTo(88));
+        }
+
+        [Test]
+        public void RebindingObjectIdPublishesMetadataAndSelectionUsesFirstHumanSlot()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var second = Runtime(4, 44);
+            tracker.Bind(3, second, new RuntimeEntityHandle(4, 1));
+            tracker.TryConsume(out _);
+            var first = Runtime(2, 22);
+            tracker.Bind(1, first, new RuntimeEntityHandle(2, 1));
+            Assert.That(tracker.TryConsume(out var value), Is.True);
+            Assert.That(value.PlayerIndex, Is.EqualTo(1));
+            first.ObjectId = 99;
+            tracker.Bind(1, first, new RuntimeEntityHandle(2, 1));
+            Assert.That(tracker.TryConsume(out value), Is.True);
+            Assert.That(value.ObjectId, Is.EqualTo(99));
+            Assert.That(value.Changes, Is.EqualTo(BattleHudChanges.All));
+            second.HP = 300;
+            Assert.That(tracker.TryConsume(out _), Is.False);
+            tracker.UnbindPlayer(1);
+            Assert.That(tracker.TryConsume(out value), Is.True);
+            Assert.That(value.PlayerIndex, Is.EqualTo(3));
+            Assert.That(value.Hp, Is.EqualTo(300));
+        }
+
+        [Test]
+        public void StopDetachesProducerAndNewWorldSessionAcceptsReusedObject()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var runtime = Runtime();
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            tracker.TryConsume(out var before);
+            tracker.Reset(stop: true);
+            Assert.That(tracker.TryConsume(out var cleared), Is.True);
+            Assert.That(cleared.IsVisible, Is.False);
+            runtime.MP = 12;
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 2));
+            Assert.That(tracker.TryConsume(out _), Is.False);
+            var nextWorld = new BattleHudChangeTracker();
+            nextWorld.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            Assert.That(nextWorld.TryConsume(out var next), Is.True);
+            Assert.That(next.Session, Is.Not.EqualTo(before.Session));
+            Assert.That(next.Mp, Is.EqualTo(12));
+        }
+
+        private sealed class Listener : MMEventListener<BattleHudChangedEvent>
+        {
+            internal readonly List<int> Threads = new List<int>();
+            public void OnMMEvent(BattleHudChangedEvent value) => Threads.Add(Thread.CurrentThread.ManagedThreadId);
+        }
+
+        [Test]
+        public void WorkerRecordsValuesButOnlyMainThreadDispatchCallsListeners()
+        {
+            var tracker = new BattleHudChangeTracker();
+            var runtime = Runtime();
+            tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+            tracker.TryConsume(out _);
+            var listener = new Listener();
+            listener.MMEventStartListening<BattleHudChangedEvent>();
+            int mainThread = Thread.CurrentThread.ManagedThreadId;
+            try
+            {
+                Task.Run(() => { runtime.HP = 211; runtime.MP = 97; }).GetAwaiter().GetResult();
+                Assert.That(listener.Threads, Is.Empty);
+                Assert.That(tracker.TryConsume(out var value), Is.True);
+                MMEventManager.TriggerEvent(new BattleHudChangedEvent(value, "Role", null));
+                Assert.That(listener.Threads, Is.EqualTo(new[] { mainThread }));
+                Assert.That(value.Hp, Is.EqualTo(211));
+                Assert.That(value.Mp, Is.EqualTo(97));
+                runtime.MP = 5;
+                Assert.That(value.Mp, Is.EqualTo(97), "Published payload must be a value snapshot.");
+            }
+            finally { listener.MMEventStopListening<BattleHudChangedEvent>(); }
+        }
+
+        [Test]
+        public void LateEnableResyncDisableUnsubscribeAndReenableRestoresCurrentState()
+        {
+            Scene scene = EditorSceneManager.NewPreviewScene();
+            SimulationTickDriver previous = SimulationTickDriver.Instance;
+            var instance = typeof(SingletonBehaviour<SimulationTickDriver>).GetProperty("Instance");
+            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            try
+            {
+                var host = new GameObject("HudEventHost");
+                host.SetActive(false);
+                SceneManager.MoveGameObjectToScene(host, scene);
+                var driver = host.AddComponent<SimulationTickDriver>();
+                instance.SetValue(null, driver);
+                typeof(SimulationTickDriver).GetField("lifecycleState", flags)
+                    .SetValue(driver, BattleRuntimeLifecycleState.Running);
+                var tracker = new BattleHudChangeTracker();
+                var runtime = Runtime();
+                tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+                tracker.TryConsume(out var initial);
+                var first = new BattleHudChangedEvent(initial, "Naruto", null);
+                typeof(SimulationTickDriver).GetField("lastBattleHudEvent", flags).SetValue(driver, first);
+                typeof(SimulationTickDriver).GetField("hasBattleHudEvent", flags).SetValue(driver, true);
+                var root = new GameObject("Hud", typeof(RectTransform));
+                root.SetActive(false);
+                SceneManager.MoveGameObjectToScene(root, scene);
+                var view = root.AddComponent<BattleHudView>();
+                var text = new GameObject("Name", typeof(RectTransform), typeof(TextMeshProUGUI));
+                text.transform.SetParent(root.transform, false);
+                var label = text.GetComponent<TextMeshProUGUI>();
+                typeof(BattleHudView).GetField("characterNameText", flags).SetValue(view, label);
+                root.SetActive(true);
+                Assert.That(label.text, Is.EqualTo("Naruto"));
+                root.SetActive(false);
+                Assert.That(label.text, Is.Empty);
+                runtime.ObjectId = 8;
+                tracker.Bind(0, runtime, new RuntimeEntityHandle(0, 1));
+                tracker.TryConsume(out var bound);
+                var next = new BattleHudChangedEvent(bound, "Sasuke", null);
+                typeof(SimulationTickDriver).GetField("lastBattleHudEvent", flags).SetValue(driver, next);
+                MMEventManager.TriggerEvent(next);
+                Assert.That(label.text, Is.Empty);
+                root.SetActive(true);
+                Assert.That(label.text, Is.EqualTo("Sasuke"));
+                MMEventManager.TriggerEvent(first);
+                Assert.That(label.text, Is.EqualTo("Sasuke"), "Old binding event must be ignored.");
+                typeof(SimulationTickDriver).GetMethod("ClearPublishedBattleHud", flags).Invoke(driver, null);
+                Assert.That(label.text, Is.Empty);
+            }
+            finally
+            {
+                EditorSceneManager.ClosePreviewScene(scene);
+                instance.SetValue(null, previous);
+            }
+        }
+    }
+}
+#endif

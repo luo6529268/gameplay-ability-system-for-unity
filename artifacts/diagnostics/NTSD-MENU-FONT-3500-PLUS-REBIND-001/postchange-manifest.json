@@ -1,0 +1,60 @@
+{
+  "id": "NTSD-MENU-FONT-3500-PLUS-REBIND-001",
+  "timestamp": "2026-10-04T03:18:46.144861+08:00",
+  "items": [
+    {
+      "relative": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs",
+      "sha256": "f180695a0fc277dd55ff33714f107d4be4512b134bda42f5fe3e5ae4418b6a72",
+      "bytes": 12167,
+      "changed": true
+    },
+    {
+      "relative": "Assets/NTSD/Scripts/Test/Editor/MenuCarouselVisualEditorTests.cs",
+      "sha256": "0582c0941047ea83a477805e4a01f0eca2deddf1f443aebd5bead499b51dffa0",
+      "bytes": 12580,
+      "changed": true
+    },
+    {
+      "relative": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "f01144c94b46b400dbc1fe9061e42b983e49135cd5dd6c1b626b98c45116329f",
+      "bytes": 525488,
+      "changed": false
+    },
+    {
+      "relative": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "df656a9621c235019d812fadcbebed4f3b93bdd2af5b13e46e130709d8a83a83",
+      "bytes": 2109997,
+      "changed": false
+    },
+    {
+      "relative": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset.meta",
+      "sha256": "b65170a0b95919b254d906787a4fb18fc15a1a2fef5610899de8ccc2619d51ed",
+      "bytes": 189,
+      "changed": false
+    },
+    {
+      "relative": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "def60e8a23da5feb00378a7c20f0ab72f4b19ac0c6021b498785da423c229a62",
+      "bytes": 577750,
+      "changed": true
+    },
+    {
+      "relative": "docs/ai/STATE.md",
+      "sha256": "b209e0234d67b7cdfc0cc946c9a0cce9ae7a2e0bfc73b735d934bc8db3b559a7",
+      "bytes": 1410581,
+      "changed": true
+    },
+    {
+      "relative": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "b15f71b8c1cd42043e288e30d2e68b20a65ce591c4ae67ade28261d4ecce17f5",
+      "bytes": 1340443,
+      "changed": true
+    },
+    {
+      "relative": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "74285c5786056c6f85efefe3f8cdf62b9a54b9f7ce82b768b81004059adac9c9",
+      "bytes": 2939,
+      "changed": true
+    }
+  ]
+}

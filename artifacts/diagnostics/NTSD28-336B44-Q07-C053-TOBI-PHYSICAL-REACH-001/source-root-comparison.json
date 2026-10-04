@@ -1,0 +1,31 @@
+{
+  "schema": "ntsd28-c053-tobi-source-root-selected-fields/1.0",
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "fields": [
+    "tobi_action",
+    "tobi_y",
+    "sampled_mask",
+    "input_phase",
+    "child_slot",
+    "child_action",
+    "child_x",
+    "child_y"
+  ],
+  "totalCompared": 640,
+  "differences": 0,
+  "firstDifferences": [],
+  "cases": [
+    {
+      "profile": "jump_from_zero",
+      "ticks": 40,
+      "fieldsCompared": 320,
+      "rootPassed": true
+    },
+    {
+      "profile": "controlled_212",
+      "ticks": 40,
+      "fieldsCompared": 320,
+      "rootPassed": true
+    }
+  ]
+}

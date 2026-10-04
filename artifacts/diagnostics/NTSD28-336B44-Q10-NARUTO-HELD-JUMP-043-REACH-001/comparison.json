@@ -1,0 +1,44 @@
+{
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "sourceProbeSha256": "9523178CF5AF01F891BA2A2D80AA8CA23218E65850D0E3A6CF296E32A9C09911",
+  "sourceCsvSha256": "BA310B1F668923F693D2D8B23C231FB8766DF6E924F3DEBAC45AE578628C5924",
+  "lfrSha256": "D1C63A81CCD69E3A2F6D099D1B6815E0C8B1ED0C76AFF92D66708761E958D7E4",
+  "sourceRunsByteIdentical": true,
+  "rootReplayExit": 0,
+  "rootReport": {
+    "passed": true,
+    "failureCode": 0,
+    "declaredTicks": 80,
+    "completedTicks": 81,
+    "nativeParityClaim": false
+  },
+  "selectedFieldsCompared": 560,
+  "selectedFieldDifferences": [],
+  "sourceAudioEvents": [
+    {
+      "tick": 9,
+      "paths": [
+        "data/017.wav",
+        "c/nar/w/a7.wav"
+      ]
+    },
+    {
+      "tick": 32,
+      "paths": [
+        "data/012.wav"
+      ]
+    }
+  ],
+  "sourceAudio043Count": 0,
+  "sourceActionCounts": {
+    "210": 3,
+    "211": 2,
+    "212": 21,
+    "215": 2,
+    "219": 0,
+    "638": 0,
+    "639": 0,
+    "640": 0,
+    "641": 0
+  }
+}

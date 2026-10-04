@@ -1,0 +1,33 @@
+{
+  "authorityExecutableSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "indexSource": "artifacts\\diagnostics\\NTSD28-Q10-FRAME-SOUND-ENTRY-READINESS-001\\formal-indexed-cue-paths.csv",
+  "indexSha256": "C2331CB3423CEFCCEC78FD8A53BE61E93937FA2423D8F07E3C2593808D79ACCB",
+  "indexRawRows": 976,
+  "physicalCuePaths": 970,
+  "caseAliasRows": 6,
+  "counts": {
+    "formal_status_PRESENT": 970,
+    "staged_status_ABSENT": 966,
+    "old_sound_status_ABSENT": 902,
+    "staged_status_PRESENT": 4,
+    "staged_equal_formal": 4,
+    "old_sound_status_PRESENT": 68,
+    "old_sound_diff_formal": 67,
+    "old_sound_equal_formal": 1,
+    "absent_both_unity_roots": 900,
+    "staged_and_old_sound_overlap": 2
+  },
+  "stagedPresentCues": [
+    "c/kim/w/j1.wav",
+    "c/saku/w/tra.wav",
+    "data/020.wav",
+    "data/067.wav"
+  ],
+  "oldSoundEqualCues": [
+    "data/m_ok.wav"
+  ],
+  "limitations": [
+    "This refresh reuses the historical lexical cue index; it does not reparse all current DAT or prove each cue is naturally reachable.",
+    "Presence and byte identity are not playback, prewarm, or device-audibility proof."
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "method": "direct RGBA tuple inequality over all 1333x730 pixels; supersedes pixel-analysis.json RGBA-getbbox false zero",
+  "size": [
+    1333,
+    730
+  ],
+  "changedPixels": 3,
+  "pixels": [
+    {
+      "x": 461,
+      "y": 595,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    },
+    {
+      "x": 461,
+      "y": 596,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    },
+    {
+      "x": 461,
+      "y": 597,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    }
+  ],
+  "newImagesByteIdenticalToOld": {
+    "ita-mark-on.png": true,
+    "ita-mark-off.png": true
+  }
+}

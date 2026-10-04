@@ -1,0 +1,48 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+DAT BLOCKED nar System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.DebugLogHandler.Internal_Log(LogType level, LogOption options, String msg, Object obj)
+   at UnityEngine.DebugLogHandler.LogFormat(LogType logType, Object context, String format, Object[] args)
+   at UnityEngine.Logger.Log(LogType logType, Object message)
+   at UnityEngine.Debug.Log(Object message)
+   at NTSD.DatParser.Lf2DatConverter.ConvertFrameDataCore(Lf2FrameBlock frameBlock, Boolean loganContent) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 174
+   at NTSD.DatParser.Lf2DatConverter.ConvertLoganFrameData(Lf2FrameBlock frameBlock) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 25
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat2\Program.cs:line 23
+DAT BLOCKED ita System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.DebugLogHandler.Internal_Log(LogType level, LogOption options, String msg, Object obj)
+   at UnityEngine.DebugLogHandler.LogFormat(LogType logType, Object context, String format, Object[] args)
+   at UnityEngine.Logger.Log(LogType logType, Object message)
+   at UnityEngine.Debug.Log(Object message)
+   at NTSD.DatParser.Lf2DatConverter.ConvertFrameDataCore(Lf2FrameBlock frameBlock, Boolean loganContent) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 174
+   at NTSD.DatParser.Lf2DatConverter.ConvertLoganFrameData(Lf2FrameBlock frameBlock) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 25
+   at InvokeStub_Lf2DatConverter.ConvertLoganFrameData(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat2\Program.cs:line 23
+DAT BLOCKED ank System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.DebugLogHandler.Internal_Log(LogType level, LogOption options, String msg, Object obj)
+   at UnityEngine.DebugLogHandler.LogFormat(LogType logType, Object context, String format, Object[] args)
+   at UnityEngine.Logger.Log(LogType logType, Object message)
+   at UnityEngine.Debug.Log(Object message)
+   at NTSD.DatParser.Lf2DatConverter.ConvertFrameDataCore(Lf2FrameBlock frameBlock, Boolean loganContent) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 174
+   at NTSD.DatParser.Lf2DatConverter.ConvertLoganFrameData(Lf2FrameBlock frameBlock) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs:line 25
+   at InvokeStub_Lf2DatConverter.ConvertLoganFrameData(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-INPUT-SEMANTICS-VALIDATION-001\dat2\Program.cs:line 23
+DAT EXECUTION COMPLETE

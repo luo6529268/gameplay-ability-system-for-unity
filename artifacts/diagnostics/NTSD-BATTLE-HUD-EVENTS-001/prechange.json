@@ -1,0 +1,100 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha": "14C7BE0928448E72E465ABC16B909D7E6506F7F406FC1AD83FBD0436A8C3932B",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_UI_Battle_BattleHudView.cs.before.txt",
+    "backupSha": "14C7BE0928448E72E465ABC16B909D7E6506F7F406FC1AD83FBD0436A8C3932B",
+    "git": " M Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs\r\n"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleUiContracts.cs",
+    "sha": "3539749777927CDCA6CDC87B82C5E63FEBFE5BA6C99AF4DA9984148A9E3941B3",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_UI_Battle_BattleUiContracts.cs.before.txt",
+    "backupSha": "3539749777927CDCA6CDC87B82C5E63FEBFE5BA6C99AF4DA9984148A9E3941B3",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha": "0B87D26743E8793179B9E2AB25671961DAF493E376952D70FAED0EFB074E59A7",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Simulation_Host_SimulationTickDriver.cs.before.txt",
+    "backupSha": "0B87D26743E8793179B9E2AB25671961DAF493E376952D70FAED0EFB074E59A7",
+    "git": " M Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs\r\n"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha": "F0285AD75276FA8DE6AE81C82C37E2B67D41F6C9DD5F736E88048D2162451B27",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Simulation_Core_NTSDEntityRuntime.cs.before.txt",
+    "backupSha": "F0285AD75276FA8DE6AE81C82C37E2B67D41F6C9DD5F736E88048D2162451B27",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "sha": "9FC0C66EF758D82B7DA32029FF507D11CDBC84E061CC85870C1A586B00DC6A0F",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Simulation_Core_SimulationWorld.cs.before.txt",
+    "backupSha": "9FC0C66EF758D82B7DA32029FF507D11CDBC84E061CC85870C1A586B00DC6A0F",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Runtime/SimulationRegistryModule.cs",
+    "sha": "B0F10B138E192205EDD2FE2FF53AE438C8E3C91D21B9CCA23F136AB415772039",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Simulation_Runtime_SimulationRegistryModule.cs.before.txt",
+    "backupSha": "B0F10B138E192205EDD2FE2FF53AE438C8E3C91D21B9CCA23F136AB415772039",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Input/SimulationFrameInputModule.cs",
+    "sha": "A0D91800604F1F55F0D7C2ABFD57F9F524796965381C0BDFBF5BFA9FD35D5002",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Simulation_Input_SimulationFrameInputModule.cs.before.txt",
+    "backupSha": "A0D91800604F1F55F0D7C2ABFD57F9F524796965381C0BDFBF5BFA9FD35D5002",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+    "sha": "D80E66EE914B58F006CDFB223DB7E88FF6E37CD351976EE06BB9D3B1C2C91C60",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_App_AppManager.cs.before.txt",
+    "backupSha": "D80E66EE914B58F006CDFB223DB7E88FF6E37CD351976EE06BB9D3B1C2C91C60",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "sha": "6BFA479230ECE08CAF89D92962DA3341DDC1F1821168607C80D73C9DDF5890C8",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Test_BattleTestBootstrap.cs.before.txt",
+    "backupSha": "6BFA479230ECE08CAF89D92962DA3341DDC1F1821168607C80D73C9DDF5890C8",
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs",
+    "sha": "FDA75BBBD6098D1CC1584E11FE5C39B22AF00378E82BED095C738D7F19DAD5CB",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Scripts_Test_Editor_BattleHudViewEditorTests.cs.before.txt",
+    "backupSha": "FDA75BBBD6098D1CC1584E11FE5C39B22AF00378E82BED095C738D7F19DAD5CB",
+    "git": "?? Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs\r\n"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha": "9E11DB32F0EF65F81476A358C40D3EC13C4B454226B28AE9988A1A7261F282AF",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\docs_ai_CHANGE-LEDGER.md.before.txt",
+    "backupSha": "9E11DB32F0EF65F81476A358C40D3EC13C4B454226B28AE9988A1A7261F282AF",
+    "git": " M docs/ai/CHANGE-LEDGER.md\r\n"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha": "5B3B9D71FCAEA7D5A1E17F31D1C9AE5FA85E443086C240FC61C5ACB84B497FE4",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\docs_ai_STATE.md.before.txt",
+    "backupSha": "5B3B9D71FCAEA7D5A1E17F31D1C9AE5FA85E443086C240FC61C5ACB84B497FE4",
+    "git": " M docs/ai/STATE.md\r\n"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha": "AAD95A652C775D209969F43C141B1F9C81BBE33B7A26D46D6EF07C07528CCF27",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\Assets_NTSD_Docs_CODEX-CURRENT-HANDOFF.md.before.txt",
+    "backupSha": "AAD95A652C775D209969F43C141B1F9C81BBE33B7A26D46D6EF07C07528CCF27",
+    "git": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\r\n"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha": "11914161A1B0FF599DEBDDFA68CE2F35D01AC5D913548B28BB720CC38D28481B",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-EVENTS-001\\docs_ai_FILE-OPERATIONS_INDEX.md.before.txt",
+    "backupSha": "11914161A1B0FF599DEBDDFA68CE2F35D01AC5D913548B28BB720CC38D28481B",
+    "git": " M docs/ai/FILE-OPERATIONS/INDEX.md\r\n"
+  }
+]

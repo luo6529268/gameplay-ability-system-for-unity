@@ -1,0 +1,34 @@
+{
+  "utc": "2026-10-03T18:10:49.338532+00:00",
+  "editor": {
+    "port": 6401,
+    "scene": {
+      "name": "NTSD_Menu",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "buildIndex": 0,
+      "isDirty": false,
+      "isLoaded": true,
+      "rootCount": 8
+    },
+    "phase": "idle",
+    "play": {
+      "is_playing": false,
+      "is_paused": false,
+      "is_changing": false
+    },
+    "compilation": {
+      "is_compiling": false,
+      "is_domain_reload_pending": false,
+      "last_compile_started_unix_ms": null,
+      "last_compile_finished_unix_ms": null,
+      "last_domain_reload_before_unix_ms": null,
+      "last_domain_reload_after_unix_ms": 1791050975344
+    }
+  },
+  "sha256": {
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "F01144C94B46B400DBC1FE9061E42B983E49135CD5DD6C1B626B98C45116329F",
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  }
+}

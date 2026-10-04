@@ -1,0 +1,7 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\c053_aux_type3_double_probe.cpp: In function 'int main(int, char**)':
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\c053_aux_type3_double_probe.cpp:225:45: error: too few arguments to function '{anonymous}::CaseResult {anonymous}::run_case(const std::filesystem::__cxx11::path&, int, int, std::ofstream&, int, const std::filesystem::__cxx11::path*, std::ofstream*)'
+  225 |                 const auto result = run_case(runtime, aux_x, aux_y, hits);
+      |                                     ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\c053_aux_type3_double_probe.cpp:67:12: note: declared here
+   67 | CaseResult run_case(const std::filesystem::path& runtime, int aux_x,
+      |            ^~~~~~~~

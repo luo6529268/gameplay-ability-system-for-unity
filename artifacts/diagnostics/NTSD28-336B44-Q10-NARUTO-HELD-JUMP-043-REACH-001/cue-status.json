@@ -1,0 +1,54 @@
+{
+  "data/043.wav": {
+    "formalSha256": "3067E2A50603F6500F93E93779C0AA812A028169A77BA46E09F1612F6DAB95FD",
+    "formalBytes": 13686,
+    "stagedPresent": false,
+    "oldPresent": true,
+    "oldSha256": "A44224A3CB8EED7B18D78CCBA5AC13C934E60315600AE53D953586E4E494C4F0",
+    "formalWav": {
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "sampleRate": 22050,
+      "frames": 13641
+    }
+  },
+  "data/017.wav": {
+    "formalSha256": "43030D58B00F98999AF6635C9966294FB9B5B6889D03FD1DCA8F46BFEDF3B5A6",
+    "formalBytes": 15232,
+    "stagedPresent": false,
+    "oldPresent": true,
+    "oldSha256": "895634229D4A6DAAD048DE76C04F7BD0175D34AF8E83D219EDA73172763845C7",
+    "formalWav": {
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "sampleRate": 22050,
+      "frames": 15106
+    }
+  },
+  "data/012.wav": {
+    "formalSha256": "04E2B02AB4415827045D25CB9C7DADDA70DA23FC8637BEAC13123A34DCE7F95C",
+    "formalBytes": 4326,
+    "stagedPresent": false,
+    "oldPresent": true,
+    "oldSha256": "CEBDB14BB0DBBCCB18CAEB8C055CF8465BE8C25299E662EA4960F8808615E77F",
+    "formalWav": {
+      "channels": 1,
+      "sampleWidthBytes": 2,
+      "sampleRate": 22050,
+      "frames": 2085
+    }
+  },
+  "c/nar/w/a7.wav": {
+    "formalSha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+    "formalBytes": 3096,
+    "stagedPresent": false,
+    "oldPresent": false,
+    "oldSha256": null,
+    "formalWav": {
+      "channels": 1,
+      "sampleWidthBytes": 1,
+      "sampleRate": 22050,
+      "frames": 3052
+    }
+  }
+}

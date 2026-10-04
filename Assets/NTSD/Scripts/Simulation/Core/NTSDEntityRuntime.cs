@@ -24,6 +24,33 @@ namespace NTSD.Simulation
         [NonSerialized] private BattleVitalStore vitalStore;
         [NonSerialized] private int vitalStoreSlot = -1;
 
+        [NonSerialized] private BattleHudChangeTracker hudChanges;
+        [NonSerialized] private int hudPlayerIndex = -1;
+        [NonSerialized] private RuntimeEntityHandle hudHandle;
+
+        internal void BindHudChanges(BattleHudChangeTracker changes, int playerIndex, RuntimeEntityHandle handle)
+        {
+            hudChanges = changes;
+            hudPlayerIndex = playerIndex;
+            hudHandle = handle;
+        }
+
+        internal void UnbindHudChanges(BattleHudChangeTracker changes, int playerIndex, RuntimeEntityHandle handle)
+        {
+            if (!ReferenceEquals(hudChanges, changes) || hudPlayerIndex != playerIndex || !hudHandle.Equals(handle))
+                return;
+            hudChanges = null;
+            hudPlayerIndex = -1;
+            hudHandle = RuntimeEntityHandle.Invalid;
+        }
+
+        private void SetHudVitalValue(ref int field, int value, BattleHudChanges changedField)
+        {
+            if (field == value) return;
+            field = value;
+            hudChanges?.Capture(hudPlayerIndex, hudHandle, changedField, value);
+        }
+
         public long PendingFlushDestroyMutationEpochForDiagnostics =>
             Volatile.Read(ref pendingFlushDestroyMutationEpoch);
 
@@ -433,8 +460,12 @@ namespace NTSD.Simulation
         public int HP2Orig;
         public int RespawnCount;
         public int HPLost;
-        public int MP = 500;
-        public int MPMax = 500;
+        [UnityEngine.SerializeField, UnityEngine.Serialization.FormerlySerializedAs("MP")]
+        private int mp = 500;
+        [UnityEngine.SerializeField, UnityEngine.Serialization.FormerlySerializedAs("MPMax")]
+        private int mpMax = 500;
+        public int MP { get => mp; set => SetHudVitalValue(ref mp, value, BattleHudChanges.Mp); }
+        public int MPMax { get => mpMax; set => SetHudVitalValue(ref mpMax, value, BattleHudChanges.MpMax); }
         private int pp = 500;
         public int PPMax = 500;
         public int PPBound = 500;
@@ -475,6 +506,11 @@ namespace NTSD.Simulation
 
             field = value;
             vitalStore?.CaptureChangedField(vitalStoreSlot, changedField, value);
+            BattleHudChanges hudField = changedField == RuntimeVitalField.Hp ? BattleHudChanges.Hp :
+                changedField == RuntimeVitalField.HpBound ? BattleHudChanges.HpBound :
+                changedField == RuntimeVitalField.Hp3 ? BattleHudChanges.HpMax : BattleHudChanges.None;
+            if (hudField != BattleHudChanges.None)
+                hudChanges?.Capture(hudPlayerIndex, hudHandle, hudField, value);
         }
 
         public int RelationTeam

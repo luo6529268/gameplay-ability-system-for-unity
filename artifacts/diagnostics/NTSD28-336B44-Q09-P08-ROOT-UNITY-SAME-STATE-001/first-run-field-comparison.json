@@ -1,0 +1,24 @@
+{
+  "status": "FIRST_RUN_INPUT_FIXTURE_DIFFERENCE",
+  "rootExecutableSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "ticks": 22,
+  "selectedChecks": 132,
+  "selectedMatches": 130,
+  "selectedDifferences": [
+    {
+      "tick": 2,
+      "field": "actorAction",
+      "root": 60,
+      "unity": 65
+    },
+    {
+      "tick": 3,
+      "field": "actorAction",
+      "root": 60,
+      "unity": 65
+    }
+  ],
+  "rngChecks": 44,
+  "rngDifferences": [],
+  "interpretation": "Root tick2 input mask16 is Attack; Unity probe run01 submitted Jump mask32. Corrected probe requires new original Editor compile and unique rerun before parity claim."
+}

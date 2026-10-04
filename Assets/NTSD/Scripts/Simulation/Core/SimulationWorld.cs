@@ -2584,10 +2584,29 @@ namespace NTSD.Simulation
                 out view);
         }
 
+        internal BattleHudChangeTracker HudChanges { get; } = new BattleHudChangeTracker();
+
+        internal void NotifyBattleHudParticipantReady(int playerIndex, LF2Entity entity)
+        {
+            BattleSlotRuntimeState[] slots = Runtime?.Roster?.Slots;
+            if (slots == null || (uint)playerIndex >= slots.Length)
+                return;
+            BattleSlotRuntimeState slot = slots[playerIndex];
+            if (slot?.Active != true || !slot.IsHuman || !(entity is LF2Character) || entity.AiControlled ||
+                slot.RuntimeSlotIndex != entity.Runtime.SlotIndex || slot.StableId != entity.Runtime.StableId ||
+                !TryGetCurrentRuntimeHandle(entity.Runtime.SlotIndex, entity, out RuntimeEntityHandle handle))
+            {
+                HudChanges.UnbindPlayer(playerIndex);
+                return;
+            }
+            HudChanges.Bind(playerIndex, entity.Runtime, handle);
+        }
+
         public void ResetRuntimeState()
         {
             EnsureAiSensingModeAvailableBeforeTick();
             stageRenderModule.Reset();
+            HudChanges.Reset();
             ResetRegisteredObjects();
             battleEcsShadowModule.Reset();
             battleEcsCooldownPass.Reset();

@@ -1,0 +1,22 @@
+{
+  "operationId": "NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-EDITOR-COMPILE-001",
+  "capturedAt": "2026-10-04T02:57:24.798446+08:00",
+  "files": [
+    {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "relativePath": "Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "bytes": 4153856,
+      "sha256": "8B4F63523C331AB6DCE85BBEDE211396C0207B667CAB7D01818BC5F153F8182A",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-EDITOR-COMPILE-001\\precompile-backup\\Assembly-CSharp.dll",
+      "git": "ignored/generated"
+    },
+    {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "relativePath": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "bytes": 5735936,
+      "sha256": "C31FCF0CA0D7409A1A4CF5222726CA437F10BAB3CA8E8750909F4296E423F067",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-EDITOR-COMPILE-001\\precompile-backup\\Assembly-CSharp-Editor.dll",
+      "git": "ignored/generated"
+    }
+  ]
+}

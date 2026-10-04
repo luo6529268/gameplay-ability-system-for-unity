@@ -10,6 +10,7 @@ using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -126,6 +127,24 @@ namespace NTSD.Test.Editor
             public int width;
             public int height;
             public int fileBytes;
+            public int publishedFrameTick;
+            public int publishedHitRecordCount;
+            public bool sparkResourceAvailable;
+            public int sparkCommandCount;
+            public List<SparkCommandSample> sparkCommands = new List<SparkCommandSample>();
+        }
+
+        [Serializable]
+        private sealed class SparkCommandSample
+        {
+            public int stableId;
+            public int pic;
+            public int sortOrder;
+            public float x;
+            public float y;
+            public float z;
+            public float width;
+            public float height;
         }
 
         [Serializable]
@@ -611,6 +630,28 @@ namespace NTSD.Test.Editor
             int height = bytes[20] << 24 | bytes[21] << 16 | bytes[22] << 8 | bytes[23];
             Require(width > 0 && height > 0,
                 "C040 Game View dimensions are invalid.");
+            var plan = world.CurrentPixelFramePlan;
+            BattlePresentationFrame frame = plan.CapturedFrame;
+            if (!plan.IsValid || plan.SimulationTick != report.endTick ||
+                frame == null || frame.TickIndex != report.endTick ||
+                !frame.CommandsMaterialized) return;
+            var sparkCommands = new List<SparkCommandSample>();
+            for (int index = 0; index < frame.CommandCount; index++)
+            {
+                BattleRenderCommand command = frame.GetCommand(index);
+                if (command.Type != BattleRenderCommandType.HitRecord) continue;
+                sparkCommands.Add(new SparkCommandSample
+                {
+                    stableId = command.StableId,
+                    pic = command.EffectivePic,
+                    sortOrder = command.SortOrder,
+                    x = command.Position.x,
+                    y = command.Position.y,
+                    z = command.Position.z,
+                    width = command.Size.x,
+                    height = command.Size.y
+                });
+            }
             using (SHA256 hash = SHA256.Create())
             {
                 report.view = new ViewCapture
@@ -621,7 +662,12 @@ namespace NTSD.Test.Editor
                     sha256 = BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", ""),
                     width = width,
                     height = height,
-                    fileBytes = bytes.Length
+                    fileBytes = bytes.Length,
+                    publishedFrameTick = frame.TickIndex,
+                    publishedHitRecordCount = frame.HitRecordCount,
+                    sparkResourceAvailable = frame.CommonVisualCatalog?.IsSparkValid == true,
+                    sparkCommandCount = sparkCommands.Count,
+                    sparkCommands = sparkCommands
                 };
             }
             report.pendingViewTick = 0;

@@ -2,6 +2,7 @@
 #include "ntsd28_playable/d3d11_renderer.h"
 #include "ntsd28_playable/game_session.h"
 #include "ntsd28_playable/game_session_lfr.h"
+#include "ntsd28_playable/presentation_interpolation.h"
 
 #include <objbase.h>
 
@@ -11,6 +12,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -96,9 +98,11 @@ int wmain(int argc, wchar_t** argv) {
     const bool kind10 = mode == L"kind10" && argc >= 5 && argc <= 8;
     const bool capture_offscreen = kind10 && argc == 8 &&
                                    std::wstring(argv[7]) == L"--offscreen-tick39";
+    const bool capture_interpolated = kind10 && argc == 8 &&
+        std::wstring(argv[7]) == L"--offscreen-interp-tick39";
     if ((mode != L"near" && mode != L"far" && !kind10) ||
         (!kind10 && argc != 4 && argc != 5 && argc != 6) ||
-        (argc == 8 && !capture_offscreen)) return 2;
+        (argc == 8 && !capture_offscreen && !capture_interpolated)) return 2;
     int opponent_x = 0;
     int source_z = 542;
     int background_id = 23;
@@ -112,7 +116,8 @@ int wmain(int argc, wchar_t** argv) {
         catch (...) { return 2; }
         if (source_z < 180 || source_z > 542) return 2;
     }
-    if (argc == (kind10 ? 7 : 6) || capture_offscreen) {
+    if (argc == (kind10 ? 7 : 6) || capture_offscreen ||
+        capture_interpolated) {
         try { background_id = std::stoi(argv[kind10 ? 6 : 5]); }
         catch (...) { return 2; }
         if (background_id != 1 && background_id != 23) return 2;
@@ -176,6 +181,7 @@ int wmain(int argc, wchar_t** argv) {
     int first_state1000_high_tick = -1;
     int f02_return_tick = -1;
     bool previous_state1000_high = false;
+    std::optional<ntsd28::RenderSnapshot28> tick38_snapshot;
     constexpr int kTicks = 128;
     for (int tick = 1; tick <= kTicks; ++tick) {
         const auto* actor_before = session.world()->entity(0);
@@ -221,6 +227,8 @@ int wmain(int argc, wchar_t** argv) {
             std::cerr << "record tick " << tick << ": " << error << '\n';
             return 9;
         }
+        if (capture_interpolated && tick == 38)
+            tick38_snapshot.emplace(session.snapshot(false));
         if (capture_offscreen && tick == 39) {
             const auto snapshot = session.snapshot(false);
             int naruto_count = 0;
@@ -267,6 +275,68 @@ int wmain(int argc, wchar_t** argv) {
             if (!rendered) {
                 std::cerr << "formal tick39 offscreen render: " << error << '\n';
                 return 17;
+            }
+        }
+        if (capture_interpolated && tick == 39) {
+            if (!tick38_snapshot) return 18;
+            const auto current = session.snapshot(false);
+            constexpr double kDisplayAlpha = 0.26;
+            const auto sample = ntsd28_playable::sample_render_presentation28(
+                *tick38_snapshot, current, kDisplayAlpha);
+            const auto* weapon_delta = sample.delta_for(2);
+            if (!sample.adjacent_ticks || weapon_delta == nullptr ||
+                weapon_delta->x != -30) {
+                std::cerr << "formal tick39 interpolation delta gate failed\n";
+                return 19;
+            }
+            const auto interpolated =
+                ntsd28_playable::interpolate_render_snapshot28(
+                    *tick38_snapshot, current, kDisplayAlpha);
+            if (!interpolated.adjacent_ticks ||
+                interpolated.snapshot.sprites.size() != 5) return 20;
+            std::ofstream geometry(output / "tick39-alpha026-sprites.csv",
+                                   std::ios::binary);
+            if (!geometry) return 21;
+            geometry << "slot,oid,pic,screen_left,screen_top,width,height,"
+                        "source_x,source_y,source_path\n";
+            int weapon_count = 0;
+            for (const auto& sprite : interpolated.snapshot.sprites) {
+                geometry << sprite.slot << ',' << sprite.object_id << ','
+                         << sprite.pic << ',' << sprite.screen_left << ','
+                         << sprite.screen_top << ',' << sprite.frame.width << ','
+                         << sprite.frame.height << ',' << sprite.frame.source_x
+                         << ',' << sprite.frame.source_y << ','
+                         << sprite.frame.source_path.u8string() << '\n';
+                if (sprite.slot == 2 && sprite.object_id == 600 &&
+                    sprite.pic == 1 && sprite.screen_left == 530)
+                    ++weapon_count;
+            }
+            geometry.close();
+            if (!geometry || weapon_count != 1) return 22;
+            std::ofstream sample_file(output / "tick39-alpha026-sample.txt",
+                                      std::ios::binary);
+            if (!sample_file) return 23;
+            sample_file << "alpha=0.26 adjacent=" << sample.adjacent_ticks
+                        << " interpolated_entities="
+                        << sample.interpolated_entities
+                        << " weapon_delta_x=" << weapon_delta->x << '\n';
+            sample_file.close();
+            if (!sample_file) return 23;
+            const HRESULT com = CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+            if (FAILED(com)) return 24;
+            bool rendered = false;
+            {
+                ntsd28_playable::D3D11Renderer28 renderer;
+                rendered = renderer.initialize_offscreen(1333, 730, error) &&
+                           renderer.render(interpolated.snapshot, false, error) &&
+                           renderer.save_offscreen_png(
+                               output / "tick39-alpha026-offscreen.png", error);
+            }
+            CoUninitialize();
+            if (!rendered) {
+                std::cerr << "formal interpolated tick39 render: " << error
+                          << '\n';
+                return 25;
             }
         }
         write_row(csv, tick, "after", input, *session.world());

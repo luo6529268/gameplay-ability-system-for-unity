@@ -1,0 +1,47 @@
+{
+  "schema": "ntsd28-q10-formal-wav-stage-postflight/1",
+  "utc": "2026-10-04T00:59:27.957538+00:00",
+  "files": {
+    "021.wav": {
+      "sha256": "AE2ED083B8A94665266AC32522E8A1648B9918CAB12062D838F1CDACC605637E",
+      "meta_guid": "2f54652eab9531c8cf13d08e21599065",
+      "wave": {
+        "channels": 1,
+        "sample_width_bytes": 1,
+        "sample_rate": 38400,
+        "frames": 34310
+      },
+      "guid_hits": [
+        "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\021.wav.meta"
+      ]
+    },
+    "102.wav": {
+      "sha256": "F0BF315E2CF8C0402D26C9928810F0F6E12233C851C61FE4B23C5CD1BA7E5603",
+      "meta_guid": "8fbcbda79f1e263ebb96c937db367479",
+      "wave": {
+        "channels": 1,
+        "sample_width_bytes": 1,
+        "sample_rate": 16000,
+        "frames": 35777
+      },
+      "guid_hits": [
+        "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\102.wav.meta"
+      ]
+    }
+  },
+  "protected_unchanged": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": true,
+    "Assets/NTSD/Scene/NTSD_Menu.unity": true,
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": true,
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": true
+  },
+  "old_unchanged": {
+    "021.wav": true,
+    "102.wav": true
+  },
+  "guid_unique": {
+    "021.wav": true,
+    "102.wav": true
+  },
+  "target_git_status": "?? Assets/NTSD/Content/LoganRuntime/vfs/data/021.wav\n?? Assets/NTSD/Content/LoganRuntime/vfs/data/021.wav.meta\n?? Assets/NTSD/Content/LoganRuntime/vfs/data/102.wav\n?? Assets/NTSD/Content/LoganRuntime/vfs/data/102.wav.meta\n"
+}

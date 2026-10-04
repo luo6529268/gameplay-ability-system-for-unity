@@ -1,0 +1,59 @@
+{
+  "source": "capture-a/source-ticks.csv",
+  "root": "root-a/trace.jsonl",
+  "declaredTicks": 40,
+  "slots": [
+    0,
+    1,
+    2,
+    50,
+    51
+  ],
+  "fields": [
+    "active",
+    "oid",
+    "action",
+    "hp",
+    "x",
+    "y",
+    "z"
+  ],
+  "comparisons": 1136,
+  "mismatchCount": 0,
+  "firstMismatches": [],
+  "tick7RootHits": [
+    {
+      "status": "applied",
+      "attacker": 2,
+      "target": 50,
+      "candidate": 0,
+      "hpDamage": 35,
+      "mpDamage": 0
+    },
+    {
+      "status": "rejected",
+      "attacker": 50,
+      "target": 0,
+      "candidate": 0,
+      "hpDamage": 0,
+      "mpDamage": 0
+    },
+    {
+      "status": "applied",
+      "attacker": 50,
+      "target": 2,
+      "candidate": 1,
+      "hpDamage": 90,
+      "mpDamage": 0
+    },
+    {
+      "status": "applied",
+      "attacker": 51,
+      "target": 50,
+      "candidate": 0,
+      "hpDamage": 25,
+      "mpDamage": 0
+    }
+  ],
+  "tick7TargetHp": 440
+}

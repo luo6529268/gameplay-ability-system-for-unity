@@ -1,0 +1,50 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "2c2bbd440197cbdc6217add897efe90c2dcd3ca8e3bb31aeedd3a7903e042ff3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleUiContracts.cs",
+    "sha256": "d368d16d5a9ea3303b75e4cc7fa23c18fbd001f01c7a64b8e119c0065cb15e18"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha256": "fcd1a1dc3cb679cd652d7f3129b5c8439e44cb7a368acd1eeededd13c79a08ff"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "44fe5fe88ece4cef63d621e8bb1afc0bfae3672d9a094eed60f10d0e974b84d8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "sha256": "df37204f6ec973cf5920d51717aeb41c259ec18c73270f45fe1f12355bcfd9c9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Runtime/SimulationRegistryModule.cs",
+    "sha256": "4ffaa130a14dea23faa8b43083cda2bebe13c6e56163070138cf565ac5221837"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Input/SimulationFrameInputModule.cs",
+    "sha256": "074b5d9b611fe9f590b21f6084da9e676c4f2ca8492a83aa14bdd21fea358e81"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+    "sha256": "afe95938388df429d1368e6121e901c02d32df4709d1e353d63e165660b459b9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "sha256": "6173b2fe8af48b6070f747be6850646ef22b145029fb3f118224f78cbc6e19a9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs",
+    "sha256": "40ba22e75fbff814864c99009a62844240c739d40b14c53eea607c9e38027f02"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "ec7bf05efa265303b8fe122339daf8f2cca89f41b75c34b43c0017542e0fff40"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs",
+    "sha256": "d0b3171522ac996398d39225c440e3f07c1132ce84bd509a2ca35a433c8a8972"
+  }
+]

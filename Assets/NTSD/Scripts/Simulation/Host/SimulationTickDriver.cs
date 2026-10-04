@@ -503,6 +503,9 @@ namespace NTSD.Simulation
                 if (_world == null)
                     return;
 
+                if (_simulationWorker == null)
+                    DispatchBattleHudChanges();
+
                 _world.ConfigureBattlePresentationDisplayPolicy(
                     battleRenderFps, ActiveHostIntervalSeconds);
                 using (PresentLatestFrameMarker.Auto())
@@ -894,6 +897,8 @@ namespace NTSD.Simulation
             DispatchPublishedSoundsAfterSuccessfulTick();
             _simulationWorkerSubmittedProvider?.AfterSimTick(publication.TickIndex);
             _simulationWorkerSubmittedProvider = null;
+            // Alignment contract: NTSD-BATTLE-HUD-EVENTS-001. Dispatch recorded changes before worker acknowledgement.
+            DispatchBattleHudChanges();
             _simulationWorkerPresentationAwaitingAcknowledgement =
                 publication.HasPresentationFrame;
 
@@ -1040,6 +1045,57 @@ namespace NTSD.Simulation
                  SimulationHostControlCommand.SingleStep) != 0;
         }
 
+        private NTSD.UI.Battle.BattleHudChangedEvent lastBattleHudEvent;
+        private bool hasBattleHudEvent;
+
+        public bool TryGetCurrentBattleHud(out NTSD.UI.Battle.BattleHudChangedEvent hudEvent)
+        {
+            hudEvent = lastBattleHudEvent;
+            return lifecycleState == BattleRuntimeLifecycleState.Running &&
+                hasBattleHudEvent && hudEvent.Values.IsVisible;
+        }
+
+        public bool IsCurrentBattleHudEvent(NTSD.UI.Battle.BattleHudChangedEvent hudEvent)
+        {
+            return hasBattleHudEvent && hudEvent.Values.Session == lastBattleHudEvent.Values.Session &&
+                hudEvent.Values.Version == lastBattleHudEvent.Values.Version &&
+                (!hudEvent.Values.IsVisible || lifecycleState == BattleRuntimeLifecycleState.Running);
+        }
+
+        private void ClearPublishedBattleHud()
+        {
+            if (!hasBattleHudEvent || !lastBattleHudEvent.Values.IsVisible)
+                return;
+            BattleHudValues previous = lastBattleHudEvent.Values;
+            lastBattleHudEvent = new NTSD.UI.Battle.BattleHudChangedEvent(
+                new BattleHudValues(previous.Session, -previous.Version - 1, -1,
+                    RuntimeEntityHandle.Invalid, -1, 0, 0, 0, 0, 0, 0, BattleHudChanges.All),
+                string.Empty, null);
+            MMEventManager.TriggerEvent(lastBattleHudEvent);
+        }
+
+        private void DispatchBattleHudChanges(bool allowClear = false)
+        {
+            if (_world == null || (!allowClear && lifecycleState != BattleRuntimeLifecycleState.Running) ||
+                !_world.HudChanges.TryConsume(out BattleHudValues values))
+                return;
+            string displayName = lastBattleHudEvent.DisplayName;
+            Sprite head = lastBattleHudEvent.HeadSprite;
+            if (!values.IsVisible)
+            {
+                displayName = string.Empty;
+                head = null;
+            }
+            else if ((values.Changes & BattleHudChanges.Binding) != 0)
+            {
+                displayName = _world.RuntimeDataCatalog?.GetCharacterData(values.ObjectId)?.name ?? string.Empty;
+                head = NTSD.UI.CharacterUIResourceManager.TryGetInstance()?.GetHeadSprite(values.ObjectId);
+            }
+            lastBattleHudEvent = new NTSD.UI.Battle.BattleHudChangedEvent(values, displayName, head);
+            hasBattleHudEvent = true;
+            MMEventManager.TriggerEvent(lastBattleHudEvent);
+        }
+
         public SimulationWorld World => _world;
         public int SparkRenderFrame => _sparkRenderFrame;
         public int CurrentTickIndex => _tickIndex;
@@ -1155,7 +1211,10 @@ namespace NTSD.Simulation
                 ResetLocalHostDebt();
             }
             if (!value && lifecycleState == BattleRuntimeLifecycleState.Preparing)
+            {
                 lifecycleState = BattleRuntimeLifecycleState.Running;
+                DispatchBattleHudChanges();
+            }
         }
 
         /// <summary>
@@ -1608,6 +1667,8 @@ namespace NTSD.Simulation
                 CompleteShutdownStage(BattleRuntimeShutdownStage.AllocationUnsealed);
 
                 _publishedSoundEvents.Clear();
+                _world?.HudChanges.Reset(stop: true);
+                DispatchBattleHudChanges(allowClear: true);
                 _entityOverlayRenderer?.StopForBattleShutdown();
                 CharacterAnimtorManager.TryGetInstance()?.ReleaseCancelledNativeContentStaging();
                 BattleCentralRenderSystem.ResetRuntime();
@@ -2545,6 +2606,7 @@ namespace NTSD.Simulation
 
         private void EnterPreparingState()
         {
+            ClearPublishedBattleHud();
             preparationGeneration = unchecked(preparationGeneration + 1);
             battleRuntimeServicesPrepared = false;
             lifecycleState = BattleRuntimeLifecycleState.Preparing;

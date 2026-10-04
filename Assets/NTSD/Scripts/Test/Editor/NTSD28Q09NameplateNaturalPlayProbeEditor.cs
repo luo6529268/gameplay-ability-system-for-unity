@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Cysharp.Threading.Tasks;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -25,6 +26,12 @@ namespace NTSD.Test.Editor
             "NTSD/Battle Diagnostics/Q09/Run Natural Nameplate Viewport Probe";
         private const string GameViewMenuPath =
             "NTSD/Battle Diagnostics/Q09/Run Natural Nameplate Game View Capture";
+        private const string Words5GameViewMenuPath =
+            "NTSD/Battle Diagnostics/Q09/Run WORDS5 Nameplate Game View Capture";
+        private const string OneTickInputMenuPath =
+            "NTSD/Battle Diagnostics/Q07/Run Menu D Dynamic One Tick Trace";
+        private const string PlayerLoopOneTickMenuPath =
+            "NTSD/Battle Diagnostics/Q07/Run Menu D PlayerLoop One Tick Trace";
         private static readonly string ResultPath = Path.GetFullPath(Path.Combine(
             Application.dataPath, "..", "artifacts", "diagnostics",
             "NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-AUDIT-20260927",
@@ -32,8 +39,15 @@ namespace NTSD.Test.Editor
         private static readonly string GameViewOutputFolder = Path.GetFullPath(Path.Combine(
             Application.dataPath, "..", "artifacts", "diagnostics",
             "NTSD28-336B44-Q09-NATURAL-GAMEVIEW-TICK-001"));
+        private static readonly string WordsGameViewOutputFolder = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-336B44-Q01-WORDS-GAMEVIEW-001"));
+        private static readonly string Words5GameViewOutputFolder = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001"));
 
         private static readonly List<LF2Entity> Entities = new List<LF2Entity>(16);
+        private static readonly List<InputTraceRow> InputTrace = new List<InputTraceRow>(12);
         private static SimulationTickDriver driver;
         private static SimulationWorld world;
         private static LF2Character actor;
@@ -52,30 +66,86 @@ namespace NTSD.Test.Editor
         private static string activeResultPath;
         private static string screenCapturePath;
         private static bool captureGameView;
+        private static bool captureWordsOnly;
+        private static int requestedBattleGroup;
+        private static bool singleTickInputTrace;
+        private static bool playerLoopOneTickTrace;
+        private static int dynamicUpdates;
+        private static int queuedAtDynamicUpdate;
+        private static readonly MethodInfo DynamicInputUpdate = typeof(InputSystem).GetMethod(
+            "Update", BindingFlags.Static | BindingFlags.NonPublic, null,
+            new[] { typeof(InputUpdateType) }, null);
 
         [MenuItem(MenuPath)]
         public static void RunFromMenu()
         {
-            Start(false);
+            Start(false, false);
         }
 
         [MenuItem(GameViewMenuPath)]
         public static void RunGameViewCapture()
         {
-            Start(true);
+            Start(true, false);
         }
 
-        private static void Start(bool captureScreen)
+        public static void RunWordsGameViewCapture()
+        {
+            Start(true, true);
+        }
+
+        [MenuItem(Words5GameViewMenuPath)]
+        public static void RunWords5GameViewCapture()
+        {
+            Start(true, true, false, false, 5);
+        }
+
+        [MenuItem(OneTickInputMenuPath)]
+        public static void RunMenuDDynamicOneTickTrace()
+        {
+            Start(false, false, true);
+        }
+
+        [MenuItem(PlayerLoopOneTickMenuPath)]
+        public static void RunMenuDPlayerLoopOneTickTrace()
+        {
+            Start(false, false, true, true);
+        }
+
+        private static void Start(bool captureScreen, bool wordsOnly,
+            bool oneTickInput = false, bool playerLoopInput = false,
+            int playerBattleGroup = 1)
         {
             EditorApplication.update -= Observe;
+            InputSystem.onAfterUpdate -= OnInputUpdate;
             ReleaseKey();
             captureGameView = captureScreen;
+            captureWordsOnly = wordsOnly;
+            requestedBattleGroup = playerBattleGroup;
+            singleTickInputTrace = oneTickInput;
+            playerLoopOneTickTrace = playerLoopInput;
+            dynamicUpdates = 0;
+            queuedAtDynamicUpdate = 0;
+            if (playerLoopInput)
+                InputSystem.onAfterUpdate += OnInputUpdate;
             string runId = DateTime.UtcNow.ToString("yyyyMMdd-HHmmss-fff") + "-" +
                 Guid.NewGuid().ToString("N");
-            activeResultPath = captureScreen
-                ? Path.Combine(GameViewOutputFolder, "natural-nameplate-" + runId + ".json")
+            activeResultPath = playerLoopInput
+                ? Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath,
+                    "..", "artifacts", "diagnostics",
+                    "NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001")),
+                    "playerloop-one-tick-" + runId + ".json")
+                : oneTickInput
+                ? Path.Combine(Path.GetFullPath(Path.Combine(Application.dataPath,
+                    "..", "artifacts", "diagnostics",
+                    "NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001")),
+                    "one-tick-" + runId + ".json")
+                : captureScreen
+                ? Path.Combine(playerBattleGroup == 5
+                        ? Words5GameViewOutputFolder
+                        : wordsOnly ? WordsGameViewOutputFolder : GameViewOutputFolder,
+                    "natural-nameplate-" + runId + ".json")
                 : ResultPath;
-            if (captureScreen && (File.Exists(activeResultPath) ||
+            if ((captureScreen || oneTickInput) && (File.Exists(activeResultPath) ||
                                   File.Exists(Path.ChangeExtension(activeResultPath, ".png"))))
                 throw new IOException("The natural Game View output path already exists.");
             screenCapturePath = null;
@@ -84,6 +154,8 @@ namespace NTSD.Test.Editor
                 status = "RUNNING",
                 scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path,
                 contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot,
+                playerLoopOneTick = playerLoopInput,
+                requestedBattleGroup = playerBattleGroup,
             };
             Save();
             if (!EditorApplication.isPlaying)
@@ -100,6 +172,7 @@ namespace NTSD.Test.Editor
             startTick = -1;
             lastObservedTick = -1;
             directionTicks = 0;
+            InputTrace.Clear();
             pausedByProbe = false;
             ownsMenuBattle = SceneManager.GetActiveScene().name == "NTSD_Menu";
             deadline = EditorApplication.timeSinceStartup + 180.0;
@@ -107,6 +180,12 @@ namespace NTSD.Test.Editor
                 PrepareMenuBattle().Forget();
             else
                 EditorApplication.update += Observe;
+        }
+
+        private static void OnInputUpdate()
+        {
+            if (InputState.currentUpdateType == InputUpdateType.Dynamic)
+                dynamicUpdates++;
         }
 
         private static async UniTask PrepareMenuBattle()
@@ -137,7 +216,7 @@ namespace NTSD.Test.Editor
                 match.players.Add(new PlayerSlotConfig
                 {
                     use = true, isHuman = true, characterId = 2,
-                    team = 1, inputId = 1,
+                    team = requestedBattleGroup, inputId = 1,
                 });
                 match.players.Add(new PlayerSlotConfig
                 {
@@ -209,15 +288,30 @@ namespace NTSD.Test.Editor
 
                     firstX = actor.Runtime.XInt;
                     moveRight = firstX <= 1050;
-                    moveKey = moveRight ? Key.D : Key.A;
+                    moveKey = playerLoopOneTickTrace ? Key.D :
+                        moveRight ? Key.D : Key.A;
                     startTick = driver.CurrentTickIndex;
                     lastObservedTick = startTick;
                     report.startTick = startTick;
                     report.initialX = firstX;
                     report.moveKey = moveKey.ToString();
+                    if (singleTickInputTrace)
+                    {
+                        if (playerLoopOneTickTrace)
+                            QueuePlayerLoopOneTickInput(input);
+                        else
+                            RunOneTickInputTrace(input);
+                        return;
+                    }
                     QueueKey(moveKey);
                     phase = 1;
                     deadline = EditorApplication.timeSinceStartup + 35.0;
+                    return;
+                }
+
+                if (playerLoopOneTickTrace && phase == 4)
+                {
+                    CompletePlayerLoopOneTickInput();
                     return;
                 }
 
@@ -230,14 +324,24 @@ namespace NTSD.Test.Editor
                     directionTicks++;
                     report.directionTicks = directionTicks;
                     report.lastX = actor.Runtime.XInt;
+                    if (InputTrace.Count < 12)
+                        CaptureInputTrace(tick);
                     Check(tick - startTick <= 180,
                         "P1 did not reach the nameplate viewport gate in 180 logic ticks.");
-                    if (directionTicks < 2 ||
-                        Math.Abs(actor.Runtime.XInt - firstX) < 8 ||
-                        actor.Runtime.XInt <= 794 ||
-                        (moveRight && actor.Runtime.XInt < 850) ||
-                        (!moveRight && actor.Runtime.XInt > 1100) ||
-                        !LF2ObjectRenderer.ShouldDrawEntityForHitStop(actor.Runtime.HitStop))
+                    bool bodyVisible = LF2ObjectRenderer.ShouldDrawEntityForHitStop(
+                        actor.Runtime.HitStop);
+                    bool waitForWords = captureWordsOnly &&
+                        (directionTicks < 2 ||
+                         world.Runtime.SlotLabels.BattleSlotLabels[0, 0] == '\0' ||
+                         !bodyVisible);
+                    bool waitForViewport = !captureWordsOnly &&
+                        (directionTicks < 2 ||
+                         Math.Abs(actor.Runtime.XInt - firstX) < 8 ||
+                         actor.Runtime.XInt <= 794 ||
+                         (moveRight && actor.Runtime.XInt < 850) ||
+                         (!moveRight && actor.Runtime.XInt > 1100) ||
+                         !bodyVisible);
+                    if (waitForWords || waitForViewport)
                     {
                         QueueKey(moveKey);
                         return;
@@ -343,6 +447,7 @@ namespace NTSD.Test.Editor
             BattleRenderCommand label = default;
             bool hasBody = false;
             bool hasLabel = false;
+            int requestedWordGlyphCommandCount = 0;
             var slotCommands = new List<string>();
             for (int index = 0; index < captured.CommandCount; index++)
             {
@@ -350,6 +455,17 @@ namespace NTSD.Test.Editor
                 if (command.RuntimeSlot != 0)
                     continue;
                 slotCommands.Add(command.Type + "/" + command.MotionAnchor);
+                if (command.Type == BattleRenderCommandType.OverlayGlyph &&
+                    command.SpriteDescriptor.HasLogicalResourceKey)
+                {
+                    BattleVisualResourceKey key =
+                        command.SpriteDescriptor.LogicalResourceKey;
+                    if (key.IsCommonWordGlyph &&
+                        key.CommonWordSheetIndex == requestedBattleGroup &&
+                        key.CommonWordCharCode ==
+                            world.Runtime.SlotLabels.BattleSlotLabels[0, 0])
+                        requestedWordGlyphCommandCount++;
+                }
                 if (!hasBody && command.Type == BattleRenderCommandType.Entity)
                 {
                     body = command;
@@ -363,6 +479,9 @@ namespace NTSD.Test.Editor
                 }
             }
             report.actorXInt = entity.XInt;
+            report.actorBattleGroup = entity.RelationTeam;
+            report.requestedWordGlyphCommandCount =
+                requestedWordGlyphCommandCount;
             report.entityHasCurrentFrame = entity.HasCurrentFrame;
             report.entityVisible = entity.EntityVisible;
             report.actorState = entity.State;
@@ -383,7 +502,7 @@ namespace NTSD.Test.Editor
             report.slot0Commands = string.Join(",", slotCommands);
             if (captureGameView)
                 CaptureVisibleMotion(captured);
-            int selectedSheet = entity.RelationTeam >= 1 && entity.RelationTeam <= 4
+            int selectedSheet = entity.RelationTeam >= 1 && entity.RelationTeam <= 5
                 ? entity.RelationTeam
                 : 0;
             report.selectedWordSheet = selectedSheet;
@@ -395,6 +514,11 @@ namespace NTSD.Test.Editor
                     selectedSheet,
                     world.Runtime.SlotLabels.BattleSlotLabels[0, 0],
                     out _);
+            if (requestedBattleGroup == 5)
+                Check(entity.RelationTeam == 5 && selectedSheet == 5 &&
+                      report.hasSelectedWordBinding &&
+                      requestedWordGlyphCommandCount > 0,
+                    "The ordinary group-5 nameplate did not publish a bound WORDS5 glyph.");
             Check(hasBody, "The selected actor body command is missing.");
             if (!hasLabel)
                 Check(captureGameView && SceneManager.GetActiveScene().name == "NTSD_Battle",
@@ -414,8 +538,11 @@ namespace NTSD.Test.Editor
                 (camera.transform.position.x + halfWidth - viewport.Left) /
                 viewport.UnitsPerPixelX);
             Check(visibleRight > visibleLeft &&
-                  entity.XInt > 794 && entity.XInt < visibleRight,
-                "The actor did not remain visible beyond the old 794-pixel clip.");
+                  entity.XInt >= visibleLeft && entity.XInt < visibleRight &&
+                  (captureWordsOnly || entity.XInt > 794),
+                captureWordsOnly
+                    ? "The actor is outside the actual camera viewport."
+                    : "The actor did not remain visible beyond the old 794-pixel clip.");
 
             report.actorXInt = entity.XInt;
             report.actorSourceX = actor.Runtime.SourceRuleX;
@@ -532,6 +659,150 @@ namespace NTSD.Test.Editor
             InputSystem.Update();
         }
 
+        private static void QueuePlayerLoopOneTickInput(CharacterInputModule input)
+        {
+            driver.SetPaused(true);
+            pausedByProbe = true;
+            if (driver.DedicatedSimulationWorkerTickInFlightForDiagnostics)
+                return;
+            report.keyboardDeviceId = keyboard.deviceId;
+            report.moveActionMap = input.MoveAction.actionMap?.name;
+            var controls = new List<string>(input.MoveAction.controls.Count);
+            foreach (InputControl control in input.MoveAction.controls)
+                controls.Add(control.path + "#" + control.device.deviceId);
+            report.moveActionControls = string.Join("|", controls);
+            report.tickBefore = driver.CurrentTickIndex;
+            queuedAtDynamicUpdate = dynamicUpdates;
+            report.queuedDynamicUpdate = queuedAtDynamicUpdate;
+            InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.D));
+            EditorApplication.QueuePlayerLoopUpdate();
+            phase = 4;
+            deadline = EditorApplication.timeSinceStartup + 10.0;
+        }
+
+        private static void CompletePlayerLoopOneTickInput()
+        {
+            if (dynamicUpdates <= queuedAtDynamicUpdate)
+            {
+                EditorApplication.QueuePlayerLoopUpdate();
+                return;
+            }
+            Check(driver.IsPaused &&
+                  !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics &&
+                  driver.CurrentTickIndex == report.tickBefore,
+                "The paused Driver changed before the queued Dynamic input was observed.");
+            CharacterInputModule input = actor.Controller as CharacterInputModule;
+            report.observedDynamicUpdate = dynamicUpdates;
+            report.keyboardPressedBeforeTick = keyboard.dKey.isPressed;
+            report.moveActionXBeforeTick = input.MoveAction.ReadValue<Vector2>().x;
+            report.currentMoveXBeforeTick = input.CurrentMoveInput.x;
+            report.activeControlBeforeTick = input.MoveAction.activeControl?.path;
+            Check(driver.StepOneTick(ignorePaused: true, buildPresentation: true),
+                "The single production Driver tick was rejected.");
+            report.tickAfter = driver.CurrentTickIndex;
+            Check(report.tickAfter == report.tickBefore + 1,
+                "The PlayerLoop input trace skipped or repeated a logic tick.");
+            report.lastX = actor.Runtime.XInt;
+            CaptureInputTrace(report.tickAfter);
+            bool canonicalRight = InputTrace.Count == 1 &&
+                (InputTrace[0].heldButtons & (int)SimulationInputButtons.Right) != 0;
+            bool inputDelivered = report.keyboardPressedBeforeTick &&
+                report.moveActionXBeforeTick > 0.5f && canonicalRight;
+            Finish(inputDelivered ? "PASS" : "FIRST_DIFFERENCE",
+                inputDelivered
+                    ? "Queued D reached the Dynamic device, P1 MoveAction and one complete battle tick."
+                    : "The queued PlayerLoop D input did not traverse the full keyboard-to-canonical chain; see tick fields.");
+        }
+
+        private static void RunOneTickInputTrace(CharacterInputModule input)
+        {
+            driver.SetPaused(true);
+            pausedByProbe = true;
+            report.keyboardDeviceId = keyboard.deviceId;
+            report.moveActionMap = input.MoveAction.actionMap?.name;
+            var controls = new List<string>(input.MoveAction.controls.Count);
+            foreach (InputControl control in input.MoveAction.controls)
+                controls.Add(control.path + "#" + control.device.deviceId);
+            report.moveActionControls = string.Join("|", controls);
+            InputSettings settings = InputSystem.settings;
+            InputSettings.BackgroundBehavior previousBackground =
+                settings.backgroundBehavior;
+            InputSettings.EditorInputBehaviorInPlayMode previousEditor =
+                settings.editorInputBehaviorInPlayMode;
+            bool previousRunInBackground = Application.runInBackground;
+            try
+            {
+                settings.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+                settings.editorInputBehaviorInPlayMode =
+                    InputSettings.EditorInputBehaviorInPlayMode
+                        .AllDeviceInputAlwaysGoesToGameView;
+                Application.runInBackground = true;
+                Check(DynamicInputUpdate != null,
+                    "The typed Dynamic Input System update is unavailable.");
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(moveKey));
+                keyboard.MakeCurrent();
+                DynamicInputUpdate.Invoke(null, new object[] { InputUpdateType.Dynamic });
+                report.keyboardPressedBeforeTick = keyboard[moveKey].isPressed;
+                report.moveActionXBeforeTick = input.MoveAction.ReadValue<Vector2>().x;
+                report.currentMoveXBeforeTick = input.CurrentMoveInput.x;
+                report.activeControlBeforeTick = input.MoveAction.activeControl?.path;
+                report.tickBefore = driver.CurrentTickIndex;
+                Check(driver.StepOneTick(ignorePaused: true, buildPresentation: true),
+                    "The single production Driver tick was rejected.");
+                report.tickAfter = driver.CurrentTickIndex;
+                Check(report.tickAfter == report.tickBefore + 1,
+                    "The single input trace skipped or repeated a logic tick.");
+                report.lastX = actor.Runtime.XInt;
+                CaptureInputTrace(report.tickAfter);
+            }
+            finally
+            {
+                settings.backgroundBehavior = previousBackground;
+                settings.editorInputBehaviorInPlayMode = previousEditor;
+                Application.runInBackground = previousRunInBackground;
+            }
+            Finish("PASS", "Typed Dynamic keyboard state and one complete Driver tick were captured.");
+        }
+
+        private static void CaptureInputTrace(int tick)
+        {
+            CharacterInputModule input = actor.Controller as CharacterInputModule;
+            FrameInputSet frameInput = driver.LastAppliedFrameInput;
+            SimulationPlayerInput playerInput = default;
+            if (frameInput?.Players != null)
+            {
+                for (int index = 0; index < frameInput.Players.Count; index++)
+                {
+                    if (frameInput.Players[index].PlayerSlot != 0)
+                        continue;
+                    playerInput = frameInput.Players[index];
+                    break;
+                }
+            }
+            InputTrace.Add(new InputTraceRow
+            {
+                tick = tick,
+                keyboardKeyPressed = keyboard != null && keyboard[moveKey].isPressed,
+                moveActionEnabled = input?.MoveAction?.enabled == true,
+                moveActionX = input?.MoveAction?.enabled == true
+                    ? input.MoveAction.ReadValue<Vector2>().x : 0f,
+                currentMoveX = input?.CurrentMoveInput.x ?? 0f,
+                frameInputTick = frameInput?.TickIndex ?? -1,
+                playerSlot = playerInput.PlayerSlot,
+                heldButtons = (int)playerInput.Buttons,
+                pressedButtons = (int)playerInput.PressedButtons,
+                releasedButtons = (int)playerInput.ReleasedButtons,
+                keyRight = actor.Runtime.KeyRight,
+                cdRight = actor.Runtime.CdRight,
+                frame = actor.Frame?.N ?? -1,
+                state = actor.Frame?.D?.state ?? -1,
+                sourceX = actor.Runtime.SourceRuleX,
+                x = actor.Runtime.X,
+                xInt = actor.Runtime.XInt,
+                vx = actor.Runtime.Vx
+            });
+        }
+
         private static void ReleaseKey()
         {
             if (keyboard == null)
@@ -544,8 +815,10 @@ namespace NTSD.Test.Editor
         private static void Finish(string status, string reason)
         {
             EditorApplication.update -= Observe;
+            InputSystem.onAfterUpdate -= OnInputUpdate;
             report.status = status;
             report.reason = reason;
+            report.inputTrace = InputTrace.ToArray();
             Save();
             ReleaseKey();
             if (pausedByProbe && driver != null &&
@@ -613,7 +886,20 @@ namespace NTSD.Test.Editor
             public string reason;
             public string scene;
             public string contentRoot;
+            public int requestedBattleGroup;
             public string moveKey;
+            public int keyboardDeviceId;
+            public string moveActionMap;
+            public string moveActionControls;
+            public bool playerLoopOneTick;
+            public int queuedDynamicUpdate;
+            public int observedDynamicUpdate;
+            public bool keyboardPressedBeforeTick;
+            public float moveActionXBeforeTick;
+            public float currentMoveXBeforeTick;
+            public string activeControlBeforeTick;
+            public int tickBefore;
+            public int tickAfter;
             public int startTick;
             public int captureTick;
             public int publishedTick;
@@ -623,6 +909,7 @@ namespace NTSD.Test.Editor
             public int initialX;
             public int lastX;
             public int actorXInt;
+            public int actorBattleGroup;
             public double actorSourceX;
             public bool entityHasCurrentFrame;
             public bool entityVisible;
@@ -645,6 +932,7 @@ namespace NTSD.Test.Editor
             public int selectedWordSheet;
             public string selectedLabelChar;
             public bool hasSelectedWordBinding;
+            public int requestedWordGlyphCommandCount;
             public int visibleLeft;
             public int visibleRight;
             public int labelLength;
@@ -672,6 +960,30 @@ namespace NTSD.Test.Editor
             public float bodyScreenX;
             public float bodyScreenY;
             public string screenCapturePath;
+            public InputTraceRow[] inputTrace;
+        }
+
+        [Serializable]
+        private sealed class InputTraceRow
+        {
+            public int tick;
+            public bool keyboardKeyPressed;
+            public bool moveActionEnabled;
+            public float moveActionX;
+            public float currentMoveX;
+            public int frameInputTick;
+            public int playerSlot;
+            public int heldButtons;
+            public int pressedButtons;
+            public int releasedButtons;
+            public int keyRight;
+            public int cdRight;
+            public int frame;
+            public int state;
+            public double sourceX;
+            public double x;
+            public int xInt;
+            public double vx;
         }
     }
 }

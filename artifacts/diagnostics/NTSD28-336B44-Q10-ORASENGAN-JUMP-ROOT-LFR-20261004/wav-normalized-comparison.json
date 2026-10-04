@@ -1,0 +1,13 @@
+{
+  "normalizedMethod": "formal unsigned 8-bit to signed 16-bit: (sample-128)*256",
+  "frames": 54104,
+  "rmsFormal16": 3442.2081747678426,
+  "rmsOld16": 3440.2946042339654,
+  "rmsDelta16": 146.2266631807924,
+  "peakAbsDelta16": 261,
+  "pearsonCorrelation": 0.999739975887748,
+  "deltaRange16": [
+    -261,
+    6
+  ]
+}

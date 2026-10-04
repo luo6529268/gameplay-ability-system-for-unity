@@ -1,0 +1,41 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+CASE 60Hz-short-in-first-render; OS-event times down=10ms up=12ms; fixture delivers all pending callbacks before sampling at render increments=16.6666667; logical cadence33ms, clamp66ms,max2
+ render#2 time=33.3333ms logicTick=1 held=0 rising=False released=False edge=0
+ render#4 time=66.6667ms logicTick=2 held=0 rising=False released=False edge=0
+PASS delivery model 60Hz-short-in-first-render
+CASE 60Hz-cross-render-same-sample; OS-event times down=10ms up=20ms; fixture delivers all pending callbacks before sampling at render increments=16.6666667; logical cadence33ms, clamp66ms,max2
+ render#2 time=33.3333ms logicTick=1 held=0 rising=False released=False edge=0
+ render#4 time=66.6667ms logicTick=2 held=0 rising=False released=False edge=0
+ render#6 time=100.0000ms logicTick=3 held=0 rising=False released=False edge=0
+PASS delivery model 60Hz-cross-render-same-sample
+CASE 60Hz-cross-actual-sample; OS-event times down=32ms up=34ms; fixture delivers all pending callbacks before sampling at render increments=16.6666667; logical cadence33ms, clamp66ms,max2
+ render#2 time=33.3333ms logicTick=1 held=1 rising=True released=False edge=5
+ render#4 time=66.6667ms logicTick=2 held=0 rising=False released=True edge=4
+ render#6 time=100.0000ms logicTick=3 held=0 rising=False released=False edge=3
+PASS delivery model 60Hz-cross-actual-sample
+CASE 60Hz-cross-ideal66-only; OS-event times down=65.9ms up=66.1ms; fixture delivers all pending callbacks before sampling at render increments=16.6666667; logical cadence33ms, clamp66ms,max2
+ render#2 time=33.3333ms logicTick=1 held=0 rising=False released=False edge=0
+ render#4 time=66.6667ms logicTick=2 held=0 rising=False released=False edge=0
+ render#6 time=100.0000ms logicTick=3 held=0 rising=False released=False edge=0
+ render#8 time=133.3333ms logicTick=4 held=0 rising=False released=False edge=0
+PASS delivery model 60Hz-cross-ideal66-only
+CASE 30Hz-cross-ideal33-only; OS-event times down=33.1ms up=33.2ms; fixture delivers all pending callbacks before sampling at render increments=33.3333333; logical cadence33ms, clamp66ms,max2
+ render#1 time=33.3333ms logicTick=1 held=0 rising=False released=False edge=0
+ render#2 time=66.6667ms logicTick=2 held=0 rising=False released=False edge=0
+ render#3 time=100.0000ms logicTick=3 held=0 rising=False released=False edge=0
+PASS delivery model 30Hz-cross-ideal33-only
+CASE stalled-render-two-ticks; OS-event times down=32ms up=34ms; fixture delivers all pending callbacks before sampling at render increments=66; logical cadence33ms, clamp66ms,max2
+ render#1 time=66.0000ms logicTick=1 held=0 rising=False released=False edge=0
+ render#1 time=66.0000ms logicTick=2 held=0 rising=False released=False edge=0
+ render#2 time=132.0000ms logicTick=3 held=0 rising=False released=False edge=0
+ render#2 time=132.0000ms logicTick=4 held=0 rising=False released=False edge=0
+PASS delivery model stalled-render-two-ticks
+CASE multi-tick-hold-release; OS-event times down=10ms up=150ms; fixture delivers all pending callbacks before sampling at render increments=16.6666667; logical cadence33ms, clamp66ms,max2
+ render#2 time=33.3333ms logicTick=1 held=1 rising=True released=False edge=5
+ render#4 time=66.6667ms logicTick=2 held=1 rising=False released=False edge=4
+ render#6 time=100.0000ms logicTick=3 held=1 rising=False released=False edge=3
+ render#8 time=133.3333ms logicTick=4 held=1 rising=False released=False edge=2
+ render#10 time=166.6667ms logicTick=5 held=0 rising=False released=True edge=1
+ render#12 time=200.0000ms logicTick=6 held=0 rising=False released=False edge=0
+PASS delivery model multi-tick-hold-release
+DELIVERY MATRIX COMPLETE. Real input and combo classes; render/OS delivery schedule is a deterministic fixture, not measured Unity hardware timing.

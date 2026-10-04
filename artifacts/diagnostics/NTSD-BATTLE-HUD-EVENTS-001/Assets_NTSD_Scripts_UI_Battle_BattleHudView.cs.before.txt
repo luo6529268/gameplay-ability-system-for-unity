@@ -1,0 +1,94 @@
+using System.Collections.Generic;
+using NTSD.Simulation;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace NTSD.UI.Battle
+{
+    /// <summary>
+    /// NTSD_Battle 场景常驻的角色资源 HUD 绑定面。
+    /// 对应当前场景的 HUD/HUDBg 区域，不管理角色列表，也不是 TEngine UIWindow。
+    /// </summary>
+    public sealed class BattleHudView : MonoBehaviour
+    {
+        [Header("Character")]
+        [SerializeField] private Image headImage;
+        [SerializeField] private TMP_Text characterNameText;
+
+        [Header("Resources")]
+        [SerializeField] private Image hpImage;
+        [SerializeField] private Image hpPreviewImage;
+        [SerializeField] private Image mpImage;
+
+        private readonly BattleHudState currentState = new BattleHudState();
+
+        private void LateUpdate()
+        {
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver == null || !driver.TryCopyBattleHudState(currentState))
+            {
+                ClearVisualState();
+                return;
+            }
+            Apply(currentState);
+        }
+
+        private void OnDisable()
+        {
+            ClearVisualState();
+        }
+
+        public void Apply(BattleHudState state)
+        {
+            if (state == null || !state.IsVisible)
+            {
+                ClearVisualState();
+                return;
+            }
+
+            if (headImage != null)
+            {
+                headImage.sprite = state.HeadSprite;
+                headImage.enabled = state.HeadSprite != null;
+            }
+            if (characterNameText != null)
+                characterNameText.text = state.DisplayName ?? string.Empty;
+            SetFill(hpImage, state.Hp01);
+            SetFill(hpPreviewImage, state.HpPreview01);
+            SetFill(mpImage, state.Mp01);
+        }
+
+        public void ClearVisualState()
+        {
+            // Keep this component active so a later character publication can restore the HUD.
+            if (headImage != null)
+            {
+                headImage.sprite = null;
+                headImage.enabled = false;
+            }
+            if (characterNameText != null)
+                characterNameText.text = string.Empty;
+            SetFill(hpImage, 0f);
+            SetFill(hpPreviewImage, 0f);
+            SetFill(mpImage, 0f);
+        }
+
+        private static void SetFill(Image image, float value)
+        {
+            if (image != null)
+                image.fillAmount = float.IsNaN(value) ? 0f : Mathf.Clamp01(value);
+        }
+
+        public void CollectMissingBindings(string path, List<string> missing)
+        {
+            if (missing == null)
+                return;
+            if (headImage == null) missing.Add(path + ".headImage");
+            if (characterNameText == null) missing.Add(path + ".characterNameText");
+            if (hpImage == null) missing.Add(path + ".hpImage");
+            if (hpPreviewImage == null) missing.Add(path + ".hpPreviewImage");
+            if (mpImage == null) missing.Add(path + ".mpImage");
+        }
+    }
+}

@@ -1,0 +1,503 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Extensions;
+using NTSD.Game;
+using NTSD.Tools;
+using NTSD.UI;
+using NTSD.Simulation;
+using MoreMountains.TopDownEngine;
+using System.Collections;
+using MoreMountains.Tools;
+using Cysharp.Threading.Tasks;
+
+namespace NTSD.App
+{
+    public enum AppFlowState
+    {
+        MenuMain,
+        MenuLoading,
+        MenuSelectGameMode,
+        MenuSelectCharacter,
+        BattleLoading,
+        BattleRunning,
+        BattlePaused,
+        BattleStopping,
+    }
+
+    public sealed class AppManager : SingletonBehaviour<AppManager>
+    {
+        [Header("Scenes")]
+        [SerializeField] private string menuSceneName = "NTSD_Menu";
+        [SerializeField] private string battleSceneName = "NTSD_Battle";
+
+        [Header("Menu")]
+        [SerializeField] private MenuUIController menuUi;
+
+        [Header("EventSystem (global unique)")]
+        [SerializeField] private EventSystem eventSystem;
+
+        [Header("Global Config")]
+        [SerializeField] private GameConfig gameConfig;
+
+        [Header("Battle Lockstep")]
+        [Tooltip("战斗帧同步底层配置。进入战斗前应用到 SimulationTickDriver。")]
+        public LockstepSimulationSettings battleLockstepSettings = new LockstepSimulationSettings();
+
+        private NTSDSoundPlayer soundPlayer;
+        private SparkRenderer sparkRenderer;
+        private InputModule inputModule;
+
+        [Header("Runtime")]
+        [SerializeField] private AppFlowState state = AppFlowState.MenuMain;
+
+        public AppFlowState State => state;
+        public MatchConfig CurrentMatchConfig { get; private set; }
+        public NTSDSoundPlayer SoundPlayer => soundPlayer;
+        public SparkRenderer SparkRenderer => sparkRenderer;
+        public InputModule InputModule => inputModule;
+
+        protected override bool PersistAcrossScenes => true;
+
+        protected override void OnSingletonAwake()
+        {
+            InitializeGameConfig();
+            EnsureRuntimeModules();
+            EnsureSingleEventSystem();
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void EnsureRuntimeModules()
+        {
+            soundPlayer = gameObject.MMGetOrAddComponent<NTSDSoundPlayer>();
+            sparkRenderer = gameObject.MMGetOrAddComponent<SparkRenderer>();
+            inputModule = new InputModule();
+        }
+
+        private void InitializeGameConfig()
+        {
+            if (gameConfig != null)
+            {
+                GameConfig.Instance = gameConfig;
+            }
+            else
+            {
+                Debug.LogWarning("[AppManager] GameConfig is not assigned!");
+            }
+        }
+
+        protected override void OnSingletonDestroyed()
+        {
+            TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnApplicationQuit()
+        {
+            TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+        }
+
+        public bool TryCloseBattleApplicationFromNativeFunctionKey()
+        {
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver == null ||
+                driver.LifecycleState != BattleRuntimeLifecycleState.Running)
+            {
+                return false;
+            }
+
+            if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
+                    out BattleRuntimeShutdownReport report))
+            {
+                Debug.LogError(
+                    "[AppManager] F4 application close was refused because ordered " +
+                    $"shutdown stopped at {report.CompletedStage}: " +
+                    report.FailureReason);
+                return false;
+            }
+
+#if !UNITY_EDITOR
+            Application.Quit(0);
+#endif
+            return true;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == battleSceneName)
+            {
+                InitializeBattleAsync(scene).Forget();
+            }
+        }
+
+        private async UniTaskVoid InitializeBattleAsync(Scene scene)
+        {
+            SimulationTickDriver simulationDriver = SimulationTickDriver.Instance;
+            if (simulationDriver == null)
+                return;
+            int preparationGeneration = simulationDriver.PreparationGeneration;
+            SimulationWorld preparationWorld = simulationDriver.World;
+            await UniTask.Yield();
+            if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                return;
+            BattleBootstrap bootstrap = null;
+            try
+            {
+                CharacterAnimtorManager contentManager = CharacterAnimtorManager.TryGetInstance();
+                if (contentManager == null)
+                    throw new System.InvalidOperationException("Battle content was not prewarmed.");
+                if (CharacterAnimtorManager.ConfiguredContentRoot.Length == 0)
+                    throw new System.InvalidOperationException("Formal Logan battle content root is required.");
+                string contentKey = await contentManager.ValidateConfiguredContentForBattleAsync();
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
+                InitializeBattleSingletons();
+
+                bootstrap = FindBattleBootstrap(scene);
+
+                SceneManager.SetActiveScene(scene);
+
+                try
+                {
+                    simulationDriver.ApplyMatchConfig(CurrentMatchConfig);
+                }
+                finally
+                {
+                    // Synchronous preparation may replace World before reporting failure.
+                    preparationGeneration = simulationDriver.PreparationGeneration;
+                    preparationWorld = simulationDriver.World;
+                }
+
+                if (bootstrap != null)
+                {
+                    if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                    {
+                        throw new System.InvalidOperationException(
+                            $"[AppManager] Battle map preparation failed before character setup: {mapFailure}");
+                    }
+
+                    if (bootstrap.IsMapConfigurationPrepared)
+                        SimulationTickDriver.Instance?.World?.RefreshStageRuntimeSnapshotFromScene();
+                }
+
+                // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
+                simulationDriver.PrepareBattleRuntimeServices();
+                SetupBattleCharacters(scene);
+
+                if (soundPlayer != null)
+                {
+                    await soundPlayer.PrepareBattleCuesAsync(
+                        CharacterAnimtorManager.Instance);
+                }
+
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
+
+                await contentManager.AssertConfiguredContentUnchangedAsync(contentKey);
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
+                if (SimulationTickDriver.Instance != null)
+                {
+                    SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
+                    SimulationTickDriver.Instance.BeginBattleAllocationSeal();
+                    bootstrap?.EnablePresentation();
+                    SimulationTickDriver.Instance.SetPaused(false);
+                }
+
+                state = AppFlowState.BattleRunning;
+                EnsureSingleEventSystem();
+            }
+            catch (System.Exception exception)
+            {
+                if (this == null || simulationDriver == null ||
+                    simulationDriver.PreparationGeneration != preparationGeneration ||
+                    !ReferenceEquals(simulationDriver.World, preparationWorld) ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopped)
+                    return;
+                Debug.LogError(
+                    $"[AppManager] Battle initialization failed: {exception}");
+                TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+            }
+        }
+
+        private void InitializeBattleSingletons()
+        {
+            NTSD.TimeWheel.TimeWheel.CreateSharedInstance();
+        }
+
+        private BattleBootstrap FindBattleBootstrap(Scene scene)
+        {
+            var roots = scene.GetRootGameObjects();
+            for (int i = 0; i < roots.Length; i++)
+            {
+                var bootstrap = roots[i].GetComponentInChildren<BattleBootstrap>(true);
+                if (bootstrap != null) return bootstrap;
+            }
+            return null;
+        }
+
+        private void EnsureSingleEventSystem()
+        {
+            if (eventSystem == null)
+            {
+                eventSystem = GetComponentInChildren<EventSystem>(true);
+            }
+
+            if (eventSystem == null)
+            {
+                var go = new GameObject("EventSystem");
+                go.transform.SetParent(transform);
+                eventSystem = go.AddComponent<EventSystem>();
+                go.AddComponent<StandaloneInputModule>();
+            }
+
+            var all = FindObjectsOfType<EventSystem>(true);
+            for (int i = 0; i < all.Length; i++)
+            {
+                if (all[i] != eventSystem)
+                {
+                    all[i].gameObject.SetActive(false);
+                }
+            }
+
+            eventSystem.gameObject.SetActive(true);
+        }
+
+        private void SetupBattleCharacters(Scene battleScene)
+        {
+            if (CurrentMatchConfig == null) return;
+
+            SimulationWorld world = SimulationTickDriver.Instance?.World;
+            BattleRosterRuntimeState roster = world?.Runtime?.Roster;
+            BattleSlotRuntimeState[] rosterSlots = roster?.Slots;
+            if (world == null || rosterSlots == null)
+                return;
+
+            int slotCount = System.Math.Min(CurrentMatchConfig.players.Count, rosterSlots.Length);
+            for (int i = 0; i < slotCount; i++)
+            {
+                var slot = CurrentMatchConfig.players[i];
+                if (slot == null || !slot.use) continue;
+
+                var frameData = CharacterAnimtorManager.Instance?.GetCharacterConfig(slot.characterId);
+                if (frameData == null)
+                {
+                    Debug.LogWarning(
+                        $"[AppManager] Character {slot.characterId} for battle slot {i} is not loaded in scene '{battleScene.name}'.");
+                    continue;
+                }
+
+                BattleStageRuntimeState stage = world.Runtime?.Stage;
+                int stageWidth = stage != null && stage.BaseStageWidthPx > 0
+                    ? stage.BaseStageWidthPx
+                    : 800;
+                int zMin = stage != null && stage.ZMin > 0 ? stage.ZMin : 180;
+                int zMax = stage != null && stage.ZMax > 0 ? stage.ZMax : 350;
+                int xRange = stageWidth / 2;
+                int zRange = zMax - zMin;
+                double spawnX = stageWidth / 4 + (xRange > 0 ? world.Rng.NextRaw() % xRange : 0);
+                int spawnZ = zMin + (zRange > 0 ? world.Rng.NextRaw() % zRange : 0);
+
+                var entityObj = LF2ObjectPool.Instance.Get(out LF2ObjectRenderer EntityModel);
+                var lf2 = LF2ReferencePool.Instance.Get(LF2ObjectType.Character, slot.characterId) as LF2Character;
+
+                int inputId = BattleMatchConfigRuntimeAdapter.ResolveInputId(slot.inputId, i);
+                int team = BattleMatchConfigRuntimeAdapter.ResolveBattleTeam(slot.team, i);
+
+                lf2.Controller.SetInputID(inputId);
+
+                lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{inputId}");
+                lf2.ModuleInitialize();
+                BattleMatchConfigRuntimeAdapter.PrepareDirectParticipantRegistration(lf2, i);
+
+                EntityModel.SetLogicObject(lf2, null);
+
+                lf2.ModuleBind(frameData, slot.characterId);
+                if (lf2.Runtime.SlotIndex != i)
+                {
+                    LF2ObjectPointFactory.ReleaseRejectedSpawn(EntityModel, lf2);
+                    continue;
+                }
+                lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
+                lf2.Team = team;
+                lf2.RelationTeam = team;
+                lf2.AiControlled = !slot.isHuman;
+
+                lf2.PS.x = spawnX;
+                lf2.PS.y = 0;
+                lf2.PS.z = spawnZ;
+                lf2.PS.vx = 0.1;
+                lf2.PS.vy = 0;
+                lf2.PS.vz = 0.1;
+                lf2.HitStun = 75;
+                SyncParticipantPhysicalBirthPosition(lf2, spawnX, spawnZ);
+
+                BattleSlotRuntimeState rosterSlot = rosterSlots[i];
+                if (rosterSlot != null && rosterSlot.Active)
+                {
+                    rosterSlot.RuntimeSlotIndex = lf2.Runtime.SlotIndex;
+                    rosterSlot.StableId = lf2.Runtime.StableId;
+                }
+            }
+        }
+
+        internal static void SyncParticipantPhysicalBirthPosition(
+            LF2Character participant,
+            double physicalX,
+            int physicalZ)
+        {
+            BattleSpatialProjection projection =
+                participant.RegisteredWorldForSimulation?.SpatialProjection ?? BattleSpatialProjection.Identity;
+            SyncParticipantBirthPosition(
+                participant,
+                projection.ViewToSourceX(physicalX),
+                projection.ViewToSourceZ(physicalZ));
+        }
+
+        internal static void SyncParticipantBirthPosition(LF2Character participant, double spawnX, double spawnZ)
+        {
+            participant.Runtime.SyncIntegerPosition();
+            participant.Runtime.SetSourceRulePosition(spawnX, spawnZ);
+            participant.Runtime.SyncSourceRuleIntegerPosition();
+            participant.RefreshRuntimeSnapshot();
+        }
+
+        public void SetMatchConfig(MatchConfig config)
+        {
+            CurrentMatchConfig = config;
+        }
+
+        public AsyncOperation LoadBattleAdditive()
+        {
+            state = AppFlowState.BattleLoading;
+
+            if (menuUi == null)
+            {
+                menuUi = FindObjectOfType<MenuUIController>(true);
+            }
+
+            menuUi?.HideAll();
+            menuUi?.EnableMenuUiCamera(false);
+
+            return SceneManager.LoadSceneAsync(battleSceneName, LoadSceneMode.Additive);
+        }
+
+        public AsyncOperation UnloadBattle()
+        {
+            return UnloadBattleInternal(false);
+        }
+
+        public bool TryReturnToCharacterSelectionFromBattleResult()
+        {
+            if (state != AppFlowState.BattleRunning &&
+                state != AppFlowState.BattlePaused)
+                return false;
+
+            Scene menuScene = SceneManager.GetSceneByName(menuSceneName);
+            Scene battleScene = SceneManager.GetSceneByName(battleSceneName);
+            if (!menuScene.IsValid() || !menuScene.isLoaded ||
+                !battleScene.IsValid() || !battleScene.isLoaded)
+                return false;
+
+            return UnloadBattleInternal(true) != null;
+        }
+
+        private AsyncOperation UnloadBattleInternal(bool returnToCharacterSelection)
+        {
+            state = AppFlowState.BattleStopping;
+            var scene = SceneManager.GetSceneByName(battleSceneName);
+            if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
+                    out BattleRuntimeShutdownReport shutdownReport))
+            {
+                Debug.LogError(
+                    "[AppManager] Battle Scene unload was refused because ordered " +
+                    $"shutdown stopped at {shutdownReport.CompletedStage}: " +
+                    shutdownReport.FailureReason);
+                return null;
+            }
+
+            NTSD.TimeWheel.TimeWheel.DestroySharedInstance();
+
+            if (!returnToCharacterSelection)
+                state = AppFlowState.MenuMain;
+            var op = SceneManager.UnloadSceneAsync(battleSceneName);
+
+            if (menuUi == null)
+            {
+                menuUi = FindObjectOfType<MenuUIController>(true);
+            }
+
+            if (op != null)
+            {
+                op.completed += _ =>
+                {
+                    menuUi?.EnableMenuUiCamera(true);
+                    if (returnToCharacterSelection)
+                    {
+                        CharacterSelectionController selection =
+                            FindObjectOfType<CharacterSelectionController>(true);
+                        selection?.ResetAll();
+                        menuUi?.ShowSelectCharacter();
+                        state = AppFlowState.MenuSelectCharacter;
+                    }
+                    else
+                    {
+                        menuUi?.ShowMainMenu();
+                    }
+                    EnsureSingleEventSystem();
+                };
+            }
+
+            return op;
+        }
+
+        public bool TryShutdownBattleRuntimeBeforeSceneDestroy(
+            out BattleRuntimeShutdownReport report)
+        {
+            Scene battleScene = SceneManager.GetSceneByName(battleSceneName);
+            BattleBootstrap bootstrap = battleScene.IsValid() && battleScene.isLoaded
+                ? FindBattleBootstrap(battleScene)
+                : null;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver == null)
+            {
+                bootstrap?.DisablePresentation();
+                report = default;
+                return bootstrap == null || bootstrap.IsRuntimeMapCleared;
+            }
+
+            report = driver.ShutdownBattleRuntime();
+            if (report.Status == BattleRuntimeShutdownStatus.Failed ||
+                (!report.RuntimeStagesCompleted &&
+                 report.Status != BattleRuntimeShutdownStatus.AlreadyStopped))
+            {
+                return false;
+            }
+
+            bootstrap?.DisablePresentation();
+            bool runtimeMapCleared = bootstrap == null || bootstrap.IsRuntimeMapCleared;
+            report = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(
+                runtimeMapCleared);
+            return report.IsComplete;
+        }
+
+        public void SetMenuState(AppFlowState menuState)
+        {
+            state = menuState;
+        }
+
+        public void SetBattlePaused(bool paused)
+        {
+            if (state == AppFlowState.BattleStopping)
+                return;
+            state = paused ? AppFlowState.BattlePaused : AppFlowState.BattleRunning;
+        }
+    }
+}

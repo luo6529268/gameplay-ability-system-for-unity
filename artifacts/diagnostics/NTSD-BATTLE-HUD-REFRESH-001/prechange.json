@@ -1,0 +1,44 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha": "8CA2C1E7888148077AA91BF7D2543E6E375B5D9D65BABA337E111E841707D225",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\Assets_NTSD_Scripts_UI_Battle_BattleHudView.cs.before.txt",
+    "backupSha": "8CA2C1E7888148077AA91BF7D2543E6E375B5D9D65BABA337E111E841707D225",
+    "git": " M Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs\r\n"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha": "4D7E31DA57B2D73C402F9BB9B6736BB8B6E55ED81E5A50A0CBEBA79B36230FE1",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\Assets_NTSD_Scripts_Simulation_Host_SimulationTickDriver.cs.before.txt",
+    "backupSha": "4D7E31DA57B2D73C402F9BB9B6736BB8B6E55ED81E5A50A0CBEBA79B36230FE1",
+    "git": ""
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha": "67A492390019237035B1223441A4AE6BB5C867533EF9C6634445B9F630AC09CD",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\docs_ai_CHANGE-LEDGER.md.before.txt",
+    "backupSha": "67A492390019237035B1223441A4AE6BB5C867533EF9C6634445B9F630AC09CD",
+    "git": " M docs/ai/CHANGE-LEDGER.md\r\n"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha": "F187468A960EFC15F56D6CF6007882FF27A96344C896C5B8A6F83B2CA74904A6",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\docs_ai_STATE.md.before.txt",
+    "backupSha": "F187468A960EFC15F56D6CF6007882FF27A96344C896C5B8A6F83B2CA74904A6",
+    "git": " M docs/ai/STATE.md\r\n"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha": "D50CA5839F7EECE777A669B01A6E78C0918523D768A7A54A6B30B686F941D78E",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\Assets_NTSD_Docs_CODEX-CURRENT-HANDOFF.md.before.txt",
+    "backupSha": "D50CA5839F7EECE777A669B01A6E78C0918523D768A7A54A6B30B686F941D78E",
+    "git": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\r\n"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha": "74285C5786056C6F85EFEFE3F8CDF62B9A54B9F7CE82B768B81004059ADAC9C9",
+    "backup": "artifacts\\diagnostics\\NTSD-BATTLE-HUD-REFRESH-001\\docs_ai_FILE-OPERATIONS_INDEX.md.before.txt",
+    "backupSha": "74285C5786056C6F85EFEFE3F8CDF62B9A54B9F7CE82B768B81004059ADAC9C9",
+    "git": " M docs/ai/FILE-OPERATIONS/INDEX.md\r\n"
+  }
+]

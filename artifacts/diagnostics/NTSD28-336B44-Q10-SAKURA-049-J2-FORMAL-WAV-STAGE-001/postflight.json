@@ -1,0 +1,47 @@
+{
+  "schema": "ntsd28-q10-sakura-049-j2-postflight/1",
+  "utc": "2026-10-04T01:12:26.020493+00:00",
+  "files": {
+    "data/049.wav": {
+      "sha256": "10ADC639123FA69CBB64DD430BE49D04314C50260D383FC22E98513D6E68D0C6",
+      "guid": "b3db72bc474d6f4ef59a521f4151a9be",
+      "guid_hits": [
+        "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\049.wav.meta"
+      ],
+      "wave": {
+        "channels": 1,
+        "sample_width_bytes": 1,
+        "sample_rate": 22050,
+        "frames": 32908
+      }
+    },
+    "c/saku/w/j2.wav": {
+      "sha256": "73C3904DB1151FA86727860A4D6BD8B7FA52C70A5209D6B0211C59803780A908",
+      "guid": "0444c8af275a152ef446b7620bc4f9ae",
+      "guid_hits": [
+        "Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\saku\\w\\j2.wav.meta"
+      ],
+      "wave": {
+        "channels": 1,
+        "sample_width_bytes": 1,
+        "sample_rate": 22050,
+        "frames": 7868
+      }
+    }
+  },
+  "old_unchanged": {
+    "data/049.wav": true,
+    "c/saku/w/j2.wav": true
+  },
+  "protected_unchanged": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": true,
+    "Assets/NTSD/Scene/NTSD_Menu.unity": true,
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": true,
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": true
+  },
+  "all_staged_wavs_match_formal": {
+    "count": 10,
+    "match": 10,
+    "bad": []
+  }
+}

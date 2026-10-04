@@ -1,3 +1,92 @@
+> 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001 / VERIFIED_SCOPED_SCENE`：原Editor同项目新程序集，独立v2 20tick原Battle Scene Play `PASS/DONE`，与336B44正式源码7选定字段140/140零差；tick2起OID220 World槽空，旧action1000是回收后探针引用，非生产首差。退出Play、唯一Scene clean、四SHA在本次运行内一致；v1/v2之间Battle磁盘SHA变化来源未证，保留。仅关闭C009受控恢复Scene子门，物理键、Q08/Q12仍开；未改生产/DAT/Scene/非战斗。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001 / PLANNED`：正式源/根OID220→OID9恢复20tick×7字段140/140后，仅扩既有C009原Battle Scene探针，新增独立20tick请求以生产工厂见证结果暂停再恢复；原请求保持。原Editor仍编译中，不在旧程序集Play；生产/DAT/Scene不改。[Task](TASKS/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-001 / RUNTIME_PENDING`：原Editor全套测试已取消且MCP独立证实停、Battle Scene clean/非Play；编译仍在卡住，故未用旧程序集Play。正式源OID220→OID9受控自然OPoint在tick1出生、tick2～4暂停timer1、tick4子体结束、tick5恢复timer2，正式336B44根LFR PASS，20tick×7字段140/140；OID230限定20tick阴性。原Scene同初态、物理键、全World待，C009/Q08/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-001/REPORT.md)。
+
+> 2026-10-04 Q08/C009 待办纠正：当前336B44 playable 的 `native_scoreboard_winner_group` 仅在 mode0 `result_visible` 供原生 scoreboard 行图文使用；按总表 P-19 此画面不作为战斗规则出口。总表已更正旧“Unity独立赢家/画面待”；返组后再次仅剩一组的计时恢复、同初态原 Battle Scene 与物理输入链仍待。既有正式源/根84/84、原Scene72/72返组暂停证据不变，C009/Q08开放；原Editor旧程序集仍需编译恢复。
+
+> 2026-10-04 Q07/C053 v6：正式`firz.dat` frame3的`next:0`在336B44 playable帧机为stayed，旧静态`3→0`推断被源/根高位案纠正。受控OID0/action212/Y-130案OID251 tick5自然出生，tick13～21停3、tick22转60；根回放PASS，六字段240/240同；两旧案LFR逐SHA稳定。Unity生产源码已有相应分支但原Scene运行未验，C053/Q07仍RUNTIME_PENDING，不再沿提高Y搜索无效帧链。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001 / RUNTIME_PENDING` v5：OID0普通跳跃tick11与受控212 tick5均有正式playable OID251 `spawned`事件（slot50/source_line1917），与子体首次可见同tick；v5编译0错，新旧两LFR逐SHA相同，复用正式根既有PASS。用户确认误启动的EditMode全套测试已取消；本轮无法由可用Editor接口独立复核取消后的UI/编译，故Unity原Scene未Play。自然action0双Uj/全World仍待，Q07开放。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001 / RUNTIME_PENDING`：正式索引确认OID0=tobi.dat、OID53=ttobi.dat；先前OID53阴性和“字段消费者首差”是错误角色前置，已由本条覆盖。正确OID0普通输入tick8经hit_Fa进510、tick11自然生OID251/action51；受控212案tick2进510/tick5出生。正式336B44根双LFR PASS，640/640选定字段同；所测子体未到action0，Unity原Scene/自然双Uj/全World待。只改Tools/文档，不改DAT/生产/Scene；C053/Q07开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001/REPORT.md)。
+
+> 2026-10-04 历史OID53阴性（已由上条覆盖）：正式playable同版工具两次编译0错，两条输入各40tick均无510/512/OID251；普通案tick8 combo_fa4但无action尝试，tick9普通空中攻击请求80/末83，受控212案tick2同类。此结果只针对错误OID53，不能裁决OID0；旧原件保留。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001 / PLANNED`：受控510初态四组阴性后，仅新增Tools正式playable两例输入探针：普通action0跳跃至212后防+右+攻击，及受控212同组合，每例至多40tick；阳性再回放336B44根。DAT/生产/Scene/非战斗不改，原Editor编译未恢复；C053/Q07开放。[Task](TASKS/NTSD28-336B44-Q07-C053-TOBI-PHYSICAL-REACH-001.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001 / RUNTIME_PENDING`：正式playable同版闭包工具编译0错；受控Tobi/action510的Y=-80/-140/-200/0四组各40tick均无OID251。负Y首tick510→212，Y0停510；仅证本有限初态阴性，静态frame512 OPoint不可升级为自然出生。无阳性LFR所以未跑根回放，原Editor编译未恢复、Unity Scene未Play。只新增Tools和文档，不改DAT/生产/Scene；C053/Q07开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001 / PLANNED`：脚本前登记仅新增Tools有界三Y×40tick正式playable探针，用受控Tobi/action510实际追OID251/action51出生及帧链，阳性送336B44根LFR；不宣称物理键或自然双Uj。原Editor仍编译停滞，本项独立于Unity Play；DAT/生产/Scene不改。[Task](TASKS/NTSD28-336B44-Q07-C053-TOBI-FIRZ-REACH-001.md)。
+
+> 2026-10-04 Q07/C053自然生成候选只读定位：正式DAT的Tobi frame512唯一词法`opoint oid:251/action51`，firz静态帧链51→2→3→0；三份正式/Unity暂存DAT逐SHA同。仍无同条件物理输入/自然双命中，不能把受控action0阳性升为自然整场；原Editor仍编译中，先等已编译探针原Scene首差。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-OID251-PRODUCER-AUDIT-20261004/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001 / COMPILE_PASS`：既有C053 Editor探针已加独立受控OID251/action0请求，旧双安科/Q10入口保持；生成Editor工程首轮缺using失败、补后0错，原Editor程序集/Play仍待。逐tick目标动作/HP及两命中writer只在原Battle Scene验证后才能升级；当前Editor编译停滞，不在旧程序集Play。生产/DAT/Scene不改。[Task](TASKS/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001 / FOCUSED_TEST_PASS`：仅新增Tools诊断，正式源码有限91组×12tick中56组同tick双Uj；代表受控第三OID251/action0与自然OID875命中OID808，源双捕获及根336B44双回放同SHA，40tick×五槽1136/1136可比字段同，根tick7两次applied HP35+25、目标HP440。第三体为受控初态，非自然三角色物理键；原Editor测试已停且Scene clean/非Play，但仍持续编译中，Unity Play未验。C053/Q07开放，不改DAT/Unity生产/Scene/非战斗。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001/REPORT.md)。
+
+> 2026-10-04 Q07/C053根trace更正：旧“根不公开逐hit”被现存336B44原件纠正；正式源/根slot51→50命中计数40/40tick同，唯一tick7根事件applied/candidate0/HP25，目标后态OID808/action156/HP475。根事件无effect/Uj，源码effect2/Uj156不晋升为根直接观测；双Uj、Unity逐writer、物理键与全World待，C053/Q07开放。仅只读证据与文档更正，无脚本/DAT/Scene改动。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-ROOT-HIT-EVENT-REINTERPRET-20261004/REPORT.md)。
+
+> 2026-10-04 恢复游标纠正：总表第513行旧C043“根自然待”已由第482行源/根/原Scene限定同态与全量SelfCheck覆盖；只留全World/物理键/其它条件。Q09/P-08当前336B44自然血点离屏三像素已有同版报告，今次独立重跑是重复校验、不提升状态；近端待原Editor编译恢复后修正Attack同输入二轮。原Editor测试停、Battle Scene clean/非Play但仍is_compiling=true；不在旧程序集Play。Q10十五已归档路径无需重复搬运，Unity clip/voice待。DAT/生产/Scene/非战斗未改。[总表](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)。
+
+> 2026-10-04 Q10已归档事件内容子门：具名当前336B44样本15条逐SHA/PCM/格式核对，10正式WAV已暂存且同版，5条007/012/016/017/101旧Sound PCM与格式同正式；仅15路径磁盘内容筛选无剩余缺口，不覆盖970词法路径/新事件或Unity实播。原Editor停编，Q10 SourcePath/clip/voice/设备待；不重复搬这15文件，转原Editor恢复和新可达事件。DAT/生产/Scene/非战斗未改，Q10/Q12/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-OBSERVED-CUE-CONTENT-COVERAGE-001/REPORT.md)。
+
+> 2026-10-04 Q10小樱高血量049/j2补证：当前源码已存55tick负控制在tick21/49自然发j2/049，336B44根同LFR退出0/PASS且动作/MP/相机X165/165同值；根trace无audio。旧049 PCM不同、j2两Unity根均缺，独立Task仅新增正式两WAV/meta，逐SHA同版、GUID唯一、旧Sound/四保护SHA稳；正式暂存10份10/10同版。原Editor编译停滞、未做Unity导入/clip/voice/设备，DAT/生产/Scene/非战斗未改；Q10/Q12/总目标开放。[根证](../../artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-HIGHHP-049-J2-ROOT-001/REPORT.md)、[内容](../../artifacts/diagnostics/NTSD28-336B44-Q10-SAKURA-049-J2-FORMAL-WAV-STAGE-001/REPORT.md)。
+
+> 2026-10-04 Q10 正式021/102战斗WAV暂存：已证当前源码自然事件分别为君麻吕tick9起及多由也→鸣人tick1/23，后者原Battle Scene生产待播六事件30/30同态；正式根同LFR可比状态通过，但根trace无audio。旧Sound两条PCM与正式版不同，现只新增正式两WAV/meta到LoganRuntime，逐SHA同版、GUID唯一，旧Sound/四保护SHA稳；历史970路径索引暂存6→8。原Editor仍编译未完成，只到内容暂存，导入/clip/voice/设备待；DAT/生产/Scene/非战斗未改，Q10/Q12/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-021-102-FORMAL-WAV-STAGE-001/REPORT.md)。
+
+> 2026-10-04 Q10两条正式战斗WAV已暂存：`data/078.wav`、`c/nar/w/a7.wav`按各自已证当前源码自然事件原样新增，逐SHA同正式，旧Sound与四保护SHA稳、meta GUID唯一；970路径历史索引的正式暂存4→6且6/6同版。原Editor仍clean/非Play/无测试但编译停滞，未做导入、自然voice或设备验收，Q10/Q12/总目标开放。[078](../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-FORMAL-WAV-DEPLOY-001/REPORT.md)、[a7](../../artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001/REPORT.md)。
+
+> 2026-10-04 Q10/043定向更正：当前336B44源码鸣人方向4tick＋持续方向/跳跃80tick双跑同版、043事件0；正式根LFR exit0/PASS，七选定字段560/560同态。实际源码音频tick9为017+a7、tick32为012；a7两Unity音频根皆缺，Unity voice待。只对本输入判阴性，不覆盖107 DAT/174声明或根设备声音；原Editor停编，不改Assets。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001 / PLANNED`：当前正式043在107个DAT/174帧声明，鸣人frame219→640(kind8)→638→639→641为条件路由；针对用户持续方向＋跳跃输入准备当前源码自然事件与正式根LFR探针。只新增Tools诊断，原Editor编译停滞期间不改Assets/Play。[Task](TASKS/NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001.md)。
+
+> 2026-10-04 原Editor运行前置更正：本地Unity-MCP只读证实全套EditMode测试已停止、Battle Scene clean/非Play；编译仍停在`is_compiling=true`、完成时间为空，脚本和全资源各一次刷新均未恢复、四保护SHA稳。修正P-08尚未进原Editor程序集，Q09/P-08二轮、Q07自然键、Q10单cue导入待编译恢复；不在旧程序集上Play。[报告](../../artifacts/diagnostics/NTSD28-336B44-ORIGINAL-EDITOR-COMPILE-RECOVERY-20261004/REPORT.md)。
+
+> 2026-10-04 Q07用户后续Attack窗口当前336B44回访：当前源码三例自然55tick CSV/LFR同旧样本，正式根三回放exit0/PASS，六字段990/990同源；首253后tick34 phase0转301/MP250，次253后tick35 phase1先到254、tick36采攻击失败，254后与次253同一LFR采样流。旧Unity自然Play只作B1E13历史；受控action241第二253成功是不同起始相位，不能视为生产首差。当前原Editor自然物理键与可见提示仍待clean场景验收，Q07/R18/Q12总门开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-WINDOW-RECHECK-20261004/REPORT.md)。
+
+> 2026-10-04 Q10螺旋丸后续Jump当前336B44根证：现有55tick LFR由正式根进程exit0/report PASS、根/当前源码动作MP110/110一致；tick34自然325→326/MP250，当前源码同tick唯一`data/078.wav`事件。根trace不导出audio，Unity正式078 WAV未暂存、旧Sound PCM不同；下一单cue正式接入和原Battle Scene自然voice待，原Editor Scene clean/编译前置未证，不启动Play或改Assets。Q10/Q12总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-JUMP-ROOT-LFR-20261004/REPORT.md)。
+
+> 2026-10-04 Q10只读cue现存性回访：历史词法索引970物理路径，当前正式vfs 970、Unity正式暂存4且逐SHA同版、旧Sound重叠68；其中41条PCM与正式不同，900条两个Unity查找根均缺。鸣人frame641的`data/043.wav`是静态候选，尚未证当前根/Unity自然事件；不批量部署，Q10/Q12/总目标开放。原Editor Test Runner用户确认已取消，但本轮只读Unity CLI未连到此Editor；Battle Scene磁盘又变化，未重新建立clean前置，P-08二轮未跑。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-CUE-AVAILABILITY-REFRESH-20261004/REPORT.md)。
+> 2026-10-04 Q09/P-08现场续证：用户确认误启动全套EditMode测试已取消，工具本轮未能从Unity CLI连接原Editor，因此取消仅作用户确认。原Editor仍运行；Battle Scene 22:57:56 UTC又写为SHA `D88AD211...76CDF6`，修正探针源码仍晚于原Editor程序集。原先只读内存显示Scene dirty/Editor compiling；未拿到新clean前置，不重启/切Scene/Play，不复用首轮四SHA。P-08/Q09/Q12开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md)。
+
+> 2026-10-04 Q09/P-08原Editor现场门再更正：MCP只读显示非Play/测试未运行、`is_compiling=true`且当前Battle Scene `isDirty=true`；磁盘Scene另有后续写入。先前基于clean提出的重启许可前提失效；保留未保存内容，不切/存/重启，待用户或编辑者自行保存并确认空闲后重建Scene/四SHA前置。P-08/Q09/Q12开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md)。
+
+> 2026-10-04 Q09/P-08 首轮后Scene漂移更正：首轮Play退出即时 Battle SHA `D8C01F...AFE7F`、四SHA同前；其后Battle磁盘于22:45 UTC另写为`6592BED4...64971`，当前Git差异含HUD文字/材质/布局，写入者未证、保留。首轮证书仅限当次即时检查；修正Attack二轮需当前Scene新clean前置/四SHA，不沿用旧基线。原Editor新程序集仍未导入。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md)。
+
+> 2026-10-04 G2/Q09/P-08 336B44 playable离屏子门当前复跑：未改诊断源重链当前Core/playable，编译/运行0；同等HP LFR tick22鼬action0/HP10/base30、唯一1×3红标记、终步headers PASS，WARP标记开/关恰3红像素，两PNG与旧版逐字节同版。正式根EXE自身仅headless LFR，不等于其GPU Present；原Unity修正输入第二轮仍待。只关闭当前playable源码离屏子门，P-08/Q09/Q12/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-EQUAL-HP-WARP-RECHECK-20261004/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001 / CODE_WRITTEN`：当前根336B44自身LFR与原Battle Scene首轮局部同态22tick已跑，目标tick8 HP10/tick22站立血点1条1×3、原相机图；六字段130/132、RNG44/44。两处为探针Jump32与正式Attack16输入错配，非生产首差。探针已修且生成Editor编译0错、Ledger exit0；原Editor仍编译、程序集时间未更新，第二轮与四SHA终验/回Menu待。P-08/Q09/Q12及总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001 / FOCUSED_TEST_PASS`：当前336B44正式playable姓名牌组1～5选择WORDS1～5、复活次数字使用WORDS0；正式剧情DAT存在team5，六张图正式/Unity逐SHA同版。Unity普通关系组5原退到WORDS0，现经共用选择器最小改动映到WORDS5，旧SelfCheck预期同步更正；纯C# RED→GREEN、生成Editor编译0错、原Editor定向3/3 PASS。真实剧情组5 Game View 与根EXE GPU未验，默认stage.dat部署仍暂缓，Q01/Q09/Q12总门开放。误用结果查询另启全套EditMode作业，用户已手动取消，Editor idle/非Play、Battle Scene clean、双Scene SHA同前，残留job清理为failed/cleared；它不充当本包或全套回归结论。原Battle Scene其他写入者HUD变动保留。
+
+> 2026-10-04 C056后续文件状态更正：19:12:34 UTC Play最终快照及即时四SHA复核时Menu仍同前值，19:21:57 UTC Menu Scene另被写入，当前SHA`9EAAA0B4...C1BA`，写入者未证、保留原状。下条“四SHA稳”仅指C056 Play前后即时复核；目前Battle/两配置仍同前值。Ledger validator exit0/PASSED，1217 Records、9代码差异文件。C056生命周期子门通过、父项开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001 / VERIFIED`（限定原Scene生命周期）：原Editor单一clean Battle的c0三tick出生1/1/0、活体1/2/2同336B44 playable源；两个子体仍活时既有十一阶段关闭`Completed / RuntimeMapCleared`，World/槽/池借用/活动对象/Sprite五残留0、退出无live World。编译初轮CS0136已修，第二轮0错；Play退回idle非Play，四保护SHA稳。C056根EXE不可直接注入受控初态、自然物理键、Q07/Q12与总目标仍开。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q01-CURRENT-CONTENT-RECHECK-20261004 / READ_ONLY_CURRENT_IDENTITY_PASS`：重新读取正式根EXE与当前资源，338/338 DAT两端各自SHA同旧清单、归一后同版，1031/1031 PNG逐SHA相同，catalog/data.txt同，缺失/漂移0；system.dat缺的8张menu_back无当前playable活跃战斗调用点，menu_wait仅加载。只证当前清单与所检源码直接消费者，非根EXE全条件和画面总验收。原Editor保持单一clean Battle、idle/非Play；不改DAT/图片/Scene/生产，Q01/Q09/Q12开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-CURRENT-CONTENT-RECHECK-20261004/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001 / VERIFIED_DIAGNOSTIC_ONLY`：原Editor一次Menu→Battle Play在PlayerLoop Dynamic 1978→1979后，D设备为真且绑定同ID1，MoveAction/回调/canonical Right仍为0；完整Driver仅tick3→4、X620未动。设备→动作是合成输入首个观测断点，Editor失焦路由只是假说，玩家物理键及生产故障未证。已退Play回clean Menu，四保护SHA稳；随后按用户确认从clean Menu切到单一clean Battle，非Play/idle。F02已通过的45tick没有重跑；Q07/Q09/Q12和总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001 / VERIFIED`（仅源活体子门）：当前336B44 playable源码 C056 受控三tick 活体 OID213 的0/0/0及1/2/2与原Battle Scene保存结果逐值同态，结构出生也同；C++17重链0诊断、新CSV双跑同SHA。正式根EXE受控入口和本Scene关闭轨迹仍待；C056/Q07/Q12与总目标开放。本包未运行Editor、未改DAT/Unity生产/Scene。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001/REPORT.md)。
+
+> 2026-10-04 G1/Q07最新：Menu→Battle 两次合成 D 单tick仅证 Editor 注入未进入键盘，`Player_1/Move` 与当前键盘同ID，生产输入故障未证。原Editor回idle非Play/clean Menu、四SHA稳；Q07/Q09/Q12总目标开放。详本文末尾和[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001/REPORT.md)。
+
+> 2026-10-04 Q01 SPARK自然画面 `NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001 / VERIFIED`（仅Unity可见子门）：原Editor 40tick，第25tick已物化2条HitRecord/1条pic0 SPARK命令与真实1920×1080 PNG同帧，锚点附近有正式图块特征色；有序关闭零残留、回clean Menu、探针前后四SHA同。Menu磁盘SHA在运行后另变，写入者未证，保留。正式EXE GPU、Q01/Q09/Q12总门开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001/REPORT.md)。
+
+> 2026-10-04 Q01 SPARK自然画面 `NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001 / COMPILE_PASS`：既有C040第25tick画面探针补同tickHitRecord/SPARK命令只读采集，生成Editor 0错、Ledger PASS。原Editor Menu仍dirty，未切Scene/Play；Q01/Q09/Q12总门开放。[Task](TASKS/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001.md)。
+
+> 2026-10-03 Q01 SPARK 当前336B44原Editor受控发布子门限定通过：Battle Scene既有命中探针4tick PASS，SPARK.png正式/暂存SHA同版，HitRecord/中央命令于三发布帧各1/2/3；基线对象/槽/池/RNG等全恢复，返回唯一干净Menu/四SHA稳。夹具在画面外，Game View与根EXE GPU/其它WORD图未证，Q01/Q09/Q12及总目标仍开。未修改DAT、图片、生产或Scene。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-CURRENT-PLAY-20261003/REPORT.md)。
+
+> 2026-10-03 Q07输入探针最新：前十二tick只读trace包`VERIFIED`限定键盘D设备状态→MoveAction首个观测断点；键队列即时更新/无焦点策略两项独立对照均失败，包`ROLLED_BACK`，代码已精确撤回，原Editor回干净Menu/四SHA稳。**生产输入故障未证**；下一用既有typed Dynamic/PlayerLoop方式单tick诊断，Q07/总目标开。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001/REPORT.md)。
+
+> 2026-10-03 Q01/WORDS `NTSD28-336B44-Q01-WORDS-GAMEVIEW-REQUEST-001 / VERIFIED`（仅WORDS1当前Unity Game View）：原Editor Menu→Battle tick7 body+字形命令和1920×1080截图，蓝色77像素邻域与命令位置同，正式/暂存WORDS1 SHA同；首轮严格Q09移动门X620未动FAIL保留，不能宣称D移动。两次退出干净Menu/四SHA稳，Editor编译0错、Ledger最终PASS；只改Editor诊断。Q01/Q07/Q09/Q12总目标仍开。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-WORDS-GAMEVIEW-001/REPORT.md)。
+
+> 2026-10-03 Q09/F02 `NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001 / VERIFIED`（仅量化锚点/当前playable离屏）：alpha0.26正式插值与WARP使武器原生中心584→554；对原Battle保存命令的相对鸣人/Tayuya中心残差−0.36/−0.89输出像素。新旧三运行各5份逻辑/LFR逐字节回归、旧WARP PNG/几何不变，编译0诊断；精确Unity alpha/正式根EXE GPU/其它Q09及Q12总目标仍待。只改Tools诊断，DAT/Unity生产/Scene/非战斗不动。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001/REPORT.md)。
+
+> 2026-10-03 Q09/F02 `NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001 / IN_PROGRESS`：已在改脚本前建Task/Change/Ledger，唯一代码路径为既有F02 C++诊断。将以独立开关在正式playable tick38→39取alpha0.26插值快照、WARP图和几何，并逐字节回归原命令；不改正式EXE、DAT/图、Unity生产/Scene/非战斗。Q09/Q12及总目标开放。[Task](TASKS/NTSD28-336B44-Q09-F02-MATCHED-ALPHA-WARP-001.md)。
+
 > 2026-10-03 Q10预热只读边界：当前正式405 DAT/55,351帧中8,864帧各一条顶层sound、复数0；13个生产固定SFX字面值与预热表13/13同。旧冰冻退出 `Battle/Ice/Shatter` 未预热，正式对应事件尚未证；不能把它擅自加为正式cue。Q10/Q12总门仍开，生产/DAT/WAV/Scene不改。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-CUE-PREWARM-BOUNDARY-20261003/REPORT.md)。
 
 > 2026-10-03 Q07/D-024 `NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001 / VERIFIED`（仅普通三人链Scene子门，覆盖下方IN_PROGRESS）：原Battle Scene从干净Menu进入，三人普通action0与正式同输入跑96完整Driver tick，对336B44根三槽15字段1440/1440零首差；tick23飞段182、tick29–31鸣人平台链接/X185不动，三人视图X比例最大残差2.27e−13px。有序关闭World/槽/池借用/活动对象/Sprite全0，回原Menu clean，四SHA稳。仍未证自然非零搬运、根EXE实际GPU/其它对象/真实键；Q07/D-024、Q09/Q12及总目标开放。只扩既有Editor探针，DAT/生产/Scene/非战斗不改。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001/REPORT.md)。
@@ -309,6 +398,14 @@
 > 2026-10-01 `NTSD28-336B44-Q07-C042-NATURAL-THROW-001 / PLANNED`：已在诊断脚本前登记独立Task/Change/Ledger。正式OID75 action355抓取→358～375投掷仅静态可达；下一用完整GameSession近远位置正反，阳性才录LFR对正式根。原Scene需独立子包；C042/Q07/总目标开放。[Task](TASKS/NTSD28-336B44-Q07-C042-NATURAL-THROW-001.md)。
 
 # 2026-09-25 恢复后当前 STATE（覆盖下方候选期措辞）
+
+> 2026-10-04 `NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001 / CODE_WRITTEN`：Task/Change/Ledger先建后只新增原Battle Scene专用Editor双实体22tick诊断及meta；可记录与当前根LFR同局部初态/首差、血点中央命令与有条件原相机画面，生产/DAT/PNG/Scene/非战斗未改。生成及原Editor编译、唯一Play和四SHA仍待；下方`PLANNED`为脚本前快照。父P-08/Q09/Q12及总目标开放。[Record](CHANGE-RECORDS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001 / PLANNED`：当前正式根336B44用旧等HP LFR headless回放22声明tick成功，六字段132/132同录制源、24行根trace同旧根，CRT初态对应seed0且`nativeParityClaim=false`。按总表P-08缺口，脚本前Task/Record/Ledger已登记，仅计划新增原Battle Scene双实体22tick Editor诊断，Unity编译/Play未验；不改生产/DAT/图/Scene/非战斗。P-08/Q09/Q12总门开放。[Task](TASKS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md)。
+
+> 2026-10-04 G2/Q09/P-08 当前336B44 playable源码重建自然血点离屏单案退出0，tick8伤害/tick22标记、全域RGBA差3像素；原Unity Editor受控血量生产相机A/B命令0→1、真实红色像素与World/槽/借用数回基线。Editor已回idle/non-Play/clean Menu，四保护SHA同前。两案不同初态/背景/视口，正式根EXE GPU与同状态配对未证；P-08/Q09/Q12/总目标仍开。仅诊断输出/文档，无脚本或资源改动。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-PLAYABLE-BLEED-RECHECK-20261004/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001 / VERIFIED`（限定）：原Editor模式0组5同tick7的WORDS5命令/绑定/1920×1080真实画面字形通过，生成Editor编译0错，运行后idle/non-Play、测试停止、Menu clean且四保护SHA同前。此前误启全套EditMode已由用户取消，不算全套结果。前一处 `CODE_WRITTEN` 记录是实施时历史快照；Q09/Q12、正式根GPU与默认剧情stage仍开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001/REPORT.md)。
 
 > 2026-10-01 C042 子包 `CODE_WRITTEN`：原Editor当前336B44投掷392矩阵两profile定向RED，首差被投者计数Unity0/源8；准确共用writer `BattleCpointWriter.ApplyThrow` 额外清零一行已移除，测试源入口已切另存新版。保留 `ApplyAction` 选招清零；修后编译、聚焦、相邻及Play待验。Task/Record `NTSD28-336B44-Q07-C042-THROW-COUNTER-001`，Q07和总目标开放。
 
@@ -5786,3 +5883,62 @@ Final read-only scene query is Menu/isDirty=false, but disk SHA is now 5D79DBB7F
 > 2026-10-03 Q07/D-024 `NTSD28-336B44-Q07-D024-PLATFORM-SCENE-001 / IN_PROGRESS`：当前正式 OID56/frame182 受控完整GameSession X200/205、Y0/−5、Z400、中性输入10tick连续链接，根EXE LFR回放PASS且选定99/99同态，`nativeParityClaim=false`。已在新增 Editor-only 原 Battle Scene 十 tick 双域探针前建立 Task/Change/Ledger；Play未跑，DAT/生产/Scene/非战斗不改。自然按键与Q07总出口开放。
 > 2026-10-03 Q07/D-024 `NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-ENTRY-001 / IN_PROGRESS`：已在唯一 Tools 诊断脚本前建立 Task/Change/Ledger；下一个有限完整 tick 矩阵将区分多由也普通输入产生飞段182与受控 action239/243 的条件控制，再看 OID2 平台链接。上一个受控 frame182 99/99 结果不证明自然玩家输入。DAT/Unity生产/Scene/非战斗不改，Q07总出口开放。
 > 2026-10-03 NTSD-MENU-FONT-3500-REBIND-001 / PLANNED：用户明确要求将使用0480 SDF的所有GameObject换为3500 SDF。原Menu仅剩25旧TMP/21旧材质/1输入全局字体，已有1新TMP；新SDF仅含4字，需补齐可支持的菜单字。精确备份/Task/Change/FileOperation齐备，不改Battle或旧0480资源。
+> NTSD-MENU-FONT-3500-REBIND-001 / IN_PROGRESS：守护式Editor迁移脚本与测试字体GUID已写，生成Editor编译0错；尚未调用场景/字库保存。
+
+> 2026-10-03 Q07/F02 原Scene帧内回访 `VERIFIED_SCOPED_UNITY_INTERNAL_EVENT`：原Editor预检干净Menu后运行既有F02单例45完整tick，Unity kind10 applied七次与336B44 playable tick31–35分布同，tick39直接记录武器`1→40→41`；旧次共有样本字段5198/5198同、旧次对根2346/2346同。有序关闭五残留0、回干净Menu、四SHA稳。正式根内部40/GPU、物理键及Q07/Q09/Q12总目标仍开；未改生产/DAT/Scene/非战斗。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F02-NATURAL-SCENE-001/f02-kind10-scene-20261003-08/REPORT.md)。
+> 2026-10-03 Q01资源主表战斗调用链只读闭合：当前336B44 playable中`NativeResourceCatalog28`无其它生产遍历出口，战斗直接解析仍仅WORDS0～5/SPARK七图；另19张主表图片没有已证战斗消费者，不按表项数量批量部署。正式根EXE全条件和活跃七图Game View仍待，Q01/Q09/Q12/总目标开；DAT/PNG/生产/Scene未改。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-BATTLE-RESOURCE-CALLSITE-CLOSURE-20261003/REPORT.md)。
+> 2026-10-03 Q01/WORDS `NTSD28-336B44-Q01-WORDS-GAMEVIEW-REQUEST-001 / IN_PROGRESS`：改脚本前已登记仅新增Editor请求桥，用现有Menu→Battle物理D探针补新版336B44实际字形Game View；已存且空闲仍须由实时Scene/编译保护门复核。仅测试代码，正式EXE同视口像素、Q01/Q09/Q12仍开放。[Task](TASKS/NTSD28-336B44-Q01-WORDS-GAMEVIEW-REQUEST-001.md)。
+> NTSD-MENU-FONT-3500-REBIND-001 / RUNTIME_PENDING：原Menu场景26个旧TMP、1个输入全局字体及6个残留旧图集贴图已通过带SHA快照的Editor操作改为3500；Assets序列化对象旧GUID扫描0，目标3500 SDF实存59个源字形并引用现有思源粗体回退。Editor生成工程0错；原Menu Play环形导航/重开用例PASS，场景SHA未变。菜单视觉组5例3过2失败，失败在嵌入式TMP TryAddCharacters动态回退，迁移因果未定，见同ID Record及XML；未作设备/人工验收。
+> 2026-10-03 Q07物理D首差 `NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001 / IN_PROGRESS`：Q01原Editor两次Menu→Battle见P1 X620未动，但旧探针只记坐标，不能判定战斗输入故障。改既有Q09 Editor探针前已建Task/Change/Ledger；只补前十二观察tick的键盘、MoveAction、逻辑帧、帧状态和源/视图位置诊断，随后用原Q01请求单次复跑并保护四SHA。DAT/生产/Scene/非战斗不动，Q07与总目标开放。[Task](TASKS/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001.md)。
+
+> 2026-10-03 Q07物理D首差诊断限定完成（覆盖下方启动快照）：`NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001 / VERIFIED`只证明原Editor Menu→Battle观测tick4–7键盘D为按下、MoveAction启用却读0，回调/逻辑按钮/源X与画面X皆0变动；首个**已观测**断点在键盘设备→动作值，原因未证。生成工程0错、原Editor单次Play回干净Menu/四SHA稳。下一独立探针包验证其Editor回调中立即`InputSystem.Update()`的时点假说，再考虑生产修改；Q07总门开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-INPUT-TRACE-001/REPORT.md)。
+
+> 2026-10-03 Q07 `NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001 / IN_PROGRESS`：前轮trace首个已观测断点在合成键盘状态→MoveAction；已先建Task/Change/Ledger，准备仅移除现有Q09 Editor探针QueueKey的即时手动`InputSystem.Update()`，让事件按正常玩家输入更新消费。编译/原Editor单次物理D对照/干净退出待；不先改生产，Q07总门开放。[Task](TASKS/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001.md)。
+
+> 2026-10-03 Q07测试键注入对照结论（覆盖下方IN_PROGRESS）：`NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001 / ROLLED_BACK`。原Editor请求04仅移除探针手动更新后键盘D真/MoveAction0；请求05再临时设置无焦点输入策略，策略2/2且退出恢复0/0，但键盘D假/MoveAction0。两次WORDS截图独立PASS，Play回唯一干净Menu/四SHA稳。失败的探针更新/焦点改动均定向撤回，保留前轮只读trace；此处未证生产故障。下一仅在独立Q07诊断包用既有Dynamic更新相位/PlayerLoop注入观察单tick，不重复长跑。Q07/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-NAMEPLATE-KEY-QUEUE-001/REPORT.md)。
+> 2026-10-04 G1/Q07 `NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001 / IN_PROGRESS`：原Editor当前Menu `isDirty=false`，用户确认已保存且空闲。为定位旧D键合成输入在键盘→MoveAction之间的首差，脚本前已登记Task/Change/Ledger；下一仅加既有Editor诊断的typed Dynamic单tick独立模式，记录动作控制、回调、canonical和位移，再从原Menu唯一Play、清理和四SHA。此为测试注入路径诊断，不预认生产故障；DAT/生产/Scene/非战斗不改，Q07/总目标开放。[Task](TASKS/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001.md)。
+> 2026-10-04 G1/Q07 `NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001 / VERIFIED_DIAGNOSTIC_ONLY`：原Editor Menu→Battle两Play各单tick；P1 `/Keyboard/d#1`与当前键盘同ID，但Editor回调直接状态写/临时无焦点typed更新均D=false，动作/逻辑输入0、X620不动。两次回idle非Play/干净Menu、四SHA稳、Console0错；只证测试注入链未闭，生产位移故障未证。停止重复长跑，后续仅在Q09确需该视口门时做PlayerLoop注入或继续其它正式可达Q07首差。Q07/Q09/Q12/总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-MENU-D-DYNAMIC-ONE-TICK-001/REPORT.md)。
+> 2026-10-04 Q09/F02 alpha1同相画面见证 `NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001 / VERIFIED`（限定）：原Editor单次Battle Play直接见中央建帧alpha1与tick39真实PNG；46/46旧样本、47/47事件同，正式raw WARP相对锚点残差−0.357/−0.887输出像素。有序关闭五残留0、回原干净Menu、本次四SHA稳；Ledger PASS。正式根GPU、物理键、Q09/Q12总目标继续开。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001/REPORT.md)。
+> 2026-10-04 `NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001 / PLANNED`：原 Scene 已记录 OID213 活体1/2/2，正式源码旧探针只记录出生1/1/0及slot2；脚本前已建 Task/Change/Ledger。本包只扩现有 Tools C++ CSV，在当前 playable 完整 tick 枚举源活体，不改正式源码、Unity生产、DAT/Scene/非战斗。根 EXE 受控入口和 C056/Q07 总门仍开放。[Task](TASKS/NTSD28-336B44-Q07-C056-SOURCE-LIVE-COUNT-001.md)。
+> 2026-10-04 `NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001 / PLANNED`：旧 Menu 合成D即时更新两轮阴性不是生产故障证据。原Editor现场idle/单一clean Menu；已在Editor脚本前建Task/Change/Ledger，只给既有探针加独立PlayerLoop等待Dynamic更新的一tick入口，复用已成功的Hidan按键相位，之后最多一次Play/完整Driver tick。DAT/生产/Scene/非战斗不改，Q07/Q09/Q12仍开放。[Task](TASKS/NTSD28-336B44-Q07-MENU-D-PLAYERLOOP-ONE-TICK-001.md)。
+
+
+> 2026-10-04 NTSD28-336B44-Q09-P08-BPOINT-CONTENT-RECHECK-20261004 / READ_ONLY_CURRENT_CONTENT_DEFAULT_BRANCH_CONFIRMED：318个正式血点仅X/Y；旧版自然Play/WARP不自动晋升新版，P-08/Q09/Q12开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-BPOINT-CONTENT-RECHECK-20261004/REPORT.md)。
+> 2026-10-04 `NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001 / IN_PROGRESS`：Q07/C056 已有合体正例三 tick 源码/原 Scene 出生和活体同态，但旧 Play 域重载后无法读取十一阶段关闭状态。已在任何脚本修改前建独立 Task/Change/Ledger；仅现有 Editor 探针 opt-in 显式关闭和零残留，原 Editor 运行待。根 EXE 受控初态、自然物理键、Q07/Q12及总目标仍开放。[Task](TASKS/NTSD28-336B44-Q07-C056-SCENE-SHUTDOWN-001.md)。
+
+> 2026-10-04 `NTSD-MENU-FONT-3500-PLUS-REBIND-001 / PLANNED`：用户新建 Plus SDF，要求改 `MenuFont3500MigrationEditor` 的目标。原 Menu 已有 26 处当前 3500 TMP 字体、1 处输入字段和 1 处 Plus TMP；新 Plus 仅预载 10 字。脚本前 Task/Change/文件操作记录及 9 文件 SHA 备份已建立，限定原 Menu，不改 Battle 或旧 3500 字库。[Task](TASKS/NTSD-MENU-FONT-3500-PLUS-REBIND-001.md)。
+
+> `NTSD-MENU-FONT-3500-PLUS-REBIND-001 / COMPILE_PASS`：MenuFont3500MigrationEditor 已改为当前3500→用户Plus，菜单测试 GUID 同步；完整生成 Editor 工程0错、原 Editor 重载后 Console 0 error。原 Editor 随后进入其它任务 Battle Play，故本轮没有切到 Menu，也没有写 Scene/Plus 字图集；精确前后 SHA 未变且准备清单已留。Menu 当前3500绑定及 Play 视觉仍待后续迁移验证。[Record](CHANGE-RECORDS/NTSD-MENU-FONT-3500-PLUS-REBIND-001.md)。
+
+> 2026-10-04 NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001 / PLANNED：当前336B44根与正式SPARK身份已复核，C040普通三人首阳tick25的原Unity Battle Game View已有火花可见证据。脚本前Task/Change/Ledger已建；仅既有C++诊断新增单案可选D3D11离屏见证，旧113案保持，根EXE GPU与Q01/Q09/Q12总门开放。[Task](TASKS/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001.md)。
+
+> 2026-10-04 NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001 / VERIFIED_SCOPED_PLAYABLE_OFFSCREEN：当前336B44对应playable的C040首阳tick25 SPARK pic0有绘制命令；同帧D3D11有/无火花仅73像素差，四色来自正式图块。单案三CSV与旧矩阵同案逐字节同、LFR同SHA；旧113案未重跑。原Unity Game View已有同链局部火花，根EXE Present/跨视口逐像素及Q01/Q09/Q12仍开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001/REPORT.md)。
+
+- NTSD-BATTLE-HUD-REFRESH-001 / COMPILE_PASS: authorized HUD character-name/resource refresh; see CHANGE-RECORDS/NTSD-BATTLE-HUD-REFRESH-001.md.
+> 2026-10-04 `NTSD28-336B44-Q09-WORDS5-GAMEVIEW-001 / CODE_WRITTEN`：组5共用选图已获原Editor聚焦3/3；现有姓名牌Editor诊断已加模式0/P1组5入口、同tick中央WORDS5命令断言与独立截图路径。待编译/原Scene Game View/有序退出；不改生产、DAT/PNG、Scene或菜单。正式根GPU/默认剧情仍开放。
+
+- NTSD-BATTLE-HUD-EVENTS-001 / IN_PROGRESS: replace prior HUD polling with existing MM events; see Change Record.
+
+2026-10-03 NTSD-BATTLE-HUD-EVENTS-001: RUNTIME_PENDING. Event-driven MM HUD implemented; actual Editor focused tests 12 passed; real Play test failed in Unity TestRunner EditModeLauncher (cannot be used during play mode), not accepted. Original Menu restored; protected scene/image/font hashes unchanged. See Change Record and artifacts/diagnostics/NTSD-BATTLE-HUD-EVENTS-001/round2. Earlier NTSD-BATTLE-HUD-REFRESH-001 polling design superseded by this event implementation; historical compile evidence retained.
+
+Validation correction: Validate-ChangeLedger FAILED with one unrelated record error: NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001 declares non-governed .cs.meta code-path. No HUD record error reported. Unrelated record preserved; whole-repository delivery gate remains blocked. HUD status RUNTIME_PENDING, not VERIFIED. Full receipt ledger-final.txt.
+
+NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001 / IN_PROGRESS: user-authorized removal of BattleHudViewEditorTests.cs/meta and embedded runner only. See docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001.md. HUD runtime acceptance remains pending.
+
+NTSD-BATTLE-HUD-VIEW-TEST-REMOVAL-001 / VERIFIED (limited deletion only): obsolete view test script/meta plus embedded helpers/runner removed; exact backups verified; protected source/scenes unchanged; no remaining type/GUID references. No new compilation/Play acceptance. NTSD-BATTLE-HUD-EVENTS-001 remains RUNTIME_PENDING.
+
+NTSD-BATTLE-CONTROLS-LIFECYCLE-001 / IN_PROGRESS: two local lifecycle fixes only; see docs/ai/CHANGE-RECORDS/NTSD-BATTLE-CONTROLS-LIFECYCLE-001.md and FILE-OPERATIONS/NTSD-BATTLE-CONTROLS-LIFECYCLE-001/RECORD.md. No Editor operation.
+
+NTSD-BATTLE-CONTROLS-LIFECYCLE-001 / RUNTIME_PENDING: isolated runtime compile PASS; actual View source + stubs lifecycle harness10/10 PASS; ledger PASS. Only BattleControlsView changed. Scene buttons/external player binding still not connected; no Editor/Play operation.
+
+NTSD-BUTTON-PRESS-CONSISTENCY-001 / IN_PROGRESS: left-pointer and built-in clear-state consistency only. See Change Record and operation; no Editor changes.
+
+NTSD-BUTTON-PRESS-CONSISTENCY-001 / RUNTIME_PENDING: left-button filtering and base InstantClearState synchronization implemented; isolated actual-source harness9/9 PASS. Multi-pointer/pause/cancel policies unchanged. No scene or Editor operation. See Change Record for build/ledger receipts.
+> 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-001 / PLANNED`：原Editor全套测试已由用户取消，原MCP只读复核`tests.is_running=false`、Battle Scene clean/非Play；Editor仍`is_compiling=true`，新程序集未就绪。本包独立做正式336B44源/根有限20tick双候选：type3 OID220→type0 OID9短帧与OID230→OID14短帧，目标是返组后再次单组计时恢复的可达证据；静态DAT不算阳性。只新增Tools诊断，生产/DAT/Scene不改。[Task](TASKS/NTSD28-336B44-Q08-C009-RETURN-RESUME-001.md)。
+
+
+NTSD-BUTTON-MULTIPOINTER-001 / IN_PROGRESS — authorized NTSDButton pointer aggregation and lifecycle cleanup. Task/Record: docs/ai/TASKS/NTSD-BUTTON-MULTIPOINTER-001.md; docs/ai/CHANGE-RECORDS/NTSD-BUTTON-MULTIPOINTER-001.md. Unity runtime pending.
+
+NTSD-BUTTON-MULTIPOINTER-001 / RUNTIME_PENDING — scoped real Unity API compile 0 errors/0 warnings; actual-source/substitute-base harness 51 PASS. Only NTSDButton production edit. Editor/Play/device pending. Evidence artifacts/diagnostics/NTSD-BUTTON-MULTIPOINTER-001/REPORT.txt; Change Record docs/ai/CHANGE-RECORDS/NTSD-BUTTON-MULTIPOINTER-001.md.
+
+NTSD-BUTTON-RIPPLE-001 / IN_PROGRESS: opt-in Ripple component and independent Unity preview; original Scene ownership unconfirmed, no Scene edits. docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-001.md.

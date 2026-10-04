@@ -1,0 +1,26 @@
+{
+  "sourceSha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+  "targetSha256": "62DABF2DD6EEA06A042D806D3991625CA30822C096C3BE72B723C935ABEA4CBB",
+  "targetMatchesFormal": true,
+  "metaSha256": {
+    "Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w.meta": "9EA64C0FBB5D2CF10D62176CCBF073E6E42FB73F2B104EEC760ABD14C8C4AEE2",
+    "Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w/a7.wav.meta": "F18157DDF8949ADD3DDBBCD19E3F8644086C28382112113D1F89A0B136E730EA"
+  },
+  "metaTrailingWhitespace": {
+    "Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w.meta": [],
+    "Assets/NTSD/Content/LoganRuntime/vfs/c/nar/w/a7.wav.meta": []
+  },
+  "protectedUnchanged": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": true,
+    "Assets/NTSD/Scene/NTSD_Menu.unity": true,
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": true,
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": true,
+    "Assets/NTSD/Content/LoganRuntime/vfs/data/078.wav": true
+  },
+  "wav": {
+    "channels": 1,
+    "sampleWidthBytes": 1,
+    "sampleRate": 22050,
+    "frames": 3052
+  }
+}

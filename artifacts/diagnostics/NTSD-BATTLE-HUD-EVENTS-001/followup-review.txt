@@ -1,0 +1,71 @@
+Follow-up review 2026-10-03 22:00 UTC
+Editor PID105896 is now NTSD_Battle, whereas prior final inspection was NTSD_Menu. No Editor interaction by this follow-up. Passive desktop capture editor-current-readonly.png shows Battle Scene/HUD preview and unhighlighted Play button, no TestRunner progress dialog. Scene transition source unknown; cannot claim Editor ownership. User instructions require pausing conflicting Scene work. No refresh, save, test start or Play toggle issued.
+Play exception diagnosis: installed test-framework 1.1.33 LegacyEditModeRunTask.Execute calls EditModeLauncher.Run; OpenNewScene invokes EditorSceneManager.GetSceneManagerSetup at line94, which is invalid in Play. Our test uses supported EnterPlayMode/ExitPlayMode yields under EditMode. Our request runner persists api callback via SessionState across reload; Poll refuses existing api, Play, dirty Scene, compilation, busy runner and terminal result. Existing evidence establishes a launcher invocation during Play, but does not identify whether another request or framework job-resume caused it; no conclusive concurrent-owner evidence. Do not attribute to another task as fact or repeat unchanged launch blindly.
+Producer review: HP/HPBound/HP3 notify after existing VitalStore update; MP/MPMax setter records only actual differences. No UI calls from setters. Full initial Bind captures all five numeric fields even defaults unchanged. AppManager and BattleTestBootstrap call ready only after initialization and roster identity. Existing roster resolver calls ready; identical identity returns before vitality reads. No added per-frame roster scan/name/vital polling. Host LateUpdate checks pending flags only; dedicated worker dispatch happens before publication ack. Name/head lookup only on Binding.
+Late subscriber: OnEnable subscribes then reads latest immutable cached event once. OnDisable/OnDestroy unsubscribe. slot generation protects Capture/Release; unregister detaches; stop/reset detach all; new tracker session monotonic; host validates latest session/version to reject old events. Same-world reset retains session but advances version and detaches producer. Preparing cached clear uses negative version to avoid positive publication collision.
+MP semantics: integer defaults remain500, assignments and compound writes preserve exact input values/no clamping; same-value writes only omit redundant notification. Serialized backing fields retain FormerlySerializedAs MP/MPMax. Compile and searches found no ref/out or named-field reflection users; field-to-property is an API shape change, not binary compatibility guarantee for external consumers.
+Current acceptance: 12 focused tests passed; no successful actual Play HUD, value-change, shutdown/reentry or dedicated-host evidence. No runtime screenshot claimed from static Scene preview. Existing Q09 ledger error untouched. Minimum next action: confirm current Battle Editor belongs to this validation and is available (no other owner or unsaved Scene changes), then use a single direct Play probe/UI flow instead of repeating failing EditMode launcher.
+
+Script hash check:
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs",
+    "sha256": "2c2bbd440197cbdc6217add897efe90c2dcd3ca8e3bb31aeedd3a7903e042ff3",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleUiContracts.cs",
+    "sha256": "d368d16d5a9ea3303b75e4cc7fa23c18fbd001f01c7a64b8e119c0065cb15e18",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha256": "fcd1a1dc3cb679cd652d7f3129b5c8439e44cb7a368acd1eeededd13c79a08ff",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "44fe5fe88ece4cef63d621e8bb1afc0bfae3672d9a094eed60f10d0e974b84d8",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "sha256": "df37204f6ec973cf5920d51717aeb41c259ec18c73270f45fe1f12355bcfd9c9",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Runtime/SimulationRegistryModule.cs",
+    "sha256": "4ffaa130a14dea23faa8b43083cda2bebe13c6e56163070138cf565ac5221837",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Input/SimulationFrameInputModule.cs",
+    "sha256": "074b5d9b611fe9f590b21f6084da9e676c4f2ca8492a83aa14bdd21fea358e81",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+    "sha256": "afe95938388df429d1368e6121e901c02d32df4709d1e353d63e165660b459b9",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "sha256": "6173b2fe8af48b6070f747be6850646ef22b145029fb3f118224f78cbc6e19a9",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudViewEditorTests.cs",
+    "sha256": "40ba22e75fbff814864c99009a62844240c739d40b14c53eea607c9e38027f02",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "sha256": "ec7bf05efa265303b8fe122339daf8f2cca89f41b75c34b43c0017542e0fff40",
+    "unchangedSinceHandoff": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHudEventEditorTests.cs",
+    "sha256": "d0b3171522ac996398d39225c440e3f07c1132ce84bd509a2ca35a433c8a8972",
+    "unchangedSinceHandoff": true
+  }
+]

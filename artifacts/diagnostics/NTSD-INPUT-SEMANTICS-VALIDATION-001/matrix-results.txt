@@ -1,0 +1,64 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+created actual CharacterInputModule
+down held=Jump
+up held=None
+PASS down/up before sample ends held=None
+raw buffered events=2
+PASS raw down/up were enqueued, disappearance is after event production
+PASS UI release preserves keyboard hold
+PASS both sources released
+PASS keyboard release preserves UI hold
+created actual NTSDEntityRuntime
+tick=1 prevA=0 currentA=1 edgeA=5 risingMask=16
+PASS first down produces edge window5
+tick=2 prevA=1 currentA=1 edgeA=4 risingMask=0
+tick=3 prevA=1 currentA=1 edgeA=3 risingMask=0
+tick=4 prevA=1 currentA=1 edgeA=2 risingMask=0
+tick=5 prevA=1 currentA=1 edgeA=1 risingMask=0
+tick=6 prevA=1 currentA=1 edgeA=0 risingMask=0
+PASS holding does not refresh rising window
+tick=7 prevA=1 currentA=0 edgeA=0 risingMask=0
+PASS release does not produce rising edge
+tick=8 prevA=0 currentA=0 edgeA=0 risingMask=0
+CASE same-render-interval down=10ms up=12ms render=16.6667ms nominal; logic=0,33,66,99ms
+ t=0 tick=0 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=33 tick=1 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=66 tick=2 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=99 tick=3 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+PASS sample detection matches same-render-interval
+CASE different-render-same-logic down=10ms up=20ms render=16.6667ms nominal; logic=0,33,66,99ms
+ t=0 tick=0 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=33 tick=1 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=66 tick=2 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=99 tick=3 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+PASS sample detection matches different-render-same-logic
+CASE cross-33ms down=32ms up=34ms render=16.6667ms nominal; logic=0,33,66,99ms
+ t=0 tick=0 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=33 tick=1 prevA=0 heldA=1 pressedA=True releasedA=False edgeA=5
+ t=66 tick=2 prevA=1 heldA=0 pressedA=False releasedA=True edgeA=4
+ t=99 tick=3 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=3
+PASS sample detection matches cross-33ms
+CASE after33-before33.333 down=33.1ms up=33.2ms render=16.6667ms nominal; logic=0,33,66,99ms
+ t=0 tick=0 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=33 tick=1 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=66 tick=2 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=99 tick=3 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+PASS sample detection matches after33-before33.333
+CASE short-straddles66 down=65.9ms up=66.1ms render=16.6667ms nominal; logic=0,33,66,99ms
+ t=0 tick=0 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=33 tick=1 prevA=0 heldA=0 pressedA=False releasedA=False edgeA=0
+ t=66 tick=2 prevA=0 heldA=1 pressedA=True releasedA=False edgeA=5
+ t=99 tick=3 prevA=1 heldA=0 pressedA=False releasedA=True edgeA=4
+PASS sample detection matches short-straddles66
+PASS canonical BeforeSimTick DiscardTick removes queued down/up
+PASS actual input state collapses same-tick direct down/up to released
+PASS actual input state complete packet overrides direct down event
+D-right-J states=1,1,1,1,1,1,0,0,0,0
+D-right-J states=2,2,0,0,0,0,0,0,0,0
+D-right-J states=0,4,0,0,0,0,0,0,0,0
+PASS actual combo route D-right-J selects Naruto DAT240
+PASS D without direction/J does not select rasengan
+ACTUAL CHARACTER CREATED
+FrameType=NTSD.Animation.LF2Objects.LF2FrameInfo
+Cache=NTSD.Animation.LF2FrameCache
+MATRIX COMPLETE

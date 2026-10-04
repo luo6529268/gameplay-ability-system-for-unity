@@ -1,0 +1,23 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-PRESS-CONSISTENCY-001\build\Assembly-CSharp.dll
+created actual CharacterInputModule
+down held=Jump
+up held=None
+PASS down/up before sample ends held=None
+raw buffered events=2
+PASS raw down/up were enqueued, disappearance is after event production
+PASS UI release preserves keyboard hold
+PASS both sources released
+PASS keyboard release preserves UI hold
+created actual NTSDEntityRuntime
+tick=1 prevA=0 currentA=1 edgeA=5 risingMask=16
+PASS first down produces edge window5
+tick=2 prevA=1 currentA=1 edgeA=4 risingMask=0
+tick=3 prevA=1 currentA=1 edgeA=3 risingMask=0
+tick=4 prevA=1 currentA=1 edgeA=2 risingMask=0
+tick=5 prevA=1 currentA=1 edgeA=1 risingMask=0
+tick=6 prevA=1 currentA=1 edgeA=0 risingMask=0
+PASS holding does not refresh rising window
+tick=7 prevA=1 currentA=0 edgeA=0 risingMask=0
+PASS release does not produce rising edge
+tick=8 prevA=0 currentA=0 edgeA=0 risingMask=0
+MANAGED PROBE COMPLETE

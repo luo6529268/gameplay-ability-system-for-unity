@@ -1,0 +1,33 @@
+{
+  "declaredTicks": 55,
+  "rootTraceRows": 57,
+  "actionAndMpChecks": 110,
+  "mismatchCount": 0,
+  "mismatches": [],
+  "selectedTicks": {
+    "33": {
+      "sourceAction": 253,
+      "rootAction": 253,
+      "sourceMp": 350,
+      "rootMp": 350,
+      "sourceAudio078Count": 0
+    },
+    "34": {
+      "sourceAction": 326,
+      "rootAction": 326,
+      "sourceMp": 250,
+      "rootMp": 250,
+      "sourceAudio078Count": 1
+    },
+    "35": {
+      "sourceAction": 327,
+      "rootAction": 327,
+      "sourceMp": 250,
+      "rootMp": 250,
+      "sourceAudio078Count": 0
+    }
+  },
+  "rootTraceExportsAudioEvents": false,
+  "sourceCsvSha256": "A9033D767CD9FD51B6E833D78F17B8C987A1423124A72C2D9E8A07EC30AD437E",
+  "rootTraceSha256": "710E589D129744D7760151E77BCE564CD04B4BC5FBBC008D718F8A0291BD405C"
+}

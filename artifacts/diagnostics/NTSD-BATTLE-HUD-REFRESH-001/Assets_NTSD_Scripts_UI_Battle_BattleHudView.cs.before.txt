@@ -1,0 +1,25 @@
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace NTSD.UI.Battle
+{
+    /// <summary>
+    /// NTSD_Battle 场景常驻的角色资源 HUD 绑定面。
+    /// 对应当前场景的 HUD/HUDBg 区域，不管理角色列表，也不是 TEngine UIWindow。
+    /// </summary>
+    public sealed class BattleHudView : MonoBehaviour
+    {
+        [Header("Character")]
+        [SerializeField] private Image headImage;
+        [SerializeField] private TMP_Text characterNameText;
+
+        [Header("Resources")]
+        [SerializeField] private Image hpImage;
+        [SerializeField] private Image hpPreviewImage;
+        [SerializeField] private Image mpImage;
+
+        
+    }
+}

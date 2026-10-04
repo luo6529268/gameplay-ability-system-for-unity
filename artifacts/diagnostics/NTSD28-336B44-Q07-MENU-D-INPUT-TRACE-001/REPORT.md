@@ -1,0 +1,9 @@
+# Q07 Menu→Battle physical D input first-difference, 2026-10-03
+
+Formal authority remains the 336B44 root EXE and corresponding playable source. This is a Unity test-input diagnostic, not a change to formal battle rules.
+
+The original Editor compiled the bounded trace with zero errors and ran existing Q01 request `q01-words-20261003-03` from one clean saved Menu. Its visible-glyph probe passed at tick7 and returned to one clean Menu; Battle/Menu/GameConfig/ProjectBattleModeConfig SHA-256 values were identical before and after. [Wrapper](../NTSD28-336B44-Q01-WORDS-GAMEVIEW-001/q01-words-20261003-03.json) and [raw trace](../NTSD28-336B44-Q01-WORDS-GAMEVIEW-001/natural-nameplate-20261003-150854-339-6a9e332377b847bbb323daaf730b097b.json) preserve the original data.
+
+At observed completed ticks 4–7, `keyboard[Key.D].isPressed=true` and P1 `MoveAction.enabled=true`, but `MoveAction.ReadValue<Vector2>().x=0`, callback-backed `CurrentMoveInput.x=0`, PlayerSlot0 canonical held/pressed/released buttons=0, native KeyRight=0, source X=403.544921875 and projected X=620. The first **observed** break is between synthetic keyboard-device state and the enabled action's value. The trace did not sample every intervening native tick or prove the cause. The probe calls `InputSystem.Update()` immediately after queuing D inside `EditorApplication.update`; processing outside normal player input update is a test-harness hypothesis, not an established production defect.
+
+Only the existing Editor diagnostic script gained twelve bounded read-only trace rows. Generated Editor build exited 0 with zero errors and 296 warnings; original Editor assembly advanced and completed Play. No DAT, image, Scene, production script or nonbattle behavior changed. A separate bounded probe-correction package should remove the suspect immediate manual update and rerun the same Menu→Battle input chain before any production fix is considered. Q07, Q09 and the overall goal remain open.

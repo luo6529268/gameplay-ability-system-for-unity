@@ -1,0 +1,13 @@
+# Q01 自然命中 SPARK：原 Battle Game View 限定见证
+
+状态：`VERIFIED_SCOPED_UNITY_GAME_VIEW`。当前战斗权威仍是根 `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 及对应 playable live path。本包只验证正式内容在原 Unity Battle Scene 的一条自然 kind-0 命中火花画面；Q01、Q09、Q12 与总目标仍开放。
+
+原 Editor PID 105896 的唯一请求 `q01-spark-natural-20261004-01` 从单一、保存干净的 Menu Scene 开始。请求前 `Library/ScriptAssemblies/Assembly-CSharp-Editor.dll` 晚于本包 Editor 探针源文件；生成 `Assembly-CSharp-Editor.csproj` 编译 exit 0、0 error、296 warning。既有 C040 输入、三角色、初始站位和 40 个完整 `SimulationTickDriver` tick 均未改，正式暂存根为 `Assets/NTSD/Content/LoganRuntime`。原[运行 JSON](../NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q01-spark-natural-20261004-01.json)为 `CAPTURED / DONE`、错误空、40 样本；与此前[同链截图](../NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/c040-view-tick25-20261003-02.json)全部 40 tick 的双方共有样本字段逐值无差。旧报告没有后来增加的平台诊断字段，因此不能称两份完整 JSON 字节相等。
+
+相对第 25 tick、全局 tick 30 的暂停截图前，当前中央 PixelFramePlan 的 `SimulationTick` 与已物化 `CapturedFrame.TickIndex` 均为 30。该帧有 2 条 HitRecord、SPARK 资源有效、1 条 `HitRecord` 绘制命令：owner stable ID 102、pic 0、sort order 3、世界锚点 `(-3.407465,-7.880001,0)`、图块 99×79。正式及 Unity 暂存 `vfs/sprite/UI/SPARK.png` 原文件 SHA 同为 `15D8843E0CE87FF63F46DFF7170D30C23BAEA0F2799434B26717AADFD5EC881B`。正式 PNG 为 500×320、全部 160000 像素原始 alpha 255，其中 150378 像素为不透明纯黑；正式 D3D11 使用纯黑透明键，Unity `BuildNativeSparkPublicationAsync` 的 `ApplyNativeSparkBlackKey` 将纯黑 alpha 置零，静态颜色键路径相符。
+
+[Game View PNG](../NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q01-spark-natural-20261004-01/game-view-tick25.png) 是原 Editor Play 抓取的 1920×1080 实际画面，2,238,123 字节；独立 SHA 复算与报告中的 `5C461ADE8F80E3B8F429B6CDB711706EF9F89F778FF2E4DD6300557238040C90` 一致。保存的 `ScenesCamera` 正交尺寸 5.76、位置 `(-1.79,-4.8)` 将命令锚点约投影到画面 `(808.36,828.75)`。正式 SPARK 第 0 图块非黑色像素仅使用 4 种 RGB；对截图按每通道误差≤3寻找这些颜色，全画面 131 个匹配点中有 116 个在该锚点附近的 `x=750..869,y=775..899` 区域，局部包围盒 `x=791..831,y=809..852`。画面中角色互相遮挡，以上支持火花在真实 Game View 中可见，但不是逐像素 GPU 同态证明，也不证明所有 SPARK 年龄/图块或根 EXE 同条件 Present 像素。
+
+探针经现有十一阶段关闭返回原单一 Menu，`enteredPlay/exitedPlay=true`、`orderedShutdownComplete/worldDetached/poolQuiesced=true`，World 对象、运行槽、池借用、活动池对象和 Sprite 五项残留均为 0。探针捕获的 Battle、Menu、GameConfig、ProjectBattleModeConfig 四保护文件运行前后 SHA 各自一致，退出时 Scene clean。**本报告撰写时** Menu 磁盘 SHA 已从运行前后共同的 `75CA65FAAFD2A6339881DD0230C26BE016C04408E314434D30E275707E06A612` 变为 `F01144C94B46B400DBC1FE9061E42B983E49135CD5DD6C1B626B98C45116329F`，其文件修改时间 `2026-10-03T16:30:50Z` 晚于本轮 Play 结束；写入者和意图未由本探针证明，当前内容保持不动，不把后续磁盘变化说成探针内 SHA 稳定的一部分。MCP 后查 Editor 仍是单一 clean Menu。
+
+本包只扩了既有 Editor 诊断脚本并新增唯一请求、JSON、PNG 和审计文件；未修改正式 EXE/源码、DAT、图片、生产战斗脚本、Scene、相机或非战斗逻辑。`Tools/Validate-ChangeLedger.ps1` 通过，限定路径 `git diff --check` 通过。尚需正式根 EXE 同条件 GPU 画面、其它正式可达非对象图和更广 Q01/Q09 出口，不把此子证据提升为整个阶段完成。

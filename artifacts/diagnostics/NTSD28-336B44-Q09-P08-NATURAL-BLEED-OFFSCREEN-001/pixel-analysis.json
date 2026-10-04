@@ -1,0 +1,74 @@
+{
+  "width": 1333,
+  "height": 730,
+  "changed_pixel_count": 3,
+  "changed_bbox": [
+    461,
+    595,
+    462,
+    598
+  ],
+  "pixels": [
+    {
+      "x": 461,
+      "y": 595,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    },
+    {
+      "x": 461,
+      "y": 596,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    },
+    {
+      "x": 461,
+      "y": 597,
+      "on": [
+        255,
+        0,
+        0,
+        255
+      ],
+      "off": [
+        106,
+        118,
+        121,
+        255
+      ]
+    }
+  ],
+  "new_sha": {
+    "on": "9E602358A7E8BD781A928E1F0581207FF9AB77EB897214A028E79D4D761799B1",
+    "off": "9554BC3C2BBD05A43EF4976ED5B6B0A56D2E3A6F4AF95DFCF23AB596E43C21F5"
+  },
+  "old_sha": {
+    "on": "9E602358A7E8BD781A928E1F0581207FF9AB77EB897214A028E79D4D761799B1",
+    "off": "9554BC3C2BBD05A43EF4976ED5B6B0A56D2E3A6F4AF95DFCF23AB596E43C21F5"
+  },
+  "new_equals_old_png": {
+    "on": true,
+    "off": true
+  },
+  "analysis_note": "First RGBA ImageChops.getbbox() yielded None because unchanged alpha difference is zero; corrected to RGB bbox then compared RGBA pixels."
+}

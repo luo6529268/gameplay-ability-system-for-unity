@@ -1,0 +1,1 @@
+NOT_RUN: new HUD tests have not been imported/executed by the existing Editor during this task. Editor was running other tests; local MCP http://127.0.0.1:8080/mcp refused connection. This result closes the request so it cannot trigger a delayed run. No scene save, scene switch or Play request performed.

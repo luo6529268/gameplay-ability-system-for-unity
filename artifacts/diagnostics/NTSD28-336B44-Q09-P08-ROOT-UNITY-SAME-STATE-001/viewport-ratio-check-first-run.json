@@ -1,0 +1,59 @@
+{
+  "rootViewport": [
+    1333,
+    730
+  ],
+  "unityViewport": [
+    1920,
+    1080
+  ],
+  "rootCausalPixelCount": 3,
+  "rootCausalPixels": [
+    [
+      461,
+      595
+    ],
+    [
+      461,
+      596
+    ],
+    [
+      461,
+      597
+    ]
+  ],
+  "rootCausalHeight": 3,
+  "unityPureRedNearProjectedAnchorCount": 5,
+  "unityPureRedNearProjectedAnchor": [
+    [
+      670,
+      917
+    ],
+    [
+      670,
+      918
+    ],
+    [
+      670,
+      919
+    ],
+    [
+      670,
+      920
+    ],
+    [
+      670,
+      921
+    ]
+  ],
+  "unityObservedHeight": 5,
+  "viewportVerticalRatio": 1.4794520547945205,
+  "projectedHeightFromRoot3": 4.438356164383562,
+  "pixelRoundingInterpretation": "Unity observed 5 output pixels is consistent with projected 4.438 pixels after 1080/730 scale; no matched Unity mark-off image, so the 5 pixels are an anchor-local observation rather than a causal A/B difference.",
+  "unityMarkScreenAnchorFromBottom": [
+    669.612548828125,
+    162.6563262939453
+  ],
+  "rootOnSha256": "04FCC3DDBD971B51B318D249B8786F72F79049B144947C0182F1A8070B048424",
+  "unityOnSha256": "D67A13C64020234F9A05BB02791F309530A195A133CAC98BFD0DD8CE7283FBF7"
+}

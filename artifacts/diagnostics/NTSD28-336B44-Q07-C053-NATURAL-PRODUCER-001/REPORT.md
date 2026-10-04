@@ -1,5 +1,7 @@
 # C053 正式 OPoint 生产者的受控自然链
 
+**2026-10-04 追加更正：** 下文“根trace不公开逐hit”过窄。对本报告保存的336B44根trace逐行复核，tick7确有`events.kind=hit`：slot51→slot50、candidate0、`applied`、HP伤害25；与正式源码CSV的40tick目标命中计数40/40一致。根事件未导出effect/Uj，不能声称根直接观测`effect2/Uj156`，且此样本只有一次目标Uj，不关闭双Uj。详[独立复核](../NTSD28-336B44-Q07-C053-ROOT-HIT-EVENT-REINTERPRET-20261004/REPORT.md)。旧原件及其按当时可见字段计算的480/480结论不改。
+
 状态：`VERIFIED_SCOPED_SOURCE_ROOT_PRODUCER / C053_OPEN`（2026-10-02）。本包找到不必将 OID875/action55 直接放入 LFR 槽2/3 的正式内容入口；**没有证明玩家物理键自然选招、两次命中、Unity 原 Scene 同态或 C053 整项完成**。
 
 权威身份：根正式 `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`；诊断按当前 playable 闭包编译，读取同版 `resources/runtime`。正式 `data/data.txt` 的 OID65=`c/ank/ank.dat`、OID702=`c/jira/sag.dat`；`ank.dat` action511/512/513 OPoint 建 OID875/action50，OID875 `c/ank/a/atk.dat` action50 `next:55`，`sag.dat` action553 OPoint 建 OID808/action150。运行前静态路径不作为阳性证据。

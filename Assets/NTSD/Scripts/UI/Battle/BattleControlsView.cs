@@ -30,6 +30,7 @@ namespace NTSD.UI.Battle
         private InputActionMap actionMap;
         private int playerId = -1;
         private bool warnedMissingBinding;
+        private bool listening;
 
         public int PlayerId => playerId;
         public bool IsPlayerBound => playerId > 0 && actionMap != null;
@@ -44,19 +45,38 @@ namespace NTSD.UI.Battle
                 CreateControl(defendButton, BattleInputAction.Defend);
         }
 
+        private void OnEnable()
+        {
+            SetListening(true);
+        }
+
         private void OnDisable()
         {
+            SetListening(false);
             ReleaseAllActions();
         }
 
         private void OnDestroy()
         {
+            SetListening(false);
             ReleaseAllActions();
+        }
 
+        private void SetListening(bool value)
+        {
+            if (listening == value)
+                return;
+
+            listening = value;
             for (int index = 0; index < controls.Length; index++)
             {
                 ControlState control = controls[index];
-                if (control?.Button != null)
+                if (control?.Button == null)
+                    continue;
+
+                if (value)
+                    control.Button.PressedStateChanged += HandlePressedStateChanged;
+                else
                     control.Button.PressedStateChanged -= HandlePressedStateChanged;
             }
         }
@@ -155,10 +175,19 @@ namespace NTSD.UI.Battle
             if (control == null || control.IsPressed == pressed)
                 return;
 
-            if (pressed &&
-                (control.Button == null ||
-                 !control.Button.isActiveAndEnabled ||
-                 !control.Button.IsInteractable()))
+            if (!pressed)
+            {
+                // Release the old binding now; never carry a failed release into a later binding.
+                control.IsPressed = false;
+                if (IsPlayerBound && control.Action != null && inputModule != null)
+                    inputModule.TrySetActionPressed(playerId, control.Action, false);
+                return;
+            }
+
+            if (!isActiveAndEnabled ||
+                control.Button == null ||
+                !control.Button.isActiveAndEnabled ||
+                !control.Button.IsInteractable())
             {
                 return;
             }
@@ -180,9 +209,6 @@ namespace NTSD.UI.Battle
 
         private ControlState CreateControl(NTSDButton button, BattleInputAction action)
         {
-            if (button != null)
-                button.PressedStateChanged += HandlePressedStateChanged;
-
             return new ControlState(button, action);
         }
 

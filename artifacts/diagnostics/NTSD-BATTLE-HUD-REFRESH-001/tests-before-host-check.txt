@@ -1,0 +1,159 @@
+#if UNITY_EDITOR
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using NUnit.Framework;
+using NTSD.UI.Battle;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEditor.TestTools.TestRunner.Api;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class BattleHudViewEditorTests
+    {
+        private Scene preview;
+        private GameObject root;
+        private BattleHudView view;
+        private TextMeshProUGUI label;
+        private UnityEngine.UI.Image hp;
+        private UnityEngine.UI.Image previewHp;
+        private UnityEngine.UI.Image mp;
+
+        [SetUp]
+        public void SetUp()
+        {
+            preview = EditorSceneManager.NewPreviewScene();
+            root = new GameObject("HudTest", typeof(RectTransform));
+            SceneManager.MoveGameObjectToScene(root, preview);
+            view = root.AddComponent<BattleHudView>();
+            label = Child<TextMeshProUGUI>("Name");
+            hp = Child<UnityEngine.UI.Image>("Hp");
+            previewHp = Child<UnityEngine.UI.Image>("Recoverable");
+            mp = Child<UnityEngine.UI.Image>("Mp");
+            Bind("characterNameText", label);
+            Bind("hpImage", hp);
+            Bind("hpPreviewImage", previewHp);
+            Bind("mpImage", mp);
+            Bind("headImage", Child<UnityEngine.UI.Image>("Head"));
+        }
+
+        private T Child<T>(string name) where T : Component
+        {
+            var child = new GameObject(name, typeof(RectTransform));
+            child.transform.SetParent(root.transform, false);
+            return child.AddComponent<T>();
+        }
+
+        private void Bind(string field, Object value)
+        {
+            typeof(BattleHudView).GetField(field, BindingFlags.Instance | BindingFlags.NonPublic)
+                .SetValue(view, value);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            EditorSceneManager.ClosePreviewScene(preview);
+        }
+
+        [Test]
+        public void ApplyUpdatesNameAndIndependentVitalRatios()
+        {
+            view.Apply(new BattleHudState { DisplayName = "Naruto", Hp01 = .4f,
+                HpPreview01 = .7f, Mp01 = .2f });
+            Assert.That(label.text, Is.EqualTo("Naruto"));
+            Assert.That(hp.fillAmount, Is.EqualTo(.4f));
+            Assert.That(previewHp.fillAmount, Is.EqualTo(.7f));
+            Assert.That(mp.fillAmount, Is.EqualTo(.2f));
+        }
+
+        [Test]
+        public void EmptyAndHiddenStateClearWithoutDisablingFutureRefresh()
+        {
+            view.Apply(new BattleHudState { DisplayName = "Old" });
+            view.Apply(null);
+            Assert.That(label.text, Is.Empty);
+            Assert.That(hp.fillAmount, Is.Zero);
+            Assert.That(root.activeSelf, Is.True);
+            view.Apply(new BattleHudState { DisplayName = "New" });
+            Assert.That(label.text, Is.EqualTo("New"));
+            view.Apply(new BattleHudState { IsVisible = false, DisplayName = "Hidden" });
+            Assert.That(label.text, Is.Empty);
+        }
+
+        [Test]
+        public void RatiosClampAndNullNameDoesNotLeaveStaleText()
+        {
+            view.Apply(new BattleHudState { DisplayName = null, Hp01 = -2f,
+                HpPreview01 = 2f, Mp01 = float.NaN });
+            Assert.That(label.text, Is.Empty);
+            Assert.That(hp.fillAmount, Is.Zero);
+            Assert.That(previewHp.fillAmount, Is.EqualTo(1f));
+            Assert.That(mp.fillAmount, Is.Zero);
+        }
+
+        [Test]
+        public void MissingNameBindingIsReported()
+        {
+            Bind("characterNameText", null);
+            var missing = new List<string>();
+            view.CollectMissingBindings("HUD", missing);
+            Assert.That(missing, Is.EquivalentTo(new[] { "HUD.characterNameText" }));
+            Assert.DoesNotThrow(() => view.Apply(new BattleHudState()));
+        }
+    }
+
+    [InitializeOnLoad]
+    internal sealed class BattleHudViewRequestRunner : ICallbacks
+    {
+        private const string Folder = "artifacts/diagnostics/NTSD-BATTLE-HUD-REFRESH-001/";
+        private static TestRunnerApi api;
+        static BattleHudViewRequestRunner()
+        {
+            EditorApplication.update += Poll;
+        }
+
+        private static void Poll()
+        {
+            if (api != null || EditorApplication.isCompiling || EditorApplication.isUpdating ||
+                !File.Exists(Folder + "run-tests.request") || File.Exists(Folder + "editor-tests.txt"))
+                return;
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                File.WriteAllText(Folder + "editor-tests.txt", "BLOCKED: existing Editor is in Play Mode; no state changed.");
+                return;
+            }
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (!SceneManager.GetSceneAt(i).isDirty)
+                    continue;
+                File.WriteAllText(Folder + "editor-tests.txt", "BLOCKED: existing scene is dirty; no save or scene switch performed.");
+                return;
+            }
+            api = ScriptableObject.CreateInstance<TestRunnerApi>();
+            api.RegisterCallbacks(new BattleHudViewRequestRunner());
+            api.Execute(new ExecutionSettings(new Filter { testMode = TestMode.EditMode,
+                testNames = new[] { "NTSD.Test.Editor.BattleHudViewEditorTests" } }));
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun) { }
+        public void TestStarted(ITestAdaptor test) { }
+        public void TestFinished(ITestResultAdaptor result)
+        {
+            if (!result.Test.IsSuite && result.FailCount > 0)
+                File.AppendAllText(Folder + "editor-failures.txt", result.FullName + "\n" + result.Message + "\n" + result.StackTrace);
+        }
+        public void RunFinished(ITestResultAdaptor result)
+        {
+            File.WriteAllText(Folder + "editor-tests.txt", $"state={result.ResultState}\npassed={result.PassCount}\nfailed={result.FailCount}\nmessage={result.Message}");
+            api.UnregisterCallbacks(this);
+            Object.DestroyImmediate(api);
+            api = null;
+        }
+    }
+}
+#endif
