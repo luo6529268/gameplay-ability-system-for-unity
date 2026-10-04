@@ -1,0 +1,23 @@
+# Q07 normal-path Serial tail read-only audit — 2026-10-05
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`, paired playable `simulation_tick_driver.cpp::SimulationTickDriver28::step`. Scope is the normal C25-to-tail call order, not all battle rules or Play acceptance.
+
+## Observed call paths
+
+- Formal `SimulationTickDriver28::step` performs one ascending-slot C25 transaction after resource/frame tick begins, then expires combo entries and returns. The examined path has no second frame/physics pass after that loop.
+- Unity `NTSDBattleTickSystem.RunPresentationAndCleanupPhase` calls `LateEntityUpdate`, expires native combo entries, then calls `FrameAdvanceAll` → `SimulationWorld.SerialTickAll(tickIndex, true, true)`. `stepWaitGate` is a separate route and was not judged here.
+- In this two-`true` call, `SerialTickAll` skips `SimTransit` and `SimTU`; it calls `ExecutePostNativePhysicsSerialForWorldPass` and refreshes non-character runtime snapshots. The production `LF2SpecialAttack` post-physics override now checks the completed-physics tick and type 3, then runs `StateEntryEvent` only when its local `_lastState` differs.
+- Current `LF2SpecialAttack.DispatchCurrentStateEvent("state_entry")` has no gameplay writer: state 15 acts only on `"TU"`; states 3000/3001/3003/3005/3006 return false. The earlier state-15 raw-DVX and death-frame tail writes were removed under the separate focused Q07 corrections; their historical RED/PASS evidence is retained in `NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001` and `NTSD28-Q07-TYPE3-DEAD-SERIAL-COUNTER-001`.
+- `RefreshRuntimeSnapshotAfterFrameAdvance` still copies wrapper identity/frame/counters/resources into runtime for non-character types. This source inspection cannot prove that every copied value equals the immediately preceding C25 runtime value for all reachable content. Existing scoped type-3 full-tick matches remain valid only for their recorded inputs.
+
+## Disposition
+
+The extra phase name and call alone do **not** establish a new 336B44 battle first difference, so no production edit, DAT change, scene change, new Change Record, or broad Play sweep is justified by this audit. A future same-initial-state trace that first differs after C25 in a field copied by this snapshot would reopen the shared snapshot owner; a state-entry theory needs a reachable non-no-op writer before becoming a repair task. Current queue status remains P0/DEP/ONE = 0. This report is static/source evidence only; no new Unity compilation or runtime test was performed.
+
+## Follow-up: snapshot provenance for an already processed live entity
+
+This follow-up narrows the prior snapshot uncertainty; it does not claim a runtime parity test. `BattleLateEntityLifecycleModule.Run` processes live slots and performs a final `RefreshRuntimeSnapshot` on the normal active tail; its active `HandleFrameTickExit` branch also refreshes. `RunPresentationAndCleanupPhase` then calls only `ExpireNativeComboEntries` before `SerialTickAll`. The expiry writer changes `NativeComboHitCount1E0` alone, which the tail's `RefreshBaseRuntimeFromEntity` does not copy. Thus no intervening writer in this examined path changes the frame/transition/resource fields that the second refresh copies for an already processed live entity.
+
+The base refresh's identity, team, owner, counters and health getters largely read the same `Runtime` fields they assign. `LF2Health` is runtime-bound after initialization; `FrameTransistor.SyncRuntime` directly writes `WaitCounter` and `NextFrame`. `Frame.N` is a separate mirror, but the active C25 exit had already copied it into `Runtime.Frame`. The weapon override's `PickerStableId` is also runtime-backed; its `WeaponDropHurt` getter normalizes nonpositive values to 10, which is applied at the earlier C25 snapshot on the ordinary active route. Consequently the second refresh has no established new value for those fields on that route. Exact wrapper/runtime equivalence for entities first materialized during the final C25 pending flush, diagnostic snapshot modes, and nonstandard early-exit branches was not dynamically measured; those boundaries remain conditional rather than a reason for an immediate broad test.
+
+Source anchors: `BattleLateEntityLifecycleModule.cs:71-74, 299-355, 975-984`; `NTSDBattleTickSystem.cs:543-553, 620-624`; `BattleNativeComboExpiryModule.cs:10-30`; `SimulationWorld.cs:3286-3342`; `LF2Entity.cs:7318-7325, 7394-7435`; `LF2LivingObject.cs:128-166`; `FrameTransistor.cs:136-143`; `LF2WeaponBase.cs:46-49, 85-88, 766-771`. No code, DAT, asset or Scene file changed for this follow-up.

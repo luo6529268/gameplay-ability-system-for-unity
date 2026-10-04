@@ -50,11 +50,11 @@ MonoBehaviour:
   BattlePerspectiveNear: 0
   BattlePerspectiveFar: 0
   TeamOptions:
-  - Independent
-  - Team 1
-  - Team 2
-  - Team 3
-  - Team 4
+  - {fileID: 21300000, guid: 87f584cfd97551049923c15a677a920d, type: 3}
+  - {fileID: 21300000, guid: 0a801a75c35a889428a1b4efb364580b, type: 3}
+  - {fileID: 21300000, guid: e45e3c20e51226f4a9134f097c57e9eb, type: 3}
+  - {fileID: 21300000, guid: b86f1dc32aa91c946ae0428a081f0b91, type: 3}
+  - {fileID: 21300000, guid: bf7c93cb76be1454ba6927348e2040bb, type: 3}
   JoinIcon1: {fileID: 21300000, guid: ff4153710d4407841b05383b6249b016, type: 3}
   JoinIcon2: {fileID: 21300000, guid: 34379c25a465836419338c80151ebc54, type: 3}
   IdlePlayerText: Join?
@@ -66,7 +66,7 @@ MonoBehaviour:
   SelectedColor: {r: 0.8000001, g: 0, b: 0, a: 1}
   ConfirmedColor: {r: 1, g: 1, b: 1, a: 1}
   RandomDisplayName: Random
-  RandomIcon: {fileID: 21300000, guid: 4d48d81e81179994c8ccf7daa5a7c546, type: 3}
+  RandomIcon: {fileID: 21300000, guid: 16f520f456ab78649ae26c1bb98001a5, type: 3}
   CountdownSprites:
   - {fileID: 21300000, guid: 188dafa6c20928146b68e329d88e3320, type: 3}
   - {fileID: 21300000, guid: a26a34b702058274ba4c0329a370ae47, type: 3}

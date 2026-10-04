@@ -46,9 +46,10 @@ namespace NTSD.UI
 
         [Header("UI References")]
         public Image RoleIcon;              // 角色图标
+        public GameObject RoleTxtObj;  // 角色图标边框
         public TextMeshProUGUI PlayerNameTxt;   // 玩家名称文本
-        public TextMeshProUGUI RoleNameTxt;     // 角色名称文本
-        public TextMeshProUGUI TeamTxt;         // 队伍文本
+        public Image TeamIcon;              // 队伍图标
+
 
         public AudioClip JoinSound;      // 加入声音
         public AudioClip LeaveSound;    // 离开声音
@@ -314,25 +315,10 @@ namespace NTSD.UI
                 {
                     if (PlayerNameTxt != null)
                         PlayerNameTxt.color = idleFlashToggle ? config.IdleFlashColor1 : config.IdleFlashColor2;
-                    if (RoleIcon != null)
-                    {
-                        RoleIcon.sprite = idleFlashToggle ? config.JoinIcon1 : config.JoinIcon2;
-                        RoleIcon.SetNativeSize();
-                    }
-                }
-
-                // 选择角色状态：角色名称闪烁
-                if (RoleNameTxt != null && state == SelectRoleState.SelectingCharacter) 
-                {
-                    RoleNameTxt.color = idleFlashToggle ? config.IdleFlashColor1 : config.IdleFlashColor2;
+                    
                 }
 
                 // 选择队伍状态：队伍名称闪烁
-                if (TeamTxt != null && state == SelectRoleState.SelectingTeam) 
-                {
-                    TeamTxt.color = idleFlashToggle ? config.IdleFlashColor1 : config.IdleFlashColor2;
-                }
-
             }
         }
 
@@ -495,13 +481,6 @@ namespace NTSD.UI
         {
             if (PlayerNameTxt != null)
                 PlayerNameTxt.text = config != null ? config.IdlePlayerText : "Join?";
-
-            if (RoleNameTxt != null)
-                RoleNameTxt.text = config != null ? config.IdleFighterText : "";
-
-            if (TeamTxt != null)
-                TeamTxt.text = config != null ? config.IdleTeamText : "";
-
         }
 
         /// <summary>
@@ -516,8 +495,6 @@ namespace NTSD.UI
 
                 UpdateCharacterDisplay(config);
 
-                if (TeamTxt != null)
-                    TeamTxt.text = config != null ? config.IdleTeamText : "";
             }
 
             if (state == SelectRoleState.SelectingTeam)
@@ -533,10 +510,6 @@ namespace NTSD.UI
         {
             if (selectedCharacterId == GameConfig.RandomCharacterId)
             {
-                // 显示"随机"选项
-                if (RoleNameTxt != null)
-                    RoleNameTxt.text = config != null ? config.RandomDisplayName : "Random";
-
                 if (RoleIcon != null && config != null && config.RandomIcon != null) 
                 {
                     RoleIcon.sprite = config.RandomIcon;
@@ -560,9 +533,6 @@ namespace NTSD.UI
                 {
                     characterIcon = CharacterUIResourceManager.Instance.GetHeadSprite(selectedCharacterId);
                 }
-
-                if (RoleNameTxt != null)
-                    RoleNameTxt.text = characterName;
 
                 if (RoleIcon != null && characterIcon != null) 
                 {
@@ -602,8 +572,7 @@ namespace NTSD.UI
                     if (RoleIcon.sprite != null)
                         RoleIcon.SetNativeSize();
                 }
-                if (state != SelectRoleState.Idle && RoleNameTxt != null)
-                    RoleNameTxt.text = nextName;
+
             };
         }
 
@@ -612,11 +581,11 @@ namespace NTSD.UI
         /// </summary>
         private void UpdateTeamDisplay(GameConfig config)
         {
-            if (TeamTxt == null) return;
+            if (TeamIcon == null) return;
 
             if (config != null && config.TeamOptions != null && selectedTeamIndex < config.TeamOptions.Length)
             {
-                TeamTxt.text = config.TeamOptions[selectedTeamIndex];
+                TeamIcon.sprite = config.TeamOptions[selectedTeamIndex];
             }
         }
 
@@ -639,13 +608,11 @@ namespace NTSD.UI
                     break;
                 case SelectRoleState.SelectingTeam:
                     // 角色已确认
-                    if (RoleNameTxt != null)
-                        RoleNameTxt.color = config.ConfirmedColor;
+
                     break;
                 case SelectRoleState.Confirmed:
                     // 队伍已确认
-                    if (TeamTxt != null)
-                        TeamTxt.color = config.ConfirmedColor;
+
                     break;
             }
 

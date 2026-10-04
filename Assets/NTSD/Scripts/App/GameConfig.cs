@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace NTSD.App
@@ -121,22 +122,11 @@ namespace NTSD.App
         /// 最后一个选项通常是"独立"(Independent)，表示不属于任何队伍
         /// </summary>
         [Header("Team Options")]
-        public string[] TeamOptions = { "Team 1", "Team 2", "Team 3", "Team 4", "Independent" };
+        public Sprite[] TeamOptions = Array.Empty<Sprite>();
 
         #endregion
 
         #region 角色选择UI - 空闲状态配置
-
-        /// <summary>
-        /// 空闲状态下闪烁的第一个图标（用于"按键加入"提示）
-        /// </summary>
-        [Header("Select Role UI - Idle State")]
-        public Sprite JoinIcon1;
-
-        /// <summary>
-        /// 空闲状态下闪烁的第二个图标（与JoinIcon1交替显示）
-        /// </summary>
-        public Sprite JoinIcon2;
 
         /// <summary>
         /// 空闲状态下玩家名称显示的文本（如"Join?"）

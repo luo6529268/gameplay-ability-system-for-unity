@@ -1,0 +1,71 @@
+{
+  "schema": "ntsd28-playable-gui-acceptance/1.0",
+  "passed": false,
+  "failureCode": 38,
+  "failureStage": "manual_input",
+  "requested": {
+    "p1ObjectId": 2,
+    "p2ObjectId": 9,
+    "backgroundId": 23,
+    "p2Human": true,
+    "durationMs": 8000,
+    "resourceRoot": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "completeVfsRoot": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime"
+  },
+  "effective": {
+    "p1ObjectId": 2,
+    "p2ObjectId": 9,
+    "backgroundId": 23
+  },
+  "window": {
+    "created": true,
+    "visibleObserved": true,
+    "requestedDurationMs": 8000,
+    "elapsedMs": 8204,
+    "requestedDurationReached": true,
+    "focusLossEvents": 1,
+    "focusLossWhileRunningEvents": 1,
+    "focusLossKeysCleared": true
+  },
+  "renderer": {
+    "d3d11SwapChainInitialized": true,
+    "successfulPresentFrames": 228,
+    "snapshotCount": 228,
+    "lastSpriteCount": 2,
+    "lastBackgroundLayerCount": 1
+  },
+  "audio": {
+    "xaudio2MasteringVoiceInitialized": true,
+    "submitCalls": 14,
+    "submittedEventCount": 0,
+    "bgmStartAttempted": true,
+    "bgmActive": true,
+    "bgmVirtualPath": "bgm\\boss2.wma",
+    "diagnostics": []
+  },
+  "simulation": {
+    "ticks": 14,
+    "resetRequests": 0
+  },
+  "manualInput": {
+    "mappedKeyDownMessages": 9,
+    "mappedKeyUpMessages": 12,
+    "sampledP1KeyMask": 0,
+    "sampledP2KeyMask": 0,
+    "nonzeroInputFrames": 0,
+    "p2NonzeroInputFrames": 0,
+    "simultaneousP1P2NonzeroFrames": 0,
+    "observed": false,
+    "p2Observed": false
+  },
+  "verification": {
+    "runtimeContractPassed": true,
+    "guiTenMinuteVerified": false,
+    "independentExecutable": true,
+    "originalNtsdProcessRequired": false,
+    "nativeParityClaim": false,
+    "completeAudioAssetParityClaim": false,
+    "wallClockSource": "std::chrono::steady_clock"
+  },
+  "fatalError": ""
+}
