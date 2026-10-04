@@ -2,6 +2,8 @@
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
+| NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001 | RUNTIME_PENDING | Q07鸣人后续Attack当前336B44原Scene三窗口，既有Editor诊断后台设备事件接入 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001.md) | [报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001/REPORT.md)：新版探针首窗口原Scene通过，转换tick/相位/PP同；另两窗口待触发或Q12，未证生产首差。 |
+| NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001 | VERIFIED | Q07/C053 Tobi自然出生链原Scene 14→40tick独立Editor诊断 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001.md) | [报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001/REPORT.md)：正式源/Unity40tick八字段320/320、四SHA同、Driver World0/Pool0；仅限定子门，Q07/C053开放。 |
 | NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001 | RUNTIME_PENDING | Q10 正式078后续Jump自然事件到原Scene战斗voice，独立Editor探针 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001.md) | [报告](../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/REPORT.md)：原Scene55tick五字段275/275同，tick34正式clip生产voice阳性；跨窗口Scene哈希并发变动，真实物理键/设备PCM/后续Attack待，Q10开放。 |
 | NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001 | VERIFIED | Q07/C053 原 Battle Scene 受控辅助双命中 40 tick 五槽 World 对照；仅既有 Editor 探针独立模式 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001.md) | [报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/REPORT.md)：正式源/Unity1136/1136五槽与200/200 RNG同、四SHA稳、World解绑/Pool0；受控子门，C053/Q07开放。 |
 | NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001 | VERIFIED | Q07/C053 正确OID0 Tobi自然输入链的原Battle Scene定向探针，仅Editor测试 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001.md) | [报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001/REPORT.md)：原Editor14tick自然OID251/tick11，正式源/Unity112/112同；四SHA稳、原Scene Driver的World解绑、Pool0。仅限定子门，Q07/Q12开放。 |
@@ -1650,3 +1652,10 @@ NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001 / VERIFIED: exact HUD event test+meta del
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / IN_PROGRESS: input-key history view, completed-frame main-thread events; Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md.
 
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / RUNTIME_PENDING (original Scene/device/worker): input-sequence event UI implemented; approved ComboPanel7sprite bindings only; independent compile0errors +isolated Unity35assertions PASS, actual DRA screenshot. PP/buttons/ripple unchanged. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md; artifacts/diagnostics/NTSD-BATTLE-COMBO-INPUT-HISTORY-001/REPORT.txt.
+
+NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001 / RUNTIME_PENDING: replace display6history with realnative5history change snapshots, consumedvisualhold0.5s, always-visible background and KeyIcon array. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001.md.
+
+NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001: runtime/editor compile0errors; isolated Unity Play45 assertions PASS incl actual native resource-rejected consumption,0.5s timer/newinputpreemption,always-visible bg,widths,worker publication boundary. OriginalScene Play pending. Evidence artifacts/diagnostics/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001/result.txt. Supersedes previous six-key display source; prior evidence remains historical.
+
+
+NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / IN_PROGRESS: original saved BattleScene validation using temporary Editor probe; old loaded assembly explains reported4symptoms. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md.

@@ -1,3 +1,5 @@
+> 2026-10-04 当前执行包 `NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001 / VERIFIED_SCOPED_SCENE`（覆盖本条PLANNED快照）：原Editor干净Battle Scene完成OID0 Tobi自然输入40个生产Driver tick，当前336B44源码/Unity八字段320/320同；后26tick子体转62后消失，没有本链action0。首轮Scene dirty安全拒绝，二轮四SHA稳、非Play；独立残留Driver World0/Pool0且Scene clean/Battle SHA同。只闭此自然40tick所选字段，不扩大到受控双Uj、真实设备键或全World；Q07/C053/Q12总门开放。未改生产、DAT、Scene、非战斗。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001/REPORT.md)。
+
 > 2026-10-04 当前执行包 `NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001 / RUNTIME_PENDING / SCOPED_NATURAL_VOICE_PASS`：原Editor正式LoganRuntime原Battle Scene完成鸣人后续Jump的55生产Driver tick；336B44源码/Unity输入相位、动作、Health.PP、combo1与078事件275/275同，tick34正式clip的pooled voice与播放中AudioSource阳性。战斗/非战斗同名cue分别指正式LoganRuntime/旧Sound；最终Editor工程0错。Play结果内六SHA同/非Play，退出残留Driver World0/Pool0；独立检查时并行Battle Scene磁盘SHA改变，跨检查窗口稳定性`INCONCLUSIVE`，保留他人改动。真实物理键、设备PCM、后续Attack螺旋手里剑及Q10/Q12总门未验；生产/DAT/旧Sound/Scene未改。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/REPORT.md)。
 
 > 2026-10-04 最新恢复点：`NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001 / VERIFIED_SCOPED_SCENE`。原Editor受控辅助type3案40完整生产Driver tick的slot0/1/2/50/51活跃有效字段与当前336B44正式源1136/1136同、RNG标量200/200同；正式源/根同槽另有1136/1136证书。退出非Play/Scene clean、四SHA稳；独立残留检查Driver1/World绑定0/Pool0。只闭受控子门，不能写成OID251/action0自然玩家链；物理键、其它C053、Q07/Q12和总目标仍开。未改DAT/生产/Scene/非战斗。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/REPORT.md)。
@@ -5142,3 +5144,13 @@ NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001 / VERIFIED: exact HUD event test+meta del
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / IN_PROGRESS: input-key history view, completed-frame main-thread events; Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md.
 
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / RUNTIME_PENDING (original Scene/device/worker): input-sequence event UI implemented; approved ComboPanel7sprite bindings only; independent compile0errors +isolated Unity35assertions PASS, actual DRA screenshot. PP/buttons/ripple unchanged. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md; artifacts/diagnostics/NTSD-BATTLE-COMBO-INPUT-HISTORY-001/REPORT.txt.
+
+NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001 / RUNTIME_PENDING: replace display6history with realnative5history change snapshots, consumedvisualhold0.5s, always-visible background and KeyIcon array. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001.md.
+
+NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001: runtime/editor compile0errors; isolated Unity Play45 assertions PASS incl actual native resource-rejected consumption,0.5s timer/newinputpreemption,always-visible bg,widths,worker publication boundary. OriginalScene Play pending. Evidence artifacts/diagnostics/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001/result.txt. Supersedes previous six-key display source; prior evidence remains historical.
+
+> 2026-10-04 当前执行包 `NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001 / IN_PROGRESS`：当前正式源/根鸣人三Attack窗口990/990同；原Editor首253自然设备合成链phase0转301已过。次253在Editor失焦时L键30tick未入FrameInputSet，非生产首差。Task/Change/Ledger先登记，下一只改既有Editor探针Queue显式更新InputSystem，再编译并复验三窗口；保留所有FAIL结果。生产、DAT、Scene、非战斗不动。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001.md)。
+
+NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / IN_PROGRESS: original saved BattleScene validation using temporary Editor probe; old loaded assembly explains reported4symptoms. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md.
+
+> 2026-10-04 `NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001 / RUNTIME_PENDING / FIRST_WINDOW_SCOPED_PASS`（覆盖同ID早期IN_PROGRESS）：当前原Editor新程序集首253自然合成键phase0转301；严格初态首帧action0/1不同，防御消费后四字段132/132同。正式336B44源/根三窗口990/990；次253/254后新版Unity仍待。失焦输入未达与日志bootstrap漏监测均非生产FAIL。依新版总表停止线不继续重复长Play，仅真实可见/按键首差或Q12终验触发；退出原Scene clean/Battle SHA稳定。无生产/DAT/Scene/非战斗改动。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001/REPORT.md)。

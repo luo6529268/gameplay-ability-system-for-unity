@@ -461,7 +461,10 @@ namespace NTSD.Test.Editor
                     inputPhase = tickDriver?.World?.InputPhase,
                 });
                 if (device != null)
+                {
                     InputSystem.QueueStateEvent(device, new KeyboardState(keys));
+                    InputSystem.Update();
+                }
             }
 
             private void ObserveNatural()

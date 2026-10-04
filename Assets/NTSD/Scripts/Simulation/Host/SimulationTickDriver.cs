@@ -668,7 +668,7 @@ namespace NTSD.Simulation
                     PublishPendingSoundsAfterChecksum();
                     // Alignment contract: NTSD-BATTLE-COMBO-INPUT-HISTORY-001. Preserve every completed catch-up frame.
                     DispatchBattleHudChanges();
-                    PublishBattleComboInput(frameInput);
+                    PublishBattleComboInput();
 
                     if (debugLogPerTick)
                         Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
@@ -902,7 +902,7 @@ namespace NTSD.Simulation
             _simulationWorkerSubmittedProvider = null;
             // Alignment contract: NTSD-BATTLE-HUD-EVENTS-001. Dispatch recorded changes before worker acknowledgement.
             DispatchBattleHudChanges();
-            PublishBattleComboInput(_simulationWorkerCompletedFrameInput);
+            PublishBattleComboInput();
             _simulationWorkerPresentationAwaitingAcknowledgement =
                 publication.HasPresentationFrame;
 
@@ -1051,7 +1051,7 @@ namespace NTSD.Simulation
 
         private NTSD.UI.Battle.BattleHudChangedEvent lastBattleHudEvent;
         private bool hasBattleHudEvent;
-        private readonly BattleComboInputHistory comboInputHistory = new BattleComboInputHistory();
+        private readonly BattleComboInputPublication comboInputHistory = new BattleComboInputPublication();
 
         public bool TryGetCurrentBattleComboInput(out BattleComboInputChangedEvent value)
         {
@@ -1066,9 +1066,12 @@ namespace NTSD.Simulation
                 (!value.Binding.IsVisible || lifecycleState == BattleRuntimeLifecycleState.Running);
         }
 
-        private void PublishBattleComboInput(FrameInputSet frame)
+        private void PublishBattleComboInput()
         {
-            if (hasBattleHudEvent && comboInputHistory.Capture(lastBattleHudEvent.Values, frame))
+            if (!hasBattleHudEvent) return;
+            NativeInputHistorySnapshot snapshot = default;
+            bool changed = _world != null && _world.HudChanges.TryConsumeComboInput(out snapshot);
+            if (comboInputHistory.Capture(lastBattleHudEvent.Values, changed, snapshot, Time.unscaledTimeAsDouble))
                 MMEventManager.TriggerEvent(comboInputHistory.Current);
         }
 
@@ -1097,7 +1100,7 @@ namespace NTSD.Simulation
                     RuntimeEntityHandle.Invalid, -1, 0, 0, 0, 0, 0, 0, BattleHudChanges.All),
                 string.Empty, null);
             MMEventManager.TriggerEvent(lastBattleHudEvent);
-            PublishBattleComboInput(null);
+            PublishBattleComboInput();
         }
 
         private void DispatchBattleHudChanges(bool allowClear = false)
@@ -1120,7 +1123,7 @@ namespace NTSD.Simulation
             lastBattleHudEvent = new NTSD.UI.Battle.BattleHudChangedEvent(values, displayName, head);
             hasBattleHudEvent = true;
             MMEventManager.TriggerEvent(lastBattleHudEvent);
-            PublishBattleComboInput(null);
+            PublishBattleComboInput();
         }
 
         public SimulationWorld World => _world;

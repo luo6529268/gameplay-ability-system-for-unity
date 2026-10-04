@@ -1,0 +1,53 @@
+{
+  "schema": "ntsd28-c053-tobi-source-unity-40tick/1.0",
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "formalSourceCsvSha256": "1277C36FB7FC5A0172E7E2257FBAB552CDE350D1BB8D1B88A13F6AB2A7625AC4",
+  "unityResultSha256": "4D9CA290100422FC771B9252F66C19DD6AF8F67FE209970F39F1A0F747B9C64E",
+  "ticks": 40,
+  "fieldsPerTick": 8,
+  "compared": 320,
+  "differences": 0,
+  "fields": {
+    "submittedLegacyButtons": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "inputPhase": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "tobiAction": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "tobiY": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "childSlot": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "childAction": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "childSourceX": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    },
+    "childY": {
+      "matched": 40,
+      "total": 40,
+      "firstDifferences": []
+    }
+  },
+  "scope": "discrete input projection, input phase, Tobi action/Y, OID251 slot/action/X/Y; not all World fields or physical device input"
+}

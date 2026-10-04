@@ -1,82 +1,82 @@
 namespace NTSD.Simulation
 {
-    public readonly struct BattleComboInputChangedEvent
-    {
-        public const int Capacity = 6;
-        public readonly BattleHudValues Binding;
-        public readonly long Version;
-        public readonly int Count;
-        private readonly ulong keys;
+    public enum BattleInputHistoryKey { None = -1, Jump = 0, Down = 2, Left = 4, Attack = 5, Right = 6, Up = 8, Defend = 9 }
+    public enum BattleComboInputChangeKind { Reset, Changed, Consumed }
 
-        internal BattleComboInputChangedEvent(BattleHudValues binding, long version, int count, ulong keys)
+    internal readonly struct NativeInputHistorySnapshot
+    {
+        internal readonly int Count;
+        internal readonly ulong Keys;
+        internal readonly BattleComboInputChangeKind Kind;
+
+        private NativeInputHistorySnapshot(int count, ulong keys, BattleComboInputChangeKind kind)
         {
-            Binding = binding;
-            Version = version;
-            Count = count;
-            this.keys = keys;
+            Count = count; Keys = keys; Kind = kind;
         }
 
-        public SimulationInputButtons GetKey(int index)
+        internal static NativeInputHistorySnapshot Capture(int[] history, BattleComboInputChangeKind kind)
         {
-            return (uint)index < (uint)Count
-                ? (SimulationInputButtons)((keys >> ((Count - 1 - index) * 8)) & 255)
-                : SimulationInputButtons.None;
+            int count = 0;
+            ulong keys = 0;
+            if (kind != BattleComboInputChangeKind.Reset && history != null)
+            {
+                for (int i = 1; i < history.Length && i <= BattleComboInputChangedEvent.Capacity; i++)
+                {
+                    int key = history[i];
+                    if (key != 0 && key != 2 && key != 4 && key != 5 && key != 6 && key != 8 && key != 9)
+                        continue;
+                    keys = (keys << 8) | (byte)key;
+                    count++;
+                }
+            }
+            return new NativeInputHistorySnapshot(count, keys, kind);
         }
     }
 
-    // Main-thread presentation history of completed input frames, never a skill recognizer.
-    internal sealed class BattleComboInputHistory
+    public readonly struct BattleComboInputChangedEvent
     {
-        private static readonly SimulationInputButtons[] Order =
+        public const int Capacity = 5;
+        public readonly BattleHudValues Binding;
+        public readonly long Version;
+        public readonly int Count;
+        public readonly BattleComboInputChangeKind Kind;
+        public readonly double PublishedAt;
+        private readonly ulong keys;
+
+        internal BattleComboInputChangedEvent(BattleHudValues binding, long version,
+            NativeInputHistorySnapshot snapshot, double publishedAt)
         {
-            SimulationInputButtons.Right, SimulationInputButtons.Left,
-            SimulationInputButtons.Up, SimulationInputButtons.Down,
-            SimulationInputButtons.Attack, SimulationInputButtons.Jump, SimulationInputButtons.Defend,
-        };
-        private BattleHudValues binding;
+            Binding = binding; Version = version; Count = snapshot.Count;
+            Kind = snapshot.Kind; keys = snapshot.Keys; PublishedAt = publishedAt;
+        }
+
+        public BattleInputHistoryKey GetKey(int index)
+        {
+            return (uint)index < (uint)Count
+                ? (BattleInputHistoryKey)((keys >> ((Count - 1 - index) * 8)) & 255)
+                : BattleInputHistoryKey.None;
+        }
+    }
+
+    // Publication cache only; the native runtime owns the sequence and its lifecycle.
+    internal sealed class BattleComboInputPublication
+    {
         private bool initialized;
-        private int lastTick = int.MinValue;
-        private int count;
-        private ulong keys;
         private long version;
         internal BattleComboInputChangedEvent Current { get; private set; }
 
-        internal bool Capture(BattleHudValues next, FrameInputSet frame)
+        internal bool Capture(BattleHudValues next, bool changed,
+            NativeInputHistorySnapshot snapshot, double publishedAt)
         {
-            bool changed = !initialized || binding.Session != next.Session ||
-                binding.PlayerIndex != next.PlayerIndex || !binding.Handle.Equals(next.Handle) ||
-                binding.StableId != next.StableId || binding.ObjectId != next.ObjectId;
-            if (changed)
-            {
-                initialized = true;
-                binding = next;
-                count = 0;
-                keys = 0;
-                lastTick = int.MinValue;
-            }
-            if (next.IsVisible && frame != null && frame.TickIndex > lastTick)
-            {
-                lastTick = frame.TickIndex;
-                for (int i = 0; i < frame.Players.Count; i++)
-                {
-                    SimulationPlayerInput input = frame.Players[i];
-                    if (input.PlayerSlot != next.PlayerIndex)
-                        continue;
-                    for (int key = 0; key < Order.Length; key++)
-                    {
-                        if ((input.PressedButtons & Order[key]) == 0)
-                            continue;
-                        keys = ((keys << 8) | (byte)Order[key]) & 0xFFFFFFFFFFFFUL;
-                        if (count < BattleComboInputChangedEvent.Capacity)
-                            count++;
-                        changed = true;
-                    }
-                    break;
-                }
-            }
-            if (changed)
-                Current = new BattleComboInputChangedEvent(next, ++version, count, keys);
-            return changed;
+            BattleHudValues previous = Current.Binding;
+            bool rebound = !initialized || previous.Session != next.Session ||
+                previous.PlayerIndex != next.PlayerIndex || !previous.Handle.Equals(next.Handle) ||
+                previous.StableId != next.StableId || previous.ObjectId != next.ObjectId;
+            if (!rebound && !changed) return false;
+            initialized = true;
+            if (!next.IsVisible || !changed) snapshot = default;
+            Current = new BattleComboInputChangedEvent(next, ++version, snapshot, publishedAt);
+            return true;
         }
     }
 }

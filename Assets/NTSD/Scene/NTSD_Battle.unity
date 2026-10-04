@@ -405,6 +405,7 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 521647143}
+  - {fileID: 833747953}
   m_Father: {fileID: 1463265078}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1175,11 +1176,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 1463265078}
+  m_Father: {fileID: 278066488}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -109.79998, y: -3.5098877}
+  m_AnchoredPosition: {x: 67.5, y: -4.0099}
   m_SizeDelta: {x: 55, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &833747954
@@ -2055,7 +2056,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 278066488}
-  - {fileID: 833747953}
   m_Father: {fileID: 1947371493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -2078,14 +2078,25 @@ MonoBehaviour:
   comboBackgroundImage: {fileID: 278066489}
   comboContentImage: {fileID: 521647144}
   comboArrowImage: {fileID: 833747954}
-  rightSprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}
-  leftSprite: {fileID: 21300000, guid: 62ba66854d89f3543a2a03139fde5f5f, type: 3}
-  upSprite: {fileID: 21300000, guid: 202e34ba31d5e814796f6b880f87af61, type: 3}
-  downSprite: {fileID: 21300000, guid: 8b3128dd7d707b04fa259836969f4c40, type: 3}
-  attackSprite: {fileID: 21300000, guid: 024dc3e38c31d734784efb025c77cb5e, type: 3}
-  jumpSprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
-  defendSprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
+  keyIcons:
+  - Key: 6
+    Sprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}
+  - Key: 4
+    Sprite: {fileID: 21300000, guid: 62ba66854d89f3543a2a03139fde5f5f, type: 3}
+  - Key: 8
+    Sprite: {fileID: 21300000, guid: 202e34ba31d5e814796f6b880f87af61, type: 3}
+  - Key: 2
+    Sprite: {fileID: 21300000, guid: 8b3128dd7d707b04fa259836969f4c40, type: 3}
+  - Key: 5
+    Sprite: {fileID: 21300000, guid: 024dc3e38c31d734784efb025c77cb5e, type: 3}
+  - Key: 0
+    Sprite: {fileID: 21300000, guid: 7971571d39c1ffd4c980001dfadf0d12, type: 3}
+  - Key: 9
+    Sprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
+  defaultWidth: 406
+  horizontalPadding: 80
   iconGap: 32
+  consumedDisplaySeconds: 0.5
 --- !u!1 &1507840666
 GameObject:
   m_ObjectHideFlags: 0

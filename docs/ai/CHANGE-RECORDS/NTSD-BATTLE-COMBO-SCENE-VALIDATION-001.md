@@ -1,0 +1,14 @@
+<!-- CHANGE-RECORD
+id: NTSD-BATTLE-COMBO-SCENE-VALIDATION-001
+status: IN_PROGRESS
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/ComboSceneValidationTemporary.cs
+authority: User authorizes original scene refresh and validation
+evidence: artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/before.json
+-->
+# NTSD-BATTLE-COMBO-SCENE-VALIDATION-001
+User reports Jump displaying Defend, inactive arrows, static width and no consumption clearing. Original Library Assembly-CSharp.dll at07:40 predates08:25 fixes: binary has old BattleComboInputHistory/rightSprite, lacks keyIcons/consumedDisplaySeconds/NotifyNativeInputHistory. User confirms originalEditor stopped/saved and authorizes refresh+validation. Bridge confirms BattleScene clean,13roots; refresh requested and assembly updated08:46. Existing execute_code cannot compile due Windows command length/Roslyn unavailable; use temporary Editor-only probe with actual saved scene bindings and normal physical-device->local-provider->Driver tick->native routing->events->View. No reassigning icons/activating arrows in test, no DAT/rules rewrite. Controlled Play initial actor frame/PP/reset and pause/explicit ticks are fixture-only; release keys, restore pause and exitPlay. No scene save. Temp probe and .meta will be backed up then removed under this same operation; exact hashes recorded before removal, no permanent tests restored/added. Acceptance actual scene UI/real input/timer plus fresh Unity compile, dirty/hash unchanged. Rollback remove temporary probe only after backup. Runtime source no new changes planned until actual evidence.
+
+CODE_WRITTEN: temporary probe Begin/Run/Queue/Tick/Record/Finish loads original Scene component bindings unchanged, queues physical Keyboard events, uses existing local-provider StepOneTick, checks actual UI and native consumption, writes evidence and exits Play. Original Editor refreshed and temporary probe compiled 08:52 UTC with no CS diagnostics in Editor.log. Runtime source and Scene unchanged in this follow-up.
+
+Live evidence after refresh: get_gameobject_component(ComboPanel51196,BattleComboView) returns new fields but keyIcons=[]; disk scene contains7correct entries. Hot reload preserved old in-memory Scene instance without migrated new array binding. Actual scene reload required after safely exiting Play. Probe Begin refused Requires saved nonplaying scene before touching input/state; another user/task entered Play after confirmed clean idle. Awaiting confirmation before stopping that Play. Evidence live-empty-mapping.json and editor-state-before-reload.json. Disk Scene SHA unchanged. Native selector also confirms only HasRequestedAction routes consume; arbitrary/unrecognized button combinations are not guaranteed to clear under existing rules, and this task will not alter that rule.

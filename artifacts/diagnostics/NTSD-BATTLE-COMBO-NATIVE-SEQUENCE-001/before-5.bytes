@@ -1,0 +1,137 @@
+using MoreMountains.Tools;
+using NTSD.Simulation;
+using UnityEngine;
+
+namespace NTSD.UI.Battle
+{
+    /// <summary>Displays the selected player's recent input presses, not hit counts or skill recognition.</summary>
+    public sealed class BattleComboView : MonoBehaviour, MMEventListener<BattleComboInputChangedEvent>
+    {
+        [Header("Combo Visuals")]
+        [SerializeField] private UnityEngine.UI.Image comboBackgroundImage;
+        [SerializeField] private UnityEngine.UI.Image comboContentImage;
+        [SerializeField] private UnityEngine.UI.Image comboArrowImage;
+        [Header("Input Sprites")]
+        [SerializeField] private Sprite rightSprite;
+        [SerializeField] private Sprite leftSprite;
+        [SerializeField] private Sprite upSprite;
+        [SerializeField] private Sprite downSprite;
+        [SerializeField] private Sprite attackSprite;
+        [SerializeField] private Sprite jumpSprite;
+        [SerializeField] private Sprite defendSprite;
+        [SerializeField, Min(0f)] private float iconGap = 32f;
+
+        private readonly UnityEngine.UI.Image[] icons = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity];
+        private readonly UnityEngine.UI.Image[] arrows = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity - 1];
+        private bool initialized;
+        private bool listening;
+        private float contentY;
+        private float arrowY;
+
+        private void OnEnable()
+        {
+            InitializeVisuals();
+            if (!listening)
+            {
+                this.MMEventStartListening<BattleComboInputChangedEvent>();
+                listening = true;
+            }
+            ClearVisualState();
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver != null && driver.TryGetCurrentBattleComboInput(out var value))
+                Apply(value);
+        }
+
+        private void OnDisable()
+        {
+            StopListening();
+            ClearVisualState();
+        }
+
+        private void OnDestroy()
+        {
+            StopListening();
+            for (int i = 1; i < icons.Length; i++)
+                if (icons[i] != null) Destroy(icons[i].gameObject);
+            for (int i = 1; i < arrows.Length; i++)
+                if (arrows[i] != null) Destroy(arrows[i].gameObject);
+        }
+
+        private void StopListening()
+        {
+            if (!listening) return;
+            this.MMEventStopListening<BattleComboInputChangedEvent>();
+            listening = false;
+        }
+
+        private void InitializeVisuals()
+        {
+            if (initialized || comboContentImage == null || comboArrowImage == null)
+                return;
+            initialized = true;
+            contentY = comboContentImage.rectTransform.anchoredPosition.y;
+            arrowY = comboArrowImage.rectTransform.anchoredPosition.y;
+            icons[0] = comboContentImage;
+            arrows[0] = comboArrowImage;
+            for (int i = 1; i < icons.Length; i++)
+                icons[i] = Instantiate(comboContentImage, comboContentImage.transform.parent);
+            for (int i = 1; i < arrows.Length; i++)
+                arrows[i] = Instantiate(comboArrowImage, comboArrowImage.transform.parent);
+            foreach (var icon in icons) icon.raycastTarget = false;
+            foreach (var arrow in arrows) arrow.raycastTarget = false;
+            if (comboBackgroundImage != null) comboBackgroundImage.raycastTarget = false;
+        }
+
+        public void OnMMEvent(BattleComboInputChangedEvent value)
+        {
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver != null && driver.IsCurrentBattleComboInputEvent(value)) Apply(value);
+        }
+
+        private void Apply(BattleComboInputChangedEvent value)
+        {
+            if (!initialized) return;
+            int count = value.Binding.IsVisible ? value.Count : 0;
+            float spacing = comboContentImage.rectTransform.rect.width + iconGap;
+            float start = -(count - 1) * spacing * .5f;
+            for (int i = 0; i < icons.Length; i++)
+            {
+                Sprite sprite = i < count ? ResolveSprite(value.GetKey(i)) : null;
+                icons[i].sprite = sprite;
+                icons[i].enabled = sprite != null;
+                icons[i].rectTransform.anchoredPosition = new Vector2(start + i * spacing, contentY);
+            }
+            for (int i = 0; i < arrows.Length; i++)
+            {
+                arrows[i].enabled = i + 1 < count && icons[i].enabled && icons[i + 1].enabled;
+                arrows[i].rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * spacing, arrowY);
+            }
+            if (comboBackgroundImage != null) comboBackgroundImage.enabled = count > 0;
+        }
+
+        private Sprite ResolveSprite(SimulationInputButtons key)
+        {
+            switch (key)
+            {
+                case SimulationInputButtons.Right: return rightSprite;
+                case SimulationInputButtons.Left: return leftSprite;
+                case SimulationInputButtons.Up: return upSprite;
+                case SimulationInputButtons.Down: return downSprite;
+                // Inverse of CharacterInputModule.CaptureHeldSimulationButtons physical action mapping.
+                case SimulationInputButtons.Attack: return defendSprite;
+                case SimulationInputButtons.Jump: return attackSprite;
+                case SimulationInputButtons.Defend: return jumpSprite;
+                default: return null;
+            }
+        }
+
+        public void ClearVisualState()
+        {
+            if (comboBackgroundImage != null) comboBackgroundImage.enabled = false;
+            if (comboContentImage != null) comboContentImage.enabled = false;
+            if (comboArrowImage != null) comboArrowImage.enabled = false;
+            foreach (var icon in icons) if (icon != null) icon.enabled = false;
+            foreach (var arrow in arrows) if (arrow != null) arrow.enabled = false;
+        }
+    }
+}

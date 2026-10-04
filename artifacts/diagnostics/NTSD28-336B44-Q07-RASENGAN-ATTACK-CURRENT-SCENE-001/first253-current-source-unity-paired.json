@@ -1,0 +1,23 @@
+{
+  "status": "SCOPED_PASS",
+  "authority": "336B44 source CSV paired with current original Unity Battle Scene natural physical device probe",
+  "sourcePath": "artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-WINDOW-RECHECK-20261004/source-01/run/first253-source.csv",
+  "sourceSha256": "161E804093D32AD59713FF1CF34F7917A07ACE282E4C044D1C626AFDE275398F",
+  "unityPath": "artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001\\first253-original-editor-pass.json",
+  "unitySha256": "3DFDCD0E8E04166FE2FE6EFB5D6472288961624F47A2F21A945DAF2F79779945",
+  "unityInitialTick": 2,
+  "relativeTicksCompared": 34,
+  "fieldMappings": {
+    "phase": "inputPhase",
+    "actor_action": "action",
+    "actor_mp": "mp",
+    "combo1": "combo"
+  },
+  "valuesCompared": 136,
+  "firstDifferences": [],
+  "limitations": [
+    "synthetic InputSystem keyboard events",
+    "probe stops at action301",
+    "no formal EXE pixel comparison"
+  ]
+}

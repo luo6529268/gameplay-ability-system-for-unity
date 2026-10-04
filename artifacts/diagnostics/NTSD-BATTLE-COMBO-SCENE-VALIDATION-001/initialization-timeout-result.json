@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "error": "System.TimeoutException: Scene fixture initialization/validation timeout\r\n  at NTSD.Test.Editor.ComboSceneValidationTemporary.Advance () [0x0001c] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\ComboSceneValidationTemporary.cs:64 ",
+  "checks": 0,
+  "rows": []
+}

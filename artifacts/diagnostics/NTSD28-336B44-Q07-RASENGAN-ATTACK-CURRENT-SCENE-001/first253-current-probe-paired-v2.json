@@ -1,0 +1,28 @@
+{
+  "status": "POST_DEFEND_GATE_SCOPED_PASS_INITIAL_FRAME_NOT_IDENTICAL",
+  "unityInitialTick": 4,
+  "sourceInitialAction": 0,
+  "unityFirstObservedAction": 1,
+  "allComparedValues": 136,
+  "allFirstDifferences": [
+    {
+      "relativeTick": 1,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 1
+    }
+  ],
+  "postDefendRelativeTickRange": [
+    2,
+    34
+  ],
+  "postDefendValuesCompared": 132,
+  "postDefendFirstDifferences": [],
+  "fieldMappings": {
+    "phase": "inputPhase",
+    "actor_action": "action",
+    "actor_mp": "mp",
+    "combo1": "combo"
+  },
+  "interpretation": "Unity play began with idle action1; source case starts action0. Defend consumption and later selected state share the same values, but this is not full same-initial-state parity."
+}

@@ -408,7 +408,10 @@ namespace NTSD.Simulation.Ecs
             store.ClearInputHistoryTail(runtime);
             int[] history = EnsureInputHistory(runtime);
             if (history != null)
+            {
                 Array.Clear(history, 1, history.Length - 1);
+                runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+            }
         }
 
         internal void SetDefendLock(NTSDEntityRuntime runtime, byte value)
@@ -457,6 +460,7 @@ namespace NTSD.Simulation.Ecs
             int[] history = EnsureInputHistory(runtime);
             if (history != null)
                 Array.Clear(history, 0, history.Length);
+            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
         }
 
         private int[] EnsureInputHistory(NTSDEntityRuntime runtime)

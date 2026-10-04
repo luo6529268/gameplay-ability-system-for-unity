@@ -39,6 +39,7 @@ namespace NTSD.Simulation
         private sealed class Participant
         {
             internal NTSDEntityRuntime Runtime;
+            internal NativeInputHistorySnapshot ComboInput;
             internal RuntimeEntityHandle Handle;
             internal int StableId, ObjectId, Hp, HpBound, HpMax, Mp, MpMax;
         }
@@ -50,6 +51,7 @@ namespace NTSD.Simulation
         private long version;
         private BattleHudChanges pending;
         private bool accepting = true;
+        private bool pendingComboInput;
 
         internal BattleHudChangeTracker()
         {
@@ -70,6 +72,7 @@ namespace NTSD.Simulation
                     UnbindPlayer(i);
             entry.Runtime?.UnbindHudChanges(this, playerIndex, entry.Handle);
             entry.Runtime = runtime;
+            entry.ComboInput = default;
             entry.Handle = handle;
             entry.StableId = runtime.StableId;
             entry.ObjectId = runtime.ObjectId;
@@ -81,6 +84,7 @@ namespace NTSD.Simulation
             {
                 selected = playerIndex;
                 pending = BattleHudChanges.All;
+                pendingComboInput = true;
             }
         }
 
@@ -102,6 +106,23 @@ namespace NTSD.Simulation
             }
             if (selected == playerIndex)
                 pending |= field;
+        }
+
+        internal void CaptureComboInput(int playerIndex, RuntimeEntityHandle handle, NativeInputHistorySnapshot snapshot)
+        {
+            if (!accepting || (uint)playerIndex >= participants.Length) return;
+            Participant entry = participants[playerIndex];
+            if (entry.Runtime == null || !entry.Handle.Equals(handle)) return;
+            entry.ComboInput = snapshot;
+            if (selected == playerIndex) pendingComboInput = true;
+        }
+
+        internal bool TryConsumeComboInput(out NativeInputHistorySnapshot snapshot)
+        {
+            snapshot = selected >= 0 ? participants[selected].ComboInput : default;
+            if (!pendingComboInput) return false;
+            pendingComboInput = false;
+            return true;
         }
 
         internal void Release(RuntimeEntityHandle handle)
@@ -129,7 +150,9 @@ namespace NTSD.Simulation
                 selected = i;
                 break;
             }
+            if (selected >= 0) participants[selected].ComboInput = default;
             pending = BattleHudChanges.All;
+            pendingComboInput = true;
         }
 
         internal void Reset(bool stop = false)
@@ -142,6 +165,7 @@ namespace NTSD.Simulation
             }
             selected = -1;
             pending = BattleHudChanges.All;
+            pendingComboInput = true;
             accepting = !stop;
         }
 

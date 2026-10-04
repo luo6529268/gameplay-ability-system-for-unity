@@ -58,3 +58,7 @@ NTSD-BATTLE-HUD-EVENT-TEST-REMOVAL-001 / VERIFIED: exact HUD event test+meta del
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / IN_PROGRESS: input-key history view, completed-frame main-thread events; Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md.
 
 NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / RUNTIME_PENDING (original Scene/device/worker): input-sequence event UI implemented; approved ComboPanel7sprite bindings only; independent compile0errors +isolated Unity35assertions PASS, actual DRA screenshot. PP/buttons/ripple unchanged. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-INPUT-HISTORY-001.md; artifacts/diagnostics/NTSD-BATTLE-COMBO-INPUT-HISTORY-001/REPORT.txt.
+
+NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001 / IN_PROGRESS: replace display6history with realnative5history change snapshots, consumedvisualhold0.5s, always-visible background and KeyIcon array. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001.md.
+
+NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / IN_PROGRESS: original saved BattleScene validation using temporary Editor probe; old loaded assembly explains reported4symptoms. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md.

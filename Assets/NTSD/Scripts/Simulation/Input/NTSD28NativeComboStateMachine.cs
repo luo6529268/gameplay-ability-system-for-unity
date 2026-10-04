@@ -27,6 +27,7 @@ namespace NTSD.Simulation
                 runtime.InputHistory = new int[6];
             for (int index = 1; index < runtime.InputHistory.Length; index++)
                 runtime.InputHistory[index] = -1;
+            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
         }
 
         internal static uint ProcessSampledInput(
@@ -106,6 +107,8 @@ namespace NTSD.Simulation
             if (!HasCanonicalState(runtime))
                 return;
 
+            // Capture before clearing: the native attempt may be consumed in the same tick as its last key.
+            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Consumed);
             NTSD28InputProxyBlock input = runtime.NativeInputProxy;
             for (int index = EdgeAttack; index <= EdgeUp; index++)
                 input.EdgeWindow[index] = 0;
@@ -139,7 +142,7 @@ namespace NTSD.Simulation
             }
 
             input.EdgeWindow[EdgeIndex(key)] = 5;
-            PushHistory(runtime.InputHistory, HistoryCode(key));
+            PushHistory(runtime, HistoryCode(key));
             return mask | Bit(key);
         }
 
@@ -299,13 +302,15 @@ namespace NTSD.Simulation
             }
         }
 
-        private static void PushHistory(int[] history, int code)
+        private static void PushHistory(NTSDEntityRuntime runtime, int code)
         {
+            int[] history = runtime.InputHistory;
             history[1] = history[2];
             history[2] = history[3];
             history[3] = history[4];
             history[4] = history[5];
             history[5] = code;
+            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Changed);
         }
 
         private static int EdgeIndex(int key)

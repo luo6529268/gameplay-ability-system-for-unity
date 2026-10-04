@@ -1,0 +1,647 @@
+--- before/Assets/NTSD/Scripts/Simulation/Presentation/BattleComboInputHistory.cs
++++ after/Assets/NTSD/Scripts/Simulation/Presentation/BattleComboInputHistory.cs
+@@ -1,82 +1,82 @@
+ namespace NTSD.Simulation
+ {
++    public enum BattleInputHistoryKey { None = -1, Jump = 0, Down = 2, Left = 4, Attack = 5, Right = 6, Up = 8, Defend = 9 }
++    public enum BattleComboInputChangeKind { Reset, Changed, Consumed }
++
++    internal readonly struct NativeInputHistorySnapshot
++    {
++        internal readonly int Count;
++        internal readonly ulong Keys;
++        internal readonly BattleComboInputChangeKind Kind;
++
++        private NativeInputHistorySnapshot(int count, ulong keys, BattleComboInputChangeKind kind)
++        {
++            Count = count; Keys = keys; Kind = kind;
++        }
++
++        internal static NativeInputHistorySnapshot Capture(int[] history, BattleComboInputChangeKind kind)
++        {
++            int count = 0;
++            ulong keys = 0;
++            if (kind != BattleComboInputChangeKind.Reset && history != null)
++            {
++                for (int i = 1; i < history.Length && i <= BattleComboInputChangedEvent.Capacity; i++)
++                {
++                    int key = history[i];
++                    if (key != 0 && key != 2 && key != 4 && key != 5 && key != 6 && key != 8 && key != 9)
++                        continue;
++                    keys = (keys << 8) | (byte)key;
++                    count++;
++                }
++            }
++            return new NativeInputHistorySnapshot(count, keys, kind);
++        }
++    }
++
+     public readonly struct BattleComboInputChangedEvent
+     {
+-        public const int Capacity = 6;
++        public const int Capacity = 5;
+         public readonly BattleHudValues Binding;
+         public readonly long Version;
+         public readonly int Count;
++        public readonly BattleComboInputChangeKind Kind;
++        public readonly double PublishedAt;
+         private readonly ulong keys;
+ 
+-        internal BattleComboInputChangedEvent(BattleHudValues binding, long version, int count, ulong keys)
++        internal BattleComboInputChangedEvent(BattleHudValues binding, long version,
++            NativeInputHistorySnapshot snapshot, double publishedAt)
+         {
+-            Binding = binding;
+-            Version = version;
+-            Count = count;
+-            this.keys = keys;
++            Binding = binding; Version = version; Count = snapshot.Count;
++            Kind = snapshot.Kind; keys = snapshot.Keys; PublishedAt = publishedAt;
+         }
+ 
+-        public SimulationInputButtons GetKey(int index)
++        public BattleInputHistoryKey GetKey(int index)
+         {
+             return (uint)index < (uint)Count
+-                ? (SimulationInputButtons)((keys >> ((Count - 1 - index) * 8)) & 255)
+-                : SimulationInputButtons.None;
++                ? (BattleInputHistoryKey)((keys >> ((Count - 1 - index) * 8)) & 255)
++                : BattleInputHistoryKey.None;
+         }
+     }
+ 
+-    // Main-thread presentation history of completed input frames, never a skill recognizer.
+-    internal sealed class BattleComboInputHistory
++    // Publication cache only; the native runtime owns the sequence and its lifecycle.
++    internal sealed class BattleComboInputPublication
+     {
+-        private static readonly SimulationInputButtons[] Order =
+-        {
+-            SimulationInputButtons.Right, SimulationInputButtons.Left,
+-            SimulationInputButtons.Up, SimulationInputButtons.Down,
+-            SimulationInputButtons.Attack, SimulationInputButtons.Jump, SimulationInputButtons.Defend,
+-        };
+-        private BattleHudValues binding;
+         private bool initialized;
+-        private int lastTick = int.MinValue;
+-        private int count;
+-        private ulong keys;
+         private long version;
+         internal BattleComboInputChangedEvent Current { get; private set; }
+ 
+-        internal bool Capture(BattleHudValues next, FrameInputSet frame)
++        internal bool Capture(BattleHudValues next, bool changed,
++            NativeInputHistorySnapshot snapshot, double publishedAt)
+         {
+-            bool changed = !initialized || binding.Session != next.Session ||
+-                binding.PlayerIndex != next.PlayerIndex || !binding.Handle.Equals(next.Handle) ||
+-                binding.StableId != next.StableId || binding.ObjectId != next.ObjectId;
+-            if (changed)
+-            {
+-                initialized = true;
+-                binding = next;
+-                count = 0;
+-                keys = 0;
+-                lastTick = int.MinValue;
+-            }
+-            if (next.IsVisible && frame != null && frame.TickIndex > lastTick)
+-            {
+-                lastTick = frame.TickIndex;
+-                for (int i = 0; i < frame.Players.Count; i++)
+-                {
+-                    SimulationPlayerInput input = frame.Players[i];
+-                    if (input.PlayerSlot != next.PlayerIndex)
+-                        continue;
+-                    for (int key = 0; key < Order.Length; key++)
+-                    {
+-                        if ((input.PressedButtons & Order[key]) == 0)
+-                            continue;
+-                        keys = ((keys << 8) | (byte)Order[key]) & 0xFFFFFFFFFFFFUL;
+-                        if (count < BattleComboInputChangedEvent.Capacity)
+-                            count++;
+-                        changed = true;
+-                    }
+-                    break;
+-                }
+-            }
+-            if (changed)
+-                Current = new BattleComboInputChangedEvent(next, ++version, count, keys);
+-            return changed;
++            BattleHudValues previous = Current.Binding;
++            bool rebound = !initialized || previous.Session != next.Session ||
++                previous.PlayerIndex != next.PlayerIndex || !previous.Handle.Equals(next.Handle) ||
++                previous.StableId != next.StableId || previous.ObjectId != next.ObjectId;
++            if (!rebound && !changed) return false;
++            initialized = true;
++            if (!next.IsVisible || !changed) snapshot = default;
++            Current = new BattleComboInputChangedEvent(next, ++version, snapshot, publishedAt);
++            return true;
+         }
+     }
+ }
+--- before/Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
++++ after/Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
+@@ -27,6 +27,14 @@
+         [NonSerialized] private BattleHudChangeTracker hudChanges;
+         [NonSerialized] private int hudPlayerIndex = -1;
+         [NonSerialized] private RuntimeEntityHandle hudHandle;
++
++        internal void NotifyNativeInputHistory(BattleComboInputChangeKind kind)
++        {
++            if (hudChanges == null) return;
++            NativeInputHistorySnapshot snapshot = NativeInputHistorySnapshot.Capture(InputHistory, kind);
++            if (kind == BattleComboInputChangeKind.Consumed && snapshot.Count == 0) return;
++            hudChanges.CaptureComboInput(hudPlayerIndex, hudHandle, snapshot);
++        }
+ 
+         internal void BindHudChanges(BattleHudChangeTracker changes, int playerIndex, RuntimeEntityHandle handle)
+         {
+@@ -804,6 +812,7 @@
+             ComboDra = ComboDla = ComboDua = ComboDda = ComboDrj = ComboDlj = ComboDuj = ComboDdj = ComboDja = 0;
+             EnsureInputHistory();
+             Array.Clear(InputHistory, 0, InputHistory.Length);
++            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+             PrevUp = PrevDown = PrevLeft = PrevRight = PrevJump = PrevDefend = PrevAttack = 0;
+             ClearDirectionalInputKeys();
+             ClearActionInputKeys();
+@@ -841,6 +850,7 @@
+         {
+             EnsureInputHistory();
+             Array.Clear(InputHistory, 1, InputHistory.Length - 1);
++            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+         }
+ 
+         public void TickInputCooldowns()
+@@ -1249,6 +1259,7 @@
+             LateSpecialTargetZ = 0;
+             EnsureInputHistory();
+             Array.Clear(InputHistory, 0, InputHistory.Length);
++            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+             CdAttack = 0;
+             CdJump = 0;
+             CdDefend = 0;
+--- before/Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs
++++ after/Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs
+@@ -39,6 +39,7 @@
+         private sealed class Participant
+         {
+             internal NTSDEntityRuntime Runtime;
++            internal NativeInputHistorySnapshot ComboInput;
+             internal RuntimeEntityHandle Handle;
+             internal int StableId, ObjectId, Hp, HpBound, HpMax, Mp, MpMax;
+         }
+@@ -50,6 +51,7 @@
+         private long version;
+         private BattleHudChanges pending;
+         private bool accepting = true;
++        private bool pendingComboInput;
+ 
+         internal BattleHudChangeTracker()
+         {
+@@ -70,6 +72,7 @@
+                     UnbindPlayer(i);
+             entry.Runtime?.UnbindHudChanges(this, playerIndex, entry.Handle);
+             entry.Runtime = runtime;
++            entry.ComboInput = default;
+             entry.Handle = handle;
+             entry.StableId = runtime.StableId;
+             entry.ObjectId = runtime.ObjectId;
+@@ -81,6 +84,7 @@
+             {
+                 selected = playerIndex;
+                 pending = BattleHudChanges.All;
++                pendingComboInput = true;
+             }
+         }
+ 
+@@ -102,6 +106,23 @@
+             }
+             if (selected == playerIndex)
+                 pending |= field;
++        }
++
++        internal void CaptureComboInput(int playerIndex, RuntimeEntityHandle handle, NativeInputHistorySnapshot snapshot)
++        {
++            if (!accepting || (uint)playerIndex >= participants.Length) return;
++            Participant entry = participants[playerIndex];
++            if (entry.Runtime == null || !entry.Handle.Equals(handle)) return;
++            entry.ComboInput = snapshot;
++            if (selected == playerIndex) pendingComboInput = true;
++        }
++
++        internal bool TryConsumeComboInput(out NativeInputHistorySnapshot snapshot)
++        {
++            snapshot = selected >= 0 ? participants[selected].ComboInput : default;
++            if (!pendingComboInput) return false;
++            pendingComboInput = false;
++            return true;
+         }
+ 
+         internal void Release(RuntimeEntityHandle handle)
+@@ -129,7 +150,9 @@
+                 selected = i;
+                 break;
+             }
++            if (selected >= 0) participants[selected].ComboInput = default;
+             pending = BattleHudChanges.All;
++            pendingComboInput = true;
+         }
+ 
+         internal void Reset(bool stop = false)
+@@ -142,6 +165,7 @@
+             }
+             selected = -1;
+             pending = BattleHudChanges.All;
++            pendingComboInput = true;
+             accepting = !stop;
+         }
+ 
+--- before/Assets/NTSD/Scripts/Simulation/Input/NTSD28NativeComboStateMachine.cs
++++ after/Assets/NTSD/Scripts/Simulation/Input/NTSD28NativeComboStateMachine.cs
+@@ -27,6 +27,7 @@
+                 runtime.InputHistory = new int[6];
+             for (int index = 1; index < runtime.InputHistory.Length; index++)
+                 runtime.InputHistory[index] = -1;
++            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+         }
+ 
+         internal static uint ProcessSampledInput(
+@@ -106,6 +107,8 @@
+             if (!HasCanonicalState(runtime))
+                 return;
+ 
++            // Capture before clearing: the native attempt may be consumed in the same tick as its last key.
++            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Consumed);
+             NTSD28InputProxyBlock input = runtime.NativeInputProxy;
+             for (int index = EdgeAttack; index <= EdgeUp; index++)
+                 input.EdgeWindow[index] = 0;
+@@ -139,7 +142,7 @@
+             }
+ 
+             input.EdgeWindow[EdgeIndex(key)] = 5;
+-            PushHistory(runtime.InputHistory, HistoryCode(key));
++            PushHistory(runtime, HistoryCode(key));
+             return mask | Bit(key);
+         }
+ 
+@@ -299,13 +302,15 @@
+             }
+         }
+ 
+-        private static void PushHistory(int[] history, int code)
+-        {
++        private static void PushHistory(NTSDEntityRuntime runtime, int code)
++        {
++            int[] history = runtime.InputHistory;
+             history[1] = history[2];
+             history[2] = history[3];
+             history[3] = history[4];
+             history[4] = history[5];
+             history[5] = code;
++            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Changed);
+         }
+ 
+         private static int EdgeIndex(int key)
+--- before/Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs
++++ after/Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs
+@@ -668,7 +668,7 @@
+                     PublishPendingSoundsAfterChecksum();
+                     // Alignment contract: NTSD-BATTLE-COMBO-INPUT-HISTORY-001. Preserve every completed catch-up frame.
+                     DispatchBattleHudChanges();
+-                    PublishBattleComboInput(frameInput);
++                    PublishBattleComboInput();
+ 
+                     if (debugLogPerTick)
+                         Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
+@@ -902,7 +902,7 @@
+             _simulationWorkerSubmittedProvider = null;
+             // Alignment contract: NTSD-BATTLE-HUD-EVENTS-001. Dispatch recorded changes before worker acknowledgement.
+             DispatchBattleHudChanges();
+-            PublishBattleComboInput(_simulationWorkerCompletedFrameInput);
++            PublishBattleComboInput();
+             _simulationWorkerPresentationAwaitingAcknowledgement =
+                 publication.HasPresentationFrame;
+ 
+@@ -1051,7 +1051,7 @@
+ 
+         private NTSD.UI.Battle.BattleHudChangedEvent lastBattleHudEvent;
+         private bool hasBattleHudEvent;
+-        private readonly BattleComboInputHistory comboInputHistory = new BattleComboInputHistory();
++        private readonly BattleComboInputPublication comboInputHistory = new BattleComboInputPublication();
+ 
+         public bool TryGetCurrentBattleComboInput(out BattleComboInputChangedEvent value)
+         {
+@@ -1066,9 +1066,12 @@
+                 (!value.Binding.IsVisible || lifecycleState == BattleRuntimeLifecycleState.Running);
+         }
+ 
+-        private void PublishBattleComboInput(FrameInputSet frame)
+-        {
+-            if (hasBattleHudEvent && comboInputHistory.Capture(lastBattleHudEvent.Values, frame))
++        private void PublishBattleComboInput()
++        {
++            if (!hasBattleHudEvent) return;
++            NativeInputHistorySnapshot snapshot = default;
++            bool changed = _world != null && _world.HudChanges.TryConsumeComboInput(out snapshot);
++            if (comboInputHistory.Capture(lastBattleHudEvent.Values, changed, snapshot, Time.unscaledTimeAsDouble))
+                 MMEventManager.TriggerEvent(comboInputHistory.Current);
+         }
+ 
+@@ -1097,7 +1100,7 @@
+                     RuntimeEntityHandle.Invalid, -1, 0, 0, 0, 0, 0, 0, BattleHudChanges.All),
+                 string.Empty, null);
+             MMEventManager.TriggerEvent(lastBattleHudEvent);
+-            PublishBattleComboInput(null);
++            PublishBattleComboInput();
+         }
+ 
+         private void DispatchBattleHudChanges(bool allowClear = false)
+@@ -1120,7 +1123,7 @@
+             lastBattleHudEvent = new NTSD.UI.Battle.BattleHudChangedEvent(values, displayName, head);
+             hasBattleHudEvent = true;
+             MMEventManager.TriggerEvent(lastBattleHudEvent);
+-            PublishBattleComboInput(null);
++            PublishBattleComboInput();
+         }
+ 
+         public SimulationWorld World => _world;
+--- before/Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs
++++ after/Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs
+@@ -1,32 +1,42 @@
++using System;
++using System.Collections;
+ using MoreMountains.Tools;
+ using NTSD.Simulation;
+ using UnityEngine;
+ 
+ namespace NTSD.UI.Battle
+ {
+-    /// <summary>Displays the selected player's recent input presses, not hit counts or skill recognition.</summary>
+     public sealed class BattleComboView : MonoBehaviour, MMEventListener<BattleComboInputChangedEvent>
+     {
+-        [Header("Combo Visuals")]
++        [Serializable]
++        private struct KeyIcon
++        {
++            public BattleInputHistoryKey Key;
++            public Sprite Sprite;
++        }
++
+         [SerializeField] private UnityEngine.UI.Image comboBackgroundImage;
+         [SerializeField] private UnityEngine.UI.Image comboContentImage;
+         [SerializeField] private UnityEngine.UI.Image comboArrowImage;
+-        [Header("Input Sprites")]
+-        [SerializeField] private Sprite rightSprite;
+-        [SerializeField] private Sprite leftSprite;
+-        [SerializeField] private Sprite upSprite;
+-        [SerializeField] private Sprite downSprite;
+-        [SerializeField] private Sprite attackSprite;
+-        [SerializeField] private Sprite jumpSprite;
+-        [SerializeField] private Sprite defendSprite;
++        [SerializeField] private KeyIcon[] keyIcons = Array.Empty<KeyIcon>();
++        [SerializeField, Min(1f)] private float defaultWidth = 406f;
++        [SerializeField, Min(0f)] private float horizontalPadding = 80f;
+         [SerializeField, Min(0f)] private float iconGap = 32f;
++        [SerializeField, Min(0f)] private float consumedDisplaySeconds = .5f;
+ 
++        private static readonly BattleInputHistoryKey[] Keys =
++        {
++            BattleInputHistoryKey.Right, BattleInputHistoryKey.Left, BattleInputHistoryKey.Up,
++            BattleInputHistoryKey.Down, BattleInputHistoryKey.Attack, BattleInputHistoryKey.Jump, BattleInputHistoryKey.Defend,
++        };
++        private readonly Sprite[] sprites = new Sprite[10];
+         private readonly UnityEngine.UI.Image[] icons = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity];
+         private readonly UnityEngine.UI.Image[] arrows = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity - 1];
+         private bool initialized;
+         private bool listening;
+         private float contentY;
+         private float arrowY;
++        private Coroutine pendingClear;
+ 
+         private void OnEnable()
+         {
+@@ -38,8 +48,7 @@
+             }
+             ClearVisualState();
+             SimulationTickDriver driver = SimulationTickDriver.Instance;
+-            if (driver != null && driver.TryGetCurrentBattleComboInput(out var value))
+-                Apply(value);
++            if (driver != null && driver.TryGetCurrentBattleComboInput(out var value)) Apply(value);
+         }
+ 
+         private void OnDisable()
+@@ -51,6 +60,7 @@
+         private void OnDestroy()
+         {
+             StopListening();
++            CancelPendingClear();
+             for (int i = 1; i < icons.Length; i++)
+                 if (icons[i] != null) Destroy(icons[i].gameObject);
+             for (int i = 1; i < arrows.Length; i++)
+@@ -64,21 +74,47 @@
+             listening = false;
+         }
+ 
++        private bool BuildIconMap()
++        {
++            Array.Clear(sprites, 0, sprites.Length);
++            bool valid = true;
++            int assigned = 0;
++            foreach (KeyIcon entry in keyIcons ?? Array.Empty<KeyIcon>())
++            {
++                int key = (int)entry.Key;
++                if (Array.IndexOf(Keys, entry.Key) < 0 || (assigned & (1 << key)) != 0)
++                {
++                    Debug.LogWarning("[BattleComboView] Invalid or duplicate icon key: " + entry.Key, this);
++                    valid = false;
++                    continue;
++                }
++                assigned |= 1 << key;
++                sprites[key] = entry.Sprite;
++            }
++            foreach (BattleInputHistoryKey key in Keys)
++            {
++                if (sprites[(int)key] != null) continue;
++                Debug.LogWarning("[BattleComboView] Missing icon: " + key, this);
++                valid = false;
++            }
++            return valid;
++        }
++
+         private void InitializeVisuals()
+         {
+-            if (initialized || comboContentImage == null || comboArrowImage == null)
+-                return;
++            if (initialized || comboContentImage == null || comboArrowImage == null) return;
+             initialized = true;
++            BuildIconMap();
++            Transform parent = comboContentImage.transform.parent;
++            comboArrowImage.transform.SetParent(parent, true);
+             contentY = comboContentImage.rectTransform.anchoredPosition.y;
+             arrowY = comboArrowImage.rectTransform.anchoredPosition.y;
+             icons[0] = comboContentImage;
+             arrows[0] = comboArrowImage;
+-            for (int i = 1; i < icons.Length; i++)
+-                icons[i] = Instantiate(comboContentImage, comboContentImage.transform.parent);
+-            for (int i = 1; i < arrows.Length; i++)
+-                arrows[i] = Instantiate(comboArrowImage, comboArrowImage.transform.parent);
+-            foreach (var icon in icons) icon.raycastTarget = false;
+-            foreach (var arrow in arrows) arrow.raycastTarget = false;
++            for (int i = 1; i < icons.Length; i++) icons[i] = Instantiate(comboContentImage, parent);
++            for (int i = 1; i < arrows.Length; i++) arrows[i] = Instantiate(comboArrowImage, parent);
++            foreach (var icon in icons) { icon.raycastTarget = false; icon.enabled = true; }
++            foreach (var arrow in arrows) { arrow.raycastTarget = false; arrow.enabled = true; }
+             if (comboBackgroundImage != null) comboBackgroundImage.raycastTarget = false;
+         }
+ 
+@@ -90,48 +126,67 @@
+ 
+         private void Apply(BattleComboInputChangedEvent value)
+         {
+-            if (!initialized) return;
++            CancelPendingClear();
++            if (!initialized) { ClearVisualState(); return; }
+             int count = value.Binding.IsVisible ? value.Count : 0;
+-            float spacing = comboContentImage.rectTransform.rect.width + iconGap;
+-            float start = -(count - 1) * spacing * .5f;
++            double remaining = consumedDisplaySeconds - (Time.unscaledTimeAsDouble - value.PublishedAt);
++            if (value.Kind == BattleComboInputChangeKind.Consumed && remaining <= 0) count = 0;
++            Render(value, count);
++            if (count > 0 && value.Kind == BattleComboInputChangeKind.Consumed)
++                pendingClear = StartCoroutine(ClearAfter((float)remaining));
++        }
++
++        private IEnumerator ClearAfter(float seconds)
++        {
++            yield return new WaitForSecondsRealtime(seconds);
++            pendingClear = null;
++            ClearVisualState();
++        }
++
++        private void CancelPendingClear()
++        {
++            if (pendingClear == null) return;
++            StopCoroutine(pendingClear);
++            pendingClear = null;
++        }
++
++        private void Render(BattleComboInputChangedEvent value, int count)
++        {
++            float iconWidth = comboContentImage.rectTransform.rect.width;
++            float step = iconWidth + comboArrowImage.rectTransform.rect.width + iconGap;
++            float rowWidth = count > 0 ? iconWidth + (count - 1) * step : 0f;
++            float start = -(rowWidth - iconWidth) * .5f;
+             for (int i = 0; i < icons.Length; i++)
+             {
+-                Sprite sprite = i < count ? ResolveSprite(value.GetKey(i)) : null;
++                int key = i < count ? (int)value.GetKey(i) : -1;
++                Sprite sprite = key >= 0 && key < sprites.Length ? sprites[key] : null;
+                 icons[i].sprite = sprite;
+-                icons[i].enabled = sprite != null;
+-                icons[i].rectTransform.anchoredPosition = new Vector2(start + i * spacing, contentY);
++                icons[i].gameObject.SetActive(sprite != null);
++                icons[i].rectTransform.anchoredPosition = new Vector2(start + i * step, contentY);
+             }
+             for (int i = 0; i < arrows.Length; i++)
+             {
+-                arrows[i].enabled = i + 1 < count && icons[i].enabled && icons[i + 1].enabled;
+-                arrows[i].rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * spacing, arrowY);
++                arrows[i].gameObject.SetActive(i + 1 < count && icons[i].gameObject.activeSelf && icons[i + 1].gameObject.activeSelf);
++                arrows[i].rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * step, arrowY);
+             }
+-            if (comboBackgroundImage != null) comboBackgroundImage.enabled = count > 0;
++            SetBackgroundWidth(count > 0 ? Mathf.Max(defaultWidth, rowWidth + 2f * horizontalPadding) : defaultWidth);
+         }
+ 
+-        private Sprite ResolveSprite(SimulationInputButtons key)
++        private void SetBackgroundWidth(float width)
+         {
+-            switch (key)
+-            {
+-                case SimulationInputButtons.Right: return rightSprite;
+-                case SimulationInputButtons.Left: return leftSprite;
+-                case SimulationInputButtons.Up: return upSprite;
+-                case SimulationInputButtons.Down: return downSprite;
+-                // Inverse of CharacterInputModule.CaptureHeldSimulationButtons physical action mapping.
+-                case SimulationInputButtons.Attack: return defendSprite;
+-                case SimulationInputButtons.Jump: return attackSprite;
+-                case SimulationInputButtons.Defend: return jumpSprite;
+-                default: return null;
+-            }
++            if (comboBackgroundImage == null) return;
++            comboBackgroundImage.enabled = true;
++            comboBackgroundImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+         }
+ 
+         public void ClearVisualState()
+         {
+-            if (comboBackgroundImage != null) comboBackgroundImage.enabled = false;
+-            if (comboContentImage != null) comboContentImage.enabled = false;
+-            if (comboArrowImage != null) comboArrowImage.enabled = false;
+-            foreach (var icon in icons) if (icon != null) icon.enabled = false;
+-            foreach (var arrow in arrows) if (arrow != null) arrow.enabled = false;
++            CancelPendingClear();
++            if (comboContentImage != null) comboContentImage.gameObject.SetActive(false);
++            if (comboArrowImage != null) comboArrowImage.gameObject.SetActive(false);
++            foreach (var icon in icons) if (icon != null) icon.gameObject.SetActive(false);
++            foreach (var arrow in arrows) if (arrow != null) arrow.gameObject.SetActive(false);
++            SetBackgroundWidth(defaultWidth);
+         }
+     }
+ }
+--- before/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterInputWriter.cs
++++ after/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterInputWriter.cs
+@@ -408,7 +408,10 @@
+             store.ClearInputHistoryTail(runtime);
+             int[] history = EnsureInputHistory(runtime);
+             if (history != null)
++            {
+                 Array.Clear(history, 1, history.Length - 1);
++                runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
++            }
+         }
+ 
+         internal void SetDefendLock(NTSDEntityRuntime runtime, byte value)
+@@ -457,6 +460,7 @@
+             int[] history = EnsureInputHistory(runtime);
+             if (history != null)
+                 Array.Clear(history, 0, history.Length);
++            runtime.NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
+         }
+ 
+         private int[] EnsureInputHistory(NTSDEntityRuntime runtime)
+--- before/Assets/NTSD/Scene/NTSD_Battle.unity
++++ after/Assets/NTSD/Scene/NTSD_Battle.unity
+@@ -2078,14 +2078,25 @@
+   comboBackgroundImage: {fileID: 278066489}
+   comboContentImage: {fileID: 521647144}
+   comboArrowImage: {fileID: 833747954}
+-  rightSprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}
+-  leftSprite: {fileID: 21300000, guid: 62ba66854d89f3543a2a03139fde5f5f, type: 3}
+-  upSprite: {fileID: 21300000, guid: 202e34ba31d5e814796f6b880f87af61, type: 3}
+-  downSprite: {fileID: 21300000, guid: 8b3128dd7d707b04fa259836969f4c40, type: 3}
+-  attackSprite: {fileID: 21300000, guid: 024dc3e38c31d734784efb025c77cb5e, type: 3}
+-  jumpSprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
+-  defendSprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
++  keyIcons:
++  - Key: 6
++    Sprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}
++  - Key: 4
++    Sprite: {fileID: 21300000, guid: 62ba66854d89f3543a2a03139fde5f5f, type: 3}
++  - Key: 8
++    Sprite: {fileID: 21300000, guid: 202e34ba31d5e814796f6b880f87af61, type: 3}
++  - Key: 2
++    Sprite: {fileID: 21300000, guid: 8b3128dd7d707b04fa259836969f4c40, type: 3}
++  - Key: 5
++    Sprite: {fileID: 21300000, guid: 024dc3e38c31d734784efb025c77cb5e, type: 3}
++  - Key: 0
++    Sprite: {fileID: 21300000, guid: 7971571d39c1ffd4c980001dfadf0d12, type: 3}
++  - Key: 9
++    Sprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
++  defaultWidth: 406
++  horizontalPadding: 80
+   iconGap: 32
++  consumedDisplaySeconds: 0.5
+ --- !u!1 &1507840666
+ GameObject:
+   m_ObjectHideFlags: 0

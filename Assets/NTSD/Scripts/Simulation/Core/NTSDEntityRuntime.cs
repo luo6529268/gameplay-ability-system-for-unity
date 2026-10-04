@@ -28,6 +28,14 @@ namespace NTSD.Simulation
         [NonSerialized] private int hudPlayerIndex = -1;
         [NonSerialized] private RuntimeEntityHandle hudHandle;
 
+        internal void NotifyNativeInputHistory(BattleComboInputChangeKind kind)
+        {
+            if (hudChanges == null) return;
+            NativeInputHistorySnapshot snapshot = NativeInputHistorySnapshot.Capture(InputHistory, kind);
+            if (kind == BattleComboInputChangeKind.Consumed && snapshot.Count == 0) return;
+            hudChanges.CaptureComboInput(hudPlayerIndex, hudHandle, snapshot);
+        }
+
         internal void BindHudChanges(BattleHudChangeTracker changes, int playerIndex, RuntimeEntityHandle handle)
         {
             hudChanges = changes;
@@ -804,6 +812,7 @@ namespace NTSD.Simulation
             ComboDra = ComboDla = ComboDua = ComboDda = ComboDrj = ComboDlj = ComboDuj = ComboDdj = ComboDja = 0;
             EnsureInputHistory();
             Array.Clear(InputHistory, 0, InputHistory.Length);
+            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
             PrevUp = PrevDown = PrevLeft = PrevRight = PrevJump = PrevDefend = PrevAttack = 0;
             ClearDirectionalInputKeys();
             ClearActionInputKeys();
@@ -841,6 +850,7 @@ namespace NTSD.Simulation
         {
             EnsureInputHistory();
             Array.Clear(InputHistory, 1, InputHistory.Length - 1);
+            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
         }
 
         public void TickInputCooldowns()
@@ -1249,6 +1259,7 @@ namespace NTSD.Simulation
             LateSpecialTargetZ = 0;
             EnsureInputHistory();
             Array.Clear(InputHistory, 0, InputHistory.Length);
+            NotifyNativeInputHistory(BattleComboInputChangeKind.Reset);
             CdAttack = 0;
             CdJump = 0;
             CdDefend = 0;

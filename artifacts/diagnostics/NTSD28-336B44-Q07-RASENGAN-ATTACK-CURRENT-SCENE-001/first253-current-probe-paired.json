@@ -1,0 +1,29 @@
+{
+  "status": "FAIL",
+  "sourcePath": "artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-WINDOW-RECHECK-20261004/source-01/run/first253-source.csv",
+  "sourceSha256": "161E804093D32AD59713FF1CF34F7917A07ACE282E4C044D1C626AFDE275398F",
+  "unityPath": "artifacts/diagnostics/NTSD28-336B44-Q07-RASENGAN-ATTACK-CURRENT-SCENE-001\\first253-current-probe-pass.json",
+  "unitySha256": "2789DAA2AE2CDA8F1946D773591F514C7A7E0B70FB08B2F792900968349D133C",
+  "unityInitialTick": 4,
+  "relativeTicksCompared": 34,
+  "fieldMappings": {
+    "phase": "inputPhase",
+    "actor_action": "action",
+    "actor_mp": "mp",
+    "combo1": "combo"
+  },
+  "valuesCompared": 136,
+  "firstDifferences": [
+    {
+      "relativeTick": 1,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 1
+    }
+  ],
+  "limitations": [
+    "synthetic InputSystem keyboard events",
+    "probe stops at action301",
+    "no formal EXE pixel comparison"
+  ]
+}

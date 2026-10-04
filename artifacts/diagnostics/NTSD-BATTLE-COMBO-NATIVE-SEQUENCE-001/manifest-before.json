@@ -1,0 +1,58 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleComboInputHistory.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleComboInputHistory.cs",
+    "sha256": "a71e1c55e1322e7503594e0815a446c3815a800a32ef7975b3be55a931ddb322",
+    "bytes": 3255,
+    "backup": "before-0.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDEntityRuntime.cs",
+    "sha256": "de3e64b21e06e7ea600ca9a1d47a997f3e3df6eeac24185f4350e0021f9badf9",
+    "bytes": 53181,
+    "backup": "before-1.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleHudChangeTracker.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleHudChangeTracker.cs",
+    "sha256": "8c0e2b3ff0acf60eb65b18ddda508146b85b2e9052a8678035a781f19dd83b2a",
+    "bytes": 6587,
+    "backup": "before-2.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Input/NTSD28NativeComboStateMachine.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Input\\NTSD28NativeComboStateMachine.cs",
+    "sha256": "570ee4d6c17fdd87a2c97cbb639a8293db269878019c00759464496ca3b3009d",
+    "bytes": 12676,
+    "backup": "before-3.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+    "sha256": "de9be10900b968c6141699909a4578e99b7fecc1d63568e916826b8c1b83e399",
+    "bytes": 122299,
+    "backup": "before-4.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\UI\\Battle\\BattleComboView.cs",
+    "sha256": "c74ce96ce49c99e675ce6c201498e2dbbe49fbeb72cf06eef228eff30270c7a5",
+    "bytes": 6026,
+    "backup": "before-5.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterInputWriter.cs",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterInputWriter.cs",
+    "sha256": "cd8e45b70b664d971c22771f6a73487ea7c65620894c8651cd1d9cde95e4aa22",
+    "bytes": 17271,
+    "backup": "before-6.bytes"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+    "sha256": "91f8c274378ff7d93aa5459f3520fcbb256c3ff50e5c4a485daa5200b845c577",
+    "bytes": 89717,
+    "backup": "before-7.bytes"
+  }
+]

@@ -26,13 +26,21 @@ namespace NTSD.Test.Editor
         private const string ContentRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string ResultPath =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001/tobi-jump-natural-01.json";
+        private const string ExtendedResultPath =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001/tobi-jump-natural-40.json";
         private const string ResidualResultPath =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL-SCENE-001/tobi-jump-natural-01-postplay.json";
+        private const string ExtendedResidualResultPath =
+            "artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001/tobi-jump-natural-40-postplay.json";
         private const string SessionKey = "NTSD.Q07.C053TobiNaturalScene.01";
         private const string MenuPath = "NTSD/Validation/Q07/C053 Tobi Natural Scene Play Probe";
+        private const string ExtendedMenuPath = "NTSD/Validation/Q07/C053 Tobi Natural 40 Tick Scene Probe";
         private const string ResidualMenuPath =
             "NTSD/Validation/Q07/C053 Tobi Post Play Residual";
+        private const string ExtendedResidualMenuPath =
+            "NTSD/Validation/Q07/C053 Tobi 40 Tick Post Play Residual";
         private const int TargetTicks = 14;
+        private const int ExtendedTargetTicks = 40;
 
         private static Report report;
         private static SimulationTickDriver driver;
@@ -68,6 +76,7 @@ namespace NTSD.Test.Editor
         private sealed class Report
         {
             public string runId = "tobi-jump-natural-01";
+            public int targetTicks = TargetTicks;
             public string status = "RUNNING";
             public string phase = "STARTUP";
             public string error = string.Empty;
@@ -119,6 +128,20 @@ namespace NTSD.Test.Editor
         [MenuItem(MenuPath)]
         private static void StartFromMenu()
         {
+            Start(TargetTicks);
+        }
+
+        [MenuItem(ExtendedMenuPath)]
+        private static void StartExtendedFromMenu()
+        {
+            Start(ExtendedTargetTicks);
+        }
+
+        private static string ResultPathFor(int targetTicks) =>
+            targetTicks == ExtendedTargetTicks ? ExtendedResultPath : ResultPath;
+
+        private static void Start(int targetTicks)
+        {
             Require(report == null &&
                 string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
                 "A Tobi natural Scene probe is already active.");
@@ -132,9 +155,13 @@ namespace NTSD.Test.Editor
             Scene scene = SceneManager.GetActiveScene();
             Require(scene.path == BattleScene && !scene.isDirty && SceneManager.sceneCount == 1,
                 "Expected one clean original Battle Scene.");
-            Require(!File.Exists(ProjectPath(ResultPath)), "Refusing to overwrite result.");
+            Require(!File.Exists(ProjectPath(ResultPathFor(targetTicks))),
+                "Refusing to overwrite result.");
             report = new Report
             {
+                runId = targetTicks == ExtendedTargetTicks
+                    ? "tobi-jump-natural-40" : "tobi-jump-natural-01",
+                targetTicks = targetTicks,
                 startedUtc = DateTime.UtcNow.ToString("O"),
                 battleHashBefore = Hash(BattleScene),
                 menuHashBefore = Hash(MenuScene),
@@ -148,15 +175,27 @@ namespace NTSD.Test.Editor
         [MenuItem(ResidualMenuPath)]
         private static void CheckPostPlayResidual()
         {
+            CheckPostPlayResidualFor(ResultPath, ResidualResultPath);
+        }
+
+        [MenuItem(ExtendedResidualMenuPath)]
+        private static void CheckExtendedPostPlayResidual()
+        {
+            CheckPostPlayResidualFor(ExtendedResultPath, ExtendedResidualResultPath);
+        }
+
+        private static void CheckPostPlayResidualFor(string priorResult,
+            string residualResult)
+        {
             Require(!EditorApplication.isPlayingOrWillChangePlaymode &&
                 !EditorApplication.isCompiling && !EditorApplication.isUpdating,
                 "Post-Play residual check requires an idle EditMode Editor.");
             Scene scene = SceneManager.GetActiveScene();
             Require(scene.path == BattleScene && SceneManager.sceneCount == 1,
                 "Post-Play residual check requires the original Battle Scene.");
-            string resultPath = ProjectPath(ResultPath);
+            string resultPath = ProjectPath(priorResult);
             Require(File.Exists(resultPath), "The original Tobi Play result is missing.");
-            string residualPath = ProjectPath(ResidualResultPath);
+            string residualPath = ProjectPath(residualResult);
             Require(!File.Exists(residualPath), "Refusing to overwrite residual result.");
             Report prior = JsonUtility.FromJson<Report>(File.ReadAllText(resultPath));
             Require(prior != null && prior.phase == "DONE" && prior.exitedPlay,
@@ -249,6 +288,14 @@ namespace NTSD.Test.Editor
             if (state == PlayModeStateChange.EnteredPlayMode &&
                 report.phase == "STARTUP" && !report.configuredBeforeStart)
                 Fail("Play clone was not configured before bootstrap Start.");
+            if (state == PlayModeStateChange.ExitingPlayMode &&
+                report.phase != "EXITING")
+            {
+                report.status = "INTERRUPTED";
+                report.error = "Play ended before the Tobi probe completed.";
+                report.phase = "EXITING";
+                SaveSession();
+            }
             if (state == PlayModeStateChange.EnteredEditMode && report.phase == "EXITING")
                 Finish();
         }
@@ -260,6 +307,16 @@ namespace NTSD.Test.Editor
             if (report == null) return;
             try
             {
+                if (!EditorApplication.isPlayingOrWillChangePlaymode &&
+                    report.phase != "EXITING" &&
+                    DateTime.UtcNow - DateTime.Parse(report.startedUtc).ToUniversalTime() >
+                    TimeSpan.FromSeconds(10))
+                {
+                    report.status = "INTERRUPTED";
+                    report.error = "Play ended without completing the Tobi probe.";
+                    report.phase = "EXITING";
+                    SaveSession();
+                }
                 if (report.phase == "EXITING")
                 {
                     if (!EditorApplication.isPlayingOrWillChangePlaymode) Finish();
@@ -352,7 +409,7 @@ namespace NTSD.Test.Editor
                 "Production World changed or tick boundary is unstable.");
             Require(driver.CurrentTickIndex == report.endTick,
                 "An unobserved tick advanced while paused.");
-            if (report.ticks.Count == TargetTicks)
+            if (report.ticks.Count == (report.targetTicks > 0 ? report.targetTicks : TargetTicks))
             {
                 report.status = "MEASURED_COMPARE_PENDING";
                 report.phase = "EXITING";
@@ -458,7 +515,7 @@ namespace NTSD.Test.Editor
             if (!report.sceneCleanAfter && report.status == "MEASURED_COMPARE_PENDING")
                 report.status = "MEASURED_SCENE_CHANGED";
             report.phase = "DONE";
-            string resultPath = ProjectPath(ResultPath);
+            string resultPath = ProjectPath(ResultPathFor(report.targetTicks));
             Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
             using (var stream = new FileStream(resultPath, FileMode.CreateNew,
                 FileAccess.Write, FileShare.None))
