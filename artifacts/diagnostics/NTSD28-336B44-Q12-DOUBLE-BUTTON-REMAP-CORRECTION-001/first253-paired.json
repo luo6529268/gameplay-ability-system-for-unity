@@ -1,0 +1,24 @@
+{
+  "authority": "336B44 formal playable source CSV, root LFR 990/990 selected fields",
+  "unityEvidence": "physical-l-after-fix-20261004.json",
+  "scope": "first natural 253 window through action301",
+  "strict": {
+    "fields": 136,
+    "matched": 135,
+    "differences": [
+      {
+        "tick": 1,
+        "field": "action",
+        "source": 0,
+        "unity": 3,
+        "match": false
+      }
+    ]
+  },
+  "fromDefenseConsumed": {
+    "fields": 132,
+    "matched": 132,
+    "differences": []
+  },
+  "note": "Tick1 standing-loop action differs because probe started from a later idle cycle; from observed defense consumption at relative tick2 the four selected fields match. This does not prove full World, full synchronized RNG table, human hardware timing, or pixels."
+}

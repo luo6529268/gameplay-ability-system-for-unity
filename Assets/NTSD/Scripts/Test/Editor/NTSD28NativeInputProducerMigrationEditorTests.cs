@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Game;
 using NTSD.Input;
 using NTSD.Simulation;
 using NUnit.Framework;
@@ -114,6 +115,63 @@ namespace NTSD.Test
             Assert.That(character.Runtime.NativeInputProxy.EdgeWindow[3], Is.EqualTo(4));
             Assert.That(character.Runtime.InputHistory[4], Is.EqualTo(-1));
             Assert.That(character.Runtime.InputHistory[5], Is.EqualTo(6));
+        }
+
+        [Test]
+        public void DataOrientedHumanPhysicalActions_ReachFormalThreeButtonIndices()
+        {
+            for (int buttonIndex = 0; buttonIndex < 3; buttonIndex++)
+            {
+                var world = CreateDataOrientedWorld();
+                LF2Character character = RegisterCharacter(world, 0, 890 + buttonIndex);
+                var controller = new CharacterInputModule();
+                character.Controller = controller;
+                controller.InputBuffer.TryDequeueAll(1, out _);
+                SetPhysicalAction(controller, buttonIndex, true);
+
+                character.RunHumanInputPollPhase(2);
+                world.CharacterInputAll(2);
+
+                NTSD28InputProxyBlock input = character.Runtime.NativeInputProxy;
+                for (int nativeIndex = 4; nativeIndex <= 6; nativeIndex++)
+                {
+                    Assert.That(input.Current[nativeIndex],
+                        Is.EqualTo(nativeIndex == buttonIndex + 4 ? 1 : 0),
+                        $"physical action {buttonIndex} must use formal native index {buttonIndex + 4}");
+                    Assert.That(input.Previous[nativeIndex], Is.Zero,
+                        $"physical action {buttonIndex} must start with a rising edge");
+                }
+                Assert.That(character.InputState.Jump, Is.EqualTo(buttonIndex == 0));
+                Assert.That(character.InputState.Defend, Is.EqualTo(buttonIndex == 1));
+                Assert.That(character.InputState.Attack, Is.EqualTo(buttonIndex == 2));
+
+                character.RunHumanInputPollPhase(3);
+                world.CharacterInputAll(3);
+                Assert.That(input.Current[buttonIndex + 4], Is.EqualTo(1));
+                Assert.That(input.Previous[buttonIndex + 4], Is.EqualTo(1));
+
+                SetPhysicalAction(controller, buttonIndex, false);
+                character.RunHumanInputPollPhase(4);
+                world.CharacterInputAll(4);
+                Assert.That(input.Current[buttonIndex + 4], Is.Zero);
+                Assert.That(input.Previous[buttonIndex + 4], Is.EqualTo(1));
+                Assert.That(character.InputState.Attack, Is.False);
+                Assert.That(character.InputState.Jump, Is.False);
+                Assert.That(character.InputState.Defend, Is.False);
+            }
+        }
+
+        private static void SetPhysicalAction(
+            CharacterInputModule controller,
+            int buttonIndex,
+            bool pressed)
+        {
+            switch (buttonIndex)
+            {
+                case 0: controller.SetAttackActionPressed(pressed); break;
+                case 1: controller.SetJumpActionPressed(pressed); break;
+                case 2: controller.SetDefendActionPressed(pressed); break;
+            }
         }
 
         [Test]

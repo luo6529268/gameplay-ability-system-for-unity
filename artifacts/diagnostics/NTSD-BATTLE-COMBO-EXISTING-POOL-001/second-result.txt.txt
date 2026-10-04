@@ -1,0 +1,6 @@
+System.ArgumentException: Type cannot be null.
+  at (wrapper managed-to-native) UnityEngine.GameObject.GetComponent(UnityEngine.GameObject,System.Type)
+  at UnityEngine.Component.GetComponent (System.Type type) [0x00007] in <37cc348edc804f4cb176b63962c716e7>:0 
+  at ComboValidation+<>c__DisplayClass16_0.<Execute>g__Members|12 (System.String name) [0x00013] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:61 
+  at ComboValidation+<Execute>d__16.MoveNext () [0x0105d] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:62 
+  at ComboValidation.Advance () [0x00002] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:16 

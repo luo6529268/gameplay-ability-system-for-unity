@@ -1,0 +1,637 @@
+{
+  "status": "PASS",
+  "error": null,
+  "checks": 118,
+  "rows": [
+    {
+      "assertion": "actual scene BattleComboView present",
+      "passed": true
+    },
+    {
+      "assertion": "latest five-key component loaded",
+      "passed": true
+    },
+    {
+      "assertion": "saved scene Jump binding",
+      "passed": true
+    },
+    {
+      "assertion": "saved scene arrow resource",
+      "passed": true
+    },
+    {
+      "phase": "initial-original-scene",
+      "tick": 4,
+      "actor": 2,
+      "frame": 1,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "kind": "Reset",
+      "sequence": [],
+      "width": 406.0,
+      "backgroundEnabled": true,
+      "iconPaths": [],
+      "arrowCount": 0,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "K",
+      "tick": 10,
+      "actor": 2,
+      "frame": 210,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        0
+      ],
+      "kind": "Changed",
+      "sequence": [
+        "Jump"
+      ],
+      "width": 406.0,
+      "backgroundEnabled": true,
+      "iconPaths": [
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_jump.png"
+      ],
+      "arrowCount": 0,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "physical K reaches native Jump and actual scene jump sprite",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "L",
+      "tick": 106,
+      "actor": 2,
+      "frame": 110,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        9
+      ],
+      "kind": "Changed",
+      "sequence": [
+        "Defend"
+      ],
+      "width": 406.0,
+      "backgroundEnabled": true,
+      "iconPaths": [
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_de.png"
+      ],
+      "arrowCount": 0,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "physical L native Defend",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "D",
+      "tick": 108,
+      "actor": 2,
+      "frame": 110,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        9,
+        6
+      ],
+      "kind": "Changed",
+      "sequence": [
+        "Defend",
+        "Right"
+      ],
+      "width": 407.0,
+      "backgroundEnabled": true,
+      "iconPaths": [
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_de.png",
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_right.png"
+      ],
+      "arrowCount": 1,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "actual inactive arrow template activates",
+      "passed": true
+    },
+    {
+      "assertion": "two keys change original background width",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "assertion": "actual local provider tick",
+      "passed": true
+    },
+    {
+      "phase": "J",
+      "tick": 110,
+      "actor": 2,
+      "frame": 285,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "kind": "Consumed",
+      "sequence": [
+        "Defend",
+        "Right",
+        "Attack"
+      ],
+      "width": 574.0,
+      "backgroundEnabled": true,
+      "iconPaths": [
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_de.png",
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_right.png",
+        "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_att.png"
+      ],
+      "arrowCount": 2,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "physical L D J actual native route consumed",
+      "passed": true
+    },
+    {
+      "assertion": "native history actually cleared",
+      "passed": true
+    },
+    {
+      "assertion": "same tick final key preserved in actual scene",
+      "passed": true
+    },
+    {
+      "phase": "after-consumption-timer",
+      "tick": 110,
+      "actor": 2,
+      "frame": 285,
+      "pp": 500,
+      "native": [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "kind": "Consumed",
+      "sequence": [
+        "Defend",
+        "Right",
+        "Attack"
+      ],
+      "width": 406.0,
+      "backgroundEnabled": true,
+      "iconPaths": [],
+      "arrowCount": 0,
+      "mapping": "{\"MonoBehaviour\":{\"m_Enabled\":true,\"m_EditorHideFlags\":0,\"m_Name\":\"\",\"m_EditorClassIdentifier\":\"\",\"comboBackgroundImage\":{\"instanceID\":0},\"comboContentImage\":{\"instanceID\":0},\"comboArrowImage\":{\"instanceID\":0},\"keyIcons\":[{\"Key\":6,\"Sprite\":{\"fileID\":21300000,\"guid\":\"f758f253acfd2f7499f200c46e08e25f\",\"type\":3}},{\"Key\":4,\"Sprite\":{\"fileID\":21300000,\"guid\":\"62ba66854d89f3543a2a03139fde5f5f\",\"type\":3}},{\"Key\":8,\"Sprite\":{\"fileID\":21300000,\"guid\":\"202e34ba31d5e814796f6b880f87af61\",\"type\":3}},{\"Key\":2,\"Sprite\":{\"fileID\":21300000,\"guid\":\"8b3128dd7d707b04fa259836969f4c40\",\"type\":3}},{\"Key\":5,\"Sprite\":{\"fileID\":21300000,\"guid\":\"024dc3e38c31d734784efb025c77cb5e\",\"type\":3}},{\"Key\":0,\"Sprite\":{\"fileID\":21300000,\"guid\":\"7971571d39c1ffd4c980001dfadf0d12\",\"type\":3}},{\"Key\":9,\"Sprite\":{\"fileID\":21300000,\"guid\":\"adf98f1469070624e9c15bda06bb36e0\",\"type\":3}}],\"defaultWidth\":406.0,\"horizontalPadding\":80.0,\"iconGap\":32.0,\"consumedDisplaySeconds\":0.5}}"
+    },
+    {
+      "assertion": "original scene timer clears icons and resets visible background",
+      "passed": true
+    }
+  ]
+}

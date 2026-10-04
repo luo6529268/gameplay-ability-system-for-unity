@@ -1,0 +1,62 @@
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M Assets/NTSD/Scene/NTSD_Battle.unity
+ M Assets/NTSD/Scripts/Input/NTSDInputStateModule.cs
+ M Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs
+ D Assets/NTSD/Scripts/Test/Editor/ComboSceneValidationTemporary.cs
+ D Assets/NTSD/Scripts/Test/Editor/ComboSceneValidationTemporary.cs.meta
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28NativeInputProducerMigrationEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs
+ M artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/result.json
+ M artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md
+ M artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001/REPORT.md
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md
+ M docs/ai/TASKS/NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001.md
+ M docs/ai/TASKS/NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001.md
+ M docs/ai/TASKS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
+ M docs/ai/TASKS/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001.md
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-EXISTING-POOL-001/
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-FIXED-SLOTS-001/
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/ComboSceneValidationTemporary.cs.backup.txt
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/ComboSceneValidationTemporary.cs.meta.backup.txt
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/REPORT.md
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/after.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/baseline-scene-consumed.png
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/baseline-scene-empty.png
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/baseline-scene-pass.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/final-compiler-errors.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/final-editor-state.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/final-scene-state.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/original-scene-consumed.png
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/original-scene-empty.png
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/probe-v2.cs.txt
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/temporary-probe-removal.json
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/view-before-width.cs.txt
+?? artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/width-only.diff
+?? artifacts/diagnostics/NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/ita-equal-hp-336b44-unity-02.json
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/ita-equal-hp-336b44-unity-03.json
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/ita-equal-hp-336b44-unity-03.png
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/protected-after-second-play.txt
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/protected-before-second-play.txt
+?? artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/third-run-field-comparison.json
+?? artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001/unity-import-20261004.json
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-EXISTING-POOL-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD-BATTLE-COMBO-EXISTING-POOL-001/
+?? docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md
+?? docs/ai/TASKS/NTSD-BATTLE-COMBO-EXISTING-POOL-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001.md

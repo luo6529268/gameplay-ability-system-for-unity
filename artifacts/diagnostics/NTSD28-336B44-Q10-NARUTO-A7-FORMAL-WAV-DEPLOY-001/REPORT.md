@@ -1,6 +1,6 @@
 # Q10 鸣人持续方向＋跳跃：正式 `c/nar/w/a7.wav` 文件暂存
 
-状态：`FORMAL_CONTENT_STAGED / UNITY_IMPORT_AND_NATURAL_VOICE_PENDING`。只新增正式战斗WAV和Unity文件夹/音频 `.meta`，未改DAT、旧Sound、脚本、Scene、相机、地图、模式或非战斗功能。Q10/Q12/总目标开放。
+状态：`FORMAL_CONTENT_STAGED / ORIGINAL_EDITOR_AUDIOCLIP_IMPORT_PASS / NATURAL_VOICE_Q12_PENDING`。只新增正式战斗WAV和Unity文件夹/音频 `.meta`，未改DAT、旧Sound、Scene、相机、地图、模式或非战斗功能。Q10/Q12/总目标开放。
 
 当前336B44正式源码在鸣人先右4tick、之后右＋跳持续80tick的tick9发`c/nar/w/a7.wav`，双源码运行CSV/LFR逐字节同版；正式根同LFR进程exit0/PASS，动作/当前DAT状态/X/Y/Z/MP/输入相位560/560零差。根公开trace没有audio字段，不声明其设备实际声音。[自然入口与范围](../NTSD28-336B44-Q10-NARUTO-HELD-JUMP-043-REACH-001/REPORT.md)。正式/Unity staged `nar.dat`逐SHA同版。
 
@@ -9,3 +9,4 @@
 以独占新建方式复制正式WAV，参照现有`c/kim/w.meta`及同格式`data/020.wav.meta`新增两个独立GUID，不更改正式WAV字节。[执行后复核](postflight.json)显示正式/暂存WAV逐SHA相同，两个GUID在全Assets `.meta` 各仅出现一次；随后仅规范化新meta的空字段行尾空格，[最终磁盘复核](postflight-final.json)再次确认WAV同SHA、头部22050Hz/3052帧、所有保护文件不变、新meta零尾空格。四保护文件与先前新增`data/078.wav`均同前置SHA。原Editor再次只读仍Battle Scene clean、非Play、无测试、编译未完成。按当前播放器共用battle-only路径，这份正式文件应在后续预热时优先于旧Sound被选取；**真实Unity AudioClip导入、自然tick9 pending→voice、Sfx混音及设备声音尚未验收**。
 
 下一步等原Editor编译恢复后执行[定向Task](../../../docs/ai/TASKS/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001.md)的自然输入和voice/SourcePath检查。两个新文件及文件夹不因运行时待验而自动撤销；若需删除，按项目文件操作审计合同逐文件记录。
+2026-10-04 队列去重后，原Editor本项目 `manage_asset/get_info` 已返回此正式路径的 `UnityEngine.AudioClip`、GUID `b2e104f471f640c8a906a21a3afc4af9`，证明Unity资产导入成功；[原始回执](unity-import-20261004.json)。一次只读 `execute_code` 查询clip样本数被MCP侧mono命令行“文件名或扩展名太长”拒绝，未得到样本/运行时voice数据，也未修改项目。正式源码自然tick9 cue已证，共用战斗音源/pooled voice在078自然例已验；a7的自身自然voice仍待Q12代表性音频例或玩家实际听到首差，不再另开重复场景Play。不能把资产导入写成实际发声或设备PCM通过。

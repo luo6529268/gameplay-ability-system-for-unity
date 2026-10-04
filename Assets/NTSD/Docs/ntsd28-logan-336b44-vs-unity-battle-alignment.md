@@ -1,3 +1,59 @@
+# NTSD 2.8-Logan 336B44 ↔ Unity 战斗对齐：当前执行入口
+
+> **2026-10-04 Q12证据复用复核（覆盖旧Q07输入修复及过量验收安排）：** 原Battle Scene自然物理L在Q07新增二次换算后误进正式Attack index4/动作60；已撤去重复换算，现有控制器/producer共用链经精确6/6和原Scene自然L→方向→K→J首253后动作301复验，正式源码防御消费后四字段132/132同。旧Q07直接缓冲/FrameInputSet测试的“玩家三键已修”标 `SUPERSEDED`，原件保留；[新Task/Record](../../../docs/ai/TASKS/NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001.md)。Q12复用C053受控战斗五槽/随机状态、C040真实Game View、078正式cue实际voice及C056有序退出的各自限定证据；不再要求无关整张随机表一致或另跑a7来重复证明共用播放器。正式EXE同帧Present像素、a7自身实播、真人按键、同冻结版退出后重进仍未知，不能称战斗表现完全一致。当前无待修P0；[Q12限定矩阵](../../../docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md)规定唯一后续出口。用户确认的正式336B44权威和范围例外均不变。
+
+> **2026-10-04 队列重整。** 本节是唯一后续执行顺序，覆盖本页其余日期段的“下一步”“待验”“当前恢复顺序”；后面的原始记录、35 项逐 ID 表与 Task/Change Record 保留为证据，不因停排而伪装成 `VERIFIED`。规则仍以 SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 的根目录正式 EXE 和对应 playable live source 为准。用户要求先完成队列去重，再恢复战斗实施；整理阶段不改战斗生产脚本、DAT、Scene 或非战斗功能。
+> [50 份未关闭 Change Record 逐 ID 调度清点](../../../docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md)给出 P0/依赖/一次定向/条件触发/证据复用的完整索引；原状态仍在各自 Record，不能把“未关闭”直接读成“待执行”。
+
+## Q01～Q12 当前口径
+
+| 阶段 | 队列状态 | 唯一必要出口 |
+| --- | --- | --- |
+| Q01 内容与引用 | `SCOPED_EVIDENCE_REUSE / IMPACT_ONLY` | 已有 338/338 规范化 DAT、对象/角色图候选和活跃战斗七图限定证据。仅在正式可达战斗消费者实际缺资源/错引用时查 owner；20 份 DAT 的换行字节差异、无战斗消费者的目录差异不单开任务。旧文件退场按逐文件授权及审计，非战斗规则前置。 |
+| Q02 加载与 PNG | `HISTORICAL_SCOPED / IMPACT_ONLY` | 新正式战斗资源实际加载失败才回访共用入口。 |
+| Q03 字段/schema | `HISTORICAL_SCOPED / IMPACT_ONLY` | 新首差落在字段解释、缺值或默认值才回访。 |
+| Q04 旧行为退休 | `HISTORICAL_SCOPED / IMPACT_ONLY` | 可达旧路径实际覆盖新版战斗规则才精确退休；不批量清理。 |
+| Q05 联合迁移 | `HISTORICAL_SCOPED / IMPACT_ONLY` | 只复核被新差异触及的 DAT/图/GUID/消费闭环。 |
+| Q06 producer 与生命周期 | `HISTORICAL_LOCAL_EXIT / IMPACT_ONLY` | 共享输入、生成、关闭写者实际改变才做相邻回归。 |
+| Q07 战斗规则与比例域 | `SCOPED_NATURAL_INPUT_PASS / EVIDENCE_REUSE` | Q12发现并撤去Q07多做的一次三键换算；当前原Scene自然合成键首253后J转301、正式源码防御消费后132/132同。旧直接输入22tick第三轮只留测试载体历史，不作为玩家输入证书。C040持有姿态、D-024 kind8近远原Scene证据复用；真人设备时差仍未知。 |
+| Q08 胜负、计时、战斗事件 | `SCOPED_EVIDENCE_REUSE / FIRST_DIFF_ONLY` | C008/C009/F05 已有源/根/Scene 限定证据；同初态计时/停战新首差或 Q07 改动触及结果 writer 才开包。结果页图文、设置和重赛排除。 |
+| Q09 战斗表现 | `SCOPED_BLEED_EVIDENCE_REUSE / FIRST_DIFF_ONLY` | 旧物理J对应的直接Jump载体已有HP10和一条1×3血点命令；Q07二次换算时第三轮直接Attack载体的同结果仅作历史，不能替代最终同初态画面验收。仅实际非例外画面首差时回访血点、阴影、挂点。完整背景与固定相机保留，跨背景/视口逐像素相等不作门。 |
+| Q10 战斗音频 | `SCOPED_EVIDENCE_REUSE / A7_TRIGGER_ONLY` | 078自然事件→正式clip→pooled voice实际播放是Q12代表样本；a7正式文件已暂存且原Editor识别为AudioClip，但自身实播未知。只在a7实际缺声或共用播放器/路径写者改变时定向回访；不逐项验证约970条静态路径或每条设备PCM。 |
+| Q11 回访与出口对账 | `SCOPED_ACCOUNTING_PASS` | 本页 §2 的35项、新版50份未关闭Record调度和下方一次性R回访归口已对账；条件门/用户例外保留未知，不为抬状态重测。 |
+| Q12 最终集成 | `IN_PROGRESS / SCOPED_EVIDENCE_REUSED` | 自然合成键正例通过并修正Q07双重映射；C053受控战斗、C040原Game View、078 voice及C056有序退出各复用其限定证据。同冻结版退出后重进仍待；正式同帧Present/真人按键/a7自身实播仍未知且按实际首差触发。不跑全角色×全场景矩阵。 |
+
+## 保留的唯一推进队列
+
+1. **文档重整已完成。** 总表、50项调度索引、`STATE`、handoff和当前任务记录已同步；以下各项只按新的有限出口执行。
+2. **Q07 输入首差归口已更正：** 旧 `HUMAN-BUTTON-NATIVE-INGRESS-001` 直接buffer测试漏掉既有物理键交叉，现标 `SUPERSEDED`；当时的22tick第三轮是合成Attack载体结果，不再称玩家三键修好。[Q12共用修正](../../../docs/ai/TASKS/NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001.md)只撤去第二次换算，原Editor精确6/6、原Scene自然合成键首253后J转301；当前正式源码从防御消费起动作/PP/combo/相位132/132同。[机械配对](../../../artifacts/diagnostics/NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001/first253-paired.json)。真人按键和画面时差仍未知。
+3. **用户报告的鸣人螺旋丸后续 Attack：** Q12已经得到新版自然首253正窗口原Scene生产Driver通过，J在下一tick同相位进`FrameInputSet`及正式proxy并转301。正式根三窗口受控990/990，Unity次253/254后新版仍无可裁决玩家首差；不为了状态逐窗口再跑，也不加鸣人特判。若真实设备或画面提示复现时差，再按共用输入/呈现出口定位。
+4. **Q09/P-08 与其它非例外画面：** 旧物理J同布局的直接Jump载体已得HP与一条1×3血点命令；Q07二次换算期间的直接Attack载体结果保留历史但不晋升玩家画面。正式根trace不输出血点/GPU，Q12只需一例非例外真实画面；有实际首差才开表现改动，不把不同随机表或固定相机例外误报为绘制缺陷。
+5. **C040与D-024重复待办撤销：** C040 持有姿态已由当前336B44正式完整tick与原Battle Scene四条件生产Driver [4/4同态](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-FULL-TICK-UNITY-SCENE-001/REPORT.md)，包含当前frame132 CPOINT X58与vaction130 X41的17像素判别；D-024 kind8近/远已由[原Scene完整Driver各260/260与投影增量](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-SCENE-001/paired-scene-comparison-20261003.json)证明。旧 `C040-HELD-POSE-UNITY-001`、`D024-KIND8-VIEW-DELTA-001` Record 的“Scene待”是先前快照；只保留自然物理键/Game View/更广D-024在Q12或新实际首差时回访，**不再安排两次Play**。
+6. **Q10 实际 cue：** 016、020/067、[078正式clip自然实际播放](../../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/REPORT.md)与自然双声道条件复用；鸣人 `c/nar/w/a7.wav` 正式文件已暂存并由原Editor识别为AudioClip，[导入回执](../../../artifacts/diagnostics/NTSD28-336B44-Q10-NARUTO-A7-FORMAL-WAV-DEPLOY-001/unity-import-20261004.json)。a7自身实播未知，只在可复现缺声或共用播放写者变化时回访，不逐cue开Play。
+7. **Q11→Q12：** Q11一次对账已在下方登记；后续仅Q12冻结版本代表矩阵。若其中出现当前336B44同初态真实首差，回到对应共用owner开最小包。
+
+## 现存 Task/Change 的停排规则
+
+- **证据复用、改动才回归：** C008/C009、C011/C012/C017、C022～C024/C029/C031、C032、C040 普通三人、C042 非零投前、C043 自然失效尾、C045/C050～C053 的已证条件、F01～F03/F05、D-024 已通过的运动/持有投影、Q09 已取证画面及 Q10 已播放 cue。原 Record 所列其他条件仍是未知，不因父 Q 开放重复已过样本。
+- **条件触发、当前不扫描：** C040 我爱罗阴性候选、C044 自然跨零、C048 自然 frame29、C053 受控 OID251/action0 双 Uj 的自然阳性、C054 自然非整数融合、C056 根 LFR 无法注入的独立状态、F04 用户暂缓 stage 下的自然治疗、D-024 非零平台链接、F02 无阳性高速出生类。须出现当前正式可复现阳性且 Unity 可建立同态初态；每类至多一次有界候选筛选，阴性只记录触发信号/owner，不延长扫描。
+- **依赖上游或归 Q12：** 旧 Q07 下游三键补丁和直接 Attack 探针已标 `SUPERSEDED`；物理 J 的真实共享入口由 Q12 原 Scene 首正窗及聚焦测试重新取证。P-08 不以旧第三轮血点命令单独升格画面完成；螺旋丸次253/254后仅在玩家可见首差时回访。C050/C051/C052 等共享写者已证条件只在相关改动后做邻例；各局部包习惯列出的“全 World、所有物理键、全部 Game View、每条设备音频”统一缩为 Q12 的代表性矩阵，不逐包重复。
+- **用户排除/例外：** 菜单/选人功能、结果页设置/重赛/原生 scoreboard 图文、普通 HUD、原版背景和两类模式 DAT、未批准的旧资源批量删除、默认 stage.dat 部署、完整联机/回滚、固定完整背景及项目地图。Menu→Battle 仅用最小接口证明战斗出生/输入/退出，不形成菜单对齐阶段。
+
+新增 Task 须同时满足“336B44 正式可达、同初态同输入存在首个不同 tick/字段、属于非例外战斗范围、已有共用 owner 无法覆盖”；否则只更新本表条件门。共用规则默认一条自然阳性加必要边界/阴性；跨 pass/schema/有序关闭或新首差才扩检。原 Editor 忙时保留现场并做只读工作，不启动第二项目、全套测试或重复阴性 Play。
+
+## Q11 一次性回访与责任对账（2026-10-04）
+
+> Q12输入纠错后的增量：原50份表中旧Q07三键Record由`RUNTIME_PENDING/REUSE`改`SUPERSEDED`，同日新增Q12双重换算Record为`RUNTIME_PENDING/REUSE`，故未关闭仍50份、REUSE35/TRIGGER15/P0零。下方关于“Q07三键修复后伤害/血点恢复”的句子只记旧直接输入探针历史，不再是当前玩家三键或画面证书；当前自然首窗口证据见文首。
+
+- §2的固定35项已逐ID核对：F01～F05共5、C项23，合计28项战斗规则/事件；combo-times、combo-boundary、C059、C060共4项条件展示；N01、N02、KO-default共3项用户排除的原生页面/HUD/提示图文。分类不是28项全部已验。
+- 50份当前未关闭新版Change Record已逐ID调度：`REUSE`35、`TRIGGER`15；当前没有已证且可裁决的新生产首差 `P0`、上游依赖 `DEP` 或必跑一次 `ONE`。局部Record原状态不因调度变为`VERIFIED`；C040与D-024的受控原Scene出口分别复用后继 `VERIFIED` 子包。
+- R01～R03的Host、输入/RNG、功能键只在共享写者变化或Q12代表性物理键触发；R04～R08的pass、结果、复活、发布只在相关新首差触发；R09～R13的命中/持有/对象生命周期仅按当前正式可达消费者触发；R14的战斗Spark/Combo及声音遵守正式启用门；R15身份/schema在冻结版本复核；R16有序关闭、R17资源消费、R18自然整链统一归Q12。旧[逐R定义与触发证据](../../../docs/ai/NTSD28-BATTLE-REMAINING-WORK-20260929.md)仅作版本化历史索引，当前调度以本节为准。
+- 原背景/两类模式DAT、菜单/选人/结果页/普通HUD及固定完整背景是用户例外；默认stage.dat暂缓、根LFR无法注入的内部态、未出现正式可达阳性的条件均标`TRIGGER`而不补造场景。Q07三键修复后伤害/血点命令恢复；动作60/65仅是LFR同步随机表与Unity seed0表不同的**测试初态限制**，不能称已证生产差异。Q10 a7已导入AudioClip，实际自然voice未验。
+- Q12只做冻结版最小代表矩阵：自然组合技合成物理键正例、当前正式同初态战斗及其实际消费随机状态、一例非例外原Game View、一例生产voice、有序退出与重进。前五个限定子门已有上述证据复用；正式同帧Present、真人手按及a7自身实播不从这些证据推断，只有实际非例外首差才追加定向验证。仍缺同冻结版退出后重进；完成前总目标保持开放。
+
+## 历史滚动记录（以下日期段不是执行队列）
+
+
 **2026-10-04 G1/Q07/C053 Tobi自然出生链40tick原场景限定通过（覆盖本条启动快照）：** `NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001 / VERIFIED_SCOPED_SCENE`。当前336B44正式源/根同输入40tick八字段320/320已证；原Editor正式内容/生产Driver同条件40tick与源码320/320零首差，后26tick OID251从action2/3转62并消失，没有自然进入受控双Uj需要的action0。首次Scene dirty安全拒绝，第二次干净前置完成，四SHA稳、退出非Play；独立残留Driver World0/Pool0、Scene clean/Battle SHA同。仅关闭此自然链40tick所选字段；真实设备键、其它可达条件、受控双Uj的自然阳性、全World及Q07/C053/Q12总门继续开放。未改生产、DAT、Scene、非战斗。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-TOBI-NATURAL40-SCENE-001/REPORT.md)。
 
 **2026-10-04 G2/Q10 正式078自然voice原场景限定通过（覆盖本条启动快照）：** `NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001 / RUNTIME_PENDING / SCOPED_NATURAL_VOICE_PASS`。原Editor正式LoganRuntime原Battle Scene完成鸣人后续Jump 55生产Driver tick；336B44源码/Unity输入相位、动作、Health.PP、combo1与078事件275/275同，tick34正式clip生产pooled voice及播放中AudioSource阳性。战斗/非战斗同名cue分别指正式LoganRuntime/旧Sound，正式clip54,104 samples/1 channel/22,050 Hz，Editor工程0错。Play结果内六SHA稳/非Play；退出残留Driver World0/Pool0，但独立检查时Battle Scene磁盘SHA已变化，同期有其它Scene工作、写入者未证，跨检查窗口稳定性`INCONCLUSIVE`，不保存/回退。根trace不导出audio；本链是后续Jump，真实物理键、设备PCM、用户报告的后续Attack螺旋手里剑及Q10/Q12总门仍待。未改生产/DAT/Scene/非战斗。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/REPORT.md)。
@@ -465,6 +521,8 @@
 | BATCH-06 / Q11 账本对齐 | `WAIT_DEPENDENCY` | 对 35 项及历史 R01～R18 逐条写明新版可达、用户例外、当前 Unity 状态、owner 和关闭证据；未闭生产缺口不能推给 Q12。 |
 | BATCH-06 / Q12 最终集成验收 | `WAIT_DEPENDENCY` | 用同一冻结 336B44 版本做自然物理键/技能、同 seed/tick 整场、逻辑与画面/声音、长跑、有序退出重进和旧总表第 8 节非例外出口；局部 PASS 不能拼成整场一致。 |
 
+**2026-10-04 Q08 剩余出口收缩（只读；覆盖上表笼统的 `Q08_OTHER_EXITS_OPEN` 待办口径）：** 当前336B44 `BattleFlow28::step` 的存活组判定、返组暂停/恢复、80/101/350 计时与停战，已有现行 Unity 共用 writer 和 C008/C009/F05 的限定对照；本次未发现新的生产首差。正式 `end_signal_emitted`、`result_record_created` 两个布尔量在所检 playable 消费路径仅进入 `scenario28.cpp` 诊断输出，80/101 的战斗内阶段已有 `NativeResultPhase` 聚焦断言；不为这两个诊断布尔量另建功能任务。当前正式 KO 事件由 `BattleWorld28::record_native_knockout` 共用出口记录，Unity 有 `RecordNativeKnockout` 和五类调用点的旧版限定证据；旧证据不自动升格为336B44整场通过，也不以无名“更多 KO 生产者”重跑矩阵。Q08 后续仅在当前正式可达、非结果页的 KO 统计/事件或预战斗停战边界出现同初态首差时单点处理；否则将一条自然 KO 事件与计时采样并入 Q12 冻结版本整场验收。mode2/3/4 目的地、原生赢家/scoreboard、结果页设置/重赛及失效 owner 自然阴性均按既有可达/用户例外门处理，不主动开包。本审计不关闭 Q08、Q12 或总目标，不改生产/DAT/Scene。静态依据为正式 `source/ntsd28_core/src/simulation/battle_flow.cpp`、`battle_world.cpp`、`source/ntsd28_playable/src/game_session.cpp`、`scenario28.cpp` 及 Unity `BattleResultsOutcomeHostWriter`、`NTSDBattleTickSystem`、`SimulationWorld.RecordNativeKnockout`；限定证据见本表 C008/C009 行及旧版证据索引。
+
 **2026-10-04 Q07/F02、C040 画面门更正：** 上表 Q07 行中早期“Game View 待”按各取证时间阅读。F02 原 Battle Scene 已取得 tick30/39 实际 Game View、黑格正式资源归因，并在 alpha=1 同相时与当前 playable 离屏渲染的武器相对锚点差小于 1 输出像素；C040 全普通初态第25 tick 已取得实际 Game View 与正式 SPARK 命令/图块使用见证，当前 playable 同快照的 SPARK 消融另证 73 个输出像素。这些仅关闭所述 Unity/当前 playable 画面子门；正式根 EXE 实际 GPU Present、F02 三实体真人键盘整链、其它战斗图/视口和 Q07/Q09/Q12 总出口仍待，不重复已通过的 F02 45 tick 与 C040 40 tick 夹具。[F02 同相证据](../../../artifacts/diagnostics/NTSD28-336B44-Q09-F02-ALPHA-ONE-SCENE-001/REPORT.md)、[C040 Unity 画面](../../../artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-NATURAL-GAMEVIEW-001/REPORT.md)、[C040 playable 消融](../../../artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001/REPORT.md)。
 
 **2026-09-30 自检更新：** Q09/P-20 的旧 BMP 图集、Q07/C017 零血 AI、F02 type4 硬着地与 C012 特殊命中锁存四处旧自检契约逐一按新版规则更正；原 Editor 对应聚焦分别 2/2、4/4、F02此前相邻50/50、C012 3/3 PASS，最终全量 `BattleRuntimeSelfCheck` 新鲜 PASS。各次早期 FAIL 均留证。这只补齐自动自检门，不代表 F02/C012 的正式根同状态、自然 Play 或 Q07 整组完成；后续按 G1 先取得这些真实出口。[F02报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-F02-FAST-WEAPON-ACTION-001/REPORT.md)、[C012报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C012-SPECIAL-HIT-LATCH-TAIL-001/AUDIT7-SELFCHECK-REPORT.md)。
@@ -561,7 +619,7 @@ R01～R18 仍用旧总表的定义，按触发而非全量重跑：输入/帧/�
 
 所有脚本改动先建 Task Contract、Change Record、Ledger/STATE/handoff，再改脚本；修改后跑最窄相关编译和测试、ChangeLedger validator，只有跨 pass/schema/有序关闭或发现新首差才扩检。不得使用 computer-use、另建 Unity 项目、改 DAT 数值、覆盖/删除用户脏文件或以非战斗场景功能作为进度。
 
-**2026-10-04 工作量与停止线核查（用户关切）：** 当前新版前缀下有209份Task、200份Change Record，其中Q07 Task 153份；这主要是累计历史子包和留痕量，不等于153个待修问题。Change Record元数据中148份`VERIFIED`、31份`RUNTIME_PENDING`、16份`FOCUSED_TEST_PASS`、2份`CODE_WRITTEN`，其余为superseded/rolled back；这些状态也不能简单相加为父Q完成。实际效率风险是同一共享机制重复建探针、已证限定场景被旧“下一步”再次排队，以及无正式可达阳性或受用户暂缓条件的分支不断扩大阴性扫描。自此按下列停止线处理，不以Task数或案例数作为进度：
+**2026-10-04 工作量与停止线核查（用户关切）：** 当前新版前缀下有210份Task、201份Change Record，其中Q07 Task 154份；这主要是累计历史子包和留痕量，不等于153个待修问题。Change Record元数据中148份`VERIFIED`、33份`RUNTIME_PENDING`、16份`FOCUSED_TEST_PASS`、1份`IN_PROGRESS`，其余为superseded/rolled back；这些状态也不能简单相加为父Q完成。实际效率风险是同一共享机制重复建探针、已证限定场景被旧“下一步”再次排队，以及无正式可达阳性或受用户暂缓条件的分支不断扩大阴性扫描。自此按下列停止线处理，不以Task数或案例数作为进度：
 
 - 已通过的C040普通三人、C042非零投前、C043自然失效尾和F02高速命中→动作40条件不重跑；仅当对应共享读写者/输入契约发生实际改动，做最窄相邻回归。Q01与Q02～Q06也只按影响触发，不重做整批。
 - C053受控OID251/action0双命中尚无自然阳性，C054自然非整数融合尚无阳性，C056正式根LFR无法注入独立状态，C048/F04受用户暂缓stage与正式可达条件限制。记录触发条件与owner后暂存，不以更长同类阴性扫描维持G1忙碌；发现新的正式可达正例再恢复。Editor导入或Scene并行修改只阻断相应子包，不让其它独立G1/G2工作空等。
@@ -645,3 +703,4 @@ R01～R18 仍用旧总表的定义，按触发而非全量重跑：输入/帧/�
 > 2026-10-04 Q09/P-08 当前 336B44 内容回访：正式根身份重算同版；405 decoded DAT 的318个血点仍仅在鼬/佐助两份，全部仅 X/Y、无 respond/w/h/rect 或 bleed_hp。正式playable与Unity当前都走1/3 HP、1×3红色的内容默认分支；这只确认内容值，不把旧 B1E13 自然Play/WARP升为新版整链或GPU证据。Q09/P-08/Q12保持开放，下一仅做新版同初态/同tick的可比画面门；[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-BPOINT-CONTENT-RECHECK-20261004/REPORT.md)。
 **2026-10-04 G2/Q09 WORDS5普通第5战斗组姓名牌共用映射聚焦通过：** 当前336B44 playable 的组1～5姓名牌选对应WORDS、复活次数字选WORDS0；正式剧情DAT存在team5，正式/Unity六图逐SHA同版。Unity原共用布局把普通组5误退sheet0，已最小修为sheet5，旧SelfCheck和聚焦测试同步更正；纯C# RED→GREEN、生成Editor 0错、原Editor精确3项EditMode 3/3 PASS。**这只关闭组5选择器/聚焦子门**，真实剧情Game View、根正式EXE GPU、其它Q09/Q12和总目标仍开；不改DAT/PNG/Scene/菜单/框架，默认stage.dat部署仍暂缓。另一次错误查询误启全套EditMode作业，不当作本包证书。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001.md)、[Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-WORDS5-GROUP-MAP-001.md)。
 **2026-10-04 G1/Q07/C053 受控辅助40tick五槽原场景包启动：** `NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001 / PLANNED`。当前336B44正式源/根受控辅助双type3案40tick五槽有效字段1136/1136同，Unity原Battle Scene旧AuxGreen只证12tick/261字段。已在脚本前建Task/Change/Ledger，下一仅给既有Editor探针加独立40tick五槽只读快照，与正式CSV判首差并验证退出清理；受控第三体不称自然角色链，生产/DAT/图/Scene/非战斗不动，C053/Q07/Q12仍开。[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001.md)。
+**2026-10-04 G1/Q07 人类三键入口首差（Q09/P-08见证）：** 原Editor已导入修正探针，干净原Battle Scene/正式LoganRuntime以鸣人OID2对鼬OID9、mode0、seed0、同一前两tick语义Attack完成22个生产Driver tick。初态CRT `3374725112/3000`同正式根；相对tick2正式根鸣人动作60，Unity动作110，后续正式tick8目标HP10/tick22一条1×3血点，而Unity全程目标HP30/血点0。前次误用Jump的130/132不是生产通过。本次Play退出clean且四保护SHA不变；`NTSDInputStateModule` 人类语义字段到 `NTSD28InputTwoPassModule.FreezeProducerState` 正式索引的适配是待聚焦RED验证的静态首差假说，不直接改DAT或画面。已建[Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001.md)及Change；下一仅修共用人类战斗输入，AI与非native保持，Q07/Q09/Q12和总目标仍开。

@@ -1,0 +1,4 @@
+System.Exception: width for 2
+  at ComboValidation.Check (System.Boolean ok, System.String why) [0x00009] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:12 
+  at ComboValidation+<Execute>d__16.MoveNext () [0x00fbf] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:58 
+  at ComboValidation.Advance () [0x00002] in C:\Users\Logan\AppData\Local\Temp\NTSDComboPoolValidation-001\Assets\Editor\ComboValidation.cs:16 

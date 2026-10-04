@@ -1,0 +1,33 @@
+--- !u!114 &1463265079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1463265077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b4c6d8e9f204a3f8b7c6d5e4f3a2b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  comboBackgroundImage: {fileID: 278066488}
+  comboContentImage: {fileID: 521647143}
+  comboArrowImage: {fileID: 833747953}
+  keyIcons:
+  - Key: 6
+    Sprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}
+  - Key: 4
+    Sprite: {fileID: 21300000, guid: 62ba66854d89f3543a2a03139fde5f5f, type: 3}
+  - Key: 8
+    Sprite: {fileID: 21300000, guid: 202e34ba31d5e814796f6b880f87af61, type: 3}
+  - Key: 2
+    Sprite: {fileID: 21300000, guid: 8b3128dd7d707b04fa259836969f4c40, type: 3}
+  - Key: 5
+    Sprite: {fileID: 21300000, guid: 024dc3e38c31d734784efb025c77cb5e, type: 3}
+  - Key: 0
+    Sprite: {fileID: 21300000, guid: 7971571d39c1ffd4c980001dfadf0d12, type: 3}
+  - Key: 9
+    Sprite: {fileID: 21300000, guid: adf98f1469070624e9c15bda06bb36e0, type: 3}
+  defaultWidth: 406
+  horizontalPadding: 80
+  consumedDisplaySeconds: 0.35

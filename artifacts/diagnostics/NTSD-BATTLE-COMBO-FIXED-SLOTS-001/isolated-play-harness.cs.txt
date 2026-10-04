@@ -1,0 +1,70 @@
+using System;using System.IO;using System.Linq;using System.Reflection;using UnityEngine;using UnityEngine.UI;
+public static class ComboValidation
+{
+ static Assembly a; static BindingFlags all=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+ static string root=@"I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity";
+ static string output=@"C:\Users\Logan\AppData\Local\Temp\NTSDComboFixedSlotsValidation-001";
+ static int checks; static int errors;
+ static object New(string t)=>Activator.CreateInstance(a.GetType(t,true),true);
+ static object Get(object o,string n)=>o.GetType().GetField(n,all)?.GetValue(o)??o.GetType().GetProperty(n,all).GetValue(o);
+ static void Set(object o,string n,object v){var f=o.GetType().GetField(n,all);if(f!=null)f.SetValue(o,v);else o.GetType().GetProperty(n,all).SetValue(o,v);}
+ static object Call(object o,string n,params object[] args)=>o.GetType().GetMethods(all).Single(m=>m.Name==n&&m.GetParameters().Length==args.Length).Invoke(o,args);
+ static void Check(bool ok,string why){if(!ok)throw new Exception(why);checks++;Debug.Log("PASS "+why);}
+ static System.Collections.IEnumerator steps;
+ [UnityEditor.InitializeOnLoadMethod] static void Install(){UnityEditor.EditorApplication.playModeStateChanged+=state=>{if(state==UnityEditor.PlayModeStateChange.EnteredPlayMode&&UnityEditor.SessionState.GetBool("NativeComboRun",false)){UnityEditor.SessionState.SetBool("NativeComboRun",false);steps=Execute();UnityEditor.EditorApplication.update+=Advance;}};}
+ public static void Run(){UnityEditor.SessionState.SetBool("NativeComboRun",true);UnityEditor.EditorApplication.EnterPlaymode();}
+ static void Advance(){try{if(steps.MoveNext())return;File.WriteAllText(output+"/result.txt","PASS "+checks);UnityEditor.EditorApplication.Exit(0);}catch(Exception e){Debug.LogException(e);File.WriteAllText(output+"/result.txt",e.ToString());UnityEditor.EditorApplication.Exit(2);}}
+ static Sprite SpriteAt(string relative){var texture=new Texture2D(2,2);texture.LoadImage(File.ReadAllBytes(Path.Combine(root,relative)));return Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new Vector2(.5f,.5f),100);}
+ static System.Collections.IEnumerator Execute(){
+ Application.logMessageReceived+=(c,t,l)=>{if(l==LogType.Error||l==LogType.Exception)errors++;};
+ var dirs=new[]{root+"/artifacts/diagnostics/NTSD-BATTLE-COMBO-FIXED-SLOTS-001/build",root+"/Library/ScriptAssemblies"};
+ AppDomain.CurrentDomain.AssemblyResolve+=(s,e)=>{foreach(var dir in dirs){var path=Path.Combine(dir,new AssemblyName(e.Name).Name+".dll");if(File.Exists(path))return Assembly.LoadFrom(path);}return null;};
+ a=Assembly.LoadFrom(dirs[0]+"/Assembly-CSharp.dll");
+ var world=New("NTSD.Simulation.SimulationWorld");var cat=Get(world,"RuntimeDataCatalog");var data=New("NTSD.Animation.LF2CharacterData");Set(data,"name","InputFixture");var wrap=Activator.CreateInstance(a.GetType("NTSD.Animation.LF2CharacterDataWrapper"),new object[]{3,data});var prep=cat.GetType().GetMethod("Prepare");var def=Activator.CreateInstance(prep.GetParameters()[0].ParameterType.GetGenericArguments()[0]);Set(def,"id",3);Set(def,"type",0);var defs=Array.CreateInstance(def.GetType(),1);defs.SetValue(def,0);var resolver=System.Linq.Expressions.Expression.Lambda(prep.GetParameters()[1].ParameterType,System.Linq.Expressions.Expression.Constant(wrap),System.Linq.Expressions.Expression.Parameter(typeof(int))).Compile();prep.Invoke(cat,new object[]{defs,resolver,Activator.CreateInstance(prep.GetParameters()[2].ParameterType),null});Call(cat,"Seal");
+ var ch=New("NTSD.Animation.LF2Objects.LF2Character");Set(ch,"ObjectId",3);Set(ch,"Team",1);Set(ch,"AiControlled",false);Call(world,"Register",ch);var rt=Get(ch,"Runtime");var roster=Get(Get(world,"Runtime"),"Roster");var slots=(Array)Get(roster,"Slots");var slot=slots.GetValue(0);Set(slot,"Active",true);Set(slot,"IsHuman",true);Set(slot,"CharacterId",3);Set(slot,"Team",1);Set(slot,"InputId",0);Set(slot,"AiId",-1);Set(slot,"RuntimeSlotIndex",Get(rt,"SlotIndex"));Set(slot,"StableId",Get(rt,"StableId"));Set(roster,"ActiveSlotCount",1);
+ var input=Get(ch,"Controller");var provider=New("NTSD.Simulation.LocalSimulationFrameInputProvider");Call(provider,"BindWorld",world);
+ var host=new GameObject("IsolatedDriver");host.SetActive(false);var dt=a.GetType("NTSD.Simulation.SimulationTickDriver");var driver=host.AddComponent(dt);dt.BaseType.GetProperty("Instance").SetValue(null,driver);Set(driver,"_world",world);Set(driver,"lifecycleState",Enum.Parse(a.GetType("NTSD.Simulation.BattleRuntimeLifecycleState"),"Running"));
+ var canvasGo=new GameObject("Canvas",typeof(RectTransform),typeof(Canvas));var canvas=canvasGo.GetComponent<Canvas>();canvas.renderMode=RenderMode.WorldSpace;canvasGo.transform.localScale=Vector3.one*.01f;((RectTransform)canvasGo.transform).sizeDelta=new Vector2(900,250);
+ var prefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/AuthoredCombo.prefab");Check(prefab!=null,"authored scene subtree imported");var hud=UnityEngine.Object.Instantiate(prefab,canvasGo.transform,false);((RectTransform)hud.transform).anchorMin=((RectTransform)hud.transform).anchorMax=new Vector2(.5f,.5f);((RectTransform)hud.transform).anchoredPosition=Vector2.zero;
+ var view=hud.AddComponent(a.GetType("NTSD.UI.Battle.BattleComboView"));var bg=hud.transform.Find("ComboBg").GetComponent<Image>();var list=bg.transform.Find("ComboList");
+ var iconSlots=Enumerable.Range(0,6).Select(i=>(RectTransform)list.Find(i==0?"ComboTemp":"ComboTemp ("+i+")")).ToArray();var arrowSlots=Enumerable.Range(0,5).Select(i=>(RectTransform)list.Find(i==0?"ComboArraw":"ComboArraw ("+i+")")).ToArray();var content=iconSlots[0].GetComponent<Image>();var arrow=arrowSlots[0].GetComponent<Image>();
+ Check(iconSlots.All(x=>x!=null)&&arrowSlots.All(x=>x!=null)&&list.gameObject.activeSelf,"actual six icons five arrows and active authored parent");Check(hud.GetComponentsInChildren<Image>(true).Length==12,"one background six icon five arrow Images");Check(arrowSlots.All(x=>x.GetComponent<Image>().sprite!=null),"authored arrow sprite references imported");
+ Set(view,"comboBackgroundImage",bg.rectTransform);Set(view,"comboContentImage",content.rectTransform);Set(view,"comboArrowImage",arrow.rectTransform);Set(view,"iconSlots",iconSlots);Set(view,"arrowSlots",arrowSlots);Set(view,"consumedDisplaySeconds",.35f);
+ var originalIDs=hud.GetComponentsInChildren<Transform>(true).Select(x=>x.GetInstanceID()).ToArray();
+ void Stable(){Check(hud.GetComponentsInChildren<Transform>(true).Select(x=>x.GetInstanceID()).SequenceEqual(originalIDs),"same authored objects no growth or reparent");}
+ var keyType=a.GetType("NTSD.UI.Battle.BattleComboView").GetNestedType("KeyIcon",all);var keys=Array.CreateInstance(keyType,7);var codes=new[]{6,4,8,2,5,0,9};var assets=new[]{"right","left","up","down","att","jump","de"};for(int i=0;i<7;i++){var entry=Activator.CreateInstance(keyType);Set(entry,"Key",Enum.ToObject(a.GetType("NTSD.Simulation.BattleInputHistoryKey"),codes[i]));Set(entry,"Sprite",SpriteAt("Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_"+assets[i]+".png"));keys.SetValue(entry,i);}Set(view,"keyIcons",keys);
+ 
+ hud.SetActive(true);Call(view,"OnEnable");Call(world,"NotifyBattleHudParticipantReady",0,ch);Call(driver,"DispatchBattleHudChanges",false);
+ object Current()=>Get(Get(driver,"comboInputHistory"),"Current");
+ string Sequence(){var c=Current();return string.Join(",",Enumerable.Range(0,(int)Get(c,"Count")).Select(i=>Call(c,"GetKey",i).ToString()));}
+ void Publish(){Call(driver,"DispatchBattleHudChanges",false);Call(driver,"PublishBattleComboInput");}
+ var native=a.GetType("NTSD.Simulation.NTSD28NativeComboStateMachine");
+ void Native(string method,params object[] args)=>native.GetMethod(method,all).Invoke(null,args);
+ var proxy=Get(rt,"NativeInputProxy");var current=(byte[])Get(proxy,"Current");var previous=(byte[])Get(proxy,"Previous");
+ void Press(int key){Array.Clear(current,0,7);Array.Clear(previous,0,7);current[key]=1;Native("ProcessSampledInput",rt,false);}
+ var icons=(Image[])Get(view,"icons");int Visible()=>icons.Count(x=>x!=null&&x.gameObject.activeSelf);
+ void Empty(string why){Check(bg.enabled&&bg.gameObject.activeSelf&&Math.Abs(bg.rectTransform.rect.width-406)<.01&&Visible()==0&&arrowSlots.All(x=>!x.gameObject.activeSelf),why);Stable();}
+ Empty("empty background visible width406");
+ var frameData=New("NTSD.Animation.LF2FrameData");Set(frameData,"hit_Fa",1);Set(Get(ch,"Frame"),"D",frameData);
+ var targetFrame=New("NTSD.Animation.LF2FrameData");Set(targetFrame,"frameId",1);Set(targetFrame,"mp",999);var frames=(System.Collections.IList)Get(data,"frames");frames.Add(frameData);frames.Add(targetFrame);var cache=New("NTSD.Animation.LF2FrameCache");Call(cache,"Load",wrap);Set(ch,"FrameCache",cache);Set(rt,"InputLocalResourceEnabled49D034",true);Set(rt,"HP",500);Set(rt,"PP",0);
+ var writer=Get(world,"CharacterActionWriter");
+ void Combo(){Native("InitializeNativeHistory",rt);Press(6);Press(3);Press(4);var r=Call(writer,"RouteNativeComboAction",ch);Check((bool)Get(r,"Consumed")&&!(bool)Get(r,"Applied")&&Get(Get(r,"Action"),"Failure").ToString()=="ResourceRejected","resource rejected route still consumes");Check((int)Get(rt,"PP")==0&&(int)Get(rt,"HP")==500,"rejected route preserves vitals");Check(((int[])Get(rt,"InputHistory")).Skip(1).All(x=>x==-1),"actual route consumed native sequence");Publish();Check(Sequence()=="Defend,Right,Attack"&&Get(Current(),"Kind").ToString()=="Consumed","same tick consumed full snapshot");Check(Visible()==3,"consumed icons visible");Check(arrowSlots.Count(x=>x.gameObject.activeSelf)==2,"three keys have only two intervening arrows");Stable();}
+ Combo();
+ var cameraGo=new GameObject("CaptureCamera",typeof(Camera));var camera=cameraGo.GetComponent<Camera>();cameraGo.transform.position=new Vector3(0,0,-10);camera.orthographic=true;camera.orthographicSize=1.8f;camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=new Color(.035f,.04f,.055f);var render=new RenderTexture(1000,360,24);camera.targetTexture=render;
+ void Shot(string name){Canvas.ForceUpdateCanvases();camera.Render();RenderTexture.active=render;var shot=new Texture2D(1000,360,TextureFormat.RGB24,false);shot.ReadPixels(new Rect(0,0,1000,360),0,0);shot.Apply();File.WriteAllBytes(output+"/"+name+".png",shot.EncodeToPNG());RenderTexture.active=null;}
+ Shot("native-consumed");
+ double until=Time.unscaledTimeAsDouble+.2;while(Time.unscaledTimeAsDouble<until)yield return null;
+ Check(Visible()==3,"visible before hold expires");Press(5);Publish();Check(Sequence()=="Jump"&&Visible()==1,"native code zero is jump and preempts consumed");Check(icons[0].sprite==(Sprite)Get(keys.GetValue(5),"Sprite"),"jump has correct sprite");
+ until=Time.unscaledTimeAsDouble+.45;while(Time.unscaledTimeAsDouble<until)yield return null;Check(Visible()==1,"old timer cannot clear new input");
+ Combo();until=Time.unscaledTimeAsDouble+.65;while(Time.unscaledTimeAsDouble<until)yield return null;Empty("actual coroutine expires after configured .35 seconds");Shot("native-empty");
+ Native("InitializeNativeHistory",rt);Publish();
+ for(int i=0;i<6;i++){Press(3);Publish();int count=Math.Min(i+1,5);Check((int)Get(Current(),"Count")==count,"native bounded count "+count);Check(Math.Abs(bg.rectTransform.rect.width-(406+(count-1)*135))<.01,"width for "+count);Check(arrowSlots.Count(x=>x.gameObject.activeSelf)==count-1,"arrow count for "+count);Check(!iconSlots[5].gameObject.activeSelf&&!arrowSlots[4].gameObject.activeSelf,"reserved sixth slot stays hidden");Stable();}
+ for(int c=0;c<3;c++){hud.SetActive(false);Check(iconSlots.All(x=>!x.gameObject.activeSelf)&&arrowSlots.All(x=>!x.gameObject.activeSelf),"disable hides authored slots");hud.SetActive(true);Check(Visible()==5,"reenable restores five key snapshot");Stable();}var version=Get(Current(),"Version");Array.Copy(current,previous,7);Native("ProcessSampledInput",rt,false);Publish();Check(Equals(version,Get(Current(),"Version")),"held input no duplicate publication");
+ Native("InitializeNativeHistory",rt);Publish();Empty("native initialization clears immediately");
+ Combo();hud.SetActive(false);hud.SetActive(true);Check(Visible()==3,"reenable retains unexpired consumed snapshot");until=Time.unscaledTimeAsDouble+.65;while(Time.unscaledTimeAsDouble<until)yield return null;Empty("reenable timer expires");hud.SetActive(false);hud.SetActive(true);Empty("expired cached snapshot cannot resurrect");
+ var beforeWorker=Get(Current(),"Version");System.Threading.Tasks.Task.Run(()=>Press(3)).Wait();Check(Visible()==0&&Equals(beforeWorker,Get(Current(),"Version")),"worker snapshot does not touch Unity UI");Publish();Check(Sequence()=="Right"&&Visible()==1,"main thread publishes worker snapshot");var stale=Current();Call(world,"Unregister",ch);Publish();Empty("registry release clears immediately");Call(view,"OnMMEvent",stale);Empty("stale event ignored");
+ Call(Get(world,"HudChanges"),"Reset",true);Call(driver,"DispatchBattleHudChanges",true);Empty("shutdown reset keeps background");
+ var nextWorld=New("NTSD.Simulation.SimulationWorld");var tracker=Get(nextWorld,"HudChanges");var bind=tracker.GetType().GetMethod("Bind",all);var handle=Activator.CreateInstance(bind.GetParameters()[2].ParameterType,new object[]{0,(uint)1});Call(tracker,"Bind",0,rt,handle);Set(driver,"_world",nextWorld);Call(driver,"DispatchBattleHudChanges",false);Empty("new world session resets publication");Call(view,"OnMMEvent",stale);Empty("old session event ignored");
+ Stable();UnityEngine.Object.Destroy((Component)view);yield return null;yield return null;Stable();Check(iconSlots.All(x=>x!=null)&&arrowSlots.All(x=>x!=null),"destroying View preserves user scene objects");Check(errors==0,"zero Unity errors");Debug.Log("COMPLETE assertions="+checks);yield break;
+ }
+}

@@ -22,6 +22,7 @@ namespace NTSD.Test.Editor
         private const string ScenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
         private const string ContentRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string RequestPath = "Temp/NTSD28_Q09_P08SameState.request.json";
+        private const string RegressionRequestPath = "Temp/NTSD28_Q07_HumanButtonRegression.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/";
         private const string SessionKey = "NTSD.Q09.P08SameState";
@@ -218,7 +219,9 @@ namespace NTSD.Test.Editor
 
         private static void TryStart()
         {
-            string requestFile = ProjectPath(RequestPath);
+            string regressionRequestFile = ProjectPath(RegressionRequestPath);
+            string requestFile = File.Exists(regressionRequestFile)
+                ? regressionRequestFile : ProjectPath(RequestPath);
             if (!File.Exists(requestFile))
                 return;
             Request request = JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
@@ -375,7 +378,7 @@ namespace NTSD.Test.Editor
             int relativeTick = report.rows.Count + 1;
             int next = driver.CurrentTickIndex + 1;
             SimulationInputButtons p1 = relativeTick <= 2
-                ? SimulationInputButtons.Attack : SimulationInputButtons.None;
+                ? SimulationInputButtons.Jump : SimulationInputButtons.None;
             var input = new FrameInputSet(next, new[]
             {
                 new SimulationPlayerInput(0, p1),

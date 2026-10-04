@@ -1,6 +1,6 @@
 # NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001
 
-Status: `FOCUSED_TEST_PASS / SCENE_PENDING`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`.
+Status: `FOCUSED_TEST_PASS / SCOPED_SCENE_COVERED_BY_DEPENDENT_RECORD`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`.
 
 Authority: current formal root EXE SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`, corresponding playable `BattleWorld28::settle_catch_relations` and the controlled formal-pass positive [report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-HELD-POSE-SOURCE-CONTROL-001/REPORT.md). With positive hold, current victim action center and catcher-vaction positional kind-2 CPOINT are different sources.
 
@@ -13,3 +13,4 @@ Exit: focused test RED before production if possible, then GREEN; generated C# c
 Current evidence: [implementation report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001/REPORT.md). Generated Editor C# build succeeded with 0 errors; focused Unity test and real Scene have not run. The dirty in-memory Battle Scene and stale original Editor assembly remain a protection boundary, so this is not a runtime PASS.
 
 2026-10-02 correction to the preceding snapshot: the original Editor subsequently refreshed, its assembly included the new test, and live `manage_scene/get_active` reported Battle Scene clean. The first named 2-case run failed because the test fixture called `SetSourceRulePosition` without `SyncSourceRuleIntegerPosition`; its source integer remained zero, yielding X11. The fixture was corrected, Editor refreshed, then the exact two cases passed 2/2 and the eight adjacent class cases passed 8/8. Battle Scene disk SHA before/after stayed `93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60`, live Scene clean. [Raw job results](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001/). The original Editor focused exit is closed; natural scene/physical-key and current root EXE full-Driver gates remain open.
+2026-10-04 去重更正：本 Task 所称“原Scene完整Driver待”已由后继 `NTSD28-336B44-Q07-C040-FULL-TICK-UNITY-SCENE-001 / VERIFIED` 的[四条件原Scene报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-FULL-TICK-UNITY-SCENE-001/REPORT.md)覆盖：当前336B44正式完整tick与Unity生产Driver 4/4同，含action132/hold5的当前CPOINT X58、vaction X41判别条件。旧正文保留为当时快照，不再启动重复Play。自然人手键、根EXE无法注入的内部关系及Q12总门仍未证。

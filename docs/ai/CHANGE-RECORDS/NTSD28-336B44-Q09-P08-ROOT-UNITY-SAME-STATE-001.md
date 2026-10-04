@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001
-status: CODE_WRITTEN
+status: RUNTIME_PENDING
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs
 authority: 336B44 formal root EXE headless LFR and corresponding playable bpoint rendering path
@@ -8,6 +8,8 @@ evidence: docs/ai/TASKS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
 -->
 
 # Q09/P-08 原 Scene 双实体同局部初态诊断
+
+2026-10-04 后继Q07修复的第三轮更正：原Scene22tick中动作110消失、tick8目标HP10、tick22血点命令1×3，六字段130/132同；另2处tick2/3正式动作60、Unity65，因根LFR manager同步随机表哈希`f75f85682ee9412c`与Unity seed0表`68c5f16327d0ddd7`不同，不能作为生产首差。原Scene退出clean、四保护SHA同。详[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/REPORT.md)；本Record仍`RUNTIME_PENDING`，不单开绘制修复。
 
 脚本创建前登记。Unity 现状：旧自然物理 J→临时鼬探针于 Battle 已跑到血点命令，但目标在场景启动数 tick 后加入，X/背景/视口和源/根案例不同；旧受控相机探针仅切 HP，不走自然完整tick。现有 F03 原Scene诊断提供可复用的 `OnSceneLoaded` Play clone 测试参战者设置、暂停稳定边界、`SetInitialActor`、离散 `FrameInputSet`、原Scene SHA检查流程。本包只加专用 opt-in Editor 探针，不改这些已有脚本及任何生产文件。
 
@@ -20,3 +22,4 @@ evidence: docs/ai/TASKS/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001.md
 2026-10-04 修正后验证：生成 Editor 工程再次 `dotnet build Assembly-CSharp-Editor.csproj --no-restore -v:q` 退出0、299 warnings/0 errors；`Tools/Validate-ChangeLedger.ps1` 退出0（先移除误写在 Record 元数据中的非脚本 `.cs.meta` code-path，`.meta` 实际新增仍在正文记录）。原 Editor 第二次刷新后持续报告 `is_compiling=true`，Editor 程序集时间仍为修正源码前，MCP Console 本次读取0条 error；尚不能宣称原 Editor 已编译或第二轮已运行。正式根/Unity第一轮六字段 130/132、RNG44/44 和画面范围已写本包 REPORT；保护文件的终态与回 Menu 待 Editor 解除编译态后检查。生产脚本、资源与 Scene 没有由本包写入。
 
 2026-10-04 取消全套测试后再次核对：原 Editor 的 `tests.is_running=false`、`current_job_id=null`、非 Play，Battle Scene `isDirty=false` 且磁盘 SHA `D88AD2111715AB2D970A85DDDAFFAAB206DFFD3BB54B9DF071AD25901D76CDF6` 与前次保护值相同。生成的 `Assembly-CSharp-Editor.csproj` 在当前工作树执行 `dotnet build --no-restore -nologo -v:q` 为 0 error / 330 warning，证明当前探针可由该生成工程编译；原 Editor 仍报告 `is_compiling=true`、未给出编译完成时间，因此不把离线编译算作 Unity Editor 新程序集验收，不在旧程序集上重跑 Play。`Attack` 修正后的第二轮及根/Unity首差判断继续待原 Editor 恢复。
+2026-10-04 修正 Attack 后第二轮原 Scene Play 已执行（覆盖上方“编译/运行待”快照）：本次相同局部初态22个完整生产 Driver tick 的首差是 tick2 正式根动作60、Unity动作110；正式根 tick8 鼬HP10/tick22血点1×3，Unity目标HP30/血点0。原 Scene退出clean、Battle/Menu/GameConfig/ProjectBattleModeConfig本轮四 SHA 稳，原始结果为 [Unity第二轮](../../../artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/ita-equal-hp-336b44-unity-02.json)。静态调用链显示人类语义 Attack 写旧 `KeyAttack`、正式 native 冻结将旧 `KeyAttack` 映射至 Defend；后续独立 Q07 单项测试已 RED 证实正式 index4 缺 Attack。**本 P-08 包没有修改生产脚本，也不把下游无血点另立绘制缺陷。** 当前仅保持 `RUNTIME_PENDING / WAIT_Q07_HUMAN_BUTTON_INGRESS`，待 Q07 修复后复用本探针一次；若动作/HP同态但绘制仍有非例外首差，再开 Q09 表现工作。用户要求先重整总表，故不立即继续 Play。

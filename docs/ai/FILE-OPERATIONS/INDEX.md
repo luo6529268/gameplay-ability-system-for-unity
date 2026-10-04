@@ -61,4 +61,10 @@ NTSD-BATTLE-COMBO-INPUT-HISTORY-001 / RUNTIME_PENDING (original Scene/device/wor
 
 NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001 / IN_PROGRESS: replace display6history with realnative5history change snapshots, consumedvisualhold0.5s, always-visible background and KeyIcon array. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001.md.
 
-NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / IN_PROGRESS: original saved BattleScene validation using temporary Editor probe; old loaded assembly explains reported4symptoms. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md.
+NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / VERIFIED: original saved BattleScene validation using temporary Editor probe; old loaded assembly explains reported4symptoms. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001.md.
+
+NTSD-BATTLE-COMBO-SCENE-VALIDATION-001 / VERIFIED: original saved BattleScene physical-device/controlledtick K,L-D-J full native consumption->UI tested; final137assertions includes tick assertions; widths406/573/740/907/1074; temporary probe removed; originalEditor refreshed/nonplaying/Scene clean and SHA unchanged. Report artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/REPORT.md. Old compiled DLL + hotreload empty keyIcons corrected by refresh/reload; only additional runtime edit is width formula. No full battle-alignment claim.
+
+NTSD-BATTLE-COMBO-EXISTING-POOL-001 / PLANNED: replace Combo UI Instantiate with existing MMMiniObjectPooler; preserve latest user edits pending confirmation. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-EXISTING-POOL-001.md.
+
+NTSD-BATTLE-COMBO-FIXED-SLOTS-001 / PLANNED: user-authored6icon/5arrow slots, remove View pooling. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-COMBO-FIXED-SLOTS-001.md; file audit docs/ai/FILE-OPERATIONS/NTSD-BATTLE-COMBO-FIXED-SLOTS-001/RECORD.md.

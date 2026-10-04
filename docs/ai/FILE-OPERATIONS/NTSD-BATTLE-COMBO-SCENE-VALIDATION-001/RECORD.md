@@ -4,3 +4,11 @@ User reports Jump displaying Defend, inactive arrows, static width and no consum
 Operation paths: Assets/NTSD/Scripts/Test/Editor/ComboSceneValidationTemporary.cs and Assets/NTSD/Scripts/Test/Editor/ComboSceneValidationTemporary.cs.meta (new, absent pre-operation); temporary evidence copies retained before removal. No Scene overwrite.
 
 Before temporary probe revision SHA ea1d9a7efa4cd96a5c4be8600f2f9526d4a06af7957e4cc705128aa43539ea85 backed up probe-v1.cs.txt; result.json preserved initialization-timeout-result.json before next run replacement. Original scene resource prewarm exceeded60s, no assertions ran. Extend async initialization budget to300s; no runtime logic changes.
+
+Additional authorized precise overwrite: Assets\NTSD\Scripts\UI\Battle\BattleComboView.cs SHA bf860ded7ad9d3f5dc2291384dcfb512db843ac32ef6cd73b6e4fbf7aa947a20 backup view-before-width.cs.txt. Probe prior revision backed probe-v2.cs.txt. Generated result/screenshots about to be replaced by final run have baseline-scene-* backups. Only Render width formula changes.
+
+EXECUTION PLANNED temporary cleanup: original Scene final run PASS137assertions (includes successful tick checks), exitedPlay/clean. Exact2paths and pre-deleteSHA/backups in artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/temporary-probe-removal.json. Both newtemporaryfiles removed after retained evidence; no user tests/resources deleted.
+
+Completed scoped UI validation and width correction. See artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001/REPORT.md. Temporary probe+meta removed after exact backups; final Scene clean/hash unchanged.
+
+Final gate: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <repository> PASS exit0; ledger-final.log preserves existing historical warnings. Process-local core.safecrlf=false only; no Git config changes. Scoped git diff --check exit0.

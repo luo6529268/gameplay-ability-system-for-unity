@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD-BATTLE-COMBO-NATIVE-SEQUENCE-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Simulation/Presentation/BattleComboInputHistory.cs
 code-path: Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
@@ -30,3 +30,5 @@ Evidence: result.txt,unity-final.log,isolated-play-harness.cs.txt,native-consume
 Limit: original Editor occupied by other work; original Battle Scene Play, physical input, full BattleRuntimeSelfCheck and native EXE comparison not run. This proves focused presentation behavior and actual native consumption in isolated Unity, not full battle alignment. Rollback requires separately audited restoration of exact before-N.bytes only after preserving any later user changes.
 
 Final audit: Validate-ChangeLedger.ps1 PASS exit0 (ledger-validation-final.log), existing historical warnings retained. Invocation explicitly supplied -RepositoryRoot; process-only GIT_CONFIG_COUNT=1/core.safecrlf=false suppressed Git newline warning that Windows PowerShell otherwise promoted to terminating NativeCommandError. No Git config/hooks changed. Two initial invocation failures are preserved in ledger-validation.log and ledger-validation-explicit-root.log. Scoped git diff --check exit0 (line-ending notices only).
+
+2026-10-04 follow-up: original BattleScene Play now passed under NTSD-BATTLE-COMBO-SCENE-VALIDATION-001. Prior originalScene pending limitation is closed for HUD scope. Width formula superseded by that Record; prior isolated evidence remains historical. Actual physical-device K and L D J through local-provider/fullnative tick verified with unchanged originalScene bindings and resources. No global native rule-alignment claim.

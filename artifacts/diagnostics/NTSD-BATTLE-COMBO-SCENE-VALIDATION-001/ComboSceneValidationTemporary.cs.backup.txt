@@ -1,0 +1,151 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.IO;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using NTSD.Simulation;
+using NTSD.UI.Battle;
+using NTSD.Animation.LF2Objects;
+namespace NTSD.Test.Editor
+{
+    public static class ComboSceneValidationTemporary
+    {
+        static readonly BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+        static readonly string Output = Path.GetFullPath("artifacts/diagnostics/NTSD-BATTLE-COMBO-SCENE-VALIDATION-001");
+        static readonly List<object> Rows = new List<object>();
+        static IEnumerator steps;
+        static SimulationTickDriver driver;
+        static LF2Character actor;
+        static BattleComboView view;
+        static Image bg;
+        static Image[] icons, arrows;
+        static int checks;
+        static bool oldPaused;
+        static double started;
+        static object Field(object o, string name) { return o.GetType().GetField(name, Flags).GetValue(o); }
+        static void Check(bool ok, string label) { Rows.Add(new { assertion = label, passed = ok }); if (!ok) throw new Exception(label); checks++; }
+        [InitializeOnLoadMethod]
+        static void Install()
+        {
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool("ComboSceneProbe", false))
+                {
+                    SessionState.SetBool("ComboSceneProbe", false);
+                    started = EditorApplication.timeSinceStartup;
+                    steps = Run();
+                    EditorApplication.update += Advance;
+                }
+                if (state == PlayModeStateChange.EnteredEditMode && File.Exists(Output + "/result.json"))
+                {
+                    File.WriteAllText(Output + "/postplay.json", JsonConvert.SerializeObject(new { dirty = UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty, scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path }, Formatting.Indented));
+                }
+            };
+        }
+        [MenuItem("NTSD/Temporary/Validate Original Combo Scene")]
+        public static void Begin()
+        {
+            if (EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty) throw new Exception("Requires saved nonplaying scene");
+            SessionState.SetBool("ComboSceneProbe", true);
+            EditorApplication.EnterPlaymode();
+        }
+        static void Advance()
+        {
+            try
+            {
+                if (EditorApplication.timeSinceStartup - started > 300) throw new TimeoutException("Scene fixture initialization/validation timeout");
+                if (steps.MoveNext()) return;
+                Finish("PASS", null);
+            }
+            catch (Exception e) { Finish("FAIL", e.ToString()); }
+        }
+        static void Finish(string status, string error)
+        {
+            EditorApplication.update -= Advance;
+            if (Keyboard.current != null) { InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState()); InputSystem.Update(); }
+            if (driver != null) driver.SetPaused(oldPaused);
+            File.WriteAllText(Output + "/result.json", JsonConvert.SerializeObject(new { status, error, checks, rows = Rows }, Formatting.Indented));
+            EditorApplication.ExitPlaymode();
+        }
+        static BattleComboInputChangedEvent Current()
+        {
+            BattleComboInputChangedEvent value;
+            driver.TryGetCurrentBattleComboInput(out value);
+            return value;
+        }
+        static void Queue(params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState(keys));
+            InputSystem.Update();
+        }
+        static void Tick(int count = 2)
+        {
+            for (int i = 0; i < count; i++) Check(driver.StepOneTick(ignorePaused: true), "actual local provider tick");
+        }
+        static void Press(Key key) { Queue(key); Tick(); Record(key.ToString()); }
+        static void Record(string phase)
+        {
+            var e = Current();
+            Rows.Add(new { phase, tick = driver.CurrentTickIndex, actor = actor.ObjectId, frame = actor.Frame.N, pp = actor.Runtime.PP, native = actor.Runtime.InputHistory.ToArray(), kind = e.Kind.ToString(), sequence = Enumerable.Range(0,e.Count).Select(i=>e.GetKey(i).ToString()).ToArray(), width = bg.rectTransform.rect.width, backgroundEnabled = bg.enabled, iconPaths = icons.Where(i=>i.gameObject.activeInHierarchy).Select(i=>AssetDatabase.GetAssetPath(i.sprite)).ToArray(), arrowCount = arrows.Count(i=>i.enabled && i.gameObject.activeInHierarchy), mapping = EditorJsonUtility.ToJson(view) });
+        }
+        static void Reset()
+        {
+            Queue(); Tick(2);
+            actor.ImmediateFrame(0);
+            typeof(NTSDEntityRuntime).Assembly.GetType("NTSD.Simulation.NTSD28NativeComboStateMachine").GetMethod("InitializeNativeHistory", BindingFlags.Static|BindingFlags.NonPublic).Invoke(null,new object[]{actor.Runtime});
+            Tick(2);
+        }
+        static IEnumerator Run()
+        {
+            while (true)
+            {
+                driver = SimulationTickDriver.Instance;
+                var boot = UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
+                actor = boot == null ? null : Field(boot,"firstPlayerLf2") as LF2Character;
+                if (actor != null && driver != null && driver.World != null && driver.CurrentTickIndex > 2) break;
+                yield return null;
+            }
+            oldPaused = driver.IsPaused; driver.SetPaused(true);
+            view = UnityEngine.Object.FindObjectOfType<BattleComboView>();
+            Check(view != null, "actual scene BattleComboView present");
+            bg = (Image)Field(view,"comboBackgroundImage"); icons=(Image[])Field(view,"icons"); arrows=(Image[])Field(view,"arrows");
+            Check(icons.Length==5 && arrows.Length==4, "latest five-key component loaded");
+            Check(((Sprite[])Field(view,"sprites"))[0] == AssetDatabase.LoadAssetAtPath<Sprite>("Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_jump.png"), "saved scene Jump binding");
+            Check(AssetDatabase.GetAssetPath(arrows[0].sprite).EndsWith("Combo_Arraw.png"), "saved scene arrow resource");
+            Record("initial-original-scene");
+            Reset(); Press(Key.K);
+            Check(Current().GetKey(Current().Count-1)==BattleInputHistoryKey.Jump && icons.Any(i=>i.gameObject.activeInHierarchy && AssetDatabase.GetAssetPath(i.sprite).EndsWith("Combo_jump.png")), "physical K reaches native Jump and actual scene jump sprite");
+            Queue(); Tick(90); Reset();
+            int widthIndex=0;
+            foreach (Key key in new[] { Key.W, Key.D, Key.A, Key.S, Key.W })
+            {
+                Press(key); widthIndex++;
+                Check(Current().Count==widthIndex && Math.Abs(bg.rectTransform.rect.width-(406+(widthIndex-1)*167))<.01,"actual scene width grows one slot for key count "+widthIndex);
+            }
+            Reset();
+            Press(Key.L); Check(Current().GetKey(Current().Count-1)==BattleInputHistoryKey.Defend,"physical L native Defend");
+            Press(Key.D); Check(arrows.Any(i=>i.enabled && i.gameObject.activeInHierarchy),"actual inactive arrow template activates");
+            Check(bg.rectTransform.rect.width>500,"two keys change original background width");
+            Press(Key.J);
+            Check(Current().Kind==BattleComboInputChangeKind.Consumed,"physical L D J actual native route consumed");
+            Check(actor.Runtime.InputHistory.Skip(1).All(x=>x==-1),"native history actually cleared");
+            Check(Current().Count==3 && icons.Count(i=>i.gameObject.activeInHierarchy)==3,"same tick final key preserved in actual scene");
+            Queue();
+            ScreenCapture.CaptureScreenshot(Output+"/original-scene-consumed.png");
+            double until=EditorApplication.timeSinceStartup+.65;while(EditorApplication.timeSinceStartup<until)yield return null;
+            Record("after-consumption-timer");
+            Check(icons.All(i=>!i.gameObject.activeSelf)&&bg.enabled&&Math.Abs(bg.rectTransform.rect.width-406)<.01,"original scene timer clears icons and resets visible background");
+            ScreenCapture.CaptureScreenshot(Output+"/original-scene-empty.png");
+            yield return null;
+        }
+    }
+}
+#endif

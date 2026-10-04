@@ -1,6 +1,6 @@
 # Q09/P-08 正式根 LFR 与原 Unity Battle 同局部初态诊断
 
-状态：`FIRST_RUN_MARK_REACHED / CORRECTED_INPUT_ORIGINAL_EDITOR_COMPILE_PENDING`。P-08、Q09、Q12 及总目标仍开放。本包只新增专用 Editor 诊断及证据，未改生产战斗逻辑、DAT、角色图片、Scene 或配置。
+状态：`THIRD_RUN_Q07_INPUT_SCOPED_RECOVERY / RANDOM_TABLE_INITIAL_STATE_LIMIT`。P-08、Q09、Q12 及总目标仍开放。前两轮历史首差见下方；第三轮 Q07 共用人类三键修复后，攻击/伤害/血点命令恢复，但同步随机表初态不同，不宣称动作逐tick完全相等。
 
 ## 权威与配对范围
 
@@ -25,3 +25,14 @@
 原 Editor 在第二次 `refresh_unity` 后报告 `is_compiling=true`，其 `Assembly-CSharp-Editor.dll` 时间仍早于修正的探针源码，且 `tests.is_running=false`、非 Play、Battle Scene clean；因此**修正输入的第二轮原 Editor Play 尚未运行**。待原 Editor 完成编译后，使用新的 runId 保存第二轮原始结果，按同一六字段逐 tick 比较，并重新核对四保护文件 SHA，最后回到运行前的 clean Menu。此处不得把生成工程编译代替原 Editor 编译或 Play。
 
 即使第二轮选定字段全同，正式根 EXE 自身 GPU Present、完整 World 状态、同视口像素、Legacy 渲染出口仍需独立证据；项目自有背景和固定完整视野属于用户例外。
+## 2026-10-04 正确 Attack 第二轮与去重结论
+
+原 Editor 当前程序集导入修正后的探针后，以新的干净 Battle Scene 基线运行 [第二轮原始结果](ita-equal-hp-336b44-unity-02.json)，鸣人 OID2、鼬 OID9、mode/difficulty0、源X500/540、Z650、HP500/30、RNG seed0，共22个完整生产 Driver tick。根输入与本轮均为前两 tick 语义 Attack（mask16），初态 CRT `3374725112/3000`。首差在相对 tick2：正式根鸣人动作60，Unity动作110；正式 tick8 鼬HP10、tick22一条1×3血点，Unity目标持续HP30/血点0。此次退出 Play 时 Battle Scene clean，Battle/Menu/GameConfig/ProjectBattleModeConfig 本轮四份保护 SHA 与前置相同；后续其它任务对 Scene 的改动不归因本探针。
+
+静态调用链显示人类语义 Attack 写旧 `KeyAttack`，而 native producer 按旧字段布局把它冻结为正式 Defend；独立 Q07 单项 EditMode 用例已实际 RED：Attack 正式索引4期望1、实际0，见 [单项结果](../NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001/editmode-red-20261004.json)。因此本轮无血点是已观测输入/动作首差的下游结果，不另立 P-08 绘制生产缺陷。先处理 [共用人类三键 Task](../../../docs/ai/TASKS/NTSD28-336B44-Q07-HUMAN-BUTTON-NATIVE-INGRESS-001.md)；动作与HP同态后才复用此22 tick案例判断非例外血点画面。根不输出血点/GPU字段、局部初态不等于全 World，故本报告不声称正式根逐像素证书。
+
+## 2026-10-04 Q07修复后第三轮与停止线
+
+原Editor新程序集导入后，用新的独立请求 `ita-equal-hp-336b44-unity-03` 复用同一原Battle Scene探针，旧请求与前两轮结果均未覆盖。[第三轮原件](ita-equal-hp-336b44-unity-03.json)、[机械配对](third-run-field-comparison.json)记录22个生产Driver tick：Unity tick2/3由原110改为65；tick8鼬HP10、tick22一条1×3血点绘制命令恢复；其余动作/X/HP等选定六字段130/132同正式根。前后四保护SHA相同，Editor已退出Play、Scene clean。
+
+动作60/65不能判生产规则首差：根LFR的同步随机表来自录制manager，初态哈希`f75f85682ee9412c`；Unity探针仅执行`NativeRandom.ResetFromSeed(0)`，表哈希`68c5f16327d0ddd7`。两边CRT状态/调用数`3374725112/3000`相同，但站立攻击site`0x82`用**同步随机表**二选一。原报告将CRT相同称为“同一局部初态”遗漏了此字段；本条更正为“角色/位置/HP/CRT相同、同步表不同”。不为抬状态继续重复此22tick，需同表证据或Q12代表技能才判断剩余动作；正式根未导出血点命令/GPU像素，Q09画面总门仍开放。第三轮新增测试请求入口属于Q07 Change，生产/DAT/Scene/非战斗均未改。

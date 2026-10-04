@@ -1,0 +1,12 @@
+--- 
++++ 
+@@ -169,7 +169,8 @@
+                 arrows[i].gameObject.SetActive(i + 1 < count && icons[i].gameObject.activeSelf && icons[i + 1].gameObject.activeSelf);
+                 arrows[i].rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * step, arrowY);
+             }
+-            SetBackgroundWidth(count > 0 ? Mathf.Max(defaultWidth, rowWidth + 2f * horizontalPadding) : defaultWidth);
++            float singleKeyWidth = Mathf.Max(defaultWidth, iconWidth + 2f * horizontalPadding);
++            SetBackgroundWidth(count > 0 ? singleKeyWidth + (count - 1) * step : defaultWidth);
+         }
+ 
+         private void SetBackgroundWidth(float width)

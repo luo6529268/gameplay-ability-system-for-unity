@@ -1,0 +1,32 @@
+﻿{
+  "schema": "ntsd28-q07-human-button-third-run-comparison/1",
+  "rootExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "unityRunId": "ita-equal-hp-336b44-unity-03",
+  "selectedFieldMatches": 130,
+  "selectedFieldTotal": 132,
+  "mismatches": [
+    {
+      "tick": 2,
+      "field": "actorAction",
+      "root": 60,
+      "unity": 65
+    },
+    {
+      "tick": 3,
+      "field": "actorAction",
+      "root": 60,
+      "unity": 65
+    }
+  ],
+  "rootInitialSynchronizedTableHash": "f75f85682ee9412c",
+  "unityInitialSynchronizedTableHashHex": "68c5f16327d0ddd7",
+  "rootRandomProvenance": "locked_lfr_manager",
+  "unityInitialCrtState": 3374725112,
+  "rootInitialCrtCalls": 3000,
+  "unityInitialCrtCalls": 3000,
+  "unityTargetHpTick8": 10,
+  "unityBleedCommandsTick22": 1,
+  "sceneCleanAfter": true,
+  "exitedPlay": true,
+  "sceneHashEqual": true
+}

@@ -1,0 +1,22 @@
+--- Assets\NTSD\Scene\NTSD_Battle.unity
++++ Assets\NTSD\Scene\NTSD_Battle.unity
+@@ -2723,6 +2723,19 @@
+   comboBackgroundImage: {fileID: 278066488}
+   comboContentImage: {fileID: 521647143}
+   comboArrowImage: {fileID: 833747953}
++  iconSlots:
++  - {fileID: 521647143}
++  - {fileID: 181874281}
++  - {fileID: 76062750}
++  - {fileID: 489746825}
++  - {fileID: 614650873}
++  - {fileID: 1793886140}
++  arrowSlots:
++  - {fileID: 833747953}
++  - {fileID: 453264874}
++  - {fileID: 1024356824}
++  - {fileID: 973262652}
++  - {fileID: 752756623}
+   keyIcons:
+   - Key: 6
+     Sprite: {fileID: 21300000, guid: f758f253acfd2f7499f200c46e08e25f, type: 3}

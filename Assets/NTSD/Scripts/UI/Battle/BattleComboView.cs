@@ -3,6 +3,7 @@ using System.Collections;
 using MoreMountains.Tools;
 using NTSD.Simulation;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NTSD.UI.Battle
 {
@@ -15,14 +16,13 @@ namespace NTSD.UI.Battle
             public Sprite Sprite;
         }
 
-        [SerializeField] private UnityEngine.UI.Image comboBackgroundImage;
-        [SerializeField] private UnityEngine.UI.Image comboContentImage;
-        [SerializeField] private UnityEngine.UI.Image comboArrowImage;
+        [SerializeField] private RectTransform comboBackgroundImage;
+        [SerializeField] private RectTransform comboContentImage;
+        [SerializeField] private RectTransform comboArrowImage;
         [SerializeField] private KeyIcon[] keyIcons = Array.Empty<KeyIcon>();
-        [SerializeField, Min(1f)] private float defaultWidth = 406f;
-        [SerializeField, Min(0f)] private float horizontalPadding = 80f;
-        [SerializeField, Min(0f)] private float iconGap = 32f;
-        [SerializeField, Min(0f)] private float consumedDisplaySeconds = .5f;
+        [SerializeField] private float defaultWidth = 406f;
+        [SerializeField] private float horizontalPadding = 80f;
+        [SerializeField] private float consumedDisplaySeconds = .5f;
 
         private static readonly BattleInputHistoryKey[] Keys =
         {
@@ -30,8 +30,10 @@ namespace NTSD.UI.Battle
             BattleInputHistoryKey.Down, BattleInputHistoryKey.Attack, BattleInputHistoryKey.Jump, BattleInputHistoryKey.Defend,
         };
         private readonly Sprite[] sprites = new Sprite[10];
-        private readonly UnityEngine.UI.Image[] icons = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity];
-        private readonly UnityEngine.UI.Image[] arrows = new UnityEngine.UI.Image[BattleComboInputChangedEvent.Capacity - 1];
+        [SerializeField] private RectTransform[] iconSlots = Array.Empty<RectTransform>();
+        [SerializeField] private RectTransform[] arrowSlots = Array.Empty<RectTransform>();
+        private Image[] icons;
+        private Image[] arrows;
         private bool initialized;
         private bool listening;
         private float contentY;
@@ -61,10 +63,7 @@ namespace NTSD.UI.Battle
         {
             StopListening();
             CancelPendingClear();
-            for (int i = 1; i < icons.Length; i++)
-                if (icons[i] != null) Destroy(icons[i].gameObject);
-            for (int i = 1; i < arrows.Length; i++)
-                if (arrows[i] != null) Destroy(arrows[i].gameObject);
+            ClearVisualState();
         }
 
         private void StopListening()
@@ -103,23 +102,31 @@ namespace NTSD.UI.Battle
         private void InitializeVisuals()
         {
             if (initialized || comboContentImage == null || comboArrowImage == null) return;
-            initialized = true;
             BuildIconMap();
-            Transform parent = comboContentImage.transform.parent;
-            comboArrowImage.transform.SetParent(parent, true);
-            contentY = comboContentImage.rectTransform.anchoredPosition.y;
-            arrowY = comboArrowImage.rectTransform.anchoredPosition.y;
-            icons[0] = comboContentImage;
-            arrows[0] = comboArrowImage;
-            for (int i = 1; i < icons.Length; i++) icons[i] = Instantiate(comboContentImage, parent);
-            for (int i = 1; i < arrows.Length; i++) arrows[i] = Instantiate(comboArrowImage, parent);
-            foreach (var icon in icons) { icon.raycastTarget = false; icon.enabled = true; }
-            foreach (var arrow in arrows) { arrow.raycastTarget = false; arrow.enabled = true; }
-            if (comboBackgroundImage != null) comboBackgroundImage.raycastTarget = false;
+            icons = CacheImages(iconSlots);
+            arrows = CacheImages(arrowSlots);
+            contentY = comboContentImage.anchoredPosition.y;
+            arrowY = comboArrowImage.anchoredPosition.y;
+            initialized = true;
+            if (icons.Length < BattleComboInputChangedEvent.Capacity ||
+                arrows.Length < BattleComboInputChangedEvent.Capacity - 1)
+                Debug.LogWarning("[BattleComboView] Bind at least five icons and four arrows.", this);
+        }
+
+        private static Image[] CacheImages(RectTransform[] slots)
+        {
+            var images = new Image[slots?.Length ?? 0];
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i] = slots[i] != null ? slots[i].GetComponent<Image>() : null;
+                if (images[i] != null) images[i].raycastTarget = false;
+            }
+            return images;
         }
 
         public void OnMMEvent(BattleComboInputChangedEvent value)
         {
+            if (!isActiveAndEnabled) return;
             SimulationTickDriver driver = SimulationTickDriver.Instance;
             if (driver != null && driver.IsCurrentBattleComboInputEvent(value)) Apply(value);
         }
@@ -152,40 +159,65 @@ namespace NTSD.UI.Battle
 
         private void Render(BattleComboInputChangedEvent value, int count)
         {
-            float iconWidth = comboContentImage.rectTransform.rect.width;
-            float step = iconWidth + comboArrowImage.rectTransform.rect.width + iconGap;
-            float rowWidth = count > 0 ? iconWidth + (count - 1) * step : 0f;
-            float start = -(rowWidth - iconWidth) * .5f;
+            count = Mathf.Min(count, BattleComboInputChangedEvent.Capacity, icons.Length);
+            float iconWidth = comboContentImage.rect.width;
+            float step = iconWidth + comboArrowImage.rect.width;
+            float start = -(Mathf.Max(0, count - 1) * step) * .5f;
             for (int i = 0; i < icons.Length; i++)
             {
+                Image icon = icons[i];
+                if (icon == null) continue;
                 int key = i < count ? (int)value.GetKey(i) : -1;
                 Sprite sprite = key >= 0 && key < sprites.Length ? sprites[key] : null;
-                icons[i].sprite = sprite;
-                icons[i].gameObject.SetActive(sprite != null);
-                icons[i].rectTransform.anchoredPosition = new Vector2(start + i * step, contentY);
+                icon.overrideSprite = null;
+                icon.sprite = sprite;
+                icon.enabled = true;
+                icon.gameObject.SetActive(sprite != null);
+                if (sprite != null)
+                    icon.rectTransform.anchoredPosition = new Vector2(start + i * step, contentY);
             }
             for (int i = 0; i < arrows.Length; i++)
             {
-                arrows[i].gameObject.SetActive(i + 1 < count && icons[i].gameObject.activeSelf && icons[i + 1].gameObject.activeSelf);
-                arrows[i].rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * step, arrowY);
+                Image arrow = arrows[i];
+                if (arrow == null) continue;
+                bool visible = i + 1 < count && icons[i] != null && icons[i + 1] != null &&
+                    icons[i].gameObject.activeSelf && icons[i + 1].gameObject.activeSelf;
+                arrow.enabled = true;
+                arrow.gameObject.SetActive(visible);
+                if (visible)
+                    arrow.rectTransform.anchoredPosition = new Vector2(start + (i + .5f) * step, arrowY);
             }
-            SetBackgroundWidth(count > 0 ? Mathf.Max(defaultWidth, rowWidth + 2f * horizontalPadding) : defaultWidth);
+            float singleKeyWidth = Mathf.Max(defaultWidth, iconWidth + 2f * horizontalPadding);
+            SetBackgroundWidth(count > 0 ? singleKeyWidth + (count - 1) * step : defaultWidth);
         }
 
         private void SetBackgroundWidth(float width)
         {
             if (comboBackgroundImage == null) return;
-            comboBackgroundImage.enabled = true;
-            comboBackgroundImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
+            comboBackgroundImage.gameObject.SetActive(true);
+            Image background = comboBackgroundImage.GetComponent<Image>();
+            if (background != null) background.enabled = true;
+            comboBackgroundImage.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         }
 
         public void ClearVisualState()
         {
             CancelPendingClear();
-            if (comboContentImage != null) comboContentImage.gameObject.SetActive(false);
-            if (comboArrowImage != null) comboArrowImage.gameObject.SetActive(false);
-            foreach (var icon in icons) if (icon != null) icon.gameObject.SetActive(false);
-            foreach (var arrow in arrows) if (arrow != null) arrow.gameObject.SetActive(false);
+            if (icons != null)
+            {
+                foreach (Image icon in icons)
+                {
+                    if (icon == null) continue;
+                    icon.gameObject.SetActive(false);
+                    icon.overrideSprite = null;
+                    icon.sprite = null;
+                }
+            }
+            if (arrows != null)
+            {
+                foreach (Image arrow in arrows)
+                    if (arrow != null) arrow.gameObject.SetActive(false);
+            }
             SetBackgroundWidth(defaultWidth);
         }
     }
