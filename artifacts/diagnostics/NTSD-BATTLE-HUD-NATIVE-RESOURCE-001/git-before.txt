@@ -1,0 +1,66 @@
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset"
+ M Assets/NTSD/Scene/NTSD_Battle.unity
+ M Assets/NTSD/Scripts/Animation/LF2Objects/BattleHitCandidateSequenceRunner.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C053NaturalDoubleBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs
+ M artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/REPORT.md
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-001.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-BUTTON-RIPPLE-001/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001.md
+?? Assets/NTSD/Prefabs/NTSDButtonRipplePreview.prefab
+?? Assets/NTSD/Prefabs/NTSDButtonRipplePreview.prefab.meta
+?? Assets/NTSD/Sprite/UIPanels/BattleHud/ButtonRippleRing.png
+?? Assets/NTSD/Sprite/UIPanels/BattleHud/ButtonRippleRing.png.meta
+?? artifacts/diagnostics/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001/
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/Capture-checks.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/Capture-failure.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/Capture2-checks.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/Capture3-checks.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/FinalPreviewDriver.cs.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/FinalPreviewEntry.cs.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/NTSDButton-Ripple-Unity-Play.gif
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/NTSDButtonRipple.cs.run3.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/PreviewEntry.cs.run1.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/PreviewEntry.cs.run3.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/PreviewEntry.cs.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/REPORT.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/RipplePreviewDriver.cs.run1.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/RipplePreviewDriver.cs.run3.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/RipplePreviewDriver.cs.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/Unity-Play-frame-040.png
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/before-newline-normalize.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/deliverables.json
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/final-deliverables.json
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/final-unity-checks.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/ledger.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/library-identity.json
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/library_file_transfer.py
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/preview-path.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/record-before-final.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/ripple-before-disable-tail.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-0.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-1.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-2.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-3.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-4.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/run2-before-5.txt
+?? artifacts/diagnostics/NTSD-BUTTON-RIPPLE-POOL-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/ank610-jira500-firz700-yminus60-01-paired.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/ank610-jira500-firz700-yminus60-default-02.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/ank610-jira500-firz700-yminus60-green-04-paired.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/ank610-jira500-firz700-yminus60-green-04.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/ank610-jira500-firz700-yminus60-plan-03.json
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-POOL-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD-BUTTON-RIPPLE-POOL-001/
+?? docs/ai/TASKS/NTSD-BUTTON-RIPPLE-POOL-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.md

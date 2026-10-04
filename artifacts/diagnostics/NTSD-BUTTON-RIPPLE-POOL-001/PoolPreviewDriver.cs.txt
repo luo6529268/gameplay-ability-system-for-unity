@@ -1,0 +1,41 @@
+using System;using System.IO;using System.Reflection;using System.Collections;using System.Collections.Generic;using NTSD.UI;using UnityEngine;using UnityEngine.UI;using UnityEngine.EventSystems;using DG.Tweening;
+public class PoolPreviewDriver:MonoBehaviour {
+ Camera cam;RenderTexture rt;NTSDButton button;NTSDButtonRipple ripple;int frame,checks;float nextCapture;Text caption;List<Tween> tweenWitness=new List<Tween>();
+ string Folder=>Path.Combine(Application.dataPath,"../Capture");
+ IList Slots=>(IList)typeof(NTSDButtonRipple).GetField("rings",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(ripple);
+ T Get<T>(object slot,string name)=>(T)slot.GetType().GetField(name,BindingFlags.Instance|BindingFlags.NonPublic).GetValue(slot);
+ int Active(){int n=0;foreach(object s in Slots)if(Get<bool>(s,"Active"))n++;return n;}
+ void Check(bool ok,string message){if(!ok)throw new Exception(message);checks++;File.AppendAllText(Path.Combine(Folder,"checks.txt"),"PASS "+message+"\n");}
+ void Start(){try{Directory.CreateDirectory(Folder);new GameObject("EventSystem",typeof(EventSystem));cam=new GameObject("Camera",typeof(Camera)).GetComponent<Camera>();cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.045f,.065f,.09f);cam.transform.position=new Vector3(0,0,-10);cam.orthographic=true;rt=new RenderTexture(800,450,24);cam.targetTexture=rt;
+ var canvas=new GameObject("Canvas",typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster)).GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=cam;canvas.planeDistance=1;
+ var prefab=UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/NTSDButtonRipplePreview.prefab");var go=Instantiate(prefab,canvas.transform,false);((RectTransform)go.transform).anchoredPosition=Vector2.zero;button=go.GetComponent<NTSDButton>();ripple=go.GetComponent<NTSDButtonRipple>();
+ caption=new GameObject("Caption",typeof(RectTransform),typeof(CanvasRenderer),typeof(Text)).GetComponent<Text>();caption.transform.SetParent(canvas.transform,false);caption.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");caption.fontSize=17;caption.alignment=TextAnchor.MiddleCenter;caption.color=new Color(.7f,.8f,.9f);caption.raycastTarget=false;caption.rectTransform.sizeDelta=new Vector2(790,90);caption.rectTransform.anchoredPosition=new Vector2(0,-140);
+ Check(Slots.Count==4&&Active()==0,"four prewarmed idle images");foreach(object s in Slots)Check(!Get<Image>(s,"Image").raycastTarget,"pooled image ignores raycasts");
+ }catch(Exception e){Fail(e);}}
+ void Down(int id){ExecuteEvents.Execute(button.gameObject,new PointerEventData(EventSystem.current){pointerId=id,button=PointerEventData.InputButton.Left},ExecuteEvents.pointerDownHandler);}
+ void Up(int id){ExecuteEvents.Execute(button.gameObject,new PointerEventData(EventSystem.current){pointerId=id,button=PointerEventData.InputButton.Left},ExecuteEvents.pointerUpHandler);}
+ void Click(){Down(1);Up(1);}
+ void Update(){if(frame==100&&button==null){try{foreach(Tween t in tweenWitness)Check(!t.IsActive(),"owned tween killed on destroy");File.AppendAllText(Path.Combine(Folder,"checks.txt"),"TOTAL "+checks+" PASS; actual Unity Play/ExecuteEvents.\n");UnityEditor.EditorApplication.Exit(0);}catch(Exception e){Fail(e);}return;}if(button==null||Time.realtimeSinceStartup<nextCapture)return;nextCapture=Time.realtimeSinceStartup+1f/30f;
+ try{
+ if(frame==1){Click();Check(Active()==1,"single click emits one ring; release emits none");}
+ if(frame==3)Click();
+ if(frame==5){float before=Get<float>(Slots[0],"Progress");Click();Check(Active()==3,"three rings concurrently active");Check(Get<float>(Slots[0],"Progress")>=before&&before>0,"third click does not reset first ring");float a=Get<Image>(Slots[0],"Image").rectTransform.sizeDelta.x,b=Get<Image>(Slots[1],"Image").rectTransform.sizeDelta.x,c=Get<Image>(Slots[2],"Image").rectTransform.sizeDelta.x;Check(a>b&&b>c,"three distinct expanding radii");}
+ if(frame==6){Click();Click();Check(Slots.Count==5&&Active()==5,"pool grows beyond four without stealing active rings");}
+ if(frame==23){Check(Active()==0,"all rings naturally recycle");Click();Check(Slots.Count==5&&Active()==1,"next click reuses retained pool");}
+ if(frame==26){button.gameObject.SetActive(false);Check(Active()==0,"disable returns all active rings");}
+ if(frame==29){button.gameObject.SetActive(true);Click();Check(Active()==1,"reenable has one subscription and one emission");}
+ if(frame==32){ripple.SendMessage("OnApplicationFocus",false);Check(Active()==0,"focus loss clears pool");ripple.SendMessage("OnApplicationFocus",true);Click();Check(Active()==1,"focus recovery emits one");}
+ if(frame==35){ripple.SendMessage("OnApplicationPause",true);Check(Active()==0,"pause clears pool");ripple.SendMessage("OnApplicationPause",false);}
+ if(frame==39){Down(1);Down(2);Down(2);Check(Active()==1,"second pointer and repeated down do not emit new rings");Up(1);Check(button.IsPointerPressed&&Active()==1,"intermediate finger release no emission");Up(2);}
+ if(frame==44){button.enabled=false;}
+ if(frame==45){Check(Active()==0,"button-only disable clears all tails");button.enabled=true;Click();}
+ if(frame==48)button.interactable=false;
+ if(frame==49){Check(Active()==0,"noninteractable clears all tails");button.interactable=true;}
+ if(frame==53){ExecuteEvents.Execute(button.gameObject,new BaseEventData(EventSystem.current),ExecuteEvents.submitHandler);Check(Active()==1&&!button.IsPointerPressed,"Submit emits visual only");}
+ if(frame==68||frame==71||frame==74)Click();
+ caption.text="ACTUAL UNITY PLAY MODE\nEach press keeps its own expanding ring\nActive rings: "+Active()+"   |   Pooled images: "+Slots.Count;
+ Canvas.ForceUpdateCanvases();cam.Render();RenderTexture.active=rt;var tex=new Texture2D(800,450,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,800,450),0,0);tex.Apply();File.WriteAllBytes(Path.Combine(Folder,$"frame-{frame:D3}.png"),tex.EncodeToPNG());Destroy(tex);RenderTexture.active=null;
+ if(++frame==100){foreach(object s in Slots){var t=Get<Tween>(s,"Tween");if(t!=null)tweenWitness.Add(t);}Destroy(button.gameObject);}
+ }catch(Exception e){Fail(e);}}
+ void Fail(Exception e){File.WriteAllText(Path.Combine(Folder,"failure.txt"),e.ToString());UnityEditor.EditorApplication.Exit(2);}
+}

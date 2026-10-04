@@ -1,0 +1,12 @@
+{
+  "scope": "12 complete production Driver ticks vs selected 336B44 formal playable source CSV, same controlled initial state; inactive slots compared by membership only",
+  "rows": 12,
+  "baseFieldPairsPerActiveRow": 23,
+  "activeMembershipPairsPerRow": 2,
+  "checkedComparableValues": 261,
+  "skippedInactiveSlotFields": 39,
+  "differenceCount": 0,
+  "firstDifferences": [],
+  "sourceRootWorldComparison": "1136/1136 selected fields from prior controlled source/root capture; root RNG internals not claimed identical",
+  "status": "SCOPED_PASS"
+}

@@ -1,0 +1,6 @@
+using UnityEditor;using UnityEditor.SceneManagement;using UnityEngine;
+[InitializeOnLoad] public static class PoolPreviewEntry {
+ static PoolPreviewEntry(){EditorApplication.playModeStateChanged+=Changed;}
+ public static void Run(){var root=PrefabUtility.LoadPrefabContents("Assets/NTSDButtonRipplePreview.prefab");var so=new SerializedObject(root.GetComponent<NTSD.UI.NTSDButtonRipple>());so.FindProperty("initialPoolSize").intValue=4;so.ApplyModifiedPropertiesWithoutUndo();PrefabUtility.SaveAsPrefabAsset(root,"Assets/NTSDButtonRipplePreview.prefab");PrefabUtility.UnloadPrefabContents(root);SessionState.SetBool("PoolPreview",true);EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);EditorApplication.EnterPlaymode();}
+ static void Changed(PlayModeStateChange s){if(s==PlayModeStateChange.EnteredPlayMode&&SessionState.GetBool("PoolPreview",false)){SessionState.SetBool("PoolPreview",false);new GameObject("PoolPreviewDriver").AddComponent<PoolPreviewDriver>();}}
+}

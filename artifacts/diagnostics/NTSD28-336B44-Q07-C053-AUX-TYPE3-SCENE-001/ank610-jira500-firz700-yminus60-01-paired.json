@@ -1,0 +1,98 @@
+{
+  "scope": "12 complete production Driver ticks vs formal playable source CSV, same controlled initial state",
+  "rows": 12,
+  "fieldsPerRow": 23,
+  "selectedFieldCount": 276,
+  "firstSixTicksDifferenceCount": 0,
+  "differenceCount": 39,
+  "firstDifferences": [
+    {
+      "tick": 7,
+      "formalField": "slot2_action",
+      "unityField": "auxiliaryAction",
+      "unity": 10,
+      "formalSource": 20
+    },
+    {
+      "tick": 7,
+      "formalField": "slot2_hp",
+      "unityField": "auxiliaryHp",
+      "unity": 458,
+      "formalSource": 368
+    },
+    {
+      "tick": 7,
+      "formalField": "crt_state",
+      "unityField": "crtState",
+      "unity": 1334545526,
+      "formalSource": 3309792928
+    },
+    {
+      "tick": 7,
+      "formalField": "crt_calls",
+      "unityField": "crtCalls",
+      "unity": 3004,
+      "formalSource": 3006
+    },
+    {
+      "tick": 8,
+      "formalField": "slot2_action",
+      "unityField": "auxiliaryAction",
+      "unity": 11,
+      "formalSource": 21
+    },
+    {
+      "tick": 8,
+      "formalField": "slot2_hp",
+      "unityField": "auxiliaryHp",
+      "unity": 458,
+      "formalSource": 368
+    },
+    {
+      "tick": 8,
+      "formalField": "crt_state",
+      "unityField": "crtState",
+      "unity": 1334545526,
+      "formalSource": 3309792928
+    },
+    {
+      "tick": 8,
+      "formalField": "crt_calls",
+      "unityField": "crtCalls",
+      "unity": 3004,
+      "formalSource": 3006
+    },
+    {
+      "tick": 9,
+      "formalField": "slot2_action",
+      "unityField": "auxiliaryAction",
+      "unity": 11,
+      "formalSource": 21
+    },
+    {
+      "tick": 9,
+      "formalField": "slot2_hp",
+      "unityField": "auxiliaryHp",
+      "unity": 458,
+      "formalSource": 368
+    },
+    {
+      "tick": 9,
+      "formalField": "crt_state",
+      "unityField": "crtState",
+      "unity": 1334545526,
+      "formalSource": 3309792928
+    },
+    {
+      "tick": 9,
+      "formalField": "crt_calls",
+      "unityField": "crtCalls",
+      "unity": 3004,
+      "formalSource": 3006
+    }
+  ],
+  "notes": [
+    "Source/root selected World fields were separately compared 1136/1136; root RNG is not claimed identical.",
+    "Inactive-slot sentinels may differ after tick 9; first difference at tick 7 is unaffected."
+  ]
+}

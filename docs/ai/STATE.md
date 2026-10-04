@@ -1,3 +1,11 @@
+> 2026-10-04 `NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001 / RUNTIME_PENDING / SCOPED_GREEN`：共用候选消费修复已在原Editor重新编译，受控辅助type3原Battle Scene默认模式12tick `SCOPED_PASS`，正式336B44源码/Unity 261/261 可比值同，第7tickHP/动作差已消除。纯角色相邻锁存聚焦、Tobi自然键与其它C053仍待；本轮运行内Scene SHA稳且clean，之后独立查询又dirty但磁盘SHA不变，保留内存内容。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/REPORT.md)。
+
+> 2026-10-04 `NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001 / PLANNED`：正式源码只拒锁存角色候选本项，根同tick候选0→角色拒后候选1→非角色命中；Unity共用候选消费当前`return true`提前终止整个攻击者。独立Task/Change已在脚本前登记，仅拟改共享返回值和旧测试文案；原Scene RED已捕获。当前Battle Scene dirty且磁盘外变，保留并暂停Play。[Task](TASKS/NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.md)。
+
+> 2026-10-04 原Editor现场补注：第三次C053探针退出时Battle Scene clean且磁盘SHA `CACF6664…E4DB8`；后续独立复核MCP显示`isDirty=true`，磁盘SHA `402139F7…EC8694CB`，写入者未证。保留当前Scene内存/磁盘修改，暂不切场景或Play；此前三次运行内证据仍有效，下一运行时验证须重新取得clean前置。
+
+> 2026-10-04 最新G1/Q07/C053：`NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001 / RUNTIME_PENDING / FIRST_DIFFERENCE_CONFIRMED`。原Editor三次原Battle Scene定向Play，正式源码/Unity所选前6tick×23字段零差，tick7正式slot50→slot2 applied/90伤，Unity OID251仍HP458/action10（正式368/20）；默认模式与ShadowCompare均同差。第三轮候选计划有ordinal0→slot0及ordinal1→slot2，但未观测后续处分；首差在候选生成之后、伤害写入之前，具体守卫待定。三次退出非Play、Scene clean且各次SHA稳，未改生产/DAT/Scene/非战斗；Q07/C053与总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/REPORT.md)。
+
 > 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001 / VERIFIED_SCOPED_SCENE`：原Editor同项目新程序集，独立v2 20tick原Battle Scene Play `PASS/DONE`，与336B44正式源码7选定字段140/140零差；tick2起OID220 World槽空，旧action1000是回收后探针引用，非生产首差。退出Play、唯一Scene clean、四SHA在本次运行内一致；v1/v2之间Battle磁盘SHA变化来源未证，保留。仅关闭C009受控恢复Scene子门，物理键、Q08/Q12仍开；未改生产/DAT/Scene/非战斗。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001/REPORT.md)。
 
 > 2026-10-04 `NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001 / PLANNED`：正式源/根OID220→OID9恢复20tick×7字段140/140后，仅扩既有C009原Battle Scene探针，新增独立20tick请求以生产工厂见证结果暂停再恢复；原请求保持。原Editor仍编译中，不在旧程序集Play；生产/DAT/Scene不改。[Task](TASKS/NTSD28-336B44-Q08-C009-RETURN-RESUME-SCENE-001.md)。
@@ -5942,3 +5950,11 @@ NTSD-BUTTON-MULTIPOINTER-001 / IN_PROGRESS — authorized NTSDButton pointer agg
 NTSD-BUTTON-MULTIPOINTER-001 / RUNTIME_PENDING — scoped real Unity API compile 0 errors/0 warnings; actual-source/substitute-base harness 51 PASS. Only NTSDButton production edit. Editor/Play/device pending. Evidence artifacts/diagnostics/NTSD-BUTTON-MULTIPOINTER-001/REPORT.txt; Change Record docs/ai/CHANGE-RECORDS/NTSD-BUTTON-MULTIPOINTER-001.md.
 
 NTSD-BUTTON-RIPPLE-001 / IN_PROGRESS: opt-in Ripple component and independent Unity preview; original Scene ownership unconfirmed, no Scene edits. docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-001.md.
+
+NTSD-BUTTON-RIPPLE-001 / RUNTIME_PENDING (original Scene); isolated real Unity compile/Play15 assertions PASS, generated ring+opt-in prefab, actual GIF saved libfile_e7092c799da08191af6ef4e51d3af3b0. Original Scene/Button SHA unchanged. [Record](docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-001.md); report artifacts/diagnostics/NTSD-BUTTON-RIPPLE-001/REPORT.txt.
+
+NTSD-BUTTON-RIPPLE-POOL-001 / IN_PROGRESS: replaces previous single-tween replay policy with independent growable ring pool. Task/Record docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-POOL-001.md; original Scenes preserved.
+
+NTSD-BUTTON-RIPPLE-POOL-001 / RUNTIME_PENDING (original Scene/device), isolated Unity compile+Play27 assertions PASS. Independent overlapping growable ring pool supersedes single replay; prefab initialPoolSize4. Actual GIF libfile_870fcb6d1f148191a5193c4abf5538fd. Record docs/ai/CHANGE-RECORDS/NTSD-BUTTON-RIPPLE-POOL-001.md; artifacts/diagnostics/NTSD-BUTTON-RIPPLE-POOL-001/REPORT.txt.
+
+NTSD-BATTLE-HUD-NATIVE-RESOURCE-001 / IN_PROGRESS: actual PP skill cost bypasses earlier MP HUD source. Minimal source remap with real writer tests; HP not yet reproduced failing. docs/ai/CHANGE-RECORDS/NTSD-BATTLE-HUD-NATIVE-RESOURCE-001.md.

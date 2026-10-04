@@ -1,0 +1,3 @@
+System.Exception: effect ends hidden
+  at RipplePreviewDriver.Check (System.Boolean value, System.String message) [0x00009] in C:\Users\Logan\AppData\Local\Temp\NTSDRipplePreview-001\Assets\RipplePreviewDriver.cs:5 
+  at RipplePreviewDriver.Update () [0x0016b] in C:\Users\Logan\AppData\Local\Temp\NTSDRipplePreview-001\Assets\RipplePreviewDriver.cs:28 

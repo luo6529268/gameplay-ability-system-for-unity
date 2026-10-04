@@ -1,0 +1,27 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\build\Assembly-CSharp.dll
+Only this standalone process Unity logger disabled to avoid native logging ECall; gameplay code unchanged.
+PASS actual Anko353 mp75 consumption
+PASS skill1 event
+PASS skill1 values HP=500 PP=425 mask=Mp
+PASS second actual skill applied
+PASS skill2 event
+PASS skill2 values HP=500 PP=350 mask=Mp
+PASS legacyMP write cannot overwrite blue cache
+Unhandled exception. System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.Object.FindObjectsOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType(Type type, Boolean includeInactive)
+   at UnityEngine.Object.FindObjectOfType[T]()
+   at MoreMountains.Tools.MMSingleton`1.get_Instance()
+   at NTSD.Animation.LF2Objects.LF2Entity.ResolveCurrentDataObjectType(LF2Entity entity) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4846
+   at NTSD.Animation.LF2Objects.LF2Entity.GetCurrentDataObjectTypeForSimulation() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:line 4758
+   at NTSD.Simulation.Ecs.BattleRecoveryStatusWriter.CanEnterNativeResource(LF2Entity entity) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Ecs\Writers\BattleRecoveryStatusWriter.cs:line 15
+   at NTSD.Simulation.Ecs.BattleRecoveryStatusWriter.ApplyMpRecovery(LF2Entity entity, Int32 resourcePhase3, Int32 selectedModeMpRegenGate2C, Boolean negativeMpRegenEnabled) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Ecs\Writers\BattleRecoveryStatusWriter.cs:line 77
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.MethodBase.Invoke(Object obj, Object[] parameters)
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\green\Program.cs:line 30

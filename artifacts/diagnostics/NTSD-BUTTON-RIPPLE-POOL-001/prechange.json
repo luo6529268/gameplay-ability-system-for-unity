@@ -1,0 +1,53 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs",
+    "sha256": "9d20b08c0a8ae4ce50046fce473bf032709b29bae4f131527de1592f1d6a27e4",
+    "backup": "before-0.txt",
+    "git": " M Assets/NTSD/Scripts/UI/NTSDButtonRipple.cs\n"
+  },
+  {
+    "path": "Assets/NTSD/Prefabs/NTSDButtonRipplePreview.prefab",
+    "sha256": "4c356e861f82a178a0071e8b1040cc17bca1733866a5afa2a813c83553cf1bd3",
+    "backup": "before-1.txt",
+    "git": "?? Assets/NTSD/Prefabs/NTSDButtonRipplePreview.prefab\n"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha256": "1f6a9953bd7596e0f617c1dfaf7598ff8a23b887f43ae9f90937d81e6325d082",
+    "backup": "before-2.txt",
+    "git": " M docs/ai/CHANGE-LEDGER.md\n"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha256": "e356ec532629671ce9d3c0a2d3c59577ba6b82628b67d377b9ab344b3d48b5f3",
+    "backup": "before-3.txt",
+    "git": " M docs/ai/STATE.md\n"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha256": "7dd015ecc7ca6b9b0a04d65a564894faaa372326f3cf6bbdec1e35304967beb3",
+    "backup": "before-4.txt",
+    "git": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha256": "f6ab2c089d794623715748dddc18572147dd041bb7fcf8878af240c11edb6260",
+    "backup": "before-5.txt",
+    "git": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "sha256": "402139f7924af2dd93f2bb0a3a27fe29e1f9298b7293a2a0a757cc78ec8694cb",
+    "protected": true
+  },
+  {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sha256": "9eaaa0b4782974d74a017c367c9d5c77326c31d4281a2d820d1cbba76986c1ba",
+    "protected": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/UI/NTSDButton.cs",
+    "sha256": "ee592bb3a6efb49ced09b09f2b36965cfa8aae549ecc03e2f55571828d49fa76",
+    "protected": true
+  }
+]

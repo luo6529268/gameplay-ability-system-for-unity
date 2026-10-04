@@ -1,0 +1,8 @@
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+[InitializeOnLoad] public static class PreviewEntry {
+ static PreviewEntry(){EditorApplication.playModeStateChanged+=Changed;}
+ public static void Run(){SessionState.SetBool("NTSDRipplePreview",true);EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);EditorApplication.EnterPlaymode();}
+ static void Changed(PlayModeStateChange state){if(state==PlayModeStateChange.EnteredPlayMode&&SessionState.GetBool("NTSDRipplePreview",false)){SessionState.SetBool("NTSDRipplePreview",false);new GameObject("PreviewDriver").AddComponent<RipplePreviewDriver>();}}
+}

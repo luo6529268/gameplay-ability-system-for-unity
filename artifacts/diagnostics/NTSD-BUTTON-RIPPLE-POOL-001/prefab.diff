@@ -1,0 +1,10 @@
+--- before
++++ after
+@@ -163,6 +163,7 @@
+     m_PreInfinity: 2
+     m_PostInfinity: 2
+     m_RotationOrder: 4
++  initialPoolSize: 4
+ --- !u!1 &5717654129459473767
+ GameObject:
+   m_ObjectHideFlags: 0

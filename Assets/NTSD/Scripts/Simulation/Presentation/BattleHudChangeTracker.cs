@@ -74,7 +74,8 @@ namespace NTSD.Simulation
             entry.StableId = runtime.StableId;
             entry.ObjectId = runtime.ObjectId;
             entry.Hp = runtime.HP; entry.HpBound = runtime.HPBound; entry.HpMax = runtime.HP3;
-            entry.Mp = runtime.MP; entry.MpMax = runtime.MPMax;
+            // Native skill costs and resource writers use PP; MP is a separate legacy bank.
+            entry.Mp = runtime.PP; entry.MpMax = runtime.MPMax;
             runtime.BindHudChanges(this, playerIndex, handle);
             if (selected < 0 || playerIndex <= selected)
             {

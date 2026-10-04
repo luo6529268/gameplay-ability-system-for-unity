@@ -1,0 +1,28 @@
+PASS four prewarmed idle images
+PASS pooled image ignores raycasts
+PASS pooled image ignores raycasts
+PASS pooled image ignores raycasts
+PASS pooled image ignores raycasts
+PASS single click emits one ring; release emits none
+PASS three rings concurrently active
+PASS third click does not reset first ring
+PASS three distinct expanding radii
+PASS pool grows beyond four without stealing active rings
+PASS all rings naturally recycle
+PASS next click reuses retained pool
+PASS disable returns all active rings
+PASS reenable has one subscription and one emission
+PASS focus loss clears pool
+PASS focus recovery emits one
+PASS pause clears pool
+PASS second pointer and repeated down do not emit new rings
+PASS intermediate finger release no emission
+PASS button-only disable clears all tails
+PASS noninteractable clears all tails
+PASS Submit emits visual only
+PASS owned tween killed on destroy
+PASS owned tween killed on destroy
+PASS owned tween killed on destroy
+PASS owned tween killed on destroy
+PASS owned tween killed on destroy
+TOTAL 27 PASS; actual Unity Play/ExecuteEvents.

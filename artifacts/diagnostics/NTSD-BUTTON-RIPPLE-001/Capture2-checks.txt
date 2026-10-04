@@ -1,0 +1,13 @@
+PASS starts hidden and does not intercept raycasts
+PASS PointerDown immediately starts effect
+PASS release does not stop ripple
+PASS rapid click reuses cached tween
+PASS second finger does not emit aggregate press
+PASS first finger release preserves other hold
+PASS effect ends hidden
+PASS disable hides and pauses
+PASS reenable fresh press reuses tween
+PASS Submit visual does not set held
+PASS focus loss clears
+PASS pause clears
+TOTAL 12 PASS; actual Unity Play Mode and ExecuteEvents; not physical touchscreen.

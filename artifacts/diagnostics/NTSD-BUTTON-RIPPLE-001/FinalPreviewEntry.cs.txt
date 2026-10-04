@@ -1,0 +1,14 @@
+using UnityEditor;using UnityEditor.SceneManagement;using UnityEngine;using UnityEngine.UI;using NTSD.UI;using System.IO;
+[InitializeOnLoad] public static class PreviewEntry {
+ static PreviewEntry(){EditorApplication.playModeStateChanged+=Changed;}
+ public static void Run(){SessionState.SetBool("NTSDRipplePreview",true);EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Single);EditorApplication.EnterPlaymode();}
+ static void MakeRingAndPrefab(){
+ const int n=256;var tex=new Texture2D(n,n,TextureFormat.RGBA32,false);var pixels=new Color[n*n];
+ for(int y=0;y<n;y++)for(int x=0;x<n;x++){float dx=x+.5f-n*.5f,dy=y+.5f-n*.5f;float distance=Mathf.Abs(Mathf.Sqrt(dx*dx+dy*dy)-100f);float core=Mathf.Exp(-distance*distance/(2f*1.6f*1.6f));float glow=.24f*Mathf.Exp(-distance*distance/(2f*6.5f*6.5f));pixels[y*n+x]=new Color(1,1,1,Mathf.Clamp01(core+glow));}
+ tex.SetPixels(pixels);tex.Apply();File.WriteAllBytes("Assets/Art/ButtonRippleRing.png",tex.EncodeToPNG());Object.DestroyImmediate(tex);AssetDatabase.ImportAsset("Assets/Art/ButtonRippleRing.png");var ti=(TextureImporter)AssetImporter.GetAtPath("Assets/Art/ButtonRippleRing.png");ti.textureType=TextureImporterType.Sprite;ti.spriteImportMode=SpriteImportMode.Single;ti.alphaIsTransparency=true;ti.mipmapEnabled=false;ti.wrapMode=TextureWrapMode.Clamp;ti.filterMode=FilterMode.Bilinear;ti.textureCompression=TextureImporterCompression.Uncompressed;ti.SaveAndReimport();
+ var go=new GameObject("NTSDButtonRipplePreview",typeof(RectTransform),typeof(CanvasRenderer),typeof(Image));var image=go.GetComponent<Image>();image.sprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/Attack.png");image.preserveAspect=true;((RectTransform)go.transform).sizeDelta=new Vector2(110,110);var button=go.AddComponent<NTSDButton>();button.targetGraphic=image;button.transition=Selectable.Transition.None;
+ var ring=new GameObject("RippleRing",typeof(RectTransform),typeof(CanvasRenderer),typeof(Image)).GetComponent<Image>();ring.transform.SetParent(go.transform,false);ring.sprite=AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Art/ButtonRippleRing.png");ring.raycastTarget=false;ring.enabled=false;var rect=ring.rectTransform;rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);rect.anchoredPosition=Vector2.zero;rect.sizeDelta=new Vector2(90,90);
+ var component=go.AddComponent<NTSDButtonRipple>();var so=new SerializedObject(component);so.FindProperty("ringImage").objectReferenceValue=ring;so.ApplyModifiedPropertiesWithoutUndo();PrefabUtility.SaveAsPrefabAsset(go,"Assets/NTSDButtonRipplePreview.prefab");Object.DestroyImmediate(go);
+ }
+ static void Changed(PlayModeStateChange state){if(state==PlayModeStateChange.EnteredPlayMode&&SessionState.GetBool("NTSDRipplePreview",false)){SessionState.SetBool("NTSDRipplePreview",false);new GameObject("PreviewDriver").AddComponent<RipplePreviewDriver>();}}
+}

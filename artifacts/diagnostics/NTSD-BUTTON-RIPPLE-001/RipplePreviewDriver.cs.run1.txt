@@ -1,0 +1,39 @@
+using System;using System.IO;using System.Reflection;using NTSD.UI;using UnityEngine;using UnityEngine.UI;using UnityEngine.EventSystems;using DG.Tweening;
+public class RipplePreviewDriver:MonoBehaviour {
+ Camera cam;RenderTexture rt;NTSDButton button;NTSDButtonRipple ripple;Image ring;int frame;Tween cached;int checks;int edges;
+ string Folder=>Path.Combine(Application.dataPath,"../Capture");
+ void Check(bool value,string message){if(!value)throw new Exception(message);checks++;File.AppendAllText(Path.Combine(Folder,"checks.txt"),"PASS "+message+"\n");}
+ void Start(){try{Time.captureFramerate=30;Directory.CreateDirectory(Folder);new GameObject("EventSystem",typeof(EventSystem));
+ cam=new GameObject("Camera",typeof(Camera)).GetComponent<Camera>();cam.clearFlags=CameraClearFlags.SolidColor;cam.backgroundColor=new Color(.045f,.065f,.09f);cam.transform.position=new Vector3(0,0,-10);cam.orthographic=true;rt=new RenderTexture(800,450,24);cam.targetTexture=rt;
+ var canvas=new GameObject("Canvas",typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster)).GetComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceCamera;canvas.worldCamera=cam;canvas.planeDistance=1;
+ var go=new GameObject("AttackBtn",typeof(RectTransform),typeof(CanvasRenderer),typeof(Image));go.SetActive(false);go.transform.SetParent(canvas.transform,false);var rect=(RectTransform)go.transform;rect.anchorMin=rect.anchorMax=new Vector2(.5f,.5f);rect.sizeDelta=new Vector2(110,110);rect.anchoredPosition=Vector2.zero;
+ var icon=go.GetComponent<Image>();icon.sprite=Load("Attack.png");icon.preserveAspect=true;button=go.AddComponent<NTSDButton>();button.targetGraphic=icon;button.transition=Selectable.Transition.None;button.PressedStateChanged+=(s,p)=>edges++;
+ ring=new GameObject("Temporary segmented ring",typeof(RectTransform),typeof(CanvasRenderer),typeof(Image)).GetComponent<Image>();ring.transform.SetParent(go.transform,false);ring.sprite=Load("TemporaryRing.png");ring.raycastTarget=false;ring.preserveAspect=false;
+ ripple=go.AddComponent<NTSDButtonRipple>();typeof(NTSDButtonRipple).GetField("ringImage",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(ripple,ring);go.SetActive(true);
+ Text label=new GameObject("Caption",typeof(RectTransform),typeof(CanvasRenderer),typeof(Text)).GetComponent<Text>();label.transform.SetParent(canvas.transform,false);label.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");label.text="ACTUAL UNITY PLAY MODE\nTemporary segmented sprite / original icon\nRepeated PointerDown, two fingers, disable/re-enable";label.fontSize=17;label.alignment=TextAnchor.MiddleCenter;label.color=new Color(.7f,.8f,.9f);label.raycastTarget=false;label.rectTransform.sizeDelta=new Vector2(780,90);label.rectTransform.anchoredPosition=new Vector2(0,-140);
+ Check(!ring.raycastTarget&&!ring.enabled,"starts hidden and does not intercept raycasts");
+ }catch(Exception e){Fail(e);}}
+ Sprite Load(string name){var tex=new Texture2D(2,2);tex.LoadImage(File.ReadAllBytes(Path.Combine(Application.dataPath,"Art",name)));return Sprite.Create(tex,new Rect(0,0,tex.width,tex.height),new Vector2(.5f,.5f),100);}
+ void Down(int id){ExecuteEvents.Execute(button.gameObject,new PointerEventData(EventSystem.current){pointerId=id,button=PointerEventData.InputButton.Left},ExecuteEvents.pointerDownHandler);}
+ void Up(int id){ExecuteEvents.Execute(button.gameObject,new PointerEventData(EventSystem.current){pointerId=id,button=PointerEventData.InputButton.Left},ExecuteEvents.pointerUpHandler);}
+ Tween Current=> (Tween)typeof(NTSDButtonRipple).GetField("rippleTween",BindingFlags.Instance|BindingFlags.NonPublic).GetValue(ripple);
+ void Update(){if(button==null)return;try{
+ if(frame==1){Down(1);cached=Current;Check(ring.enabled&&button.IsPointerPressed,"PointerDown immediately starts effect");}
+ if(frame==3){Up(1);Check(ring.enabled,"release does not stop ripple");}
+ if(frame==6){Down(1);Check(Current==cached,"rapid click reuses cached tween");}
+ if(frame==8)Up(1);
+ if(frame==12){Down(2);Down(3);Check(edges==5,"second finger does not emit aggregate press");}
+ if(frame==15){Up(2);Check(button.IsPointerPressed,"first finger release preserves other hold");}
+ if(frame==18)Up(3);
+ if(frame==30){Check(!ring.enabled,"effect ends hidden");Down(1);button.gameObject.SetActive(false);Check(!ring.enabled&&!cached.IsPlaying(),"disable hides and pauses");}
+ if(frame==33){button.gameObject.SetActive(true);Down(1);Check(ring.enabled&&Current==cached,"reenable fresh press reuses tween");}
+ if(frame==35)Up(1);
+ if(frame==48){ExecuteEvents.Execute(button.gameObject,new BaseEventData(EventSystem.current),ExecuteEvents.submitHandler);Check(ring.enabled&&!button.IsPointerPressed,"Submit visual does not set held");}
+ if(frame==52){ripple.SendMessage("OnApplicationFocus",false);Check(!ring.enabled&&!cached.IsPlaying(),"focus loss clears");ripple.SendMessage("OnApplicationFocus",true);}
+ if(frame==56){Down(1);ripple.SendMessage("OnApplicationPause",true);Check(!ring.enabled&&!cached.IsPlaying(),"pause clears");ripple.SendMessage("OnApplicationPause",false);Up(1);}
+ if(frame==60)Down(1);if(frame==62)Up(1);
+ Canvas.ForceUpdateCanvases();cam.Render();RenderTexture.active=rt;var tex=new Texture2D(800,450,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,800,450),0,0);tex.Apply();File.WriteAllBytes(Path.Combine(Folder,$"frame-{frame:D3}.png"),tex.EncodeToPNG());Destroy(tex);RenderTexture.active=null;
+ if(++frame==80){Destroy(button.gameObject);File.AppendAllText(Path.Combine(Folder,"checks.txt"),"TOTAL "+checks+" PASS; actual Unity Play Mode and ExecuteEvents; not physical touchscreen.\n");UnityEditor.EditorApplication.Exit(0);}
+ }catch(Exception e){Fail(e);}}
+ void Fail(Exception e){File.WriteAllText(Path.Combine(Folder,"failure.txt"),e.ToString());UnityEditor.EditorApplication.Exit(2);}
+}

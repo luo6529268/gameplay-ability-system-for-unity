@@ -28,12 +28,25 @@ namespace NTSD.Test.Editor
         private const string Q10ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q10-C053-FORMAL-WAV-DEPLOY-001/";
         private const string AuxRequestPath = "Temp/NTSD28_Q07_C053AuxType3.request.json";
+        private const string AuxDefaultRequestPath =
+            "Temp/NTSD28_Q07_C053AuxType3DefaultHit.request.json";
+        private const string AuxPlanRequestPath =
+            "Temp/NTSD28_Q07_C053AuxType3CandidatePlan.request.json";
+        private const string AuxGreenRequestPath =
+            "Temp/NTSD28_Q07_C053AuxType3Green.request.json";
         private const string AuxResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q07-C053-AUX-TYPE3-SCENE-001/";
         private const string SessionKey = "NTSD.Q07.C053PerHitWriter02";
         private const string RunId = "ank580-ank580-jira500-per-hit-writer-02";
         private const string Q10RunId = "ank580-ank580-jira500-formal-wav-03";
         private const string AuxRunId = "ank610-jira500-firz700-yminus60-01";
+        private const string AuxDefaultRunId = "ank610-jira500-firz700-yminus60-default-02";
+        private const string AuxPlanRunId = "ank610-jira500-firz700-yminus60-plan-03";
+        private const string AuxGreenRunId = "ank610-jira500-firz700-yminus60-green-04";
+
+        private static bool IsAuxRun(string runId) =>
+            runId == AuxRunId || runId == AuxDefaultRunId ||
+            runId == AuxPlanRunId || runId == AuxGreenRunId;
 
         private static Report report;
         private static SimulationTickDriver driver;
@@ -98,6 +111,7 @@ namespace NTSD.Test.Editor
             public int targetHitPlanEntryCount;
             public string targetHitWriterEntries;
             public int targetHitWriterEntryCount;
+            public string attacker50PlanEntries;
             public long observationMismatchCount;
             public long hitPlanFailureCount;
             public bool hitPlanValid;
@@ -183,7 +197,7 @@ namespace NTSD.Test.Editor
 
         private static string ResultPath(string runId) =>
             (runId == Q10RunId ? Q10ResultRoot :
-                runId == AuxRunId ? AuxResultRoot : ResultRoot) + runId + ".json";
+                IsAuxRun(runId) ? AuxResultRoot : ResultRoot) + runId + ".json";
 
         private static void Restore()
         {
@@ -212,7 +226,7 @@ namespace NTSD.Test.Editor
                 FieldInfo field = typeof(BattleTestBootstrap).GetField("overrideCharacterIds",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(field != null, "BattleTestBootstrap overrideCharacterIds is missing.");
-                field.SetValue(matches[0], report.runId == AuxRunId
+                field.SetValue(matches[0], IsAuxRun(report.runId)
                     ? new[] { 65, 702 }
                     : new[] { 65, 702, 65 });
                 report.configuredBeforeStart = true;
@@ -249,7 +263,8 @@ namespace NTSD.Test.Editor
                 if (!EditorApplication.isPlaying) return;
                 if (report.phase == "STARTUP")
                 {
-                    ConfigureShadowAtResetBoundary();
+                    if (report.runId != AuxDefaultRunId && report.runId != AuxGreenRunId)
+                        ConfigureShadowAtResetBoundary();
                     WaitForRoster();
                     return;
                 }
@@ -276,6 +291,9 @@ namespace NTSD.Test.Editor
                 (Path: Q10RequestPath, Id: Q10RunId),
                 (Path: RequestPath, Id: RunId),
                 (Path: AuxRequestPath, Id: AuxRunId),
+                (Path: AuxDefaultRequestPath, Id: AuxDefaultRunId),
+                (Path: AuxPlanRequestPath, Id: AuxPlanRunId),
+                (Path: AuxGreenRequestPath, Id: AuxGreenRunId),
             })
             {
                 string candidatePath = PathInProject(choice.Path);
@@ -305,10 +323,15 @@ namespace NTSD.Test.Editor
             driver = SimulationTickDriver.Instance;
             world = driver?.World;
             if (world == null || driver.CurrentTickIndex < 5) return;
-            Require(ReferenceEquals(world, shadowConfiguredWorld) &&
-                world.BattleHitExecutionPlanModeForDiagnostics ==
-                    BattleHitExecutionPlanMode.ShadowCompare,
-                "Read-only ShadowCompare was not configured before the first battle tick.");
+            if (report.runId == AuxDefaultRunId || report.runId == AuxGreenRunId)
+                Require(world.BattleHitExecutionPlanModeForDiagnostics ==
+                    BattleHitExecutionPlanMode.Disabled,
+                    "Default hit plan mode changed before the first battle tick.");
+            else
+                Require(ReferenceEquals(world, shadowConfiguredWorld) &&
+                    world.BattleHitExecutionPlanModeForDiagnostics ==
+                        BattleHitExecutionPlanMode.ShadowCompare,
+                    "Read-only ShadowCompare was not configured before the first battle tick.");
             if (!driver.IsPaused) { driver.SetPaused(true); return; }
             if (driver.DedicatedSimulationWorkerTickInFlightForDiagnostics) return;
             if (stableTick != driver.CurrentTickIndex)
@@ -324,7 +347,7 @@ namespace NTSD.Test.Editor
                 second is LF2Character, "OID702 roster entity is missing.");
             anko = (LF2Character)first;
             jiraiya = (LF2Character)second;
-            bool auxiliaryCase = report.runId == AuxRunId;
+            bool auxiliaryCase = IsAuxRun(report.runId);
             if (!auxiliaryCase)
             {
                 Require(world.TryResolveRosterInputEntity(2, out LF2Entity third) &&
@@ -505,7 +528,7 @@ namespace NTSD.Test.Editor
             long q10PlayedBefore = report.runId == Q10RunId
                 ? soundPlayer.PooledOneShotPlayCountForDiagnostics
                 : 0;
-            SimulationPlayerInput[] inputs = report.runId == AuxRunId
+            SimulationPlayerInput[] inputs = IsAuxRun(report.runId)
                 ? new[]
                 {
                     new SimulationPlayerInput(0, SimulationInputButtons.None),
@@ -556,6 +579,24 @@ namespace NTSD.Test.Editor
                 world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
             var targetEntries = new List<string>();
             var writerRows = new List<string>();
+            var attacker50Entries = new List<string>();
+            if (report.runId == AuxPlanRunId)
+            {
+                for (int index = 0;
+                     world.TryGetBattleHitExecutionPlanEntryForDiagnostics(
+                         index, out BattleHitExecutionPlanEntryView entry);
+                     index++)
+                {
+                    if (entry.AttackerHandle.Slot != 50) continue;
+                    attacker50Entries.Add(entry.CandidateOrdinal + ":" +
+                        entry.TargetSlot + ":" + entry.ItrIndex + ":" +
+                        entry.ItrKind + ":" + entry.ExpectedDisposition + ":" +
+                        entry.ObservedDisposition + ":" +
+                        entry.PreprocessObserved + ":" +
+                        entry.DispositionObserved + ":" +
+                        entry.WriterEffectObserved);
+                }
+            }
             if (child != null)
             {
                 for (int index = 0;
@@ -626,6 +667,7 @@ namespace NTSD.Test.Editor
                 targetHitPlanEntryCount = targetEntries.Count,
                 targetHitWriterEntries = string.Join(";", writerRows),
                 targetHitWriterEntryCount = writerRows.Count,
+                attacker50PlanEntries = string.Join(";", attacker50Entries),
                 observationMismatchCount = hitPlan.ObservationMismatchCount,
                 hitPlanFailureCount = hitPlan.FailureCount,
                 hitPlanValid = hitPlan.CurrentTickPlanValid,
@@ -671,7 +713,15 @@ namespace NTSD.Test.Editor
         {
             TickRow seventh = report.ticks.Single(value => value.relativeTick == 7);
             bool matched;
-            if (report.runId == AuxRunId)
+            if (report.runId == AuxDefaultRunId || report.runId == AuxGreenRunId)
+            {
+                matched = report.childBirthTick == 1 && report.attackerBirthTick == 4 &&
+                    seventh.auxiliarySlot == 2 && seventh.auxiliaryAction == 20 &&
+                    seventh.auxiliaryHp == 368 && seventh.childSlot == 50 &&
+                    seventh.childAction == 156 && seventh.childHp == 440 &&
+                    seventh.attackerSlot == 51 && seventh.attackerAction == 11;
+            }
+            else if (report.runId == AuxRunId || report.runId == AuxPlanRunId)
             {
                 matched = report.childBirthTick == 1 && report.attackerBirthTick == 4 &&
                     seventh.attackerCount == 1 && seventh.owner0Count == 1 &&

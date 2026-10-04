@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-RIPPLE-001\library_file_transfer.py", line 303, in <module>
+    raise SystemExit(main(sys.argv[1:]))
+                     ^^^^^^^^^^^^^^^^^^
+  File "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-RIPPLE-001\library_file_transfer.py", line 288, in main
+    materializer.apply_xattrs(
+  File "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-RIPPLE-001\library_file_transfer.py", line 246, in apply_xattrs
+    xattr.apply(path)
+  File "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BUTTON-RIPPLE-001\library_file_transfer.py", line 64, in apply
+    os.setxattr(path, self.name, encoded_value)
+    ^^^^^^^^^^^
+AttributeError: module 'os' has no attribute 'setxattr'

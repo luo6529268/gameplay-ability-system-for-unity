@@ -102,8 +102,9 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             // NTSD 2.8 checks the persistent special-hit latch after the frozen-pair/vrest gate
-            // and aborts the attacker only for character DAT targets, before ITR resolution.
-            // Alignment contract: NTSD28-B5-SPECIAL-HIT-LATCH-ATOMIC-PRODUCTION-INTEGRATION-001.
+            // and rejects only this character candidate before ITR resolution;
+            // later candidates for this attacker must still be considered.
+            // Alignment contract: NTSD28-336B44-Q07-C053-LATCH-CANDIDATE-CONTINUE-001.
             bool ordinaryCandidate = originalItr.kind == 0 || originalItr.kind == 4 || originalItr.kind == 5;
             bool canConsume = CanConsumeRecordedCandidate(attacker, target, !ordinaryCandidate);
             if (!canConsume)
@@ -112,7 +113,7 @@ namespace NTSD.Animation.LF2Objects
             if (attacker.Runtime.SpecialHitLatch0EB &&
                 target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
             {
-                return true;
+                return false;
             }
 
             if (BruteForceSceneQuery.IsReleaseConsumerPairBlocked(attacker, target))

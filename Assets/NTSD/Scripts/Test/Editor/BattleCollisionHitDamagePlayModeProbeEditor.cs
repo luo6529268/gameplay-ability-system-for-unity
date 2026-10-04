@@ -217,7 +217,7 @@ namespace NTSD.Test.Editor
                     fixtures.hitConfirmSecond.Health.HP == 100 &&
                     fixtures.hitConfirmAttacker.Runtime.SpecialHitLatch0EB &&
                     fixtures.hitConfirmAttacker.HitConfirm2 == 0,
-                "SpecialHitLatch0EB did not abort the entire attacker before writers");
+                "SpecialHitLatch0EB did not suppress the character candidates before writers");
             Require(fixtures.caughtFirst.Health.HP == 100 &&
                     fixtures.caughtSecond.Health.HP < 100,
                 "caught/hurtable gate did not skip only the first candidate");

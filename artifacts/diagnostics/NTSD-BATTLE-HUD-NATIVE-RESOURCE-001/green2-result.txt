@@ -1,0 +1,24 @@
+Actual managed assembly: I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\build\Assembly-CSharp.dll
+Only this standalone process Unity logger disabled to avoid native logging ECall; gameplay code unchanged.
+PASS actual Anko353 mp75 consumption
+PASS skill1 event
+PASS skill1 values HP=500 PP=425 mask=Mp
+PASS second actual skill applied
+PASS skill2 event
+PASS skill2 values HP=500 PP=350 mask=Mp
+PASS legacyMP write cannot overwrite blue cache
+Unhandled exception. System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.Security.SecurityException: ECall methods must be packaged into a system module.
+   at UnityEngine.ResourcesAPIInternal.FindShaderByName(String name)
+   at UnityEngine.ResourcesAPI.FindShaderByName(String name)
+   at UnityEngine.Shader.Find(String name)
+   at NTSD.Simulation.Presentation.BattleSpriteMaterialClassifier..ctor() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Presentation\BattleSpriteMaterialClassifier.cs:line 19
+   at NTSD.Simulation.Presentation.BattlePresentationCoordinator..ctor() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Presentation\BattlePresentationShadowBuild.cs:line 1592
+   at NTSD.Simulation.SimulationStageRenderModule..ctor(SimulationWorld world) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Stage\SimulationStageRenderModule.cs:line 36
+   at NTSD.Simulation.SimulationWorld..ctor(BattleRuntimeProfile runtimeProfile, Int32 runtimeSlotCapacity, CollisionBroadphaseBackend collisionBroadphase, RuntimeCharacterConfigResolver characterConfigResolver) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Core\SimulationWorld.cs:line 364
+   at NTSD.Simulation.SimulationWorld..ctor() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Core\SimulationWorld.cs:line 262
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+   --- End of inner exception stack trace ---
+   at System.RuntimeType.CreateInstanceDefaultCtor(Boolean publicOnly, Boolean wrapExceptions)
+   at Program.New(String n) in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\green2\Program.cs:line 5
+   at Program.Main() in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD-BATTLE-HUD-NATIVE-RESOURCE-001\green2\Program.cs:line 30

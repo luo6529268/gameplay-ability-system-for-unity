@@ -1,0 +1,6 @@
+PASS starts hidden and does not intercept raycasts
+PASS PointerDown immediately starts effect
+PASS release does not stop ripple
+PASS rapid click reuses cached tween
+PASS second finger does not emit aggregate press
+PASS first finger release preserves other hold
