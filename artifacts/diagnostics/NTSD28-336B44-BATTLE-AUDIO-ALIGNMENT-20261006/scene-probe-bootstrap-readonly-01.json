@@ -1,0 +1,26 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "data": {
+      "gameObjectID": 77736,
+      "gameObjectName": "GameObject",
+      "component": {
+        "typeName": "NTSD.Test.BattleTestBootstrap",
+        "instanceID": 77738,
+        "properties": {
+          "gameConfig": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+          "overrideCharacterIds": [
+            2,
+            2
+          ],
+          "autoResume": true,
+          "delayFrames": 1,
+          "forceWalkingMode": false,
+          "forceRunningMode": false,
+          "logForceStateToggle": true
+        }
+      }
+    }
+  }
+}

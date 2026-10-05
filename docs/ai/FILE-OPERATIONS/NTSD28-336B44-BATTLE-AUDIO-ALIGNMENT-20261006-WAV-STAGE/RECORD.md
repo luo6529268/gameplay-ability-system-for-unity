@@ -8,3 +8,5 @@
 恢复仅移除本次新增manifest项，须再获删除授权并留记录；本次无删除。
 
 原执行结尾校验表达式TypeError，保留失败，不重复复制。按实际manifest复核所有WAV SHA/.meta均在位：{"operation": "NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE", "ended": "2026-10-05T19:02:18.855606+00:00", "mapped_source_total": 981, "battle_required_total": 978, "existing_kept": 12, "new_wav": 966, "new_wav_metas": 966, "new_folder_metas": 53, "all_destinations_sha_equal": true, "initial_validation_error": "TypeError at final verification expression root[e['destination']] after successful staging; no writes retried. Rechecked actual manifest destinations using root / path."}。状态 VERIFIED，仅部署身份。
+
+记录措辞更正：新AudioImporter沿用既有078 meta模板（compressionFormat:1）；没有宣称Unity导入缓存为PCM编码。生产播放器通过UnityWebRequest按原WAV文件解码，原采样率/声道/样本数由实际加载测试验收。WAV原字节逐SHA相同，原12meta/GUID不变。

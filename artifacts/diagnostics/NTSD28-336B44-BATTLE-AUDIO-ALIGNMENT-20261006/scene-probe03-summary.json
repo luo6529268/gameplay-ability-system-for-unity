@@ -1,0 +1,18 @@
+{
+  "sceneStatus": "PASS",
+  "sampleCount": 64,
+  "counterMax": {
+    "rejectedUnpreparedCueCount": 0,
+    "failedPreparedCueLoadCount": 0,
+    "skippedMissingBattleCueFileCount": 0,
+    "voiceLimitDropCount": 0,
+    "rejectedPublishedSoundEventCount": 0
+  },
+  "postExitVoiceCount": 0,
+  "postExitPlaying": 0,
+  "orderedShutdownComplete": true,
+  "shutdownWorldObjects": 0,
+  "shutdownRuntimeSlots": 0,
+  "shutdownBorrowers": 0,
+  "note": "4 already playing one-shots remained immediately after logical shutdown; after exiting Play audio sources/playing both0, not a Scene-unload audio-stop proof."
+}

@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28BattleAudioAlignmentEditorTests.cs(158,49): error CS0266: Cannot implicitly convert type 'int' to 'byte'. An explicit conversion exists (are you missing a cast?)",
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28BattleAudioAlignmentEditorTests.cs(159,48): error CS0266: Cannot implicitly convert type 'int' to 'byte'. An explicit conversion exists (are you missing a cast?)"
+    ]
+  }
+}

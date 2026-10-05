@@ -1,0 +1,8 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q10Diagnostics\battle_audio_20261006_probe.cpp: In function 'const char* {anonymous}::audio_source_name(ntsd28::WorldAudioEventSource28)':
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q10Diagnostics\battle_audio_20261006_probe.cpp:64:12: warning: enumeration value 'frontend_menu' not handled in switch [-Wswitch]
+   64 |     switch (source) {
+      |            ^
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q10Diagnostics\battle_audio_20261006_probe.cpp: In function 'void {anonymous}::emit_dash_case(int)':
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q10Diagnostics\battle_audio_20261006_probe.cpp:642:33: warning: narrowing conversion of '(int)after->ntsd28::EntityState28::position.ntsd28::Position28::x' from 'int' to 'double' [-Wnarrowing]
+  642 |                 after->position.x,
+      |                 ~~~~~~~~~~~~~~~~^

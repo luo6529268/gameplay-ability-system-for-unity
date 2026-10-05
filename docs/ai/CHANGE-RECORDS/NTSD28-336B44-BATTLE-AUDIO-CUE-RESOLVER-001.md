@@ -1,11 +1,12 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-BATTLE-AUDIO-CUE-RESOLVER-001
-status: CODE_WRITTEN
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs
 code-path: Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/SoundPresentationDispatchEditorTests.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioCatalogEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioSceneProbeEditor.cs
 authority: user 2026-10-06 battle audio request; formal 336B44 and verified playable battle audio live paths
 evidence: docs/ai/TASKS/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006.md
 -->
@@ -22,3 +23,13 @@ Unity 原状与预期：战斗专用统一解析 SFX_ddd -> data/ddd.wav，正�
 不可回退边界：不得回退用户/其他任务修改、DAT及Scene；无外部发布/删除。
 
 2026-10-06 CODE_WRITTEN：实际脚本已按声明路径编辑；资源966新增WAV+966meta+53foldermeta已逐SHA验证，原12保持。cue新两项RED均预期首差；原Editor Refresh已提交，正在导入资源，初次请求30秒超时不等于失败/编译验收。事件规则worker三个指定文件已静态检查，ECS投影和运行仍待主代理集成。无DAT/Scene/非战斗修改。
+
+实际Play出口实施前声明准确测试脚本 NTSD28BattleAudioSceneProbeEditor.cs：原已保存Battle Scene，生产角色/声音预热/Driver/voice与退出；自然Naruto DJJ/DJA沿既有07855tick序列，受控180/213帧声音与一次60攻击命中代表。不称受控帧注入为自然受击/自然冲刺。结果采用本Task新CreateNew文件，不覆盖旧探针原件，Scene/config不写盘。
+
+2026-10-06 FOCUSED_TEST_PASS：原Editor实际compile0 error；audio-focused-green-final-result 25/25（含978原WAV UnityWebRequest samples/channels/frequency逐个一致，代表8声音voice，128稳定播放GC0）；post-audio-focused-final-result16/16；post-audio-ecs-final-result6/6。去重为39具名case，不称47个不同case。native当前Core22/22应用成功/0anomalies，普通effect0/1/type3/prefix，effect2/3/23后效，reduced0/7/70/75 DAT回退/type3目标X，type2反弹。正式EXE音频事件未捕获，当前source身份与正式根精确对应仍受历史来源限制；当前Core trace不晋升formal EXE。681保护哈希、978三端WAV一致、原12 WAV/meta24项与开始Git基线完全同。
+原Scene run01只在正式内容预热startup180秒超时，没有战斗tick/声音测量，报告FAIL；正常有序关闭/退出后voice0/hashclean保留，不包装PASS。run02用既有078十分钟启动先例、12分钟总限，30秒CreateNew状态快照，正在运行；collision门已要求同tick实际assigned+playing+playdelta，有序关闭失败停止不卸载。无DAT、Scene/Input或非战斗改动。
+
+2026-10-06 最新更正：Scene02提前退出由用户明确确认是他或其他任务的操作；尚未进入声音预热/战斗tick，所以不是运行音频失败也不是PASS。Scene03在已保存Battle/Editor idle前置后启动，输出新03保留01/02。Dash三RED额外1个cue，删三行后同三项GREEN，动作/速度/DAT帧a7断言通过；累积42去重case，原39和978加载未重复。独立只读复审无新增阻断；原Scene声音/普通SelfCheck整体未知仍明确未晋升。
+
+2026-10-06 最终运行验收：Scene03 PASS/DONE，原Scene/Driver tick5→69，global39自然技能data078、global69实际命中HP500→480/SFX001；两受控p3/a7帧均实际voice。所有64样本五失败/拒绝/溢出计数0；World/slot/borrower清零并正常退出，退出后voice0/hashclean。资源978实际解码、42去重case、681保护/原12WAV与meta稳定；详本Task REPORT.md/scene03/final-content-guard。
+状态边界：cue/resource VERIFIED；Event RUNTIME_PENDING仅正式根逐事件对应不足，Unity运行已通过，不表示还未运行Play。当前Core25受控case非formal根见证，kind9候选来源不足未实施。旧记录中的两个早期音频hunk表述不作为kind9正式源身份证明，不扩大旧目标或自动重跑全角色。整体BattleRuntimeSelfCheck及设备听感未运行。

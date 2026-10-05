@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "01b0cf35c21149e0afc1627a19bff56a",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791230109662,
+      "finished_unix_ms": 1791230126714,
+      "last_update_unix_ms": 1791230126714,
+      "progress": {
+        "completed": 3,
+        "total": 8941,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791230125725,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.DashInputKeepsDatFrameSoundWithoutExtraChannelSeven(215,0,False,\"TryRunSharedCharacterDatCrouchInputPhase\",214,-23.0d)",
+        "last_finished_unix_ms": 1791230125730,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.DashInputKeepsDatFrameSoundWithoutExtraChannelSeven(9,2,True,\"TryRunSharedCharacterDatRunningInputPhase\",213,23.0d)",
+            "message": "  Expected: property Count equal to 0\r\n  But was:  1\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.DashInputKeepsDatFrameSoundWithoutExtraChannelSeven(215,0,True,\"TryRunSharedCharacterDatCrouchInputPhase\",213,23.0d)",
+            "message": "  Expected: property Count equal to 0\r\n  But was:  1\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.DashInputKeepsDatFrameSoundWithoutExtraChannelSeven(215,0,False,\"TryRunSharedCharacterDatCrouchInputPhase\",214,-23.0d)",
+            "message": "  Expected: property Count equal to 0\r\n  But was:  1\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using NTSD.App;
 using NTSD.Animation;
@@ -4843,40 +4843,11 @@ namespace NTSD.Simulation.Ecs
                 projection.TargetFall = projectedFall;
             }
 
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker,
-                attacker.Runtime.XInt,
-                ref projection);
             ProjectStandardHurtCustomSounds(
                 targetWorld,
                 attacker,
                 target,
                 ref projection);
-            ProjectQueuedSound(
-                targetWorld,
-                knockback ? "SFX_006" : "SFX_001",
-                knockback ? target : attacker,
-                knockback ? target.Runtime.XInt : attacker.Runtime.XInt,
-                ref projection);
-
-            if (resolvedItr.effect == 1)
-            {
-                ProjectQueuedSound(
-                    targetWorld,
-                    knockback ? "SFX_033" : "SFX_032",
-                    target,
-                    target.Runtime.XInt,
-                    ref projection);
-                ProjectQueuedSound(
-                    targetWorld,
-                    knockback ? "SFX_006" : "SFX_001",
-                    knockback ? target : attacker,
-                    knockback ? target.Runtime.XInt : attacker.Runtime.XInt,
-                    ref projection);
-            }
-
             bool attackerState2000 = attacker.GetState() == LF2States.HeavyWeaponInSky;
             if (knockback &&
                 projection.TargetVx > -5.0 &&
@@ -4999,10 +4970,38 @@ namespace NTSD.Simulation.Ecs
                 target,
                 resolvedItr,
                 ref projection);
-            ProjectNativeKind0PostEffectAction(
+            int postEffectAction = ProjectNativeKind0PostEffectAction(
                 target,
                 resolvedItr,
                 ref projection);
+            bool fall80Sound = projection.TargetFall == 80;
+            ProjectQueuedSound(
+                targetWorld,
+                fall80Sound ? "SFX_006" : "SFX_001",
+                target,
+                target.Runtime.XInt,
+                ref projection);
+
+            if (resolvedItr.effect == 1)
+            {
+                ProjectQueuedSound(
+                    targetWorld,
+                    fall80Sound ? "SFX_033" : "SFX_032",
+                    target,
+                    target.Runtime.XInt,
+                    ref projection);
+                ProjectQueuedSound(
+                    targetWorld,
+                    fall80Sound ? "SFX_006" : "SFX_001",
+                    target,
+                    target.Runtime.XInt,
+                    ref projection);
+            }
+
+            string postCue = LF2HitResolveRuntimeData.ResolveStandardPostHitSound(
+                resolvedItr.effect, postEffectAction);
+            if (!string.IsNullOrWhiteSpace(postCue))
+                ProjectQueuedSound(targetWorld, postCue, target, target.Runtime.XInt, ref projection);
             bool projectedHitRecord = ProjectKind0HitRecord(
                 attacker,
                 target,
@@ -5064,7 +5063,7 @@ namespace NTSD.Simulation.Ecs
             }
         }
 
-        private static void ProjectNativeKind0PostEffectAction(
+        private static int ProjectNativeKind0PostEffectAction(
             LF2Entity target,
             InteractionArea resolvedItr,
             ref WriterEffectSnapshot projection)
@@ -5075,13 +5074,14 @@ namespace NTSD.Simulation.Ecs
                     resolvedItr,
                     projection.TargetKnockbackVx);
             if (decision.Action <= 0)
-                return;
+                return 0;
 
             projection.TargetFrame = decision.Action;
             projection.TargetRuntimeFrame = decision.Action;
             projection.TargetAttackingCounter = 0;
             if (decision.Facing >= 0)
                 projection.TargetFacing = decision.Facing;
+            return decision.Action;
         }
 
         private static bool CanProjectAlternateCharacterDamageWriterEffect(
@@ -5485,24 +5485,13 @@ namespace NTSD.Simulation.Ecs
 
             LF2CharacterData attackerData =
                 LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
-            if (attacker.GetCurrentDataObjectTypeForSimulation() ==
-                    (int)LF2ObjectType.SpecialAttack)
+            string leadCue = LF2HitResolveRuntimeData.ResolveReducedHitSound(
+                attackerData,
+                LF2HitResolveRuntimeData.ResolveCharacterData(target),
+                attacker.GetCurrentDataObjectTypeForSimulation(),
+                target.Frame?.D?.state ?? 0);
+            if (!string.IsNullOrWhiteSpace(leadCue))
             {
-                if (!string.IsNullOrWhiteSpace(attackerData?.weapon_broken_sound))
-                {
-                    ProjectQueuedSound(
-                        targetWorld,
-                        attackerData.weapon_broken_sound,
-                        attacker,
-                        attacker.Runtime.XInt,
-                        ref projection);
-                }
-            }
-            else
-            {
-                string leadCue = target.ObjectId == 37 || target.ObjectId == 6
-                    ? "SFX_017"
-                    : "SFX_002";
                 ProjectQueuedSound(
                     targetWorld,
                     leadCue,

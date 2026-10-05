@@ -319,7 +319,7 @@ namespace NTSD.Simulation.Ecs
                 target.DirectWriteNativeRawFramePreserveWaitCounter(decision.TargetAction);
         }
 
-        private static void ApplyNativeKind0PostEffectAction(
+        private static int ApplyNativeKind0PostEffectAction(
             LF2Entity target,
             InteractionArea interaction)
         {
@@ -329,12 +329,13 @@ namespace NTSD.Simulation.Ecs
                     interaction,
                     target.KnockbackVx);
             if (decision.Action <= 0)
-                return;
+                return 0;
 
             target.DirectWriteNativeRawFramePreserveWaitCounter(decision.Action);
             target.AttackingCounter = 0;
             if (decision.Facing >= 0)
                 target.SwitchDir(decision.Facing == 0 ? "right" : "left");
+            return decision.Action;
         }
 
         internal static void ApplyConfirmedInputStatuses(
@@ -1163,7 +1164,6 @@ namespace NTSD.Simulation.Ecs
             bool skipOrdinaryVerticalReaction =
                 BattleNativeOrdinaryHitPrelude.IsSpecialLinkRestGate(victim, itr);
 
-            LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
             int effectiveInjury = ResolveNativeUnarmoredHpInjury(
                 itr.injury,
                 victim.Runtime.IncomingDamageScale340,
@@ -1192,11 +1192,7 @@ namespace NTSD.Simulation.Ecs
 
             if (itr.kind != 9)
             {
-                LF2HitResolveRuntimeData.RecordStandardHurtSounds(
-                    attacker,
-                    victim,
-                    itr,
-                    knockdown);
+                LF2HitResolveRuntimeData.RecordStandardHitAttackerSound(attacker);
             }
 
             ArmNativeUnarmoredHitMotion(
@@ -1263,7 +1259,13 @@ namespace NTSD.Simulation.Ecs
             LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
             ApplyStandardState1002Tail(attacker, victim);
             ApplyNativeEffectActionOverride(attacker, victim, itr);
-            ApplyNativeKind0PostEffectAction(victim, itr);
+            int postEffectAction = ApplyNativeKind0PostEffectAction(victim, itr);
+            if (itr.kind != 9)
+            {
+                LF2HitResolveRuntimeData.RecordStandardCharacterHurtSounds(victim, itr);
+                victim.QueueBattleSound(LF2HitResolveRuntimeData.ResolveStandardPostHitSound(
+                    itr.effect, postEffectAction));
+            }
 
             if (victim is LF2LivingObject livingVictim &&
                 attacker is LF2LivingObject livingAttacker)
@@ -2649,20 +2651,13 @@ namespace NTSD.Simulation.Ecs
                 LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
             LF2CharacterData victimData =
                 LF2HitResolveRuntimeData.ResolveCharacterData(victim);
-            if (attackerData == null || victimData == null)
-                return;
-
-            if (attacker.GetCurrentDataObjectTypeForSimulation() ==
-                (int)LF2ObjectType.SpecialAttack)
-            {
-                if (!string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
-                    attacker.QueueBattleSound(attackerData.weapon_broken_sound);
-                return;
-            }
-
-            victim.QueueBattleSound(victim.ObjectId == 37 || victim.ObjectId == 6
-                ? "SFX_017"
-                : "SFX_002");
+            string cue = LF2HitResolveRuntimeData.ResolveReducedHitSound(
+                attackerData,
+                victimData,
+                attacker.GetCurrentDataObjectTypeForSimulation(),
+                victim.Frame?.D?.state ?? 0);
+            if (!string.IsNullOrWhiteSpace(cue))
+                victim.QueueBattleSound(cue);
         }
 
         private static bool FrameStateIs(LF2Entity entity, int state)

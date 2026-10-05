@@ -1,0 +1,765 @@
+{
+  "Schema": "NTSD28-battle-audio-20261006-native-evidence-v2",
+  "GeneratedUtc": "2026-10-05T19:26:03.0334432Z",
+  "Authority": "current-native-Core-source-limited",
+  "FormalRootExeEventWitness": false,
+  "SourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q10Diagnostics\\battle_audio_20261006_probe.cpp",
+  "SourceSHA256": "916BCF5EFB939A2D2C03826DA742F1F61A2789E3AE94FC921205BFBD286CBD5C",
+  "CommandReferencePath": "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/source-input-manifest-v2.json.command",
+  "CommandReferenceExists": false,
+  "FallbackCommandManifestPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\source-input-manifest-v2.json",
+  "FallbackCommandManifestSHA256": "057911E267030973A9343FFD30F1DB92515FB05C3D43B5AA79D6A621BE532FC0",
+  "ActualCompileArgvPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\native\\compile-attempt-04-argv.json",
+  "ActualCompileArgv": [
+    "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-municode",
+    "-finput-charset=UTF-8",
+    "-fexec-charset=UTF-8",
+    "-IJ:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\fusion_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\minibar_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\object_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_machine.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_motion.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_random.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_response.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\damage_resolution.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\defense_resolution.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\armor_resolution.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\object_spawning.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_flow.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\background_definition.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_resource_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_frame_hud.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_combo_hud.cpp",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q10Diagnostics\\battle_audio_20261006_probe.cpp",
+    "-lbcrypt",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "-o",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\native\\battle_audio_20261006_probe-attempt-04.exe"
+  ],
+  "ActualCommandInputHashes": [
+    {
+      "Path": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+      "SHA256": "4FD46EEF3B96DFD00115598BBAB6E9D7AE660A3B1A576E1D2AA6023C97D10A95"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+      "SHA256": "E895D1F3F8FA5C0DE1A17ADF634D972AE86EAD4A5DB6FC9C17E995F853193C09"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+      "SHA256": "CF5E81B2F353C4C766DE91B88A27B62AB3F405E94B1016912491C45ABC38C13A"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\fusion_catalog.cpp",
+      "SHA256": "586AE115842B81B5F6D0F5F6D1C2E3E319F33E8447523825307A6828292EAA92"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp",
+      "SHA256": "8F66035D91FDB8DB900316D4D63DE52F6A7248643074D26F1DDAC4F650EDD739"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\minibar_catalog.cpp",
+      "SHA256": "DB92DE77ACBC7AFBB54AAF3C7D2FB6346E4B3F145EEA658452B8702DB27A386A"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\object_catalog.cpp",
+      "SHA256": "790CB69BC390D22FE27AB0C12639FB0171AC4AE176D4924E2F171EDF0A9C8CD7"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_machine.cpp",
+      "SHA256": "9CF2D47957CAA7FCC4321E5E97AA7ED67E61EE6A3D2E2569B1080C5F8689514D"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_motion.cpp",
+      "SHA256": "C83EEB02EBF2E1C9337258F4ABEDF535470E65CFA6861301AFFE703FBA7499F3"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_random.cpp",
+      "SHA256": "32CF43C9F9652F3098E5DEEED742862D71750865177C719C01F50D79C737BE01"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "SHA256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+      "SHA256": "B240FB9C8486C1F6E2D6B9F89C89FBD2BE70A4EDC792A4C527703855F8A2136F"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "SHA256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+      "SHA256": "262B31261CA4747DFBE8117EE365E853B0591FC4AA05EDFD7F618CD75206D806"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+      "SHA256": "4168C78A23849EAA17DD749002B89DD335841DB6CECA8B04FAE8356B10F1B905"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_response.cpp",
+      "SHA256": "48C6059DC998352C33680186CA704DEC36B8BDF0C249344A3B1A7F016B241E4B"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+      "SHA256": "070453131DDC189C51988F2169CAC1EFAF3C223E512A000965D2FD8E11ED5991"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\damage_resolution.cpp",
+      "SHA256": "9041E1623E1C48498035304D49C659DA4BF220F11F319DE7480A4D64F6D95B91"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\defense_resolution.cpp",
+      "SHA256": "C1142C46668E2B9F12E6F21D7B11791F3963EB38DBB8D735657C9A0F24DD093C"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\armor_resolution.cpp",
+      "SHA256": "DCA921E78FA78122616C64384BAC4B13A1A64D7DB4F4714827F57C2C1FC106FD"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\object_spawning.cpp",
+      "SHA256": "53F49DC676802DB67B740510B54AA7AE83E617FAEEF293F64D55FBD924535888"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+      "SHA256": "1E701875BAF71E8CAF491C621653719B076747EAC970B37B7FB31A119E14FD85"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_flow.cpp",
+      "SHA256": "74016DFD8F5AB6FD031CD562A18FBD065ECDA2AD558930CFC806BB275FD166E4"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "SHA256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+      "SHA256": "970836FA031071F1099A0FF7B8E50C590A5265A971984437E51A8C2C2081906A"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\background_definition.cpp",
+      "SHA256": "65DB516894E9EB0D2EB4DD44D84DD5B10648C646CC17DAA9A12D654655FE914A"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_resource_catalog.cpp",
+      "SHA256": "3B87B8944D27AE0AF8E7B344A2DEFB28F53896172E95C77CE69DEC758D313560"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_frame_hud.cpp",
+      "SHA256": "1BEAC0E38B7ED12C0C95789DB527D471C0A9B362377BD278D8D940BD9669B0A7"
+    },
+    {
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_combo_hud.cpp",
+      "SHA256": "A34CE601B134B06A7E2F0027608C745405AE803E27BC9BEB0D584335C31EE4DD"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q10Diagnostics\\battle_audio_20261006_probe.cpp",
+      "SHA256": "916BCF5EFB939A2D2C03826DA742F1F61A2789E3AE94FC921205BFBD286CBD5C"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\native\\battle_audio_20261006_probe-attempt-04.exe",
+      "SHA256": "12AC335E10F44FB7C84C23D5A82CC50F99A5C3DA000B400035BFCC025A50D3B9"
+    }
+  ],
+  "CompileAttempts": [
+    {
+      "Attempt": 1,
+      "ExitCode": 1,
+      "Argv": "compile-attempt-01-argv.json",
+      "Stdout": "compile-attempt-01-stdout.txt",
+      "Stderr": "compile-attempt-01-stderr.txt",
+      "Note": "initial helper include failed because Q07 command exposes only 28Core include"
+    },
+    {
+      "Attempt": 2,
+      "ExitCode": 0,
+      "Argv": "compile-attempt-02-argv.json",
+      "Stdout": "compile-attempt-02-stdout.txt",
+      "Stderr": "compile-attempt-02-stderr.txt",
+      "Executable": "battle_audio_20261006_probe-attempt-02.exe",
+      "Note": "pre-final case matrix"
+    },
+    {
+      "Attempt": 3,
+      "ExitCode": 0,
+      "Argv": "compile-attempt-03-argv.json",
+      "Stdout": "compile-attempt-03-stdout.txt",
+      "Stderr": "compile-attempt-03-stderr.txt",
+      "Executable": "battle_audio_20261006_probe-attempt-03.exe",
+      "Note": "final matrix before ordinary target weapon_hit sentinel"
+    },
+    {
+      "Attempt": 4,
+      "ExitCode": 0,
+      "Argv": "compile-attempt-04-argv.json",
+      "Stdout": "compile-attempt-04-stdout.txt",
+      "Stderr": "compile-attempt-04-stderr.txt",
+      "Executable": "battle_audio_20261006_probe-attempt-04.exe",
+      "Note": "final source and fixture"
+    }
+  ],
+  "Run": {
+    "Attempt": 3,
+    "ExitCode": 0,
+    "Executable": "battle_audio_20261006_probe-attempt-04.exe",
+    "Stdout": "run-attempt-03-stdout.jsonl",
+    "Stderr": "run-attempt-03-stderr.txt"
+  },
+  "Fixture": {
+    "Dat": "in-memory only",
+    "AttackerSlot": 0,
+    "VictimSlot": 70,
+    "AttackerX": 300,
+    "VictimX": 700,
+    "Geometry": "wide in-memory ITR/BDY",
+    "SourceSlotBasis": "WorldAudioEvent28 has no source slot; each emitted source_slot is inferred from the native append branch and fixed fixture slots"
+  },
+  "OptionalFrameSound": {
+    "Status": "not_executed",
+    "Reason": "Q07 28Core command has no playable formal catalog/session input; scope kept to hit/reduced/landing Core APIs"
+  },
+  "Verification": {
+    "JSONLLineCount": 23,
+    "CaseCount": 22,
+    "AnomalousCaseCount": 0,
+    "OrdinaryCount": 8,
+    "ReducedCount": 13,
+    "LandingCount": 1,
+    "ValidJsonLines": true
+  },
+  "Cases": [
+    {
+      "Index": 0,
+      "Group": "ordinary",
+      "Label": "effect0_postFall20",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 1,
+      "Group": "ordinary",
+      "Label": "effect1_postFall20",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 11,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        },
+        {
+          "Order": 2,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 2,
+      "Group": "ordinary",
+      "Label": "effect0_postFall80",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 80,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 2,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 80
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 3,
+      "Group": "ordinary",
+      "Label": "effect1_postFall80",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 80,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 2,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 80
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 12,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 80
+        },
+        {
+          "Order": 2,
+          "Source": "builtin_channel",
+          "Channel": 2,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 80
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 4,
+      "Group": "ordinary",
+      "Label": "type3_broken_first_ownX",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_broken",
+          "Channel": -1,
+          "ResourcePath": "attacker-broken.wav",
+          "SourceSlot": 0,
+          "WorldX": 300,
+          "PostFall": 20
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 5,
+      "Group": "ordinary",
+      "Label": "effect2_postAudio16",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 16,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 6,
+      "Group": "ordinary",
+      "Label": "effect3_postAudio14",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 14,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 7,
+      "Group": "ordinary",
+      "Label": "effect23_postAudio16",
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 20,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 0,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        },
+        {
+          "Order": 1,
+          "Source": "builtin_channel",
+          "Channel": 16,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 20
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 8,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_hit",
+          "Channel": -1,
+          "ResourcePath": "target-hit.wav",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 9,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 10,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 11,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 12,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_drop",
+          "Channel": -1,
+          "ResourcePath": "target-drop.wav",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 13,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 14,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 15,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_drop",
+          "Channel": -1,
+          "ResourcePath": "target-drop.wav",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 16,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 17,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 18,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_drop",
+          "Channel": -1,
+          "ResourcePath": "target-drop.wav",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 19,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 1,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 20,
+      "Group": "reduced",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "applied",
+      "PostFall": 30,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "definition_weapon_broken",
+          "Channel": -1,
+          "ResourcePath": "attacker-reduced-broken.wav",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": 30
+        }
+      ],
+      "Anomalies": []
+    },
+    {
+      "Index": 21,
+      "Group": "landing",
+      "Label": null,
+      "Executed": true,
+      "StatusName": "success",
+      "PostFall": null,
+      "AudioEvents": [
+        {
+          "Order": 0,
+          "Source": "builtin_channel",
+          "Channel": 4,
+          "ResourcePath": "",
+          "SourceSlot": 70,
+          "WorldX": 700,
+          "PostFall": null
+        }
+      ],
+      "Anomalies": []
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "NTSD28-battle-audio-20261006-kind9-prechange-reconstruction-v1",
+  "generatedUtc": "2026-10-05T20:10:25.6333764Z",
+  "operation": "CreateNew read-only reconstruction; current Tools probe was not modified",
+  "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q10Diagnostics\\battle_audio_20261006_probe.cpp",
+  "sourceCurrentSha256": "545E0D3C15E85FA14C2A786494BBD50F1F33D71E5A4274D8E85DF0781A90FB79",
+  "expectedCurrentSha256": "545E0D3C15E85FA14C2A786494BBD50F1F33D71E5A4274D8E85DF0781A90FB79",
+  "prechangeShaRecordPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\native\\kind9-prechange-source-sha.json",
+  "prechangeShaRecord": "422AB61E7C5F05706B889C925EE8EBABE9B4036F473C19B56C6A37B3DE858387",
+  "actualBeforeCppFilesFoundBeforeReconstruction": [],
+  "actualBeforeCppFilePresent": false,
+  "recoveredPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\native\\battle_audio_20261006_probe-pre-kind9-recovered-attempt-01.cpp",
+  "recoveredSha256": "422AB61E7C5F05706B889C925EE8EBABE9B4036F473C19B56C6A37B3DE858387",
+  "status": "RECOVERED_MATCH",
+  "removedHunks": [
+    {
+      "kind": "kind9 fixture/helper block",
+      "startMarker": "std::string kind9_dat(bool attacker) {",
+      "endMarker": "void emit_landing_case(int index) {",
+      "description": "Removed kind9_dat, relation_status_name, write_relation_hits, and emit_kind9_case."
+    },
+    {
+      "kind": "main calls",
+      "lines": [
+        "emit_kind9_case(index++, 1);",
+        "emit_kind9_case(index++, 3);"
+      ]
+    }
+  ],
+  "compileRun": "not run by instruction",
+  "productionSourceModified": false,
+  "csharpModified": false
+}

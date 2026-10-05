@@ -230,34 +230,13 @@ namespace NTSD.Animation.LF2Objects
             if (attacker == null || victim == null || itr == null)
                 return;
 
-            LF2CharacterData attackerData = ResolveCharacterData(attacker);
             LF2CharacterData victimData = ResolveCharacterData(victim);
             int victimType = victim.GetCurrentDataObjectTypeForSimulation();
 
-            if (attackerData != null &&
-                attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack &&
-                !string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
-            {
-                attacker.QueueBattleSound(attackerData.weapon_broken_sound);
-            }
+            RecordStandardHitAttackerSound(attacker);
 
             if (victimType == (int)LF2ObjectType.Character)
-            {
-                (knockback ? victim : attacker).QueueBattleSound(knockback ? "SFX_006" : "SFX_001");
-                if (itr.effect == 1)
-                {
-                    if (knockback)
-                    {
-                        victim.QueueBattleSound("SFX_033");
-                        victim.QueueBattleSound("SFX_006");
-                    }
-                    else
-                    {
-                        victim.QueueBattleSound("SFX_032");
-                        attacker.QueueBattleSound("SFX_001");
-                    }
-                }
-            }
+                RecordStandardCharacterHurtSounds(victim, itr);
 
             if (victimType > 0 &&
                 victimData != null &&
@@ -265,6 +244,57 @@ namespace NTSD.Animation.LF2Objects
             {
                 victim.QueueBattleSound(victimData.weapon_hit_sound);
             }
+        }
+
+        internal static void RecordStandardHitAttackerSound(LF2Entity attacker)
+        {
+            LF2CharacterData data = ResolveCharacterData(attacker);
+            if (attacker.GetCurrentDataObjectTypeForSimulation() ==
+                (int)LF2ObjectType.SpecialAttack &&
+                !string.IsNullOrWhiteSpace(data?.weapon_broken_sound))
+            {
+                attacker.QueueBattleSound(data.weapon_broken_sound);
+            }
+        }
+
+        internal static void RecordStandardCharacterHurtSounds(
+            LF2Entity victim, InteractionArea itr)
+        {
+            bool fall80 = victim.Runtime.Fall == 80;
+            string baseSound = fall80 ? "SFX_006" : "SFX_001";
+            victim.QueueBattleSound(baseSound);
+            if (itr.effect == 1)
+            {
+                victim.QueueBattleSound(fall80 ? "SFX_033" : "SFX_032");
+                victim.QueueBattleSound(baseSound);
+            }
+        }
+
+        internal static string ResolveStandardPostHitSound(int effect, int postEffectAction)
+        {
+            if ((effect == 3 || effect == 30) && postEffectAction == 200)
+                return "SFX_065";
+            if (effect == 23 || ((effect == 2 || effect == 20 ||
+                effect == 21 || effect == 22) && postEffectAction == 203))
+                return "SFX_068";
+            return null;
+        }
+
+        internal static string ResolveReducedHitSound(
+            LF2CharacterData attackerData,
+            LF2CharacterData victimData,
+            int attackerType,
+            int victimPreHitState)
+        {
+            if (attackerType == (int)LF2ObjectType.SpecialAttack)
+                return attackerData?.weapon_broken_sound;
+
+            string sound = victimPreHitState == 7 ||
+                           victimPreHitState == 70 ||
+                           victimPreHitState == 75
+                ? victimData?.weapon_drop_sound
+                : victimData?.weapon_hit_sound;
+            return string.IsNullOrWhiteSpace(sound) ? "SFX_002" : sound;
         }
 
         private static int ResolveAttackerState(LF2Entity attacker)

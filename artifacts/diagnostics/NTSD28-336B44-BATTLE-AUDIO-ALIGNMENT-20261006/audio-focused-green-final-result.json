@@ -1,0 +1,267 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "af95349b55674c7e9c0f848703694ea8",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791227800174,
+      "finished_unix_ms": 1791227860687,
+      "last_update_unix_ms": 1791227860687,
+      "progress": {
+        "completed": 25,
+        "total": 8924,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791227860124,
+        "last_finished_test_full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries",
+        "last_finished_unix_ms": 1791227860128,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 25,
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 52.6524801,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(2,9.0d,False)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(2,9.0d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.1568887,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(2,9.01d,True)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(2,9.01d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0062937,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(4,8.5d,False)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(4,8.5d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0060917,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(4,8.51d,True)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(4,8.51d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.005952,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(6,8.51d,True)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(6,8.51d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0051479,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(1,10.0d,False)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.NonCharacterBounceUsesFixedChannelFourAndPreservesThreshold(1,10.0d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0107242,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryHurtUsesReactionTimerAndVictimPosition(20,False,0,\"SFX_001\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinaryHurtUsesReactionTimerAndVictimPosition(20,False,0,\"SFX_001\")",
+            "state": "Passed",
+            "durationSeconds": 0.015307,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryHurtUsesReactionTimerAndVictimPosition(80,False,0,\"SFX_006\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinaryHurtUsesReactionTimerAndVictimPosition(80,False,0,\"SFX_006\")",
+            "state": "Passed",
+            "durationSeconds": 0.0065703,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryHurtUsesReactionTimerAndVictimPosition(20,True,0,\"SFX_001\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinaryHurtUsesReactionTimerAndVictimPosition(20,True,0,\"SFX_001\")",
+            "state": "Passed",
+            "durationSeconds": 0.0070349,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryHurtUsesReactionTimerAndVictimPosition(20,False,1,\"SFX_001,SFX_032,SFX_001\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinaryHurtUsesReactionTimerAndVictimPosition(20,False,1,\"SFX_001,SFX_032,SFX_001\")",
+            "state": "Passed",
+            "durationSeconds": 0.0056951,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryHurtUsesReactionTimerAndVictimPosition(80,False,1,\"SFX_006,SFX_033,SFX_006\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinaryHurtUsesReactionTimerAndVictimPosition(80,False,1,\"SFX_006,SFX_033,SFX_006\")",
+            "state": "Passed",
+            "durationSeconds": 0.0060038,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinarySpecialAttackBrokenCueKeepsAttackerPositionBeforeVictimBase",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.OrdinarySpecialAttackBrokenCueKeepsAttackerPositionBeforeVictimBase",
+            "state": "Passed",
+            "durationSeconds": 0.00652,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,0,\"hit.wav\",\"drop.wav\",\"hit.wav\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,0,\"hit.wav\",\"drop.wav\",\"hit.wav\")",
+            "state": "Passed",
+            "durationSeconds": 0.0094201,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,7,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,7,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "state": "Passed",
+            "durationSeconds": 0.008503,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,70,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,70,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "state": "Passed",
+            "durationSeconds": 0.0109853,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,75,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,75,\"hit.wav\",\"drop.wav\",\"drop.wav\")",
+            "state": "Passed",
+            "durationSeconds": 0.005906,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,7,\"hit.wav\",\"\",\"SFX_002\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,7,\"hit.wav\",\"\",\"SFX_002\")",
+            "state": "Passed",
+            "durationSeconds": 0.0048746,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(0,0,\"\",\"drop.wav\",\"SFX_002\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(0,0,\"\",\"drop.wav\",\"SFX_002\")",
+            "state": "Passed",
+            "durationSeconds": 0.0107041,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(3,7,\"hit.wav\",\"drop.wav\",\"broken.wav\")",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(3,7,\"hit.wav\",\"drop.wav\",\"broken.wav\")",
+            "state": "Passed",
+            "durationSeconds": 0.0066071,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ReducedHurtUsesPreHitDatCueAtVictimPosition(3,0,\"hit.wav\",\"drop.wav\",null)",
+            "fullName": "NTSD.Test.NTSD28BattleAudioAlignmentEditorTests.ReducedHurtUsesPreHitDatCueAtVictimPosition(3,0,\"hit.wav\",\"drop.wav\",null)",
+            "state": "Passed",
+            "durationSeconds": 0.0049137,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StagedBattleWavsDecodeAndPreparedAliasesPlayWithoutAllocation",
+            "fullName": "NTSD.Test.NTSD28BattleAudioCatalogEditorTests.StagedBattleWavsDecodeAndPreparedAliasesPlayWithoutAllocation",
+            "state": "Passed",
+            "durationSeconds": 51.1308182,
+            "message": null,
+            "stackTrace": null,
+            "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:10994 (active clients: 1)\r\n<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)\r\nDecoded WAV files: 978; representative voices: 8; alias hot-path allocations: 0\r\n"
+          },
+          {
+            "name": "CapturedHitPlanPreservesSourceReactionTimer(ShadowCompare)",
+            "fullName": "NTSD.Test.NTSD28Q06StandardHitFall80PreservationEditorTests.CapturedHitPlanPreservesSourceReactionTimer(ShadowCompare)",
+            "state": "Passed",
+            "durationSeconds": 0.1226553,
+            "message": null,
+            "stackTrace": null,
+            "output": "<color=cyan>[BMP 解析] 角色=FallAttacker, 找到 0 个精灵文件定义</color>\r\n<color=cyan>[BMP 解析] 角色=FallTarget, 找到 0 个精灵文件定义</color>\r\n{\"index\":0,\"diagnostics\":{\"Mode\":2,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":1,\"ObservedCandidateCount\":1,\"ObservedPreprocessCount\":1,\"ObservedDispositionCount\":1,\"ObservedFirstBodyResponseAttemptCount\":1,\"ObservedConsumeEffectsCount\":1,\"ObservedWriterEffectCount\":1,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":1,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":-4,\"fall\":80}\r\n{\"index\":1,\"diagnostics\":{\"Mode\":2,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":1,\"ObservedCandidateCount\":1,\"ObservedPreprocessCount\":1,\"ObservedDispositionCount\":1,\"ObservedFirstBodyResponseAttemptCount\":1,\"ObservedConsumeEffectsCount\":1,\"ObservedWriterEffectCount\":1,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":1,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":395,\"fall\":80}\r\n{\"index\":2,\"diagnostics\":{\"Mode\":2,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":1,\"ObservedCandidateCount\":1,\"ObservedPreprocessCount\":1,\"ObservedDispositionCount\":1,\"ObservedFirstBodyResponseAttemptCount\":1,\"ObservedConsumeEffectsCount\":1,\"ObservedWriterEffectCount\":1,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":1,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":395,\"fall\":20}\r\n"
+          },
+          {
+            "name": "CapturedHitPlanPreservesSourceReactionTimer(DataOriented)",
+            "fullName": "NTSD.Test.NTSD28Q06StandardHitFall80PreservationEditorTests.CapturedHitPlanPreservesSourceReactionTimer(DataOriented)",
+            "state": "Passed",
+            "durationSeconds": 0.0131155,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"index\":0,\"diagnostics\":{\"Mode\":3,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":0,\"ObservedCandidateCount\":0,\"ObservedPreprocessCount\":0,\"ObservedDispositionCount\":0,\"ObservedFirstBodyResponseAttemptCount\":0,\"ObservedConsumeEffectsCount\":0,\"ObservedWriterEffectCount\":0,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":0,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":-4,\"fall\":80}\r\n{\"index\":1,\"diagnostics\":{\"Mode\":3,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":0,\"ObservedCandidateCount\":0,\"ObservedPreprocessCount\":0,\"ObservedDispositionCount\":0,\"ObservedFirstBodyResponseAttemptCount\":0,\"ObservedConsumeEffectsCount\":0,\"ObservedWriterEffectCount\":0,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":0,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":395,\"fall\":80}\r\n{\"index\":2,\"diagnostics\":{\"Mode\":3,\"CapturedTick\":0,\"CharacterPassCaptureCount\":1,\"ObjectPassCaptureCount\":0,\"AttackerVisitCount\":2,\"PlannedAttackerCount\":1,\"PlannedCandidateCount\":1,\"ObservationPassCount\":0,\"ObservedCandidateCount\":0,\"ObservedPreprocessCount\":0,\"ObservedDispositionCount\":0,\"ObservedFirstBodyResponseAttemptCount\":0,\"ObservedConsumeEffectsCount\":0,\"ObservedWriterEffectCount\":0,\"ObservedLifecycleEffectCount\":0,\"ObservedDispatchCount\":0,\"ObservedAbortTerminationCount\":0,\"SkippedCandidateCountAfterAbort\":0,\"ObservationMismatchCount\":0,\"FailureCount\":0,\"LastConsumeEffectsDifferenceMask\":0,\"LastFirstBodyResponseDifferenceMask\":0,\"LastWriterEffectDifferenceMask\":0,\"FirstSoundEffectDifference\":null,\"LastLifecycleEffectDifferenceMask\":0,\"FirstFailureReason\":0,\"FirstFailureAttackerSlot\":-1,\"FirstFailureCandidateOrdinal\":-1,\"CurrentTickPlanValid\":true},\"hp\":395,\"fall\":20}\r\n"
+          },
+          {
+            "name": "BattleBuiltinAliasResolvesFormalWavAndSharesPreparedPathCue",
+            "fullName": "NTSD.Test.SoundPresentationDispatchEditorTests.BattleBuiltinAliasResolvesFormalWavAndSharesPreparedPathCue",
+            "state": "Passed",
+            "durationSeconds": 0.0079867,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries",
+            "fullName": "NTSD.Test.SoundPresentationDispatchEditorTests.BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries",
+            "state": "Passed",
+            "durationSeconds": 0.0037885,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

@@ -3483,7 +3483,6 @@ namespace NTSD.Animation.LF2Objects
                 if (characterData == null)
                     return true;
 
-                QueueBattleSound("SFX_017");
                 SetSharedCharacterDatInputFrameDirect(LF2StandardFrames.DashForward);
                 Runtime.AnimSub = 0;
                 Runtime.Vx = Runtime.Dir == "right"
@@ -3636,7 +3635,6 @@ namespace NTSD.Animation.LF2Objects
 
             if ((rightPressed || Runtime.Vx > 0.001f) && jumpReady)
             {
-                QueueBattleSound("SFX_017");
                 SetSharedCharacterDatInputFrameDirect(
                     Runtime.Dir == "right" ? LF2StandardFrames.DashForward : LF2StandardFrames.DashForward2);
                 Runtime.AnimSub = 0;
@@ -3647,7 +3645,6 @@ namespace NTSD.Animation.LF2Objects
             }
             else if ((leftPressed || Runtime.Vx < -0.001f) && jumpReady)
             {
-                QueueBattleSound("SFX_017");
                 SetSharedCharacterDatInputFrameDirect(
                     Runtime.Dir == "right" ? LF2StandardFrames.DashForward2 : LF2StandardFrames.DashForward);
                 Runtime.AnimSub = 0;
@@ -6168,7 +6165,6 @@ namespace NTSD.Animation.LF2Objects
 
             LF2CharacterData characterData = FrameCache?.Wrapper?.characterData;
             int dropHurt = characterData?.weapon_drop_hurt ?? 0;
-            string dropSound = characterData?.weapon_drop_sound;
             int state = landingFrame.state;
 
             if (dataType == (int)LF2ObjectType.LightWeapon)
@@ -6189,7 +6185,7 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Y = landingY;
                 if (landingVy > 9.0)
                 {
-                    QueueBattleSound(dropSound);
+                    QueueBattleSound("SFX_011");
                     Runtime.Vy = -5.0;
                     SwitchDir(Runtime.Dir == "left" ? "right" : "left");
                     Runtime.Vx *= 0.5;
@@ -6228,7 +6224,7 @@ namespace NTSD.Animation.LF2Objects
                         Runtime.Vy = -10.0;
                     Runtime.Vx *= 0.7;
                     SetFrameTickRawDirect(0);
-                    QueueBattleSound(dropSound);
+                    QueueBattleSound("SFX_011");
                 }
                 else
                 {
@@ -6306,7 +6302,6 @@ namespace NTSD.Animation.LF2Objects
 
             LF2CharacterData characterData = FrameCache?.Wrapper?.characterData;
             int dropHurt = characterData?.weapon_drop_hurt ?? 0;
-            string dropSound = characterData?.weapon_drop_sound;
             int state = landingFrame.state;
             Runtime.WeaponFlightCounter -= dropHurt;
             Runtime.Y = landingY;
@@ -6316,7 +6311,7 @@ namespace NTSD.Animation.LF2Objects
                 SetFrameTickRawDirect(7);
                 SwitchDir(Runtime.Dir == "left" ? "right" : "left");
                 Runtime.Vx *= 0.5;
-                QueueBattleSound(dropSound);
+                QueueBattleSound("SFX_011");
             }
             else
             {

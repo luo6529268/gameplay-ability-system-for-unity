@@ -1,0 +1,124 @@
+[
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "before_sha256": "04F63D863809E747461D2D09756B1ABAD2EC3C1BD16E2AC97D23A382DF19C3CB",
+    "after_sha256": "C1277E8FC80DCB91B106F94EAD7CDA782E76C1D55AE58D65E47B7A425DF89CD0",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "before_sha256": "657B3053B05403452E6B37ED8368BAFE80E309F10982714DE9277CE69B556996",
+    "after_sha256": "DF681BB69A30AB1697B2A8440882A83FCE49A0CEBB95C69FAD71215C53ECF318",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "before_sha256": "0A6E36BF885790D75D7E0E62EBD840E5ED0D3C5E95AD504F7764EE6039427B35",
+    "after_sha256": "37D37D3C0F239489B7D115BDB23FE55C6BD0F1B9D5B3D84E3C6C32ABAA66874B",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "before_sha256": "2DD9A2BD6161A48DE3BED974EF89CD6AAC640EB0B3E2784AE57E04726934762C",
+    "after_sha256": "78F20CE1BDA2F614018CC16E79DB9C2D388820B8D9DBEE55C06668BE403DCB8E",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "before_sha256": "00B7CC4C0DA999323DF10273FB17CA2B8C6FB4EF110D3DE3CF2601FAB0110EF7",
+    "after_sha256": "8C6A9FEB9F8DA92DD3EC1111DB059AA981758658D4F348004604E8B3BFBDC5DA",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "before_sha256": "5B251FA0A0D4ACF29F60961CEB64139B5E4817A4B1B6975BFCD3260B901A8850",
+    "after_sha256": "EA60A07795357558A642E736B50E64F48E6EAE14D548A3E7816BA9F095FC5391",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+    "before_sha256": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+    "after_sha256": "E58F88DDB738208E43BB26D1951AA20C5FBAF1FE1BC59B955748985D27C51551",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "before_sha256": "3A0501DC9993047546DBDB7316EE708C60760BEFAC089308B283F5BAD46241CD",
+    "after_sha256": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "before_sha256": "C61081A39F7338D597A779441627AD175C440D8D15F701DCC74383B5D44F394A",
+    "after_sha256": "C481886C1C2CF1ED4C70229866C374066393CF03FDA6417E7821A62053312C0C",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "before_sha256": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+    "after_sha256": "05B18C45A71016E31A75209958A382613FC2EA43156965DF743FB720169DEEC1",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "before_sha256": "2A6A6F0471C007F9289E5EE5364AA8328FE98587E3DCD22D140E2E28012BC449",
+    "after_sha256": "0109F17F1F95FEBDCD052B2FBBBD402EE2E54CFFDA192FF9FEAB1CF71F0A1B63",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "before_sha256": "85DCA6C1FFA0EC1D9E2F353F27A25EC5E366DCA51823224CB3B3824BEB473200",
+    "after_sha256": "8C7A0BF5E0B30EE90AEE7071D4F3F25A54F0DE1559C144160DDF310522D88A39",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/SoundPresentationDispatchEditorTests.cs",
+    "before_sha256": "2EC9CBF5B762A3A545EF22E077EB6E746723154EE9B9B3A9B719FE8DAC3689A7",
+    "after_sha256": "DE8B01CEF24515BA2D4C1A30BFC5DA9D4DCCEED5EECA52A73287FF6C2F8E5D37",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "before_sha256": "DB0AC55714FFAEC40F2265466FE16C8F8B9B44177F0C47C61E96B47EDBCCDEA0",
+    "after_sha256": "DB0AC55714FFAEC40F2265466FE16C8F8B9B44177F0C47C61E96B47EDBCCDEA0",
+    "exists": true,
+    "backup_matches": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioCatalogEditorTests.cs",
+    "before": "DID_NOT_EXIST_AT_TASK_START",
+    "after_sha256": "49D328E3F79071C5E428668A1C01F09A0004D7C6B382F57BB7CF0CE688514463",
+    "exists": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioAlignmentEditorTests.cs",
+    "before": "DID_NOT_EXIST_AT_TASK_START",
+    "after_sha256": "472B7D9D03C5F4C2A9FE690C93CEB18673F8AAA046BC629A5C9ECFA6DB126186",
+    "exists": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioSceneProbeEditor.cs",
+    "before": "DID_NOT_EXIST_AT_TASK_START",
+    "after_sha256": "F483B39B779C2CE749A1DB9D0D98732E5F8E3DE0242751A9147A73CEC44B957B",
+    "exists": true
+  },
+  {
+    "path": "Tools/NTSD28Q10Diagnostics/battle_audio_20261006_probe.cpp",
+    "before": "DID_NOT_EXIST_AT_TASK_START",
+    "after_sha256": "545E0D3C15E85FA14C2A786494BBD50F1F33D71E5A4274D8E85DF0781A90FB79",
+    "exists": true
+  }
+]
