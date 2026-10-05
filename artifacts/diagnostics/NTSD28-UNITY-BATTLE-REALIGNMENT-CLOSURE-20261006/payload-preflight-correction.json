@@ -1,0 +1,12 @@
+{
+  "priorExit": 1,
+  "error": "AssertionError on unrestricted table-row counts: historical tables also matched",
+  "counts": {
+    "currentQRows": 12,
+    "currentBatchRows": 6,
+    "wholeQRows": 12,
+    "wholeBatchRows": 15
+  },
+  "documentsUnmutatedExceptPlannedIndex": true,
+  "correction": "restrict replacements to current section only; retain historical stage rows"
+}

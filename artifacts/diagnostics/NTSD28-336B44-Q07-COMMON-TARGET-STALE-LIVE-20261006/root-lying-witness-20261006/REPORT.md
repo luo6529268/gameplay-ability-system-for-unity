@@ -23,3 +23,5 @@
 用户2026-10-06说明近期修改只是非战斗场景逻辑，本任务停止由此引出的全局源码恢复要求；不据此晋升候选或宣称当前源码树完整对应336B44。ZIP只读核查已终止，原件未解压/恢复/覆盖。
 
 原始逐参数/root PID/stdout/stderr/report/trace/fixture及SHA、实际逐字段比较见本目录JSON文件。
+
+独立审阅措辞更正：根report原始declaredTicks=3、completedTicks=4，本文四tick指实际执行四步及初始共五行。上述“没有命中、生成或销毁事件”只限定为这五行trace未报告此类事件，不推断未导出的内部过程；“持续active”由持续实体输出和计数递增支持，不称观察到私有active标志。详INDEPENDENT-REVIEW.md。

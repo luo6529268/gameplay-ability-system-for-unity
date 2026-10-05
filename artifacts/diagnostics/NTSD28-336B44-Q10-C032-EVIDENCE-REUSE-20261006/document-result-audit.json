@@ -1,0 +1,101 @@
+{
+  "operationId": "NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006",
+  "status": "VERIFIED",
+  "utc": "2026-10-05T17:51:36.617847+00:00",
+  "actualDocuments": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "7BBEDFFDCCA25FAE818304FBAEEDD6A1A228FC3C41DF0263F95D5426B2919E3D",
+      "afterSha256": "9A8B58E5FA0AE703FAEF47171224189D9F17411CDDFF8C4BE13C7997B89C448D",
+      "beforeBytes": 351788,
+      "afterBytes": 353018,
+      "bomPreserved": true,
+      "oldPayloadPreservedExceptDeclaredTotalRows": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+      "beforeSha256": "9B49605D0A9220AE7B0E5C68CD0769D14AADA0DAAD12B2081849657DEB38EEE3",
+      "afterSha256": "ADD05FAE70542E3D708D8A27D372452B208831C073914E830401F56F0B0A36D6",
+      "beforeBytes": 3904,
+      "afterBytes": 4977,
+      "bomPreserved": true,
+      "oldPayloadPreservedExceptDeclaredTotalRows": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+      "beforeSha256": "D12A6E868406C1BDEA973AE3C55B2739DE96FD761CD5BAA6FD25487430238755",
+      "afterSha256": "6B8A8821504FBB590963192559CD3C3FF23FA7706207F5B00DF0699E335A3508",
+      "beforeBytes": 4822,
+      "afterBytes": 5895,
+      "bomPreserved": true,
+      "oldPayloadPreservedExceptDeclaredTotalRows": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "beforeSha256": "9834FBDBA3DEECBD983D2E686E8545922F7FEB770C4624805EFE5FCA7780B5F4",
+      "afterSha256": "834DC345CE9E91F19C3B7AE04490B15B936AB5FB77C4AAF99F64EE5CEDBD8067",
+      "oldPayloadPrefixPreserved": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "beforeSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "afterSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "beforeSha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "afterSha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "beforeSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "afterSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "beforeSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "afterSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "beforeSha256": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "afterSha256": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\NTSDSoundPlayer.cs",
+      "beforeSha256": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "afterSha256": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Sound\\data\\016.wav",
+      "beforeSha256": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE",
+      "afterSha256": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "beforeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "afterSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\016.wav",
+      "beforeSha256": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810",
+      "afterSha256": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810",
+      "same": true
+    }
+  ],
+  "backupsVerified": true,
+  "diffCheckExit": 0,
+  "scriptEdits": 0,
+  "newUnityRuns": 0,
+  "scope": "Document-only historical evidence reuse, no parent promotion"
+}

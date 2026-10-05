@@ -21,6 +21,67 @@ namespace NTSD.Test
 {
     public sealed class SoundPresentationDispatchEditorTests
     {
+        [Test]
+        public void BattleBuiltinAliasResolvesFormalWavAndSharesPreparedPathCue()
+        {
+            using var formalContent = new FormalContentConfigScope();
+            var host = new GameObject("BattleBuiltinAliasTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            try
+            {
+                var player = host.AddComponent<NTSDSoundPlayer>();
+                MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod(
+                    "GetOrPrepareCue", BindingFlags.Instance | BindingFlags.NonPublic);
+                object alias = getCue.Invoke(player, new object[] { "SFX_020", true });
+                object path = getCue.Invoke(player, new object[] { @"data\020.wav", true });
+                Assert.That(ReadCueField<bool>(alias, "IsFormalBattleFile"), Is.True);
+                Assert.That(ReadCueField<string>(alias, "SourcePath"),
+                    Is.EqualTo(ReadCueField<string>(path, "SourcePath")));
+                Assert.That(alias, Is.SameAs(path));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries()
+        {
+            var host = new GameObject("BattleFrameSoundCatalogTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            host.SetActive(false);
+            try
+            {
+                var manager = host.AddComponent<CharacterAnimtorManager>();
+                var frame = new LF2FrameData { sound = "legacy.wav" };
+                var sounds = new List<string>();
+                for (int index = 0; index < 21; index++)
+                    sounds.Add($"c/test/w/voice{index}.wav");
+                typeof(LF2FrameData).GetMethod("SealFrameSounds",
+                    BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(frame, new object[] { sounds });
+                var data = new LF2CharacterData { frames = new List<LF2FrameData> { frame } };
+                var catalog = new Dictionary<int, LF2CharacterDataWrapper>
+                {
+                    [777] = new LF2CharacterDataWrapper(777, data),
+                };
+                typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig",
+                    BindingFlags.Instance | BindingFlags.NonPublic).SetValue(manager, catalog);
+                var collected = new HashSet<string>();
+                manager.CollectBattleSoundIds(collected);
+                Assert.That(collected, Is.EquivalentTo(sounds.GetRange(0, 20)));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
         [TestCase(-334, 0, 0)]
         [TestCase(-333, 0, 0)]
         [TestCase(-1, 99, 0)]
@@ -987,6 +1048,11 @@ namespace NTSD.Test
                     null);
                 return frame;
             }
+        }
+
+        private static T ReadCueField<T>(object cue, string name)
+        {
+            return (T)cue.GetType().GetField(name).GetValue(cue);
         }
 
         private sealed class FormalContentConfigScope : IDisposable

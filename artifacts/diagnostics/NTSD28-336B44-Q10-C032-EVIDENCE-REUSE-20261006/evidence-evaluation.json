@@ -1,0 +1,85 @@
+{
+  "checkedUtc": "2026-10-05T17:46:19.267028+00:00",
+  "scope": "READ_ONLY_HISTORICAL_RAW_EVIDENCE_REUSE_NOT_NEW_PLAY",
+  "checks": {
+    "baseline_pass": true,
+    "baseline_128_ticks": true,
+    "baseline_scene_preserved": true,
+    "voice_pass": true,
+    "voice_128_ticks": true,
+    "voice_scene_preserved": true,
+    "pcm_pass": true,
+    "pcm_128_ticks": true,
+    "pcm_scene_preserved": true,
+    "voice_samples_equal_baseline": true,
+    "pcm_samples_equal_baseline": true,
+    "voice_two_correct_voices": true,
+    "pcm_two_correct_voices": true,
+    "pcm_isolation_and_cleanup": true,
+    "pcm_recorded_ratio_recomputes": true,
+    "pcm_ratio_within_declared_1e_minus_5_absolute": true,
+    "current_pcm_identity": true,
+    "current_wave_parameters": true
+  },
+  "passed": true,
+  "evidence": {
+    "baseline": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-F03-NATURAL-SCENE-001\\tay36-a243-x550-natural-scene-03.json",
+      "sha256": "5356791C4D92A9A97E37644D89A81B698245EB5D4511F01F8EA65C982D1F83D4",
+      "startedUtc": "2026-09-30T18:11:57.9371699Z",
+      "status": "PASS",
+      "phase": "DONE"
+    },
+    "voice": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-C032-NATURAL-VOICE-001\\tay36-a243-x550-c032-voice-01.json",
+      "sha256": "17FCA4E9A97DD5A87ED3855268AD214BAD906B88B1B4F63D108FAD2E2555A825",
+      "startedUtc": "2026-10-02T15:06:17.4841595Z",
+      "status": "PASS",
+      "phase": "DONE"
+    },
+    "pcm": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-C032-NATURAL-MONO-PCM-001\\tay36-a243-x550-c032-mono-pcm-04.json",
+      "sha256": "116B4E91BF7BF8F4058D3999B0E96B05549F659CAED418C6367F7931162C3E42",
+      "startedUtc": "2026-10-03T04:07:47.9033309Z",
+      "status": "PASS",
+      "phase": "DONE"
+    }
+  },
+  "pcm": {
+    "sampleRate": 48000,
+    "frames": 9216,
+    "measuredRatio": 15.666673766652398,
+    "expectedRatio": 15.666666666666666,
+    "absoluteDifference": 7.099985731784386e-06,
+    "declaredAbsoluteTolerance": 1e-05,
+    "route": "<master>",
+    "mutedOtherSources": 2,
+    "otherUnmutedDuringCapture": 0
+  },
+  "waves": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Sound\\data\\016.wav",
+      "channels": 1,
+      "frequency": 22100,
+      "sampleWidth": 1,
+      "frames": 8158,
+      "pcmSha256": "50A75E61ACBF4CD2A985CAD642E2B2901EF1835661441BBB2ED3818046121A6C",
+      "fileSha256": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\016.wav",
+      "channels": 1,
+      "frequency": 22100,
+      "sampleWidth": 1,
+      "frames": 8158,
+      "pcmSha256": "50A75E61ACBF4CD2A985CAD642E2B2901EF1835661441BBB2ED3818046121A6C",
+      "fileSha256": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810"
+    }
+  ],
+  "limits": [
+    "Historical 2026-10-02/03 original Editor results, freshly rechecked, no new Unity Play/compile",
+    "Isolated software single mono voice, not natural overlapping full mix",
+    "Formal root trace does not expose per-event audio or hardware output",
+    "Parent C032 RUNTIME_PENDING and Q10/total open; unknown conditions remain trigger-only"
+  ]
+}

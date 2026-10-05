@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-05T18:05:07.259118+00:00",
+  "operationId": "NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006",
+  "scope": [
+    "docs/ai/CURRENT-AUTHORITY.md",
+    "docs/ai/STATE.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "docs/ai/DECISIONS.md",
+    "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md"
+  ],
+  "userInstruction": "那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了",
+  "method": "SHA-guarded UTF-8 document prepend/append plus exact Q-stage/current batch-row closure; preserve BOM/history, backups current dirty bytes; no Record status promotion",
+  "allowedChange": "Close this campaign under user-accepted current total-table representative exits; retain exceptions and uncovered conditions as future-goal candidates; no new goal or tests",
+  "indexPlannedAppend": "\r\n- `NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006` — `PLANNED`：用户明确收尾当前目标；9文档当前字节备份、限定证据与精确范围见 [NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/RECORD.md](NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/RECORD.md)。\r\n"
+}

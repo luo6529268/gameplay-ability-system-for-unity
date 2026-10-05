@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-05T17:27:33.001015+00:00",
+  "argv": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md', LF will be replaced by CRLF the next time Git touches it\n"
+}

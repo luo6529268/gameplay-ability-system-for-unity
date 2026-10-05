@@ -3940,7 +3940,19 @@ namespace NTSD.Animation
                     continue;
 
                 for (int index = 0; index < frames.Count; index++)
-                    AddBattleSoundId(destination, frames[index]?.sound);
+                {
+                    LF2FrameData frame = frames[index];
+                    if (frame == null)
+                        continue;
+                    if (!frame.UsesLoganFrameNumbers && frame.FrameSounds.Count == 0)
+                    {
+                        AddBattleSoundId(destination, frame.sound);
+                        continue;
+                    }
+                    int count = System.Math.Min(20, frame.FrameSounds.Count);
+                    for (int soundIndex = 0; soundIndex < count; soundIndex++)
+                        AddBattleSoundId(destination, frame.FrameSounds[soundIndex]);
+                }
             }
 
             LoganModeKnockoutFeedInput feed =

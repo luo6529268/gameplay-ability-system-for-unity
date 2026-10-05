@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "docs/ai/CURRENT-AUTHORITY.md",
+    "docs/ai/STATE.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "docs/ai/DECISIONS.md",
+    "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CURRENT-AUTHORITY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/DECISIONS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md', LF will be replaced by CRLF the next time Git touches it\n"
+}

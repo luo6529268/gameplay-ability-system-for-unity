@@ -28,12 +28,16 @@ namespace NTSD.App
             "SFX_010",
             "SFX_011",
             "SFX_017",
+            "SFX_020",
+            "SFX_021",
+            "SFX_025",
             "SFX_032",
             "SFX_033",
             "SFX_039",
             "SFX_065",
             "SFX_066",
             "SFX_068",
+            "SFX_085",
         };
 
         private sealed class PreparedSoundCue
@@ -51,7 +55,7 @@ namespace NTSD.App
         private readonly Dictionary<string, PreparedSoundCue> preparedCues =
             new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
         private readonly Dictionary<string, PreparedSoundCue> preparedFormalBattleCues =
-            new Dictionary<string, PreparedSoundCue>(StringComparer.Ordinal);
+            new Dictionary<string, PreparedSoundCue>(StringComparer.OrdinalIgnoreCase);
         private AudioController preparedAudioController;
         private long preparedCueBuildCount;
         private AudioSource[] oneShotVoices = Array.Empty<AudioSource>();
@@ -172,7 +176,15 @@ namespace NTSD.App
                 PreparedSoundCue battleCue = GetOrPrepareCue(soundId, true);
                 await EnsurePreparedCueLoadedAsync(battleCue);
                 if (battleCue != null && battleCue.IsFormalBattleFile)
-                    await EnsurePreparedCueLoadedAsync(GetOrPrepareCue(soundId));
+                {
+                    PreparedSoundCue genericCue = GetOrPrepareCue(soundId);
+                    if (genericCue != null && (genericCue.IsSingleFile
+                        ? File.Exists(genericCue.SourcePath)
+                        : Directory.Exists(genericCue.SourcePath)))
+                    {
+                        await EnsurePreparedCueLoadedAsync(genericCue);
+                    }
+                }
             }
 
             long skippedMissing = skippedMissingBattleCueFileCount -
@@ -307,6 +319,14 @@ namespace NTSD.App
             AudioItem audioItem = FindAudioItem(controller, soundId) ??
                                   CreateFallbackAudioItem(soundId);
             string relativeFolder = ResolveRelativeFolder(soundId, audioItem);
+            if (isBattleEvent && soundId.Length == 7 &&
+                soundId.StartsWith("SFX_", StringComparison.Ordinal) &&
+                soundId[4] >= '0' && soundId[4] <= '9' &&
+                soundId[5] >= '0' && soundId[5] <= '9' &&
+                soundId[6] >= '0' && soundId[6] <= '9')
+            {
+                relativeFolder = "data/" + soundId.Substring(4) + ".wav";
+            }
             string normalizedRelativeFolder = NormalizeRelativeFolder(relativeFolder);
             bool isSingleFile = IsSingleFilePath(normalizedRelativeFolder);
             string formalSourcePath = isBattleEvent && isSingleFile
@@ -316,6 +336,12 @@ namespace NTSD.App
                 preparedCues.TryGetValue(soundId, out preparedCue))
                 return preparedCue;
             bool isFormalBattleFile = formalSourcePath != null;
+            if (isFormalBattleFile && preparedFormalBattleCues.TryGetValue(
+                normalizedRelativeFolder, out preparedCue))
+            {
+                preparedFormalBattleCues.TryAdd(soundId, preparedCue);
+                return preparedCue;
+            }
             preparedCue = new PreparedSoundCue
             {
                 AudioItem = audioItem,
@@ -329,7 +355,10 @@ namespace NTSD.App
                 Clips = isSingleFile ? new AudioClip[1] : null,
             };
             if (isFormalBattleFile)
-                preparedFormalBattleCues.Add(soundId, preparedCue);
+            {
+                preparedFormalBattleCues.TryAdd(normalizedRelativeFolder, preparedCue);
+                preparedFormalBattleCues.TryAdd(soundId, preparedCue);
+            }
             else
                 preparedCues.Add(soundId, preparedCue);
             preparedCueBuildCount++;

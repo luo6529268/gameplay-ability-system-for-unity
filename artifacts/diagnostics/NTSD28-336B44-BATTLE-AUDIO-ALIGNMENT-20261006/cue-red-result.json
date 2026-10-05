@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "8749a496a740460187fb0829acebe3c1",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791226920738,
+      "finished_unix_ms": 1791226930025,
+      "last_update_unix_ms": 1791226930025,
+      "progress": {
+        "completed": 2,
+        "total": 8903,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791226929356,
+        "last_finished_test_full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries",
+        "last_finished_unix_ms": 1791226929367,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattleBuiltinAliasResolvesFormalWavAndSharesPreparedPathCue",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattlePrewarmCollectsAllTwentyFrameSoundsWithoutTrailingEntries",
+            "message": "  Expected: equivalent to < \"c/test/w/voice0.wav\", \"c/test/w/voice1.wav\", \"c/test/w/voice2.wav\", \"c/test/w/voice3.wav\", \"c/test/w/voice4.wav\", \"c/test/w/voice5.wav\", \"c/test/w/voice6.wav\", \"c/test/w/voice7.wav\", \"c/test/w/voice8.wav\", \"c/test/w/voice9.wav\"... >\r\n  But was:  < \"legacy.wav\" >\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

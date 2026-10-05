@@ -156,3 +156,10 @@ Task-only 的 [鸣人 a7 正式战斗 WAV 部署](TASKS/NTSD28-336B44-Q10-NARUTO
 | NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001 | REUSE | 缓存type一行修复已4/4具名及subject26/26限定通过；复用证据，根/自然/不同World/GPU维持条件门；2F8无新可达首差，不动2F8、不加矩阵。 |
 
 | NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001 | REUSE | 已确认三RED首差；两共用hunk修后原Editor7/7、native v2当前70输入稳、subject26/26/direct15/15/view残差0。仅受控活跃旧槽消费者，不晋升自然/根/Host/GPU整场；新非例外首差或相邻改动才回访。 |
+
+
+## 2026-10-06 — 本轮对齐停止自动调度
+
+用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。
+
+依据：[收尾报告](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)；复核14份原件和PNG身份，六出口按各自边界通过。未关闭子Record不整体改成VERIFIED，未覆盖条件不是本轮待执行项。336B44权威、D-023/D-024/D-025和其它已批准例外保留。不创建或启动后续目标。

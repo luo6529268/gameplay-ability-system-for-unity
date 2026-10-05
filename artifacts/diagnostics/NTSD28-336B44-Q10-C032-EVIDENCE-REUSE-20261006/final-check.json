@@ -1,0 +1,36 @@
+{
+  "documents": [
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "preciseChangeVerified": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+      "preciseChangeVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+      "preciseChangeVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "preciseChangeVerified": true
+    }
+  ],
+  "diffCheckArgv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+    "docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006\\RECORD.md"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md', LF will be replaced by CRLF the next time Git touches it\n",
+  "gitStatus": "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 2]\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md\n M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-STALE-LIVE-ROOT-DOC-20261006/RECORD.md\n M docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md\n?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/INDEPENDENT-REVIEW.md\n?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/final-diff-check.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/final-scope-audit.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/review-report-append-audit.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/tool-check-results.json\n?? artifacts/diagnostics/NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006/\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl\n?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006/\n",
+  "noNewCompileOrPlay": true
+}

@@ -1,3 +1,7 @@
+> **2026-10-06 新音效任务启动（独立于已收尾目标）：** 用户授权先修复所有角色及战斗音效，来源 03_声音资源；Task NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006 / IN_PROGRESS，Change NTSD28-336B44-BATTLE-AUDIO-CUE-RESOLVER-001 与 NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001 / PLANNED。只战斗声音资源、统一播放解析/多声预热、已证共享事件分支与聚焦验证；不改DAT、Scene、非战斗及旧目标关闭状态。记录/备份已先落盘，尚未称编译或运行通过。总表新增任务回链，按必要出口执行。
+
+> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。
+
 > **2026-10-06 正式根倒地目标四tick限定补证完成：** 同Task内正式336B44 EXE headless回放exit0/passed=true，206/frame54面对持续99/frame230/state14/HP500目标，四tick X500→500.7→502.1→504.2→507、Vx0.7/1.4/2.1/2.8、末动作0。目标仍在场/倒地，直接证明本例追踪运动继续；私有3F8未导出。复用旧健康目标Core/Unity11主体字段各55/55同，仅输出对照，非完整同初态/全World。正式地图Z钳制另列用户例外。未改C#/DAT/Scene/源码、未运行Unity/旧七项，11保护SHA稳。用户确认非战斗修改不引出全局恢复前置；父Record仍RUNTIME_PENDING，父Q/目标开放，229Record/68未关REUSE54/TRIGGER14不变。本出口完成，下一仅按当前总表实际首差/必要终验，停止源码历史扩检。 [正式原件](../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md)
 
 > **2026-10-06 用户边界澄清与正式出口：** 用户确认近期修改只涉及非战斗场景逻辑，本任务不因这些变化扩大源码恢复/非战斗审计或阻塞战斗对齐；正式根EXE仍336B44，候选不晋升。已有共用目标7/7、Core26/26/direct15/15限定证据保留。下一在同Task内仅一次正式EXE206/frame54→99/frame230倒地目标四tick诊断；初态受控/零输入，不改DAT、Scene或C#，不重跑七项。自然击倒/HP0/私有3F8/整场不由该例推出；父Q及总目标仍开放。229Record/68未关REUSE54/TRIGGER14保持，此次是既有包一个出口，非新增生产任务。

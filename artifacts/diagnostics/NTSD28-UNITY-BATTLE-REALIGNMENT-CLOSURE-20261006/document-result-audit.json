@@ -1,0 +1,148 @@
+{
+  "operationId": "NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006",
+  "status": "VERIFIED",
+  "utc": "2026-10-05T18:09:30.326292+00:00",
+  "changedDocuments": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeSha256": "5108DE0BC2F84E8314A0BFFA09406E016B42B6543C9F3FDF5CF768485CB01CB0",
+      "afterSha256": "2DD9A2BD6161A48DE3BED974EF89CD6AAC640EB0B3E2784AE57E04726934762C",
+      "beforeBytes": 357791,
+      "afterBytes": 358479,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha256": "919A29B809FC84673CFDF73FEB98DBFA00B235DA48A2AB531456C3E1C33C705E",
+      "afterSha256": "0A6E36BF885790D75D7E0E62EBD840E5ED0D3C5E95AD504F7764EE6039427B35",
+      "beforeBytes": 1509900,
+      "afterBytes": 1510588,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha256": "47BF99454F3A743D1EC431320D2A43194796E9C787E7E81B49800CDC58C39E7F",
+      "afterSha256": "00B7CC4C0DA999323DF10273FB17CA2B8C6FB4EF110D3DE3CF2601FAB0110EF7",
+      "beforeBytes": 1444302,
+      "afterBytes": 1444993,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeSha256": "9A8B58E5FA0AE703FAEF47171224189D9F17411CDDFF8C4BE13C7997B89C448D",
+      "afterSha256": "5B251FA0A0D4ACF29F60961CEB64139B5E4817A4B1B6975BFCD3260B901A8850",
+      "beforeBytes": 353018,
+      "afterBytes": 353348,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/DECISIONS.md",
+      "beforeSha256": "FE19CA9CDAEEEECA7B0AA75158A5BF7EAA4BCDB39A49EFF4C99E19F1EE226E7F",
+      "afterSha256": "5D735CFC6C111C7B4116E12D0F503AAC18B1F77DE82AB399598B281B41553277",
+      "beforeBytes": 44069,
+      "afterBytes": 45006,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "beforeSha256": "F3B9D4FBA7A14CD0ADC29037C7058558B6B74D08358B5263A0583E4A092F4EE8",
+      "afterSha256": "8AEEF5EBFE907EF71D76B4F1BE64186E3DEDA2E978912E2886F961D6545B9371",
+      "beforeBytes": 34305,
+      "afterBytes": 35242,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha256": "74E2FDB64000016ADD9EB98B722688B98870AE1E6CC7F16A5E6D27E0F475FD5C",
+      "afterSha256": "657B3053B05403452E6B37ED8368BAFE80E309F10982714DE9277CE69B556996",
+      "beforeBytes": 614598,
+      "afterBytes": 615535,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md",
+      "beforeSha256": "867AD2BA38E7DCCEBE5ACB4D4532C01906A1689EE9235718F0EF6BCE2F9E7DC2",
+      "afterSha256": "AE828202C99990BC9FF2656A9B788E3DCA60DB48DEA0D6AD26E0490B014DB7B2",
+      "beforeBytes": 8411,
+      "afterBytes": 9102,
+      "bomPreserved": true,
+      "exactPayloadVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeSha256": "834DC345CE9E91F19C3B7AE04490B15B936AB5FB77C4AAF99F64EE5CEDBD8067",
+      "afterSha256": "04F63D863809E747461D2D09756B1ABAD2EC3C1BD16E2AC97D23A382DF19C3CB",
+      "oldPrefixPreserved": true,
+      "exactPayloadVerified": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "before": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "after": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "before": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "after": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "before": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "after": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "before": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "after": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "before": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "after": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\NTSDSoundPlayer.cs",
+      "before": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "after": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Sound\\data\\016.wav",
+      "before": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE",
+      "after": "C57503D7FBE8E93065C7C4CCB14596246FA46750CC3B9FC6B4BD98CFEC7647AE",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "before": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "after": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\data\\016.wav",
+      "before": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810",
+      "after": "40F7B9AC8483BA57DFED5C1E0322653FC387918D429B7711E3DD4B11178A9810",
+      "same": true
+    }
+  ],
+  "backupsVerified": true,
+  "diffCheckExit": 0,
+  "productionEdits": 0,
+  "newPlayRuns": 0,
+  "newGoalStarted": false,
+  "scope": "User-accepted current table closure, no universal parity or child Record status promotion"
+}

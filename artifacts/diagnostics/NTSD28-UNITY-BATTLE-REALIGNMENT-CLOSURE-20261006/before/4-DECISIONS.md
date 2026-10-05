@@ -1,0 +1,355 @@
+# NTSD 长期项目决策记录
+
+> 当前战斗规则版本决定：2026-09-30 的 [D-026](#d-026--336b44-正式发行晋升与战斗对齐重新基线) 已取代 D-021 的 B1E13 权威身份；D-023/D-024/D-025 的内容和用户例外继续有效。
+
+## D-025 — 非角色战斗对象离开项目可行走区域后按战斗逻辑时间延迟清除
+
+- **状态**：`USER_CONFIRMED / SCOPED_VERIFIED / Q12_INTEGRATION_REVISIT`。
+- **日期**：2026-09-24。
+- **用户明确要求**：项目自己的可行走区域是离场判据；仅非角色战斗对象连续离开该区域超过 10 秒才清除。10 秒按战斗逻辑时间计，正常 33 ms tick 需约 304 tick，F5 快速模式只缩短现实等待时间，不改变逻辑 tick 数。
+- **边界**：实体地面点应以实际战斗 X/Z 投影到项目的可行走多边形判定；重新进入区域重置连续离区计时。角色现有边界/生命周期不由此决定改变。该用户例外取代 NTSD 正式版非角色 X 越界即时销毁时机，但不自动取消其他正式规则或修改 DAT。没有有效可行走多边形时不得把“无数据”误判为“已离区”。
+- **实现依赖**：地图准备阶段冻结可供 dedicated worker 安全读取的多边形数据；计时进入实体 runtime 的 reset、池复用、snapshot/restore 与 checksum；按现有有序关闭回收。先定向 RED，再验证场景接线、304 tick 边界、重入、F5、不同非角色类型及保存恢复。详 `artifacts/diagnostics/NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001/NONCHAR-WALKABLE-10S-CONTRACT.md`。
+
+
+## D-024 — 固定完整背景下战斗实体位移以画面比例一致为目标
+
+- **状态**：`USER_CONFIRMED / UNIFORM_SPATIAL_RATIO_DIRECTION / TRANSFORM_AND_RUNTIME_PENDING`。
+- **日期**：2026-09-23。
+- **用户明确要求**：后续类似跑距的对齐，不再以原版与 Unity 的位移像素数相同作为出口；角色、道具、武器及其他战斗实体，只要涉及位移像素，均以相对于原版画面的位移比例一致作为目标。DAT 中任何数据不得修改，除非用户另行明确要求。
+- **决定**：在已确认保留 Unity 当前相机尺寸和完整背景的前提下，战斗位移的用户验收指标改为同条件、同逻辑时段的屏幕位移占比。横向比较采用 `Unity 位移 / Unity 可见宽度 = 正式版位移 / 正式版可见宽度`；当前 Training 16:9 样本宽度分别为 2048 和 1333，故横向参考倍率为 `2048/1333`。此决定扩展到所有战斗实体的相应运动路径，不能只改鸣人、角色跑步或某个 DAT 字段。
+- **2026-09-29 用户补充决定**：碰撞中涉及原 DAT 尺寸的攻击框、受击框与实体实际距离，也要在 Unity 按同一画面比例处理。不得只放大角色奔跑位移，或只放大一方的判定框；应使同一战斗空间的出生/重生/生成中心、后续位移、双方局部碰撞几何和查询边界采用相容的比例映射。该指示不授权修改 DAT 原值，也不授权韩、李专用分支。正式版原规则坐标继续保留用于原规则/trace，Unity 实际空间另作统一投影；原版 X520/580 的对照在 Unity 必须使用同一映射后的初始位置，不能再用未映射的 Unity X520/580 直接判定成败。
+- **边界与依赖**：该比例目标是用户批准的正式战斗逻辑逐像素位移例外，不能再将启用后的世界 X trace 写为与正式版逐像素相等。统一空间投影必须先定义项目地图的共同锚点、X/Y/Z 各轴倍率、整数取整、可行走边界与已有物理位置的迁移关系；不能把横向倍率盲用于全部坐标轴、图片尺寸或非空间字段。2026-09-28 韩抓李反例证明：只放大运动会使近距漏抓/远距误抓，只放大局部框会使近远两例都抓到；需先使双方中心间距及局部框保持同一映射，再核对生成、碰撞、命中、边界和表现消费者。应盘点输入移动、帧运动、物理积分、武器/飞行物/道具速度、OPoint 初始速度、外力/击退、跟随/投掷、平台、传送与边界等生产出口及其碰撞和命中副作用，按统一坐标合同分批改动和验证。资源 DAT 保持 NTSD 2.8-Logan 原始数据，不以改 DAT 数值实现倍率；相机与非战斗框架不因此自动改变。
+- **现状与实施出口**：`NTSD28-USER-FIXED-VIEW-RUN-RATIO-001` 仅是角色跑/冲刺 X/Z 速度的局部实施，原 Editor 聚焦测试通过但自然 Play 未完成，不代表 D-024 全实体达成。后续先出可枚举生产入口/坐标轴/视口参考清单和共享换算合同，再按互不重叠的有界批次实施；每批检查多实体位置、显示位移比例、生成/碰撞/命中/边界副作用、正式行为例外记录及原项目 Play。不得因改成比例目标而宣称其他战斗规则已完全一致。
+- **2026-10-05 用户视觉尺寸裁决**：同全局 tick14 现有正式根/原 Unity 截图的角色本体画面占比约小 5.3%（鸣人）、3.9%（鼬）；用户确认这属正常，保留 Unity 现有 `BattleVisualScale=1.5` 和战斗实体显示尺寸，作为 Q09 已批准表现例外，不以此开尺寸缩放修复包。该裁决仅针对显示尺寸，不缩小本决定的位移、碰撞和物理距离比例范围，也不豁免错误帧图、挂点、阴影或其它非例外表现。测量原件见 `artifacts/diagnostics/NTSD28-336B44-Q09-TICK14-BODY-SIZE-20261005/REPORT.md`。
+- **恢复入口**：`Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md` 顶部 D-024/Q09 跟踪项，`docs/ai/STATE.md` 和当前 handoff。
+
+## D-023 — DAT 与角色相关图片采用 NTSD 2.8-Logan 内容权威（背景类 DAT 排除）
+
+- **状态**：`USER_CONFIRMED / CONTENT_TARGET_DECIDED / BACKGROUND_DAT_SCOPE_CORRECTED`。
+- **日期**：2026-09-12。
+- **用户明确要求**：“Dat文件和图片资源要用NTSD2.8-Logan版本的”，并指出当前 DAT 和角色相关图片估计需要全部删除；本轮重点另要求核对现有脚本、整理已对齐项目与真实剩余修改。
+- **决定**：DAT 及角色相关图片的正式目标采用当前权威 EXE 实际消费的 `resources/runtime` 版本；不采用“旧同名 DAT 数值继续保留、只补缺失”的方向。旧 Unity 138-DAT manifest/projection 与图片是迁移前基线，保留历史验证价值，不能再裁决目标内容。
+- **替代关系**：替代 D-020/H 和 Direction-B 合同中该范围的“策略待定/新 DAT 不可覆盖”条款；不改历史测试原始结果。迁移后必须以新内容指纹重验受影响行为，旧内容专项 VERIFIED 不自动升级为新版全角色验收。
+- **边界**：资源源版本已决定，实际迁移未执行。先列出旧→新 object/path/hash/GUID/引用关系、共享资源、parser 和 loader 必需修改，再按独立 Task/Change 分批接入；不能按 Config/Sprite 目录整体清空。精确删除集合尚待清单核验，不将“估计”扩张成无差别删除许可。
+- **保持项**：既有容量/相机/边界/随机掉落/保留 UI 例外和排除项不变；不自动扩大为所有 UI/地图图片或 WAV 全量迁移；默认 stage.dat 部署暂停仍须单独解决。
+- **恢复入口**：`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 的当前状态、第 4 节实时矩阵和 H 专项。
+
+> **2026-09-24 用户范围更正（覆盖本节上面的概括，不改写原始决定）：** 本项目不使用原版 NTSD 背景与两类模式 DAT。`b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat` 明确排除在 D-023 的迁移目标之外；使用项目自己的背景、地图及模式内容。原版源码或 DAT 可供只读规则分析，但调用链可达性不构成这些资源的部署或接线授权。此前 Q07 对背景类共50个 DAT 的暂存和未接入解析器是错误扩围；另两个 mode DAT 已进入生产内容身份、combo/KO消费者，需先安全脱钩再由用户清理。其他非排除 DAT 与角色相关图片的目标不变。
+
+> **2026-09-24 实施更新：** 用户选择独立 Unity ScriptableObject 资产替代 mode DAT。`ProjectBattleModeConfig.asset` 已建立并通过配置化生产预热传入不可变快照；正式模式 DAT 不再参与该入口的身份、combo/KO 输入。52个排除 DAT、对应meta和误加解析器/测试已移入单一`for-user-deletion/`文件夹，供用户自行删除。原 Editor 的定向测试、自检和两条受控 Play 记录在 Q07 ProjectMode 任务中；这不表示 Q07 其他内容与全部 KO/连击行为已闭合。
+
+> **2026-09-12 任务重整说明（不新增用户决策）：** 当前完整对齐执行视图见 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节，标识 `NTSD28-ALIGNMENT-REPLAN-20260912`。
+> D-020 的 IMPLEMENTATION_NOT_STARTED 仅是 9 月 2 日历史状态，不能覆盖 Goal17～20 后续限定成果；其用户例外与 H 策略边界在明确改判前仍有效。
+> D-022 路线已批准，实际联合迁移及前置闭合仍不能写成完成。当前用户要求重新整理任务；建议正式战斗可达资源最终对齐 NTSD 2.8-Logan，但尚未将建议记为内容切换批准。
+
+> **CURRENT AUTHORITY / 2026-09-02：** `GOVERNANCE-NTSD28-LOGAN-AUTHORITY-MIGRATION-001`
+> 已由用户确认取代 D-001 的 NTSD 2.4 行为权威。任何恢复工作先读
+> `docs/ai/CURRENT-AUTHORITY.md`。D-001～D-018 中依赖旧 NTSD 2.4 release、
+> `ntsd_new.exe`、旧 `game_tick(...)`、固定 30 Hz、Authority400 或旧对齐状态的部分均标记为
+> `NTSD24_AUTHORITY_SUPERSEDED / REBASELINE_REQUIRED`；它们可以保留历史事实，但不能驱动
+> 当前 Unity 实现或签发 NTSD 2.8-Logan 对齐结论。
+
+## D-001 — C++ release live path 是唯一行为权威（已被 D-019 取代）
+
+- **状态**：`SUPERSEDED BY D-019 / NTSD24_AUTHORITY_SUPERSEDED`
+- **日期**：2026-08-20
+- **决定**：战斗规则、pass 顺序、输入时点、碰撞/命中、CPoint/held/opoint、生命周期及 render handoff 的最终裁决，均来自 `J:\QQFile\NTSD2.4\ntsd_release` 中参与 `ntsd_new.exe` release 构建的 live path；主入口为 `src/entity/game_tick.cpp::game_tick(...)`。
+- **依据**：根 `AGENTS.md`、`Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md`；本机已读取 release `Makefile`，其 target 为 `ntsd_new.exe` 且列入相关 live 模块。
+- **影响**：C#、Unity self-check、性能 hash、反汇编和旧文档都不能单独签发 C++ 对齐结论。
+
+## D-002 — C# 与旧 Unity 验证资料保留为历史回归，不删除或改写历史事实
+
+- **状态**：VERIFIED
+- **日期**：2026-08-20
+- **决定**：保留 `ntsd_release_C#`、`BattleRuntimeSelfCheck`、Authority400 diagnostic、历史 alignment/handoff 和优化报告，以供命名定位、夹具复用、回归和性能诊断；所有旧“已对齐/已关闭”结论均须按 C++ release live path 重新审核后才能恢复为当前行为结论。
+- **依据**：重新对齐总纲 R0 与根 `AGENTS.md` 的 C# 边界。
+- **影响**：R0 只加迁移声明和证据台账，不在旧历史段落中逐行重写当时事实。
+
+## D-003 — R0 只处理工作流、证据和文档，不改变 battle runtime
+
+- **状态**：VERIFIED
+- **日期**：2026-08-20
+- **决定**：R0 的允许写入范围是长期状态文件与 authority migration 文档；禁止变更 Unity/C++ gameplay、DAT、场景、资源、trace implementation 和 R2+ 调度。
+- **依据**：重新对齐总纲 R0 的目的和完成条件。
+- **影响**：R1 之前不得借“修文档”实施任何 gameplay 修复。
+
+## D-004 — R1 先建立 C++ 源码行为合同与 Unity 差异清单，再决定任何 gameplay 改动
+
+- **状态**：VERIFIED
+- **日期**：2026-08-21
+- **决定**：R1 的必经主线是“C++ release live-source behavior contract → Unity source-pass crosswalk → 全量差异清单 → 子流程验收矩阵”。每个条目必须保留 authority/evidence、前置条件、字段/副作用、Unity 映射、依赖、状态和验收方式；R2 才可能修改主调度器 pass 边界。
+- **依据**：用户明确的源码优先、先盘点后修复工作流；`Assets/NTSD/Docs/cpp-release-vs-unity-battle-realignment-plan.md` 的 R1 修订。
+- **影响**：R1-WP02 的自动 full trace 是增强证据，而不是开始源码合同或差异盘点的门槛。任何未闭合的 C++ 行为必须保持 `UNKNOWN`；任何无法独立运行的 Unity 子流程必须标记“逻辑已对齐，待测试”，不得提前宣称已验证。
+
+## D-005 — R1 使用新的 C++ 锚定三方 trace 合同；旧 Authority400 格式不升级为 authority
+
+- **状态**：DECIDED（流程/证据合同；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-21
+- **决定**：后续 R1 producer 统一采用 `ntsd-r1-cpp-unity-trace-v1`，同时输出 `cpp-release`、`unity-fallback`、`unity-optimized`。三个 producer 必须共享固定 initial state、DAT 语义清单、stage manifest、seed 和 input journal，并以 C++ `game_tick(...)` checkpoint 为比较锚点。first-difference 必须保留 tick、checkpoint/pass、slot、字段、C++ 值、两个 Unity 值和最短已知重现前缀。
+- **依据**：`docs/ai/TASKS/R1-WP01-trace-contract-planning.md`；C++ release Makefile 与 `src/entity/game_tick.cpp::game_tick(...)` 的静态 live-path 核验；`Tools/NTSDParity/README.md` 已明确旧 v3/v4 trace 的 C# authority provenance。
+- **影响**：历史 C# / Unity parity schema、Authority400、checksum、fast-path proof 可复用为格式、夹具、回归或诊断材料，但不能作为 C++ 行为裁决 producer。未绑定的字段、float 归一化和 presentation policy 保持 UNKNOWN / capture-only，不得被 comparator 或旧 hash 自动判为相等。R1-WP02 当前 BLOCKED 时，本决定的 producer 合同保留为未来自动比较设计，不阻断 D-004 的源码盘点主线。
+- **不决定**：本决策不判定任何 Unity pass、CPoint、WeaponSync、held/link、collision、input、opoint、render 或技能已经与 C++ 相同或不同；这些必须等待实际 C++ release trace。
+
+## D-006 — C++ Release runtime 在 R1 中不可修改；WP02 只能做外部只读采集
+
+- **状态**：DECIDED（用户明确范围；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-21
+- **决定**：R1-WP02 必须从未修改的 `J:\QQFile\NTSD2.4\ntsd_release` Release runtime 以只读方式取得 trace。不得修改源码、头文件、Makefile、构建产物、可执行文件、DLL、资源、DAT、配置或 C++ 工程内的输出文件；不得新增 C++ instrumentation、trace sink、fixture bootstrap、输入 bridge、CLI 或诊断写入。
+- **采集边界**：只允许使用现有 stdout/stderr、既有日志/诊断开关、既有命令行、既有输入/自动化方式或其他证明不写入 C++ runtime 的外部观察通道。采集结果、run manifest 和比较资料必须保存在非 authority 目录。
+- **依据**：用户对 R1-WP02 的当前明确要求；`docs/ai/TASKS/R1-WP01-trace-contract-planning.md` 的 R1-WP02 amendment。
+- **影响**：若没有安全的只读观察方式、可重复运行环境或必要输入，R1-WP02 必须输出 blocker 并停止；不能以“先插桩再比较”绕过该 blocker。后续 Unity trace、comparator、R2 仍不在本 Work Package 范围内。
+
+## D-007 — Unity 中央表现与扩展容量是不可回退的交付边界
+
+- **状态**：DECIDED（用户明确交付约束；不是 C++ gameplay VERIFIED 结论）
+- **日期**：2026-08-21
+- **决定**：C++ release 只裁决战斗规则、逻辑 render handoff 和最终可观察行为，不裁决 Unity 的底层 renderer API、Mesh/URP/Texture2DArray 实现或生产容量策略。重新对齐必须保留：
+  - `BattleCentralRenderSystem`、中央 command/descriptor、`CentralOnly`、Texture2DArray/atlas、动态 Mesh/quad 与 URP 接入；
+  - Legacy `SpriteRenderer` 仅作兼容、fallback 或诊断，不重新成为生产渲染依赖；
+  - `Authority400` 为固定 400 slot 的 C++ 同槽对照 profile，不是 Unity 生产全局上限；
+  - `MobileExtended` 为 1,050 initial slot、1,000 active runtime entity；
+  - `DesktopExtended` 为 page-normalized 初始容量（默认 512）、dynamic growth 和无生产 active 硬上限；
+  - `SimulationTickDriver -> NTSDBattleTickSystem -> SimulationWorld`、30 Hz、`FrameInputSet`、slot/generation、SoA/ECS store、对象池、worker 与战斗期间零 GC 目标。
+- **依据**：用户当前明确要求；`Assets/NTSD/Scripts/Simulation/BattleRuntimeProfile.cs`、`SimulationWorld.Registry.partial.cs`、`SimulationWorld.StageRender.partial.cs` 与中央渲染计划的静态实现核验。
+- **影响**：任何 C++ 行为差异只能通过最小 Unity adapter 修复。若适配可能触及本决策的边界，必须先在差异条目写出 C++ 合同、非回退证明和验收条件；不得通过恢复逐实体生产 `SpriteRenderer`、降低移动端容量、固定桌面上限、取消动态增长或把渲染状态反写回模拟来“对齐”。
+
+## D-008 — 自编写脚本改动必须具有仓库内可恢复审计记录
+
+- **状态**：DECIDED（用户明确流程约束；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-21
+- **决定**：每个闭合的自编写脚本行为改动使用唯一 Change ID，并在 `docs/ai/CHANGE-LEDGER.md`、`docs/ai/CHANGE-RECORDS/<ID>.md`、`STATE.md` 与 handoff 中留下可恢复记录。记录必须覆盖 authority/用户需求、Unity 原状、实际代码路径与符号、改前/改后职责、不可回退边界、验证证据、未关闭风险、回滚和 Git 关联。
+- **执行规则**：必须先创建 `PLANNED`/`IN_PROGRESS` Record，再修改脚本；每次带脚本 diff 的交付、提交前检查和 handoff 前必须运行 `Tools/Validate-ChangeLedger.ps1`。不能独立验证的项保持“待测试”/`RUNTIME_PENDING`；不得以代码存在、编译通过、聊天内容或 commit message 代替证据。
+- **代码注释边界**：不要求把 Change ID 写进每一行源代码。只有不直观的 C++/Unity 时序合同、字段契约或跨 pass 适配点才保留简短 `Alignment contract: <ID>` 注释；详细历史始终留在 Change Record。
+- **Git 边界**：validator 是只读仓库工具；未经用户单独批准不得安装 Git hook、修改 `.git/config`、修改 `.git/hooks` 或改变 GitHub Desktop 提交行为。
+- **依据**：用户要求每次脚本代码修改必须在上下文压缩和长会话后仍可稳定追溯。
+- **影响**：后续 R1/R2 及所有 Unity 工具/脚本变更都必须先登记。未被 Change Record 覆盖的脚本 diff 不得被报告为可交付。
+
+## D-009 — 已批准总计划内的 Work Package 连续推进；只在真实范围门槛停止
+
+- **状态**：DECIDED（用户明确工作方式；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-21
+- **决定**：用户已授权按 `cpp-release-vs-unity-battle-realignment-plan.md` 的既定 R1～R8 依赖顺序持续推进。属于该计划、已具备 Task Contract 的常规子 Work Package 不需要在每个 R2/R3/R4 子包开始前重复请求确认；应连续执行“合同 → Change Record → 最小改动 → 分层验证 → 留痕”的闭环。
+- **仍须停止并请求方向的情形**：需要扩大到计划外模块或长期架构；需要改变 CentralOnly/Texture2DArray/dynamic Mesh/URP、1.5× scale、fixed-world camera、容量、30Hz/FrameInputSet/SoA/ECS/pool/worker/0-GC 等保护边界；需要运行、修改、构建或向 C++ authority 目录写入；C++ source contract 无法闭合；需要改 DAT/scene/resource 以掩盖逻辑差异；或用户明确要求暂停/更改范围。
+- **不被取消的约束**：每一项脚本改动仍必须先有独立 Change Record；R1-WP02 full trace 仍保持 BLOCKED；T8 default `stage.dat` 仍暂缓；每个结论仍按 source / compile / focused fixture / joint fixture / Play Mode / trace 分层报告。
+- **影响**：当前 R2-VERIFY-01 与 R3-INP-01 可以按计划连续进入其 Change Record 和实施阶段。此前文档中“等待用户确认”的表述只保留为当时历史状态，不再阻断当前已批准总计划内的执行。
+
+## D-010 — R3 输入差异按独立 producer / consumer 边界拆分，不合并为大改动
+
+- **状态**：DECIDED（已批准计划内的最小实施拆分；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-22
+- **决定**：将历史上过宽的 `R3-INP-02` 细分为四个独立 Work Package：
+  - `R3-INP-02` 只覆盖 `D-SCHED-010` 的默认 F1/F2 step gate 与 Unity battle-entry clear 分离；
+  - `R3-HOLD-INP-01` 单独覆盖 `D-INP-001` negative-link / held-caught input；
+  - `R3-AI-LIFE-01` 单独覆盖 `D-INP-002` 的 HP=0 / respawn AI caller；
+  - `R3-INP-03` 保留 frame packet、P1/P2 extension、AI target equivalence 与 physical binding。
+- **依据**：C++ `game_tick.cpp` 的 step gate 只影响 scheduler callback / render-after-return，而
+  `input_handler.cpp::apply_input` 的 negative-link 行为和 AI HP prefilter 分别依赖 held/relation 与
+  death/respawn producer。把三类问题混入一笔脚本改动会破坏 D-008 的可审计最小范围。
+- **影响**：R3-INP-02 可以复用现有 `BattleStepMode` / `BattleStepGate`；不得顺手删除
+  `Runtime.LinkState < 0` 或 `HP <= 0` return。每个后续包仍必须分别建立 Task Contract、Change Record
+  和分层验收。物理 F1/F2/W/S/A/D/J/K/L binding 和 C++ debug-unlock 不因本决定自动获得实现授权。
+
+## D-011 — 将 R3-INP-03 拆为 packet、容量、AI target 与物理绑定四个可验收包
+
+- **状态**：DECIDED（D-010 的执行级细化；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-22
+- **决定**：原 `R3-INP-03` 覆盖的四类证据/风险不共享同一最小改动边界，改按以下连续顺序处理：
+  - `R3-INP-03A`：只关闭 `D-INP-003` 的 canonical full-held `FrameInputSet` journal contract，验证
+    press / hold / release / same-tick multi-key 对 `key/prev/cd/history` 的 C++ poll 等价；
+  - `R3-INP-04`：只验证 `D-INP-004` 的固定 P1/P2 authority fixture 与 Unity 3+ roster extension 边界；
+  - `R3-AI-TGT-01`：只验证 `D-INP-005` 的 fallback / indexed AI target equal-distance、cached-target
+    与 team/input-phase behavior；
+  - `R3-PHY-01`：只处理 `D-INP-006` 的实际 InputAction / Inspector / W-S-A-D-J-K-L Play Mode binding。
+- **依据**：C++ `InputHandler::poll`（`src/input/input_handler.cpp:1555-1613`）只读取当前 held state 并在
+  固定顺序生成 prev/cooldown/history；P1/P2 caller 在 `src/core/main.cpp:4607-4608`。Unity 的
+  `FrameInputSet`/`SimulationFrameInputModule`/`NTSDInputStateModule`、roster extension、AI SoA 以及
+  InputAction asset 分别属于不同 consumer 和验收层。
+- **影响**：`R3-INP-03A` 可先做 test-only contract，不得顺手改 physical asset、roster capacity、AI
+  candidate 或 lockstep protocol。`R3-PHY-01` 保持用户 Play Mode / asset 确认前的 `UNKNOWN`；本次不
+  修改 physical binding。
+
+## D-012 — 将 R3-FRAME-01 按 current-key、landing raw write 与 respawn integer sync 分离
+
+- **状态**：DECIDED（D-009 内的执行级最小拆分；不是 gameplay VERIFIED 结论）
+- **日期**：2026-08-22
+- **决定**：原 `R3-FRAME-01` 覆盖的 `D-MOV-001～003` 不共享同一个安全改动边界，按以下顺序连续处理：
+  - `R3-FRAME-01A`：只关闭 `D-MOV-001`，即 current key 从 human/AI producer 保留至 C++ F03/F09
+    consumer；不得移动或重写 human/AI producer；
+  - `R3-LAND-01`：只处理 `D-MOV-002` 的 landing raw-frame writer subset，并先闭合 frame/Prev/
+    Attacking/Transistor 以及 R4/R5 consumer；
+  - `R3-SYNC-RESP-01`：只处理 `D-MOV-003` 的 successful-physics integer sync 与 respawn scan时点，
+    并先闭合 link/cpoint/structural lifecycle consumer。
+- **依据**：C++ `InputHandler::poll` / `prepare_ai_input` 与 `frame_advance.cpp:80-83,941-951,977-980`
+  已将 D-MOV-001 的生产者、消费者和最小断言闭合；但 C++ landing和respawn还分别依赖 raw frame-history
+  writer以及R5 structural/held/CPoint producer。把三项合入一次改动会违反 D-008 的可恢复审计和最小回滚原则。
+- **影响**：`R3-FRAME-001A` 已建立为 `PLANNED` Record；实际脚本改动先只允许其三条路径。D-MOV-002/003
+  不因 D-MOV-001 的测试通过而自动获得实现授权，R3-FRAME-02（D-MOV-004/005）仍保持后续独立包。
+
+## D-013 — R3-FRAME-02 按 executable guard 与当前 DAT reachability 再次收缩
+
+- **状态**：DECIDED（scope / evidence decision；不是 gameplay VERIFIED 结论）。
+- **决定**：`D-MOV-004` 单独由 `R3-FRAME-02A` 处理 Unity-only `ThrowFrameGuard` readers；`D-MOV-005`
+  因当前 authored DAT inventory无法到达 exact-character ECS path而不改代码，作为未来 asset/eligibility watch保留。
+- **依据**：C++ release source complete field inventory确认 `throw_frame_guard` 没有 conditional reader、没有
+  nonnegative writer；Unity有三处 F03/F07 reader。C++ state2000 facing存在且Unity fallback已有对应；当前 literal
+  state2000 DAT全为 type2/type4，而 exact ECS只处理 type0。
+- **影响**：不得把“当前不可达”写成删除 state2000 rule的授权，也不得将 D-MOV-005 的静态结论挤入
+  R3-FRAME-02A。未来DAT或type eligibility变化必须重开 source / reachability审计。
+
+## D-014 — combo progress以C++ by-reference即时写入为权威，废止Unity local transaction oracle
+
+- **状态**：DECIDED（source authority correction；尚不是代码或runtime VERIFIED）。
+- **日期**：2026-08-23
+- **决定**：C++ `input_handler.cpp` 的八方向combo和DJA直接以entity字段引用执行；每个wrapper步骤、
+  interrupt和early branch的字段修改即时生效。Unity不得继续把九字段复制为local transaction并在大多数
+  return路径丢弃，也不得用旧self-check的“staggered L/S/K must not complete”定义权威行为。
+- **依据**：`include/input_handler.h:9-16`确认J/K/L到internal storage的交叉映射；
+  `input_handler.cpp:2758-2859`确认`run_combo/advance_combo`按引用写入；`Makefile:35`确认release参与性；
+  Unity `BattleCharacterInputActionResolver.ApplyComboFrameInput`与现有self-check形成相反合同。
+- **影响**：登记`D-INP-010`，由独立`R3-COMBO-01 / R3-COMBO-001`处理resolver和陈旧测试。physical
+  binding/FrameInputSet/worker edge仍属D-INP-006，不得与本修复合并；真实Naruto opoint表现继续由R8-WP01C验收。
+
+## D-015 — F1/F2 战斗调试步进不进入正常战斗对齐范围
+
+- **状态**：DECIDED（用户范围决定）。
+- **日期**：2026-08-23
+- **决定**：Unity 不移植 C++ Release 的 F1/F2 battle debug step、A→B→C debug unlock及其仅在
+  debug tail-skip条件下出现的candidate carrier保留行为。`D-STEP-001`与`D-SCHED-008`作为用户批准省略的
+  debug-only行为保留证据，不再计为正常战斗主线的未修复 gameplay差异。
+- **依据**：用户明确确认“F1/F2 战斗调试步进逻辑不用”；`R8-WP01G-R01/R01B`已证明
+  `D-SCHED-008`的差异只在该debug early-return路径出现，normal completed tick无candidate reader差异。
+- **影响**：`R2-CANDIDATE-TAIL-01`与`R3-STEP-01`不执行；不得以后因上下文压缩重新把它们作为normal
+  gameplay blocker。当前工作转入`R8-WP01G-R02`，只闭合`D-MOV-005`、`D-COL-005B`、`D-HIT-005`、
+  `D-LIFE-001`。
+
+## D-016 — 地图逻辑与地图表现资产分离，并以 Map ID 加 Catalog 配对
+
+- **状态**：DECIDED（用户明确的 Unity-native 架构方向；尚无 gameplay 代码或运行时验证）。
+- **日期**：2026-08-25
+- **决定**：未来多地图系统使用两个独立 ScriptableObject。BattleMapLogicDefinition 保存稳定 Map ID 与会影响战斗模拟的地图数据；BattleMapPresentationDefinition 使用同一 Map ID 保存背景和本地表现资源。BattleMapCatalog 是 Map ID 的唯一配对、校验和选择入口。战斗开始前将 LogicDefinition 冻结为 world-owned BattleMapRuntimeSnapshot；战斗 Tick 内不得扫描 Scene、读取 ScriptableObject 或由 Camera/Bg 推导地图逻辑。
+- **逻辑边界**：逻辑资产和 MapFingerprint 可以包含经 C++ Release/Unity 合同确认的 Stage rectangle、出生点、随机区域及 map-specific simulation 字段；不得包含 Asset GUID、路径、Sprite、Texture、Transform、Camera、分辨率、Windows/Android、黑色覆盖或本地表现。MapFingerprint 未来进入现有 LockstepSessionIdentity.StageFingerprint 的正式创建链；mismatch 必须在 Tick 0 前 fail closed。
+- **表现边界**：背景、装饰、平台取景、Android 底部黑色覆盖和 Editor preview 只读 PresentationDefinition；它们不改变 SimulationWorld、输入、随机数、checksum、Stage、实体位置或联机身份。不同平台可以不同显示而共享同一逻辑地图。
+- **实施边界**：首批只迁入 M0 重新审计确认的矩形 Stage 语义。BoundaryWall polygon 可作为作者/预览数据保存，但在独立 M6 获得 C++ evidence 或用户明确新玩法授权前，必须标为 AUTHORING_ONLY，不能自动成为角色、武器、击退、投掷物、opoint 或 AI 的正式阻挡规则。
+- **工程边界**：新地图类型使用独立完整类，不新增 partial。Inspector List 仅用于编辑/加载，tick 使用冻结数组或扁平数据。GameConfig 和 Scene BoundaryWallManager 在过渡期只能是明确 legacy fallback，不能覆盖已选中地图快照。
+- **依据**：用户要求“一个 Asset 保存 Map ID 和地图可行走区域，另一个 Asset 保存 Map ID 和地图资源”；现有 BoundaryWallManager 只导出场景联合外接矩形，SimulationWorld 当前从 GameConfig/Scene 取得 Stage，LockstepSessionIdentity 已有 StageFingerprint 但尚未证明有地图资产注入链。
+- **影响**：建立 BATTLE-MAP-ASSET-ARCHITECTURE-001 总计划与 M0 至 M7 Work Package。下一步只能先进行 MAP-M0-001 的只读坐标/范围/fingerprint 合同审计；在此之前不得创建 runtime map selection、改 Stage writer、接入 polygon gameplay 或改变背景表现。
+
+## D-017 — 复用现有 BoundaryWall 多边形语义进行 Map ID 配置化
+
+- **状态**：DECIDED（用户澄清后的范围修正；尚无代码实施）。
+- **日期**：2026-08-25
+- **纠正**：D-016 中“先审计 C++、先使用矩形、polygon 在未来才参与 simulation、先接入 StageFingerprint”的内容不适用于当前任务，现已在写代码前 supersede。用户明确指出可行走区域就是现有 BoundaryWall 与 BoundaryWallManager 正在处理的任意 polygon；本任务不新增或重定义 battle physics。
+- **决定**：新增一份按 MapId 保存的 Boundary Asset，数据形状和坐标单位对齐现有 BoundaryExportData、BoundaryData、PolygonData 与 world X/Y vertices；新增另一份按同 MapId 保存背景/表现资源的 Presentation Asset。加载选中 MapId 后，继续使用现有 BoundaryWall 和 BoundaryWallManager 的 polygon union、point contains、rect fully inside、edge epsilon、random walkable point 与 polygon outer-bounds 行为。
+- **实施边界**：本计划只改变 boundary 数据来源和 Editor/Bootstrap 配置流程。不得把 polygon 转成矩形，不得新写点包含或碰撞算法，不得改变移动、hit、opoint、AI、tick、Camera、背景表现、lockstep、fingerprint、服务器或 C++ 工程。Scene 顶点编辑和 Asset 保存必须显式 Load/Apply，不能自动互相覆盖。
+- **影响**：BATTLE-MAP-ASSET-ARCHITECTURE-001 和其 M0 至 M7 Task/Handoff 全部标为 SUPERSEDED BEFORE CODE。当前唯一执行计划是 BATTLE-MAP-BOUNDARY-ASSET-001，按 MAPCFG-001 至 MAPCFG-004 连续推进。
+
+## D-018 — 将地图背景并入 Boundary Asset，取消独立 Presentation Asset
+
+- **状态**：DECIDED（用户明确的当前架构修正；代码级验证进行中）。
+- **日期**：2026-08-26
+- **决定**：删除独立 `BattleMapPresentationDefinition` 与 `Desert01_Presentation.asset`；
+  `BattleMapBoundaryDefinition` 同时保存 `MapId`、边界几何和 `BackgroundSprite`；
+  `BattleMapCatalog.Entry` 只保留 `MapId` 与 Boundary Definition。
+- **数据边界**：地图资产的 `boundaries → polygons → verticesWorld` 不再保存 `boundaryName` 或
+  多边形 `name`。共享 `BoundaryData` / `PolygonData` 的字段暂作为 BoundaryWall、JSON 导出和
+  旧编辑器的兼容运行时合同保留，由加载适配层按稳定序号生成，不参与 MapId 解析、authoring 匹配或
+  边界几何判断。
+- **不变项**：不改变 BoundaryWall 多边形 union/contains/rect/random/Stage fallback 语义，不改变
+  tick、输入、RNG、checksum、Camera、背景表现规则、lockstep、服务器或 C++ authority；不部署默认
+  `stage.dat`。
+- **依据**：用户于 2026-08-26 明确确认“可以删除”，并要求 `Desert01_Boundary` 增加背景图以及删除
+  `boundaryName` 和 `Name`；当前执行记录为 `MAPCFG-005`。
+- **影响**：D-016 的“两份独立资产”选择和 D-017 中“新增 Presentation Asset”的部分被本决定
+  supersede；MAPCFG-001～004 的已执行验证保留为历史事实，当前资产数据合同由 MAPCFG-005 接管。
+
+## D-019 — NTSD 2.8-Logan 取代 NTSD 2.4 成为当前唯一战斗行为权威
+
+- **状态**：`IDENTITY_SUPERSEDED_BY_D-021 / DIRECTORY_AND_LEGACY-BOUNDARIES_STILL_ACTIVE`
+- **日期**：2026-09-02
+- **决定**：当前唯一战斗行为权威改为
+  `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为
+  `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75` 的正式
+  `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与当前发行 EXE 对应且进入
+  playable 构建闭包的源码。
+- **唯一恢复入口**：`docs/ai/CURRENT-AUTHORITY.md`。根 `AGENTS.md`、长期状态、当前 Handoff
+  和所有旧权威文档都必须链接该入口；上下文压缩后不得从旧 Change Record 恢复 NTSD 2.4 权威。
+- **当前源码主入口**：`source\ntsd28_playable\src\game_session.cpp::GameSession28::step()`，
+  `source\ntsd28_core\src\simulation\simulation_tick_driver.cpp::SimulationTickDriver28::step(...)`
+  和 `source\ntsd28_core\src\simulation\battle_world.cpp::BattleWorld28`。
+- **废止范围**：D-001 的旧根目录、`ntsd_new.exe`、`src/entity/game_tick.cpp::game_tick(...)`、
+  NTSD 2.4 C#、旧 Authority400/trace/对齐状态都只保留为历史证据。它们不能定义当前 pass、
+  timing、slot、RNG、字段、生命周期或可观察行为。
+- **重新基线**：当前权威包已观察到正常逻辑间隔 33 ms、F5 3 ms、1000 个物理 slot 和双 RNG 流；
+  因此旧“固定精确 30 Hz / 400-slot / 单 RNG / 已对齐”结论均为 `REBASELINE_REQUIRED`。
+  这些观察不代表 Unity 代码已修改或已对齐。
+- **内容边界**：本决定不自动推翻
+  `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001`；正式内容数值仍暂由 Unity
+  `Assets/NTSD/Config` 冻结现状定义。若要让新包 runtime 资源取代内容数值权威，必须取得用户
+  另行明确决定。
+- **写入边界**：本决定只授权文档和治理恢复入口迁移；不授权修改 C#、Scene、Prefab、DAT、
+  资源、ProjectSettings、服务器或权威 C++ 包。后续实现必须另建 Task/Change 并取得新权威证据。
+- **旧文档处置**：经用户要求复核，旧 C# authority、NTSD 2.4 C++ release、R0～R8/U0～U9
+  对齐 campaign 文档不再承担当前恢复或审计职责，并已由用户从工作树删除；Git 历史仅可用于
+  按需历史查阅，不能恢复旧 authority 或继续旧 Change。
+
+## D-020 — NTSD 2.8 完整对齐范围、用户例外与 E/H 专项
+
+- **状态**：`USER_CONFIRMED / ACTIVE / STATIC_INVENTORY_COMPLETE / IMPLEMENTATION_NOT_STARTED`
+- **日期**：2026-09-02
+- **决定**：以 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 作为当前唯一差异总表。
+  非例外战斗规则、状态、顺序、生命周期和战斗表现的最终目标是与正式 NTSD 2.8-Logan 完全一致；
+  所有旧 2.4/C# 验证均需重新基线化。
+- **容量决定**：Slot 容量模型继续使用 Unity；容量不是待修差异，但 slot 扫描顺序、identity、复用、
+  birth visibility 和生命周期语义仍按新权威对齐。
+- **Unity 保留例外**：头顶血条、FootSelf、移动端底部黑区/平台取景、多边形战斗边界、当前随机掉武器
+  路径和固定世界相机不处理。这些例外会产生可观察差异，最终报告必须披露，不能声称逐像素无差异。
+- **用户排除项**：完整原生 HUD、结果页与战斗内结果信息表现、背景多层/cycle、完整原生选择流程
+  不处理，不作为当前完成门槛。
+- **E 项**：旧 `NTSDSpec` 必须处理；先用 2.8 正式证据替换生产调用者，引用清零后再决定是否删除。
+- **H 项**：内容、数值和资源差异必须处理；Direction B 当前仍有效，但只是策略决定前的保护状态。
+  整体切换、只补缺失或分类权威尚待用户决定，当前不授权覆盖 DAT/PNG/WAV、Prefab、Scene 或 importer。
+- **声明边界**：只允许声明“非例外战斗域完全对齐，并保留用户批准例外”；除非用户撤销全部例外并
+  恢复排除项，否则不得声明整个应用逐像素、全流程无差异。
+
+## D-021 — 修复 Bug 后的 NTSD 2.8-Logan 新版身份正式晋升
+
+- **状态**：`USER_CONFIRMED / ACTIVE / B0-B3_REBASELINE_IN_PROGRESS`
+- **日期**：2026-09-04
+- **用户决定**：用户说明其发现并修复了 NTSD 2.8-Logan Bug，指定目录中 EXE/source 的变化是有意更新，
+  并明确要求继续处理。
+- **新正式身份**：根 `NTSD2.8-Logan.exe` SHA-256
+  `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`；82-file playable
+  C++/header closure manifest `39DDDA154F5632C43089E2D5F1A5755ABBFBFD131A85D6B5ABF9AC00E6A46109`；
+  75-file source-capture子闭包manifest `07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F`。
+  最初漂移审计的`5F2E5B41...5FA9`只是旧workspace工具漏掉`kind_catalog.cpp`与
+  `minibar_catalog.cpp`的73-file子集。
+- **旧身份**：D-019中的 `1277B70B...DAF75` EXE与`C59BD8D3...2D75` source manifest降为历史基线，
+  不再裁决当前实现；D-019的目录、权威种类、旧2.4/C#废止和内容边界仍有效。
+- **重新基线**：新版 `simulation_tick_driver.cpp` 已观察到真实pass顺序变化，因此B0～当前B3中所有依赖
+  源码身份、pass placement或trace producer identity的证据必须分类复核。字段/算法未变的既有Unity实现可以
+  保留，但必须用新身份重新出证；受规则变化影响的pass contract必须修改后再继续。
+- **写入边界**：authority目录继续只读；只在Unity workspace更新治理、诊断工具和经独立Task/Change批准的
+  实现。此决定不改变用户批准例外、用户排除项或H项内容策略待定边界。
+
+
+## D-022 — B6联合schema迁移、旧midbattle拒绝与locked系统规则
+
+- **状态**：USER_CONFIRMED / ROADMAP_APPROVED / SCHEMA_IMPLEMENTATION_NOT_STARTED
+- **日期**：2026-09-10
+- **决定**：采用一次性联合主版本迁移：entity runtime 12→13、aggregate snapshot20→21、checksum23→24；涉及删除的base-shell/character-shell按实际项升版。旧midbattle snapshot严格拒绝，新session按seed/input重放，不建立adapter。首批system规则表locked immutable，明确不支持alternate配置。
+- **附带条款**：reserved字段仅为过渡；对应producer/consumer退休并通过新版本capture/restore/hash验收后，在该联合窗口删除，不成为长期规则状态。历史checksum/parity按版本分组，不跨版本直接等值比较。CPoint19→27内容字段合同与hurt consumer退休独立，不因本裁定改变converter、内容authority或H内容迁移策略。
+- **路线图**：行为producer/consumer退休（期间必要reserved默认值与退出条件明确）→一次性提升主版本及必要shell版本→接线/验收；只保留一个不兼容窗口。+2F8缺失不能通过旧Spawner/Owner推导来假兼容。
+- **依据**：用户2026-09-10明确裁定；决策材料 `Temp/Goal14_Triage_Report.md` 第5节（当前实际版本12/20/23，现有restore严格版本检查，无既有adapter）。
+- **影响与边界**：本Goal只登记路线图并实现pickup P1关系计数/locked规则与P2纯事务；不修改任何Lockstep/Snapshot、Checksum或shell/schema文件，不做P3原子接线。以后实际联合迁移另建Task/Record并按裁定验收。首批locked表只承认正式{120,124}；unaudited、空表或alternate集合在Unity规则准入层unsupported，这一限制不冒称Authority的audited空表一般语义。
+## D-026 — 336B44 正式发行晋升与战斗对齐重新基线
+
+- **日期/状态**：2026-09-30；`USER_CONFIRMED / ACTIVE / NEW_ALIGNMENT_IN_PROGRESS`。
+- **用户决定**：确认根目录含 35 项限定修复的 `NTSD2.8-Logan.exe` 作为后续战斗规则权威，要求依据 `NTSD28-BATTLE-ALIGNMENT-RESET-20260930.md` 和新版建立新的对齐文档，继续执行总目标。
+- **精确身份**：正式 EXE SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`；当前 source 树 SHA `2924DDD8C153EE34378081578D21D7EF9EB7E8BDF73799695C89C56DC3418CA1`；runtime 树 SHA `F3EA4516BD903F10131217A856947F7C0F91DB72F506F6E2A7F88D6281F3FD41`；82 文件 playable 闭包 SHA `B97DF3C5BB75058D13FD9CCC7A542536BB956A1F496A9140BD98C06D6F8638AA`。具体算法、75 文件子闭包与独立编译结果见 `artifacts/diagnostics/NTSD28-G0-336B44-AUTHORITY-20260930/REPORT.md`。
+- **取代关系**：D-021 的 B1E13 身份从此是版本化历史，不再裁决当前规则；旧 Task/Change 和局部通过证据原样保留。只在新版相关文件、正式条件和 Unity 读写链均复核后复用对应结论，不能批量更换哈希或把 35 项直接写成 35 个 Unity 缺陷。
+- **当前执行入口**：`Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md`；旧总表仅保存历史与证据索引。总目标、六批次和 Q/R 编号保持一个体系；首先核新版可达首差，再按本文约束修复和验收。
+- **不变边界**：D-023 的非排除 DAT/角色图权威及背景/两类模式 DAT 排除，D-024 的统一比例空间、D-025 的项目可走区 10 秒逻辑时间例外、结果页设置/重赛等非战斗排除、默认 stage.dat 暂缓、DAT 数值不可改、旧资源零删除授权与 Unity/GAS 框架保持均继续生效。任何脚本变动仍须先立 Task/Change。
+
+## FILE-REMOVAL-AUDIT-001 — 文件删除留痕（2026-10-01）
+
+用户明确要求今后所有删除处理均有记录，避免再次无法追查原因。按 `AGENTS.md` 第13.3节及 `docs/ai/file-removal-audit-contract.md` 执行：操作前记录原因、授权、执行者、逐文件清单/哈希/Git状态、可恢复来源和计划命令；执行后追加实际命令、含时区时间、退出码、原始输出和前后验证。移动、覆盖及丢弃内容的Git操作也适用。统一索引 `docs/ai/FILE-OPERATIONS/INDEX.md`；没有前置记录不执行，已有授权不重复请求。外部删除无进程证据时保留未知，不推断归因。未新增监控、hook或清理脚本。

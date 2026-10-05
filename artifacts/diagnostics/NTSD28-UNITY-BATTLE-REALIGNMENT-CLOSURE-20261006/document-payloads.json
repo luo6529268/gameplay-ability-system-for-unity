@@ -1,0 +1,123 @@
+{
+  "docs/ai/CURRENT-AUTHORITY.md": {
+    "prefix": "> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。\r\n\r\n",
+    "replacements": []
+  },
+  "docs/ai/STATE.md": {
+    "prefix": "> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。\r\n\r\n",
+    "replacements": []
+  },
+  "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": {
+    "prefix": "> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。\r\n\r\n",
+    "replacements": []
+  },
+  "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md": {
+    "prefix": "> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。\r\n\r\n",
+    "replacements": [
+      {
+        "old": "| Q01 内容与引用 | `SCOPED_EVIDENCE_REUSE / IMPACT_ONLY` | 已有 338/338 规范化 DAT、对象/角色图候选和活跃战斗七图限定证据；[最新索引对象图 1013/1013 在位且逐 SHA 同版](../../../artifacts/diagnostics/NTSD28-336B44-Q01-INDEXED-CONTENT-IDENTITY-20261001/REPORT.md)。正式独有的[14 DAT/114 PNG 消费者归口](../../../artifacts/diagnostics/NTSD28-336B44-Q01-FORMAL-ONLY-CONSUMER-ROUTING-20261005/REPORT.md)已分类：7 个剧情子 DAT 随父 `stage.dat` 用户暂缓，其余属于菜单/普通 HUD/结果等表现边界，不启动批量复制。`small/4t_kyubi_s.png` 的短时用户清晰度实验已由其他工作恢复原字节，本任务只记录各次磁盘快照；七图是在删除前的快照，当前 WORDS0～5 缺失及预热影响按文首单列。仅在正式可达战斗消费者实际缺资源/错引用时查 owner；25 份 DAT（对象 20、全局 5）的换行字节差异、无战斗消费者的目录差异不单开战斗修复任务。旧文件退场按逐文件授权及审计，非战斗规则前置。 |",
+        "new": "| Q01 内容与引用 | `USER_ACCEPTED_SCOPED_CLOSURE` | 已有 338/338 规范化 DAT、对象/角色图候选和活跃战斗七图限定证据；[最新索引对象图 1013/1013 在位且逐 SHA 同版](../../../artifacts/diagnostics/NTSD28-336B44-Q01-INDEXED-CONTENT-IDENTITY-20261001/REPORT.md)。正式独有的[14 DAT/114 PNG 消费者归口](../../../artifacts/diagnostics/NTSD28-336B44-Q01-FORMAL-ONLY-CONSUMER-ROUTING-20261005/REPORT.md)已分类：7 个剧情子 DAT 随父 `stage.dat` 用户暂缓，其余属于菜单/普通 HUD/结果等表现边界，不启动批量复制。`small/4t_kyubi_s.png` 的短时用户清晰度实验已由其他工作恢复原字节，本任务只记录各次磁盘快照；七图是在删除前的快照，当前 WORDS0～5 缺失及预热影响按文首单列。仅在正式可达战斗消费者实际缺资源/错引用时查 owner；25 份 DAT（对象 20、全局 5）的换行字节差异、无战斗消费者的目录差异不单开战斗修复任务。旧文件退场按逐文件授权及审计，非战斗规则前置。 |"
+      },
+      {
+        "old": "| Q02 加载与 PNG | `HISTORICAL_SCOPED / IMPACT_ONLY` | 新正式战斗资源实际加载失败才回访共用入口。 |",
+        "new": "| Q02 加载与 PNG | `USER_ACCEPTED_SCOPED_CLOSURE` | 新正式战斗资源实际加载失败才回访共用入口。 |"
+      },
+      {
+        "old": "| Q03 字段/schema | `HISTORICAL_SCOPED / IMPACT_ONLY` | 新首差落在字段解释、缺值或默认值才回访。 |",
+        "new": "| Q03 字段/schema | `USER_ACCEPTED_SCOPED_CLOSURE` | 新首差落在字段解释、缺值或默认值才回访。 |"
+      },
+      {
+        "old": "| Q04 旧行为退休 | `HISTORICAL_SCOPED / IMPACT_ONLY` | 可达旧路径实际覆盖新版战斗规则才精确退休；不批量清理。 |",
+        "new": "| Q04 旧行为退休 | `USER_ACCEPTED_SCOPED_CLOSURE` | 可达旧路径实际覆盖新版战斗规则才精确退休；不批量清理。 |"
+      },
+      {
+        "old": "| Q05 联合迁移 | `HISTORICAL_SCOPED / IMPACT_ONLY` | 只复核被新差异触及的 DAT/图/GUID/消费闭环。 |",
+        "new": "| Q05 联合迁移 | `USER_ACCEPTED_SCOPED_CLOSURE` | 只复核被新差异触及的 DAT/图/GUID/消费闭环。 |"
+      },
+      {
+        "old": "| Q06 producer 与生命周期 | `HISTORICAL_LOCAL_EXIT / IMPACT_ONLY` | 共享输入、生成、关闭写者实际改变才做相邻回归。 |",
+        "new": "| Q06 producer 与生命周期 | `USER_ACCEPTED_SCOPED_CLOSURE` | 共享输入、生成、关闭写者实际改变才做相邻回归。 |"
+      },
+      {
+        "old": "| Q07 战斗规则与比例域 | `SCOPED_NATURAL_INPUT_PASS / EVIDENCE_REUSE` | Q12发现并撤去Q07多做的一次三键换算；当前原Scene自然合成键首253后J转301、正式源码防御消费后132/132同。旧直接输入22tick第三轮只留测试载体历史，不作玩家输入证书。C040持有姿态、D-024 kind8近远原Scene证据复用；真人设备时差仍未知。并行选人 UI 现为`VERIFIED (scoped)`且其验收明确排除战斗启动；当前普通确认→倒计时链没有可达完成入口，[稳定版接口边界](../../../artifacts/diagnostics/NTSD28-336B44-Q07-ROLE-SELECTION-IMPACT-20261005/REPORT.md)不作为Q07必跑或战斗规则首差，不改非战斗UI。原Battle Scene出生/输入/退出已有定向证据；仅当另行接通菜单战斗启动或真实非例外战斗首差出现时，复查相邻接口，不重开角色矩阵。 本轮非角色hit_Fa7源深度死区已[6/6边界邻例＋完整Driver一tick1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-20261005/REPORT.md)，raw槽及其它分支保持；自然Play/正式EXE仍按实际首差条件门。 共用追踪/回收及type4武器的X/Z规则坐标统一入口已[原Editor18/18＋518完整Driver一tick1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005/REPORT.md)，DAT及Y/目标排名未改；整阶段保持开放。 正式14共用尾部已[8/8定向＋207/115完整Driver一步1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/REPORT.md)，保留2/4/12并移除14多余Y/速度/帧写者；自然Sai/正式根等仍按条件门。 共同2/4/12纵向/整数阶段已[6/6＋907完整Driver一步1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-20261005/REPORT.md)，移除非正式Y cap与提前整数写者，摩擦保留Vx9；自然入口与父阶段仍开放。 共用加速精度已[四参数＋十tick＋局部SelfCheck共6/6限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/REPORT.md)，tick10末帧3与当前nativeAI源码消费者一致；自然根/整阶段仍开放。 behavior1共用消费者已[原Editor七项及同一完整tick限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005/REPORT.md)，native三受控初态AI消费者输出符合；自然/正式根及父阶段仍开放。  behavior3四tick源整数精度已[原Editor4/4及native完整Core声明字段65/65限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005/REPORT.md)，源整数507与比例出口正确；自然出生/706及父阶段仍开放。 共用1/3非正HP运动门已[原Editor4/4及206完整Core/Unity声明字段26/26限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005/REPORT.md)，HP0保留正常帧推进而停追踪运动；自然降血及父阶段仍开放。 共用10仅目标副作用与旧运动退休已[原Editor5/5及902两完整tick39/39限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005/REPORT.md)；旧[共享resolver两候选](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005/COMMON-RESOLVER-FOLLOWUP.md)为当时快照，缓存type现已[一行修复、原Editor4/4与完整Core/Unity subject26/26限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/REPORT.md)；[2F8有界核查](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/2F8-BOUNDED-REVIEW.md)未得共用消费者正式可达新首差，保持条件门、不另开包；不称整阶段全面一致。  共用重扫失败的活跃旧目标已[原Editor7/7、native v2完整Driver26/26及direct15/15限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/REPORT.md)；只按最终active槽继续消费、Fa1去额外目标HP门，inactive及scan保持，父阶段开放。 |",
+        "new": "| Q07 战斗规则与比例域 | `USER_ACCEPTED_SCOPED_CLOSURE` | Q12发现并撤去Q07多做的一次三键换算；当前原Scene自然合成键首253后J转301、正式源码防御消费后132/132同。旧直接输入22tick第三轮只留测试载体历史，不作玩家输入证书。C040持有姿态、D-024 kind8近远原Scene证据复用；真人设备时差仍未知。并行选人 UI 现为`VERIFIED (scoped)`且其验收明确排除战斗启动；当前普通确认→倒计时链没有可达完成入口，[稳定版接口边界](../../../artifacts/diagnostics/NTSD28-336B44-Q07-ROLE-SELECTION-IMPACT-20261005/REPORT.md)不作为Q07必跑或战斗规则首差，不改非战斗UI。原Battle Scene出生/输入/退出已有定向证据；仅当另行接通菜单战斗启动或真实非例外战斗首差出现时，复查相邻接口，不重开角色矩阵。 本轮非角色hit_Fa7源深度死区已[6/6边界邻例＋完整Driver一tick1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-20261005/REPORT.md)，raw槽及其它分支保持；自然Play/正式EXE仍按实际首差条件门。 共用追踪/回收及type4武器的X/Z规则坐标统一入口已[原Editor18/18＋518完整Driver一tick1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005/REPORT.md)，DAT及Y/目标排名未改；整阶段保持开放。 正式14共用尾部已[8/8定向＋207/115完整Driver一步1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/REPORT.md)，保留2/4/12并移除14多余Y/速度/帧写者；自然Sai/正式根等仍按条件门。 共同2/4/12纵向/整数阶段已[6/6＋907完整Driver一步1/1限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-20261005/REPORT.md)，移除非正式Y cap与提前整数写者，摩擦保留Vx9；自然入口与父阶段仍开放。 共用加速精度已[四参数＋十tick＋局部SelfCheck共6/6限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/REPORT.md)，tick10末帧3与当前nativeAI源码消费者一致；自然根/整阶段仍开放。 behavior1共用消费者已[原Editor七项及同一完整tick限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005/REPORT.md)，native三受控初态AI消费者输出符合；自然/正式根及父阶段仍开放。  behavior3四tick源整数精度已[原Editor4/4及native完整Core声明字段65/65限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005/REPORT.md)，源整数507与比例出口正确；自然出生/706及父阶段仍开放。 共用1/3非正HP运动门已[原Editor4/4及206完整Core/Unity声明字段26/26限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005/REPORT.md)，HP0保留正常帧推进而停追踪运动；自然降血及父阶段仍开放。 共用10仅目标副作用与旧运动退休已[原Editor5/5及902两完整tick39/39限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005/REPORT.md)；旧[共享resolver两候选](../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005/COMMON-RESOLVER-FOLLOWUP.md)为当时快照，缓存type现已[一行修复、原Editor4/4与完整Core/Unity subject26/26限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/REPORT.md)；[2F8有界核查](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/2F8-BOUNDED-REVIEW.md)未得共用消费者正式可达新首差，保持条件门、不另开包；不称整阶段全面一致。  共用重扫失败的活跃旧目标已[原Editor7/7、native v2完整Driver26/26及direct15/15限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/REPORT.md)；只按最终active槽继续消费、Fa1去额外目标HP门，inactive及scan保持，父阶段开放。 |"
+      },
+      {
+        "old": "| Q08 胜负、计时、战斗事件 | `SCOPED_EVIDENCE_REUSE / FIRST_DIFF_ONLY` | C008/C009/F05 已有源/根/Scene 限定证据；同初态计时/停战新首差或 Q07 改动触及结果 writer 才开包。结果页图文、设置和重赛排除。 |",
+        "new": "| Q08 胜负、计时、战斗事件 | `USER_ACCEPTED_SCOPED_CLOSURE` | C008/C009/F05 已有源/根/Scene 限定证据；同初态计时/停战新首差或 Q07 改动触及结果 writer 才开包。结果页图文、设置和重赛排除。 |"
+      },
+      {
+        "old": "| Q09 战斗表现 | `SCOPED_GLOBAL_TICK14_CAPTURE / FIRST_DIFF_ONLY` | 鸣人 OID2／鼬 OID9 原 Battle Scene 的[严格全局0→14静置单例](../../../artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001/REPORT.md)已通过：14行零输入，双方末帧动作3、HP500/MP200与正式根暂停标题一致，发布/计划/截图均为tick14；两图可见双方本体与足下阴影、左右关系同。[正式根逐 tick 对照](../../../artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001/REPORT.md)的12字段×14tick为140/168同值，28项差异均为两人Z：正式背景tick1起钳至542，项目地图维持400，属地图例外。GUI标题不显示X/Z；不能把指定初态X500/620 Z400写成末帧同值。Unity初始World对象4个，正式窗口无全World明细；背景、固定相机、HUD、名字均为用户例外，故不宣称整图逐像素或Q09全阶段一致。前次全局19报告保留为弱配对历史；旧物理J血点和二次换算期间Attack仅保留历史。[正式普通战斗可选连击图层默认关](../../../artifacts/diagnostics/NTSD28-336B44-Q09-COMBO-DISPLAY-GATE-20261005/REPORT.md)，不因Unity缺图层或用户删`combo_hits.png`开修复；连击计数规则保留。仅可复现非例外画面首差触发血点、阴影、挂点共用出口回访，不加角色/场景矩阵。 本轮平台阴影共用高度投影已[4/4定向及原Scene31tick限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005/REPORT.md)，三项实际命令比例正确、已有规则2945/2945同；GPU和父阶段保持开放。 |",
+        "new": "| Q09 战斗表现 | `USER_ACCEPTED_SCOPED_CLOSURE` | 鸣人 OID2／鼬 OID9 原 Battle Scene 的[严格全局0→14静置单例](../../../artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001/REPORT.md)已通过：14行零输入，双方末帧动作3、HP500/MP200与正式根暂停标题一致，发布/计划/截图均为tick14；两图可见双方本体与足下阴影、左右关系同。[正式根逐 tick 对照](../../../artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001/REPORT.md)的12字段×14tick为140/168同值，28项差异均为两人Z：正式背景tick1起钳至542，项目地图维持400，属地图例外。GUI标题不显示X/Z；不能把指定初态X500/620 Z400写成末帧同值。Unity初始World对象4个，正式窗口无全World明细；背景、固定相机、HUD、名字均为用户例外，故不宣称整图逐像素或Q09全阶段一致。前次全局19报告保留为弱配对历史；旧物理J血点和二次换算期间Attack仅保留历史。[正式普通战斗可选连击图层默认关](../../../artifacts/diagnostics/NTSD28-336B44-Q09-COMBO-DISPLAY-GATE-20261005/REPORT.md)，不因Unity缺图层或用户删`combo_hits.png`开修复；连击计数规则保留。仅可复现非例外画面首差触发血点、阴影、挂点共用出口回访，不加角色/场景矩阵。 本轮平台阴影共用高度投影已[4/4定向及原Scene31tick限定通过](../../../artifacts/diagnostics/NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005/REPORT.md)，三项实际命令比例正确、已有规则2945/2945同；GPU和父阶段保持开放。 |"
+      },
+      {
+        "old": "| Q10 战斗音频 | `SCOPED_NATURAL_VOICE_AND_ISOLATED_PCM_PASS / IMPACT_ONLY` | 078及我爱罗j4/043已有原Scene自然正式clip→池化voice实播；C032自然两次落地voice及首声隔离软件左右声道输出亦已限定通过，[原件复核](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006/REPORT.md)。tick27不同地图边界后的SFX不能裁决为同态首差。正式根逐条音频/自然并发完整混音、设备输出、a7自身实播及其它cue未全面验证；仅实际缺声或共用写者首差回访，不将未知自动列为必跑，不逐项验证约970条静态路径。 |",
+        "new": "| Q10 战斗音频 | `USER_ACCEPTED_SCOPED_CLOSURE` | 078及我爱罗j4/043已有原Scene自然正式clip→池化voice实播；C032自然两次落地voice及首声隔离软件左右声道输出亦已限定通过，[原件复核](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C032-EVIDENCE-REUSE-20261006/REPORT.md)。tick27不同地图边界后的SFX不能裁决为同态首差。正式根逐条音频/自然并发完整混音、设备输出、a7自身实播及其它cue未全面验证；仅实际缺声或共用写者首差回访，不将未知自动列为必跑，不逐项验证约970条静态路径。 |"
+      },
+      {
+        "old": "| Q11 回访与出口对账 | `SCOPED_ACCOUNTING_PASS / FIRST_DIFF_ONLY` | 本页 §2 的35项、2026-10-04原50份未关闭Record基线及[后增18份逐项调度](../../../docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md)已对账；当前同命名范围68份未关闭，`REUSE54/TRIGGER14/P0=DEP=ONE=0`。Q12诊断和重进见证均已关闭；D-024 本体 Y、活跃 kind0 火花及[本例自然落地规则](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005/LANDING-REUSE.md)有原 Scene 限定证据。本轮[R120自然中间alpha命令](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005/R120-SCENE-ACCEPTANCE.md)和普通C14命中六例各自限定通过，不重复取样；持有挂点共用补偿原Editor两例RED→GREEN，源/frame/view字段保持。落地画面、原Scene空中命中及GPU等仍按实际首差/终验条件门，不为抬状态重测。 |",
+        "new": "| Q11 回访与出口对账 | `USER_ACCEPTED_SCOPED_CLOSURE` | 本页 §2 的35项、2026-10-04原50份未关闭Record基线及[后增18份逐项调度](../../../docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md)已对账；当前同命名范围68份未关闭，`REUSE54/TRIGGER14/P0=DEP=ONE=0`。Q12诊断和重进见证均已关闭；D-024 本体 Y、活跃 kind0 火花及[本例自然落地规则](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005/LANDING-REUSE.md)有原 Scene 限定证据。本轮[R120自然中间alpha命令](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005/R120-SCENE-ACCEPTANCE.md)和普通C14命中六例各自限定通过，不重复取样；持有挂点共用补偿原Editor两例RED→GREEN，源/frame/view字段保持。落地画面、原Scene空中命中及GPU等仍按实际首差/终验条件门，不为抬状态重测。 |"
+      },
+      {
+        "old": "| Q12 最终集成 | `SCOPED_REPRESENTATIVE_PASS / CONDITIONAL_FIRST_DIFF` | 自然合成键正例、C053受控战斗、C040原Game View、078实际voice、C056有序关闭均按各自边界复用；两轮同六身份原Scene重进/退出新增限定通过。合成输入诊断失败已回滚，不作为重进前置；正式同帧Present、真人手按、a7自身实播及未覆盖模式仍未知，有非例外首差才定向回访。 |",
+        "new": "| Q12 最终集成 | `USER_ACCEPTED_SCOPED_CLOSURE` | 自然合成键正例、C053受控战斗、C040原Game View、078实际voice、C056有序关闭均按各自边界复用；两轮同六身份原Scene重进/退出新增限定通过。合成输入诊断失败已回滚，不作为重进前置；正式同帧Present、真人手按、a7自身实播及未覆盖模式仍未知，有非例外首差才定向回访。 |"
+      },
+      {
+        "old": "| BATCH-01 / Q01 | 内容清单、对象解析、候选发布和索引图身份已取得限定证据；`IMPACT_ONLY` | 仅正式可达战斗消费者出现缺图、错引或解析首差时复查；已删 WORDS 整组跳过，剧情 stage 父表仍暂缓。 |",
+        "new": "| BATCH-01 / Q01 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "| BATCH-02 / Q02～Q05 | 旧批次限定完成；新版按影响回访 | 新版战斗资源加载、字段解释或旧路径出现可复现首差。 |",
+        "new": "| BATCH-02 / Q02～Q05 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "| BATCH-03 / Q06 | 历史本地出口已交付；新版按影响回访 | 共享输入、生成或关闭写者发生实际改动时做最窄相邻回归。 |",
+        "new": "| BATCH-03 / Q06 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "| BATCH-04 / Q07～Q08 | 战斗规则、比例域、胜负与计时已有分项限定证据；总出口仍开放 | 当前正式版同初态出现非例外规则首差，或共用写者修改触及已证条件。 |",
+        "new": "| BATCH-04 / Q07～Q08 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "| BATCH-05 / Q09～Q10 | 同全局 tick14 画面和自然战斗音效已有代表性限定证据；总出口仍开放 | 可复现的非例外画面或缺声首差；不重跑全部角色与 cue。 |",
+        "new": "| BATCH-05 / Q09～Q10 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "| BATCH-06 / Q11～Q12 | 35项和原50份基线加后增18份未关闭Record已逐项调度；Q12冻结版代表矩阵限定通过，整体完全一致仍未证明 | 当前229份同名Record中68份未关闭，REUSE54/TRIGGER14/P0=DEP=ONE=0。D-024本体Y、火花、自然落地规则、R120命令、持有挂点与平台阴影及非角色追踪死区及共用追踪/回收坐标及14共用尾部及共同纵向整数阶段各有限定证据；未覆盖条件只按真实非例外首差或必要终验触发，不批量加测。 |",
+        "new": "| BATCH-06 / Q11～Q12 | 本轮 `USER_ACCEPTED_SCOPED_CLOSURE`；限定证据见Q阶段表 | 用户以后明确新目标后才按相应实际差异/影响复核，不自动恢复本轮。 |"
+      },
+      {
+        "old": "## Q01～Q12 当前口径",
+        "new": "## Q01～Q12 本轮收尾状态（2026-10-06）"
+      },
+      {
+        "old": "## 保留的唯一推进队列",
+        "new": "## 本轮原推进队列（已收尾，仅保留证据与未来归口参考）"
+      },
+      {
+        "old": "状态：`ACTIVE / NEW_AUTHORITY_REBASELINE / Q07-Q12_OPEN`；建立日期：2026-09-30。",
+        "new": "状态：`USER_ACCEPTED_SCOPED_CLOSURE`；建立日期：2026-09-30；用户确认收尾日期：2026-10-06。"
+      },
+      {
+        "old": "原总目标 `NTSD28-UNITY-BATTLE-REALIGNMENT-001` 继续 ACTIVE，六批次和 Q01～Q12/R01～R18 编号延续，避免产生两个并行完成口径。",
+        "new": "原总目标 `NTSD28-UNITY-BATTLE-REALIGNMENT-001` 已按用户接受的当前总表验收范围收尾；六批次和 Q01～Q12/R01～R18 编号保留为本轮证据索引，未来问题另立用户明确的新目标。"
+      }
+    ]
+  },
+  "docs/ai/DECISIONS.md": {
+    "append": "\r\n\r\n## 2026-10-06 — 当前对齐目标收尾决定\r\n\r\n用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。\r\n\r\n依据：[收尾报告](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)；复核14份原件和PNG身份，六出口按各自边界通过。未关闭子Record不整体改成VERIFIED，未覆盖条件不是本轮待执行项。336B44权威、D-023/D-024/D-025和其它已批准例外保留。不创建或启动后续目标。\r\n"
+  },
+  "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md": {
+    "append": "\r\n\r\n## 2026-10-06 — 本轮对齐停止自动调度\r\n\r\n用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。\r\n\r\n依据：[收尾报告](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)；复核14份原件和PNG身份，六出口按各自边界通过。未关闭子Record不整体改成VERIFIED，未覆盖条件不是本轮待执行项。336B44权威、D-023/D-024/D-025和其它已批准例外保留。不创建或启动后续目标。\r\n"
+  },
+  "docs/ai/CHANGE-LEDGER.md": {
+    "append": "\r\n\r\n## 2026-10-06 — 本轮对齐停止自动调度\r\n\r\n用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。\r\n\r\n依据：[收尾报告](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)；复核14份原件和PNG身份，六出口按各自边界通过。未关闭子Record不整体改成VERIFIED，未覆盖条件不是本轮待执行项。336B44权威、D-023/D-024/D-025和其它已批准例外保留。不创建或启动后续目标。\r\n"
+  },
+  "docs/ai/TASKS/NTSD28-336B44-Q12-REPRESENTATIVE-MATRIX-001.md": {
+    "prefix": "> **2026-10-06 本轮目标已获用户确认收尾：** 用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。 [收尾清单与证据](../../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)。\r\n\r\n",
+    "replacements": []
+  },
+  "docs/ai/FILE-OPERATIONS/INDEX.md": {
+    "index": true
+  }
+}

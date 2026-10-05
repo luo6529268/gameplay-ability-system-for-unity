@@ -1,0 +1,2726 @@
+[
+  {
+    "path": "Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+    "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+  },
+  {
+    "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+    "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+  },
+  {
+    "path": "Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+    "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+  },
+  {
+    "path": "Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+    "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  },
+  {
+    "path": "Assets\\NTSD\\Config\\InputConfig\\NTSDInputConfig.inputactions",
+    "sha256": "9C033F4781D78BE23B6773ED89CA1787D6A12C4CF9160A9EAD117236686E6D88"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\bgm.dat",
+    "sha256": "C77DB23CEEABA3014F044AE30E41FC24FC76FE6E3890FD1BFA9B61E34462C8D1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\bgm.dat.meta",
+    "sha256": "6EBD2C96A017AABD31CAFFE4E554F968AB464075BFF8D111C95C65E446AD705B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\broken_weapon.dat",
+    "sha256": "C53F8D3882A74DCE9C425111CC1FA9C96D73CBEE9D6255E4978378BEB60D8B7C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\broken_weapon.dat.meta",
+    "sha256": "C3D6E124104608A38A22114803089B01CC0F7631619998283188E22432EE238D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\etc.dat",
+    "sha256": "DAC6C544FECD2241A3C064DBAEE2C1B35ADBEAF5D888F81A8F819FE5A54396BB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\etc.dat.meta",
+    "sha256": "4E00AE58F50D0172734FE488DB4D4DC6A7034AE922A50A5E9EB3373AA18ECF54"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\frame.dat",
+    "sha256": "3D2174498A747A1A2BAAD297EA3D852B86D36B1A9CACC301730AD40C4E6ADD92"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\frame.dat.meta",
+    "sha256": "3AF7D6B3155E52853A74FCB6DB9DF759516CE4E2902DCC90C20C628015733D1F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\fusion.dat",
+    "sha256": "554B4E86881528195A6E856D84A4DB06D0112A34283080E4CA402B1D52AB43F4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\fusion.dat.meta",
+    "sha256": "AE52C032E24D2ACEF7ADF012036F1CCF0D54FC6BB3CBA45AF2E3311E2BBB16B4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\kind.dat",
+    "sha256": "C7F132D5E999709D3B0808515F85F06DB482AB814DB9B914DD369F6D1EA281B1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\kind.dat.meta",
+    "sha256": "F874ECF063B3A1E1FD688D0A4BFEAEBEA00FFE71AC8B4B8F80A986B6F5E39D1F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\resource.dat",
+    "sha256": "4CB8D30CA477E5E8EC0AA625813FF2C7A63E1C3AF561DA3822C1583DFAC6818F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\resource.dat.meta",
+    "sha256": "A59696AC5A816698FAF10F2D88EDE8885837C344F1DC576F2F4E113CE88C906E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\sound.dat",
+    "sha256": "D1FC4640DA9FE18BBA5921AC7CE19BB345E58D8FAD30674AD7301E2D5D400A4C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\sound.dat.meta",
+    "sha256": "C6B1E4329B55A07A1EAE942649A6F6FC340C958085442C03B9EDE2CBD6C8A7B6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\system.dat",
+    "sha256": "D848CC6D711A01D12A054E2B5ADB903938D7AFB182854EB39DDBBF2236C31AE2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\system.dat.meta",
+    "sha256": "7C11654EF10D41D0A3D0BF188E4FD9C7800D1B34DBEAC8723CE9D9ABF0C79C52"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\c.dat",
+    "sha256": "2403A75136D80F29772019408204B40EA857B52FDC95662E6AA4FA3BF26A07E7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\c.dat.meta",
+    "sha256": "2793B50A682AB08C4DBF9EBE4669AB4B6C311809F46CABA73CCC568146386C52"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\1.dat",
+    "sha256": "4C463E5504005B5B55E1015D0200251B4AD27AA529C5F366DFFA1959CF9E5743"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\1.dat.meta",
+    "sha256": "BDAB121F499E5619037489E0B64A8C95362D5938536BDFCB1748E644B76863D5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\2.dat",
+    "sha256": "F8ADFB9B61E7A9D1251F455F13AE34A0DB8D43FB9D4E7A4F6236DD7AC01CEFEC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\2.dat.meta",
+    "sha256": "352A0C33F06C3A1E231A175579DA1F801870A5590ECE0D6E2D8AEE5750F52860"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\3.dat",
+    "sha256": "FEAC0E58D336B48A5897342E529977B934D7FDFD08973C205CAF8793874D4EA6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\3.dat.meta",
+    "sha256": "DF16816623542010D06BABFBF4AD62931A0FC99FCB91DE1DA08C077B4ED7E788"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\4.dat",
+    "sha256": "54CFFDA696CB220FEC8F606509A4408C954D9EE002E32CBAB5BC442B62A7BB26"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\4.dat.meta",
+    "sha256": "A4198DA25F98A737EB827277FCE0A9119E835E84BAE491BB55719AD1A18AF417"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\5.dat",
+    "sha256": "80EE80252F2CF749E950B2E25035879C11CB7517863AF0CA14B7E88814121B12"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\5.dat.meta",
+    "sha256": "AABE18C12FADE7CFEFDEF3C33146C870E1520FC87A4AB7CF251B2819C0AE3D5C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\6.dat",
+    "sha256": "2641D21E09CD222B50036559496D266B73037BB7F3CF23F7B5A6590FCE5C118A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\6.dat.meta",
+    "sha256": "9F40AC92ADFBDD369F2C708202BBAF5B2733C6C1DB74C3F40E19B12B6FCB1A4C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\8.dat",
+    "sha256": "6DBD01033891ABE442590EB40DEA4E5B31B1FC64F22140E6407C4E834F6F78B5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\8.dat.meta",
+    "sha256": "9D15F891B6F4E8460D78B15CFC9294A97C937894D0997303533B4C49CAC833EE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\9.dat",
+    "sha256": "BB9FCD5C414FCEC9937EE1A300097962623135F212B13A4A9FC5DAA888D1FC50"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\9.dat.meta",
+    "sha256": "B0B3EA3FF2B23A576BF97751B3982CEDB1337F341125BB8AA8FF1687AEFB3388"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\b.dat",
+    "sha256": "4E647E881644AF37253AA36AE94E4719FAA88FC0DC897A8F5E170E8AB3E26722"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\b.dat.meta",
+    "sha256": "D9D9E9ACB98064A81E1C4D8F032126C4BD44209CA21FAF7EFB1AED1BF4F2AAE2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\e.dat",
+    "sha256": "984A0F8D072F0D23A15CE18A740A15711C9D5E00E452D19C08911DCECBDBE337"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\e.dat.meta",
+    "sha256": "5B92B77885EECBD63EC023503699812312CEAE00C794DEC5DC78C3BE4A789716"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\h.dat",
+    "sha256": "BB2535F15BBD6F1D8A54906E85EF745CB676845E13A96831C9EBBA2BB9D98ECC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\h.dat.meta",
+    "sha256": "3D0D82F2B400C2A23F101A934F53099BBDB2F895E2A8377E1D2AF4EBFBDA9C84"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\h2.dat",
+    "sha256": "86AD6C8128795217463AD8B4D55E08166D86E98D246047664E50BE4D04D0FBA1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\h2.dat.meta",
+    "sha256": "ACC66451200787DAC36379543C8AA13C8927B877740A65793A8497AF9DC1010F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\l.dat",
+    "sha256": "6E882B894D19B1C24D518815E33CB63A6B45A3864C8B161BFE22AAB3030D0CC6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\l.dat.meta",
+    "sha256": "59D303A62C2A3C078F78DD692980BA52F7447F0BF6BF403757A664CA38E99168"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\n.dat",
+    "sha256": "B1AC549A484A903E6EAB8592AE8DCC6BAF4AE277FFC187A310C911EEFF8F5E0D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\n.dat.meta",
+    "sha256": "35801EA24CA85D761AD6EF5CCE16E5E5D98CC65B16846901394D0EAF1FD82279"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\scr.dat",
+    "sha256": "994C7043AA0D351B90B1DF1F83B38F8A788E51A2DF7D3DFF24301E75B20A9A58"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\scr.dat.meta",
+    "sha256": "694CCFB2C90C1A344FA8C54E2F9F5CCCA5D9C03FBC8E0105E252B2EEB03D64ED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\t.dat",
+    "sha256": "51204213E6962EFFE8A7978736FFE23C518F3F8B2051AD92344BB520C869630F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\t.dat.meta",
+    "sha256": "D32F7C99B1258835139706774B0B8D07766F3021042A55C7EF3CB61BAB6D2886"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\x.dat",
+    "sha256": "9E641EC84CAE538CE7206CA449B9AA83C5C2BB760E866FBFE1BDF9B19116C843"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\x.dat.meta",
+    "sha256": "95086E03E3559FC40A685005EEE7240369CC61F46ACC169894F18910043991DE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ama\\ama.dat",
+    "sha256": "87A4086D35D3EF9C12D56537AAD7123F605E239AF5D046BFBB6E1C7165F66BC0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ama\\ama.dat.meta",
+    "sha256": "DF87A87BB27B02FDAF0A19AF0A573E805C9C65ED7EF9EB31F9E8665E052008B6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ama\\ama2.dat",
+    "sha256": "F7297687E9F3550893F39A597388AE7F84691CC0572C8AAC22B321A6877142ED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ama\\ama2.dat.meta",
+    "sha256": "E589A169F346DFCB8646AB4768CC8041B8CA48A5065AA461874B178F5ED167BC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\blac\\blac.dat",
+    "sha256": "C57EF75B4FE8CE28CD223C5A5A1194057360D87230B47E61F7186B5767447349"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\blac\\blac.dat.meta",
+    "sha256": "26D41948B65B0934476EC01FAE16FB65C82C1F37881070B08F33975A60744A45"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\blas\\blas.dat",
+    "sha256": "2C091FDE0153494B88E140D59EDE7F3EA8263C316C20254E24BE19C21257DAFF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\blas\\blas.dat.meta",
+    "sha256": "1FA105CD25328C85B51ADA35EDA5A97BF505ECE3F666856F68988D1EAB75E2FB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ble\\ble.dat",
+    "sha256": "8CBD76C771F6DD43DAAB6C603EE8715E68427B316FF17B039FEF7726DBC6D778"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\ble\\ble.dat.meta",
+    "sha256": "9CCC7D0EED33082D47943669EFC2C8BCC796EA108CF894ED8BE88816F0CA5F6F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\cha\\cha.dat",
+    "sha256": "20C0704FC53B3D18D77FE61566F0B7445C31DAD9C5D8197C5444F960E89E6692"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\cha\\cha.dat.meta",
+    "sha256": "DA0BE2EAB12E500E25B32875F44793F7802A1BBCE29F61CBC1AA220BAB3A744C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\cla\\cla.dat",
+    "sha256": "563BD1E33CFC5406B102638C66BB12CB36A7C3A2E51411DEA421E5DF531AD8B2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\cla\\cla.dat.meta",
+    "sha256": "7B872E3724DA2B063DB6E8988E7BEFFEE5FFE496812867D1731AA9202B02FC93"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\fir.dat",
+    "sha256": "3ECD42106333D9391085F04F877D597A6B00B7673720D671F86B62E9408B43F0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\fir.dat.meta",
+    "sha256": "2360031BF9C10674CFB23894006DE67E2CA4AB0185689436454887DB278477C2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\firz.dat",
+    "sha256": "7496A9AD256D83B6679BA4C93F877D5FC0C490E41AE8F509C792507E1FDDEACC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\firz.dat.meta",
+    "sha256": "13EDBC71DB0C630D9153D87629D437BF97C818C97BCCB1854CDD593363F42B05"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\fla.dat",
+    "sha256": "11660C9B6D72352612DEF562C11C8318E69B7A7341FC04F3CF113EB1424AA252"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fir\\fla.dat.meta",
+    "sha256": "90CCB82494F67EB921819A3874F7B3D44CCCE768D45C8DA5E2E60B231AF4EC47"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fla\\fla.dat",
+    "sha256": "F2D74829CCCAB278D501A44774F2CEEB4C9070AA07B30B4959A7DD4A01F2A7AE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fla\\fla.dat.meta",
+    "sha256": "F7551FE85A480553EB037580080D5867942E6FCCE0A9E14853F538B13473F55E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fro\\fro.dat",
+    "sha256": "583BB428600FD4B56A089B698224246F870BB62535AFC588222561B259DDC19E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\fro\\fro.dat.meta",
+    "sha256": "CABA9789A88ECF091168CD502879397AC35BA5517C21227007BA5A31184E1A27"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\gro\\gro.dat",
+    "sha256": "60816F558FB2EAE757FF1D40CE145A4044881EE3F3D9AC3F30FE1583F5CC6A73"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\gro\\gro.dat.meta",
+    "sha256": "4CBE2E67FA72E05A5ABF8B6BE8936908B06B37E56CEC32956F3AF784FE64A1BB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\gro\\gro2.dat",
+    "sha256": "09AFF5548E2C783FAA83FEEBE173443D364860D80903A6395641A0A8FCBAF9D9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\gro\\gro2.dat.meta",
+    "sha256": "EDFBB1B3557C56B9EB94AEB82D173970B9F7BF212B785A44E55D266AD3B5123F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\hea\\hea.dat",
+    "sha256": "7902F2FC1E3497958D6DD551568275184B0487364B4E5F734D5F62A6E568FB56"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\hea\\hea.dat.meta",
+    "sha256": "B27C048EB610276B22F34EDC4B25A33BF1124A6A1F66766A6E7E7F2B20CFAD5C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kam\\kam.dat",
+    "sha256": "BF6166CAD9755F47C7679117FF3946460434451149260975807787CC2ACD1876"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kam\\kam.dat.meta",
+    "sha256": "FACFDCBC45B4575D4F640C164260F972B3C653148EC6D0AEA87B293D5E1F8A1B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat.dat",
+    "sha256": "9964A84C7F877747A13B3470BD1F4E9BC94CB3C100FA46A5E554B0D08AD40DC9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat.dat.meta",
+    "sha256": "E4B62D2FD89AF22F13932D2188244CE052618A3245BE980514773713C8F0C2D9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat2.dat",
+    "sha256": "F618AF7331B3CFBC915CA793CBF50DBB8A54E756AA2B7D6ADAE9444D459BAD08"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat2.dat.meta",
+    "sha256": "87D107B6537A5C68F3138346C0593FD68D29591C6ECD4E7D2BD664E46CC717E0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat3.dat",
+    "sha256": "392A312497CF5CCE4C6E4A49BCEFA026486055ED108E36DB025FA896A34F0346"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat3.dat.meta",
+    "sha256": "754CEA85EBB946BD2788E1BADD6D4B34D529DD4AFE93E8B1DB5B4F4F16EB0BAB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat4.dat",
+    "sha256": "01647EF1858F401F5413E667B1D2E6A5C22EA932368C0A07EC5FAD27A2CDD813"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\kat\\kat4.dat.meta",
+    "sha256": "F4F38A6DA7652B4A5A29F605D5A53855F65F5F8AA298FE478571B94F411A73DD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\lig\\lig.dat",
+    "sha256": "1784A2D06B3EB000909F8C91DFE7BBF96AC022090A74894B428FC4F46D7844A8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\lig\\lig.dat.meta",
+    "sha256": "0CB3B34D28193A49FA1C3D136109EEBE83622F0600A71DF05DBC75C25E737956"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\meg\\meg.dat",
+    "sha256": "B77E50E8A0F240A51A22D735501FC38ED050C42394F234B2388F3D5F4EE1DD23"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\meg\\meg.dat.meta",
+    "sha256": "E3BD390049532594FBCB39F59A4B72608143BA48BB41D5408B2BBD9B22933752"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\god.dat",
+    "sha256": "4428EFCAE04FBD94BEC11C18B593274737D495D9EDB457FD2942E994B7DA62D5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\god.dat.meta",
+    "sha256": "5F7AE6FC496B3A902B4E49AF593934344179757E4407E778DDF30489513A2CFB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\pof.dat",
+    "sha256": "25F644B7BC258F4716B17B8E51F76E7057725C832B0BF9970F17EC5FA35E8D29"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\pof.dat.meta",
+    "sha256": "236B14659AE361717384FB614AB8746D3D9E173B38DE49AEA0E27E07F65ABD28"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\pof2.dat",
+    "sha256": "926AD3324F0B96F5FD235987E612A781491B60496C3AE81FDC7D333A90B1EA6C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pof\\pof2.dat.meta",
+    "sha256": "FAEC279E6AA8E72FCF764423A37744B8374EAA8DD45BF192B80E7FB3D9A5ABD7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pur\\pur.dat",
+    "sha256": "A02EC4F9DB3BE9A5690BF1707611B9A31EB3BC5F39FF81965ED00630E238BC4D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\pur\\pur.dat.meta",
+    "sha256": "8BD91B125738C36B34C08A89ACBA0777F083B6316D2F006EB6A17B146109E988"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\roc\\roc.dat",
+    "sha256": "28F42F75463C07F512201F89216992646C2F60214C13F040DDFF4EA4C13DFBBE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\roc\\roc.dat.meta",
+    "sha256": "D9F577114578E3933978240484FED29EAB86C53B8DBE2A2121D90FCCCD2E2EFB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\sna.dat",
+    "sha256": "2C99336F5250B5F7C5665FBAFA3D272ECB2931160154F7D8253DA03055608ED5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\sna.dat.meta",
+    "sha256": "06ACA081F2830A0F09883D4EBDC3195481872745A35B94C78ADC19B9EDA8AE71"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\snaoro.dat",
+    "sha256": "F2F3337C82EEEAFE0D5EED19DCE4A94ABD963BD4E57611EA0643981B467013EB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\snaoro.dat.meta",
+    "sha256": "AAD2BA798EFD33D8660ED3C2C5FEADBDDF44F474F29C5D75E0AB667A42FEF49C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\snasas.dat",
+    "sha256": "A8D61C861C22CF3F3162D127DD59C0BCA77B33FB51CA5D1441981E9A6720561E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\sna\\snasas.dat.meta",
+    "sha256": "6FE09175A3769853232102EFC9651E18B43CF5B9512CBB235F794E273AF60298"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\spi\\spi.dat",
+    "sha256": "72432504EA29BF39492D334CF2B0894973D02EFBBF1BB0DBA6BC3ECDA826B401"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\spi\\spi.dat.meta",
+    "sha256": "E7BFD045D24586A3D7F89E15A1CB008E02DBCE5045997ADA9659E0869C0DD202"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\tra\\tra.dat",
+    "sha256": "BAC7FB67C0FBF013D3859933D5A9FFF2D5E6C09D5C9D2ACDBDFB0468AB18D454"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\tra\\tra.dat.meta",
+    "sha256": "4C4F5CA409C81A940C37AE81514726AFBF243B5A560ADB1DD300401C0C95CE07"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wal\\wal.dat",
+    "sha256": "8AFFF827883807BD97889DC52B250D3B07DF532AD1353D95FEEED5ACF7C9A699"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wal\\wal.dat.meta",
+    "sha256": "BCCCEA77D498086399BCB9A6A337BB0F82539B188D28B3BB9211908096BAEA57"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wat\\wat.dat",
+    "sha256": "435EBEFEF864B145EC2C0F5E686AC1225E525EC277A4B01030D9A074270D7180"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wat\\wat.dat.meta",
+    "sha256": "0E6FA4A2903EA2315FFF59632853C12D17B52E08F67ED3FBB58FF1AD085727DB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wat\\wat2.dat",
+    "sha256": "6DC42CB9694CDEB4790BF5C387E5354C2C1A1F362FBA92DB25E8E52C3B6D9558"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\wat\\wat2.dat.meta",
+    "sha256": "7C7915174A5A4C3A8DF18275D543B9CC090B5832BE5D76D95B18C66F38FCEA07"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\win\\win.dat",
+    "sha256": "B61EBA593329D5E448234985846D766785B6F89974535CDC19371BBD6038A553"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\win\\win.dat.meta",
+    "sha256": "E286A0B6957061A770FE6574ADA00A94494D430925D25C8F5E18B9AE61E97A04"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\zzz\\zzz.dat",
+    "sha256": "82F72D6AEB561EC87939C0231026E9F5C52B342DB72230424C68F2390CC66465"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\a\\zzz\\zzz.dat.meta",
+    "sha256": "F65516FF20C80DD3110041A984AA42A9F04CEE2BE97D8B3165BA4E504D2077E1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\0\\spe.dat",
+    "sha256": "2781956E89EDADA3D4560CF6FF73F562E168F29A288BBA2C3AEB74D75EEA8EB2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\0\\spe.dat.meta",
+    "sha256": "2650794529FD53F35E0062D7F23524545AB26E1B4A2465DE1ABA0ACAAE6A1B69"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\acl.dat",
+    "sha256": "14DD0D2F000C510970F2A351AEB8E077ABAE3F7DF95D0E7CC1D6BE620B651CA5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\acl.dat.meta",
+    "sha256": "1261BA844450DFF4F1045BA886287B789707990519C8845674DCAB09AF650C87"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\ank.dat",
+    "sha256": "7BEEFED713CC85CDF2BF36399FE158B63E822038FBED09AE79901BB6B3E81AC5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\ank.dat.meta",
+    "sha256": "8C3F0BDF85AB004703C77FE461716CE75DBA1DB311714FD9558F26C859E11170"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\ssnk.dat",
+    "sha256": "426E106ABAF97ED522DCABFBE8DB2CBD0F57ACD4BFEF5A484C363B27209D7260"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\ssnk.dat.meta",
+    "sha256": "FD66332E549B189D8D7C0EB002DF9ED7381E308550F28DC0863C78242271FF7B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\asu.dat",
+    "sha256": "ADBBB5276FAD9A1056E484CAEADF7ED07C5744AB669CD5D336762D086E95A1A9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\asu.dat.meta",
+    "sha256": "240F076CC941AA13BA56A315498EF6A0A2D048079764C6575EB56EBD777D7030"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\bee\\bee.dat",
+    "sha256": "0E52DFBE044178D654C3E5D1694B9A733AC3D15AE1E8BBFE8E0E33169ACA7A4F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\bee\\bee.dat.meta",
+    "sha256": "02D250E31C8DA8EF1034ADFFC0C2E4FF6AE790134B7CEA75D2FFE6B6DD9E55A4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\chi.dat",
+    "sha256": "70B5DCDDB31CC783F13D86103F6B96A47BA62D04CEF38369DE193546A5D210B1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\chi.dat.meta",
+    "sha256": "994065BF232F0F3374A254A827525EA1DF1FEE3BD2C3033E1EFFB946660B1E3A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup1.dat",
+    "sha256": "CA34081B2763A205AF34E0305F9A99755D2BE62202C4963B165E3119B4A60318"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup1.dat.meta",
+    "sha256": "02EB10DA68FBB06D2293B31C8D00342B9D21C641649CED4CB49F98D1A9EB30D2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup10.dat",
+    "sha256": "946A4BE072A5DFBB2EEBAA10021EE9FBA4C66C53D9D79693EAB1E63EC8494240"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup10.dat.meta",
+    "sha256": "EDDE9FF74D77E9871101AB50BA0EA072B0021554A32D76FEBB83A25AB53F2BAA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup2.dat",
+    "sha256": "F76BF0E7CF82620C18B9E76078B41F3B4E3D4D7BD250AA8CBD4646B40E52889B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup2.dat.meta",
+    "sha256": "FF3E22EC0AD8AAFD5DF0797768D947475BE8B0C0594EC0BD6DD6453B889FDB56"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup3.dat",
+    "sha256": "FDC6A5C00B5F1DC841221BD63B419805D3A7D90D6CA6429EBD440AFF08D85716"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup3.dat.meta",
+    "sha256": "2F368DD495B2CBA6EBF83783EDE626E1E4B247DA024748ADB6740F26DC433ED1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup4.dat",
+    "sha256": "C7A7F82D8A9F100A850C57F39D288AA257C48C9CC9FE8B4B8078EFA1C6A8D984"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup4.dat.meta",
+    "sha256": "08837EC761A1C6ED5410DC6CCE104FA5D50D3F45DC03544CD02638052EBDB3A9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup5.dat",
+    "sha256": "E2483952B8C4390A93A957533382948FEA5DB9952D430AF849BCA6EE615581B4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup5.dat.meta",
+    "sha256": "7ED0117750055B18C4375E0133D327E260B56C4CA3E198F8178E70ACAE213852"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup6.dat",
+    "sha256": "C1D0228A957D1FA5AD1CAD9D9065C25DACD76A722271E2B376F8A0814A4C21BC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup6.dat.meta",
+    "sha256": "A5DF12C8BA60AB645C3C8ADF4C691220A5B6613D73E500280581F2B34A02D27B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup7.dat",
+    "sha256": "B7502C80C235A080B5F00E5627F10CC32352A2EB3FAF27AA665226D1C2205F91"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup7.dat.meta",
+    "sha256": "A43A8D48569C7B5BF085C4D99408C4091A1FC9E17AE9A4890311615F90FD66A2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup8.dat",
+    "sha256": "A8B3ABB4CCADB2ACDE7F7D1B01924B9F389033CFEBE1531EE93F723289E5B952"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup8.dat.meta",
+    "sha256": "92F57831D4238FE3C6E059418B3F7CD3ACC8ABBEE8E1167799B0786E7FAE606E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup9.dat",
+    "sha256": "91B9B83D23F4F7736239DD83B33D9E789E2204E9597FED1B6270A5C40EB8570A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\pup9.dat.meta",
+    "sha256": "073DB9E3ADA4C4359FA3E08E9486779C6E67B5973C23FB1B7910F9175D3BEB57"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\dan.dat",
+    "sha256": "629ABE62CF1B2D83B7709D93CBD2D965B9024C359C417E645E048D272CD55091"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\dan.dat.meta",
+    "sha256": "58DD8DDA59A17B30CD63E8E9BDDA8B43A342A0FE6F1744D80FEC2EBE6E40B82D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\danr.dat",
+    "sha256": "D94B879E035B3B1E2851BAF48D951A1F1E3DEAF47127991DA954923D613E4AA6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\danr.dat.meta",
+    "sha256": "76D76A99C476A3A97BEA5AA1739A3A0C42E70FCFF13E5D139248196567EBDF90"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\bir.dat",
+    "sha256": "156A2798327699964DAC1A67A76AF7E9EA3C1787DBCC00413CD147777F971D12"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\bir.dat.meta",
+    "sha256": "7224FC7151914827465FE8D9F7977078E96EA58162BFA2C4A8BF2409297D51A2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\dei.dat",
+    "sha256": "8BB04CC5060F2D7E1BE3BFBB659344DE23A154F291F1BFF77476B262B782F28A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\dei.dat.meta",
+    "sha256": "3BEEAA86D54A5A2A50F58A409E29AF9D66C79C058246F014C32DE8443E834607"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\ncb.dat",
+    "sha256": "65097290812D2A661ECAA7D11A41305173FA414225E62F20664DF19BB690460C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\ncb.dat.meta",
+    "sha256": "A82E1A189362A93808244CC81F641A928FE257240EFDDE45E5441A9C1F2C8EB3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\ncd.dat",
+    "sha256": "F5DAB7D62BADA4A66CF2009B2B3A2DF76AC233411134D935B35A4EB833A5BF1A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\ncd.dat.meta",
+    "sha256": "3F8C76DB1A98D0AB1DFF5E8BF69213D459C9760FD803C6B73E175B2BDD712AA3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\zom.dat",
+    "sha256": "61E9435A7CB12A1E0CDC6F9BD209DEF6C4D7E66B66B8752409F7AC7457D72D16"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\zom.dat.meta",
+    "sha256": "F565C5DE3FB9489D581F4E3DE4BA35326DB48A0E65FC056A7421038AB7B76EF1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\zom2.dat",
+    "sha256": "0F072DA874234692EA973AF36B911D755E5DFA6DEA22FBD84065868132870288"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\zom2.dat.meta",
+    "sha256": "22FCEAA27859D91B87EC7140FA23E0C539F350AD926B2B1460A00D24626B3971"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\gaa.dat",
+    "sha256": "AF81C7FCC483F7CD7566EA65CE27B005BECF72B680FF4E4B1D7635EA21DAA37A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\gaa.dat.meta",
+    "sha256": "637AE9C00D2C948513DE48AD1EE25CD3C1C436E4E44715508B20FDDF7E399D7F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\fakefan.dat",
+    "sha256": "5023E5408E1ABC0B6B469C756B4EE3A0B2F59B228572401C60D2D0EEDA44A9D1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\fakefan.dat.meta",
+    "sha256": "3321278435D3F921EBCFC7B9E5EB5B4EA5EA639A7D851A6B6EA7B0DC21BDCBB0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\gur.dat",
+    "sha256": "178C1D294300810F3FB0AE20415B2E62A93F11C6CDF025A88A1E2EA6080A51C2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\gur.dat.meta",
+    "sha256": "839A4CCE995A8806D8D9557EEEFCEBB99C5ACD1812BF0E18304D90815748F44D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\gei.dat",
+    "sha256": "5CE66F8A53236C69DEA0D47D64FC60E1F2424DAF085B96B7A2355B8738ED190C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\gei.dat.meta",
+    "sha256": "5A73F757F0BC0DB1AC50085BF13870F499C62EFF485C5621254B40A29B4289C5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\gsi.dat",
+    "sha256": "51FC2EA9EDC862752455A8865518661B76478F5FB3E256F01AE349B137CE42EF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\gsi.dat.meta",
+    "sha256": "61496AE3B08C961BB187C0523262F38153CEF9A51020C1FDFFEE9E1CC13E8876"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\guy.dat",
+    "sha256": "2F5EF8A08EAA2C15887439446305EC6E029D2FD0C3D56CA605111A63FBFC763D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\guy.dat.meta",
+    "sha256": "97B68AED29E6DB287B6B90AA4778CEE825F5F9E9317B718F00069232E649116B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hak\\hak.dat",
+    "sha256": "D719299E3EBC5DC990938508819E3638914EE3CF3C033198DCBAB931BADB773E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hak\\hak.dat.meta",
+    "sha256": "D112BC0F94FFCED7F53C4A1A396A0BC3675845BBA1797A1F0C929E67747E0950"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\han.dat",
+    "sha256": "654FA5C6565CCD68FD2476C526B92F5ABA64637250FBBE497F171285D8A38854"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\han.dat.meta",
+    "sha256": "A1B30B1B867B0AC3F4427C00CB88E7662578F95857679178B58F1E916DB70A4F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\smo.dat",
+    "sha256": "8185D7332ECE1010325603F24C3ED932639963AE10F78651BC4A5FAD61997C0B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\smo.dat.meta",
+    "sha256": "246DC00F655027A0E0F09B2691D2ECBB218D80C6744644E7BAD0039B45AFBD9C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\has.dat",
+    "sha256": "3141F3E58D6531672303E0B765AD41CEF068717BBB1F83074262035CBE213048"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\has.dat.meta",
+    "sha256": "C95FF520E8C386EA361DFAABE04AA4C1C5BB978418D4A2941BBF902B1EF262D7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\hcl.dat",
+    "sha256": "791801C5D7AD4E7C6A43977F9D28674088A959202EC7008C546D874D7B5E140E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\hcl.dat.meta",
+    "sha256": "F52F2445FAF84A455BF288AFA991AF144453660975B124B4F32DB795B09A569A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\sag.dat",
+    "sha256": "528A9C66CC6BB7B52D3540288CA21F0869DCF865E4545F1F35401C717456FBFD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\sag.dat.meta",
+    "sha256": "B5F7DF249C2AA6F9B1CE3C0121FDAFEF2D9351A91AE84A0B381102322ACA5760"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\clo1.dat",
+    "sha256": "C3F9AF3D2CD0AC2E60F8D8F4BA549FFA9E96221167F3AA05D9CF3E805D877766"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\clo1.dat.meta",
+    "sha256": "1DC7A5FBFD42D34572FE13593E418F362A3B731353EF60E706BBE6994F75FAE0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\clo2.dat",
+    "sha256": "983954573C6D66D61EF62DD19D6D4E751D3D43B1A90C21E285185BF7D42FE39E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\clo2.dat.meta",
+    "sha256": "F6C0B3CA57F16F4EC9A2991F19048C6C90421C6C328078FD2F713734902AD487"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\hay.dat",
+    "sha256": "629C256D94FAD3F338D5BC27218D667486F622240E67F23CAF8352C0738DA315"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\hay.dat.meta",
+    "sha256": "068DC0EF691B12783F82E26057A4FE9D99EE4EB01AA87BDBE1CD24315BD9A131"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\hayS.dat",
+    "sha256": "4EA9B681D55AB76CCDD4EFF64F692F8F2F899E23AA95D9C1E2C3B67F85648B8B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\hayS.dat.meta",
+    "sha256": "3449035568E5080986A11805655DBD2770677E52E32BA51A26D1EC9D494D51FE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\hid.dat",
+    "sha256": "8361BDF408E75163796307413B684991A7D8F187BF30101BA19FBAD766D86C82"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\hid.dat.meta",
+    "sha256": "21EE97ED07BA49D6326AC5D8E280ED3C896D41C2F2A72FF8892F7FE1C519EC74"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\rea.dat",
+    "sha256": "27F0B91F92C09BEB9BBE11127D0EF4AC3B0267F1978737F94C76841BC010F75D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\rea.dat.meta",
+    "sha256": "B71BCC7870377D214CC5AA0DB2B4BE8A14A85AAE0785143A4794F2F9E21A56F4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\hin.dat",
+    "sha256": "C12062CE234518E54CFCFD577B7AC55F2B58A2A39E5038F64ABBEDDA122CD32F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\hin.dat.meta",
+    "sha256": "7EA2936705FCA7D80CFA4F03D2D4E3586D583E62F26F3E2D069E1ED47FDD88B9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\hcl.dat",
+    "sha256": "AC183DFB454858BCB2C0B02A135479C721D3FCF4B79582EDC413C2954D0FCB86"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\hcl.dat.meta",
+    "sha256": "820D604D5C12CB03AB250806BAAD294B6137DACD668ED5AFD377BDFD9A899356"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\hir.dat",
+    "sha256": "119F6DB71DCEBF14593C05ADCF475DD5AC64232F25E9009C05FE9D3A78FD635E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\hir.dat.meta",
+    "sha256": "9C93566C19E7EA03F40B8FEE7E46F4FD463A2D8E53228A8988759D1CC2471C07"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\ita.dat",
+    "sha256": "2EC65F77FB74CB1106506E87FCEFB643DEDD022D395E0C4A325E1816EEDA8958"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\ita.dat.meta",
+    "sha256": "394956942E779D5C96BD3391E1BF23B7801F2932BD9D42391DC8F7B35C6D7710"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\jira.dat",
+    "sha256": "0399A48AAF06D292B4491477F56520D38219B9AAA8C12ADC98E4594EDB821B72"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\jira.dat.meta",
+    "sha256": "F990E1BB2AC62E551FDADE8D1B896A22321373114B7BB37F5E6E7747E289DDCA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\pre.dat",
+    "sha256": "846DCFD20E1DC1CE5C43AA25FB63D5823885E502C2BCCFCB3959253685D50020"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\pre.dat.meta",
+    "sha256": "255BECE9470B835ECB5C8BF3B1DD6E70427F992B1854CAC2D30A8D1391780D30"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\sag.dat",
+    "sha256": "705B4BE41554DC29E7828B90F82A542B303C75B8006121B79D377E749547876D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\sag.dat.meta",
+    "sha256": "B7215BA3894F08EC29C95B839D5D67B3A48C6CE8C063CE8BC860460DED3A4FF4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\gol.dat",
+    "sha256": "8BC9C577205386EAECEA5361A8758FADEB553AABDE0869678D59C2049FC45806"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\gol.dat.meta",
+    "sha256": "AE4CD2C0956C2FE30AB3BAB75B2C6D81FC0F272FA822B135F5D0C49AF78E51A1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\gol2.dat",
+    "sha256": "E8163E866F699CFA1AEE7B6B202A759D59560C151FCF4AF91DA883E9FC639B6D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\gol2.dat.meta",
+    "sha256": "E25DBB81F0B20352F5D658BDEF17945C29DB430735CCBBD91F9D1F381AC899D3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\jiro.dat",
+    "sha256": "4033B16F7C066D9D63BE6C23245221CD5B3A07AE32D89EE706F5FE6602200ED7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\jiro.dat.meta",
+    "sha256": "3B70289B1D8FB68CD5A064BD6C80B5E3C06D1B3118298642971FBB453A88AD25"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\jiro1.dat",
+    "sha256": "C3094B5ED9A130E3303B7F1FF48620D227572C412A3193F07BFA3C06003E7FA4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\jiro1.dat.meta",
+    "sha256": "AB11EF13E750372BA9855D95276902EC6797A424418F5C39ABD2AB114D7CA513"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\jugo.dat",
+    "sha256": "C6A9D0F91C7857B8C0D7313F75BD9C2077AFBC1673C0BEAEB6C9F480D059BC1F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\jugo.dat.meta",
+    "sha256": "2F9E0EE36A68906E1AAD0E3127F89D1589613881DDDDC1B59C99C9B9D9949701"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\jugoCS2.dat",
+    "sha256": "CB19258265ED4565322DBA3AF81EB0B57FB1252B2EAC3CE7E7F352F850129E76"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\jugoCS2.dat.meta",
+    "sha256": "6AF78306BBD233AE1B2FF100EEE9F6AC675F3D444CB8130E31D4939EB70CF9AA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\kab.dat",
+    "sha256": "EBA7B0363F08D8C608E8720C7AF6953AD72100CF081681498B300B5CD00096DB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\kab.dat.meta",
+    "sha256": "3D393F392D26E01402E773F76979289A390F34AA01451F1753EFC8FAC885C267"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\tsurugi.dat",
+    "sha256": "0F0D407E7A8F9D6875B125CD2E0732866697D11B5DE5BCFFA9A4D6F7A33A57ED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\tsurugi.dat.meta",
+    "sha256": "0E8E513E3659EB06A21829F46B50EBA6656A47FB0BD332AD13BA27CA4A33C68E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\yoroi.dat",
+    "sha256": "D0198CFA47EF3176B7CAEBC7AEB674BE0BF8DC2BD60A78F8291A9A2EEFA4F396"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\yoroi.dat.meta",
+    "sha256": "F88BAB743FFB763847B723366F17280A408DF44E70F3530960A634DD4CF6EA37"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\kaka.dat",
+    "sha256": "4D6F8DD6CD149C38312C8599485DEDD7EA6C77FF57F7A49E70F4204E743C3A64"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\kaka.dat.meta",
+    "sha256": "CC9357C6FF57D050FDD0FEC4FD583F6EE402FED230B4C234298B09170FD726EE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\pak.dat",
+    "sha256": "D37356B1F660B0F29D1C9A5662C42B360F87711449A975408B18064591B6FD90"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\pak.dat.meta",
+    "sha256": "511612DCCDFE790925771028296110E66C448F549C8AAD53D02C469409FEF784"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakun.dat",
+    "sha256": "D0D14464D0EF5B8F40EC890954271098B21490B62AA37CCC5CE4E262B6AEBA8A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakun.dat.meta",
+    "sha256": "C299159E214DEF70837A82E73CF7A234455AFEF64BF9F7C9545307E04AEA4692"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakunck.dat",
+    "sha256": "5C343237D7CBC4501D06976FB8886030F1E312686B93E34E73F32504455E22DA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakunck.dat.meta",
+    "sha256": "8C6493358985F9B7DAAA4AB4A23C60094A673C141C3C4351FEFEE4812D11494A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakunre.dat",
+    "sha256": "7456AF76A9CD66D8ECEF26132B34DA4875245ABC144B0DE0C44AD8C2FA3CD167"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\kakunre.dat.meta",
+    "sha256": "76422D1CDDF23FB6F25C389E19B4553EB7A0CBD686A9CC50C1F3211C3C9796AD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskair.dat",
+    "sha256": "715FCFFA312CFB91558A26F80D1CD415C4942AF421A0CA87B90FE8F80D69C5E8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskair.dat.meta",
+    "sha256": "61812FA756588FE625E93BD5810E48D942AEFC2FA885CF35208E432B948DBD15"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskfir.dat",
+    "sha256": "52B9EBA48925E5904DE97D20BB871360D79336D690B4FC3FEB013D5EEB1220E9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskfir.dat.meta",
+    "sha256": "734F4A9E9E5077FE3BBDE6D63734CC08D683D3107BBBEB77E1649D62929B78D2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskthu.dat",
+    "sha256": "E297E0FD4C21A55B8D62408131022A972608BC3272832479099AE4EDE4EA4EDD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskthu.dat.meta",
+    "sha256": "B806E5C61858CA8E7ED3C2AFAED7410F80FD359B9D6F59AE554D6A82581DBC4B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskwat.dat",
+    "sha256": "9047308B307A09ED8B6E12D78EC6EFCADC7D6BDBCECE805469A5F2894CC5B43D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\maskwat.dat.meta",
+    "sha256": "E7763CEF4B8E16D5A0AB7B6B2F60CCC934C3AB7BEDDD6C9C0AE180364944BDE5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\kan.dat",
+    "sha256": "66796DD3BC874C5D7F368D14FF59C5BA0F2674BB7927B193F27AF27145B880E2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\kan.dat.meta",
+    "sha256": "EB0135A856D48A4BE5D42339C7904D3A58F4E4216F768B7EC02E5372DEDAE446"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\kan2.dat",
+    "sha256": "E50A594690F2980C55306B565B466C2C35C4CEC4C5AA4E302DE0C3062B03ED26"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\kan2.dat.meta",
+    "sha256": "DD629F144A4661E5D3F95FCBF868F9B8320FDB7A8296063F4271CA48DD987E40"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\kar.dat",
+    "sha256": "A4500E6B40B33667460C11ABE3C47F7F5B8F07C1DCEBF39A74A9AF0E2CE21F62"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\kar.dat.meta",
+    "sha256": "31F96BA725681D5A74806778B9AC8BED974E9C06FA9BD10D51B75532A6013219"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kib\\kib.dat",
+    "sha256": "DDF02DA447785F998D657C6C50F02F98C8E47BC19F451CBED4017E9ECE1117FE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kib\\kib.dat.meta",
+    "sha256": "ED6C403F581B73E5D3DD1AE34B3BB1C8D64F8E26387E9CD7484E699BF6E1E1C7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\kid.dat",
+    "sha256": "19DFAFA7255CEE8D2F281D1AA08EF66A5339E9467699C67C7EB4430C5567CD4D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\kid.dat.meta",
+    "sha256": "D28F541153FA67AA69668F88FFE9229F7918770BF6FC4C1EBF8CC9AAF09D47C6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\kid1.dat",
+    "sha256": "A7566950548B4E3D00378192B1E18D3C682A665E68366770DC2E8276B1D6E072"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\kid1.dat.meta",
+    "sha256": "A79DB7677EABFFDB66E2BF32C207DECD31A151740E1A34DFB9FD4213AA89E771"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\kim.dat",
+    "sha256": "5C40F5B614BEF735DDB6E8EB1856F2ECFB20A700CDA5D65770BB139611B7B64B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\kim.dat.meta",
+    "sha256": "2BA668395FD98994B8143420A3BB722B54EFD71255C114E4AB25B751D17039D7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\kim1.dat",
+    "sha256": "108D8932F22C8539EDD213FFC288338726164BE0678FA6FB64732D890A56185E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\kim1.dat.meta",
+    "sha256": "85CC90D6D973C0A07FE4D41BDF3166BEBEDD499300C7DE3A9CA438E8109D0F9A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\kcl.dat",
+    "sha256": "1ADAABE78E22B3935BCA57D54D65E84B224B3708C87FBBFDD4A8B1105204539F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\kcl.dat.meta",
+    "sha256": "534AB14F505F29BA5A776427D0F49F0967A39A92C02C0A29BEC47E4BABE9735A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\kis.dat",
+    "sha256": "42365D2812B3E91C10598DDBD003FA53AAB9E38364A2335D6403540F19A9B6B4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\kis.dat.meta",
+    "sha256": "E59C7323D37F4F3F07FFC4B67FB280E11F9D4FBDB1E4BA7752D2D4391AFED588"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\nck.dat",
+    "sha256": "BD9034F7E2ABD376EB44AC4ED913B7A2E440C01D49F6A5A54FCBA9C1788032A5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\nck.dat.meta",
+    "sha256": "DF61A69BCB8DE3D3937C536FD303E3EFB862DBD3C01DE604538781EB838DE194"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\sam.dat",
+    "sha256": "A6412B3472BDFFBEDB690E026A6C654E976357FCC1AF9D358D20B2A437EA9B5B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\sam.dat.meta",
+    "sha256": "66A58D3FA348489937E887845502C3D786F8116B11D3200AC138E1DB83A3C377"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\ang.dat",
+    "sha256": "CD5380DD4934FB51BE095841BADF7C218181D2D3547414C65DAF4409938E9F29"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\ang.dat.meta",
+    "sha256": "14CFF07AEA66BE2481FBFAF8A8F8EE2AE4467EB8FA7F29CE1CE5625E4D128F85"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\kon.dat",
+    "sha256": "E301CB7C0951CA1AD110FCD1A2998D7C08D4D44CC2F1E2B7FC389C031171C058"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\kon.dat.meta",
+    "sha256": "15A4916EC501D7242EA8BD44C656B45C35645D4CB326626C7A6F6CE117848FE9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\lee\\lee.dat",
+    "sha256": "775079F67116E0EA490DD57FC6FB226E1813C6D645807E4D49273639929C99BE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\lee\\lee.dat.meta",
+    "sha256": "8FB5878CE666B21D4F79751DEAA1587A975B7620D6160C18E3E3F02FA30F51D2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\kcm.dat",
+    "sha256": "68BBECA6F4F4337C88A54225C5E2726C63D3C26A8DA627EFBFCEAB315A41FC8D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\kcm.dat.meta",
+    "sha256": "8E9FE08C54053B8C953541B9480099FC5AE56ED58CC582F5FC1F02400D0F4E7D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\min.dat",
+    "sha256": "FEC6191012A2B2E1E2FB4B0873EFC9EFAE12156C417B77B3914CEF1EB634044E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\min.dat.meta",
+    "sha256": "BD9BAE1521EBBAEF2883C4038CB522AEF37BD1F7E8024D31E71B2DC611C4CBCD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\sag.dat",
+    "sha256": "C5D1313DAC69E96F1B3A874DAB38F7217D3272F39CBEF82C0AACD42254AAA59D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\sag.dat.meta",
+    "sha256": "F2294F0F3E023B6343283962AA56E6FA86C8F2AFDD21C70C2DB795D7D2F3A524"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\cs2.dat",
+    "sha256": "21A2CC7B0DE09A9A74CE11921629C2D6CC401D242BA2D6C0FC11A2696050FF81"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\cs2.dat.meta",
+    "sha256": "09E1AE9B4D3E89F5BA7F60E2A1055ACAC8EF75934CD88375732E02E9463318F9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\miz.dat",
+    "sha256": "1F9020BE7CD22306D5040B31AAD816ACE4D2F7014514F843A2980A67773EF197"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\miz.dat.meta",
+    "sha256": "BF416486F1468726F0F4792BCC327FB7B4C8AD4F54B93411CA558B182C4DD84E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\4tk.dat",
+    "sha256": "38D3BC34EC37D05829B476AB707CB82121E9C3D72E9D77483A28A2D42C8716FC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\4tk.dat.meta",
+    "sha256": "7A6795FD238ECBA3C5A099AD7811CA8B7D7938BA0998FEF1A60B1B6357014D70"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\kyu.dat",
+    "sha256": "F1313A21EC21CB3E29C5DAEC73D3CBA7D18C7EE1891A680777E68A51D7AA88EC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\kyu.dat.meta",
+    "sha256": "9D555EF7A7A61C644148AB5DFDA5C4D22FD1EA76DFB11944C60DD221863CA32F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\nar.dat",
+    "sha256": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\nar.dat.meta",
+    "sha256": "5EE997F6AEC5FB7BCF3D198BF055F1C6810CCCE5871AAA567F8F10941BCB869E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\ncl.dat",
+    "sha256": "1E79078AF213896E82AC18A9E0A1D9A7026D3CC5C44386D231B67798D7FA68E3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\ncl.dat.meta",
+    "sha256": "41ADD354ED327D25DCC6EE44530254340FF064DC54E6FA699931C1AA51755807"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\sna.dat",
+    "sha256": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\sna.dat.meta",
+    "sha256": "573FBCC8F2B9BBD60B84113C81AA201DE06CE2A0AF5561C4CF16EF72660B8C13"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\snc.dat",
+    "sha256": "69EE090C669468305C38675A141754B7DFB2B912B7BA931C439AE5C5CE612414"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\snc.dat.meta",
+    "sha256": "F0492BD53E09C1802465C8A12FA8A936B768C0C3AF1BC51BE59F1061A74AD19B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\nej.dat",
+    "sha256": "789248298018F10B334EF4FA3D09EC101E720308C4876A6F951B543CDAEFDB4B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\nej.dat.meta",
+    "sha256": "754A933B84403EDA6C6B4896A07017D729D31D0B5B0B5ECE0F0674DD31A22560"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\1.dat",
+    "sha256": "E90DEB05EB7F6424684EBC73EF5E0436DDA446A648D52DA1D5001EEBB6168FE6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\1.dat.meta",
+    "sha256": "ACE01CF148D16AED7F92C1EDBDB42990DC8332A29AE03E62AB3385893E77C887"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\2.dat",
+    "sha256": "A7EDA0DAEDE69A3B613F3B2DF2965C271DFFC26634434E007C7C8004421D7C02"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\2.dat.meta",
+    "sha256": "44509853984B3C41614F83385692BB781E43A37E2274982A59340183DC3C08DF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\oro.dat",
+    "sha256": "D0BF93D80AF467D48B79738A061A6923D498E034A669B7EDE1877D0A64A5814E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\oro.dat.meta",
+    "sha256": "D5F7A83C04E4FEBA709466ECBF8B9E496CBE9A83BBD8642F712FD0C8C12F37A8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\pai.dat",
+    "sha256": "B883C73C27BA92FC69BA88F1421BFF6FEBCBEC9AB14F8EB0B3D52A6C560673C5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\pai.dat.meta",
+    "sha256": "8C11989900069DC7ACF5C0E9FCEDFD1FE2DB239174DCD6D26506EB54D14F512B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\paid.dat",
+    "sha256": "6FA891571190C317C87BA3E55BC39AA80A145E8C9D012DE26E79AC7C3F10D705"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\paid.dat.meta",
+    "sha256": "28A6EC2C98809BA9C47714F4372469AFDA0E3B153F87CFF525060BF008F365BA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\rai.dat",
+    "sha256": "11F5E730BFF0EA60BBE2BECC68263C2EF303D0CE26F2976CC67A7F7DC112881B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\rai.dat.meta",
+    "sha256": "E57CFF6C0B68AAD3FCCDCCA0E20869260E0C03B3E9AAAEB93C4BF6F25FE1CA6D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\raiT.dat",
+    "sha256": "F0F582CA1EC20E6CFE295C7C6FDDDD9BECEA815F3C2EA6DF879D0E7FB5CB2083"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\raiT.dat.meta",
+    "sha256": "FF4178AD1516E2C4C7944E7CC68CD08CD4D0C78D4368B6E134B35942A2140AE0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\sai.dat",
+    "sha256": "1D8A8EE87CCE86B09F839F02358CB702488195674DB2883F484BD0968BEDAC01"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\sai.dat.meta",
+    "sha256": "6598B74CFBBC27CA4210E144EC420EB5C8001D8D53D77F920813BA0F69592551"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\sako.dat",
+    "sha256": "D1F007307D77494188710EC8D941FC2CBAF3CC48A7C9F2C1AD04066482E0C638"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\sako.dat.meta",
+    "sha256": "1E43F1A390ACF973B29DD9CE69BE836A1560B56684DCDF7DF000588769359345"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\sako1.dat",
+    "sha256": "0A0745A5EC4EF350EE48374ADA9D31AE5E710A14DC194471CA900896CE413C9F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\sako1.dat.meta",
+    "sha256": "01E570D1232B7F7252F64C21145E10408E6711467FDEEAC672AFA3A3E3F9647F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\suk.dat",
+    "sha256": "D795316454CD14326452F8270BE027A2D768928B5D9F2597279E2030005EDCD6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\suk.dat.meta",
+    "sha256": "D19FD3C083430377B57946D9C640A910F57B0AC829AB98A10825B920663EB866"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\suk1.dat",
+    "sha256": "570216E772BBD2AD2C49B0EF08DF4535AE3C7B36C189EE5972570E355F64F242"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\suk1.dat.meta",
+    "sha256": "40EC6A1D15C0CCA0300C1B48715513479995EBACE4BFD66407527D29F72E787B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\uko.dat",
+    "sha256": "6AF3BBA902BA48FEA440DE8A4CF76CF2D27DBD764DA90D4FC54677BA866AD88C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\uko.dat.meta",
+    "sha256": "1945826E40E76A087EE2BCD4B8C137267174329CCF90A26ACCC1466DD0FAF8C0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\uko1.dat",
+    "sha256": "86FF26379A55EADD8B698A180F302F0295C66B35A114234988A59B1F8B89E307"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\uko1.dat.meta",
+    "sha256": "A313C6504FCD59AFA00E94C81A3FFDCB8D8579E29601B4E90EA04752628B9C28"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku.dat",
+    "sha256": "B96FBC8055C0B3B62B05E9AD2AA735A7E32F56EB2648EBAFBDE14D8A0509DB48"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku.dat.meta",
+    "sha256": "7D7570FECF3B9E3F1CE38C049F96412D790E85B3004FAE0C6E54B4505DCE3E75"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku2.dat",
+    "sha256": "CDFFBF121D6EBB7EE16B918E54AE2E83FAD0814062616C3FC1A623D7206E5F6C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku2.dat.meta",
+    "sha256": "56B70A3A336561D032F646F9D6FD833B72664EC4B0CA50DB769D1692FAB02634"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku3.dat",
+    "sha256": "D74A12B85CADC51B1A4FD812599456CBDFD496A1B1CB40C9C26D5369A0E205BC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\saku3.dat.meta",
+    "sha256": "773B3EA088725D6DB2086D9F2C7C3058447EC8BDD01F4ABD8C3958F0DCA869F6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\Hsa.dat",
+    "sha256": "15648AB8CB68C9784D6A4F69599646C49696EE85A818D7BDABFB5B919950F126"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\Hsa.dat.meta",
+    "sha256": "DA2C36E79B2FC2662B574D85C667030B9052AA9DE00B2DF0022297200C22139C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\ncs.dat",
+    "sha256": "624E82B1DEC91EE779B6367E406850026A69026376A1EBFA9377FAF5033579FC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\ncs.dat.meta",
+    "sha256": "6AFC1EA4B7D9981CCCB30760EABE177192390417F0555020B72F542CF14A70D9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\pup.dat",
+    "sha256": "9EC4FE82468953F7C1578416265D353BD77AC7DA2B8ADD9A569618F51353729F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\pup.dat.meta",
+    "sha256": "0DAC70872C0A24185DE3480FEFAB0BA14C43D4C9363AA22CB247A327C242EE99"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\saso.dat",
+    "sha256": "3A617FC575608A144AC5E44979EE642871C296F973D0C6503BE40BD2BED26063"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\saso.dat.meta",
+    "sha256": "BA9289B3BEAB1952514AC3A6242A48457FFEDAD99539D29C580CE47273B3B130"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\cs2.dat",
+    "sha256": "066D2CF6D756580CA99E187F82F5B8A4DB4CD64B103FFE7B9634C67A8B880FAB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\cs2.dat.meta",
+    "sha256": "6748E9636EB5772B65D87023F96DF1F23F25A550B96733C9460A95A4C5236202"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\mss.dat",
+    "sha256": "392448C546CF356C7E100164CEE166C4BB353793A4C47FA12E75A4B74F7ADAED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\mss.dat.meta",
+    "sha256": "3A5952C0279DE382CD0BBFFD7E71042FA3608BF09C034E9361F6DAADC63144A0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\sasu.dat",
+    "sha256": "F0296329C30A30771BBCD292B72296BE413B9CF68A460D54C782C02305AB9583"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\sasu.dat.meta",
+    "sha256": "2C0099DD443E6DF9984C2269B92860A4253A32CEB1A3D6FC7453D7AA413B3E71"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\sus.dat",
+    "sha256": "40D57B84AC362E24270DE66AA0B53862ABC9D70FF326250AFFF45AFFBED4D28C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\sus.dat.meta",
+    "sha256": "9FB08BAD84A284F2D46AC5C71081DD1F150A3795A333D826B6F6D71555D24AA3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shik\\shik.dat",
+    "sha256": "7EE5067A2FE329AB761E7CB29B03BD698ABE9EE5A6273EED75414723B6C21401"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shik\\shik.dat.meta",
+    "sha256": "44A822722106E8A862105A059C949D91B747930528259E785676DCE47F482C63"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shino\\shino.dat",
+    "sha256": "44EB19BBABD9381CFA5BC6E1D1B5FA6BEF6033D88A40DC1EDF5E336DFA4D920B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shino\\shino.dat.meta",
+    "sha256": "2F4AE5EFB5DDF647A3914CF29A0714D0C4AD71B357FB896411FD0C90830B4B41"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shis\\shis.dat",
+    "sha256": "AC521C6683FF44B38924EB9E7B2946D6389A37A4BBFF9A29B4834E52497C46B8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shis\\shis.dat.meta",
+    "sha256": "89E5FB41CF42359FE1CC136BA844D061773B80BDE440A1D37E267A23AB7C5220"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sui\\sui.dat",
+    "sha256": "B5C34723D3A81870D60BCBC4DF0AEDE48F0D7A1DFAC346B4EA793303B93BD90F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sui\\sui.dat.meta",
+    "sha256": "5997450E58CCE232632145EAF89207BE19B78B4C4B82306DB91631ADAA97210F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\tay.dat",
+    "sha256": "677E8DF36E21706D506D4DEC50DBD543877085182A8658416CA56A633F7D796B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\tay.dat.meta",
+    "sha256": "C3BDEE5DEB55E0F824853A14126E35D78FC6D4671764098B647FE735D72BEC3F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\tay1.dat",
+    "sha256": "852897D07F39AF6000AA7C1092137E9C4287587FB3AF904A9DA924A4EB753DF8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\tay1.dat.meta",
+    "sha256": "9C892EAF2C74B213D87FA3EE8D2929AE984D27E648454D07C6AC8CCF35867173"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tem\\tem.dat",
+    "sha256": "06540386F7BC2EF5BA53E6F2D52FD65832EBB52E487F3ACE14DD3B6C700F59C5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tem\\tem.dat.meta",
+    "sha256": "598534154AF71F3DA0FC4C818E39A6FFA5261CCE0313297F8B29D94A20760772"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\bash.dat",
+    "sha256": "22DA2AD7351BD0BAC0BB3E309782AFD84D4B8E1C728406E5E080960F5F777E3E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\bash.dat.meta",
+    "sha256": "FDF8B176EB5F6DD5059CB128CBF2736907EC64506A08B7B756095914B051901F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\blade.dat",
+    "sha256": "6B6830173038B1D00424F3771B2CC9FE09E340907FF040371234E984D5D065AA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\blade.dat.meta",
+    "sha256": "3A5CAE5D194FC512EBADAB24DE86AB667B508550C58B85CFBE3732A4613A360B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\pole.dat",
+    "sha256": "E587093BC60448E8F2D0125E0E915859EB59BD11F63557FA66B71B2BC3A5CECD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\pole.dat.meta",
+    "sha256": "05949BBA703D5F2B3F453B68B9B244C5DF25FF4A41E95EF31FC7ED9D41B45424"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\swords.dat",
+    "sha256": "C8F900CAD906134F31DA61EB0AE430A8C8F420A4744EF9E3C84D63FD8E1B95A2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\swords.dat.meta",
+    "sha256": "29C942390126CFD2ECC42D771A57B662F011E4E917600A60C79E0A783F6A7D04"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\ten.dat",
+    "sha256": "D5797B8BBEF1A0E57D0F62FB78D06FBBB300BC3B9ECFEFD98F4FE199B9AF27AD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\ten.dat.meta",
+    "sha256": "0FE1168B134D1EBD64273C18336E7E62F5172E63EEA1D2FF5411C53F123BFC52"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\tobi.dat",
+    "sha256": "7AC8AB91E0ADE7A19E7BE1950568D080440A673C9C0107189D3465038479D61F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\tobi.dat.meta",
+    "sha256": "49DC3B364D7441D30038CAC3A651D796ED39B5F5A777E99EA9530475FF9275C0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\ttobi.dat",
+    "sha256": "05432DC502050F0E8D226A94907E99F2439032F951EE00CA49B7D0AC7716632E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\ttobi.dat.meta",
+    "sha256": "D5230D7278BAEC976DA8676D5B50390E181BEF7971EE28A963F95CC00A4BF39D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\tclo.dat",
+    "sha256": "298425B7B707F1408032DAE71C5D9E0DAABC6B10D83D6E0181C71F17018C0422"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\tclo.dat.meta",
+    "sha256": "358003E8575FA0E0E3052BBC178C17EEA758712EECB53EB70B09D96885BCCD25"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\tobir.dat",
+    "sha256": "5D2C06BDE56DA49ACDD73B64391579D86FAC0484C3C78B47D828EB9517AE35A3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\tobir.dat.meta",
+    "sha256": "B600866DA4D26674696CE9E28762DF587AD0136CED49A6C2A38DF541B8F368BB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tsu\\tsu.dat",
+    "sha256": "581FF7F249B821EC0682BE25EB11AA623E4524459EB0DBA549D8816F13C5F0D4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tsu\\tsu.dat.meta",
+    "sha256": "CA95049EA1DE8DD0B390425964BD9060F14EB3E27E04504A18B072966A434A44"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\yag.dat",
+    "sha256": "37F4E7DBAD493DE90C175FD4B3113E4A5DA19A0F10F5BBE208CD8DF949FEF3BF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\yag.dat.meta",
+    "sha256": "AF73712BA995523733D8B9B84AA31ADE38F932C1C53B5D11B1803A03EADCF6C9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\yam.dat",
+    "sha256": "E044C3E9139D5D6EF7AFEF6FB20F05E027A761D2997C1A65A342D330A2420B65"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\yam.dat.meta",
+    "sha256": "05E68F76354546DAEBCC97C16A7EECE93B26784242E34AD81197FCBE8A286179"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\ycl.dat",
+    "sha256": "6968E6614A9709FCF92519377A0835BDD665778AE97369263CD0C11B6E366254"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\ycl.dat.meta",
+    "sha256": "A80E3922E6C771544CBD1C61035A6EF2B3615F24C0F84DB8A5FD37533BE4B47B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\clo.dat",
+    "sha256": "27E9B9935AE88E4293F218FE31B474655F0D0336ABA5A3C07D90630058AF73B9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\clo.dat.meta",
+    "sha256": "27A7472FD76E9526F6DEE5CB7E3152FE0003D7FACC11B9E8F589AD08D3C25780"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\dem.dat",
+    "sha256": "09723C6672619D1AEBB987E170801877D43C8C5BE86A8A3C9C459B9E9ACA9B9D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\dem.dat.meta",
+    "sha256": "A46ED19ADDDCCC824C11BD73CDE5B5A579027BD42B76A224B2CC42B69F7D0909"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\zab.dat",
+    "sha256": "CFD20CDE9E66EF889FC1B8D40BA582FFA91B0D27EA447BBED4FEFFD40D1CC750"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\zab.dat.meta",
+    "sha256": "3BDB7D37ED3BDBF3E1F5BA4057D8F72674EB88372B49B8C719B2974DB505969D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk.dat",
+    "sha256": "FC34315BD542BC9E721419E6390103D9F165A055CFCEC45D1A66D9BAE1894CF8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk.dat.meta",
+    "sha256": "7BB30079B32A0B281CC88729BD5A07F023E6B3A52D948617674136064748E1EE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk2.dat",
+    "sha256": "75FC8DE9A37B3D55FB9E4E28EFF8001A809840CBE46584DD7CD9317FDFAD3E95"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk2.dat.meta",
+    "sha256": "278895B51DBC8B42EE862DD7393128418B6046B9AD8CD0B9ABFE403F169F7FA8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk3.dat",
+    "sha256": "7153743BC721FFA43B564308867A5E8BDC6B527A476620D54006B49D903C4130"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ank\\a\\atk3.dat.meta",
+    "sha256": "0E38C873BB536577F8C71F3957648067F986EC5A481A1358837878738491D7B9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\a\\ash.dat",
+    "sha256": "1D5E3653527A1BEDC3135896691F11E6791E38E41E5444350A1ADAE29ECF6BAF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\a\\ash.dat.meta",
+    "sha256": "737E78431E0CFFAFFCC08AF154E9EBD24394AF428B6990CF5B63C3FF03C92F19"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\a\\fly.dat",
+    "sha256": "B5F9621166157496629C8DFE8A405738ACA8F0F64BF715B940C0C9D60FA86A77"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\asu\\a\\fly.dat.meta",
+    "sha256": "B2AF0755E6363061A28DBC38F5FDDACA4557AEB8975C435FFF83718D75A96C89"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\bee\\a\\wind.dat",
+    "sha256": "2790E03EF34979437F43AA70A9A08FDCAE189BE391DA944A41EF8EB1430F9FF4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\bee\\a\\wind.dat.meta",
+    "sha256": "4BDA4C16611AE26E08A6688807AE4496FDF5B8BF5BF03580AFF622BA66B36173"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\a\\atk.dat",
+    "sha256": "473E702A3E4AC48159A9A277041617E4A8604719B78BBDDD8959692D7B6ECA29"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\a\\atk.dat.meta",
+    "sha256": "C381AB1BD753E40C8B5F7FC061DA1E14286CEAA77C83F69EBD929A42B1F38F80"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\a\\pup.dat",
+    "sha256": "D2F0665120E79B0E327A748F6065C818EE5C8753A55FFC2EED0C2075A7CDC5F3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\chi\\a\\pup.dat.meta",
+    "sha256": "4A86473A9E44C163A34559597066BAA87FA767A2D6AB5313D352A5B98BCDCDC6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\iza.dat",
+    "sha256": "0BB049A859AF987572F7BDF3923F18653166BB474098E40204AE8FA8400C6ED4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\iza.dat.meta",
+    "sha256": "C183C34749F705E98F9BBDE290C005C57B100860F0E6EF67EB0D28353916DB2F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\mark.dat",
+    "sha256": "C9353E138AB732CB834644DAE96AEA3238F9E8B3963C3428E23D50839BFD7ED1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\mark.dat.meta",
+    "sha256": "0E4DB0EA43C10E9848B251663B06016DED08975FD4EE80873E8CA54250F2FF0C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\win.dat",
+    "sha256": "2E8758FDEF5C42C40A044616833C50DD45BF60C9C6AA34B34D3622EC209C7EFB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dan\\a\\win.dat.meta",
+    "sha256": "45188B7A76B4CA38AB010A2BA3C2002E8B1EA6B1469CB63595A44B2A126C3410"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla.dat",
+    "sha256": "6E34F750531E052A1C91F8458BD594B2F78F66D833675B57ACB16B6B1138074F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla.dat.meta",
+    "sha256": "DC893C381DA6043975A36C04370DC135CC856F1268461A23C42C7CD505A72199"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+    "sha256": "0F9222EABD9A4FC44B32A65580C58A9CF7896368DCCFB8637FB6368759F76E08"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla2.dat.meta",
+    "sha256": "3B303F6AD6E9E27B5CD0CCD958A6C1D8F3E6AE259020A511E30753A9F5838533"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla3.dat",
+    "sha256": "9E2632CE3FBF9D8A6B665BA48F1B29B2437B4DD866D9AEAF4372C6E1C3F2616D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla3.dat.meta",
+    "sha256": "53AD2B4EAD990D6BE58681A43942D225F6F2271BDA322331572DF5C53210301C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\a\\san.dat",
+    "sha256": "BAB3E85D5D255233EA6C42AB52966A63C7E09623650A1004E5791EDE9FC160A9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\a\\san.dat.meta",
+    "sha256": "DEB3C43738176F9B8223B1F53333855567027086033E7C9447662A0E5F0D4904"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\a\\ult.dat",
+    "sha256": "87E6624996C32EEE593F51D0BDFF6921073B95295DB5C64F15449286BE3F1F47"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gaa\\a\\ult.dat.meta",
+    "sha256": "BF7EFFCEFC829A869D9095C9B216856EFBF1B870E6024828CB8B1760E412ABD7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\a\\cag.dat",
+    "sha256": "4D1E6DB5D1B963B685AB4A9A244911E75BAE390514B1DF5CCFC5EBF6512CE3C6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\gur\\a\\cag.dat.meta",
+    "sha256": "1D6DCD098C326B2504B05C1170B7E2A6ADB7B3829D343EEE735D8DA90F9DA0DC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\a\\bal.dat",
+    "sha256": "8CC7B073936D2C12ED14E5330288C2E44D9280B1164F9C8BCD6DBDAC77F4DDD1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\guy\\a\\bal.dat.meta",
+    "sha256": "C97062B590CDB07E31C2C6742E0EA5EDE0868481A06CF5C4E6AA5D6EC3DBB7CB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hak\\a\\mir.dat",
+    "sha256": "D513629C437514F8CF550B15AA02376B2ED6748589ED688256F404CA81A91DE8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hak\\a\\mir.dat.meta",
+    "sha256": "1521B33EF8417168D64EB9C138BEC30D1D4A5CD761F6F077D58B535D45BF368B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\a\\ste.dat",
+    "sha256": "1BD1240743E2EF931204514DAD5AAD6D475F4B18C65F3EF64FD33F6D01769AAB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\han\\a\\ste.dat.meta",
+    "sha256": "3E45D3790C493FD7998379F666D7FA0B4EBAE6C97671939D87F685B0B13E49A7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\a\\atk.dat",
+    "sha256": "AA9D06D6A804ECE1D966DE15EA42316923090D61B37D3495136461022D8636D9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\has\\a\\atk.dat.meta",
+    "sha256": "6BCE8D995E7192329241080E2575D28ABC69DB970CC4656080CAE9D74651CFFE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\a\\blo.dat",
+    "sha256": "7AC69822561F7D8780B4C90A7B0E8D32D0F9F2CB6AD006F89B3FA895D640F514"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\a\\blo.dat.meta",
+    "sha256": "8B087F60A6FFE0A4D784322AF67913CB01CF0149C7F50D8092223FD8CFACEC7A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\a\\sla.dat",
+    "sha256": "2631206D8D62C9D7B38DFDEE76C3A7F3D68021F07F3F7012DA430F88FA218BD1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hay\\a\\sla.dat.meta",
+    "sha256": "995F6100CF51DB54838D6DC00B75D1E8CF4CC6F8728B530949966C4A5E42E77A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\rea.dat",
+    "sha256": "680E53DED9D26C9A38519283738DAEEFBD753665A064479B9FC79913492025D8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\rea.dat.meta",
+    "sha256": "38B4A9EC7ECFD716DCBB6DC89BE7C8D87E45F995EE78841E2817DD91D9ECE696"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\rea2.dat",
+    "sha256": "EC9A0B5CF8D485398E0ADE1086CB6F627F154F8D39DFB9B9195A428A3651DF7D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\rea2.dat.meta",
+    "sha256": "C320B234B0AEDFA18C85DCB821691135D135361DC6BE4EC12661D88C65E30F22"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\scy.dat",
+    "sha256": "F939A2E83D89B37F828290CAEB0E4C1E39625F78C984CAB729A5F49A7D51B37E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hid\\a\\scy.dat.meta",
+    "sha256": "B7A3BF188B07C0BBDCBAB9CC2B4F9C4241143945459D6B01488B5FDB0EA54134"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\are.dat",
+    "sha256": "3092E68F379AA362A3CD55886C4274E2DFC7B33BF1683EFDDFCD819667BFBDAB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\are.dat.meta",
+    "sha256": "E91F9318DB65AE7DF0C46C22153A46AAACFE425F6245E80D451E48A1FAF74DF4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\hincha.dat",
+    "sha256": "101FA4C0FDFA866B1C2964D91E8C1881509C9E88D00DD320D8A29357869D7702"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\hincha.dat.meta",
+    "sha256": "885604F687F4737C485D71BBB24D430AB6241859CDAC7EEC709BBC8D2D02E45C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\wind.dat",
+    "sha256": "00AB91A22AC7D18588830D055D284C9BDB91F9F2C901FECA8AFA70B87676AED4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hin\\a\\wind.dat.meta",
+    "sha256": "5019CFF77F8C0B26DA83E5498B8F6BFEC6BDAB44197BDD318CE3B8D7F2EAAC6F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\a\\atk.dat",
+    "sha256": "F791332275B6A69021CD1F4004F1FE60FAA46799D025B925E26223DDB7880095"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\hir\\a\\atk.dat.meta",
+    "sha256": "6BCB4458243A09079B95BA905D7A1ED0C85EF9403B400154CBB21107EA674ADB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\a\\cro.dat",
+    "sha256": "9A9BEF3C84B03EB41AE5CE7CA34139F392D33BE15074397EBCA648B0200C9E37"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\a\\cro.dat.meta",
+    "sha256": "BC838B2DD699BAFD587FAB78E1A06A2595EF8BAE24312DF449BA5EEB1A563C84"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\a\\cro2.dat",
+    "sha256": "FE0FF56BF5E42A200B4D86D93032D9E90750C82328065C45A16314C5BAD8B6A5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ita\\a\\cro2.dat.meta",
+    "sha256": "4AA5030A4504CBA5C973CCADE46D299FD820B506AE30292DC568D69A97AE0C4E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\mag.dat",
+    "sha256": "EE7958AB61843861CB7BCE91E803A5D93F4F8A7DE69657204EE039D32A998DE7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\mag.dat.meta",
+    "sha256": "38937A7309643980DD3DE95D435FAF487208730D467EE34EC5B0319E1DB32A09"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\ras.dat",
+    "sha256": "9DB962B520DFD5C80E384CDB97D7DD6BDB5C0B8D763B1C09BC7B32A5ED254DBE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\ras.dat.meta",
+    "sha256": "D9C53607524F91AABFE0320C6F6A26CE0AA8E425B0D246611931D805F0B8ECE5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\toad.dat",
+    "sha256": "3B3182A384648AC50EE041ACA37FDB921E95F87EDC6F98547BE2E4420D79F80A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jira\\a\\toad.dat.meta",
+    "sha256": "F1E9EE440B2EF2123CA7494711C4217211CF22D4568AD2ED702D1CAE127BAA57"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\a\\cav.dat",
+    "sha256": "BA395F2B698AC18631A6094F00CCEB5CA7DA03E99E46DDE70026B2CD04EE7692"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\a\\cav.dat.meta",
+    "sha256": "4F8A3376552574D606A4BD1739AAE7F631EA6BF65182E7DFD59524408165E503"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\a\\gol.dat",
+    "sha256": "0BBE59501073F7B774908141C38DBB9AEAFA036E2623422A3E6312140CA28BDE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jiro\\a\\gol.dat.meta",
+    "sha256": "D1D11066D29F90966DBFA276E9817422DE7CE8450BE52F97A4C98EA8FD4FEF3B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\a\\pao.dat",
+    "sha256": "B1BEEACB3F5CFD5D8397A0FE6E18AFEC2E20F8586241C0648652E60CAF74EE4B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\jug\\a\\pao.dat.meta",
+    "sha256": "5993D65AC86E8175682CF709FD614CB38D15CC24A76D1D87AD9CA97A7E705B4A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\a\\atk.dat",
+    "sha256": "9E2A24772D93602E85689538F858F39299BE6DCEC62097B57DDA828842114833"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\a\\atk.dat.meta",
+    "sha256": "ADA22F448ACE19373A7A56BC633051C83B0C2944DA8C59BD1DAFBFA49E65AD84"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\a\\cha.dat",
+    "sha256": "06262B72B652E0FB4F022F4B9C2DD895E3EC96B10CFD480CA49A8B2FAE396675"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kab\\a\\cha.dat.meta",
+    "sha256": "CF3EFE8EDEB3E9AE49FBC3D5296E2EFFA8D23C5AD2CB2534846515BEC2528F29"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\a\\rai.dat",
+    "sha256": "7226B2FE9B51F2F87AF003774B871B31769C8CDF9C6B852C63703804098688F3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaka\\a\\rai.dat.meta",
+    "sha256": "42FCB6CD53C36F4037F0D6E49A289AFE62CAD951F3757747750A2F9065AD94D6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\a\\nck.dat",
+    "sha256": "8E618B4374E77FEE664F0F5C39721E0F71652D4FD7238DB8FFDD4F9803F52B2A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kaku\\a\\nck.dat.meta",
+    "sha256": "D9A2F7575B41B16420FB4AFF656618F98F745A864A0320212DD9C14D4F34BE4B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\kar.dat",
+    "sha256": "83F26DCFAEF23398765EA95DE393E1474701183D733FEAF0AAFAC6959C25E41B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\kar.dat.meta",
+    "sha256": "8D4A8A81DB5A4DEBDCA5AF42605DD6B703201EB6CA48EFA6D0E51469A542401E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\kar2.dat",
+    "sha256": "A01CA9553F04B74C807ECFD09296A86C8C36B0115A595574DC9B893D5609B13A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\kar2.dat.meta",
+    "sha256": "8E0A20AB2C0E7DC07FDC95D65EA0F91DD7803BD4817E77BC73C48CFAF8FEF44D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\san.dat",
+    "sha256": "43C4E6F424E9D089F9DCC84BA31905DE5CE3E7EFFE08DD51D551743C5C04E176"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kan\\a\\san.dat.meta",
+    "sha256": "CD1E053A0C4F356045A17CB485F4A7820B75B8C01AE7E4FAD8F449EF8E0DCFBD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\cha.dat",
+    "sha256": "9EA4FE77CC2E295D91B5680372B1B0B705D19287B8EC6A45C52C5319F7A2363F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\cha.dat.meta",
+    "sha256": "972E43A65965CD0BAF57B4040D736D82DD8A7E4D703DE733AE9D894505D1E2B2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\jug.dat",
+    "sha256": "E7BC6D634A75C0E2AE183F486AF99C8B16FDFD1E30F6A718346DA48002E3A377"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\jug.dat.meta",
+    "sha256": "84324A961EDDB2A7937CFC3BE8A45B0B47F201717CA828A59AF753C662ABB9C1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\sas.dat",
+    "sha256": "3FE056D939EAF13758E37390D2C8B11336390D1C527E51646601B11FF127BD02"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\sas.dat.meta",
+    "sha256": "0B67CB22C9CFEC0BC862D5D141209C27CB156ACFF12AF743C50EDDD984BAD9C1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\sui.dat",
+    "sha256": "D2817D0967D9C41C87407D5101072468442E7AB5AC0FCE2955428AEDD14219ED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kar\\a\\sui.dat.meta",
+    "sha256": "95CBD6195FA5C0B5280059D6EC017EAD3375EF851DB29B3D6239AA6A4C83E1B5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kib\\a\\aka.dat",
+    "sha256": "16A07B0E84B1CDB7C527FC276164A780B6C298F8EB97FFDD03CE0ADED16E1E31"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kib\\a\\aka.dat.meta",
+    "sha256": "EFEDDB3231C32AB4C7373D16521DE8C802A9EF67E3FEE740279020400AF0F95C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\atk.dat",
+    "sha256": "38C83A1E8CE5463DC49642DB978D57E13992A37719218515E6C02A8EB176E5C1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\atk.dat.meta",
+    "sha256": "CF5C2C317B1645C8E6CEFC9B0F748F9232BDB901553F8DB49A1CE126885E0A36"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\kyo.dat",
+    "sha256": "09115AD45ED83868E47F28806EAF893349EF1A5D350D2D0E61A9116FDCFCBFD4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\kyo.dat.meta",
+    "sha256": "E2CD2A93DACFA31B06273D78AF69371CAD0691B79E4C2CEE82A970C62F256C41"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\spi.dat",
+    "sha256": "5CB66469F3462A15C8D1CBF4512727C55A5885A9F4356EC4BCE6C8B8A10F7276"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kid\\a\\spi.dat.meta",
+    "sha256": "7D1EF51461C61225ED8C7EEB7B41CA84865A2CA00CF06DD3BC93D2E881C205C0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\a\\bon.dat",
+    "sha256": "9FFDFC1192AEA975D7255848A5F685A6A020584A26E176C94595EEA07CDD4E7E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kim\\a\\bon.dat.meta",
+    "sha256": "F579B20E03A724C27C98C5CB197F76C685D58CED29259E1ADD5712BAECB5B2A4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\a\\wat.dat",
+    "sha256": "83567008B156672FC1788CCDE48D0357C1C84ED134CD144CDB84242E9ABCC823"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kis\\a\\wat.dat.meta",
+    "sha256": "0A081FEFAF10AAC5EB3329DC97A93EEED7724A6D91D471D6B92EAF95B100FDD2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\a\\pap.dat",
+    "sha256": "F1EEE85B50DBB643AAAB9BA01FB19CA6CD530830E34A646CACB46027C43D9953"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\kon\\a\\pap.dat.meta",
+    "sha256": "8EADDF8C203CB395ABF2C2BC2DE7A7BB9D6183DA6D7BA75330FF8CD3A6841E96"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\lee\\a\\lee.dat",
+    "sha256": "4653F79315FB88EE09107C9108F5BB681C76DF1399023771D24109E146B0AA6D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\lee\\a\\lee.dat.meta",
+    "sha256": "AEE6E66F32C10BE4A50664E81BBF5E22FBAC8D6560690372373334874351849F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fla.dat",
+    "sha256": "7D30FD27B3179EDAA4FA6D3CC9CA1910575594EABFF554AF327FDB93FB1435BA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fla.dat.meta",
+    "sha256": "A59B7E229B50E664BFC74F4D4615E33ABE51C8F2CB1ADB330C9EAACDADD1D4D2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fly.dat",
+    "sha256": "F28D177419D5DC4591BE5BFDF54DF28AE9399BEB977C539F7515D5284D18048E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fly.dat.meta",
+    "sha256": "05088E90A68DC23E5FF4239E4B50403B0A2CF404B38AFD8AC70E01F17DBC8533"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fly2.dat",
+    "sha256": "6981FA937DE3FFDBA4A41AFF183F0FCC856A84276B4349BB90A26A97CF739E4F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\fly2.dat.meta",
+    "sha256": "34FAB00F8E818A864A12D3F1490CD505E97FB577AD68B83DD2F22FFE114CB03F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\kcm.dat",
+    "sha256": "ACBFCDE173C0B3C08DF0DFF75163EF6D5B380836F6F62F75A243BD6C2AD3BC37"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\min\\a\\kcm.dat.meta",
+    "sha256": "E837E55653A6D7B9A129D135122958B4B0C4662E2F38E361F4D1B89703E75B79"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\a\\shur.dat",
+    "sha256": "FD1E49E10E961A5E916210B5678431947BF4E957E83AB5AC7CD68D423B097688"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\miz\\a\\shur.dat.meta",
+    "sha256": "B5B35BD48DE4B45BC6A639501AB956C1447B43E72C22879A1A9EB76772698209"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\4tk.dat",
+    "sha256": "C20B265DBEB45F6474EFA38C40F4D2EAFB8A2D4C1B080C34245BCF5255FFC83C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\4tk.dat.meta",
+    "sha256": "AAA89F4C713FC1588A41D6ACDFF6459FD79466C77403941F53F5D6C842398B25"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\atk.dat",
+    "sha256": "881060DBA197C8FD39B1F089BE0FE89D30CA3D0AABDA37402B5DFAD90918CF99"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\atk.dat.meta",
+    "sha256": "FF6B4877E168A4CD784D6524C0D1C26E457CE8B6E5E05D84A5483A3BFAC6674A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\ras.dat",
+    "sha256": "FDF3FBBA9B7B5565A4E2FD596B6B6F6DE6EB3EBB142A7CD92D513037B1918E6C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\ras.dat.meta",
+    "sha256": "06B3EC64208F28F060D6ACB1F14E281D52863FB6EC21A58147FF246255E166AE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\are.dat",
+    "sha256": "12872C47972B4FB039F9BAB7E27E8382CCF51A9066686DC9FAC9CA46E2356D64"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\are.dat.meta",
+    "sha256": "693121E103794AF6D7462CD6549D5B38F88AC11B0FF44794FF5E2BF6B7EBB9BE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\bya.dat",
+    "sha256": "CCE33337A07D429942CA740E52FFE9BBEFCDB9E5587777D9489311067170D0C9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\bya.dat.meta",
+    "sha256": "68F2E92F8AF957050ED07183E5FAF30E132F21027DBE28395C50444158836A42"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\bya2.dat",
+    "sha256": "F091934083FAFB46771B83646FEFA9D78839D53D6E2A4AC210B3171BE07DD088"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nej\\a\\bya2.dat.meta",
+    "sha256": "42187C05DCAA98DB3F90A79E2CEF4274C05CA3790A0E6163A1BAC2203CCEED47"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\a\\atk.dat",
+    "sha256": "CAC7074F58C9037F4099484C44F6E47212B182011F25EE494BB1C3BF04967685"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\a\\atk.dat.meta",
+    "sha256": "0531996282DC303C67F94B60A223F7BE6A8221C13A0B6846149909094BF772B5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\a\\edo2.dat",
+    "sha256": "D1634F6FE5757251F84371E491BE66316389E888AB5E205520CFF5CC483B279F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\oro\\a\\edo2.dat.meta",
+    "sha256": "9AE70B0B6290D895AD6C4154DFE0336E5FBA4082E6BE0EB6B5D8D429A9706C7C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\cha.dat",
+    "sha256": "7A3889C9453ADA75CF23DDB19BE60C156F841A31126C479FE7CE4598AF52FDBF"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\cha.dat.meta",
+    "sha256": "607571C740C48026DD3B134ECF7411E604BC0EE7CA216A3E9705F3847A085AC0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\ox.dat",
+    "sha256": "3AEBD539DF7C48B18EBFADF586A60B16ACB09F6B04932CB887F3EF9E0AAD8990"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\ox.dat.meta",
+    "sha256": "F1FFC611B77EECDA730C061FFA7C13CB99DD9D675BB6FB1F48C2C3E6D6FB5C74"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\rhi.dat",
+    "sha256": "CCFCAA6436C0B9B06701B4742F06DE89D043860C5A10E9EA75E55DC28DF0B1C6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\rhi.dat.meta",
+    "sha256": "7A8B568C05FB58EB79D710E65295FAFA2D83DB039A30C41AD816952F1E7BB568"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\squ.dat",
+    "sha256": "3C3CB32BB510FE7FB03A0124471177F714D0ABFEA028ADDFDFD57AB0C31DD2F1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\squ.dat.meta",
+    "sha256": "7DFD30CC903F8490B46404B9F5CC39E3F00FF5D1E1A9AA9B05A458658BB9FA9E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\sum.dat",
+    "sha256": "6B62AECBBE7592802A8ED7F65B61650C8FD966201956BE894B8E010ECFBED5F2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\pai\\a\\sum.dat.meta",
+    "sha256": "93D17E7E3B09E948A716D2157E5830F3E838B40AFFEB48F55C11B725E394C51B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\a\\rai.dat",
+    "sha256": "6FA234E12C83C9C29177B6C86A095D5D9A23FFD0484C1FACAD173CCFC6CAF736"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\rai\\a\\rai.dat.meta",
+    "sha256": "2F9105B7FA0E716D555D0CCF18BA230367D3407DD8298DAF559889D9E014C28D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\a\\ink.dat",
+    "sha256": "BFD40B2B4BB3FC3CD173113535321FFC128F8C642AD584D498FB56D0EC5713D9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\a\\ink.dat.meta",
+    "sha256": "287FD0FF950CD9ABB2D80199308D1822591E8FC9AB8A72637BDD6FF7160E89F4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\a\\atk.dat",
+    "sha256": "3219844DDFA490F485BCB1A732A0CFC73D358386DCBEE611BCC2E46B503328D8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sako\\a\\atk.dat.meta",
+    "sha256": "60BA09508024395DC75CBBC75DBDFCB2D0A5AA7E0D3FF1AE44510C5766F9531D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\a\\atk.dat",
+    "sha256": "5DD9B3ED4CB43C633B58A706741EA3CEBA049C783AA59B068A9E04C89B8B8C92"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saku\\a\\atk.dat.meta",
+    "sha256": "17752180D8E731AA012FC7B301B88303C6809F7015820D8F6DF0F36B8035BA3F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\iro.dat",
+    "sha256": "7443496B1EF458CA66B3FC1367B1F998451D860228BF7D76437CB49585D0EF36"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\iro.dat.meta",
+    "sha256": "34CDB721B55FE61690CF7CC10DE8A76239C0208D8A76F51F4181ECAA9F2CBEA2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\pup.dat",
+    "sha256": "1B0808604FCD6940C9A6E2530EA0410685EFCB2AE4BE56A17EF4A48A0C277769"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\pup.dat.meta",
+    "sha256": "C8C8487D3A6B786D25E85B44BCE806FDB8FD37B1A2EFBE440A31C58AED10DB5F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\pup2.dat",
+    "sha256": "F2DC4F3277DEA7B36F31DD7FE65EACDF744E88DD287D73E707A4946D3273BB7F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\saso\\a\\pup2.dat.meta",
+    "sha256": "C00E9517F2677E7DC912CC1866084687EC8CD470606CC313C8E2261D89E30266"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\chi.dat",
+    "sha256": "6C0F2A6B39904230152D83D1ECF8C97076C5C5BBF99AB157240E4574E735A47F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\chi.dat.meta",
+    "sha256": "EB9BAFF00ED86422F9457ACD07DAF6E7277B29FB9DD8CA51D14DB99F3D27D586"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\gen.dat",
+    "sha256": "D9EEBBB5411E31BB513CDE7D2A22BD51A38812F01A9485F8CD24F1A0A57AA7BA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\gen.dat.meta",
+    "sha256": "705B012984013D0F95751C30C6D900E1746450A7567A0BFE42D433D8E43B034A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\mss.dat",
+    "sha256": "BB7A64A9A7E9D046474539033F12945BE23035EBD0FB5AC4BC96414966DEA5BE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sasu\\a\\mss.dat.meta",
+    "sha256": "82DBA36BB040112679BBCC3EE1722A73421E9F5D15DFC07729E6D60B51123563"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shik\\a\\sha.dat",
+    "sha256": "7287C23ECE6FDA55DB9297051AC154C9AC502A5FED9D5892977DA8EC4EA192FD"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shik\\a\\sha.dat.meta",
+    "sha256": "C842D438DD53192C1AE6CF5B092F175872C85ED52F9BC071EC30BE022AE2BB87"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shino\\a\\bug.dat",
+    "sha256": "FDCF6AFB65459B3E0BDBE6068232158C1408FA6C57C152D14666CCF71C6249BE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shino\\a\\bug.dat.meta",
+    "sha256": "95840214A01B63598DFDA004348F300DB004A71FCE6339BD47FCCBAEFF7639C5"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shis\\a\\gen.dat",
+    "sha256": "C68F4195F0F1B28F634CF5D4AAFF9DCE450EC4DF12E0BE36F183CB8F09BE620E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\shis\\a\\gen.dat.meta",
+    "sha256": "D4A361E2CE6830253526EBFD1E4909ECB40DCCE2413C6FFD0C05DE5226656761"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sui\\a\\atk.dat",
+    "sha256": "F227D4B3448AC418F809784E98BC3FE95D36094B45EE44B69D5AC03E9FAF2959"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sui\\a\\atk.dat.meta",
+    "sha256": "73990E388148205C7432FCCD6DF79FA118F65E06EDCC4B22BC404D21A3DA3C13"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\a\\mon.dat",
+    "sha256": "BAFE595B64346D89BCE7C111084F7D562272ECA3C6E2076EEFB9F4563D851455"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tay\\a\\mon.dat.meta",
+    "sha256": "DCCCAEE9F7A8515899BC61E5564D1891D18722282C033AA4BD05E03B8E0A7408"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tem\\a\\tem.dat",
+    "sha256": "DB9763F907FAE24D1BDB3712E31D47280282D8945C73EAFEE3162C62D3E67A27"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tem\\a\\tem.dat.meta",
+    "sha256": "13EE12E58A9490D9F05AFBE597EC531A329026973EF8C6DAFD856A9B839FDB3A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\a\\ten.dat",
+    "sha256": "AA97FAD374F79C239AA2166064CABAC432EF15A8C205BDF0E0BA689F73428AF0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\ten\\a\\ten.dat.meta",
+    "sha256": "E627400565D26AFE6F05B6EF6C95B54545B19AFB8C2DF603C32921A3B504F862"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\a\\fox.dat",
+    "sha256": "E995F7C97148AF95424AC76F74C4FFA1F492FC231EF4E0703F56313FFF4118EB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\a\\fox.dat.meta",
+    "sha256": "412C1DF9A04B96F141E39F0BCD3BC241F632998579D81ACA763054D00207044C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\a\\kat.dat",
+    "sha256": "16B9ABC42AFB118F4690A61A5396646D40BD4E19304EE9BCE1033145E6440BEC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobi\\a\\kat.dat.meta",
+    "sha256": "ED7D11D2C72FB48A1FC9E794DBD864ED74F28BFB987BC27C82166A4F45632EF7"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\a\\atk.dat",
+    "sha256": "A4E81D78067668BEFBABA8AE8816021C28091C9A655E6BEE598D22B5209DCD10"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tobir\\a\\atk.dat.meta",
+    "sha256": "4EED7B89AE046B6877C58B35CB40F2A32D820B044E44B2320716A0854C3B11E3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tsu\\a\\atk.dat",
+    "sha256": "7E23DAB0C30CD88ACCE92D47A488B558D4E702BFE46C4A520D594416DDB32730"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\tsu\\a\\atk.dat.meta",
+    "sha256": "A18803EAC41B6B83603491B243678479FD956310D56368FE47F708C18F042FBB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\a\\dra.dat",
+    "sha256": "6685CA5E1BDFED82AD104C81662E9DCBBB5AA26737FDF491D12D4C30C62FEA33"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\a\\dra.dat.meta",
+    "sha256": "A9B66AA4A479613CA1411DCD8DAE7CA5783DE734CD952C5553E2F21818748053"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\a\\mir.dat",
+    "sha256": "67E04006964DCD02961700ACD371FFF88D0C44035F3AD899E242867577D0C20F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yag\\a\\mir.dat.meta",
+    "sha256": "3BC693D32CC64D2C9C685E197E15E20B2315485C44DD16879B241F857F6A6787"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\a\\tre.dat",
+    "sha256": "2E20642634E2505596975511945D680A3E8A2DE2409A539F73601D0539130432"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\yam\\a\\tre.dat.meta",
+    "sha256": "134C0BD9BF66168D63E2BB908C8669AAF4B36E9FEC39AC690331BEB3422BCA92"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\a\\dra.dat",
+    "sha256": "3DE9B2BB3B0B2A787078EFA88D26276D21C54FB6F3A4EBCD127CB808A29966AE"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\a\\dra.dat.meta",
+    "sha256": "83DE18B4C848172FB86A5D3431C17A896B35006715D9F5EF7158660DE52E1C6D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\a\\zab.dat",
+    "sha256": "0D27419E913A2DF7B7D4C957C884F01E98EC9EB0C1858E76086ECFC2F024E1A2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\zab\\a\\zab.dat.meta",
+    "sha256": "1A35578AC79BF110FC69A454218B2AED400FC20F07C8C414DCD0A1B04FF3B5CA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genma.dat",
+    "sha256": "AB8F579FB2729750F76D43867164D635F7CF9542EE45B762B70B3D4AA8F7E5E3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genma.dat.meta",
+    "sha256": "72465F30CFDC8C19A64F2BEB92C0B7214A296BE3D8853308675553B66AFF0CA9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genmaclone.dat",
+    "sha256": "62ADBC5F619D8DBA3C28AB733F7FE403AE4EB35F257E3070E11B59C4EC73A950"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genmaclone.dat.meta",
+    "sha256": "00B927C627EAC689D4B4B505429BC4CBF822626240B43ADE867100CE5BCB2365"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\bigdragon.dat",
+    "sha256": "DF5BCD1E9B5DA700CFDF6CC7AB1265CA6CFE129A85CDAF94D33E21C09D8D8A80"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\bigdragon.dat.meta",
+    "sha256": "0035D2DB741E83E4DC609BCE987EE0DE1E29BD96EDDA67B7EBB833B4ECCD8332"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\katon.dat",
+    "sha256": "58FC555DBE5F6B56BC62DC670FBB59E9371F0EAEFC6FCCF98839E3BC0C0E1E8E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\katon.dat.meta",
+    "sha256": "BF56C9F63A9EAF1A76B6E9F09A9C89FDD07B388D3FCA774C620F20FD06AE8B7C"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+    "sha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat.meta",
+    "sha256": "3210422198F3175B87D9F981D60A4A95C2FD3118FFF9801EAD4EA6885C80C792"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\smalldragon.dat",
+    "sha256": "B2C82488EC4B15ACC956929A21E7177DEA4294D253958B5B98CE27767454D2FA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\smalldragon.dat.meta",
+    "sha256": "FA4E05FFBE0C8E8EDC8CB76F5E2489E65B501E38DCC5DFD7A2574D35F2AA8263"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\wind.dat",
+    "sha256": "99C04D29960B4873BC5BD4001CDDC855810FD76BF1F530ED220F7906AA05E5ED"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\wind.dat.meta",
+    "sha256": "E29A867B72F7C6EE9CE0B202EEA63BA009D5DFEFD8C136E34F8B90048499602E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\frame\\INKHUD.dat",
+    "sha256": "54D0B199F8D305C2B97718620A9C8E639FC7D5DEB09FDE62194E2D1D18DFF9D0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\frame\\INKHUD.dat.meta",
+    "sha256": "F3F459B10676D9EB9470BBB5D8700CAA74E814A2DA94237C46B80AC8B42E5D62"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug.dat",
+    "sha256": "BE15C3D7A4E1A4B607F3B77ECAEC83C3143C9F1B9D98E83C38F0A0F8D14372D1"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug.dat.meta",
+    "sha256": "28BF73D570EA52D5A1BE80ED21B857057C91F2EE0DCBD6D8B8EE4B0CCE959423"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug2.dat",
+    "sha256": "E8219D74A3CBACBA75936428AEE2E97E2D793056B7666AAA8F93893CA371EA3B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug2.dat.meta",
+    "sha256": "698F8C89B62FEE0F7F6ED267CD38D32E389506D94D9C0F04D019E7D826F8D859"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug3.dat",
+    "sha256": "A49631102C98225D21C4E9B4392F5E22645E7292B20EB23C673E71E583124E43"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\hug\\hug3.dat.meta",
+    "sha256": "72278CC11292DAD0F29BC8A6EBFF793381FC6D278BD30FB3B3986AEFB7562F33"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\hun.dat",
+    "sha256": "95B3ECF64DA8F9EA702D7ACD48CBBABCD73CF1B7CF6B1B8E899C4A96DF9CD903"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\hun.dat.meta",
+    "sha256": "6D3FBBDC482317AD49E693EAEE8A0D9E61D88B7E3F2287838D8C33DE63CBA40A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\nin.dat",
+    "sha256": "4381CD8E19B82ACB1011BACC76691F2E9637472FD255A813DC2C9A95DF52E57B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\nin.dat.meta",
+    "sha256": "33AE8CEAE45E2F48F5F688F871414EF93AD4A64FDC85CA6583D14C5B7FB479C9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\nin2.dat",
+    "sha256": "60AFBC7E5498FCD17B2ADECEF7C5D7DD2A33E6340B82D149385B2AABD930085B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\nin\\nin2.dat.meta",
+    "sha256": "18C3FF2C8C7DA6A132708DA50484EB1EEFABA61238A19524E891896D2DCA0D2D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\san\\san.dat",
+    "sha256": "83BB358DD080AF36D5877D46DE58DB510110E0697EF2FCB8A6812E68BDF1868F"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\san\\san.dat.meta",
+    "sha256": "8FC9302AE2C5101E60457025F64E9BDE495D1CE9540C5909A2DE1251CD9D97FC"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\teu\\teu.dat",
+    "sha256": "4A87F06F38B70DC0CA5B444B43BDB1C1B07AF4BCAD3938ABB36F231961851A65"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\teu\\teu.dat.meta",
+    "sha256": "D7E34CF35B35C574AB482C6C3D4072854795F665EAE88AE20D54DFA9DB93F865"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\ton\\ton.dat",
+    "sha256": "8F74873703D3F0599A519ADDED93C487DC7E736013A53FC116653FD29FDC614B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\m\\ton\\ton.dat.meta",
+    "sha256": "F53BB1BD631697B66B7F6C27B4EDC32CCCFFFA82DBD3360DFBAE3F7C180325F0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\0.dat",
+    "sha256": "F94C3727A5ADB7BB4A9A127FC8C42D647114984CE2B3971DC3E6AEA0854D846B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\0.dat.meta",
+    "sha256": "9D403496757636601BC405D5096699FE8AA3C20A1FCAE04105D182C0D24B5AC3"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\iru.dat",
+    "sha256": "7F03687F974B57353E83EF98C8CE3AEBBB9E233EBD67E565FA0E323EAA61837A"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\iru.dat.meta",
+    "sha256": "D518981E71B2212238A3677BC2085DA5C6CA70425429E7C68F5D2EC1D32C2468"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\iruc.dat",
+    "sha256": "71F9991AC44C9D58FE0124E2D34A2DF374CAF60BF28E1801B970B63EB12D06E8"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\iruc.dat.meta",
+    "sha256": "4C46BD628C900B36083E9C456EB4589834C850479A74824679F3048AD73A8FD6"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\ram.dat",
+    "sha256": "2B5E024CCED9918949C03C6E4D26C788F25BEC79CF3823C1028F26A6A1AAE7D0"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\0\\ram.dat.meta",
+    "sha256": "10FCCC394924FCFB3F2A2671C649A3375DB0B83979297771DCCC55DD993D3BF9"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\1\\1.dat",
+    "sha256": "FB2517651A071550E23B53D667321F4273175DC56CC9CC8E909ECA3540C8FF6D"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\1\\1.dat.meta",
+    "sha256": "62278F2B037A1F32F2E17FB6E6FDA22159D96018CB882CDD71C4CAC3AADF6677"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\1\\ncs.dat",
+    "sha256": "0E06E96D33ADBD5A7EB2C6F819CA969B836E0B2EA583C8B9262B022FCC843A99"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\1\\ncs.dat.meta",
+    "sha256": "1A28EDFDEE84BAC9CE932A2E2F51618F22ADC9AEF987AFCBBA7CF7A97687B3BB"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\2\\2.dat",
+    "sha256": "1105E6BBE3A1DA618E08AFE5F2E5AF13CA78DDC0D204EAF4502A7CBFFD8BF1FA"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\2\\2.dat.meta",
+    "sha256": "81498089EA1259F6C2B3226EA3AF56818EA4B5CEAA6168D9BFC8B47232527037"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\2\\ncs2.dat",
+    "sha256": "EABE4D2B46A86DA3DD4B4DC6E699CF4B28FE1B6B60C55C6CF4911DF4FFB2B67E"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\2\\ncs2.dat.meta",
+    "sha256": "CF747D0991236BF06310155D2C06D5A1D2C76179D6810FFE011B65B787A0D779"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\3\\3.dat",
+    "sha256": "236A81A0E426C4C05F791F0CA56E899A7C28AB87862A4CC19FFDFBFD8421CEA4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\3\\3.dat.meta",
+    "sha256": "F11E66B556D561887B10B056EC3D5E15D2BACC7224EA05C81C872C4213E3328B"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\4\\4.dat",
+    "sha256": "0E320303ED4E655CA07096D382443D33BA6A442AFF7547E01531F90D3DF67390"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\4\\4.dat.meta",
+    "sha256": "A6F1DF9348AED74558B009F6A440330958544AABBDB64C05CFCC308D0D9FC936"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\5\\5.dat",
+    "sha256": "5144E0E5200678427A86C068FC3E97DFAA3748CA5F454EEC6087AD77CC65D672"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\5\\5.dat.meta",
+    "sha256": "3F6F116EC9FEB9DD82ACFD4B25D778560948C50A5016FFAC3FF22FE1FF234AB4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\5\\5p.dat",
+    "sha256": "746C6AC6BE7CED714F740E13C31ED7C6A64B7842D2CAAF67C184EC616E79A8E4"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\5\\5p.dat.meta",
+    "sha256": "03D759A99C569102606B3A2244021020B03B50EAB97C056163F8E648B838C4D2"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\S\\S.dat",
+    "sha256": "B7B4031774563EE7AF734DCB8F6D1695A9A58992D3314EE475C89344B6872245"
+  },
+  {
+    "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\s\\S\\S.dat.meta",
+    "sha256": "6F8797DFA33C90ADF3FAA47318A8B0D7A881E96E286179A2AC430D9EB8045936"
+  }
+]

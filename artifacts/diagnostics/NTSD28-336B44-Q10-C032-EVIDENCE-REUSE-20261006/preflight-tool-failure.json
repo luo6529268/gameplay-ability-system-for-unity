@@ -1,0 +1,12 @@
+{
+  "priorExit": 1,
+  "error": "UnicodeDecodeError gbk decoding document-plan.json via default Path.read_text",
+  "phase": "before document mutation and before REPORT creation",
+  "documentContentChecks": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "correction": "explicit UTF-8 JSON reads; no file retry before verifying exact prior bytes"
+}

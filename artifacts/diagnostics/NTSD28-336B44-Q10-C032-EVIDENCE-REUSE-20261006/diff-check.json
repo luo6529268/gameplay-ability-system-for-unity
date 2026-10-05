@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+    "docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: in the working copy of 'Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md', LF will be replaced by CRLF the next time Git touches it\n"
+}

@@ -1,0 +1,106 @@
+{
+  "utc": "2026-10-05T18:03:54.957016+00:00",
+  "goal": "NTSD28-UNITY-BATTLE-REALIGNMENT-001",
+  "userClosureInstruction": "那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了",
+  "approvedCompletionScope": "Current336B44 total-table necessary work and six scoped representative exits; preserve approved exceptions, defer uncovered conditions to separately defined future goals",
+  "checks": {
+    "input_natural_first_window": true,
+    "combat_40_tick_five_slot": true,
+    "combat_source_original_hash": true,
+    "combat_unity_original_hash": true,
+    "view_tick25_original_capture": true,
+    "voice_078_playing": true,
+    "ordered_shutdown_two_live_children": true,
+    "reentry_two_saved_scene_cycles": true,
+    "formal_exe_current_336b44": true
+  },
+  "passed": true,
+  "evidence": {
+    "NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001/physical-l-after-fix-20261004.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001\\physical-l-after-fix-20261004.json",
+      "bytes": 25862,
+      "sha256": "16B33A5BCBA0A160B303674B3F8E870442F58E7A627574D43614FF7EBFA09D22"
+    },
+    "NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001/first253-paired.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-DOUBLE-BUTTON-REMAP-CORRECTION-001\\first253-paired.json",
+      "bytes": 805,
+      "sha256": "C42DB6073421F8DBBD42ECF8990CFE51EFFD2488B3BC846CE850D62FF76D1224"
+    },
+    "NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/ank610-jira500-firz700-yminus60-world40-01.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001\\ank610-jira500-firz700-yminus60-world40-01.json",
+      "bytes": 157624,
+      "sha256": "6E063785FFA4AD40219172D7101CDA3A363772F756AC0DD29384AABBFBE477A6"
+    },
+    "NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001/world40-paired.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-AUX-WORLD40-SCENE-001\\world40-paired.json",
+      "bytes": 1160,
+      "sha256": "380A6F1D1CCF0FBF03A0B2DB1EB6F40229297D937883A6CE5D402BBF6876743B"
+    },
+    "NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/c040-view-tick25-20261003-02.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001\\c040-view-tick25-20261003-02.json",
+      "bytes": 133393,
+      "sha256": "F6166B850DE3676E8328A3C5B3DE398C3B9795272E21BDC179C3ED61B3DD4746"
+    },
+    "NTSD28-336B44-Q07-C040-NATURAL-SCENE-001/kakuzu-bee-guy-natural-scene-20261003-06.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C040-NATURAL-SCENE-001\\kakuzu-bee-guy-natural-scene-20261003-06.json",
+      "bytes": 132917,
+      "sha256": "A97C8C001BDB98D7A8D30BD1AA6F2574AB3C720E8F1235CAA276E4F57B6A7BB2"
+    },
+    "artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/c040-view-tick25-20261003-02/game-view-tick25.png": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001\\c040-view-tick25-20261003-02\\game-view-tick25.png",
+      "bytes": 2238040,
+      "sha256": "23BEA33FFA4D07928CD3E7CD72A91EBC55835E91CE0A79FFFBDCD2C7FA4A8855"
+    },
+    "NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/naruto-078-scene-01.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001\\naruto-078-scene-01.json",
+      "bytes": 34174,
+      "sha256": "9F68928016F1314F78F5FC44D68DEE0350F9D43699F29B130AFD98E798EDEF24"
+    },
+    "NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001/comparison.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q10-ORASENGAN-078-NATURAL-VOICE-001\\comparison.json",
+      "bytes": 1394,
+      "sha256": "F0A11BE622EBD22EB9E1DF66660E7FB8103C533CE73279EC8AA3FACC0F4B7061"
+    },
+    "NTSD28-336B44-Q07-C056-FUSION-SCENE-PLAY-001/fusion-hold-c0-shutdown-20261004-01/snapshot-0007.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C056-FUSION-SCENE-PLAY-001\\fusion-hold-c0-shutdown-20261004-01\\snapshot-0007.json",
+      "bytes": 3466,
+      "sha256": "A77D1EE1A276130B6C71B1523AAC310D6D04C68875B80E48B6DA1E2E23C848B2"
+    },
+    "NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/cycle-20261004T131738357-cfcffe4c2c51470a97944aa66d7d4930-exit.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001\\cycle-20261004T131738357-cfcffe4c2c51470a97944aa66d7d4930-exit.json",
+      "bytes": 638,
+      "sha256": "5FAE77022B7C80F3F55D131C42A940309502D6BA463B23E01FCE9BE0A0078A4A"
+    },
+    "NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/cycle-20261004T131738357-cfcffe4c2c51470a97944aa66d7d4930-live.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001\\cycle-20261004T131738357-cfcffe4c2c51470a97944aa66d7d4930-live.json",
+      "bytes": 641,
+      "sha256": "CEFC255774230A30428F8BB0BF9A874E0A08717FE9C909EC9D1EC30A454CCC61"
+    },
+    "NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/cycle-20261004T132047138-00b946d5e2e94ff9b38185aef4bcbd65-exit.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001\\cycle-20261004T132047138-00b946d5e2e94ff9b38185aef4bcbd65-exit.json",
+      "bytes": 638,
+      "sha256": "C5F7E6305E34D5F520DF5491A93665770AE653347D10FCA7C554DAE724623C54"
+    },
+    "NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001/cycle-20261004T132047138-00b946d5e2e94ff9b38185aef4bcbd65-live.json": {
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q12-REENTRY-LIFECYCLE-WITNESS-001\\cycle-20261004T132047138-00b946d5e2e94ff9b38185aef4bcbd65-live.json",
+      "bytes": 641,
+      "sha256": "378736DEEEAB4FCE92597C2108F1A8FA5F76C68AD063D4FAD756A2ADA84474D9"
+    }
+  },
+  "formalExe": {
+    "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+    "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+  },
+  "limits": [
+    "User accepted current total-table representative exit scope on 2026-10-06; this is not a claim of every character/action/mode/cue coverage",
+    "Reports retain their own run version and captured fields; not all six exits rerun on one current final assembly",
+    "Synthetic physical keyboard events are not human hardware wall-clock timing",
+    "C053 auxiliary initial state controlled, not natural third-body skill; no full-World/RNG-table-byte proof",
+    "C040 Unity Game View is real at tick25, no formal EXE same-frame GPU pixel equality claim",
+    "AudioSource voice proof is not hardware full-mix equivalence",
+    "Parent RUNTIME_PENDING and conditional Records retain historical evidence statuses, future work requires a separately specified user goal"
+  ],
+  "newPlayRuns": 0,
+  "newTests": 0,
+  "productionEdits": 0
+}

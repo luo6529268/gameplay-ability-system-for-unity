@@ -1,0 +1,12 @@
+{
+  "operation": "NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE",
+  "ended": "2026-10-05T19:02:18.855606+00:00",
+  "mapped_source_total": 981,
+  "battle_required_total": 978,
+  "existing_kept": 12,
+  "new_wav": 966,
+  "new_wav_metas": 966,
+  "new_folder_metas": 53,
+  "all_destinations_sha_equal": true,
+  "initial_validation_error": "TypeError at final verification expression root[e['destination']] after successful staging; no writes retried. Rechecked actual manifest destinations using root / path."
+}

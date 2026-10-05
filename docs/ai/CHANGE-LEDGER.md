@@ -1731,3 +1731,15 @@ NTSD-WORDS-PREWARM-DEPENDENCY-001 / VERIFIED (scoped): original Unity Menu forma
 2026-10-05T17:18:46.929829+00:00 > **2026-10-06 用户边界澄清与正式出口：** 用户确认近期修改只涉及非战斗场景逻辑，本任务不因这些变化扩大源码恢复/非战斗审计或阻塞战斗对齐；正式根EXE仍336B44，候选不晋升。已有共用目标7/7、Core26/26/direct15/15限定证据保留。下一在同Task内仅一次正式EXE206/frame54→99/frame230倒地目标四tick诊断；初态受控/零输入，不改DAT、Scene或C#，不重跑七项。自然击倒/HP0/私有3F8/整场不由该例推出；父Q及总目标仍开放。229Record/68未关REUSE54/TRIGGER14保持，此次是既有包一个出口，非新增生产任务。
 
 2026-10-05T17:25:40.204162+00:00 > **2026-10-06 正式根倒地目标四tick限定补证完成：** 同Task内正式336B44 EXE headless回放exit0/passed=true，206/frame54面对持续99/frame230/state14/HP500目标，四tick X500→500.7→502.1→504.2→507、Vx0.7/1.4/2.1/2.8、末动作0。目标仍在场/倒地，直接证明本例追踪运动继续；私有3F8未导出。复用旧健康目标Core/Unity11主体字段各55/55同，仅输出对照，非完整同初态/全World。正式地图Z钳制另列用户例外。未改C#/DAT/Scene/源码、未运行Unity/旧七项，11保护SHA稳。用户确认非战斗修改不引出全局恢复前置；父Record仍RUNTIME_PENDING，父Q/目标开放，229Record/68未关REUSE54/TRIGGER14不变。本出口完成，下一仅按当前总表实际首差/必要终验，停止源码历史扩检。 原件：artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md
+
+
+## 2026-10-06 — 本轮对齐停止自动调度
+
+用户已确认：“那我理解了，那目前的目标就可以收尾了，然后我们再确认其他问题，这个属于是另外的目标任务了”。本轮按当前336B44总表的必要工作和六个代表出口收尾，状态 `USER_ACCEPTED_SCOPED_CLOSURE`；不等于所有角色/操作/模式/声音/像素全面一致。旧Record验证层级保留，当前无自动继续执行的对齐项，未来问题由用户明确新目标后再归口；旧ACTIVE/父Q开放/下一步不自动恢复本轮。
+
+依据：[收尾报告](../../artifacts/diagnostics/NTSD28-UNITY-BATTLE-REALIGNMENT-CLOSURE-20261006/REPORT.md)；复核14份原件和PNG身份，六出口按各自边界通过。未关闭子Record不整体改成VERIFIED，未覆盖条件不是本轮待执行项。336B44权威、D-023/D-024/D-025和其它已批准例外保留。不创建或启动后续目标。
+
+| NTSD28-336B44-BATTLE-AUDIO-CUE-RESOLVER-001 | PLANNED | 角色/技能/全局battle声音统一解析与多声预热 | [Record](CHANGE-RECORDS/NTSD28-336B44-BATTLE-AUDIO-CUE-RESOLVER-001.md) |
+| NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001 | PLANNED | 共享命中/防御/对象落地声音与预测 | [Record](CHANGE-RECORDS/NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001.md) |
+
+2026-10-06 新音效任务进度：CUE-RESOLVER-001 / EVENT-RULES-001 = CODE_WRITTEN；cue两项预期RED，966个缺失正式WAV已接入、12既有保留。原Editor正在导入，ECS预测/聚焦声音/代表Play仍待，不恢复旧对齐目标。

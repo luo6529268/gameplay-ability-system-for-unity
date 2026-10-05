@@ -1,0 +1,25 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterFrameAdvancePass.cs
+code-path: Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218EnvironmentCreditEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q10KnockoutModeSoundEditorTests.cs
+authority: selected formal 336B44 playable BattleWorld28::step_physics and NativeSoundCatalog28 data/sound.dat index 6
+evidence: docs/ai/TASKS/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001.md
+-->
+
+# NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001
+
+Created before scripts. Unity current state: the C031 strict state12/18 path no longer enters old landing fallbacks that could queue `SFX_006`; no channel-6 producer remains on that path, and `NTSDSoundPlayer` does not prewarm `data\016.wav`. Add a shared prelude called by the three existing character dynamics paths before environment damage, queue exactly one cue on penetration, then keep existing environment and action order. Add one builtin prewarm entry for the already-present PCM-identical file. First add narrow RED assertions, then make the producer/prewarm changes; do not change `SFX_006` consumers elsewhere. Expected side effect: the penetration tick queues one indexed channel-6 cue at entity X before damage, while exact equality queues none. No nonbattle, DAT/WAV, Scene or config changes. Verify original Editor focused tests and report device-layer limits; rollback exact declared hunks only.
+
+Original Editor event RED job `7180ff4542ac42a7890c2e83fd7fcfbe`: penetration expected one cue but got zero; equality control passed. The Q10 prewarm filter in that job used `NTSD.Test.Editor` and executed zero cases; excluded. Correct prewarm test job `fb5b8b4d2ee241758c4c799536d78991` failed earlier on its existing `data\m_ok.wav` assertion (expected prepared true, actual false), before the newly appended `data\016.wav` check. This is a separate existing fixture dependency and cannot prove C032. Before further script edit, restore the existing mode-cue list and add a standalone `SelectedLandingChannel6ClipIsPreparedAfterSeal` test in the same declared test file, using only the builtin sound set with a null character manager. This test will inspect the single-file wrapper for `data\016.wav` after seal without depending on mode candidate loading. No extra script path.
+
+The independent original Editor prewarm job `90561029b4bc4faea95027effc6a278e` executed 1/1 RED: sealed player could not retrieve `data\016.wav`. Production code is now written: `LF2Entity.ApplyCurrentDatType0State1218LandingPrelude` checks the C031 strict result and type0 state12/18, queues `data\016.wav` before invoking the existing environment-damage consumer, and replaces its three character dynamics call sites; `NTSDSoundPlayer.BuiltInBattleSoundIds` adds that same path for sealed prewarm. Existing `SFX_006` consumers and all DAT/WAV/Scene/config files remain unchanged. Current status `CODE_WRITTEN / UNITY_GREEN_PENDING`; no compile or post-change runtime result is claimed yet.
+
+Original Editor post-change exact event/equality and sealed-clip job `88b3d4330fd1411a953257c1a8b533fa` passed 3/3. This proves the `LF2Character` direct physics consumer and builtin prewarm, not yet the canonical Ecs frame-advance path. Before further test-script edit, the already-declared B4 environment test file may add one small DataOrientedCanonical complete-tick state12 equality/penetration pair using a registered one-character World and no input. It will assert exactly zero/one `data\016.wav` pending events and preserve the C031 action boundary. No production path changes; report RED if the canonical caller differs.
+
+That canonical complete-tick pair passed 2/2 in original Editor job `580e845fe98840f9963ecfe5a21767cf`; the adjacent complete B4 environment-credit class passed 10/10 in job `f9eae00d6fbb4b68a51b9840db28fb02`. The final C032 code paths are exactly those declared in metadata. ChangeLedger validation passed (1,041 records, 93 governed code files in current dirty diff), `git diff --check` passed, and four protected Scene/config hashes remained identical to the previous C031 witness. [Report](../../../artifacts/diagnostics/NTSD28-336B44-Q10-C032-LANDING-CHANNEL6-001/REPORT.md). Status `RUNTIME_PENDING`: current producer and clip are proven in focused original Editor tests, while formal root same-state event capture, voice/pan/volume and device playback remain unverified. The existing separate mode-cue test failed at m_ok and is not claimed repaired. Q10 and total alignment remain open.

@@ -1,0 +1,104 @@
+{
+  "observed_at": "2026-10-06T02:35:09.438969+08:00",
+  "protected_paths": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\NTSDSoundPlayer.cs",
+      "sha256_before": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "sha256_after": "0203D7DB0DAF11AB4F9E64AD65C59B33414119A2D09414E1048E10DBA5AB0415",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\AppManager.cs",
+      "sha256_before": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9",
+      "sha256_after": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+      "sha256_before": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "sha256_after": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+      "sha256_before": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "sha256_after": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterDatHitResolver.cs",
+      "sha256_before": "C61081A39F7338D597A779441627AD175C440D8D15F701DCC74383B5D44F394A",
+      "sha256_after": "C61081A39F7338D597A779441627AD175C440D8D15F701DCC74383B5D44F394A",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.cs",
+      "sha256_before": "7E59A58765DBCCD2C214AD976DC177C76A5F54FEF34164145395EDB59A89FD3C",
+      "sha256_after": "7E59A58765DBCCD2C214AD976DC177C76A5F54FEF34164145395EDB59A89FD3C",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\BattleHitCandidateSequenceRunner.cs",
+      "sha256_before": "85E749F11AEB55330C78A53EA1BA20381B1D191A80096A1954D0A23C58A83A46",
+      "sha256_after": "85E749F11AEB55330C78A53EA1BA20381B1D191A80096A1954D0A23C58A83A46",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+      "sha256_before": "2A6A6F0471C007F9289E5EE5364AA8328FE98587E3DCD22D140E2E28012BC449",
+      "sha256_after": "2A6A6F0471C007F9289E5EE5364AA8328FE98587E3DCD22D140E2E28012BC449",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Load\\NTSDResourceLoader.cs",
+      "sha256_before": "17768F6BC8536E34B98A479C98C0AAA2EAD867BEE9D72B35A4C0C4B5ABECE9A9",
+      "sha256_after": "17768F6BC8536E34B98A479C98C0AAA2EAD867BEE9D72B35A4C0C4B5ABECE9A9",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "sha256_before": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "sha256_after": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "sha256_before": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "sha256_after": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "sha256_before": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "sha256_after": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "unchanged": true
+    }
+  ],
+  "resource_csv_unique_rows": 150,
+  "resource_group_accounting_pass": true,
+  "current_tracked_script_diff_paths": [],
+  "production_changes_by_this_audit": false,
+  "unity_or_formal_audio_runtime_executed": false,
+  "artifacts": [
+    {
+      "name": "current-observations.json",
+      "sha256": "11AF1AB26941919D4916206E5CECAC19542EAB739DDE596C1840B0D1DDA1C77E"
+    },
+    {
+      "name": "hurt-state-frame-sound-references.json",
+      "sha256": "A6FA4F215F131CD3C4BF30C35439BC8BE1C0EC6D84AFCE3563126367F10AD2F1"
+    },
+    {
+      "name": "REPORT.md",
+      "sha256": "9608D908B7D21A763C5A4DE70AD8D3732E05C8CEF7A329B97FD2778A9AB38650"
+    },
+    {
+      "name": "resource-audit.csv",
+      "sha256": "82BA118DCD560BCDFBEB1644A98C38BC75FD1DBF83E16D1C612CD36BA96AC414"
+    },
+    {
+      "name": "resource-audit.json",
+      "sha256": "A3E7BC1CDF09F4C696FE2AD28695F94B84115834410705334FC7C5D83AE6F38A"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "goal": {
+    "threadId": "01a09613-adcb-72a0-a64b-ff039b8dcb3f",
+    "objective": "在保留当前Unity/GAS框架、所有非战斗功能和已批准例外的前提下，执行已准备的NTSD28-UNITY-BATTLE-REALIGNMENT-001总目标：按ntsd28-logan-vs-unity-battle-alignment.md第0.14节六个批次及Q01-Q12/R01-R18依赖回访推进，使用NTSD2.8-Logan正式DAT与角色相关图片完成剩余战斗逻辑、数据接入、生命周期和非例外表现对齐及最终验收。首先执行BATCH-01/Q01只读内容接入清单和兼容性检查，按批次出口如实记录验证。不得改动非战斗逻辑或重做已关闭职责；具体脚本修改前建立准确Task/Change，旧资源仅按核对清单及现有删除授权规则处理。",
+    "status": "complete",
+    "tokensUsed": 195560528,
+    "timeUsedSeconds": 1289545,
+    "createdAt": 1789233090,
+    "updatedAt": 1791223960
+  },
+  "remainingTokens": null,
+  "completionBudgetReport": "Goal achieved. Report final usage from this tool result's structured goal fields. If `goal.tokenBudget` is present, include token usage from `goal.tokensUsed` and `goal.tokenBudget`. If `goal.timeUsedSeconds` is greater than 0, summarize elapsed time in a concise, human-friendly form appropriate to the response language."
+}

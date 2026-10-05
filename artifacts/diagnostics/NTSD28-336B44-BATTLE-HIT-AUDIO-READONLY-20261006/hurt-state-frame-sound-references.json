@@ -1,0 +1,3270 @@
+{
+  "method": "lexical frame-header sound fields for indexed type0 defense/caught/hurt/fall/frozen/lying/burning states; not proof of natural reachability",
+  "selection_states": [
+    7,
+    8,
+    10,
+    11,
+    12,
+    13,
+    14,
+    16,
+    18,
+    19,
+    70,
+    75
+  ],
+  "type0_dat_files": 158,
+  "missing_dat": [],
+  "references": [
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "custom/1genma/w/p1.wav"
+    },
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "custom/1genma/w/p1.wav"
+    },
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "custom/1genma/w/p2.wav"
+    },
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "custom/1genma/w/p2.wav"
+    },
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 664,
+      "state": 7,
+      "sound": "custom/1genma/w/a2.wav"
+    },
+    {
+      "oid": 901,
+      "dat": "custom/1genma/genma.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 903,
+      "dat": "custom/1genma/genmaclone.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "custom/1genma/w/p1.wav"
+    },
+    {
+      "oid": 903,
+      "dat": "custom/1genma/genmaclone.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "custom/1genma/w/p1.wav"
+    },
+    {
+      "oid": 903,
+      "dat": "custom/1genma/genmaclone.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "custom/1genma/w/p2.wav"
+    },
+    {
+      "oid": 903,
+      "dat": "custom/1genma/genmaclone.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "custom/1genma/w/p2.wav"
+    },
+    {
+      "oid": 500,
+      "dat": "m/hug/hug.dat",
+      "frame": 63,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 501,
+      "dat": "m/hug/hug2.dat",
+      "frame": 63,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 502,
+      "dat": "m/hug/hug3.dat",
+      "frame": 63,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 62,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 68,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 72,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 73,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 74,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 75,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 76,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 77,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 86,
+      "dat": "m/teu/teu.dat",
+      "frame": 78,
+      "state": 7,
+      "sound": "data/012.wav"
+    },
+    {
+      "oid": 2,
+      "dat": "c/nar/nar.dat",
+      "frame": 162,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 2,
+      "dat": "c/nar/nar.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 2,
+      "dat": "c/nar/nar.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 99,
+      "dat": "c/nar/sna.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 99,
+      "dat": "c/nar/sna.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 99,
+      "dat": "c/nar/sna.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 96,
+      "dat": "c/nar/snc.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 96,
+      "dat": "c/nar/snc.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/nar/w/p3.wav"
+    },
+    {
+      "oid": 508,
+      "dat": "c/nar/4tk.dat",
+      "frame": 318,
+      "state": 18,
+      "sound": "data/006.wav"
+    },
+    {
+      "oid": 1,
+      "dat": "c/saku/saku.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 1,
+      "dat": "c/saku/saku.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 1,
+      "dat": "c/saku/saku.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 704,
+      "dat": "c/saku/saku2.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 704,
+      "dat": "c/saku/saku2.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 704,
+      "dat": "c/saku/saku2.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 705,
+      "dat": "c/saku/saku3.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 705,
+      "dat": "c/saku/saku3.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/saku/w/p1.wav"
+    },
+    {
+      "oid": 705,
+      "dat": "c/saku/saku3.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 11,
+      "dat": "c/sasu/sasu.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sasu/w/p2.wav"
+    },
+    {
+      "oid": 11,
+      "dat": "c/sasu/sasu.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sasu/w/p1.wav"
+    },
+    {
+      "oid": 11,
+      "dat": "c/sasu/sasu.dat",
+      "frame": 236,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 11,
+      "dat": "c/sasu/sasu.dat",
+      "frame": 237,
+      "state": 7,
+      "sound": "data/103.wav"
+    },
+    {
+      "oid": 11,
+      "dat": "c/sasu/sasu.dat",
+      "frame": 668,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 87,
+      "state": 18,
+      "sound": "data/103.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 88,
+      "state": 18,
+      "sound": "data/103.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 120,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 121,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 122,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 123,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 124,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 125,
+      "state": 18,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 282,
+      "state": 7,
+      "sound": "data/103.wav"
+    },
+    {
+      "oid": 38,
+      "dat": "c/sasu/cs2.dat",
+      "frame": 676,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 98,
+      "dat": "c/sasu/mss.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sasu/w/p2.wav"
+    },
+    {
+      "oid": 98,
+      "dat": "c/sasu/mss.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sasu/w/p1.wav"
+    },
+    {
+      "oid": 98,
+      "dat": "c/sasu/mss.dat",
+      "frame": 381,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 98,
+      "dat": "c/sasu/mss.dat",
+      "frame": 382,
+      "state": 7,
+      "sound": "data/103.wav"
+    },
+    {
+      "oid": 87,
+      "dat": "c/sasu/sus.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sasu/w/p2.wav"
+    },
+    {
+      "oid": 87,
+      "dat": "c/sasu/sus.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sasu/w/p1.wav"
+    },
+    {
+      "oid": 4,
+      "dat": "c/sai/sai.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sai/w/p1.wav"
+    },
+    {
+      "oid": 4,
+      "dat": "c/sai/sai.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sai/w/p1.wav"
+    },
+    {
+      "oid": 4,
+      "dat": "c/sai/sai.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/sai/w/p3.wav"
+    },
+    {
+      "oid": 4,
+      "dat": "c/sai/sai.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/sai/w/p2.wav"
+    },
+    {
+      "oid": 4,
+      "dat": "c/sai/sai.dat",
+      "frame": 484,
+      "state": 18,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 3,
+      "dat": "c/kaka/kaka.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kaka/w/p1.wav"
+    },
+    {
+      "oid": 3,
+      "dat": "c/kaka/kaka.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kaka/w/p1.wav"
+    },
+    {
+      "oid": 3,
+      "dat": "c/kaka/kaka.dat",
+      "frame": 261,
+      "state": 18,
+      "sound": "c/kaka/w/j2.wav"
+    },
+    {
+      "oid": 3,
+      "dat": "c/kaka/kaka.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 13,
+      "dat": "c/yam/yam.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 65,
+      "dat": "c/ank/ank.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ank/w/p2.wav"
+    },
+    {
+      "oid": 65,
+      "dat": "c/ank/ank.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/ank/w/p2.wav"
+    },
+    {
+      "oid": 65,
+      "dat": "c/ank/ank.dat",
+      "frame": 668,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 44,
+      "dat": "c/ank/acl.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ank/w/p2.wav"
+    },
+    {
+      "oid": 44,
+      "dat": "c/ank/acl.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/ank/w/p2.wav"
+    },
+    {
+      "oid": 73,
+      "dat": "c/hay/hay.dat",
+      "frame": 413,
+      "state": 7,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 73,
+      "dat": "c/hay/hay.dat",
+      "frame": 665,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 410,
+      "dat": "c/hay/hayS.dat",
+      "frame": 413,
+      "state": 7,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 72,
+      "dat": "c/dan/dan.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/dan/w/p1.wav"
+    },
+    {
+      "oid": 72,
+      "dat": "c/dan/dan.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/dan/w/p1.wav"
+    },
+    {
+      "oid": 72,
+      "dat": "c/dan/dan.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 604,
+      "dat": "c/dan/danr.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/dan/w/p1.wav"
+    },
+    {
+      "oid": 604,
+      "dat": "c/dan/danr.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/dan/w/p1.wav"
+    },
+    {
+      "oid": 604,
+      "dat": "c/dan/danr.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 553,
+      "state": 19,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/shis/w/p1.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/shis/w/p1.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 265,
+      "state": 19,
+      "sound": "data/067.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 272,
+      "state": 19,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 273,
+      "state": 19,
+      "sound": "data/067.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 282,
+      "state": 19,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 283,
+      "state": 19,
+      "sound": "data/067.wav"
+    },
+    {
+      "oid": 70,
+      "dat": "c/shis/shis.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 18,
+      "dat": "c/nej/nej.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/nej/w/p2.wav"
+    },
+    {
+      "oid": 18,
+      "dat": "c/nej/nej.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/nej/w/p2.wav"
+    },
+    {
+      "oid": 18,
+      "dat": "c/nej/nej.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/nej/w/p3.wav"
+    },
+    {
+      "oid": 18,
+      "dat": "c/nej/nej.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/nej/w/p4.wav"
+    },
+    {
+      "oid": 18,
+      "dat": "c/nej/nej.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hin/w/p2.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hin/w/p2.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/hin/w/p3.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/hin/w/p4.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 433,
+      "state": 18,
+      "sound": "data/043.wav"
+    },
+    {
+      "oid": 41,
+      "dat": "c/hin/hin.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/lee/w/p4.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/lee/w/p4.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/lee/w/p3.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 226,
+      "state": 16,
+      "sound": "c/lee/w/p2.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 362,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 363,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 372,
+      "state": 7,
+      "sound": "data/016.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 711,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 712,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 714,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 715,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 717,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 718,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 720,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 721,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 723,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 724,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 726,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 727,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 729,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 7,
+      "dat": "c/lee/lee.dat",
+      "frame": 730,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 506,
+      "dat": "c/guy/guy.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 506,
+      "dat": "c/guy/guy.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 506,
+      "dat": "c/guy/guy.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 94,
+      "dat": "c/guy/gsi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 94,
+      "dat": "c/guy/gsi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 94,
+      "dat": "c/guy/gsi.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 97,
+      "dat": "c/guy/gei.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 97,
+      "dat": "c/guy/gei.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/guy/w/p3.wav"
+    },
+    {
+      "oid": 97,
+      "dat": "c/guy/gei.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 19,
+      "dat": "c/ten/ten.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ten/w/p2.wav"
+    },
+    {
+      "oid": 19,
+      "dat": "c/ten/ten.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 713,
+      "dat": "c/ten/pole.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ten/w/p2.wav"
+    },
+    {
+      "oid": 713,
+      "dat": "c/ten/pole.dat",
+      "frame": 664,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 723,
+      "dat": "c/ten/swords.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ten/w/p2.wav"
+    },
+    {
+      "oid": 724,
+      "dat": "c/ten/blade.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ten/w/p2.wav"
+    },
+    {
+      "oid": 729,
+      "dat": "c/ten/bash.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ten/w/p2.wav"
+    },
+    {
+      "oid": 22,
+      "dat": "c/shik/shik.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/shik/w/p1.wav"
+    },
+    {
+      "oid": 430,
+      "dat": "c/asu/asu.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/asu/w/p1.wav"
+    },
+    {
+      "oid": 430,
+      "dat": "c/asu/asu.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/asu/w/p1.wav"
+    },
+    {
+      "oid": 430,
+      "dat": "c/asu/asu.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 5,
+      "dat": "c/shino/shino.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/shino/w/p1.wav"
+    },
+    {
+      "oid": 5,
+      "dat": "c/shino/shino.dat",
+      "frame": 220,
+      "state": 11,
+      "sound": "c/shino/w/p3.wav"
+    },
+    {
+      "oid": 5,
+      "dat": "c/shino/shino.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/shino/w/p2.wav"
+    },
+    {
+      "oid": 12,
+      "dat": "c/kib/kib.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kib/w/p1.wav"
+    },
+    {
+      "oid": 12,
+      "dat": "c/kib/kib.dat",
+      "frame": 220,
+      "state": 11,
+      "sound": "c/kib/w/p3.wav"
+    },
+    {
+      "oid": 12,
+      "dat": "c/kib/kib.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/kib/w/p2.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/chi/w/p4.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/chi/w/p4.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/chi/w/p2.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/chi/w/p3.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 264,
+      "state": 7,
+      "sound": "data/053.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 267,
+      "state": 7,
+      "sound": "data/053.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 270,
+      "state": 7,
+      "sound": "data/053.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 319,
+      "state": 18,
+      "sound": "c/chi/w/j1.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 670,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 671,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 673,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 8,
+      "dat": "c/chi/chi.dat",
+      "frame": 674,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 14,
+      "dat": "c/kan/kan.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kan/w/p3.wav"
+    },
+    {
+      "oid": 14,
+      "dat": "c/kan/kan.dat",
+      "frame": 220,
+      "state": 11,
+      "sound": "c/kan/w/p2.wav"
+    },
+    {
+      "oid": 14,
+      "dat": "c/kan/kan.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/kan/w/p1.wav"
+    },
+    {
+      "oid": 15,
+      "dat": "c/tem/tem.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tem/w/p1.wav"
+    },
+    {
+      "oid": 15,
+      "dat": "c/tem/tem.dat",
+      "frame": 220,
+      "state": 11,
+      "sound": "c/tem/w/p2.wav"
+    },
+    {
+      "oid": 15,
+      "dat": "c/tem/tem.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/tem/w/p3.wav"
+    },
+    {
+      "oid": 16,
+      "dat": "c/gaa/gaa.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/gaa/w/p3.wav"
+    },
+    {
+      "oid": 16,
+      "dat": "c/gaa/gaa.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/gaa/w/p3.wav"
+    },
+    {
+      "oid": 16,
+      "dat": "c/gaa/gaa.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/gaa/w/p1.wav"
+    },
+    {
+      "oid": 16,
+      "dat": "c/gaa/gaa.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/gaa/w/p2.wav"
+    },
+    {
+      "oid": 16,
+      "dat": "c/gaa/gaa.dat",
+      "frame": 278,
+      "state": 7,
+      "sound": "c/gaa/w/j1.wav"
+    },
+    {
+      "oid": 78,
+      "dat": "c/rai/rai.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/rai/w/p3.wav"
+    },
+    {
+      "oid": 78,
+      "dat": "c/rai/rai.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/rai/w/p3.wav"
+    },
+    {
+      "oid": 78,
+      "dat": "c/rai/rai.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 436,
+      "dat": "c/rai/raiT.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/rai/w/p3.wav"
+    },
+    {
+      "oid": 436,
+      "dat": "c/rai/raiT.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/rai/w/p3.wav"
+    },
+    {
+      "oid": 436,
+      "dat": "c/rai/raiT.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 75,
+      "dat": "c/bee/bee.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/bee/w/p2.wav"
+    },
+    {
+      "oid": 75,
+      "dat": "c/bee/bee.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/bee/w/p2.wav"
+    },
+    {
+      "oid": 75,
+      "dat": "c/bee/bee.dat",
+      "frame": 669,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/han/w/p1.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/han/w/p1.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 361,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 362,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 363,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 364,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 365,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 366,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 726,
+      "dat": "c/han/han.dat",
+      "frame": 668,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/han/w/p1.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/han/w/p1.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 361,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 362,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 363,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 364,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 365,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 366,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 727,
+      "dat": "c/han/smo.dat",
+      "frame": 668,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/yag/w/p1.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/yag/w/p1.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 326,
+      "state": 7,
+      "sound": "c/yag/w/e2.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 327,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 340,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 510,
+      "dat": "c/yag/yag.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 29,
+      "dat": "c/hak/hak.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hak/w/p2.wav"
+    },
+    {
+      "oid": 29,
+      "dat": "c/hak/hak.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hak/w/p2.wav"
+    },
+    {
+      "oid": 29,
+      "dat": "c/hak/hak.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/hak/w/p1.wav"
+    },
+    {
+      "oid": 29,
+      "dat": "c/hak/hak.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 84,
+      "dat": "c/gur/gur.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/gur/w/p3.wav"
+    },
+    {
+      "oid": 84,
+      "dat": "c/gur/gur.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/gur/w/p1.wav"
+    },
+    {
+      "oid": 84,
+      "dat": "c/gur/gur.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 85,
+      "dat": "c/gur/fakefan.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/gur/w/p3.wav"
+    },
+    {
+      "oid": 85,
+      "dat": "c/gur/fakefan.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/gur/w/p1.wav"
+    },
+    {
+      "oid": 60,
+      "dat": "c/zab/zab.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 60,
+      "dat": "c/zab/zab.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 60,
+      "dat": "c/zab/zab.dat",
+      "frame": 516,
+      "state": 14,
+      "sound": "data/012.wav"
+    },
+    {
+      "oid": 60,
+      "dat": "c/zab/zab.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 49,
+      "dat": "c/zab/clo.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 49,
+      "dat": "c/zab/clo.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 456,
+      "dat": "c/zab/dem.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 456,
+      "dat": "c/zab/dem.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/zab/w/p3.wav"
+    },
+    {
+      "oid": 456,
+      "dat": "c/zab/dem.dat",
+      "frame": 516,
+      "state": 14,
+      "sound": "data/012.wav"
+    },
+    {
+      "oid": 456,
+      "dat": "c/zab/dem.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sui/w/p5.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sui/w/p6.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/sui/w/p1.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/sui/w/p2.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 225,
+      "state": 11,
+      "sound": "c/sui/w/p3.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 227,
+      "state": 16,
+      "sound": "c/sui/w/p4.wav"
+    },
+    {
+      "oid": 74,
+      "dat": "c/sui/sui.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 77,
+      "dat": "c/kar/kar.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kar/w/p1.wav"
+    },
+    {
+      "oid": 77,
+      "dat": "c/kar/kar.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kar/w/p1.wav"
+    },
+    {
+      "oid": 77,
+      "dat": "c/kar/kar.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 71,
+      "dat": "c/jug/jugo.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jug/w/p1.wav"
+    },
+    {
+      "oid": 71,
+      "dat": "c/jug/jugo.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/jug/w/p1.wav"
+    },
+    {
+      "oid": 71,
+      "dat": "c/jug/jugo.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jug/w/p1.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/jug/w/p1.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 752,
+      "state": 7,
+      "sound": "c/jug/w/j6.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 758,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 759,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 760,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 761,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 762,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 763,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 764,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 765,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 766,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 767,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 768,
+      "state": 7,
+      "sound": "data/089.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 769,
+      "state": 7,
+      "sound": "data/021.wav"
+    },
+    {
+      "oid": 400,
+      "dat": "c/jug/jugoCS2.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 76,
+      "dat": "c/miz/miz.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/miz/w/p3.wav"
+    },
+    {
+      "oid": 76,
+      "dat": "c/miz/miz.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/miz/w/p4.wav"
+    },
+    {
+      "oid": 76,
+      "dat": "c/miz/miz.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 428,
+      "dat": "c/miz/cs2.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/miz/w/p3.wav"
+    },
+    {
+      "oid": 428,
+      "dat": "c/miz/cs2.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/miz/w/p4.wav"
+    },
+    {
+      "oid": 428,
+      "dat": "c/miz/cs2.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jiro/w/p3.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/jiro/w/p4.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 303,
+      "state": 7,
+      "sound": "data/009.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 415,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 417,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 418,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 66,
+      "dat": "c/jiro/jiro1.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jiro/w/p3.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/jiro/w/p4.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 303,
+      "state": 7,
+      "sound": "data/009.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 415,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 417,
+      "state": 7,
+      "sound": "data/004.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 418,
+      "state": 7,
+      "sound": "data/003.wav"
+    },
+    {
+      "oid": 37,
+      "dat": "c/jiro/jiro.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 67,
+      "dat": "c/kid/kid1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kid/w/p3.wav"
+    },
+    {
+      "oid": 67,
+      "dat": "c/kid/kid1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kid/w/p4.wav"
+    },
+    {
+      "oid": 67,
+      "dat": "c/kid/kid1.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 34,
+      "dat": "c/kid/kid.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kid/w/p3.wav"
+    },
+    {
+      "oid": 34,
+      "dat": "c/kid/kid.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kid/w/p4.wav"
+    },
+    {
+      "oid": 34,
+      "dat": "c/kid/kid.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 61,
+      "dat": "c/sako/sako1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 61,
+      "dat": "c/sako/sako1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 61,
+      "dat": "c/sako/sako1.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 81,
+      "dat": "c/sako/suk1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 81,
+      "dat": "c/sako/suk1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 81,
+      "dat": "c/sako/suk1.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 83,
+      "dat": "c/sako/uko1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 83,
+      "dat": "c/sako/uko1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 35,
+      "dat": "c/sako/sako.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 35,
+      "dat": "c/sako/sako.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 35,
+      "dat": "c/sako/sako.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 80,
+      "dat": "c/sako/suk.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 80,
+      "dat": "c/sako/suk.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 80,
+      "dat": "c/sako/suk.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 82,
+      "dat": "c/sako/uko.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/sako/w/p3.wav"
+    },
+    {
+      "oid": 82,
+      "dat": "c/sako/uko.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/sako/w/p4.wav"
+    },
+    {
+      "oid": 62,
+      "dat": "c/tay/tay1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tay/w/p3.wav"
+    },
+    {
+      "oid": 62,
+      "dat": "c/tay/tay1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tay/w/p4.wav"
+    },
+    {
+      "oid": 62,
+      "dat": "c/tay/tay1.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 36,
+      "dat": "c/tay/tay.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tay/w/p3.wav"
+    },
+    {
+      "oid": 36,
+      "dat": "c/tay/tay.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tay/w/p4.wav"
+    },
+    {
+      "oid": 36,
+      "dat": "c/tay/tay.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 28,
+      "dat": "c/kim/kim1.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kim/w/p3.wav"
+    },
+    {
+      "oid": 28,
+      "dat": "c/kim/kim1.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kim/w/p3.wav"
+    },
+    {
+      "oid": 28,
+      "dat": "c/kim/kim1.dat",
+      "frame": 295,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 28,
+      "dat": "c/kim/kim1.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 507,
+      "dat": "c/kim/kim.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kim/w/p3.wav"
+    },
+    {
+      "oid": 507,
+      "dat": "c/kim/kim.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kim/w/p3.wav"
+    },
+    {
+      "oid": 507,
+      "dat": "c/kim/kim.dat",
+      "frame": 295,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 507,
+      "dat": "c/kim/kim.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/kab/w/p0.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/kab/w/p3.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 668,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 23,
+      "dat": "c/kab/kab.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/043.wav"
+    },
+    {
+      "oid": 860,
+      "dat": "c/kab/tsurugi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 860,
+      "dat": "c/kab/tsurugi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 860,
+      "dat": "c/kab/tsurugi.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/kab/w/p0.wav"
+    },
+    {
+      "oid": 860,
+      "dat": "c/kab/tsurugi.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/kab/w/p3.wav"
+    },
+    {
+      "oid": 861,
+      "dat": "c/kab/yoroi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 861,
+      "dat": "c/kab/yoroi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kab/w/p5.wav"
+    },
+    {
+      "oid": 861,
+      "dat": "c/kab/yoroi.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/kab/w/p0.wav"
+    },
+    {
+      "oid": 861,
+      "dat": "c/kab/yoroi.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "c/kab/w/p3.wav"
+    },
+    {
+      "oid": 20,
+      "dat": "c/oro/oro.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/oro/w/p1.wav"
+    },
+    {
+      "oid": 20,
+      "dat": "c/oro/oro.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/oro/w/p1.wav"
+    },
+    {
+      "oid": 20,
+      "dat": "c/oro/oro.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/oro/w/p2.wav"
+    },
+    {
+      "oid": 20,
+      "dat": "c/oro/oro.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 21,
+      "dat": "c/jira/jira.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jira/w/p1.wav"
+    },
+    {
+      "oid": 21,
+      "dat": "c/jira/jira.dat",
+      "frame": 352,
+      "state": 7,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 701,
+      "dat": "c/jira/pre.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jira/w/p1.wav"
+    },
+    {
+      "oid": 702,
+      "dat": "c/jira/sag.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/jira/w/p1.wav"
+    },
+    {
+      "oid": 702,
+      "dat": "c/jira/sag.dat",
+      "frame": 352,
+      "state": 7,
+      "sound": "data/028.wav"
+    },
+    {
+      "oid": 513,
+      "dat": "c/tsu/tsu.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/tsu/w/p2.wav"
+    },
+    {
+      "oid": 513,
+      "dat": "c/tsu/tsu.dat",
+      "frame": 226,
+      "state": 16,
+      "sound": "c/tsu/w/p1.wav"
+    },
+    {
+      "oid": 513,
+      "dat": "c/tsu/tsu.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 27,
+      "dat": "c/min/min.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 449,
+      "dat": "c/min/sag.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 427,
+      "dat": "c/min/kcm.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/029.wav"
+    },
+    {
+      "oid": 63,
+      "dat": "c/hir/hir.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hir/w/p1.wav"
+    },
+    {
+      "oid": 63,
+      "dat": "c/hir/hir.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hir/w/p1.wav"
+    },
+    {
+      "oid": 63,
+      "dat": "c/hir/hir.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "data/009.wav"
+    },
+    {
+      "oid": 63,
+      "dat": "c/hir/hir.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 504,
+      "dat": "c/hir/hcl.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hir/w/p1.wav"
+    },
+    {
+      "oid": 504,
+      "dat": "c/hir/hcl.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hir/w/p1.wav"
+    },
+    {
+      "oid": 504,
+      "dat": "c/hir/hcl.dat",
+      "frame": 222,
+      "state": 11,
+      "sound": "data/009.wav"
+    },
+    {
+      "oid": 64,
+      "dat": "c/tobir/tobir.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tobir/w/j6.wav"
+    },
+    {
+      "oid": 64,
+      "dat": "c/tobir/tobir.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tobir/w/j4.wav"
+    },
+    {
+      "oid": 64,
+      "dat": "c/tobir/tobir.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 415,
+      "dat": "c/tobir/tclo.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tobir/w/j6.wav"
+    },
+    {
+      "oid": 415,
+      "dat": "c/tobir/tclo.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tobir/w/j4.wav"
+    },
+    {
+      "oid": 69,
+      "dat": "c/has/has.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/has/w/p1.wav"
+    },
+    {
+      "oid": 69,
+      "dat": "c/has/has.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 93,
+      "dat": "c/has/sag.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/has/w/p1.wav"
+    },
+    {
+      "oid": 93,
+      "dat": "c/has/sag.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 47,
+      "dat": "c/has/hcl.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/has/w/p1.wav"
+    },
+    {
+      "oid": 25,
+      "dat": "c/kaku/kakun.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 25,
+      "dat": "c/kaku/kakun.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 25,
+      "dat": "c/kaku/kakun.dat",
+      "frame": 381,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 25,
+      "dat": "c/kaku/kakun.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 498,
+      "dat": "c/kaku/kakunck.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 498,
+      "dat": "c/kaku/kakunck.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 498,
+      "dat": "c/kaku/kakunck.dat",
+      "frame": 381,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 498,
+      "dat": "c/kaku/kakunck.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 57,
+      "dat": "c/kaku/kakunre.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 57,
+      "dat": "c/kaku/kakunre.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kaku/w/p2.wav"
+    },
+    {
+      "oid": 57,
+      "dat": "c/kaku/kakunre.dat",
+      "frame": 381,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 57,
+      "dat": "c/kaku/kakunre.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 871,
+      "dat": "c/kaku/maskfir.dat",
+      "frame": 61,
+      "state": 19,
+      "sound": "data/071.wav"
+    },
+    {
+      "oid": 871,
+      "dat": "c/kaku/maskfir.dat",
+      "frame": 348,
+      "state": 19,
+      "sound": "data/071.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hid/w/p3.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hid/w/p3.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 296,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 299,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 302,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 371,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 374,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 377,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 24,
+      "dat": "c/hid/hid.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/008.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/hid/w/p3.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/hid/w/p3.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 296,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 299,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 302,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 371,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 374,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 377,
+      "state": 7,
+      "sound": "data/054.wav"
+    },
+    {
+      "oid": 56,
+      "dat": "c/hid/rea.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/008.wav"
+    },
+    {
+      "oid": 6,
+      "dat": "c/saso/Hsa.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/saso/w/p4.wav"
+    },
+    {
+      "oid": 6,
+      "dat": "c/saso/Hsa.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/saso/w/p4.wav"
+    },
+    {
+      "oid": 6,
+      "dat": "c/saso/Hsa.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/saso/w/p2.wav"
+    },
+    {
+      "oid": 6,
+      "dat": "c/saso/Hsa.dat",
+      "frame": 223,
+      "state": 11,
+      "sound": "c/saso/w/p3.wav"
+    },
+    {
+      "oid": 6,
+      "dat": "c/saso/Hsa.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 51,
+      "dat": "c/saso/saso.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 670,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 671,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 672,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 673,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 674,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 90,
+      "dat": "c/saso/ncs.dat",
+      "frame": 675,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 10,
+      "dat": "c/dei/dei.dat",
+      "frame": 92,
+      "state": 19,
+      "sound": "data/008.wav"
+    },
+    {
+      "oid": 10,
+      "dat": "c/dei/dei.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/dei/w/p4.wav"
+    },
+    {
+      "oid": 10,
+      "dat": "c/dei/dei.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/dei/w/p4.wav"
+    },
+    {
+      "oid": 10,
+      "dat": "c/dei/dei.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 58,
+      "dat": "c/dei/bir.dat",
+      "frame": 73,
+      "state": 7,
+      "sound": "data/017.wav"
+    },
+    {
+      "oid": 45,
+      "dat": "c/dei/ncd.dat",
+      "frame": 92,
+      "state": 19,
+      "sound": "data/008.wav"
+    },
+    {
+      "oid": 45,
+      "dat": "c/dei/ncd.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/dei/w/p4.wav"
+    },
+    {
+      "oid": 45,
+      "dat": "c/dei/ncd.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/dei/w/p4.wav"
+    },
+    {
+      "oid": 45,
+      "dat": "c/dei/ncd.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 46,
+      "dat": "c/dei/ncb.dat",
+      "frame": 73,
+      "state": 7,
+      "sound": "data/017.wav"
+    },
+    {
+      "oid": 17,
+      "dat": "c/kis/kis.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kis/w/p5.wav"
+    },
+    {
+      "oid": 17,
+      "dat": "c/kis/kis.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kis/w/p4.wav"
+    },
+    {
+      "oid": 17,
+      "dat": "c/kis/kis.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 505,
+      "dat": "c/kis/kcl.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kis/w/p5.wav"
+    },
+    {
+      "oid": 505,
+      "dat": "c/kis/kcl.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kis/w/p4.wav"
+    },
+    {
+      "oid": 91,
+      "dat": "c/kis/sam.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kis/w/p5.wav"
+    },
+    {
+      "oid": 91,
+      "dat": "c/kis/sam.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kis/w/p4.wav"
+    },
+    {
+      "oid": 42,
+      "dat": "c/kis/nck.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kis/w/p5.wav"
+    },
+    {
+      "oid": 42,
+      "dat": "c/kis/nck.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kis/w/p4.wav"
+    },
+    {
+      "oid": 42,
+      "dat": "c/kis/nck.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 9,
+      "dat": "c/ita/ita.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/ita/w/p1.wav"
+    },
+    {
+      "oid": 9,
+      "dat": "c/ita/ita.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/ita/w/p1.wav"
+    },
+    {
+      "oid": 9,
+      "dat": "c/ita/ita.dat",
+      "frame": 221,
+      "state": 11,
+      "sound": "c/ita/w/p2.wav"
+    },
+    {
+      "oid": 9,
+      "dat": "c/ita/ita.dat",
+      "frame": 332,
+      "state": 14,
+      "sound": "data/005.wav"
+    },
+    {
+      "oid": 9,
+      "dat": "c/ita/ita.dat",
+      "frame": 333,
+      "state": 14,
+      "sound": "data/005.wav"
+    },
+    {
+      "oid": 68,
+      "dat": "c/kon/kon.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/kon/w/p3.wav"
+    },
+    {
+      "oid": 68,
+      "dat": "c/kon/kon.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/kon/w/p4.wav"
+    },
+    {
+      "oid": 68,
+      "dat": "c/kon/kon.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 26,
+      "dat": "c/pai/pai.dat",
+      "frame": 676,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 509,
+      "dat": "c/pai/paid.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/pai/w/p1.wav"
+    },
+    {
+      "oid": 509,
+      "dat": "c/pai/paid.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/pai/w/p1.wav"
+    },
+    {
+      "oid": 509,
+      "dat": "c/pai/paid.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 0,
+      "dat": "c/tobi/tobi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tobi/w/p3.wav"
+    },
+    {
+      "oid": 0,
+      "dat": "c/tobi/tobi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tobi/w/p4.wav"
+    },
+    {
+      "oid": 0,
+      "dat": "c/tobi/tobi.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/017.wav"
+    },
+    {
+      "oid": 0,
+      "dat": "c/tobi/tobi.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 53,
+      "dat": "c/tobi/ttobi.dat",
+      "frame": 180,
+      "state": 12,
+      "sound": "c/tobi/w/p3.wav"
+    },
+    {
+      "oid": 53,
+      "dat": "c/tobi/ttobi.dat",
+      "frame": 186,
+      "state": 12,
+      "sound": "c/tobi/w/p4.wav"
+    },
+    {
+      "oid": 53,
+      "dat": "c/tobi/ttobi.dat",
+      "frame": 666,
+      "state": 7,
+      "sound": "data/017.wav"
+    },
+    {
+      "oid": 53,
+      "dat": "c/tobi/ttobi.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    },
+    {
+      "oid": 92,
+      "dat": "s/0/iru.dat",
+      "frame": 667,
+      "state": 7,
+      "sound": "data/007.wav"
+    }
+  ],
+  "paths": [
+    "c/ank/w/p2.wav",
+    "c/asu/w/p1.wav",
+    "c/bee/w/p2.wav",
+    "c/chi/w/j1.wav",
+    "c/chi/w/p2.wav",
+    "c/chi/w/p3.wav",
+    "c/chi/w/p4.wav",
+    "c/dan/w/p1.wav",
+    "c/dei/w/p4.wav",
+    "c/gaa/w/j1.wav",
+    "c/gaa/w/p1.wav",
+    "c/gaa/w/p2.wav",
+    "c/gaa/w/p3.wav",
+    "c/gur/w/p1.wav",
+    "c/gur/w/p3.wav",
+    "c/guy/w/p3.wav",
+    "c/hak/w/p1.wav",
+    "c/hak/w/p2.wav",
+    "c/han/w/p1.wav",
+    "c/has/w/p1.wav",
+    "c/hid/w/p3.wav",
+    "c/hin/w/p2.wav",
+    "c/hin/w/p3.wav",
+    "c/hin/w/p4.wav",
+    "c/hir/w/p1.wav",
+    "c/ita/w/p1.wav",
+    "c/ita/w/p2.wav",
+    "c/jira/w/p1.wav",
+    "c/jiro/w/p3.wav",
+    "c/jiro/w/p4.wav",
+    "c/jug/w/j6.wav",
+    "c/jug/w/p1.wav",
+    "c/kab/w/p0.wav",
+    "c/kab/w/p3.wav",
+    "c/kab/w/p5.wav",
+    "c/kaka/w/j2.wav",
+    "c/kaka/w/p1.wav",
+    "c/kaku/w/p2.wav",
+    "c/kan/w/p1.wav",
+    "c/kan/w/p2.wav",
+    "c/kan/w/p3.wav",
+    "c/kar/w/p1.wav",
+    "c/kib/w/p1.wav",
+    "c/kib/w/p2.wav",
+    "c/kib/w/p3.wav",
+    "c/kid/w/p3.wav",
+    "c/kid/w/p4.wav",
+    "c/kim/w/p3.wav",
+    "c/kis/w/p4.wav",
+    "c/kis/w/p5.wav",
+    "c/kon/w/p3.wav",
+    "c/kon/w/p4.wav",
+    "c/lee/w/p2.wav",
+    "c/lee/w/p3.wav",
+    "c/lee/w/p4.wav",
+    "c/miz/w/p3.wav",
+    "c/miz/w/p4.wav",
+    "c/nar/w/p3.wav",
+    "c/nej/w/p2.wav",
+    "c/nej/w/p3.wav",
+    "c/nej/w/p4.wav",
+    "c/oro/w/p1.wav",
+    "c/oro/w/p2.wav",
+    "c/pai/w/p1.wav",
+    "c/rai/w/p3.wav",
+    "c/sai/w/p1.wav",
+    "c/sai/w/p2.wav",
+    "c/sai/w/p3.wav",
+    "c/sako/w/p3.wav",
+    "c/sako/w/p4.wav",
+    "c/saku/w/p1.wav",
+    "c/saso/w/p2.wav",
+    "c/saso/w/p3.wav",
+    "c/saso/w/p4.wav",
+    "c/sasu/w/p1.wav",
+    "c/sasu/w/p2.wav",
+    "c/shik/w/p1.wav",
+    "c/shino/w/p1.wav",
+    "c/shino/w/p2.wav",
+    "c/shino/w/p3.wav",
+    "c/shis/w/p1.wav",
+    "c/sui/w/p1.wav",
+    "c/sui/w/p2.wav",
+    "c/sui/w/p3.wav",
+    "c/sui/w/p4.wav",
+    "c/sui/w/p5.wav",
+    "c/sui/w/p6.wav",
+    "c/tay/w/p3.wav",
+    "c/tay/w/p4.wav",
+    "c/tem/w/p1.wav",
+    "c/tem/w/p2.wav",
+    "c/tem/w/p3.wav",
+    "c/ten/w/p2.wav",
+    "c/tobi/w/p3.wav",
+    "c/tobi/w/p4.wav",
+    "c/tobir/w/j4.wav",
+    "c/tobir/w/j6.wav",
+    "c/tsu/w/p1.wav",
+    "c/tsu/w/p2.wav",
+    "c/yag/w/e2.wav",
+    "c/yag/w/p1.wav",
+    "c/zab/w/p3.wav",
+    "custom/1genma/w/a2.wav",
+    "custom/1genma/w/p1.wav",
+    "custom/1genma/w/p2.wav",
+    "data/003.wav",
+    "data/004.wav",
+    "data/005.wav",
+    "data/006.wav",
+    "data/007.wav",
+    "data/008.wav",
+    "data/009.wav",
+    "data/012.wav",
+    "data/016.wav",
+    "data/017.wav",
+    "data/021.wav",
+    "data/028.wav",
+    "data/029.wav",
+    "data/043.wav",
+    "data/053.wav",
+    "data/054.wav",
+    "data/067.wav",
+    "data/071.wav",
+    "data/089.wav",
+    "data/103.wav"
+  ]
+}
