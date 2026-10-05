@@ -116,6 +116,7 @@ namespace NTSD.Animation
                             frame,
                             BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world),
                             world.FixedViewRunDistanceScale,
+                            world.SpatialProjection.VerticalScale,
                             world.FixedViewRunVerticalDistanceScale);
                         bleedMotionPrepared = true;
                     }

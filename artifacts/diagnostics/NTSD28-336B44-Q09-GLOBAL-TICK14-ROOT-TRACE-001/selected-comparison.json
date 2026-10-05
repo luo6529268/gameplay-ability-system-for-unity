@@ -1,0 +1,639 @@
+{
+  "nativeRootExit": 0,
+  "nativeReportPassed": true,
+  "nativeFailureCode": 0,
+  "nativeDeclaredTicks": 14,
+  "nativeCompletedTicks": 15,
+  "nativeTraceTicks": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "unityStartTick": 0,
+  "unityEndTick": 14,
+  "comparedTicks": 14,
+  "fieldsPerTick": 12,
+  "comparedValues": 168,
+  "differences": [
+    {
+      "tick": 1,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 1,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 2,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 2,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 3,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 3,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 4,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 4,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 5,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 5,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 6,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 6,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 7,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 7,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 8,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 8,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 9,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 9,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 10,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 10,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 11,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 11,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 12,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 12,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 13,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 13,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 14,
+      "field": "actorZ",
+      "native": 542,
+      "unity": 400
+    },
+    {
+      "tick": 14,
+      "field": "targetZ",
+      "native": 542,
+      "unity": 400
+    }
+  ],
+  "nonStageFieldDifferences": [],
+  "selectedRows": [
+    {
+      "tick": 1,
+      "native": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 2,
+      "native": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 3,
+      "native": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 0,
+        "targetAction": 0,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 4,
+      "native": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 5,
+      "native": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 6,
+      "native": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 7,
+      "native": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 1,
+        "targetAction": 1,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 8,
+      "native": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 9,
+      "native": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 10,
+      "native": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 11,
+      "native": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 2,
+        "targetAction": 2,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 12,
+      "native": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 13,
+      "native": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    },
+    {
+      "tick": 14,
+      "native": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 542,
+        "targetZ": 542,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      },
+      "unity": {
+        "actorAction": 3,
+        "targetAction": 3,
+        "actorHp": 500,
+        "targetHp": 500,
+        "actorMp": 200,
+        "targetMp": 200,
+        "actorX": 500,
+        "targetX": 620,
+        "actorZ": 400,
+        "targetZ": 400,
+        "crtState": 3374725112,
+        "crtCalls": 3000
+      }
+    }
+  ],
+  "rootTraceSha256": "AEDF728137EA48B25BA658F155F0A38013DBA16BC556DFEA99012BE59368047E",
+  "unityJsonSha256": "A5C901FFDCF5C7713B2A918A62BBE147AFF442574EBB1C7BF76D8CB5B93E24BF"
+}

@@ -1,0 +1,89 @@
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M Assets/NTSD/Scripts/Animation/BattleEntityOverlayRenderer.cs
+ M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+ M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+ M Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs
+ M Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponFrameLogicResolver.cs
+ M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs
+ M Assets/NTSD/Scripts/Simulation/Core/BattleSpatialProjection.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeHitSparkWriter.cs
+ M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs
+ M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationMotionSampler.cs
+ M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs
+ M Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs
+ M Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattlePresentationCommandWriterEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattlePresentationMotionSamplerEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardHitRestProductionIntegrationEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28D024UnifiedSpatialProjectionEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q06HitSparkEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07AirborneIdleBattlePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040NaturalScenePlayProbeEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07HeldWeaponDualDomainEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28Q09P08SameStateBattlePlayProbeEditor.cs
+ M artifacts/diagnostics/NTSD28-336B44-Q01-INDEXED-CONTENT-IDENTITY-20261001/REPORT.md
+ M artifacts/diagnostics/NTSD28-336B44-Q07-ROLE-SELECTION-IMPACT-20261005/REPORT.md
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-IDLE-TICK14-GAMEVIEW-001.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/DECISIONS.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD28-336B44-Q09-IDLE-TICK14-GAMEVIEW-001.md
+?? artifacts/diagnostics/NTSD28-336B44-Q01-FORMAL-ONLY-CONSUMER-ROUTING-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-held-anchor-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-vertical-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-vertical-green-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-vertical-r120-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-HELD-ANCHOR-REQUEST-20261005-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001/d024-shadow-height-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-R120-REQUEST-20261005-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-SPARK-REQUEST-20261005-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q07-d024-spark-green-20261005-01.json
+?? artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q07-d024-spark-green-20261005-01/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-D024-SHADOW-REQUEST-20261005-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-IDLE-TICK14-GAMEVIEW-001/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-SHADOW-CUSTOM-CONTENT-REACH-20261005/
+?? artifacts/diagnostics/NTSD28-336B44-Q09-TICK14-BODY-SIZE-20261005/
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-SPARK-VIEW-ANCHOR-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-PROBE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-WPOINT-SCENE-PROBE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-PROBE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-D024-HELD-ANCHOR-REQUEST-20261005-001/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-D024-R120-REQUEST-20261005-001/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-D024-SCENE-REQUEST-20261005-001/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-D024-SPARK-REQUEST-20261005-001/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-001-EDIT-20261005/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001-EDIT-20261005/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q09-D024-SHADOW-REQUEST-20261005-001/
+?? docs/ai/TASKS/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-D024-SPARK-VIEW-ANCHOR-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-001.md
+?? docs/ai/TASKS/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001.md

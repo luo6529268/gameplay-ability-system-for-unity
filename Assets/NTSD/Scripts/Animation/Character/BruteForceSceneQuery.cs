@@ -7677,6 +7677,11 @@ namespace NTSD.Animation
                 return new WorldRect(x1, RectMin, x2, RectMax);
 
             VerticalWorldRect(y, frame.centery, rect.Y, rect.H, intMinFullHeight: false, out int y1, out int y2);
+            if (projection.VerticalScale != 1.0)
+            {
+                y1 = ProjectCollisionY(projection, y1);
+                y2 = ProjectCollisionY(projection, y2);
+            }
             return new WorldRect(x1, y1, x2, y2);
         }
 
@@ -7712,6 +7717,11 @@ namespace NTSD.Animation
 
             int y1 = ExeI32Add3(y, -frame.centery, itr.y);
             int y2 = unchecked(y1 + itr.h);
+            if (projection.VerticalScale != 1.0)
+            {
+                y1 = ProjectCollisionY(projection, y1);
+                y2 = ProjectCollisionY(projection, y2);
+            }
             return new WorldRect(x1, y1, x2, y2);
         }
 
@@ -7735,6 +7745,11 @@ namespace NTSD.Animation
             BattleSpatialProjection projection,
             double sourceX) =>
             ClampRect(projection.SourceToViewX(sourceX));
+
+        private static int ProjectCollisionY(
+            BattleSpatialProjection projection,
+            int sourceY) =>
+            ClampRect(projection.SourceDeltaToViewY(sourceY));
 
         private static bool IsEntityFacingLeft(LF2Entity entity)
         {

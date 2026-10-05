@@ -1,0 +1,25 @@
+{
+  "request": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.BattlePresentationCommandWriterEditorTests.PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies",
+      "NTSD.Test.BattlePresentationCommandWriterEditorTests.PlatformShadowOffset_LegacyRendererUsesSameVisualOffset"
+    ],
+    "includeDetails": true,
+    "includeFailedTests": true
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "6eaa10789c534d5eb3902db8d1767b47",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

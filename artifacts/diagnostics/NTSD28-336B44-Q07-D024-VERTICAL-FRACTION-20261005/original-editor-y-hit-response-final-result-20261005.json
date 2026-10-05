@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "b9cc60e2fcbd426386c4ff058a1026dc",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791195031080,
+      "finished_unix_ms": 1791195038026,
+      "last_update_unix_ms": 1791195038026,
+      "progress": {
+        "completed": 6,
+        "total": 8837,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791195037609,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5StandardHitRestProductionIntegrationEditorTests.AirborneVerticalBoundaryPreservesCommittedDamageAcrossViewScale(True,-9)",
+        "last_finished_unix_ms": 1791195037612,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5StandardHitRestProductionIntegrationEditorTests.AirborneVerticalBoundaryPreservesCommittedDamageAcrossViewScale(False,-11)",
+            "message": "  Expected: -3\r\n  But was:  3\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5StandardHitRestProductionIntegrationEditorTests.AirborneVerticalBoundaryPreservesCommittedDamageAcrossViewScale(True,-11)",
+            "message": "  Expected: -3\r\n  But was:  3\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

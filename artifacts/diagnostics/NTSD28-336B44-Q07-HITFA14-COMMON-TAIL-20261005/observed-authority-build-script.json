@@ -1,0 +1,361 @@
+{
+  "utc": "2026-10-05T13:07:02.459762+00:00",
+  "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+  "sha256": "C3151351D683CE557B2E47C89742E62D69B51D68B2DA006D2D36CDF33AA68A00",
+  "size": 39855,
+  "mtimeNs": 1791205559820770100,
+  "relevantLines": [
+    {
+      "line": 58,
+      "text": "$coreSources = @("
+    },
+    {
+      "line": 59,
+      "text": "    'src\\data\\dat_document.cpp',"
+    },
+    {
+      "line": 60,
+      "text": "    'src\\data\\dat_parser.cpp',"
+    },
+    {
+      "line": 61,
+      "text": "    'src\\data\\fusion_catalog.cpp',"
+    },
+    {
+      "line": 62,
+      "text": "    'src\\data\\kind_catalog.cpp',"
+    },
+    {
+      "line": 63,
+      "text": "    'src\\data\\minibar_catalog.cpp',"
+    },
+    {
+      "line": 64,
+      "text": "    'src\\data\\object_catalog.cpp',"
+    },
+    {
+      "line": 65,
+      "text": "    'src\\simulation\\frame_machine.cpp',"
+    },
+    {
+      "line": 66,
+      "text": "    'src\\simulation\\frame_motion.cpp',"
+    },
+    {
+      "line": 67,
+      "text": "    'src\\simulation\\native_random.cpp',"
+    },
+    {
+      "line": 68,
+      "text": "    'src\\simulation\\native_ai.cpp',"
+    },
+    {
+      "line": 69,
+      "text": "    'src\\simulation\\input_routing.cpp',"
+    },
+    {
+      "line": 70,
+      "text": "    'src\\simulation\\physics_integrator.cpp',"
+    },
+    {
+      "line": 71,
+      "text": "    'src\\simulation\\collision_geometry.cpp',"
+    },
+    {
+      "line": 72,
+      "text": "    'src\\simulation\\hit_candidates.cpp',"
+    },
+    {
+      "line": 73,
+      "text": "    'src\\simulation\\hit_response.cpp',"
+    },
+    {
+      "line": 74,
+      "text": "    'src\\simulation\\combat_records.cpp',"
+    },
+    {
+      "line": 75,
+      "text": "    'src\\simulation\\damage_resolution.cpp',"
+    },
+    {
+      "line": 76,
+      "text": "    'src\\simulation\\defense_resolution.cpp',"
+    },
+    {
+      "line": 77,
+      "text": "    'src\\simulation\\armor_resolution.cpp',"
+    },
+    {
+      "line": 78,
+      "text": "    'src\\simulation\\object_spawning.cpp',"
+    },
+    {
+      "line": 79,
+      "text": "    'src\\simulation\\battle_world.cpp',"
+    },
+    {
+      "line": 80,
+      "text": "    'src\\simulation\\battle_flow.cpp',"
+    },
+    {
+      "line": 81,
+      "text": "    'src\\simulation\\simulation_tick_driver.cpp',"
+    },
+    {
+      "line": 82,
+      "text": "    'src\\rendering\\render_snapshot.cpp',"
+    },
+    {
+      "line": 83,
+      "text": "    'src\\rendering\\background_definition.cpp',"
+    },
+    {
+      "line": 84,
+      "text": "    'src\\rendering\\native_resource_catalog.cpp',"
+    },
+    {
+      "line": 85,
+      "text": "    'src\\rendering\\native_frame_hud.cpp',"
+    },
+    {
+      "line": 86,
+      "text": "    'src\\rendering\\native_combo_hud.cpp'"
+    },
+    {
+      "line": 87,
+      "text": ") | ForEach-Object { Join-Path $coreRoot $_ }"
+    },
+    {
+      "line": 749,
+      "text": "}"
+    },
+    {
+      "line": 750,
+      "text": ""
+    },
+    {
+      "line": 751,
+      "text": "$arguments = @("
+    },
+    {
+      "line": 752,
+      "text": "    '-std=c++17',"
+    },
+    {
+      "line": 753,
+      "text": "    '-O2',"
+    },
+    {
+      "line": 754,
+      "text": "    '-Wall',"
+    },
+    {
+      "line": 755,
+      "text": "    '-Wextra',"
+    },
+    {
+      "line": 756,
+      "text": "    '-Wpedantic',"
+    },
+    {
+      "line": 757,
+      "text": "    '-municode',"
+    },
+    {
+      "line": 758,
+      "text": "    '-mwindows',"
+    },
+    {
+      "line": 759,
+      "text": "    '-DUNICODE',"
+    },
+    {
+      "line": 760,
+      "text": "    '-D_UNICODE',"
+    },
+    {
+      "line": 761,
+      "text": "    '-finput-charset=UTF-8',"
+    },
+    {
+      "line": 762,
+      "text": "    '-fexec-charset=UTF-8',"
+    },
+    {
+      "line": 763,
+      "text": "    ('-I' + (Join-Path $coreRoot 'include')),"
+    },
+    {
+      "line": 764,
+      "text": "    ('-I' + (Join-Path $playableRoot 'include'))"
+    },
+    {
+      "line": 765,
+      "text": ") + $coreSources + @("
+    },
+    {
+      "line": 766,
+      "text": "    (Join-Path $playableRoot 'src\\game_session.cpp'),"
+    },
+    {
+      "line": 767,
+      "text": "    (Join-Path $playableRoot 'src\\selection_flow.cpp'),"
+    },
+    {
+      "line": 768,
+      "text": "    (Join-Path $playableRoot 'src\\audio_backend.cpp'),"
+    },
+    {
+      "line": 769,
+      "text": "    (Join-Path $playableRoot 'src\\d3d11_renderer.cpp'),"
+    },
+    {
+      "line": 770,
+      "text": "    (Join-Path $playableRoot 'src\\lfr_recorder.cpp'),"
+    },
+    {
+      "line": 771,
+      "text": "    (Join-Path $playableRoot 'src\\game_session_lfr.cpp'),"
+    },
+    {
+      "line": 772,
+      "text": "    (Join-Path $playableRoot 'src\\recording_application.cpp'),"
+    },
+    {
+      "line": 773,
+      "text": "    (Join-Path $playableRoot 'src\\scenario28.cpp'),"
+    },
+    {
+      "line": 774,
+      "text": "    (Join-Path $playableRoot 'src\\presentation_interpolation.cpp'),"
+    },
+    {
+      "line": 775,
+      "text": "    (Join-Path $playableRoot 'src\\main.cpp'),"
+    },
+    {
+      "line": 776,
+      "text": "    $versionResource,"
+    },
+    {
+      "line": 777,
+      "text": "    '-ld3d11',"
+    },
+    {
+      "line": 778,
+      "text": "    '-ldxgi',"
+    },
+    {
+      "line": 779,
+      "text": "    '-ld3dcompiler',"
+    },
+    {
+      "line": 780,
+      "text": "    '-lwindowscodecs',"
+    },
+    {
+      "line": 781,
+      "text": "    '-lole32',"
+    },
+    {
+      "line": 782,
+      "text": "    '-lshell32',"
+    },
+    {
+      "line": 783,
+      "text": "    '-lgdi32',"
+    },
+    {
+      "line": 784,
+      "text": "    '-lcomdlg32',"
+    },
+    {
+      "line": 785,
+      "text": "    '-luuid',"
+    },
+    {
+      "line": 786,
+      "text": "    '-lwinmm',"
+    },
+    {
+      "line": 787,
+      "text": "    '-lxaudio2_9',"
+    },
+    {
+      "line": 788,
+      "text": "    '-lmfplat',"
+    },
+    {
+      "line": 789,
+      "text": "    '-lmfreadwrite',"
+    },
+    {
+      "line": 790,
+      "text": "    '-lmfuuid',"
+    },
+    {
+      "line": 791,
+      "text": "    '-lpropsys',"
+    },
+    {
+      "line": 792,
+      "text": "    '-lz',"
+    },
+    {
+      "line": 793,
+      "text": "    '-static-libgcc',"
+    },
+    {
+      "line": 794,
+      "text": "    '-static-libstdc++',"
+    },
+    {
+      "line": 795,
+      "text": "    '-o',"
+    },
+    {
+      "line": 796,
+      "text": "    (Join-Path $buildRoot 'Ntsd28Playable.exe')"
+    },
+    {
+      "line": 797,
+      "text": ")"
+    },
+    {
+      "line": 798,
+      "text": ""
+    },
+    {
+      "line": 799,
+      "text": "Write-Host '[build] Ntsd28Playable.exe'"
+    },
+    {
+      "line": 800,
+      "text": "& $compiler @arguments"
+    },
+    {
+      "line": 801,
+      "text": "if ($LASTEXITCODE -ne 0) {"
+    },
+    {
+      "line": 802,
+      "text": "    throw \"Ntsd28Playable build failed with exit code $LASTEXITCODE\""
+    },
+    {
+      "line": 803,
+      "text": "}"
+    },
+    {
+      "line": 804,
+      "text": "if ($Target -eq 'playable') {"
+    },
+    {
+      "line": 805,
+      "text": "    Write-Host \"[build] focused complete: $buildRoot\""
+    },
+    {
+      "line": 806,
+      "text": "    return"
+    }
+  ]
+}

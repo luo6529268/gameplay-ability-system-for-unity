@@ -624,6 +624,7 @@ namespace NTSD.Animation.Rendering
                                     DisplayMotion.Prepare(
                                         buildFrame, displayAlpha,
                                         world.FixedViewRunDistanceScale,
+                                        world.SpatialProjection.VerticalScale,
                                         world.FixedViewRunVerticalDistanceScale);
                                     DisplayMotion.ApplyToCapturedCommands(buildFrame);
                                 }

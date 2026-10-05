@@ -3,11 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.EditorTools;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace NTSD.Test.Editor
 {
@@ -19,6 +22,109 @@ namespace NTSD.Test.Editor
             "artifacts/diagnostics/NTSD28-Q07-HELD-WEAPON-DUAL-DOMAIN-FULL-TICK-001";
         private const double XFactor = 2048.0 / 1333.0;
         private const double ZFactor = 1152.0 / 730.0;
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NaturalPickupHeldWeapon_ViewWPointsCoincideAfterProjection(bool configuredView)
+        {
+            NativeRow expected = ReadNativeRows()[1];
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                FormalRuntime, Root + "/naruto-held-weapon-24.json",
+                BattleRuntimeProfile.Authority400, 24,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(
+                        configuredView ? 2048 : 1333, configuredView ? 1152 : 730);
+                    LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity opponent = world.FindEntityByRuntimeSlotForQuery(1);
+                    holder.Runtime.SetSourceRulePosition(holder.Runtime.X, holder.Runtime.Z);
+                    holder.Runtime.SyncSourceRuleIntegerPosition();
+                    opponent.Runtime.SetSourceRulePosition(opponent.Runtime.X, opponent.Runtime.Z);
+                    opponent.Runtime.SyncSourceRuleIntegerPosition();
+                    var weaponData = world.RuntimeCharacterConfigs.Resolve(120);
+                    Assert.That(weaponData?.characterData, Is.Not.Null);
+                    var weapon = new LF2Weapon();
+                    weapon.ObjectId = 120;
+                    weapon.SetWeaponType(1);
+                    weapon.FrameCache.Load(weaponData);
+                    weapon.SetRequiredRuntimeSlot(50);
+                    world.Register(weapon);
+                    weapon.ImmediateFrame(64);
+                    weapon.Health.HP = 100;
+                    weapon.Runtime.SetPosition(190, 0, 542);
+                    weapon.Runtime.SyncIntegerPosition();
+                    weapon.Runtime.SetSourceRulePosition(190, 542);
+                    weapon.Runtime.SyncSourceRuleIntegerPosition();
+                    for (int tick = 1; tick <= 2; tick++)
+                        Assert.That(driver.StepOneTick(inputs[tick - 1], true, true), Is.True);
+
+                    Assert.That(holder.Frame.D.frameId, Is.EqualTo(expected.ActorAction));
+                    Assert.That(weapon.Frame.D.frameId, Is.EqualTo(expected.WeaponAction));
+                    Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(50));
+                    Assert.That(weapon.Runtime.LinkState, Is.EqualTo(-1));
+                    Assert.That(weapon.Runtime.HolderStableId, Is.EqualTo(0));
+                    Assert.That(holder.Runtime.SourceRuleXInt, Is.EqualTo(expected.ActorX));
+                    Assert.That(holder.Runtime.SourceRuleZInt, Is.EqualTo(expected.ActorZ));
+                    Assert.That(weapon.Runtime.SourceRuleXInt, Is.EqualTo(expected.WeaponX));
+                    Assert.That(weapon.Runtime.SourceRuleZInt, Is.EqualTo(expected.WeaponZ));
+
+                    Vector2 offset = LF2ObjectRenderer.ResolveHeldVisualAttachmentOffsetPixels(
+                        weapon.Runtime, weapon.Frame.D, holder, NTSDRenderSpace.BattleVisualScale);
+                    Vector2 holderPoint = RenderedWeaponPoint(holder, world.SpatialProjection, 2);
+                    Vector2 weaponPoint = RenderedWeaponPoint(weapon, world.SpatialProjection, 2) + offset;
+                    Vector2 difference = weaponPoint - holderPoint;
+                    string directory = Path.GetFullPath(
+                        "artifacts/diagnostics/NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-20261005");
+                    Directory.CreateDirectory(directory);
+                    string output = Path.Combine(directory, "pickup-anchor-" +
+                        (configuredView ? "project-" : "identity-") +
+                        DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff", CultureInfo.InvariantCulture) +
+                        "-" + Guid.NewGuid().ToString("N") + ".csv");
+                    using (var stream = new FileStream(output, FileMode.CreateNew, FileAccess.Write))
+                    using (var writer = new StreamWriter(stream))
+                    {
+                        writer.WriteLine("tick,configured_view,holder_action,weapon_action,holder_source_x,weapon_source_x,holder_y,weapon_y,holder_view_x,weapon_view_x,holder_view_z,weapon_view_z,holder_center_x,holder_center_y,holder_wpoint_x,holder_wpoint_y,weapon_center_x,weapon_center_y,weapon_wpoint_x,weapon_wpoint_y,offset_x,offset_y,holder_point_x,holder_point_y,weapon_point_x,weapon_point_y,difference_x,difference_y");
+                        writer.WriteLine(string.Join(",", new double[]
+                        {
+                            2, configuredView ? 1 : 0, holder.Frame.D.frameId, weapon.Frame.D.frameId,
+                            holder.Runtime.SourceRuleXInt, weapon.Runtime.SourceRuleXInt,
+                            holder.Runtime.YInt, weapon.Runtime.YInt,
+                            holder.Runtime.XInt, weapon.Runtime.XInt,
+                            holder.GetDisplayZ(), weapon.GetDisplayZ(),
+                            holder.Frame.D.centerx, holder.Frame.D.centery,
+                            holder.Frame.D.PrimaryWeaponPoint.X, holder.Frame.D.PrimaryWeaponPoint.Y,
+                            weapon.Frame.D.centerx, weapon.Frame.D.centery,
+                            weapon.Frame.D.PrimaryWeaponPoint.X, weapon.Frame.D.PrimaryWeaponPoint.Y,
+                            offset.x, offset.y, holderPoint.x, holderPoint.y,
+                            weaponPoint.x, weaponPoint.y, difference.x, difference.y
+                        }.Select(value => value.ToString("R", CultureInfo.InvariantCulture))));
+                    }
+                    TestContext.Progress.WriteLine("D024 held WPoint geometry: " + output);
+                    Assert.That(difference.x, Is.EqualTo(0.0).Within(0.0003), "held visual WPoint X");
+                    Assert.That(difference.y, Is.EqualTo(0.0).Within(0.0003), "held visual WPoint Y");
+                }, useProjectMode: true);
+        }
+
+        private static Vector2 RenderedWeaponPoint(
+            LF2Entity entity, BattleSpatialProjection projection, int tick)
+        {
+            LF2FrameData frame = entity.Frame.D;
+            float width = entity.GetSpriteWidthPxForRender();
+            float height = entity.GetSpriteHeightPxForRender();
+            float scale = NTSDRenderSpace.BattleVisualScale;
+            bool facingLeft = entity.Runtime.Dir == "left";
+            Vector2 pivot = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                entity.Runtime.XInt, entity.Runtime.YInt, entity.GetDisplayZ(),
+                entity.GetRenderOffsetX(), entity.Match.ReleaseCameraX,
+                entity.FrameDelay, tick, facingLeft, width, height,
+                frame.centerx, frame.centery, scale, projection.VerticalScale);
+            float pointX = facingLeft ? width - frame.PrimaryWeaponPoint.X :
+                frame.PrimaryWeaponPoint.X;
+            return pivot + new Vector2(
+                scale * (pointX - width * 0.5f),
+                scale * (frame.PrimaryWeaponPoint.Y - height));
+        }
 
         [Test]
         public void NaturalPickupMovingHeldWeapon_KeepsRuleAndScaledViewDomains()

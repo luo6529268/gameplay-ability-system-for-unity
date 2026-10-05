@@ -1,5 +1,9 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using NTSD.Animation;
 using NTSD.Simulation;
+using NTSD.Animation.LF2Objects;
 using NUnit.Framework;
 
 namespace NTSD.Test.Editor
@@ -73,6 +77,70 @@ namespace NTSD.Test.Editor
             Assert.That(projection.ViewToSourceZ(
                     projection.SourceToViewZ(180.5, anchorZ), anchorZ),
                 Is.EqualTo(180.5).Within(1e-9));
+        }
+
+        [Test]
+        public void GlobalHeightUsesViewHeightRatioWithoutChangingApprovedSpriteScale()
+        {
+            BattleSpatialProjection projection =
+                BattleSpatialProjection.FromReferenceViewport(2048, 1152);
+            double expectedHeightDelta = 2.0 * 1152.0 / 730.0;
+
+            Assert.That(projection.SourceDeltaToViewY(2),
+                Is.EqualTo(expectedHeightDelta).Within(1e-12));
+            Assert.That(BattleSpatialProjection.Identity.SourceDeltaToViewY(2),
+                Is.EqualTo(2.0));
+
+            UnityEngine.Vector2 before = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500, -22, 402f, 0f, 0, 0, 21, false,
+                60f, 80f, 30f, 60f, 1.5f, projection.VerticalScale);
+            UnityEngine.Vector2 after = LF2ObjectRenderer.ComputeEntityBottomCenterPivotPixels(
+                500, -20, 402f, 0f, 0, 0, 23, false,
+                60f, 80f, 30f, 60f, 1.5f, projection.VerticalScale);
+            Assert.That(after.y - before.y,
+                Is.EqualTo(expectedHeightDelta).Within(1e-4));
+            Assert.That(after.x, Is.EqualTo(before.x));
+        }
+
+        [Test]
+        public void OrdinaryBodyYEndpointsProjectOnceAndFullHeightStaysSentinel()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            var normalBody = new BattleBodyBoxValue(-10, -5, 20, 10);
+            var fullBody = new BattleBodyBoxValue(-101, int.MinValue, 900, 0);
+            var frame = new LF2FrameData
+            {
+                frameId = 0,
+                state = LF2States.Standing,
+                centerx = 10,
+                centery = 10,
+                bodies = new List<BattleBodyBoxValue> { normalBody, fullBody },
+            };
+            var data = new LF2CharacterData
+            {
+                type_sub = 0,
+                frames = new List<LF2FrameData> { frame },
+            };
+            var entity = new LF2Character { ObjectId = 8810 };
+            entity.SetRequiredRuntimeSlot(0);
+            entity.FrameCache.Load(new LF2CharacterDataWrapper(8810, data));
+            entity.ImmediateFrame(0);
+            world.Register(entity);
+            entity.Runtime.YInt = -20;
+
+            Assert.That(BruteForceSceneQuery.TryBuildBodyBattleVolume(
+                entity, frame, normalBody, out PhysicsState.BattleVolume normal), Is.True);
+            double scale = 1152.0 / 730.0;
+            int expectedTop = (int)Math.Truncate(-35.0 * scale);
+            int expectedBottom = (int)Math.Truncate(-25.0 * scale);
+            Assert.That(normal.y, Is.EqualTo(expectedTop));
+            Assert.That(normal.h, Is.EqualTo(expectedBottom - expectedTop));
+
+            Assert.That(BruteForceSceneQuery.TryBuildBodyBattleVolume(
+                entity, frame, fullBody, out PhysicsState.BattleVolume full), Is.True);
+            Assert.That(full.y, Is.EqualTo(-1000000000f));
+            Assert.That(full.h, Is.EqualTo(2000000000f));
         }
 
         [Test]

@@ -1,0 +1,28 @@
+{
+  "exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "argv": [
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+    "--resource-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--complete-vfs-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--headless-playback-lfr",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\idle-global14-derived-input-v2.lfr",
+    "--headless-playback-report",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\root-playback-report-v2.json",
+    "--headless-playback-trace",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\root-trace-v2.jsonl",
+    "--lfr-slot0-action",
+    "0",
+    "--lfr-slot1-action",
+    "0",
+    "--lfr-slot0-facing",
+    "0",
+    "--lfr-slot1-facing",
+    "1",
+    "--lfr-slot0-mp",
+    "200",
+    "--lfr-slot1-mp",
+    "200"
+  ]
+}

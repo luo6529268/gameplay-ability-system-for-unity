@@ -1,0 +1,40 @@
+{
+  "utc": "2026-10-05T11:30:24.314640+00:00",
+  "files": [
+    {
+      "path": "Temp/NTSD28_Q07_D024_PlatformNaturalScene.request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q07_D024_PlatformNaturalScene.request.json",
+      "exists": false,
+      "bytes": 0,
+      "sha256": null,
+      "gitStatus": ""
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001/d024-shadow-height-20261005-01.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-PLATFORM-NATURAL-SCENE-001\\d024-shadow-height-20261005-01.json",
+      "exists": false,
+      "bytes": 0,
+      "sha256": null,
+      "gitStatus": ""
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "formalExe": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+}

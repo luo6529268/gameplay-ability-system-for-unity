@@ -29,6 +29,16 @@ namespace NTSD.Simulation.Presentation
             double viewScaleX,
             double viewScaleZ)
         {
+            Prepare(frame, alpha, viewScaleX, 1.0, viewScaleZ);
+        }
+
+        public void Prepare(
+            BattlePresentationFrame frame,
+            double alpha,
+            double viewScaleX,
+            double viewScaleY,
+            double viewScaleZ)
+        {
             if (generation == int.MaxValue)
             {
                 Array.Clear(previousGenerationBySlot, 0,
@@ -73,7 +83,7 @@ namespace NTSD.Simulation.Presentation
                 if (BattlePresentationMotionSampler.Sample(
                         previous, current,
                         frame.PreviousMotionTickIndex, frame.TickIndex,
-                        alpha, viewScaleX, viewScaleZ,
+                        alpha, viewScaleX, viewScaleY, viewScaleZ,
                         out BattlePresentationMotionDelta delta) !=
                     BattlePresentationMotionSampleStatus.Sampled)
                 {
@@ -137,7 +147,7 @@ namespace NTSD.Simulation.Presentation
         {
             return new Vector3(
                 (float)delta.ViewX * NTSDRenderSpace.UnitsPerPixelX,
-                -(float)(delta.Y + delta.ViewZ) * NTSDRenderSpace.UnitsPerPixelY,
+                -(float)(delta.ViewY + delta.ViewZ) * NTSDRenderSpace.UnitsPerPixelY,
                 0f);
         }
 

@@ -1,0 +1,27 @@
+{
+  "scene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Battle",
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "buildIndex": 1,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 11
+      }
+    }
+  },
+  "console": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  },
+  "runtimeAssemblyNewer": true,
+  "editorAssemblyNewer": true
+}

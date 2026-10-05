@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "242dd61ff0514d7d9eee2746486fb120",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791203005965,
+      "finished_unix_ms": 1791203035638,
+      "last_update_unix_ms": 1791203035638,
+      "progress": {
+        "completed": 1,
+        "total": 8859,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791203010734,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedTrackingSourcePairSurvivesOneFullDriverTick",
+        "last_finished_unix_ms": 1791203034335,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 24.1515287,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

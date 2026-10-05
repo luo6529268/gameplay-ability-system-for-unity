@@ -1,0 +1,160 @@
+{
+  "status": "SCOPED_ORIGINAL_SCENE_R120_COMMAND_PASS",
+  "observedUtc": "2026-10-05T10:28:13.908594+00:00",
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "runId": "d024-vertical-r120-20261005-01",
+  "inputs": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-vertical-green-20261005-01.json",
+      "sha256": "F3D090762B3508CB21AE3442DCE44CA41AABFE39A6B3739F64A3BBA75AF3C5DF",
+      "bytes": 66078
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-vertical-r120-20261005-01.json",
+      "sha256": "A4BE804DBAC6E76FB95B463D6B97C5D9B8D4BD8698D9C51B73182B1D5DAF1FA9",
+      "bytes": 67944
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005\\landing-reuse-comparison-20261005.json",
+      "sha256": "990344E9AFB8060CBF00C121EB45A029DA85F9A4AF56B9718A42BF4977B84327",
+      "bytes": 8214
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-R120-REQUEST-20261005-001\\after-manifest.json",
+      "sha256": "6A73B203554D1D26201FAB2CC2546804B44CE2D02DEFECAB3F3BEEDA38370A2D",
+      "bytes": 3589
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07AirborneIdleBattlePlayProbeEditor.cs",
+      "sha256": "16A855465BA32D420FFE08B021B0259C7A05DE2B04139972D276968E2EF9ECAE",
+      "bytes": 28585
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationMotionSampler.cs",
+      "sha256": "86AF617C641A509EBF1CECB81414BB5F8A13D88BD2896B9E0057B5DA3FE6A492",
+      "bytes": 5021
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "sha256": "9EB25754712EBC31BCA08437D965320DE845D51CA39B698BFDD45F8F0E6B293F",
+      "bytes": 97191
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "sha256": "7E7A46089EC74D02642DE7520FA6690EF17E30688B81BFD0E0CE7CEBC677FEDE",
+      "bytes": 5826048
+    }
+  ],
+  "verifiedExistingAuthorityTraceInputs": [
+    {
+      "name": "source_entities",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\source-entities.csv",
+      "sha256": "B0A9EE53473964BA89988DCD5BB21B851109C1F7F68590DFA0246B726FAC899F"
+    },
+    {
+      "name": "source_rng",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\source-rng.csv",
+      "sha256": "219C4B555EC3DB2D7CBCCFD546E2EEB56DE57658BB79E35D083C925A980D70DC"
+    },
+    {
+      "name": "formal_root_trace",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\root-trace.jsonl",
+      "sha256": "9A4A3BB52C928658A456FD869A9D35098C1123F34693875B81D3D2363F859B13"
+    }
+  ],
+  "compile": {
+    "command": "dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q -clp:ErrorsOnly",
+    "exitCode": 0,
+    "errors": 0,
+    "warnings": 301
+  },
+  "newVsBaselineSamples": {
+    "ticks": 32,
+    "fullSamplesExactlyEqual": true,
+    "differences": []
+  },
+  "reusedSourceParity": {
+    "comparedFields": 1690,
+    "differences": [],
+    "proof": "fresh full sample equality plus unchanged baseline/source input hashes; not a new native run"
+  },
+  "reusedFormalRootParity": {
+    "comparedFields": 1658,
+    "differences": [],
+    "excludedFields": [
+      "crtState"
+    ],
+    "proof": "fresh full sample equality plus unchanged baseline/root input hashes; independent CRT seed limitation retained"
+  },
+  "interpolation": {
+    "previousMotionTick": 27,
+    "previousPreciseY": -22.0,
+    "currentPreciseY": -20.3,
+    "previousPreciseZ": 402.0,
+    "currentPreciseZ": 402.0,
+    "sampledRoundedY": -22.0,
+    "sourceDeltaY": -2.0,
+    "expectedBodyDeltaPixels": 3.1561643835616437,
+    "observedBodyDeltaPixels": 3.1561852206927217,
+    "observedShadowDeltaPixels": 0.0,
+    "partial": {
+      "relativeTick": 23,
+      "globalTick": 28,
+      "publishedTick": 28,
+      "planTick": 28,
+      "slot": 51,
+      "action": 212,
+      "sourceY": -20,
+      "sourceZ": 402,
+      "bodyCommands": 1,
+      "shadowCommands": 1,
+      "renderFps": 120,
+      "displayAlpha": 0.0156545455392932,
+      "viewportHeightPixels": 1152.0,
+      "bodyWorldY": -8.032822608947754,
+      "shadowWorldY": -8.380000114440918,
+      "bodyMinusShadowPixels": 34.717750549316406
+    },
+    "complete": {
+      "relativeTick": 23,
+      "globalTick": 28,
+      "publishedTick": 28,
+      "planTick": 28,
+      "slot": 51,
+      "action": 212,
+      "sourceY": -20,
+      "sourceZ": 402,
+      "bodyCommands": 1,
+      "shadowCommands": 1,
+      "renderFps": 30,
+      "displayAlpha": 1.0,
+      "viewportHeightPixels": 1152.0,
+      "bodyWorldY": -8.064384460449219,
+      "shadowWorldY": -8.380000114440918,
+      "bodyMinusShadowPixels": 31.561565399169922
+    }
+  },
+  "independentFormula": {
+    "verticalScale": 1.5780821917808219,
+    "sourceRoundedDeltaY": -2,
+    "expectedBodyDeltaViewPixels": 3.1561643835616437,
+    "observedBodyDeltaViewPixels": 3.1561852206927217,
+    "errorViewPixels": 2.0837131077922066e-05,
+    "sourceFraction": 0.0027397260273972603,
+    "viewFraction": 0.002739744115184654
+  },
+  "postconditions": {
+    "exitedPlay": true,
+    "sceneClean": true,
+    "sceneSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "consoleErrors": 0,
+    "requestRestored": true
+  },
+  "limitations": [
+    "single natural OID85 intermediate alpha command sample; not actual device 120 FPS or GPU Present",
+    "no new formal GUI/native execution",
+    "no actual original Scene airborne ordinary hit witness",
+    "no full World/checksum parity; formal CRT initial state differs without calls",
+    "BattleVisualScale 1.5 remains user-approved exception"
+  ]
+}

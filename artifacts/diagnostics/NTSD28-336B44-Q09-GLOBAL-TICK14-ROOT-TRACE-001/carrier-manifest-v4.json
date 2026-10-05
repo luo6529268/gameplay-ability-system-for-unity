@@ -1,0 +1,11 @@
+{
+  "source_sha256": "8840583F73011F1C7C632A6E923DBDFFDB570972695B59168371DD014390828E",
+  "derived_sha256": "4872D6B73F51D072DB00495C898BDAFFD4D619C14C690795C613C467549F349A",
+  "only_change": {
+    "field": "terminal logical slot1 input_hp_consumed_total",
+    "offset": 184,
+    "old": 20,
+    "new": 0
+  },
+  "reason": "v3 completed all 15 ticks but retained old attack target damage header"
+}

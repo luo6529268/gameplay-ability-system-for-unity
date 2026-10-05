@@ -26,10 +26,14 @@ namespace NTSD.Test.Editor
         private const string RequestPath = "Temp/NTSD28_Q09_P08SameState.request.json";
         private const string RegressionRequestPath = "Temp/NTSD28_Q07_HumanButtonRegression.request.json";
         private const string IdleRequestPath = "Temp/NTSD28_Q09_IdleTick14.request.json";
+        private const string GlobalIdleRequestPath = "Temp/NTSD28_Q09_GlobalTick14.request.json";
+        private const string GlobalIdleRetryRequestPath = "Temp/NTSD28_Q09_GlobalTick14Retry.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/";
         private const string IdleResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q09-IDLE-TICK14-GAMEVIEW-001/";
+        private const string GlobalIdleResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q09-GLOBAL-TICK14-GAMEVIEW-001/";
         private const string SessionKey = "NTSD.Q09.P08SameState";
         private const string ConsumedKey = "NTSD.Q09.P08SameState.Consumed";
 
@@ -92,6 +96,7 @@ namespace NTSD.Test.Editor
             public bool exitedPlay;
             public bool configuredBeforeStart;
             public bool idleTick14;
+            public bool idleGlobalTick14;
             public bool returnToMenu;
             public bool returnedToMenu;
             public string menuHashBefore;
@@ -99,6 +104,7 @@ namespace NTSD.Test.Editor
             public string contentRoot;
             public int startTick;
             public int endTick;
+            public int initialObjectCount;
             public int battleMode;
             public int difficulty;
             public int initialInputPhase;
@@ -189,6 +195,14 @@ namespace NTSD.Test.Editor
                     "overrideCharacterIds", BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(field != null, "BattleTestBootstrap override field is unavailable.");
                 field.SetValue(bootstrap, new[] { 2, 9 });
+                if (report.idleGlobalTick14)
+                {
+                    FieldInfo autoResumeField = typeof(BattleTestBootstrap).GetField(
+                        "autoResume", BindingFlags.Instance | BindingFlags.NonPublic);
+                    Require(autoResumeField != null,
+                        "BattleTestBootstrap auto-resume field is unavailable.");
+                    autoResumeField.SetValue(bootstrap, false);
+                }
                 report.configuredBeforeStart = true;
                 Persist();
             }
@@ -230,7 +244,7 @@ namespace NTSD.Test.Editor
                     return;
                 }
                 Require(DateTime.UtcNow - new DateTime(report.startedUtcTicks,
-                    DateTimeKind.Utc) < TimeSpan.FromMinutes(8),
+                    DateTimeKind.Utc) < TimeSpan.FromMinutes(report.idleGlobalTick14 ? 3 : 8),
                     "Original Battle Scene Play timed out.");
                 if (report.phase == "OPENING_SCENE")
                 {
@@ -265,36 +279,62 @@ namespace NTSD.Test.Editor
 
         private static void TryStart()
         {
+            string globalRequestFile = ProjectPath(GlobalIdleRequestPath);
+            string globalRetryRequestFile = ProjectPath(GlobalIdleRetryRequestPath);
             string idleRequestFile = ProjectPath(IdleRequestPath);
             string regressionRequestFile = ProjectPath(RegressionRequestPath);
+            Request globalRequest = File.Exists(globalRequestFile)
+                ? JsonUtility.FromJson<Request>(File.ReadAllText(globalRequestFile)) : null;
+            Request globalRetryRequest = File.Exists(globalRetryRequestFile)
+                ? JsonUtility.FromJson<Request>(File.ReadAllText(globalRetryRequestFile)) : null;
             Request idleRequest = File.Exists(idleRequestFile)
                 ? JsonUtility.FromJson<Request>(File.ReadAllText(idleRequestFile)) : null;
+            bool activeGlobalRetryRequest = globalRetryRequest != null &&
+                globalRetryRequest.requested &&
+                globalRetryRequest.scenario == "idleGlobalTick14" &&
+                globalRetryRequest.expiresUtcTicks > DateTime.UtcNow.Ticks &&
+                !string.IsNullOrEmpty(globalRetryRequest.runId) &&
+                globalRetryRequest.runId.StartsWith("idle-global14-336b44-", StringComparison.Ordinal) &&
+                !File.Exists(ResultPath(globalRetryRequest.runId));
+            bool activeGlobalRequest = globalRequest != null && globalRequest.requested &&
+                globalRequest.scenario == "idleGlobalTick14" &&
+                globalRequest.expiresUtcTicks > DateTime.UtcNow.Ticks &&
+                !string.IsNullOrEmpty(globalRequest.runId) &&
+                globalRequest.runId.StartsWith("idle-global14-336b44-", StringComparison.Ordinal) &&
+                !File.Exists(ResultPath(globalRequest.runId));
             bool activeIdleRequest = idleRequest != null && idleRequest.requested &&
                 idleRequest.scenario == "idleTick14" &&
                 idleRequest.expiresUtcTicks > DateTime.UtcNow.Ticks &&
                 !string.IsNullOrEmpty(idleRequest.runId) &&
                 !File.Exists(ResultPath(idleRequest.runId));
-            if (activeIdleRequest && EditorApplication.isPlayingOrWillChangePlaymode)
+            if ((activeGlobalRetryRequest || activeGlobalRequest || activeIdleRequest) &&
+                EditorApplication.isPlayingOrWillChangePlaymode)
                 return;
-            string requestFile = activeIdleRequest
-                ? idleRequestFile : File.Exists(regressionRequestFile)
-                    ? regressionRequestFile : ProjectPath(RequestPath);
+            string requestFile = activeGlobalRetryRequest ? globalRetryRequestFile :
+                activeGlobalRequest ? globalRequestFile :
+                activeIdleRequest ? idleRequestFile :
+                File.Exists(regressionRequestFile) ? regressionRequestFile : ProjectPath(RequestPath);
             if (!File.Exists(requestFile))
                 return;
-            Request request = activeIdleRequest
-                ? idleRequest : JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
-            bool idleTick14 = requestFile == idleRequestFile;
+            Request request = activeGlobalRetryRequest ? globalRetryRequest :
+                activeGlobalRequest ? globalRequest :
+                activeIdleRequest ? idleRequest :
+                JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
+            bool idleGlobalTick14 = requestFile == globalRequestFile ||
+                requestFile == globalRetryRequestFile;
+            bool idleTick14 = idleGlobalTick14 || requestFile == idleRequestFile;
             if (request == null || !request.requested ||
                 string.IsNullOrEmpty(request.runId) ||
                 SessionState.GetString(ConsumedKey, string.Empty) == request.runId ||
                 File.Exists(ResultPath(request.runId)))
                 return;
-            if (idleTick14 && (request.scenario != "idleTick14" ||
+            if (idleTick14 && (request.scenario !=
+                               (idleGlobalTick14 ? "idleGlobalTick14" : "idleTick14") ||
                                request.expiresUtcTicks <= DateTime.UtcNow.Ticks))
                 return;
             Require(request.runId.Length <= 80 &&
-                request.runId.StartsWith(idleTick14
-                    ? "idle-tick14-336b44-" : "ita-equal-hp-336b44-",
+                request.runId.StartsWith(idleGlobalTick14 ? "idle-global14-336b44-" :
+                    idleTick14 ? "idle-tick14-336b44-" : "ita-equal-hp-336b44-",
                     StringComparison.Ordinal),
                 "Unexpected P-08 runId.");
             foreach (char character in request.runId)
@@ -313,6 +353,7 @@ namespace NTSD.Test.Editor
                     phase = "OPENING_SCENE",
                     startedUtcTicks = DateTime.UtcNow.Ticks,
                     idleTick14 = true,
+                    idleGlobalTick14 = idleGlobalTick14,
                     returnToMenu = true,
                     menuHashBefore = HashPath(MenuScenePath),
                 };
@@ -335,6 +376,7 @@ namespace NTSD.Test.Editor
                 startedUtcTicks = DateTime.UtcNow.Ticks,
                 sceneHashBefore = HashScene(),
                 idleTick14 = idleTick14,
+                idleGlobalTick14 = idleGlobalTick14,
             };
             SessionState.SetString(ConsumedKey, request.runId);
             Persist();
@@ -347,9 +389,13 @@ namespace NTSD.Test.Editor
                 "Play clone roster was not configured before Start.");
             driver = SimulationTickDriver.Instance;
             world = driver?.World;
-            if (world == null || driver.CurrentTickIndex < 5 ||
+            if (world == null || driver.CurrentTickIndex <
+                    (report.idleGlobalTick14 ? 0 : 5) ||
                 !world.IsBattleSnapshotBoundaryReady)
                 return;
+            if (report.idleGlobalTick14)
+                Require(driver.CurrentTickIndex == 0,
+                    "Global idle comparison must begin before the first battle tick.");
             if (!driver.IsPaused)
             {
                 driver.SetPaused(true);
@@ -371,17 +417,48 @@ namespace NTSD.Test.Editor
                     BattlePresentationBackendMode.CentralOnly,
                 "CentralOnly production backend is required.");
             report.contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot;
-            Require(report.contentRoot == ContentRoot &&
-                    CharacterAnimtorManager.TryGetInstance()?.PublishedLoganContentIdentity != null,
+            Require(report.contentRoot == ContentRoot,
+                "The Battle Scene is not using the formal LoganRuntime root.");
+            bool contentPublished =
+                CharacterAnimtorManager.TryGetInstance()?.PublishedLoganContentIdentity != null;
+            if (report.idleGlobalTick14 && !contentPublished)
+            {
+                stableUpdates = 0;
+                return;
+            }
+            Require(contentPublished,
                 "Formal LoganRuntime content is not published.");
+            LF2Entity first = null;
             LF2Entity second = null;
-            Require(world.TryResolveRosterInputEntity(0, out LF2Entity first) &&
-                    first is LF2Character && first.ObjectId == 2 &&
-                    world.TryResolveRosterInputEntity(1, out second) &&
+            bool firstReady = world.TryResolveRosterInputEntity(0, out first);
+            bool secondReady = world.TryResolveRosterInputEntity(1, out second);
+            if (report.idleGlobalTick14 && (!firstReady || !secondReady))
+            {
+                stableUpdates = 0;
+                return;
+            }
+            Require(firstReady && first is LF2Character && first.ObjectId == 2 &&
+                    secondReady &&
                     second is LF2Character && second.ObjectId == 9,
                 "The Play clone roster is not Naruto OID2 / Ita OID9.");
             actor = (LF2Character)first;
             target = (LF2Character)second;
+            if (report.idleGlobalTick14)
+            {
+                Require(driver.LifecycleState == BattleRuntimeLifecycleState.Preparing,
+                    "Global idle comparison requires the Preparing lifecycle.");
+                BattleBootstrap bootstrap = UnityEngine.Object.FindObjectOfType<BattleBootstrap>(true);
+                Require(bootstrap != null && bootstrap.gameObject.scene == SceneManager.GetActiveScene(),
+                    "The original Battle Scene presentation bootstrap is unavailable.");
+                driver.BeginBattleAllocationSeal();
+                bootstrap.EnablePresentation();
+                driver.SetPaused(false);
+                driver.SetPaused(true);
+                Require(driver.CurrentTickIndex == 0 && driver.IsPaused &&
+                        driver.LifecycleState == BattleRuntimeLifecycleState.Running &&
+                        !driver.DedicatedSimulationWorkerActiveForDiagnostics,
+                    "Production battle start changed the global tick or worker state.");
+            }
             if (report.idleTick14)
             {
                 SetInitialActor(actor, 500, 500, false, 400, 200);
@@ -405,6 +482,7 @@ namespace NTSD.Test.Editor
                 world.NativeRandom.SynchronizedNext(0x004021E0u, 1);
             NTSD28NativeRandomScalarState rng = world.NativeRandom.CaptureScalarState();
             report.startTick = report.endTick = driver.CurrentTickIndex;
+            report.initialObjectCount = world.ObjectCount;
             report.battleMode = world.BattleGameModeId;
             report.difficulty = world.Difficulty;
             report.initialInputPhase = world.InputPhase;
@@ -583,6 +661,9 @@ namespace NTSD.Test.Editor
             Require(driver.IsPaused && report.rows.Count == 14 &&
                     driver.CurrentTickIndex == report.endTick,
                 "The idle tick14 screenshot boundary is unstable.");
+            if (report.idleGlobalTick14)
+                Require(report.startTick == 0 && report.endTick == 14,
+                    "The composite screenshot is not at global tick14.");
             BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
             BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
             BattlePixelFramePlan plan = world.CurrentPixelFramePlan;
@@ -602,7 +683,8 @@ namespace NTSD.Test.Editor
             report.screenHeight = Screen.height;
             Require(report.screenWidth > 0 && report.screenHeight > 0,
                 "The composite Game View dimensions are unavailable.");
-            report.screenshot = IdleResultRoot + report.runId + ".png";
+            report.screenshot = (report.idleGlobalTick14
+                ? GlobalIdleResultRoot : IdleResultRoot) + report.runId + ".png";
             string path = ProjectPath(report.screenshot);
             Require(!File.Exists(path), "Refusing to overwrite the idle screenshot.");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -643,7 +725,9 @@ namespace NTSD.Test.Editor
                 last.targetSourceX == 620 && last.actorSourceZ == 400 &&
                 last.targetSourceZ == 400;
             report.status = logicMatchesFormalTitle
-                ? "CAPTURED_FORMAL_TITLE_FIELDS_MATCH"
+                ? report.idleGlobalTick14
+                    ? "CAPTURED_GLOBAL_TICK14_FORMAL_TITLE_FIELDS_MATCH"
+                    : "CAPTURED_FORMAL_TITLE_FIELDS_MATCH"
                 : "CAPTURED_LOGIC_TITLE_FIRST_DIFFERENCE";
             report.phase = "EXITING";
             Persist();
@@ -774,7 +858,9 @@ namespace NTSD.Test.Editor
         }
 
         private static string ResultPath(string runId) =>
-            ProjectPath((runId.StartsWith("idle-tick14-336b44-",
+            ProjectPath((runId.StartsWith("idle-global14-336b44-",
+                StringComparison.Ordinal) ? GlobalIdleResultRoot :
+                runId.StartsWith("idle-tick14-336b44-",
                 StringComparison.Ordinal) ? IdleResultRoot : ResultRoot) + runId + ".json");
 
         private static string ProjectPath(string relative) =>

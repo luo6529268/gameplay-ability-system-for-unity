@@ -15,14 +15,22 @@ namespace NTSD.Simulation.Presentation
     public readonly struct BattlePresentationMotionDelta
     {
         public BattlePresentationMotionDelta(double viewX, int y, double viewZ)
+            : this(viewX, y, y, viewZ)
+        {
+        }
+
+        public BattlePresentationMotionDelta(
+            double viewX, int y, double viewY, double viewZ)
         {
             ViewX = viewX;
             Y = y;
+            ViewY = viewY;
             ViewZ = viewZ;
         }
 
         public double ViewX { get; }
         public int Y { get; }
+        public double ViewY { get; }
         public double ViewZ { get; }
     }
 
@@ -35,6 +43,21 @@ namespace NTSD.Simulation.Presentation
             int currentTick,
             double alpha,
             double viewScaleX,
+            double viewScaleZ,
+            out BattlePresentationMotionDelta delta)
+        {
+            return Sample(previous, current, previousTick, currentTick,
+                alpha, viewScaleX, 1.0, viewScaleZ, out delta);
+        }
+
+        public static BattlePresentationMotionSampleStatus Sample(
+            in BattlePresentationMotionState previous,
+            in BattlePresentationMotionState current,
+            int previousTick,
+            int currentTick,
+            double alpha,
+            double viewScaleX,
+            double viewScaleY,
             double viewScaleZ,
             out BattlePresentationMotionDelta delta)
         {
@@ -74,6 +97,7 @@ namespace NTSD.Simulation.Presentation
             delta = new BattlePresentationMotionDelta(
                 sourceDeltaX * viewScaleX,
                 sourceDeltaY,
+                sourceDeltaY * viewScaleY,
                 sourceDeltaZ * viewScaleZ);
             return BattlePresentationMotionSampleStatus.Sampled;
         }

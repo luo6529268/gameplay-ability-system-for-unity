@@ -184,6 +184,38 @@ namespace NTSD.Test.Editor
 
         [TestCase(false)]
         [TestCase(true)]
+        public void VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(
+            bool configuredView)
+        {
+            foreach (int targetSourceY in new[] { 29, 30, 31 })
+            {
+                CreateProjectedGeometryScenario(
+                    configuredView, 535, 650, 535, 650, false,
+                    out SimulationWorld world,
+                    out BruteForceSceneQuery query,
+                    out LF2Character attacker);
+                var entities = new List<LF2Entity>();
+                world.GetAllEntities(entities);
+                LF2Entity target = entities.Find(entity => entity.ObjectId == 8903);
+                Assert.That(target, Is.Not.Null);
+                target.Runtime.Y = targetSourceY;
+                target.Runtime.SyncIntegerPosition();
+
+                LF2FrameData frame = attacker.GetCollisionFrameData();
+                List<SceneQueryHit> direct = query.QueryBodyHits(
+                    attacker, frame, frame.itrs[0]);
+                List<SceneQueryHit> collected = RunCollection(
+                    world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+                int expectedCount = targetSourceY == 29 ? 1 : 0;
+                Assert.That(direct.Count, Is.EqualTo(expectedCount),
+                    $"direct configuredView={configuredView} targetSourceY={targetSourceY}");
+                Assert.That(collected.Count, Is.EqualTo(expectedCount),
+                    $"collected configuredView={configuredView} targetSourceY={targetSourceY}");
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
         public void NonCharacterBodyUsesSameProjectedGeometry(bool configuredView)
         {
             foreach (int targetSourceX in new[] { 519, 580 })

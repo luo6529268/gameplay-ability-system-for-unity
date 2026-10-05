@@ -165,6 +165,52 @@ namespace NTSD.Test
             }
         }
 
+        [TestCase(false, 10)]
+        [TestCase(true, 15)]
+        public void SourceSparkEventYProjectsOnceAtFixedView(
+            bool configuredView, int expectedViewY)
+        {
+            var row = File.ReadLines(Source).Select(JObject.Parse).First(r =>
+                (int)r["index"] == 3);
+            var world = MakeWorld(row, BattleRuntimeProfile.Authority400, false,
+                out LF2Entity attacker, out LF2Entity target);
+            try
+            {
+                if (configuredView)
+                {
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    BattleSpatialProjection projection = world.SpatialProjection;
+                    attacker.Runtime.SetSourceRulePosition(-11, 20);
+                    target.Runtime.SetSourceRulePosition(-4, 20);
+                    attacker.Runtime.SyncSourceRuleIntegerPosition();
+                    target.Runtime.SyncSourceRuleIntegerPosition();
+                    attacker.Runtime.SetPosition(
+                        projection.SourceToViewX(-11), -5,
+                        projection.SourceToViewZ(20));
+                    target.Runtime.SetPosition(
+                        projection.SourceToViewX(-4), -6,
+                        projection.SourceToViewZ(20));
+                    attacker.Runtime.SyncIntegerPosition();
+                    target.Runtime.SyncIntegerPosition();
+                }
+
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
+                InteractionArea itr = attacker.FrameCache
+                    .GetNativeFrameDataById(0).itrs[0];
+                BattleNativeHitSparkWriter.Append(
+                    world, attacker, target, itr, 0, null, false, true);
+
+                Assert.That(target.HitRecordCount, Is.EqualTo(1));
+                Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedViewY));
+                Assert.That(world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore,
+                    Is.EqualTo(2UL));
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+            }
+        }
+
         private static void DispatchCandidate(SimulationWorld world, LF2Entity attacker, Consumer consumer, int index)
         {
             Assert.That(world.SceneQuery.TryGetCollisionCandidateRange(attacker, out var range), Is.True);

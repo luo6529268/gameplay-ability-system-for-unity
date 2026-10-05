@@ -1,0 +1,12 @@
+{
+  "params": {
+    "mode": "force",
+    "scope": "all",
+    "compile": "request",
+    "wait_for_ready": false
+  },
+  "response": {
+    "status": "error",
+    "error": "Command processing timed out after 30000 ms"
+  }
+}

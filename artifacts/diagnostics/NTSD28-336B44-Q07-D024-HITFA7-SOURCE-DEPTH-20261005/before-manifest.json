@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-05T11:43:28.810606+00:00",
+  "scripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "6132DD5781366CC559AE3CEC3FACA9A790A8AD4901E4EBFD74A3ECF6A0CC4998",
+      "bytes": 18703,
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "109975EE6AEAA7D4A711CB617298026234283FAFDE483892720D16B90E2688A9",
+      "bytes": 290616,
+      "gitStatus": "M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ]
+}

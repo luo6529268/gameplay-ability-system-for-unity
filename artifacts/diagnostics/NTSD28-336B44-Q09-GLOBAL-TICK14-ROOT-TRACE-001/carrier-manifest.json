@@ -1,0 +1,71 @@
+{
+  "source": "artifacts\\diagnostics\\NTSD28-Q09-P08-NATURAL-EQUAL-HP-ROOT-LFR-001\\ita_equal_hp_source_packets.lfr",
+  "source_sha256": "ABD2B83A72E7DC7496228CE56BD2310E3AC69C67BECCC69354A7FA50416C5C55",
+  "derived": "artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\idle-global14-derived-input.lfr",
+  "derived_sha256": "5FC23C069526E766D9AA110CF1C1B7FFE7964B54F854FF5178A29CDDA3807D37",
+  "manager_size": 6491672,
+  "shift_key_source": "current formal source ntsd28_playable/src/lfr_recorder.cpp locked_lfr_shift_key28",
+  "edits": [
+    {
+      "field": "declared_end_tick",
+      "offset": 324,
+      "old": 22,
+      "new": 14
+    },
+    {
+      "field": "slot1_x",
+      "offset": 748,
+      "old": 540,
+      "new": 620
+    },
+    {
+      "field": "slot0_z",
+      "offset": 904,
+      "old": 650,
+      "new": 400
+    },
+    {
+      "field": "slot1_z",
+      "offset": 908,
+      "old": 650,
+      "new": 400
+    },
+    {
+      "field": "slot0_mp",
+      "offset": 984,
+      "old": 500,
+      "new": 200
+    },
+    {
+      "field": "slot1_mp",
+      "offset": 988,
+      "old": 500,
+      "new": 200
+    },
+    {
+      "field": "slot1_base_hp",
+      "offset": 1148,
+      "old": 30,
+      "new": 500
+    },
+    {
+      "field": "bgm_path",
+      "offset": 1536,
+      "old": "bgm\\stage1.wma",
+      "new": "bgm\\boss2.wma"
+    },
+    {
+      "field": "input_row_1",
+      "offset": 11074,
+      "old": "08000000000000000000",
+      "new": "00000000000000000000"
+    },
+    {
+      "field": "input_row_2",
+      "offset": 11084,
+      "old": "08000000000000000000",
+      "new": "00000000000000000000"
+    }
+  ],
+  "limits": "Derived diagnostic input carrier only; current formal EXE playback defines observed rules, not this artifact."
+}

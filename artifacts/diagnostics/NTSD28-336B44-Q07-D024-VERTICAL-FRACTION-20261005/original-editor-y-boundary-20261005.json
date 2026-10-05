@@ -1,0 +1,60 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "4c7b0ca838de4a4c8ed3939629255fa0",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791191022773,
+      "finished_unix_ms": 1791191027348,
+      "last_update_unix_ms": 1791191027348,
+      "progress": {
+        "completed": 2,
+        "total": 8829,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791191026879,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(True)",
+        "last_finished_unix_ms": 1791191026884,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.3587767,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(False)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0763268,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(True)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.VerticalBodyBoundaryKeepsSourceCandidateResultsAcrossViewScale(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0043195,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

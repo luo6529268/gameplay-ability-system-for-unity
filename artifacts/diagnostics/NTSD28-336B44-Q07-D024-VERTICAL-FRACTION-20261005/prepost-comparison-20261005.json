@@ -1,0 +1,27 @@
+{
+  "schema": "ntsd28/d024-vertical-prepost@1",
+  "observedUtc": "2026-10-05T08:59:15.889975+00:00",
+  "before": {
+    "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-vertical-20261005-01.json",
+    "sha256": "3d4ac279ecbe1ab32640aba468cff17e72b2ce95a5ff7e221b615933fe944351"
+  },
+  "after": {
+    "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-vertical-green-20261005-01.json",
+    "sha256": "f3d090762b3508cb21ae3442dce44ca41aabfe39a6b3739f64a3bba75af3c5df"
+  },
+  "sameRuleSamples": true,
+  "sampleCountBefore": 32,
+  "sampleCountAfter": 32,
+  "matchingVisualKeys": {
+    "21": true,
+    "23": true
+  },
+  "beforeViewDistanceDeltaPx": 1.9999504089355469,
+  "afterViewDistanceDeltaPx": 3.1561851501464844,
+  "expectedViewDistanceDeltaPx": 3.1561643835616437,
+  "absoluteErrorPx": 2.0766584840625768e-05,
+  "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "status": "PASS",
+  "phase": "DONE"
+}

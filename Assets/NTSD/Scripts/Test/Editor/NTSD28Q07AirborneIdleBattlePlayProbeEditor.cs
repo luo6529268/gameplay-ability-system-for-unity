@@ -7,9 +7,11 @@ using System.Reflection;
 using System.Security.Cryptography;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,6 +30,7 @@ namespace NTSD.Test.Editor
         private static SimulationWorld world;
         private static LF2Character actor;
         private static LF2Character target;
+        private static LF2Weapon heldWeapon;
         private static int stableTick = -1;
         private static int stableUpdates;
 
@@ -73,6 +76,44 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
+        private sealed class VisualSample
+        {
+            public int relativeTick;
+            public int globalTick;
+            public int publishedTick;
+            public int planTick;
+            public int slot;
+            public int action;
+            public int sourceY;
+            public int sourceZ;
+            public int bodyCommands;
+            public int shadowCommands;
+            public int renderFps;
+            public double displayAlpha;
+            public float viewportHeightPixels;
+            public float bodyWorldY;
+            public float shadowWorldY;
+            public float bodyMinusShadowPixels;
+        }
+
+        [Serializable]
+        private sealed class InterpolationSample
+        {
+            public int previousMotionTick;
+            public double previousPreciseY;
+            public double currentPreciseY;
+            public double previousPreciseZ;
+            public double currentPreciseZ;
+            public double sampledRoundedY;
+            public double sourceDeltaY;
+            public double expectedBodyDeltaPixels;
+            public double observedBodyDeltaPixels;
+            public double observedShadowDeltaPixels;
+            public VisualSample partial;
+            public VisualSample complete;
+        }
+
+        [Serializable]
         private sealed class Report
         {
             public string runId;
@@ -97,7 +138,31 @@ namespace NTSD.Test.Editor
             public bool sceneCleanAfter;
             public bool exitedPlay;
             public List<Sample> samples = new List<Sample>();
+            public List<VisualSample> visualSamples = new List<VisualSample>();
+            public List<InterpolationSample> interpolationSamples = new List<InterpolationSample>();
+            public HeldAnchorSample heldAnchor;
         }
+
+        [Serializable]
+        private sealed class HeldAnchorSample
+        {
+            public int globalTick, publishedTick, planTick, holderCommands, weaponCommands;
+            public int holderAction, weaponAction, holderSourceX, weaponSourceX;
+            public int holderSourceZ, weaponSourceZ, holderY, weaponY, weaponSlot;
+            public int holderLink, targetSlot, weaponLink, holderSlot;
+            public double horizontalScale, verticalScale, displayAlpha;
+            public Vector3 holderCommandPosition, weaponCommandPosition;
+            public Vector2 holderPointWorld, weaponPointWorld, differencePixels;
+        }
+
+        private static bool IsHeldAnchorProbe =>
+            report != null && report.runId.StartsWith("d024-held-anchor-", StringComparison.Ordinal);
+
+        private static bool IsVerticalProbe =>
+            report != null && report.runId.StartsWith("d024-vertical-", StringComparison.Ordinal);
+
+        private static bool IsInterpolationProbe =>
+            report != null && report.runId.StartsWith("d024-vertical-r120-", StringComparison.Ordinal);
 
         [InitializeOnLoadMethod]
         private static void Register()
@@ -155,7 +220,7 @@ namespace NTSD.Test.Editor
                 FieldInfo field = typeof(BattleTestBootstrap).GetField("overrideCharacterIds",
                     BindingFlags.Instance | BindingFlags.NonPublic);
                 Require(field != null, "BattleTestBootstrap overrideCharacterIds is missing.");
-                field.SetValue(matches[0], new[] { 84, 2 });
+                field.SetValue(matches[0], IsHeldAnchorProbe ? new[] { 2, 7 } : new[] { 84, 2 });
                 report.configuredBeforeStart = true;
                 Save();
             }
@@ -241,13 +306,36 @@ namespace NTSD.Test.Editor
                 second is LF2Character, "Second Naruto roster entity is missing.");
             actor = (LF2Character)first;
             target = (LF2Character)second;
-            Require(actor.ObjectId == 84 && target.ObjectId == 2,
+            Require(IsHeldAnchorProbe ? actor.ObjectId == 2 && target.ObjectId == 7 :
+                actor.ObjectId == 84 && target.ObjectId == 2,
                 "Play clone roster is not formal OID84/2 pair.");
             report.contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot;
             Require(report.contentRoot == "Assets/NTSD/Content/LoganRuntime",
                 "Play World did not use staged formal content.");
-            SetInitialActor(actor, 388, 500, 500);
-            SetInitialActor(target, 0, 1100, 500);
+            if (IsHeldAnchorProbe)
+            {
+                SetHeldAnchorInitialActor(actor, 200);
+                SetHeldAnchorInitialActor(target, 1200);
+                var data = world.RuntimeCharacterConfigs.Resolve(120);
+                Require(data?.characterData != null, "Formal OID120 data is unavailable.");
+                heldWeapon = new LF2Weapon();
+                heldWeapon.ObjectId = 120;
+                heldWeapon.SetWeaponType(1);
+                heldWeapon.FrameCache.Load(data);
+                heldWeapon.SetRequiredRuntimeSlot(50);
+                world.Register(heldWeapon);
+                heldWeapon.ImmediateFrame(64);
+                heldWeapon.Health.HP = 100;
+                heldWeapon.Runtime.SetPosition(190, 0, 542);
+                heldWeapon.Runtime.SyncIntegerPosition();
+                heldWeapon.Runtime.SetSourceRulePosition(190, 542);
+                heldWeapon.Runtime.SyncSourceRuleIntegerPosition();
+            }
+            else
+            {
+                SetInitialActor(actor, 388, 500, 500);
+                SetInitialActor(target, 0, 1100, 500);
+            }
             actor.RelationTeam = 1;
             target.RelationTeam = 2;
             world.Runtime.Roster.Slots[0].Team = 1;
@@ -309,17 +397,27 @@ namespace NTSD.Test.Editor
             };
         }
 
+        private static void SetHeldAnchorInitialActor(LF2Character character, int x)
+        {
+            SetInitialActor(character, 0, x, 500);
+            character.AiControlled = false;
+            character.Runtime.SetPosition(x, 0, 542);
+            character.Runtime.SyncIntegerPosition();
+            AppManager.SyncParticipantBirthPosition(character, x, 542);
+        }
+
         private static void MeasureOneTick()
         {
             Require(ReferenceEquals(driver.World, world) && driver.IsPaused &&
                 !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics,
                 "Production World changed or tick boundary is not stable.");
             Require(driver.CurrentTickIndex == report.endTick, "Unobserved tick while paused.");
-            if (report.samples.Count == 32) { CompleteMeasurement(); return; }
+            if (report.samples.Count == (IsHeldAnchorProbe ? 2 : 32)) { CompleteMeasurement(); return; }
             int next = driver.CurrentTickIndex + 1;
             var input = new FrameInputSet(next, new[]
             {
-                new SimulationPlayerInput(0, SimulationInputButtons.None),
+                new SimulationPlayerInput(0, IsHeldAnchorProbe ?
+                    SimulationInputButtons.Jump : SimulationInputButtons.None),
                 new SimulationPlayerInput(1, SimulationInputButtons.None)
             });
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
@@ -339,7 +437,8 @@ namespace NTSD.Test.Editor
             for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
             {
                 LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
-                if (entity == null || (slot > 1 && entity.ObjectId != 619 && entity.ObjectId != 85)) continue;
+                if (entity == null || (slot > 1 && entity.ObjectId != 619 && entity.ObjectId != 85 &&
+                    !(IsHeldAnchorProbe && ReferenceEquals(entity, heldWeapon)))) continue;
                 EntitySample captured = Capture(entity, slot);
                 sample.entities.Add(captured);
                 if (report.primarySlot < 0 && captured.oid == 85)
@@ -350,11 +449,243 @@ namespace NTSD.Test.Editor
             }
             report.samples.Add(sample);
             report.endTick = driver.CurrentTickIndex;
+            if (IsHeldAnchorProbe && sample.relativeTick == 2)
+                CaptureHeldAnchorPresentation();
+            if (IsInterpolationProbe && sample.relativeTick == 23)
+                CaptureInterpolationPresentation(sample);
+            if (IsVerticalProbe && (sample.relativeTick == 21 || sample.relativeTick == 23))
+                CaptureVerticalPresentation(sample);
             Save();
+        }
+
+        private static void CaptureVerticalPresentation(Sample sample)
+        {
+            report.visualSamples.Add(CapturePresentation(sample, 30));
+        }
+
+        private static void CaptureHeldAnchorPresentation()
+        {
+            Require(actor.Frame.N == 115 && heldWeapon.Frame.N == 24 &&
+                actor.GetHeldWeapon() == heldWeapon && actor.Runtime.TargetSlotIndex == 50 &&
+                heldWeapon.Runtime.LinkState == -1 && heldWeapon.Runtime.HolderStableId == actor.Runtime.SlotIndex,
+                "Two-tick natural pickup did not reach the formal reciprocal 115/24 relation.");
+            BattlePixelFramePlan plan;
+            double alpha;
+            int renderFps = world.BattlePresentationRenderFps;
+            float interval = world.BattlePresentationLogicIntervalSeconds;
+            try
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(30, interval);
+                plan = BattleCentralRenderSystem.PrepareFrame(world);
+                alpha = BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world);
+            }
+            finally
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(renderFps, interval);
+            }
+            BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
+            Require(published != null && published.TickIndex == report.endTick &&
+                plan.IsValid && !plan.IsStale && plan.SimulationTick == report.endTick &&
+                plan.CapturedFrame != null && plan.CapturedFrame.CommandsMaterialized &&
+                plan.CapturedFrame.TickIndex == report.endTick && Math.Abs(alpha - 1.0) < 1e-6,
+                "Current complete-tick central commands are unavailable.");
+            var evidence = new HeldAnchorSample
+            {
+                globalTick = report.endTick, publishedTick = published.TickIndex,
+                planTick = plan.SimulationTick, displayAlpha = alpha,
+                horizontalScale = world.SpatialProjection.HorizontalScale,
+                verticalScale = world.SpatialProjection.VerticalScale,
+                holderAction = actor.Frame.N, weaponAction = heldWeapon.Frame.N,
+                holderSourceX = actor.Runtime.SourceRuleXInt, weaponSourceX = heldWeapon.Runtime.SourceRuleXInt,
+                holderSourceZ = actor.Runtime.SourceRuleZInt, weaponSourceZ = heldWeapon.Runtime.SourceRuleZInt,
+                holderY = actor.Runtime.YInt, weaponY = heldWeapon.Runtime.YInt,
+                holderLink = actor.Runtime.LinkState, targetSlot = actor.Runtime.TargetSlotIndex,
+                weaponLink = heldWeapon.Runtime.LinkState, holderSlot = heldWeapon.Runtime.HolderStableId,
+                weaponSlot = heldWeapon.Runtime.SlotIndex
+            };
+            report.heldAnchor = evidence;
+            for (int index = 0; index < plan.CapturedFrame.CommandCount; index++)
+            {
+                BattleRenderCommand command = plan.CapturedFrame.GetCommand(index);
+                if (command.Type != BattleRenderCommandType.Entity) continue;
+                if (command.RuntimeSlot == actor.Runtime.SlotIndex)
+                {
+                    evidence.holderCommands++;
+                    evidence.holderCommandPosition = command.Position;
+                    evidence.holderPointWorld = CommandWeaponPoint(command, actor.Frame.D);
+                }
+                else if (command.RuntimeSlot == heldWeapon.Runtime.SlotIndex)
+                {
+                    evidence.weaponCommands++;
+                    evidence.weaponCommandPosition = command.Position;
+                    evidence.weaponPointWorld = CommandWeaponPoint(command, heldWeapon.Frame.D);
+                }
+            }
+            evidence.differencePixels = new Vector2(
+                (evidence.weaponPointWorld.x - evidence.holderPointWorld.x) / NTSDRenderSpace.UnitsPerPixelX,
+                -(evidence.weaponPointWorld.y - evidence.holderPointWorld.y) / NTSDRenderSpace.UnitsPerPixelY);
+            Require(evidence.horizontalScale > 1.0 && evidence.verticalScale > 1.0 &&
+                evidence.holderCommands == 1 && evidence.weaponCommands == 1 &&
+                evidence.holderSourceX == 201 && evidence.weaponSourceX == 214 &&
+                evidence.weaponSourceZ - evidence.holderSourceZ == 1 &&
+                evidence.holderY == 0 && evidence.weaponY == 7 &&
+                Math.Abs(evidence.differencePixels.x) < 0.0003 &&
+                Math.Abs(evidence.differencePixels.y) < 0.0003,
+                "Natural source-rule alignment or actual central WPoint contact differs.");
+        }
+
+        private static Vector2 CommandWeaponPoint(BattleRenderCommand command, LF2FrameData frame)
+        {
+            float x = command.FlipX ? command.Size.x - frame.PrimaryWeaponPoint.X :
+                frame.PrimaryWeaponPoint.X;
+            return new Vector2(
+                command.Position.x + (x - command.Pivot.x * command.Size.x) *
+                    NTSDRenderSpace.BattleVisualScale * NTSDRenderSpace.UnitsPerPixelX,
+                command.Position.y + (command.Size.y - frame.PrimaryWeaponPoint.Y -
+                    command.Pivot.y * command.Size.y) *
+                    NTSDRenderSpace.BattleVisualScale * NTSDRenderSpace.UnitsPerPixelY);
+        }
+
+        private static VisualSample CapturePresentation(Sample sample, int requestedRenderFps)
+        {
+            EntitySample entity = sample.entities.FirstOrDefault(value => value.oid == 85 &&
+                value.slot == report.primarySlot);
+            Require(entity != null, "Expected natural OID85 at vertical capture tick.");
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            Require(camera != null && camera.orthographic, "World camera is unavailable.");
+            BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
+            int renderFps = world.BattlePresentationRenderFps;
+            float logicInterval = world.BattlePresentationLogicIntervalSeconds;
+            BattlePixelFramePlan plan;
+            double alpha;
+            try
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(requestedRenderFps, logicInterval);
+                plan = BattleCentralRenderSystem.PrepareFrame(world);
+                alpha = BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world);
+            }
+            finally
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(renderFps, logicInterval);
+            }
+            Require(published != null && published.TickIndex == sample.globalTick &&
+                plan.IsValid && !plan.IsStale && plan.SimulationTick == sample.globalTick &&
+                plan.CapturedFrame != null && plan.CapturedFrame.CommandsMaterialized &&
+                plan.CapturedFrame.TickIndex == sample.globalTick,
+                "Current tick central presentation commands are unavailable.");
+            var visual = new VisualSample
+            {
+                relativeTick = sample.relativeTick,
+                globalTick = sample.globalTick,
+                publishedTick = published.TickIndex,
+                planTick = plan.SimulationTick,
+                slot = entity.slot,
+                action = entity.action,
+                sourceY = entity.y,
+                sourceZ = entity.z,
+                renderFps = requestedRenderFps,
+                displayAlpha = alpha,
+                viewportHeightPixels = 2f * camera.orthographicSize /
+                    NTSDRenderSpace.UnitsPerPixelY
+            };
+            BattlePresentationFrame commands = plan.CapturedFrame;
+            for (int index = 0; index < commands.CommandCount; index++)
+            {
+                BattleRenderCommand command = commands.GetCommand(index);
+                if (command.RuntimeSlot != entity.slot) continue;
+                if (command.Type == BattleRenderCommandType.Entity)
+                {
+                    visual.bodyCommands++;
+                    visual.bodyWorldY = command.Position.y;
+                }
+                else if (command.Type == BattleRenderCommandType.Shadow)
+                {
+                    visual.shadowCommands++;
+                    visual.shadowWorldY = command.Position.y;
+                }
+            }
+            Require(visual.bodyCommands == 1 && visual.shadowCommands == 1 &&
+                (requestedRenderFps > 30 || Math.Abs(alpha - 1.0) < 1e-6),
+                "Expected one body and shadow command at the requested display policy.");
+            visual.bodyMinusShadowPixels =
+                (visual.bodyWorldY - visual.shadowWorldY) / NTSDRenderSpace.UnitsPerPixelY;
+            return visual;
+        }
+
+        private static void CaptureInterpolationPresentation(Sample sample)
+        {
+            BattlePresentationFrame frame = world.BattlePresentation.PublishedFrame;
+            Require(frame != null && frame.PreviousMotionTickIndex + 1 == sample.globalTick,
+                "Expected adjacent published motion ticks.");
+            BattlePresentationMotionState previous = default;
+            BattlePresentationMotionState current = default;
+            bool foundPrevious = false;
+            bool foundCurrent = false;
+            for (int index = 0; index < frame.PreviousMotionStateCount; index++)
+            {
+                BattlePresentationMotionState value = frame.GetPreviousMotionState(index);
+                if (value.Handle.Slot != report.primarySlot) continue;
+                previous = value;
+                foundPrevious = true;
+            }
+            for (int index = 0; index < frame.MotionStateCount; index++)
+            {
+                BattlePresentationMotionState value = frame.GetMotionState(index);
+                if (value.Handle.Slot != report.primarySlot) continue;
+                current = value;
+                foundCurrent = true;
+            }
+            Require(foundPrevious && foundCurrent && previous.Handle.Equals(current.Handle) &&
+                previous.ObjectId == 85 && current.ObjectId == 85 &&
+                previous.HasSourceRulePosition && current.HasSourceRulePosition,
+                "OID85 adjacent motion identity is unavailable.");
+
+            VisualSample partial = CapturePresentation(sample, 120);
+            VisualSample complete = CapturePresentation(sample, 30);
+            double roundedY = Math.Round(previous.PreciseY +
+                (current.PreciseY - previous.PreciseY) * partial.displayAlpha,
+                MidpointRounding.AwayFromZero);
+            double deltaY = roundedY - Math.Round(current.PreciseY,
+                MidpointRounding.AwayFromZero);
+            var interpolation = new InterpolationSample
+            {
+                previousMotionTick = frame.PreviousMotionTickIndex,
+                previousPreciseY = previous.PreciseY,
+                currentPreciseY = current.PreciseY,
+                previousPreciseZ = previous.PreciseZ,
+                currentPreciseZ = current.PreciseZ,
+                sampledRoundedY = roundedY,
+                sourceDeltaY = deltaY,
+                expectedBodyDeltaPixels = -deltaY * world.SpatialProjection.VerticalScale,
+                observedBodyDeltaPixels =
+                    (partial.bodyWorldY - complete.bodyWorldY) / NTSDRenderSpace.UnitsPerPixelY,
+                observedShadowDeltaPixels =
+                    (partial.shadowWorldY - complete.shadowWorldY) / NTSDRenderSpace.UnitsPerPixelY,
+                partial = partial,
+                complete = complete,
+            };
+            report.interpolationSamples.Add(interpolation);
+            Require(partial.displayAlpha > 0.0 && partial.displayAlpha < 1.0 && deltaY != 0.0,
+                "Natural display clock did not produce a discriminating intermediate alpha.");
+            Require(Math.Abs(previous.PreciseZ - current.PreciseZ) < 1e-10 &&
+                Math.Abs(interpolation.observedShadowDeltaPixels) < 0.0003 &&
+                Math.Abs(interpolation.observedBodyDeltaPixels -
+                    interpolation.expectedBodyDeltaPixels) < 0.0003,
+                "Intermediate body/ground commands differ from native rounding and shared Y projection.");
         }
 
         private static void CompleteMeasurement()
         {
+            if (IsHeldAnchorProbe)
+            {
+                Require(report.samples.Count == 2 && report.heldAnchor != null,
+                    "Held-anchor evidence is incomplete.");
+                report.status = "PASS";
+                report.phase = "EXITING";
+                Save();
+                EditorApplication.ExitPlaymode();
+                return;
+            }
             EntitySample born = report.samples[20].entities
                 .FirstOrDefault(value => value.slot == report.primarySlot);
             EntitySample next = report.samples[21].entities
@@ -367,6 +698,15 @@ namespace NTSD.Test.Editor
                 born.counter == 1 && born.y == -22 && Math.Abs(born.vy) < 1e-8 &&
                 next.action == 212 && next.counter == 0 && next.y == -22 &&
                 Math.Abs(next.vy - 1.7) < 1e-8 ? "PASS" : "DIFFERENCE";
+            if (IsVerticalProbe && (report.visualSamples.Count != 2 ||
+                report.visualSamples[0].relativeTick != 21 ||
+                report.visualSamples[1].relativeTick != 23 ||
+                report.visualSamples[0].action != 212 ||
+                report.visualSamples[1].action != 212 ||
+                report.visualSamples[0].sourceZ != report.visualSamples[1].sourceZ))
+                report.status = "DIFFERENCE";
+            if (IsInterpolationProbe && report.interpolationSamples.Count != 1)
+                report.status = "DIFFERENCE";
             report.phase = "EXITING";
             Save();
             EditorApplication.ExitPlaymode();
@@ -406,6 +746,7 @@ namespace NTSD.Test.Editor
             world = null;
             actor = null;
             target = null;
+            heldWeapon = null;
             stableTick = -1;
             stableUpdates = 0;
         }

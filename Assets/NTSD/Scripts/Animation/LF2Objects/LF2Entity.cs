@@ -561,7 +561,10 @@ namespace NTSD.Animation.LF2Objects
                 int cameraX = Match?.ReleaseCameraX ?? 0;
                 int renderOffsetX = (int)GetRenderOffsetX();
                 float shadowCenterX = GetRuntimeXInt() + renderOffsetX - cameraX;
-                float shadowCenterY = GetRenderZInt() + Runtime.RenderShadowOffset10C;
+                float shadowCenterY = GetRenderZInt() +
+                    (float)((RegisteredWorldForSimulation?.SpatialProjection ??
+                        BattleSpatialProjection.Identity)
+                        .SourceDeltaToViewY(Runtime.RenderShadowOffset10C));
                 Vector3 worldPos = NTSDRenderSpace.ScreenPixelToPresentationWorld(
                     shadowCenterX,
                     shadowCenterY,
@@ -1555,10 +1558,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int targetX = target.GetRuntimeXInt();
-            int selfX = GetRuntimeXInt();
-            int targetZ = GetFrameLogicTargetZInt(target, 1);
-            int selfZ = GetFrameLogicTargetZInt(this, 1);
+            ResolveFrameLogicPositionPair(target, null,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
 
             if (targetX > selfX)
                 Runtime.Vx += 0.85f;
@@ -1609,10 +1610,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int targetX = target.GetRuntimeXInt();
-            int selfX = GetRuntimeXInt();
-            int targetZ = GetFrameLogicTargetZInt(target, 3);
-            int selfZ = GetFrameLogicTargetZInt(this, 3);
+            ResolveFrameLogicPositionPair(target, null,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
 
             if (targetX > selfX)
                 Runtime.Vx += 0.7f;
@@ -1917,11 +1916,13 @@ namespace NTSD.Animation.LF2Objects
             bool targetHasHp = target != null
                 ? target.Health != null && target.Health.HP > 0
                 : rawTargetRuntime != null && rawTargetRuntime.HP > 0;
+            ResolveFrameLogicPositionPair(target, rawTargetRuntime,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
             if (hitFa == 4 && targetHasHp)
             {
-                int dx = (target?.GetRuntimeXInt() ?? rawTargetRuntime.XInt) - GetRuntimeXInt();
+                int dx = targetX - selfX;
                 int dy = (target?.GetRuntimeYInt() ?? rawTargetRuntime.YInt) - GetRuntimeYInt();
-                int dz = (target != null ? GetFrameLogicZInt(target) : rawTargetRuntime.ZInt) - GetFrameLogicZInt(this);
+                int dz = targetZ - selfZ;
                 if (dx > -30 && dx < 30 && dy > 0 && dy < 80 && dz > -10 && dz < 10)
                 {
                     Runtime.Vx = 0f;
@@ -1951,37 +1952,35 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int targetX = target?.GetRuntimeXInt() ?? rawTargetRuntime?.XInt ?? 0;
-            int selfX = GetRuntimeXInt();
-            int targetZ = target != null ? GetFrameLogicTargetZInt(target, hitFa) : rawTargetRuntime?.ZInt ?? 0;
-            int selfZ = GetFrameLogicTargetZInt(this, hitFa);
-
+            // Alignment contract: NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001; preserve native double thresholds.
             if (targetX > selfX)
-                Runtime.Vx += 0.7f;
+                Runtime.Vx += 0.7;
             if (targetX < selfX)
-                Runtime.Vx -= 0.7f;
+                Runtime.Vx -= 0.7;
             if (targetZ > selfZ + 5)
-                Runtime.Vz += 0.4f;
+                Runtime.Vz += 0.4;
             if (targetZ < selfZ - 5)
-                Runtime.Vz -= 0.4f;
+                Runtime.Vz -= 0.4;
 
-            Runtime.Vy *= 0.7142857142857143; // P0-f-2b B2-3a: VALUE-BUG 5f/7f鈫?.7142857142857143 (baseline FrameAdvance.cs Vy*=0.7142857142857143)
-
-            if (target != null && IsCharacterFrameLogicTarget(target))
+            // Alignment contract: NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001
+            if (hitFa != 14)
             {
-                if (Runtime.Y + 40f < target.Runtime.Y)
+                Runtime.Vy *= 0.7142857142857143; // P0-f-2b B2-3a: VALUE-BUG 5f/7f鈫?.7142857142857143 (baseline FrameAdvance.cs Vy*=0.7142857142857143)
+
+                if (target != null && IsCharacterFrameLogicTarget(target))
+                {
+                    if (Runtime.Y + 40f < target.Runtime.Y)
+                        Runtime.Y += 1f;
+                    if (Runtime.Y + 40f > target.Runtime.Y)
+                        Runtime.Y -= 1f;
+                }
+                else if (Runtime.Y > 0f)
+                {
                     Runtime.Y += 1f;
-                if (Runtime.Y + 40f > target.Runtime.Y)
-                    Runtime.Y -= 1f;
-            }
-            else if (Runtime.Y > 0f)
-            {
-                Runtime.Y += 1f;
+                }
             }
 
             Runtime.Vx = System.Math.Clamp(Runtime.Vx, -14.0, 14.0);
-            if (Runtime.Y > 1.4f)
-                Runtime.Y = 1.4f;
 
             if (hitFa == 14)
                 Runtime.Vz = System.Math.Clamp(Runtime.Vz, -1.5, 1.5);
@@ -1989,25 +1988,10 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Vz = System.Math.Clamp(Runtime.Vz, -2.2, 2.2);
 
             SwitchDir(Runtime.Vx > 0f ? "right" : "left");
-            Runtime.YInt = (int)Runtime.Y;
+            // Alignment contract: NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-001; physics publishes integer Y.
 
             if (hitFa == 2)
                 ApplyHitFa2FrameSelection();
-
-            if (hitFa == 14)
-            {
-                double absVx = System.Math.Abs(Runtime.Vx);
-                int curFrame = Frame?.N ?? -1;
-                if (absVx >= 8f)
-                {
-                    if (curFrame > 40)
-                        SetFrameTickDirect(curFrame - 50);
-                }
-                else if (curFrame < 10)
-                {
-                    SetFrameTickDirect(curFrame + 50);
-                }
-            }
         }
 
         private void RunNonCharacterHitFa7FrameLogic()
@@ -2025,8 +2009,8 @@ namespace NTSD.Animation.LF2Objects
             if (target == null && rawTargetRuntime == null)
                 return;
 
-            int selfX = GetRuntimeXInt();
-            int targetX = target?.GetRuntimeXInt() ?? rawTargetRuntime.XInt;
+            ResolveFrameLogicPositionPair(target, rawTargetRuntime,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
             if (selfX < targetX)
                 Runtime.Vx += 0.7;
             if (targetX < selfX)
@@ -2036,8 +2020,7 @@ namespace NTSD.Animation.LF2Objects
             if (targetX < selfX)
                 Runtime.Vx -= 0.7;
 
-            int selfZ = Runtime.ZInt;
-            int targetZ = target?.Runtime.ZInt ?? rawTargetRuntime.ZInt;
+            // Alignment contract: NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001.
             if (selfZ + 5 < targetZ)
                 Runtime.Vz += 0.4;
             if (targetZ < selfZ - 5)
@@ -2651,6 +2634,26 @@ namespace NTSD.Animation.LF2Objects
                 if (curFrame != 1 && curFrame != 2)
                     SetFrameTickDirect(1);
             }
+        }
+
+        internal bool ResolveFrameLogicPositionPair(
+            LF2Entity target, NTSDEntityRuntime rawTargetRuntime,
+            out int selfX, out int targetX, out int selfZ, out int targetZ)
+        {
+            // Alignment contract: NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-001.
+            bool useSourcePosition = target?.Runtime != null &&
+                GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character &&
+                Runtime.SourceRulePositionInitialized &&
+                target.Runtime.SourceRulePositionInitialized;
+            selfX = useSourcePosition ? Runtime.SourceRuleXInt : GetRuntimeXInt();
+            targetX = useSourcePosition
+                ? target.Runtime.SourceRuleXInt
+                : target?.GetRuntimeXInt() ?? rawTargetRuntime?.XInt ?? 0;
+            selfZ = useSourcePosition ? Runtime.SourceRuleZInt : Runtime.ZInt;
+            targetZ = useSourcePosition
+                ? target.Runtime.SourceRuleZInt
+                : target?.Runtime?.ZInt ?? rawTargetRuntime?.ZInt ?? 0;
+            return useSourcePosition;
         }
 
         private static int GetFrameLogicZInt(LF2Entity entity)

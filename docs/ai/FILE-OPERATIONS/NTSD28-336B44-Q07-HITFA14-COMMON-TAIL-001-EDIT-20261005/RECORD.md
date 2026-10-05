@@ -1,0 +1,13 @@
+# NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001-EDIT-20261005
+
+状态：VERIFIED（仅三脚本文本增量及备份核验；生产Record仍RUNTIME_PENDING）；类型：三脚本限定文本增量及before字节备份，无删除/移动/Git丢弃。
+授权：用户启动战斗总目标并要求通用规则和已有框架/非战斗保护；[Task](../../TASKS/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001.md)明确实际路径。执行者/root；工作目录I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity；before登记UTC2026-10-05T12:37:41.266196+00:00。
+逐文件原绝对/相对路径、字节、SHA/Git和已验证before备份及四保护/五权威/五DAT两端SHA均在[before-manifest](../../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/before-manifest.json)。逐文件为LF2Entity.cs、BattleRuntimeSelfCheck.cs、Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs，各有独立同名backup；准确原路径以manifest为准。
+拟执行apply_patch按Task七例测试先行，随后三脚本同一规则的限定增量；dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q -clp:ErrorsOnly；现有Editor MCP refresh_unity及精确run_tests/get_test_job，不开新项目或全套测试。所有输出CreateNew、不写DAT/Scene/资源；成功、失败、超时和逐文件新身份待追加。Before含已有X/Z与shadow等dirty，不得误覆盖或整体回退。
+
+实际测试先行仅apply_patch上述Editor测试档。生成构建命令退出0/0errors/301warnings/102.50秒；refresh参数mode=force/scope=all/compile=request/wait_for_ready=false，唯一请求30秒观察超时，现有状态compiling=true，没有重复请求或测试启动。原件editor-red-build.log、editor-red-prestate.json、editor-red-refresh.json、editor-red-readiness-01.json都在本包artifact，CreateNew保存；生产/SelfCheck未执行增量。MCP get_state误用manage_editor action只产生Unknown action错误，随后按实际get_editor_state资源读取成功，没有场景或Play操作。
+
+最终操作核验：结束采集UTC2026-10-05T13:06:03.485146+00:00，执行者/root。实际apply_patch先写七例RED，然后仅三脚本共用14尾部与对应SelfCheck、新完整Driver方法；两次callback前错误type_sub guard诊断已记录并只修新方法。四次dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q -clp:ErrorsOnly均exit0/0error（RED102.50秒、GREEN24.56秒、catalog入口诊断10.73秒、type guard更正9.09秒）；四次现有MCP refresh，各批新程序集核对后精确run_tests。RED job84cf269f86564004a1849f23cd300e74五预期fail/两控制pass；GREEN joba0b934cb6063428f83f34380f09df63d 8/8；前两完整方法job2e6e9dc23ce542cea799633b9c6aabee与4ad8b188865b4d86aed407c55737e4c6 completed1/failed，第三次jobdc0fb1ad938f44cdabc8348f9847ef99 1/1。原件/实际命令在[报告](../../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/REPORT.md)，未执行全套测试；shell PID未记录，不推断。
+
+逐文件新SHA/Git及相对before实际diff见[最终核验](../../../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-20261005/final-authority-diff-and-editor-state.json)：LF2Entity.cs A996DFE814390DB93FCE884099C8FBF6694FD63B90B8475CA7585EB20AA7F0EE；BattleRuntimeSelfCheck.cs CC91C70ADC519144BD07DCAA68866E75D16FC25B4271924D23D061E6F64CF415；Editor测试档22799F0631D4A770BD9202C0F54C564AA53B03E52272328A7A5F83FBC27C7B59。三个backup精确可用，四保护/五DAT两端SHA稳，Scene clean/nonPlay/Console0error；没有删除/移动或Git丢弃，用户已有dirty保留。外部build.ps1 SHA改变，执行者未知、本操作没有写该路径；已保存观察副本并在Record/报告说明，不声称全部外部authority身份未变。任何恢复须另获精确授权和新Operation，未执行恢复；本Operation不代表父Q/总目标关闭。
+

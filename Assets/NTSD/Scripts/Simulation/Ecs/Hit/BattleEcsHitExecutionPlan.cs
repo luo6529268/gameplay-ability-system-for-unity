@@ -5579,7 +5579,9 @@ namespace NTSD.Simulation.Ecs
             projection.HitRecordCount++;
             projection.HitRecordDamage = encoded >= 100 && encoded < 200
                 ? encoded - 100 : (group * 2 + (resolvedItr.fall <= 60 ? 1 : 0)) * 10;
-            projection.HitRecordZ = target.Runtime.ZInt + hitY + ProjectSparkCrt(ref projection) - 4;
+            projection.HitRecordZ = BattleNativeHitSparkWriter.ProjectSourceEventY(
+                target.RegisteredWorldForSimulation, target.Runtime,
+                hitY + ProjectSparkCrt(ref projection) - 4);
             projection.HitRecordX = hitX + ProjectSparkCrt(ref projection) - 4;
             return true;
         }

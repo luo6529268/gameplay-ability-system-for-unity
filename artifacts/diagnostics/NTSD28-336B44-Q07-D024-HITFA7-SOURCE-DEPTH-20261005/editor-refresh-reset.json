@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-05T11:45:13.831451+00:00",
+  "operation": "refresh_unity mode force scope all compile request",
+  "error": "ConnectionResetError WinError 10054 while awaiting refresh response",
+  "testLaunched": false,
+  "refreshOutcome": "unknown until current-state inspection"
+}

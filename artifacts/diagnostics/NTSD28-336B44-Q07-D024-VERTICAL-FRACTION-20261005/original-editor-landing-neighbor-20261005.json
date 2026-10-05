@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c5e986e6501a412eb26f7685dc28e0e0",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791191303300,
+      "finished_unix_ms": 1791191307237,
+      "last_update_unix_ms": 1791191307237,
+      "progress": {
+        "completed": 1,
+        "total": 8829,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791191306773,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B4Type0OrdinaryLandingEditorTests.ExactCharacterNegativeFloorLandingUsesFrameHitG",
+        "last_finished_unix_ms": 1791191306779,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.2481018,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "ExactCharacterNegativeFloorLandingUsesFrameHitG",
+            "fullName": "NTSD.Test.Editor.NTSD28B4Type0OrdinaryLandingEditorTests.ExactCharacterNegativeFloorLandingUsesFrameHitG",
+            "state": "Passed",
+            "durationSeconds": 0.0063683,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

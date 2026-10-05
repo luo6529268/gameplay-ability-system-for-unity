@@ -1,0 +1,37 @@
+[
+  {
+    "view": "identity",
+    "redFile": "pickup-anchor-identity-20261005T103932030-077b16d5ade14ed7b49beea05880f151.csv",
+    "greenFile": "pickup-anchor-identity-20261005T104712284-bd91d498fcc94079975b43fbc2147673.csv",
+    "changedFields": [],
+    "redDifference": [
+      "0",
+      "0"
+    ],
+    "greenDifference": [
+      "0",
+      "0"
+    ]
+  },
+  {
+    "view": "project",
+    "redFile": "pickup-anchor-project-20261005T103954612-be030c277fac4edf947634bf95f32ec9.csv",
+    "greenFile": "pickup-anchor-project-20261005T104735882-53b33011d50d40fd8b647ec68b44d6f9.csv",
+    "changedFields": [
+      "offset_x",
+      "offset_y",
+      "weapon_point_x",
+      "weapon_point_y",
+      "difference_x",
+      "difference_y"
+    ],
+    "redDifference": [
+      "6",
+      "4.04656982421875"
+    ],
+    "greenDifference": [
+      "0",
+      "0"
+    ]
+  }
+]

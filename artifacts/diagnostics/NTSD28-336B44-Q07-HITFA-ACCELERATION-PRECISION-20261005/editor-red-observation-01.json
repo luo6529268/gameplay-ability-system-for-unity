@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-05T13:46:12.904669+00:00",
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "db0df1b9a4a64fc6a8414fc36c1f50e7",
+        "status": "running",
+        "mode": "EditMode",
+        "started_unix_ms": 1791207937552,
+        "finished_unix_ms": null,
+        "last_update_unix_ms": 1791207972861,
+        "progress": {
+          "completed": 1,
+          "total": 8878,
+          "current_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold",
+          "current_test_started_unix_ms": 1791207972861,
+          "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa2AccelerationBandSurvivesTenFullDriverTicks",
+          "last_finished_unix_ms": 1791207972859,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa2AccelerationBandSurvivesTenFullDriverTicks",
+              "message": "  full Driver must reach the middle band on tick 10\r\n  Expected: 3 or 4\r\n  But was:  2\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  }
+}

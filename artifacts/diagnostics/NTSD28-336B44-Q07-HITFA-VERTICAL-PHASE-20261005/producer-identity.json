@@ -1,0 +1,8 @@
+{
+  "utc": "2026-10-05T13:22:27.739046+00:00",
+  "path": "custom/1genma/genma.dat",
+  "formalSha256": "AB8F579FB2729750F76D43867164D635F7CF9542EE45B762B70B3D4AA8F7E5E3",
+  "stagedSha256": "AB8F579FB2729750F76D43867164D635F7CF9542EE45B762B70B3D4AA8F7E5E3",
+  "formalFrame333": "<frame> 333 xDj\npic: 85 state: 15 wait: 0 next: 334 centerx: 39 centery: 79 sound: data\\073.wav\nopoint: kind: 1 x: 30 y: 80 action: 190 dvx: 10 oid: 907 facing: 0 opoint_end:\nwpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:\nbdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:\nbdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:\n<frame_end>",
+  "scope": "Static producer reach only; not natural input or formal-root run evidence."
+}

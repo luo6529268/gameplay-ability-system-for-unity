@@ -1,0 +1,30 @@
+{
+  "request": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.NTSD28Q07HeldWeaponDualDomainEditorTests.NaturalPickupHeldWeapon_ViewWPointsCoincideAfterProjection"
+    ]
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "23310520aeec408b9a11737b5f720400",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  },
+  "compileConsole": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  }
+}

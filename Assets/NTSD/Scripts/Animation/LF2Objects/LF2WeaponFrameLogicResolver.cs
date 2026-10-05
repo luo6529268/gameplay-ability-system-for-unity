@@ -65,11 +65,18 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            bool useSourcePosition = _weapon.ResolveFrameLogicPositionPair(target, null,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
+            if (!useSourcePosition)
+            {
+                selfZ = GetFrameLogicZInt(_weapon);
+                targetZ = GetFrameLogicZInt(target);
+            }
             if (target != null && target.Health != null && target.Health.HP > 0)
             {
-                int dx = target.GetRuntimeXInt() - _weapon.GetRuntimeXInt();
+                int dx = targetX - selfX;
                 int dy = target.GetRuntimeYInt() - _weapon.GetRuntimeYInt();
-                int dz = GetFrameLogicZInt(target) - GetFrameLogicZInt(_weapon);
+                int dz = targetZ - selfZ;
                 if (dx > -30 && dx < 30 && dy > 0 && dy < 80 && dz > -10 && dz < 10)
                 {
                     _weapon.Runtime.Vx = 0f;
@@ -86,11 +93,6 @@ namespace NTSD.Animation.LF2Objects
                 ApplyWeaponHitFaNoTargetCatch();
                 return;
             }
-
-            int selfX = _weapon.GetRuntimeXInt();
-            int targetX = target.GetRuntimeXInt();
-            int selfZ = GetFrameLogicZInt(_weapon);
-            int targetZ = GetFrameLogicZInt(target);
 
             if (targetX > selfX)
                 _weapon.Runtime.Vx += 0.7f;
@@ -170,10 +172,8 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
-            int selfX = _weapon.GetRuntimeXInt();
-            int targetX = target.GetRuntimeXInt();
-            int selfZ = _weapon.Runtime.ZInt;
-            int targetZ = target.Runtime.ZInt;
+            _weapon.ResolveFrameLogicPositionPair(target, null,
+                out int selfX, out int targetX, out int selfZ, out int targetZ);
 
             if (targetX > selfX)
                 _weapon.Runtime.Vx += 0.7f;

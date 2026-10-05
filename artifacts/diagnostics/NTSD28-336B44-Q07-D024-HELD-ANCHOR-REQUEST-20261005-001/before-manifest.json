@@ -1,0 +1,32 @@
+{
+  "operationId": "NTSD28-336B44-Q07-D024-HELD-ANCHOR-REQUEST-20261005-001",
+  "utc": "2026-10-05T10:55:21.625842+00:00",
+  "pid": 115352,
+  "files": [
+    {
+      "relativePath": "Temp/NTSD28_Q07_AirborneIdleBattlePlay.request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q07_AirborneIdleBattlePlay.request.json",
+      "exists": true,
+      "bytes": 68,
+      "sha256": "7486F5BB3126869EC1D32C6033B68C6A94A19797573BCD0AEE21ED220B985BF1",
+      "gitStatus": "!! Temp/"
+    },
+    {
+      "relativePath": "artifacts/diagnostics/NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001/d024-held-anchor-20261005-01.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-held-anchor-20261005-01.json",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "gitStatus": ""
+    }
+  ],
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "scene": {
+    "relativePath": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+    "exists": true,
+    "bytes": 109282,
+    "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "gitStatus": ""
+  }
+}

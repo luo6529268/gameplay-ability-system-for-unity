@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-05T13:46:43.382240+00:00",
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "db0df1b9a4a64fc6a8414fc36c1f50e7",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791207937552,
+        "finished_unix_ms": 1791208003322,
+        "last_update_unix_ms": 1791208003322,
+        "progress": {
+          "completed": 5,
+          "total": 8878,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791207993034,
+          "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(207,115,0,-1,1)",
+          "last_finished_unix_ms": 1791208000105,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa2AccelerationBandSurvivesTenFullDriverTicks",
+              "message": "  full Driver must reach the middle band on tick 10\r\n  Expected: 3 or 4\r\n  But was:  2\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(518,1,1,0,10)",
+              "message": "  the tenth double acceleration crosses the strict seven threshold\r\n  Expected: 3\r\n  But was:  1\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(518,1,-1,0,10)",
+              "message": "  the tenth double acceleration crosses the strict seven threshold\r\n  Expected: 3\r\n  But was:  1\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(207,115,0,1,1)",
+              "message": "  Expected: 0.40000000000000002d\r\n  But was:  0.40000000596046448d\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(207,115,0,-1,1)",
+              "message": "  Expected: -0.40000000000000002d\r\n  But was:  -0.40000000596046448d\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  }
+}

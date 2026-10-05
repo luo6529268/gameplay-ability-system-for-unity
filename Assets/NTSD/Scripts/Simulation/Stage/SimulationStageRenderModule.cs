@@ -947,6 +947,7 @@ namespace NTSD.Simulation
                 _battlePresentation.PublishedFrame,
                 BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world),
                 world.FixedViewRunDistanceScale,
+                world.SpatialProjection.VerticalScale,
                 world.FixedViewRunVerticalDistanceScale);
             var snapshot = BuildRendererSnapshot();
             for (int i = 0; i < snapshot.Count; i++)

@@ -14,6 +14,7 @@ namespace NTSD.Simulation
 
         public double HorizontalScale { get; }
         public double DepthScale { get; }
+        public double VerticalScale => DepthScale;
         public double SharedAnchorX { get; }
         public double SharedAnchorZ { get; }
 
@@ -56,6 +57,9 @@ namespace NTSD.Simulation
 
         public double SourceDeltaToViewZ(double deltaZ) =>
             deltaZ * DepthScale;
+
+        public double SourceDeltaToViewY(double deltaY) =>
+            deltaY * VerticalScale;
 
         public double SourceToViewX(double sourceX) =>
             SourceToViewX(sourceX, SharedAnchorX);

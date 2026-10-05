@@ -1,0 +1,22 @@
+{
+  "request": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.NTSD28B5StandardHitRestProductionIntegrationEditorTests.AirborneVerticalBoundaryPreservesCommittedDamageAcrossViewScale"
+    ]
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "b9cc60e2fcbd426386c4ff058a1026dc",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

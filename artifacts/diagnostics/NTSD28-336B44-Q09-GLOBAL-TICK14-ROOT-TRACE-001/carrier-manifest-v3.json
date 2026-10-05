@@ -1,0 +1,11 @@
+{
+  "source_sha256": "39C50B8C29DE0FC8BC4CFCE3A5310CF000962B50D961CFB788BEFCE4CEF46956",
+  "derived_sha256": "8840583F73011F1C7C632A6E923DBDFFDB570972695B59168371DD014390828E",
+  "only_change": {
+    "field": "terminal logical slot0 input_score_total_348",
+    "offset": 148,
+    "old": 20,
+    "new": 0
+  },
+  "reason": "v2 executed 15 ticks but terminal header retained attack score from old carrier"
+}

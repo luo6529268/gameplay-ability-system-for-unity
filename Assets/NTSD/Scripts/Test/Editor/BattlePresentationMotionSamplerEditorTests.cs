@@ -42,6 +42,30 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void Sample_ProjectsRoundedGlobalHeightOnlyForPresentation()
+        {
+            BattlePresentationMotionState previous = State(3, 1, 2, 100, -2, 400);
+            BattlePresentationMotionState current = State(3, 1, 2, 100, -1, 400);
+            double viewScaleY = 1152.0 / 730.0;
+
+            BattlePresentationMotionSampleStatus status =
+                BattlePresentationMotionSampler.Sample(
+                    previous, current, 10, 11, 0.5,
+                    2048.0 / 1333.0, viewScaleY, viewScaleY,
+                    out BattlePresentationMotionDelta delta);
+
+            Assert.That(status, Is.EqualTo(BattlePresentationMotionSampleStatus.Sampled));
+            Assert.That(delta.Y, Is.EqualTo(-1));
+            Assert.That(delta.ViewY, Is.EqualTo(-viewScaleY).Within(1e-12));
+            Assert.That(delta.ViewZ, Is.Zero);
+            Assert.That(BattlePresentationDisplayMotion.ToWorldGround(delta).y,
+                Is.Zero);
+            Assert.That(BattlePresentationDisplayMotion.ToWorldBody(delta).y,
+                Is.EqualTo((float)viewScaleY * NTSD.Animation.NTSDRenderSpace.UnitsPerPixelY)
+                    .Within(1e-6f));
+        }
+
+        [Test]
         public void Sample_RejectsTickIdentityAndEveryRelationChange()
         {
             var priorRuntime = Runtime(20, 2, 1);

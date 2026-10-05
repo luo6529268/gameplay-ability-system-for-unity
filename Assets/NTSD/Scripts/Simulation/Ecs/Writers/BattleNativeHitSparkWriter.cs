@@ -38,10 +38,23 @@ namespace NTSD.Simulation.Ecs
                 y = (y + targetTop) / 2;
             else if (y > victim.YInt)
                 y = (y + victim.YInt) / 2;
-            y += victim.ZInt;
-            y += (int)(world.NativeRandom.CrtNext() % 9u) - 4;
+            y = ProjectSourceEventY(world, victim,
+                y + (int)(world.NativeRandom.CrtNext() % 9u) - 4);
             x += (int)(world.NativeRandom.CrtNext() % 9u) - 4;
             host.AddHitRecord(id, x, y);
+        }
+
+        internal static int ProjectSourceEventY(
+            SimulationWorld world, NTSDEntityRuntime victim, int sourceOffsetY)
+        {
+            BattleSpatialProjection projection = world?.SpatialProjection ?? BattleSpatialProjection.Identity;
+            if (projection.VerticalScale == 1.0)
+                return unchecked(victim.ZInt + sourceOffsetY);
+
+            int sourceZ = victim.SourceRulePositionInitialized
+                ? victim.SourceRuleZInt
+                : (int)projection.ViewToSourceZ(victim.Z);
+            return (int)projection.SourceToViewZ(unchecked(sourceZ + sourceOffsetY));
         }
     }
 }

@@ -1,0 +1,48 @@
+{
+  "observedUtc": "2026-10-05T10:15:27.380106+00:00",
+  "status": "FOCUSED_TEST_PASS",
+  "files": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B5StandardHitRestProductionIntegrationEditorTests.cs",
+      "sha256": "48D8881D55566D5B3DD092246DF0E67C1246741CA170A9D2B783924B8C1AAEC7",
+      "bytes": 11323
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001.md",
+      "sha256": "994173883DBF529404186FF35F3AA5532BC774269348270BA4422D770693702F",
+      "bytes": 14810
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005\\original-editor-y-hit-response-corrected-result-20261005.json",
+      "sha256": "1952A03428C69603F0090952D550B341FF780D5796038C93A35D6C9E5E8BF9C2",
+      "bytes": 4068
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005\\original-editor-y-hit-response-poststate-20261005.json",
+      "sha256": "FEACD21E17E3D78B9AD43B04DC803C930DEB6C0667EA8317293EFDBB98C23FB6",
+      "bytes": 3113
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-VERTICAL-FRACTION-20261005\\Y-HIT-RESPONSE.md",
+      "sha256": "EA78C6D0F19D0BF5DB11715D77E11081CE49F798254037B257B3D21F6FC097E7",
+      "bytes": 4809
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+      "sha256": "262B31261CA4747DFBE8117EE365E853B0591FC4AA05EDFD7F618CD75206D806",
+      "bytes": 5275
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+      "sha256": "4168C78A23849EAA17DD749002B89DD335841DB6CECA8B04FAE8356B10F1B905",
+      "bytes": 10867
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+      "sha256": "80AAD1AB1865D081F7E65A95098FDFA5C32A37D97E8C68F3861E6FDA1FC00D5E",
+      "bytes": 419528
+    }
+  ],
+  "authorityLimit": "Current release source as declared by README_SOURCE and playable build closure; no official EXE airborne replay run for this fixture",
+  "originalScenePlayRunThisTurn": false
+}

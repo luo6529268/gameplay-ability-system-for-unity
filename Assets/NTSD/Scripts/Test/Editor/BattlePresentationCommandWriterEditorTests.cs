@@ -368,23 +368,30 @@ namespace NTSD.Test
             }
         }
 
-        [Test]
-        public void PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies()
+        [TestCase(false, 23)]
+        [TestCase(true, -50)]
+        public void PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies(
+            bool fixedView, int sourceOffset)
         {
+            BattleSpatialProjection projection = fixedView
+                ? BattleSpatialProjection.FromReferenceViewport(2048, 1152)
+                : BattleSpatialProjection.Identity;
             BattleCommonVisualCatalog catalog = CreateCatalog(0, includeShadow: true);
             var frame = new BattlePresentationFrame();
             Reset(frame, catalog);
-            BattlePresentationEntitySnapshot entity = CreatePlatformShadowEntity(23);
+            frame.SpatialProjection = projection;
+            BattlePresentationEntitySnapshot entity = CreatePlatformShadowEntity(sourceOffset);
             Assert.That(entity.WithPresentationBaseOrder(104).RenderShadowOffset10C,
-                Is.EqualTo(23));
+                Is.EqualTo(sourceOffset));
             Assert.That(entity.WithResolvedSprite(1f, 1f, Rect.zero, Vector2.zero,
-                false, default, null).RenderShadowOffset10C, Is.EqualTo(23));
+                false, default, null).RenderShadowOffset10C, Is.EqualTo(sourceOffset));
             AddEntity(frame, entity);
 
             var coordinator = new BattlePresentationCoordinator();
             coordinator.BuildCommandsForSelfCheck(frame);
             var baseline = new BattlePresentationFrame();
             Reset(baseline, catalog);
+            baseline.SpatialProjection = projection;
             AddEntity(baseline, CreatePlatformShadowEntity(0));
             coordinator.BuildCommandsForSelfCheck(baseline);
 
@@ -402,9 +409,10 @@ namespace NTSD.Test
                     shadowCount++;
                     Assert.That(actual.Position, Is.EqualTo(
                         NTSDRenderSpace.CaptureViewportTransform().ScreenPixelToWorld(
-                            120, 203, 0f)));
+                            120, 180f + (float)(sourceOffset *
+                                (fixedView ? 1152.0 / 730.0 : 1.0)), 0f)));
                 }
-                else
+                else if (actual.Type != BattleRenderCommandType.OverlayGlyph)
                 {
                     Assert.That(actual.Position, Is.EqualTo(original.Position));
                 }
@@ -412,13 +420,20 @@ namespace NTSD.Test
             Assert.That(shadowCount, Is.EqualTo(1));
         }
 
-        [Test]
-        public void PlatformShadowOffset_LegacyRendererUsesSameVisualOffset()
+        [TestCase(false, 23)]
+        [TestCase(true, -50)]
+        public void PlatformShadowOffset_LegacyRendererUsesSameVisualOffset(
+            bool fixedView, int sourceOffset)
         {
             var shadowObject = new GameObject("Platform Shadow Offset Test");
             var actor = new LF2Character();
+            var world = new SimulationWorld();
             try
             {
+                if (fixedView)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                actor.SetRequiredRuntimeSlot(0);
+                world.Register(actor);
                 SpriteRenderer renderer = shadowObject.AddComponent<SpriteRenderer>();
                 float worldDepth = renderer.transform.position.z;
                 actor.ObjectId = 2;
@@ -427,7 +442,7 @@ namespace NTSD.Test
                 actor.Runtime.HitStop = 0;
                 actor.Runtime.XInt = 120;
                 actor.Runtime.ZInt = 180;
-                actor.Runtime.RenderShadowOffset10C = 23;
+                actor.Runtime.RenderShadowOffset10C = sourceOffset;
                 actor.SetShadowRenderer(renderer);
 
                 actor.UpdateShadow();
@@ -435,7 +450,8 @@ namespace NTSD.Test
                 Assert.That(renderer.transform.position, Is.EqualTo(
                     NTSDRenderSpace.SnapPresentationWorldPosition(
                         NTSDRenderSpace.ScreenPixelToPresentationWorld(
-                            120f, 203f, worldDepth))));
+                            120f, 180f + (float)(sourceOffset *
+                                (fixedView ? 1152.0 / 730.0 : 1.0)), worldDepth))));
 
                 actor.Runtime.RenderShadowOffset10C = 0;
                 actor.UpdateShadow();
@@ -448,6 +464,7 @@ namespace NTSD.Test
             finally
             {
                 actor.SetShadowRenderer(null);
+                world.Unregister(actor);
                 UnityEngine.Object.DestroyImmediate(shadowObject);
             }
         }

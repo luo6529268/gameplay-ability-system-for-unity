@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-05T13:26:48.712551+00:00",
+  "params": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaVerticalFollowFrictionSurvivesOneFullDriverTick"
+    ],
+    "includeDetails": false,
+    "includeFailedTests": true
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "2b416da5ae694a4fb6ecbc2f2e3df947",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

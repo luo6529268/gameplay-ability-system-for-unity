@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-05T13:25:41.416850+00:00",
+  "params": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaVerticalFollowKeepsIntegerYUntilPhysics",
+      "NTSD.Test.Editor.NTSD28Q07HitFa5FullDriverEditorTests.ExistingLiveHitFaRepresentativeRoutingRemainsValid"
+    ],
+    "includeDetails": false,
+    "includeFailedTests": true
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "56676b15b8bc457b9f4605ec7aa8a8cd",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

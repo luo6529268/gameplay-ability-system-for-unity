@@ -1,0 +1,65 @@
+{
+  "observedUtc": "2026-10-05T08:54:53.830219+00:00",
+  "jobs": [
+    {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Test job status retrieved.",
+        "data": {
+          "job_id": "931538c555074604970def79d9713154",
+          "status": "succeeded",
+          "mode": "EditMode",
+          "started_unix_ms": 1791190082570,
+          "finished_unix_ms": 1791190089480,
+          "last_update_unix_ms": 1791190089480,
+          "progress": {
+            "completed": 2,
+            "total": 8826,
+            "current_test_full_name": null,
+            "current_test_started_unix_ms": 1791190089028,
+            "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28D024UnifiedSpatialProjectionEditorTests.GlobalHeightUsesViewHeightRatioWithoutChangingApprovedSpriteScale",
+            "last_finished_unix_ms": 1791190089029,
+            "stuck_suspected": false,
+            "editor_is_focused": true,
+            "blocked_reason": null,
+            "failures_so_far": [],
+            "failures_capped": false
+          },
+          "error": null,
+          "result": null
+        }
+      }
+    },
+    {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Test job status retrieved.",
+        "data": {
+          "job_id": "7100f1e72947440b8623ab0a45f039e5",
+          "status": "succeeded",
+          "mode": "EditMode",
+          "started_unix_ms": 1791190237658,
+          "finished_unix_ms": 1791190242840,
+          "last_update_unix_ms": 1791190242840,
+          "progress": {
+            "completed": 1,
+            "total": 8827,
+            "current_test_full_name": null,
+            "current_test_started_unix_ms": 1791190242372,
+            "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28D024UnifiedSpatialProjectionEditorTests.OrdinaryBodyYEndpointsProjectOnceAndFullHeightStaysSentinel",
+            "last_finished_unix_ms": 1791190242429,
+            "stuck_suspected": false,
+            "editor_is_focused": true,
+            "blocked_reason": null,
+            "failures_so_far": [],
+            "failures_capped": false
+          },
+          "error": null,
+          "result": null
+        }
+      }
+    }
+  ]
+}

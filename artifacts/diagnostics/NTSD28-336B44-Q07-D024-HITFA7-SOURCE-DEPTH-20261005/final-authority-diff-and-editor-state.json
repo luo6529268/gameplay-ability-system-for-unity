@@ -1,0 +1,338 @@
+{
+  "utc": "2026-10-05T11:57:31.033502+00:00",
+  "state": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791201450815,
+        "sequence": 7,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "guid": "9a044b4462e171548a6466aaa64f92e5",
+            "name": "NTSD_Battle"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791201302576,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791201234891
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": 1791201272944,
+          "started_by": "unknown",
+          "last_run": {
+            "finished_unix_ms": 1791201302525,
+            "result": "unknown",
+            "counts": null
+          }
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "scene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Battle",
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "buildIndex": 1,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 11
+      }
+    }
+  },
+  "console": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  },
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "same": true
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "sha256": "CD648F740364F8115F46FD3FA2C8C136C3EB7F0B512CA40CAEDEB353EA45FDF8"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\ank\\a\\atk.dat",
+      "sha256": "FC34315BD542BC9E721419E6390103D9F165A055CFCEC45D1A66D9BAE1894CF8"
+    }
+  ],
+  "actualScripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "7C242EC1BD0840A991CFD1DB4E1C6407696F5F8A7375CCC98E1F0072E0830D2C",
+      "diff": [
+        "--- \n",
+        "+++ \n",
+        "@@ -117,4 +117,154 @@\n",
+        "             Assert.That(subject.Runtime.IsFacingLeft, Is.True);",
+        "             Assert.That(world.ObjectCount, Is.EqualTo(2));",
+        "+        }",
+        "+",
+        "+        [TestCase(false, 4, 0.0)]",
+        "+        [TestCase(true, 4, 0.0)]",
+        "+        [TestCase(true, -4, 0.0)]",
+        "+        [TestCase(true, 6, 0.4)]",
+        "+        public void RealOid875DepthDeadZoneUsesSourceCoordinates(",
+        "+            bool fixedView, int sourceDepthGap, double expectedDepthVelocity)",
+        "+        {",
+        "+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(",
+        "+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));",
+        "+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);",
+        "+            Assert.That(configs[875].characterData.frames.Any(frame =>",
+        "+                frame.frameId == 55 && frame.hit_Fa == 7), Is.True);",
+        "+",
+        "+            var world = new SimulationWorld();",
+        "+            if (fixedView)",
+        "+                world.ConfigureFixedViewRunDistance(2048, 1152);",
+        "+            world.BindLogicReferencePool(new BattleLogicReferencePool());",
+        "+            world.PrepareRuntimeDataCatalogForBattle(",
+        "+                catalog.Entries.Select(entry =>",
+        "+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),",
+        "+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)",
+        "+                    ? wrapper : null,",
+        "+                loganCatalog: catalog);",
+        "+            world.SetLogicOnlyEntityMaterialization(true);",
+        "+",
+        "+            var target = new LF2Character { ObjectId = 99 };",
+        "+            target.ModuleInitialize();",
+        "+            target.SetRequiredRuntimeSlot(0);",
+        "+            target.ModuleBind(configs[99], 99, world);",
+        "+            target.Initialize(500, 500);",
+        "+            target.Team = 2;",
+        "+",
+        "+            var subject = new LF2SpecialAttack { ObjectId = 875 };",
+        "+            subject.FrameCache.Load(configs[875]);",
+        "+            subject.ImmediateFrame(55);",
+        "+            subject.SetRequiredRuntimeSlot(50);",
+        "+            subject.Team = 1;",
+        "+            subject.Health.HP = 100;",
+        "+            subject.ObjectAiTargetSlot3F8 = 0;",
+        "+            world.Register(subject);",
+        "+",
+        "+            void Place(NTSDEntityRuntime runtime, double y, double sourceZ)",
+        "+            {",
+        "+                runtime.SetPosition(",
+        "+                    world.SpatialProjection.SourceToViewX(400), y,",
+        "+                    world.SpatialProjection.SourceToViewZ(sourceZ));",
+        "+                runtime.SyncIntegerPosition();",
+        "+                runtime.SetSourceRulePosition(400, sourceZ);",
+        "+                runtime.SyncSourceRuleIntegerPosition();",
+        "+            }",
+        "+",
+        "+            try",
+        "+            {",
+        "+                Place(subject.Runtime, -40, 380);",
+        "+                Place(target.Runtime, 0, 380 + sourceDepthGap);",
+        "+                subject.Runtime.SetVelocity(0, 0, 0);",
+        "+                double initialViewZ = subject.Runtime.Z;",
+        "+",
+        "+                subject.RunFrameLogicBeforeAdvance();",
+        "+",
+        "+                Assert.That(subject.Runtime.Vz,",
+        "+                    Is.EqualTo(expectedDepthVelocity).Within(1e-9));",
+        "+                Assert.That(subject.Runtime.Vx, Is.Zero);",
+        "+                Assert.That(subject.Runtime.Vy, Is.EqualTo(0.4).Within(1e-9));",
+        "+                Assert.That(subject.Runtime.Y, Is.EqualTo(-39.6).Within(1e-9));",
+        "+                Assert.That(subject.Runtime.YInt, Is.EqualTo(-40));",
+        "+                Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(380));",
+        "+                Assert.That(subject.Frame.N, Is.EqualTo(55));",
+        "+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);",
+        "+                Assert.That(world.ObjectCount, Is.EqualTo(2));",
+        "+",
+        "+                CharacterMechanics.StepNonCharacterBattleLogic(",
+        "+                    subject.Runtime, 0.5,",
+        "+                    world.SpatialProjection.HorizontalScale,",
+        "+                    world.SpatialProjection.DepthScale);",
+        "+",
+        "+                double expectedScale = fixedView ? 1152.0 / 730.0 : 1.0;",
+        "+                Assert.That(subject.Runtime.SourceRuleZ,",
+        "+                    Is.EqualTo(380 + expectedDepthVelocity).Within(1e-9));",
+        "+                Assert.That(subject.Runtime.Z - initialViewZ,",
+        "+                    Is.EqualTo(expectedDepthVelocity * expectedScale).Within(1e-9));",
+        "+                Assert.That(target.Runtime.SourceRuleZ,",
+        "+                    Is.EqualTo(380 + sourceDepthGap));",
+        "+                Assert.That(subject.Runtime.NativePreviousY104, Is.EqualTo(-40));",
+        "+                Assert.That(world.ObjectCount, Is.EqualTo(2));",
+        "+            }",
+        "+            finally",
+        "+            {",
+        "+                world.Unregister(subject);",
+        "+                world.Unregister(target);",
+        "+            }",
+        "+        }",
+        "+",
+        "+        [Test]",
+        "+        public void RealOid875SourceDepthDeadZoneSurvivesFullDriverTick()",
+        "+        {",
+        "+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(",
+        "+                ProjectPath(RuntimeRoot),",
+        "+                ProjectPath(FullTickWitnessRoot + \"/scenario.json\"),",
+        "+                BattleRuntimeProfile.Authority400, 3,",
+        "+                (driver, inputs, identity) =>",
+        "+                {",
+        "+                    SimulationWorld world = driver.World;",
+        "+                    world.ConfigureFixedViewRunDistance(2048, 1152);",
+        "+                    LF2Entity target = world.FindEntityByRuntimeSlotForQuery(0);",
+        "+                    LF2Entity subject = world.FindEntityByRuntimeSlotForQuery(1);",
+        "+                    Assert.That(target?.ObjectId, Is.EqualTo(99));",
+        "+                    Assert.That(subject?.ObjectId, Is.EqualTo(875));",
+        "+                    Assert.That(subject.Frame.N, Is.EqualTo(55));",
+        "+                    Assert.That(world.StageDepthBoundsArePhysical, Is.False);",
+        "+",
+        "+                    void Place(LF2Entity entity, double y, int sourceZ)",
+        "+                    {",
+        "+                        entity.Runtime.SetPosition(",
+        "+                            world.SpatialProjection.SourceToViewX(400), y,",
+        "+                            world.SpatialProjection.SourceToViewZ(sourceZ));",
+        "+                        entity.Runtime.SyncIntegerPosition();",
+        "+                        entity.Runtime.SetSourceRulePosition(400, sourceZ);",
+        "+                        entity.Runtime.SyncSourceRuleIntegerPosition();",
+        "+                        entity.Runtime.SetVelocity(0, 0, 0);",
+        "+                    }",
+        "+",
+        "+                    Place(subject, -40, 600);",
+        "+                    Place(target, 0, 604);",
+        "+                    subject.ObjectAiTargetSlot3F8 = 0;",
+        "+                    double initialViewZ = subject.Runtime.Z;",
+        "+",
+        "+                    Assert.That(driver.StepOneTick(",
+        "+                        inputs[0], ignorePaused: true,",
+        "+                        buildPresentation: false), Is.True);",
+        "+",
+        "+                    subject = world.FindEntityByRuntimeSlotForQuery(1);",
+        "+                    target = world.FindEntityByRuntimeSlotForQuery(0);",
+        "+                    Assert.That(subject?.ObjectId, Is.EqualTo(875));",
+        "+                    Assert.That(target?.ObjectId, Is.EqualTo(99));",
+        "+                    Assert.That(subject.Runtime.SourceRuleZ,",
+        "+                        Is.EqualTo(600).Within(1e-9));",
+        "+                    Assert.That(subject.Runtime.Vz, Is.Zero);",
+        "+                    Assert.That(subject.Runtime.Z - initialViewZ,",
+        "+                        Is.Zero.Within(1e-9));",
+        "+                    Assert.That(target.Runtime.SourceRuleZ, Is.EqualTo(604));",
+        "+                    Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);",
+        "+                    Assert.That(world.ObjectCount, Is.EqualTo(2));",
+        "+                    TestContext.Progress.WriteLine(",
+        "+                        \"HITFA7_FULL_DRIVER_ONE_TICK: sourceGap=4, \" +",
+        "+                        \"sourceZ=600, velocityZ=0, viewDeltaZ=0, targetSlot=0\");",
+        "+                },",
+        "+                useProjectMode: true);",
+        "         }",
+        " "
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "1D9AFC4F0C2A1B2CE5690C3F459E58153B43AB7E64EA1B97A46E8F22214D97A4",
+      "diff": [
+        "--- \n",
+        "+++ \n",
+        "@@ -2040,6 +2040,12 @@\n",
+        "                 Runtime.Vx -= 0.7;",
+        " ",
+        "-            int selfZ = Runtime.ZInt;",
+        "-            int targetZ = target?.Runtime.ZInt ?? rawTargetRuntime.ZInt;",
+        "+            // Alignment contract: NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001.",
+        "+            bool useSourceDepth = target != null &&",
+        "+                Runtime.SourceRulePositionInitialized &&",
+        "+                target.Runtime.SourceRulePositionInitialized;",
+        "+            int selfZ = useSourceDepth ? Runtime.SourceRuleZInt : Runtime.ZInt;",
+        "+            int targetZ = useSourceDepth",
+        "+                ? target.Runtime.SourceRuleZInt",
+        "+                : target?.Runtime.ZInt ?? rawTargetRuntime.ZInt;",
+        "             if (selfZ + 5 < targetZ)",
+        "                 Runtime.Vz += 0.4;"
+      ]
+    }
+  ],
+  "stagedOid875MatchesFormal": true,
+  "readPathCorrection": "First readonly lookup omitted decoded_dat and failed FileNotFoundError; rg resolved both decoded_dat paths; no file mutation or test restart."
+}

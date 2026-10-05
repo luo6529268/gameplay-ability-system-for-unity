@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-05T12:10:29.058152+00:00",
+  "scripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "sha256": "1D9AFC4F0C2A1B2CE5690C3F459E58153B43AB7E64EA1B97A46E8F22214D97A4",
+      "bytes": 291001,
+      "gitStatus": "M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005\\before\\LF2Entity.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponFrameLogicResolver.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponFrameLogicResolver.cs",
+      "sha256": "990D18BCFC3F22F302A1826238D10342C5FC415466C0B22D89CF94D7C2408775",
+      "bytes": 12444,
+      "gitStatus": "",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005\\before\\LF2WeaponFrameLogicResolver.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "7C242EC1BD0840A991CFD1DB4E1C6407696F5F8A7375CCC98E1F0072E0830D2C",
+      "bytes": 26049,
+      "gitStatus": "M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-TRACKING-RULE-POSITION-20261005\\before\\NTSD28Q07NonCharacterHitFa7EditorTests.cs"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "sha256": "CD648F740364F8115F46FD3FA2C8C136C3EB7F0B512CA40CAEDEB353EA45FDF8"
+    }
+  ]
+}

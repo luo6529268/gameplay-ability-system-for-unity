@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-05T13:46:19.980100+00:00",
+  "exitCode": 0,
+  "rows": 11,
+  "lastRows": [
+    {
+      "call": 9,
+      "vx": 6.300000000000001,
+      "action": 1,
+      "target": 0,
+      "sourceX": 400,
+      "sourceY": -91,
+      "sourceZ": 600
+    },
+    {
+      "call": 10,
+      "vx": 7.000000000000001,
+      "action": 3,
+      "target": 0,
+      "sourceX": 400,
+      "sourceY": -90,
+      "sourceZ": 600
+    }
+  ],
+  "stderr": "",
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005\\native_ai_acceleration_witness.exe",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime"
+  ]
+}

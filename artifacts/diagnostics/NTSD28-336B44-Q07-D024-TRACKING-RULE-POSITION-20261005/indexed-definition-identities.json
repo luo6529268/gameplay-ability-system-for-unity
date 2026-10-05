@@ -1,0 +1,75 @@
+{
+  "utc": "2026-10-05T12:24:33.674024+00:00",
+  "definitions": [
+    {
+      "oid": 700,
+      "frame": 54,
+      "hitFa": 1,
+      "relative": "c/saku/a/atk.dat",
+      "formalSha256": "5DD9B3ED4CB43C633B58A706741EA3CEBA049C783AA59B068A9E04C89B8B8C92",
+      "stagedSha256": "5DD9B3ED4CB43C633B58A706741EA3CEBA049C783AA59B068A9E04C89B8B8C92",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 875,
+      "frame": 50,
+      "hitFa": 3,
+      "relative": "c/ank/a/atk.dat",
+      "formalSha256": "FC34315BD542BC9E721419E6390103D9F165A055CFCEC45D1A66D9BAE1894CF8",
+      "stagedSha256": "FC34315BD542BC9E721419E6390103D9F165A055CFCEC45D1A66D9BAE1894CF8",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 518,
+      "frame": 1,
+      "hitFa": 2,
+      "relative": "c/nar/a/atk.dat",
+      "formalSha256": "881060DBA197C8FD39B1F089BE0FE89D30CA3D0AABDA37402B5DFAD90918CF99",
+      "stagedSha256": "881060DBA197C8FD39B1F089BE0FE89D30CA3D0AABDA37402B5DFAD90918CF99",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 219,
+      "frame": 0,
+      "hitFa": 4,
+      "relative": "w/e.dat",
+      "formalSha256": "178D2653E2BC4AFFF7B933DA2F28A87ECD6217CBD4F99291EA1B19F300704274",
+      "stagedSha256": "984A0F8D072F0D23A15CE18A740A15711C9D5E00E452D19C08911DCECBDBE337",
+      "rawEqual": false,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 124,
+      "frame": 40,
+      "hitFa": 12,
+      "relative": "w/9.dat",
+      "formalSha256": "BB9FCD5C414FCEC9937EE1A300097962623135F212B13A4A9FC5DAA888D1FC50",
+      "stagedSha256": "BB9FCD5C414FCEC9937EE1A300097962623135F212B13A4A9FC5DAA888D1FC50",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 907,
+      "frame": 190,
+      "hitFa": 12,
+      "relative": "custom/1genma/a/wind.dat",
+      "formalSha256": "99C04D29960B4873BC5BD4001CDDC855810FD76BF1F530ED220F7906AA05E5ED",
+      "stagedSha256": "99C04D29960B4873BC5BD4001CDDC855810FD76BF1F530ED220F7906AA05E5ED",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    },
+    {
+      "oid": 207,
+      "frame": 115,
+      "hitFa": 14,
+      "relative": "c/sai/a/ink.dat",
+      "formalSha256": "BFD40B2B4BB3FC3CD173113535321FFC128F8C642AD584D498FB56D0EC5713D9",
+      "stagedSha256": "BFD40B2B4BB3FC3CD173113535321FFC128F8C642AD584D498FB56D0EC5713D9",
+      "rawEqual": true,
+      "crlfLfOnlyEqual": true
+    }
+  ]
+}

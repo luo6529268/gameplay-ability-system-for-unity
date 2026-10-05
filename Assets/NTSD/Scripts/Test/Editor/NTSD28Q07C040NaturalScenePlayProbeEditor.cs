@@ -148,6 +148,25 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
+        private sealed class ShadowSample
+        {
+            public int relativeTick;
+            public int globalTick;
+            public int publishedTick;
+            public int planTick;
+            public int sourceOffset;
+            public int commandCount;
+            public double displayAlpha;
+            public double viewHeightOffset;
+            public double expectedViewHeightOffset;
+            public double residual;
+        }
+
+        private static bool IsShadowProjectionProbe => report != null &&
+            report.mode == "platform" &&
+            report.runId.StartsWith("d024-shadow-height-", StringComparison.Ordinal);
+
+        [Serializable]
         private sealed class Report
         {
             public string runId;
@@ -194,6 +213,7 @@ namespace NTSD.Test.Editor
             public List<FileHash> before = new List<FileHash>();
             public List<FileHash> after = new List<FileHash>();
             public List<TickSample> samples = new List<TickSample>();
+            public List<ShadowSample> shadowSamples = new List<ShadowSample>();
         }
 
         [InitializeOnLoadMethod]
@@ -535,7 +555,7 @@ namespace NTSD.Test.Editor
                 !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics,
                 "Production World changed or tick boundary is not stable.");
             Require(driver.CurrentTickIndex == report.endTick, "Unobserved tick while paused.");
-            int targetTicks = report.mode == "platform" ? 96 :
+            int targetTicks = IsShadowProjectionProbe ? 31 : report.mode == "platform" ? 96 :
                 report.mode == "triad" ? 16 : 40;
             if (report.samples.Count == targetTicks)
             {
@@ -593,6 +613,8 @@ namespace NTSD.Test.Editor
             }
             report.samples.Add(sample);
             report.endTick = driver.CurrentTickIndex;
+            if (IsShadowProjectionProbe && tick >= 29 && tick <= 31)
+                CapturePlatformShadowPresentation(tick);
             if (report.captureGameView && tick == 25)
             {
                 string relativePath = ViewResultRoot + report.runId + "/game-view-tick25.png";
@@ -606,6 +628,63 @@ namespace NTSD.Test.Editor
                 ScreenCapture.CaptureScreenshot(output);
             }
             Save();
+        }
+
+        private static void CapturePlatformShadowPresentation(int relativeTick)
+        {
+            NTSD.Animation.Rendering.BattlePixelFramePlan plan;
+            double alpha;
+            int renderFps = world.BattlePresentationRenderFps;
+            float interval = world.BattlePresentationLogicIntervalSeconds;
+            try
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(30, interval);
+                plan = NTSD.Animation.Rendering.BattleCentralRenderSystem.PrepareFrame(world);
+                alpha = NTSD.Animation.Rendering.BattleCentralRenderSystem
+                    .LastResolvedDisplayAlphaForWorld(world);
+            }
+            finally
+            {
+                world.ConfigureBattlePresentationDisplayPolicy(renderFps, interval);
+            }
+            BattlePresentationFrame frame = plan.CapturedFrame;
+            Require(plan.IsValid && !plan.IsStale && plan.SimulationTick == report.endTick &&
+                frame != null && frame.TickIndex == report.endTick && frame.CommandsMaterialized &&
+                world.BattlePresentation.PublishedFrame?.TickIndex == report.endTick &&
+                Math.Abs(alpha - 1.0) < 1e-6,
+                "Platform shadow commands are not from the current complete tick.");
+            int sourceOffset = actors[2].Runtime.RenderShadowOffset10C;
+            int expectedSourceOffset = relativeTick == 29 ? -50 : relativeTick == 30 ? -58 : -64;
+            Require(sourceOffset == expectedSourceOffset,
+                "Existing natural platform source-height sequence changed.");
+            var sample = new ShadowSample
+            {
+                relativeTick = relativeTick,
+                globalTick = report.endTick,
+                publishedTick = world.BattlePresentation.PublishedFrame.TickIndex,
+                planTick = plan.SimulationTick,
+                sourceOffset = sourceOffset,
+                displayAlpha = alpha,
+                expectedViewHeightOffset = sourceOffset * 1152.0 / 730.0
+            };
+            NTSDRenderSpace.ViewportTransformSnapshot viewport =
+                NTSDRenderSpace.CaptureViewportTransform();
+            Vector3 ground = viewport.ScreenPixelToWorld(
+                actors[2].GetRuntimeXInt() + (int)actors[2].GetRenderOffsetX() - world.ReleaseCameraX,
+                actors[2].GetRenderZInt(), 0f);
+            for (int index = 0; index < frame.CommandCount; index++)
+            {
+                BattleRenderCommand command = frame.GetCommand(index);
+                if (command.Type != BattleRenderCommandType.Shadow ||
+                    command.RuntimeSlot != 2 || command.StableId != actors[2].StableId)
+                    continue;
+                sample.commandCount++;
+                sample.viewHeightOffset = -(command.Position.y - ground.y) / viewport.UnitsPerPixelY;
+            }
+            sample.residual = sample.viewHeightOffset - sample.expectedViewHeightOffset;
+            report.shadowSamples.Add(sample);
+            Require(sample.commandCount == 1 && Math.Abs(sample.residual) < 0.002,
+                "Natural platform shadow did not consume the shared height projection.");
         }
 
         private static void WaitForGameView()
@@ -680,10 +759,11 @@ namespace NTSD.Test.Editor
         private static void CompleteMeasurement()
         {
             report.status = report.samples.Count ==
-                (report.mode == "platform" ? 96 :
+                (IsShadowProjectionProbe ? 31 : report.mode == "platform" ? 96 :
                     report.mode == "triad" ? 16 : 40) &&
                 report.samples.All(value => value.entities.Count == 3) &&
-                (!report.captureGameView || report.view != null)
+                (!report.captureGameView || report.view != null) &&
+                (!IsShadowProjectionProbe || report.shadowSamples.Count == 3)
                 ? "CAPTURED" : "INCOMPLETE";
             Save();
             if (!CaptureOrderedShutdown()) return;

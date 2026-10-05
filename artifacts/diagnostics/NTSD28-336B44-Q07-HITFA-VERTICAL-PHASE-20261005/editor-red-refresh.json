@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-05T13:21:04.567466+00:00",
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Refresh requested.",
+      "data": {
+        "refresh_triggered": true,
+        "compile_requested": true,
+        "resulting_state": "compiling",
+        "hint": "If Unity enters compilation/domain reload, poll editor_state until ready_for_tools is true."
+      }
+    }
+  }
+}

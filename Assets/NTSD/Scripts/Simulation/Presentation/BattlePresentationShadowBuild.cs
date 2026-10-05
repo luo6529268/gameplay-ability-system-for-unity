@@ -1021,6 +1021,8 @@ namespace NTSD.Simulation.Presentation
         public int EarthquakeBackgroundOffsetY { get; internal set; }
         public int SelectedModeReviveLivesGate54 { get; internal set; }
         public int SelectedModeEtcMode { get; internal set; }
+        public BattleSpatialProjection SpatialProjection { get; internal set; } =
+            BattleSpatialProjection.Identity;
         public int EntityCount { get; internal set; }
         public int MotionStateCount { get; private set; }
         public int PreviousMotionStateCount { get; private set; }
@@ -1175,6 +1177,7 @@ namespace NTSD.Simulation.Presentation
                     EarthquakeBackgroundOffsetY = source.EarthquakeBackgroundOffsetY;
                     SelectedModeReviveLivesGate54 = source.SelectedModeReviveLivesGate54;
                     SelectedModeEtcMode = source.SelectedModeEtcMode;
+                    SpatialProjection = source.SpatialProjection;
                     EntityCount = source.EntityCount;
                     MotionStateCount = source.MotionStateCount;
                     PreviousMotionStateCount = source.PreviousMotionStateCount;
@@ -1217,6 +1220,7 @@ namespace NTSD.Simulation.Presentation
             EarthquakeBackgroundOffsetY = 0;
             SelectedModeReviveLivesGate54 = 0;
             SelectedModeEtcMode = 0;
+            SpatialProjection = BattleSpatialProjection.Identity;
             EntityCount = 0;
             MotionStateCount = 0;
             PreviousMotionStateCount = 0;
@@ -2411,6 +2415,7 @@ namespace NTSD.Simulation.Presentation
                 {
                     spriteCaptureCache.Clear();
                     frame.Reset(tickIndex, commonVisualCatalog);
+                    frame.SpatialProjection = world.SpatialProjection;
                     NTSD28EarthquakeRuntimeState earthquake = world.Runtime?.Earthquake;
                     frame.EarthquakeOwnerSlot = earthquake?.OwnerSlot ?? -1;
                     frame.EarthquakeBackgroundOffsetX = earthquake?.BackgroundOffsetX ?? 0;
@@ -3062,7 +3067,8 @@ namespace NTSD.Simulation.Presentation
                         ? stableGroundPosition
                         : viewportTransform.ScreenPixelToWorld(
                             entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
-                            unchecked(entity.ZInt + entity.RenderShadowOffset10C),
+                            entity.ZInt + (float)frame.SpatialProjection
+                                .SourceDeltaToViewY(entity.RenderShadowOffset10C),
                             0f);
                     writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Shadow,
@@ -3109,7 +3115,8 @@ namespace NTSD.Simulation.Presentation
                         resolvedPixelHeight,
                         entity.CenterX,
                         entity.CenterY,
-                        NTSDRenderSpace.BattleVisualScale);
+                        NTSDRenderSpace.BattleVisualScale,
+                        frame.SpatialProjection.VerticalScale);
                     bool presentationFlipX = entity.FlipX;
                     if (entity.State == 9997)
                     {
@@ -3123,7 +3130,11 @@ namespace NTSD.Simulation.Presentation
                             entity.FlipX, resolvedPixelWidth, resolvedPixelHeight,
                             entity.CenterX, entity.CenterY,
                             NTSDRenderSpace.BattleVisualScale,
-                            entity.State9997OwnerPosition,
+                            new Vector3(
+                                entity.State9997OwnerPosition.x,
+                                (float)frame.SpatialProjection.SourceDeltaToViewY(
+                                    entity.State9997OwnerPosition.y),
+                                entity.State9997OwnerPosition.z),
                             entity.OwnerNativeYOffset, visibleLeft, visibleRight,
                             out presentationFlipX);
                     }
@@ -3135,7 +3146,8 @@ namespace NTSD.Simulation.Presentation
                         0f);
                     Vector3 stableHealthGroundWorld = viewportTransform.ScreenPixelToWorld(
                         entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
-                        entity.DisplayZ + entity.YInt,
+                        entity.DisplayZ + (float)frame.SpatialProjection
+                            .SourceDeltaToViewY(entity.YInt),
                         0f);
                     Vector2 stableHealthAnchorWorld = new Vector2(
                         stableHealthGroundWorld.x,

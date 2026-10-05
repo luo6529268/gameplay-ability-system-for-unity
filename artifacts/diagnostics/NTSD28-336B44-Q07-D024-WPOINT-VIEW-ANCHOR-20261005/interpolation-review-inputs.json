@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-05T11:08:26.679476+00:00",
+  "scope": "read-only contract review; no new tests or Play",
+  "files": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "bytes": 5469312,
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "bytes": 36567,
+      "sha256": "CD648F740364F8115F46FD3FA2C8C136C3EB7F0B512CA40CAEDEB353EA45FDF8"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\src\\presentation_interpolation.cpp",
+      "bytes": 7145,
+      "sha256": "00076B1125DE736629FAFF1EE6F7A321CE01A6DBFB6067081264D8E0D48AA5DB"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationMotionSampler.cs",
+      "bytes": 5021,
+      "sha256": "86AF617C641A509EBF1CECB81414BB5F8A13D88BD2896B9E0057B5DA3FE6A492"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationDisplayMotion.cs",
+      "bytes": 6776,
+      "sha256": "FCF000529ECB127DAD5FDDD3E254373575F44BE124A099B21782C575376D7AD7"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+      "bytes": 175219,
+      "sha256": "2B3599A4564A9F36807F19F4209B3C99DE65646C90DA7EA35F94FF041C85A820"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "bytes": 97191,
+      "sha256": "9EB25754712EBC31BCA08437D965320DE845D51CA39B698BFDD45F8F0E6B293F"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "bytes": 290428,
+      "sha256": "5C1C0D9575A6EFB0B34697697EB6ED5516F84E9D73EC35CD3E38D295B51DDBEE"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattlePresentationMotionSamplerEditorTests.cs",
+      "bytes": 8832,
+      "sha256": "7EFBD4FABD5236B98BD14E5CFEF5AB3B2D82E1418CA505B7F9F8DCFB53A00F34"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-held-anchor-20261005-01.json",
+      "bytes": 5674,
+      "sha256": "6EF6CB7855CFC6F521FF42621B1C1F7E8B2505B362B0D850104DD8A3371740BC"
+    }
+  ]
+}

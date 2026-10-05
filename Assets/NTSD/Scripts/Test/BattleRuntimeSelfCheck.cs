@@ -22539,29 +22539,33 @@ itr_end:
             target.Runtime.SyncIntegerPosition();
             for (int i = 0; i < sources.Length; i++)
             {
-                sources[i].Runtime.SetPosition(0.0, 0.0, 0.0);
-                sources[i].Runtime.SetVelocity(0.0, 0.0, 0.0);
+                sources[i].Runtime.SetPosition(0.0, -10.25, 0.0);
+                sources[i].Runtime.SetVelocity(0.0, 2.8, 0.0);
                 sources[i].Runtime.SyncIntegerPosition();
             }
 
             world.FrameLogicBeforeAdvanceAll(1);
             for (int i = 0; i < sources.Length; i++)
             {
-                Expect(sources[i].Frame.N == 50 &&
+                Expect(sources[i].Frame.N == 0 &&
                        Nearly(sources[i].Runtime.Vx, 0.7) &&
                        Nearly(sources[i].Runtime.Vz, 0.4) &&
-                       Nearly(sources[i].Runtime.Y, 1.0),
-                    $"BATTLE-AUDIT3-10: hit_Fa=14 tick1 must run one frame-band tracking step for {sources[i].GetType().Name}");
+                       Nearly(sources[i].Runtime.Y, -10.25) &&
+                       Nearly(sources[i].Runtime.Vy, 2.8) &&
+                       sources[i].Runtime.YInt == -10,
+                    $"hit_Fa=14 tick1 must preserve action and vertical state while tracking X/Z for {sources[i].GetType().Name}");
             }
 
             world.FrameLogicBeforeAdvanceAll(2);
             for (int i = 0; i < sources.Length; i++)
             {
-                Expect(sources[i].Frame.N == 50 &&
+                Expect(sources[i].Frame.N == 0 &&
                        Nearly(sources[i].Runtime.Vx, 1.4) &&
                        Nearly(sources[i].Runtime.Vz, 0.8) &&
-                       Nearly(sources[i].Runtime.Y, 1.4),
-                    $"BATTLE-AUDIT3-10: hit_Fa=14 tick2 must add exactly one tracking step for {sources[i].GetType().Name}");
+                       Nearly(sources[i].Runtime.Y, -10.25) &&
+                       Nearly(sources[i].Runtime.Vy, 2.8) &&
+                       sources[i].Runtime.YInt == -10,
+                    $"hit_Fa=14 tick2 must add one X/Z step without changing action or vertical state for {sources[i].GetType().Name}");
             }
         }
 

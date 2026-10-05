@@ -1,0 +1,329 @@
+{
+  "status": "SCOPED_NATURAL_LANDING_RULE_PASS",
+  "observedUtc": "2026-10-05T09:57:49.638434+00:00",
+  "method": "read-only comparison of existing post-change original Battle Scene, source CSV, and official-root trace; no new Unity Play or script change",
+  "absoluteFloatTolerance": 1e-12,
+  "inputs": {
+    "unity_after": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-vertical-green-20261005-01.json",
+      "sha256": "F3D090762B3508CB21AE3442DCE44CA41AABFE39A6B3739F64A3BBA75AF3C5DF"
+    },
+    "unity_before": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-vertical-20261005-01.json",
+      "sha256": "3D4AC279ECBE1AB32640ABA468CFF17E72B2CE95A5FF7E221B615933FE944351"
+    },
+    "source_entities": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\source-entities.csv",
+      "sha256": "B0A9EE53473964BA89988DCD5BB21B851109C1F7F68590DFA0246B726FAC899F"
+    },
+    "source_rng": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\source-rng.csv",
+      "sha256": "219C4B555EC3DB2D7CBCCFD546E2EEB56DE57658BB79E35D083C925A980D70DC"
+    },
+    "formal_root_trace": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001\\guren388-airborne-child\\root-trace.jsonl",
+      "sha256": "9A4A3BB52C928658A456FD869A9D35098C1123F34693875B81D3D2363F859B13"
+    }
+  },
+  "currentExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "currentSceneSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sourceVsUnity": {
+    "entityRows": 107,
+    "ticks": 32,
+    "entityFields": [
+      "oid",
+      "type",
+      "action",
+      "state",
+      "counter",
+      "x",
+      "y",
+      "z",
+      "vx",
+      "vy",
+      "vz",
+      "hp",
+      "owner",
+      "team"
+    ],
+    "rngFields": [
+      "crtState",
+      "crtCalls",
+      "customCounter",
+      "customIndex",
+      "customCalls",
+      "lastCallSite"
+    ],
+    "comparedFields": 1690,
+    "differences": []
+  },
+  "formalRootVsUnity": {
+    "comparedFields": 1658,
+    "differences": [],
+    "excludedField": "crtState",
+    "reason": "existing LFR fixture does not carry independent CRT seed; root locked_lfr_manager initial CRT state differs. No CRT calls consumed during this 32-tick interval; retain this limitation rather than claiming full RNG parity.",
+    "excludedComparisons": [
+      {
+        "tick": 1,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 2,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 3,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 4,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 5,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 6,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 7,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 8,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 9,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 10,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 11,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 12,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 13,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 14,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 15,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 16,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 17,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 18,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 19,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 20,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 21,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 22,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 23,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 24,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 25,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 26,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 27,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 28,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 29,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 30,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 31,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      },
+      {
+        "tick": 32,
+        "field": "crtState",
+        "formal": 3374725112,
+        "unity": 1758127634
+      }
+    ]
+  },
+  "beforeAfterAllSamplesIdentical": true,
+  "landingSequence": [
+    {
+      "relativeTick": 26,
+      "globalTick": 31,
+      "slot": 51,
+      "oid": 85,
+      "type": 0,
+      "action": 212,
+      "state": 4,
+      "counter": 0,
+      "x": 742,
+      "y": -5,
+      "z": 402,
+      "vx": 0.0,
+      "vy": 8.5,
+      "vz": 0.0,
+      "hp": 500,
+      "owner": 0,
+      "team": 1
+    },
+    {
+      "relativeTick": 27,
+      "globalTick": 32,
+      "slot": 51,
+      "oid": 85,
+      "type": 0,
+      "action": 215,
+      "state": 15,
+      "counter": 1,
+      "x": 742,
+      "y": 0,
+      "z": 402,
+      "vx": 0.0,
+      "vy": 0.0,
+      "vz": 0.0,
+      "hp": 500,
+      "owner": 0,
+      "team": 1
+    },
+    {
+      "relativeTick": 28,
+      "globalTick": 33,
+      "slot": 51,
+      "oid": 85,
+      "type": 0,
+      "action": 213,
+      "state": 5,
+      "counter": 1,
+      "x": 757,
+      "y": -13,
+      "z": 402,
+      "vx": 14.0,
+      "vy": -11.3,
+      "vz": 0.0,
+      "hp": 500,
+      "owner": 0,
+      "team": 1
+    }
+  ],
+  "visualSampleRelativeTicks": [
+    21,
+    23
+  ],
+  "limitations": [
+    "landing rule state is witnessed; no landing-tick body/shadow command or GPU screenshot was captured",
+    "real Y hit response and original-Scene intermediate R120 alpha remain unverified",
+    "not full World/checksum, all-character, all-mode, physical-key or global alignment acceptance"
+  ]
+}

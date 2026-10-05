@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-05T11:21:49.777444+00:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "5C1C0D9575A6EFB0B34697697EB6ED5516F84E9D73EC35CD3E38D295B51DDBEE",
+      "bytes": 290428,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "2B3599A4564A9F36807F19F4209B3C99DE65646C90DA7EA35F94FF041C85A820",
+      "bytes": 175219,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005\\before\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCommandWriterEditorTests.cs",
+      "sha256": "EE2EA27A8A17B93592E81E767AE08A0C69259BA0ED7307375937DCC46B7C5EFC",
+      "bytes": 69705,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q09-D024-PLATFORM-SHADOW-VIEW-20261005\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattlePresentationCommandWriterEditorTests.cs"
+    }
+  ]
+}

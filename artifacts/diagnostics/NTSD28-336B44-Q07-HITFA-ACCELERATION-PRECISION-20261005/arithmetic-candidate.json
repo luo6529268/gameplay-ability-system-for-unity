@@ -1,0 +1,82 @@
+{
+  "scope": "static arithmetic, not Unity or formal EXE runtime evidence",
+  "rows": [
+    {
+      "step": 1,
+      "nativeDouble": 0.7,
+      "unityFloatLiteralPromoted": 0.699999988079071,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 2,
+      "nativeDouble": 1.4,
+      "unityFloatLiteralPromoted": 1.399999976158142,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 3,
+      "nativeDouble": 2.0999999999999996,
+      "unityFloatLiteralPromoted": 2.099999964237213,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 4,
+      "nativeDouble": 2.8,
+      "unityFloatLiteralPromoted": 2.799999952316284,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 5,
+      "nativeDouble": 3.5,
+      "unityFloatLiteralPromoted": 3.4999999403953552,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 6,
+      "nativeDouble": 4.2,
+      "unityFloatLiteralPromoted": 4.199999928474426,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 7,
+      "nativeDouble": 4.9,
+      "unityFloatLiteralPromoted": 4.899999916553497,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 8,
+      "nativeDouble": 5.6000000000000005,
+      "unityFloatLiteralPromoted": 5.599999904632568,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 9,
+      "nativeDouble": 6.300000000000001,
+      "unityFloatLiteralPromoted": 6.299999892711639,
+      "nativeMiddleBand": false,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 10,
+      "nativeDouble": 7.000000000000001,
+      "unityFloatLiteralPromoted": 6.9999998807907104,
+      "nativeMiddleBand": true,
+      "unityMiddleBand": false
+    },
+    {
+      "step": 11,
+      "nativeDouble": 7.700000000000001,
+      "unityFloatLiteralPromoted": 7.6999998688697815,
+      "nativeMiddleBand": true,
+      "unityMiddleBand": true
+    }
+  ]
+}

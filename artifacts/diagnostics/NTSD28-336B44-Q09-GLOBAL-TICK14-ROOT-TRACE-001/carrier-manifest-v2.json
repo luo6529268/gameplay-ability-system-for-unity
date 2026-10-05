@@ -1,0 +1,13 @@
+{
+  "source": "artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\idle-global14-derived-input.lfr",
+  "source_sha256": "5FC23C069526E766D9AA110CF1C1B7FFE7964B54F854FF5178A29CDDA3807D37",
+  "derived": "artifacts\\diagnostics\\NTSD28-336B44-Q09-GLOBAL-TICK14-ROOT-TRACE-001\\idle-global14-derived-input-v2.lfr",
+  "derived_sha256": "39C50B8C29DE0FC8BC4CFCE3A5310CF000962B50D961CFB788BEFCE4CEF46956",
+  "only_change": {
+    "field": "LFR HP checksum for source row 0",
+    "offset": 5304,
+    "old": 530,
+    "new": 1000
+  },
+  "first_attempt": "root-playback-report.json failed at source row0 due stale 530 checksum; no production conclusion"
+}

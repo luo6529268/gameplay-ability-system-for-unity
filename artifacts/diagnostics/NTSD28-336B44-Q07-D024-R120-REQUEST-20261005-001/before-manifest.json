@@ -1,0 +1,32 @@
+{
+  "operationId": "NTSD28-336B44-Q07-D024-R120-REQUEST-20261005-001",
+  "status": "PLANNED",
+  "observedAt": "2026-10-05T18:21:45.221968+08:00",
+  "executor": "root active NTSD28 alignment task",
+  "cwd": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "files": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q07_AirborneIdleBattlePlay.request.json",
+      "exists": true,
+      "bytes": 68,
+      "sha256": "7486F5BB3126869EC1D32C6033B68C6A94A19797573BCD0AEE21ED220B985BF1",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-D024-R120-REQUEST-20261005-001\\request-before.json",
+      "backupSha256": "7486F5BB3126869EC1D32C6033B68C6A94A19797573BCD0AEE21ED220B985BF1",
+      "gitStatus": ""
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001\\d024-vertical-r120-20261005-01.json",
+      "exists": false,
+      "bytes": null,
+      "sha256": null,
+      "backup": null,
+      "gitStatus": "not present"
+    }
+  ],
+  "protectedSceneSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "plannedRequest": {
+    "requested": true,
+    "runId": "d024-vertical-r120-20261005-01"
+  },
+  "restore": "copy saved request-before raw bytes after terminal Play and verify exact SHA; keep result and backup"
+}

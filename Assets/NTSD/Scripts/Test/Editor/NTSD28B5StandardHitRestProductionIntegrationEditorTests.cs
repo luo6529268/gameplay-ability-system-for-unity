@@ -122,6 +122,86 @@ namespace NTSD.Test.Editor
             Assert.That(world.PendingSounds.Count, Is.Zero);
         }
 
+        [TestCase(false, -11)]
+        [TestCase(true, -11)]
+        [TestCase(false, -10)]
+        [TestCase(true, -10)]
+        [TestCase(false, -9)]
+        [TestCase(true, -9)]
+        public void AirborneVerticalBoundaryPreservesCommittedDamageAcrossViewScale(
+            bool configuredView,
+            int targetSourceY)
+        {
+            var world = new SimulationWorld();
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            TypedCharacter attacker = CreateEntity(
+                world, 9120, 0, LF2ObjectType.Character);
+            TypedCharacter target = CreateEntity(
+                world, 9121, 1, LF2ObjectType.Character);
+            InteractionArea interaction = StandardInteraction();
+            interaction.injury = 10;
+            interaction.arest = 4;
+            interaction.vrest = 1;
+            interaction.x = 40;
+            interaction.y = -20;
+            interaction.w = 25;
+            interaction.h = 40;
+            interaction.zwidth = 15;
+            attacker.Frame.D.centerx = 39;
+            attacker.Frame.D.itrs.Add(interaction);
+            target.Frame.D.centerx = 39;
+            target.Frame.D.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = 21,
+                y = -10,
+                w = 43,
+                h = 20,
+            });
+            SetProjectedAirbornePosition(world, attacker, -40);
+            SetProjectedAirbornePosition(world, target, targetSourceY);
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            ulong crtCallsBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.TryGetCollisionCandidateSequence(
+                attacker, out List<SceneQueryHit> candidates), Is.True);
+            int expectedHits = targetSourceY == -11 ? 1 : 0;
+            Assert.That(candidates.Count, Is.EqualTo(expectedHits));
+
+            world.PostInteractionTickAll(1);
+            world.EndCollisionCandidateConsumption();
+
+            Assert.That(target.Health.HP, Is.EqualTo(500 - 10 * expectedHits));
+            Assert.That(target.HitCount, Is.EqualTo(expectedHits));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(3 * expectedHits));
+            Assert.That(target.FrameDelay, Is.EqualTo(-3 * expectedHits));
+            Assert.That(attacker.ItrRest.Arest, Is.EqualTo(4 * expectedHits));
+            Assert.That(target.ItrRest.GetVrest(0), Is.EqualTo(expectedHits));
+            Assert.That(target.Runtime.YInt, Is.EqualTo(targetSourceY));
+            Assert.That(attacker.Runtime.YInt, Is.EqualTo(-40));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtCalls - crtCallsBefore,
+                Is.EqualTo((ulong)(2 * expectedHits)));
+        }
+
+        private static void SetProjectedAirbornePosition(
+            SimulationWorld world,
+            TypedCharacter entity,
+            int sourceY)
+        {
+            entity.Runtime.SetPosition(
+                world.SpatialProjection.SourceToViewX(535),
+                sourceY,
+                world.SpatialProjection.SourceToViewZ(650));
+            entity.Runtime.SyncIntegerPosition();
+            entity.Runtime.SetSourceRulePosition(535, 650);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
+        }
+
         private static bool ApplyRoute(
             int route,
             SimulationWorld world,

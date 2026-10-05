@@ -1,0 +1,36 @@
+{
+  "authority": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "condition": "paired C040 natural b9-17-k19-x540-g560; relative tick25/global Unity tick30; host slot2 OID97; drawable kind0 spark ID0",
+  "sourceEvidence": {
+    "path": "artifacts/diagnostics/NTSD28-336B44-Q01-SPARK-PLAYABLE-OFFSCREEN-001/first-positive-20261004-02/tick25-sparks.csv",
+    "sha256": "B15BEF018266E62C712FBD7B5BD81A581DC4EC19BF7DDAC62729FDEBF420D34E",
+    "screenY": 352,
+    "hostGroundZ": 400,
+    "deltaYFromGroundPx": -48
+  },
+  "unityEvidence": {
+    "path": "artifacts/diagnostics/NTSD28-336B44-Q09-C040-GAMEVIEW-WITNESS-001/q01-spark-natural-20261004-01.json",
+    "sha256": "6996070118E3357D594542E995FA4834BC11D6325CF9B7C2BCA4CE9A3CDBC8FB",
+    "commandWorldY": -7.880000591278076,
+    "cameraYFromPriorGameViewReport": "-4.8",
+    "logicalViewportTopWorldY": "-2.05",
+    "logicalScreenY": 583.0000591278076,
+    "hostViewZ": 631.2328767123288,
+    "hostViewZInt": 631,
+    "deltaYFromGroundPx": -47.9999408721924
+  },
+  "comparison": {
+    "sourceFractionOfFormalHeight": 0.06575342465753424,
+    "unityFractionOfFixedViewHeight": 0.041666615340444794,
+    "unityToFormalFractionRatio": 0.6336797749692645,
+    "targetViewDeltaPx": -75.74794520547945,
+    "missingDistancePx": 27.748004333287053,
+    "sourceAnchorProjectedToViewPx": 555.4849315068493,
+    "unityAnchorMinusProjectedSourcePx": 27.515127620958285
+  },
+  "limits": [
+    "Formal screenshot is corresponding playable D3D11 offscreen, not root EXE actual Present",
+    "Unity viewport top reconstructed from camera data in existing Q01 Game View report; no independent viewport-snapshot field in original JSON",
+    "No new Play or production change in this evidence package"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "fab30ec5c9144062893824c9d89f39f2",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791200728886,
+      "finished_unix_ms": 1791200763101,
+      "last_update_unix_ms": 1791200763101,
+      "progress": {
+        "completed": 4,
+        "total": 8845,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791200754693,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.RealOid875DepthDeadZoneUsesSourceCoordinates(True,6,0.4d)",
+        "last_finished_unix_ms": 1791200761260,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.RealOid875DepthDeadZoneUsesSourceCoordinates(True,4,0.0d)",
+            "message": "  Expected: 0.0d +/- 1.0000000000000001E-09d\r\n  But was:  0.40000000000000002d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.RealOid875DepthDeadZoneUsesSourceCoordinates(True,-4,0.0d)",
+            "message": "  Expected: 0.0d +/- 1.0000000000000001E-09d\r\n  But was:  -0.40000000000000002d\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

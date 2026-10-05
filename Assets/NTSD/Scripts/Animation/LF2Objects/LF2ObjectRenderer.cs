@@ -557,7 +557,8 @@ namespace NTSD.Animation.LF2Objects
                 spriteHeight,
                 centerx,
                 centery,
-                NTSDRenderSpace.BattleVisualScale);
+                NTSDRenderSpace.BattleVisualScale,
+                _logicObject.Match?.SpatialProjection.VerticalScale ?? 1.0);
             bool presentationFacingLeft = ps.dir == "left";
             if (frame?.state == 9997)
             {
@@ -573,7 +574,10 @@ namespace NTSD.Animation.LF2Objects
                     .ProjectModeSnapshot?.SelectedModeEtcMode ?? 0;
                 Vector3 ownerPosition = owner == null
                     ? default
-                    : new Vector3(owner.GetRuntimeXInt(), owner.GetRuntimeYInt(),
+                    : new Vector3(owner.GetRuntimeXInt(),
+                        (float)(_logicObject.Match?.SpatialProjection
+                            .SourceDeltaToViewY(owner.GetRuntimeYInt()) ??
+                            owner.GetRuntimeYInt()),
                         owner.GetDisplayZ());
                 pivot = ResolveState9997BodyPivotPixels(
                     frame.state, selectedModeEtcMode, ownerSlot,
@@ -612,11 +616,12 @@ namespace NTSD.Animation.LF2Objects
             float spriteHeight,
             float centerx,
             float centery,
-            float visualScale)
+            float visualScale,
+            double verticalScale = 1.0)
         {
             int extraX = frameDelay < 0 ? 6 * (tickIndex & 1) - 3 : 0;
             int screenX = xInt + (int)renderOffsetX - cameraX + extraX;
-            int screenY = (int)displayZ + yInt;
+            float screenY = (int)displayZ + (float)(yInt * verticalScale);
             float pivotX = facingLeft
                 ? screenX + visualScale * (centerx - spriteWidth * 0.5f)
                 : screenX + visualScale * (spriteWidth * 0.5f - centerx);
@@ -746,7 +751,7 @@ namespace NTSD.Animation.LF2Objects
             BattleWeaponPointValue holderWPoint = holderFrame.PrimaryWeaponPoint;
             BattleWeaponPointValue heldWPoint = heldFrame.PrimaryWeaponPoint;
 
-            return ComputeHeldVisualAttachmentOffsetPixels(
+            Vector2 offset = ComputeHeldVisualAttachmentOffsetPixels(
                 holderRuntime.Dir == "left",
                 holderFrame.centerx,
                 holderFrame.centery,
@@ -757,6 +762,28 @@ namespace NTSD.Animation.LF2Objects
                 heldWPoint.X,
                 heldWPoint.Y,
                 visualScale);
+
+            BattleSpatialProjection projection = holder.RegisteredWorldForSimulation?.SpatialProjection ??
+                BattleSpatialProjection.Identity;
+            if (projection.HorizontalScale != 1.0 || projection.VerticalScale != 1.0)
+            {
+                // Alignment contract: NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-001.
+                float localDeltaX = (holderWPoint.X - holderFrame.centerx) -
+                    (heldWPoint.X - heldFrame.centerx);
+                if (holderRuntime.Dir == "left")
+                {
+                    localDeltaX = -localDeltaX;
+                }
+
+                float localDeltaY = (holderWPoint.Y - holderFrame.centery) -
+                    (heldWPoint.Y - heldFrame.centery);
+                offset.x += (float)(localDeltaX - ((double)heldRuntime.XInt - holderRuntime.XInt));
+                offset.y += (float)(localDeltaY -
+                    (projection.SourceDeltaToViewY((double)heldRuntime.YInt - holderRuntime.YInt) +
+                     (double)heldRuntime.ZInt - holderRuntime.ZInt));
+            }
+
+            return offset;
         }
 
         internal static Vector2 ComputeHeldVisualAttachmentOffsetPixels(
