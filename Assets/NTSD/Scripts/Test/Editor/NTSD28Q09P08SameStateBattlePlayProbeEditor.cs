@@ -12,6 +12,7 @@ using NTSD.Game;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -20,11 +21,15 @@ namespace NTSD.Test.Editor
     internal static class NTSD28Q09P08SameStateBattlePlayProbeEditor
     {
         private const string ScenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
+        private const string MenuScenePath = "Assets/NTSD/Scene/NTSD_Menu.unity";
         private const string ContentRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string RequestPath = "Temp/NTSD28_Q09_P08SameState.request.json";
         private const string RegressionRequestPath = "Temp/NTSD28_Q07_HumanButtonRegression.request.json";
+        private const string IdleRequestPath = "Temp/NTSD28_Q09_IdleTick14.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q09-P08-ROOT-UNITY-SAME-STATE-001/";
+        private const string IdleResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q09-IDLE-TICK14-GAMEVIEW-001/";
         private const string SessionKey = "NTSD.Q09.P08SameState";
         private const string ConsumedKey = "NTSD.Q09.P08SameState.Consumed";
 
@@ -41,6 +46,8 @@ namespace NTSD.Test.Editor
         {
             public bool requested;
             public string runId;
+            public string scenario;
+            public long expiresUtcTicks;
         }
 
         [Serializable]
@@ -50,10 +57,15 @@ namespace NTSD.Test.Editor
             public int globalTick;
             public int submittedP1Buttons;
             public int actorAction;
+            public int actorHp;
+            public int actorMp;
             public int actorSourceX;
+            public int actorSourceZ;
             public int actorViewX;
             public int targetAction;
+            public int targetMp;
             public int targetSourceX;
+            public int targetSourceZ;
             public int targetViewX;
             public int targetHp;
             public int targetBaseHp;
@@ -79,6 +91,11 @@ namespace NTSD.Test.Editor
             public bool sceneCleanAfter;
             public bool exitedPlay;
             public bool configuredBeforeStart;
+            public bool idleTick14;
+            public bool returnToMenu;
+            public bool returnedToMenu;
+            public string menuHashBefore;
+            public string menuHashAfter;
             public string contentRoot;
             public int startTick;
             public int endTick;
@@ -89,10 +106,12 @@ namespace NTSD.Test.Editor
             public int initialActorSourceX;
             public int initialActorSourceZ;
             public int initialActorHp;
+            public int initialActorMp;
             public int initialTargetAction;
             public int initialTargetSourceX;
             public int initialTargetSourceZ;
             public int initialTargetHp;
+            public int initialTargetMp;
             public int initialTargetBaseHp;
             public uint initialCrtState;
             public ulong initialCrtCalls;
@@ -104,6 +123,17 @@ namespace NTSD.Test.Editor
             public float tick22MarkScreenX;
             public float tick22MarkScreenY;
             public string screenshot;
+            public int screenshotWidth;
+            public int screenshotHeight;
+            public int screenshotTickAfter;
+            public int publishedTick = -1;
+            public int planTick = -1;
+            public int screenWidth;
+            public int screenHeight;
+            public float cameraOrthographicSize;
+            public float cameraAspect;
+            public int cameraPixelWidth;
+            public int cameraPixelHeight;
             public bool cameraTargetRestored;
             public List<Row> rows = new List<Row>();
         }
@@ -202,12 +232,28 @@ namespace NTSD.Test.Editor
                 Require(DateTime.UtcNow - new DateTime(report.startedUtcTicks,
                     DateTimeKind.Utc) < TimeSpan.FromMinutes(8),
                     "Original Battle Scene Play timed out.");
+                if (report.phase == "OPENING_SCENE")
+                {
+                    if (EditorApplication.isPlayingOrWillChangePlaymode)
+                        return;
+                    Scene scene = SceneManager.GetActiveScene();
+                    Require(scene.path == ScenePath && !scene.isDirty &&
+                            SceneManager.sceneCount == 1,
+                        "The original Battle Scene did not open cleanly.");
+                    report.sceneHashBefore = HashScene();
+                    report.phase = "STARTUP";
+                    Persist();
+                    EditorApplication.EnterPlaymode();
+                    return;
+                }
                 if (!EditorApplication.isPlaying)
                     return;
                 if (report.phase == "STARTUP")
                     WaitForRoster();
                 else if (report.phase == "MEASURING")
                     MeasureOneTick();
+                else if (report.phase == "SCREENSHOT_WAIT")
+                    WaitForIdleScreenshot();
                 else
                     Fail("Unexpected probe phase: " + report.phase);
             }
@@ -219,19 +265,37 @@ namespace NTSD.Test.Editor
 
         private static void TryStart()
         {
+            string idleRequestFile = ProjectPath(IdleRequestPath);
             string regressionRequestFile = ProjectPath(RegressionRequestPath);
-            string requestFile = File.Exists(regressionRequestFile)
-                ? regressionRequestFile : ProjectPath(RequestPath);
+            Request idleRequest = File.Exists(idleRequestFile)
+                ? JsonUtility.FromJson<Request>(File.ReadAllText(idleRequestFile)) : null;
+            bool activeIdleRequest = idleRequest != null && idleRequest.requested &&
+                idleRequest.scenario == "idleTick14" &&
+                idleRequest.expiresUtcTicks > DateTime.UtcNow.Ticks &&
+                !string.IsNullOrEmpty(idleRequest.runId) &&
+                !File.Exists(ResultPath(idleRequest.runId));
+            if (activeIdleRequest && EditorApplication.isPlayingOrWillChangePlaymode)
+                return;
+            string requestFile = activeIdleRequest
+                ? idleRequestFile : File.Exists(regressionRequestFile)
+                    ? regressionRequestFile : ProjectPath(RequestPath);
             if (!File.Exists(requestFile))
                 return;
-            Request request = JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
+            Request request = activeIdleRequest
+                ? idleRequest : JsonUtility.FromJson<Request>(File.ReadAllText(requestFile));
+            bool idleTick14 = requestFile == idleRequestFile;
             if (request == null || !request.requested ||
                 string.IsNullOrEmpty(request.runId) ||
                 SessionState.GetString(ConsumedKey, string.Empty) == request.runId ||
                 File.Exists(ResultPath(request.runId)))
                 return;
+            if (idleTick14 && (request.scenario != "idleTick14" ||
+                               request.expiresUtcTicks <= DateTime.UtcNow.Ticks))
+                return;
             Require(request.runId.Length <= 80 &&
-                request.runId.StartsWith("ita-equal-hp-336b44-", StringComparison.Ordinal),
+                request.runId.StartsWith(idleTick14
+                    ? "idle-tick14-336b44-" : "ita-equal-hp-336b44-",
+                    StringComparison.Ordinal),
                 "Unexpected P-08 runId.");
             foreach (char character in request.runId)
                 Require(char.IsLetterOrDigit(character) || character == '-',
@@ -239,6 +303,27 @@ namespace NTSD.Test.Editor
             Require(!EditorApplication.isPlayingOrWillChangePlaymode,
                 "Editor must be idle in Edit Mode.");
             Scene scene = SceneManager.GetActiveScene();
+            if (idleTick14 && scene.path == MenuScenePath &&
+                !scene.isDirty && SceneManager.sceneCount == 1)
+            {
+                report = new Report
+                {
+                    runId = request.runId,
+                    status = "RUNNING",
+                    phase = "OPENING_SCENE",
+                    startedUtcTicks = DateTime.UtcNow.Ticks,
+                    idleTick14 = true,
+                    returnToMenu = true,
+                    menuHashBefore = HashPath(MenuScenePath),
+                };
+                SessionState.SetString(ConsumedKey, request.runId);
+                Persist();
+                EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Single);
+                return;
+            }
+            if (idleTick14 && (scene.path != ScenePath || scene.isDirty ||
+                               SceneManager.sceneCount != 1))
+                return;
             Require(scene.path == ScenePath && !scene.isDirty &&
                 SceneManager.sceneCount == 1,
                 "A single clean saved NTSD_Battle Scene is required.");
@@ -249,6 +334,7 @@ namespace NTSD.Test.Editor
                 phase = "STARTUP",
                 startedUtcTicks = DateTime.UtcNow.Ticks,
                 sceneHashBefore = HashScene(),
+                idleTick14 = idleTick14,
             };
             SessionState.SetString(ConsumedKey, request.runId);
             Persist();
@@ -296,8 +382,16 @@ namespace NTSD.Test.Editor
                 "The Play clone roster is not Naruto OID2 / Ita OID9.");
             actor = (LF2Character)first;
             target = (LF2Character)second;
-            SetInitialActor(actor, 500, 500, false);
-            SetInitialActor(target, 540, 30, true);
+            if (report.idleTick14)
+            {
+                SetInitialActor(actor, 500, 500, false, 400, 200);
+                SetInitialActor(target, 620, 500, true, 400, 200);
+            }
+            else
+            {
+                SetInitialActor(actor, 500, 500, false);
+                SetInitialActor(target, 540, 30, true);
+            }
             actor.Team = actor.RelationTeam = 1;
             target.Team = target.RelationTeam = 2;
             world.Runtime.Roster.Slots[0].Team = 1;
@@ -307,6 +401,8 @@ namespace NTSD.Test.Editor
             world.Runtime.Match.Difficulty = 0;
             world.Runtime.NativeWorldClock.Reset();
             world.NativeRandom.ResetFromSeed(0u);
+            if (report.idleTick14)
+                world.NativeRandom.SynchronizedNext(0x004021E0u, 1);
             NTSD28NativeRandomScalarState rng = world.NativeRandom.CaptureScalarState();
             report.startTick = report.endTick = driver.CurrentTickIndex;
             report.battleMode = world.BattleGameModeId;
@@ -316,35 +412,46 @@ namespace NTSD.Test.Editor
             report.initialActorSourceX = actor.Runtime.SourceRuleXInt;
             report.initialActorSourceZ = actor.Runtime.SourceRuleZInt;
             report.initialActorHp = actor.Runtime.HP;
+            report.initialActorMp = actor.Runtime.MP;
             report.initialTargetAction = target.Frame.N;
             report.initialTargetSourceX = target.Runtime.SourceRuleXInt;
             report.initialTargetSourceZ = target.Runtime.SourceRuleZInt;
             report.initialTargetHp = target.Runtime.HP;
+            report.initialTargetMp = target.Runtime.MP;
             report.initialTargetBaseHp = target.Runtime.HP3;
             report.initialCrtState = rng.CrtState;
             report.initialCrtCalls = rng.CrtCalls;
             report.initialTableHash = rng.SynchronizedTableHash;
-            Require(report.battleMode == 0 && report.difficulty == 0 &&
-                    report.initialActorAction == 0 && report.initialTargetAction == 0 &&
-                    report.initialActorSourceX == 500 &&
-                    report.initialTargetSourceX == 540 &&
-                    report.initialActorSourceZ == 650 &&
-                    report.initialTargetSourceZ == 650 &&
-                    report.initialActorHp == 500 && report.initialTargetHp == 30 &&
-                    report.initialTargetBaseHp == 30 &&
-                    report.initialCrtState == 3374725112u &&
-                    report.initialCrtCalls == 3000UL,
-                "The selected formal root LFR local initial tuple was not restored.");
+            bool initialTupleMatches = report.battleMode == 0 && report.difficulty == 0 &&
+                report.initialActorAction == 0 && report.initialTargetAction == 0 &&
+                report.initialActorSourceX == 500 && report.initialActorHp == 500 &&
+                report.initialCrtState == 3374725112u && report.initialCrtCalls == 3000UL;
+            if (report.idleTick14)
+            {
+                initialTupleMatches &= report.initialTargetSourceX == 620 &&
+                    report.initialActorSourceZ == 400 && report.initialTargetSourceZ == 400 &&
+                    report.initialActorMp == 200 && report.initialTargetHp == 500 &&
+                    report.initialTargetBaseHp == 500 && report.initialTargetMp == 200;
+            }
+            else
+            {
+                initialTupleMatches &= report.initialTargetSourceX == 540 &&
+                    report.initialActorSourceZ == 650 && report.initialTargetSourceZ == 650 &&
+                    report.initialTargetHp == 30 && report.initialTargetBaseHp == 30;
+            }
+            Require(initialTupleMatches,
+                "The selected formal root local initial tuple was not restored.");
             report.phase = "MEASURING";
             Persist();
         }
 
         private static void SetInitialActor(
-            LF2Character character, int sourceX, int hp, bool faceLeft)
+            LF2Character character, int sourceX, int hp, bool faceLeft,
+            int sourceZ = 650, int mp = 500)
         {
-            character.Initialize(hp, 500);
+            character.Initialize(hp, mp);
             character.ImmediateFrame(0);
-            character.Runtime.MP = 500;
+            character.Runtime.MP = mp;
             character.Runtime.PP = 500;
             character.ClearBattleEntryInputState();
             NTSD28NativeComboStateMachine.InitializeNativeHistory(character.Runtime);
@@ -355,12 +462,13 @@ namespace NTSD.Test.Editor
             character.ItrRest.Reset();
             character.Runtime.SetPosition(
                 world.SpatialProjection.SourceToViewX(sourceX), 0,
-                world.SpatialProjection.SourceToViewZ(650));
-            AppManager.SyncParticipantBirthPosition(character, sourceX, 650);
+                world.SpatialProjection.SourceToViewZ(sourceZ));
+            AppManager.SyncParticipantBirthPosition(character, sourceX, sourceZ);
             Require(character.Runtime.SourceRuleXInt == sourceX &&
-                    character.Runtime.SourceRuleZInt == 650 &&
+                    character.Runtime.SourceRuleZInt == sourceZ &&
                     character.Runtime.YInt == 0 &&
-                    character.Runtime.HP == hp && character.Runtime.HP3 == hp,
+                    character.Runtime.HP == hp && character.Runtime.HP3 == hp &&
+                    character.Runtime.MP == mp,
                 "Character source position or health was not restored.");
         }
 
@@ -370,14 +478,14 @@ namespace NTSD.Test.Editor
                     !driver.DedicatedSimulationWorkerTickInFlightForDiagnostics &&
                     driver.CurrentTickIndex == report.endTick,
                 "Production World changed or the paused tick boundary is unstable.");
-            if (report.rows.Count == 22)
+            if (report.rows.Count == (report.idleTick14 ? 14 : 22))
             {
                 Complete();
                 return;
             }
             int relativeTick = report.rows.Count + 1;
             int next = driver.CurrentTickIndex + 1;
-            SimulationInputButtons p1 = relativeTick <= 2
+            SimulationInputButtons p1 = !report.idleTick14 && relativeTick <= 2
                 ? SimulationInputButtons.Jump : SimulationInputButtons.None;
             var input = new FrameInputSet(next, new[]
             {
@@ -394,10 +502,15 @@ namespace NTSD.Test.Editor
                 globalTick = driver.CurrentTickIndex,
                 submittedP1Buttons = (int)p1,
                 actorAction = actor.Frame.N,
+                actorHp = actor.Runtime.HP,
+                actorMp = actor.Runtime.MP,
                 actorSourceX = actor.Runtime.SourceRuleXInt,
+                actorSourceZ = actor.Runtime.SourceRuleZInt,
                 actorViewX = actor.Runtime.XInt,
                 targetAction = target.Frame.N,
+                targetMp = target.Runtime.MP,
                 targetSourceX = target.Runtime.SourceRuleXInt,
+                targetSourceZ = target.Runtime.SourceRuleZInt,
                 targetViewX = target.Runtime.XInt,
                 targetHp = target.Runtime.HP,
                 targetBaseHp = target.Runtime.HP3,
@@ -440,6 +553,11 @@ namespace NTSD.Test.Editor
 
         private static void Complete()
         {
+            if (report.idleTick14)
+            {
+                CaptureIdleGameView();
+                return;
+            }
             Row last = report.rows[21];
             bool reached = report.rows[7].targetHp == 10 &&
                 last.targetAction == 0 && last.targetHp == 10 &&
@@ -455,6 +573,78 @@ namespace NTSD.Test.Editor
             {
                 report.status = "SELECTED_TRACE_OR_MARK_DIFFERENCE";
             }
+            report.phase = "EXITING";
+            Persist();
+            EditorApplication.ExitPlaymode();
+        }
+
+        private static void CaptureIdleGameView()
+        {
+            Require(driver.IsPaused && report.rows.Count == 14 &&
+                    driver.CurrentTickIndex == report.endTick,
+                "The idle tick14 screenshot boundary is unstable.");
+            BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
+            BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
+            BattlePixelFramePlan plan = world.CurrentPixelFramePlan;
+            report.publishedTick = published?.TickIndex ?? -1;
+            report.planTick = plan.CapturedFrame?.TickIndex ?? -1;
+            Require(report.publishedTick == report.endTick &&
+                    report.planTick == report.endTick,
+                "The idle Game View does not have the same published logic tick.");
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            Require(camera != null && camera.isActiveAndEnabled,
+                "The original Battle Scene world camera is unavailable.");
+            report.cameraOrthographicSize = camera.orthographicSize;
+            report.cameraAspect = camera.aspect;
+            report.cameraPixelWidth = camera.pixelWidth;
+            report.cameraPixelHeight = camera.pixelHeight;
+            report.screenWidth = Screen.width;
+            report.screenHeight = Screen.height;
+            Require(report.screenWidth > 0 && report.screenHeight > 0,
+                "The composite Game View dimensions are unavailable.");
+            report.screenshot = IdleResultRoot + report.runId + ".png";
+            string path = ProjectPath(report.screenshot);
+            Require(!File.Exists(path), "Refusing to overwrite the idle screenshot.");
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            ScreenCapture.CaptureScreenshot(path);
+            report.phase = "SCREENSHOT_WAIT";
+            Persist();
+        }
+
+        private static void WaitForIdleScreenshot()
+        {
+            string path = ProjectPath(report.screenshot);
+            if (!File.Exists(path) || new FileInfo(path).Length < 24)
+                return;
+            var image = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            try
+            {
+                if (!ImageConversion.LoadImage(image, File.ReadAllBytes(path), false))
+                    return;
+                report.screenshotWidth = image.width;
+                report.screenshotHeight = image.height;
+            }
+            catch (IOException)
+            {
+                return;
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(image);
+            }
+            report.screenshotTickAfter = driver.CurrentTickIndex;
+            Require(driver.IsPaused && report.screenshotTickAfter == report.endTick,
+                "The logic tick changed during the composite screenshot.");
+            Row last = report.rows[13];
+            bool logicMatchesFormalTitle = last.actorAction == 3 &&
+                last.targetAction == 3 && last.actorHp == 500 &&
+                last.targetHp == 500 && last.actorMp == 200 &&
+                last.targetMp == 200 && last.actorSourceX == 500 &&
+                last.targetSourceX == 620 && last.actorSourceZ == 400 &&
+                last.targetSourceZ == 400;
+            report.status = logicMatchesFormalTitle
+                ? "CAPTURED_FORMAL_TITLE_FIELDS_MATCH"
+                : "CAPTURED_LOGIC_TITLE_FIRST_DIFFERENCE";
             report.phase = "EXITING";
             Persist();
             EditorApplication.ExitPlaymode();
@@ -541,6 +731,27 @@ namespace NTSD.Test.Editor
                 report.status = "FAIL";
                 report.error += " Saved Battle Scene or active Scene changed.";
             }
+            if (report.returnToMenu && report.sceneCleanAfter)
+            {
+                try
+                {
+                    EditorSceneManager.OpenScene(MenuScenePath, OpenSceneMode.Single);
+                    Scene menu = SceneManager.GetActiveScene();
+                    report.menuHashAfter = HashPath(MenuScenePath);
+                    report.returnedToMenu = menu.path == MenuScenePath &&
+                        !menu.isDirty && report.menuHashAfter == report.menuHashBefore;
+                    if (!report.returnedToMenu)
+                    {
+                        report.status = "FAIL";
+                        report.error += " Original Menu Scene did not return cleanly.";
+                    }
+                }
+                catch (Exception exception)
+                {
+                    report.status = "FAIL";
+                    report.error += " Menu Scene restore failed: " + exception;
+                }
+            }
             report.phase = "DONE";
             string path = ResultPath(report.runId);
             if (!File.Exists(path))
@@ -563,15 +774,18 @@ namespace NTSD.Test.Editor
         }
 
         private static string ResultPath(string runId) =>
-            ProjectPath(ResultRoot + runId + ".json");
+            ProjectPath((runId.StartsWith("idle-tick14-336b44-",
+                StringComparison.Ordinal) ? IdleResultRoot : ResultRoot) + runId + ".json");
 
         private static string ProjectPath(string relative) =>
             Path.GetFullPath(Path.Combine(Application.dataPath, "..", relative));
 
-        private static string HashScene()
+        private static string HashScene() => HashPath(ScenePath);
+
+        private static string HashPath(string relativePath)
         {
             using (SHA256 sha = SHA256.Create())
-            using (FileStream stream = File.OpenRead(ProjectPath(ScenePath)))
+            using (FileStream stream = File.OpenRead(ProjectPath(relativePath)))
                 return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
 

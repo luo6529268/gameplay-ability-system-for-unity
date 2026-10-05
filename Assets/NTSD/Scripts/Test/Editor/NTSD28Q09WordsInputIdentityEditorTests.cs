@@ -17,7 +17,7 @@ namespace NTSD.Test.Editor
             "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime";
 
         [Test]
-        public void FormalAndStagedCandidateCaptureSameWordsInputs()
+        public void FormalWordsAndIntentionallyAbsentStagedWordsRemainDistinct()
         {
             string stagedRoot = Path.GetFullPath(Path.Combine(
                 Application.dataPath, "NTSD/Content/LoganRuntime"));
@@ -30,11 +30,9 @@ namespace NTSD.Test.Editor
             Assert.That(formal.Images.Count, Is.EqualTo(906));
             Assert.That(staged.Images.Count, Is.EqualTo(906));
             Assert.That(formal.WordsInput, Is.Not.Null);
-            Assert.That(staged.WordsInput, Is.Not.Null);
-            Assert.That(staged.WordsInput.InputFingerprint,
-                Is.EqualTo(formal.WordsInput.InputFingerprint));
-            Assert.That(staged.VisualFingerprint, Is.EqualTo(formal.VisualFingerprint));
-            Assert.That(staged.WordsInput.Images.Count, Is.EqualTo(6));
+            Assert.That(staged.WordsInput, Is.Null);
+            Assert.That(staged.VisualFingerprint, Is.Not.EqualTo(formal.VisualFingerprint));
+            Assert.That(formal.WordsInput.Images.Count, Is.EqualTo(6));
             Assert.DoesNotThrow(formal.AssertInputsCurrent);
             Assert.DoesNotThrow(staged.AssertInputsCurrent);
         }
@@ -59,10 +57,17 @@ namespace NTSD.Test.Editor
                 File.WriteAllText(resourcePath,
                     "<bmp_begin>\n" + string.Join("\n", rows) + "\n<bmp_end>\n",
                     new UTF8Encoding(false));
+                Assert.That(LoganVisualContentCandidate.NativeWordsInput.Capture(source, true), Is.Null);
+                Assert.Throws<FileNotFoundException>(() =>
+                    LoganVisualContentCandidate.NativeWordsInput.Capture(source));
 
                 string imageDirectory = Path.Combine(source.ImageRoot, "sprite", "UI");
                 Directory.CreateDirectory(imageDirectory);
-                for (int index = 0; index < 6; index++)
+                File.WriteAllBytes(Path.Combine(imageDirectory, "WORDS0.png"), new byte[] { 0 });
+                Assert.That(LoganVisualContentCandidate.NativeWordsInput.Capture(source, true), Is.Null);
+                Assert.Throws<FileNotFoundException>(() =>
+                    LoganVisualContentCandidate.NativeWordsInput.Capture(source));
+                for (int index = 1; index < 6; index++)
                     File.WriteAllBytes(Path.Combine(imageDirectory, "WORDS" + index + ".png"),
                         new byte[] { (byte)index });
 

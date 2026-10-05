@@ -1,0 +1,15 @@
+# Role selection UI: independent stage, click clarification pending
+
+Status: BLOCKED only on required click semantics; not a complete wired feature.
+
+Written: SelectRoleItem.cs and new CharacterChoiceItem.cs/meta. No Scene, GameConfig, resource, other HUD/input or DAT edits. Core displays Join only when Idle; joined shows random/head portrait and actual GameLocalSettings player name; uses CharacterUISprites.HeadSprite directly because current global GetHeadSprite returns SmallSprite. Five team indices use exact GameConfig order; cancel clears team. Existing player Attack InputAction joins/confirms/toggles cancellation, no new physical key constants or Update polling. Disable/re-enable resets and rebinds. Generic candidate view dispatches pointer ID callback and resets Select/Cancel label on pool release/rebind.
+
+Validation: fresh managed runtime compile0errors/36warnings; original Editor Console error-CS query0entries. Independent actual Unity Play66assertions PASS using current production code/input action maps and bytes from actual RFACE/TF0..4/naruto head/small assets. Covers join/onlyowner/name/head distinction/5teams/invalidindices/4confirm-cancelcycles/4disable-enablecycles/P1P2isolation/candidate pointer callback and reset/reuse. Catalog/model and UI objects are controlled fixtures, not original scene integration. First harness setup lacked optional TMP package cache; first executable fixture failed readonly singleton property, corrected fixture uses actual singleton backing field. Failure evidence retained. No full BattleRuntimeSelfCheck or original Scene Play acceptance claimed.
+
+Confirmed hierarchy: current saved NTSD_Menu has one populated player slot (P1), one CharItem Image template under a ScrollRect/GridLayout/ContentSizeFitter, five existing team Buttons. Select and TeamIndexTxt belong to CharItem. Role portrait/name/Join/TeamColorImg are separate player-slot children. Scene SHA unchanged from pre-change backup; user committed existing baseline during inspection without changing bytes. Current original Editor read-only inspection was idle/nonplaying/Scene clean; no test Play was initiated there.
+
+Pending required user choice: first candidate click only previews and second click on same candidate confirms, or first candidate click immediately confirms. In both proposed paths clicking same confirmed character cancels. Existing CharItem has no behavior to disambiguate. Question submitted, no reply received at handoff.
+
+Not done: CharacterSelectionBoard (declared only, not created), pooled list generation, actual team Button wiring, shared player focus routing, Scene references, full real-scene click/confirmation/re-entry test and screenshots. Do not report complete or wire ambiguous behavior without answer. Existing explicit legacy OnConfirmTeam public API retained for out-of-scope callers; normal Attack path now cancels instead of advancing to legacy ready/countdown.
+
+Reference attachment could not be materialized by supported Windows Library flow; no claim to have viewed it. Work grounded in saved project hierarchy.

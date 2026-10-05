@@ -1,0 +1,233 @@
+using System;
+using UnityEngine;
+
+namespace NTSD.App
+{
+    /// <summary>
+    /// 游戏全局配置
+    /// 存储角色选择界面、倒计时、队伍等相关的配置数据
+    /// 使用 ScriptableObject 便于在编辑器中配置和热更新
+    /// </summary>
+    [CreateAssetMenu(fileName = "GameConfig", menuName = "NTSD/Game Config")]
+    public class GameConfig : ScriptableObject
+    {
+        [Header("Battle Runtime Profile")]
+        [Tooltip("Logan runtime content root. Empty retains the pre-migration Unity content. Relative paths start beside the application's data directory.")]
+        public string BattleContentRuntimeRoot = "";
+        [Tooltip("Optional profile name. Empty uses the platform default.")]
+        public string BattleRuntimeProfileName = "";
+        [Tooltip("Battle AI execution profile. Empty uses LegacyCanonical on every platform. Valid values: LegacyCanonical, DataOrientedCanonical.")]
+        public string BattleAiExecutionProfileName = "";
+        [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
+        public int DesktopInitialRuntimeSlotCapacity = 512;
+        [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]
+        public string BattleCollisionBroadphaseName = "";
+        [Tooltip("Battle presentation backend. Empty uses CentralOnly. Valid values: LegacyOnly, CentralShadowBuild, CentralOnly. CentralOnly owns battle pixels and fails closed without enabling legacy presenters.")]
+        public string BattlePresentationBackendName = "CentralOnly";
+        [Tooltip("Battle atlas policy. Empty uses Auto. Valid values: Auto, TextureArray, OrderedPages.")]
+        public string BattleAtlasModeName = "";
+        [Tooltip("Central battle draw policy. Empty uses the renderer feature default. Valid values: Auto, OrderedChunks, StrictOrderedDraw.")]
+        public string BattleDrawModeName = "";
+        [Tooltip("Sprite used by the central renderer for the local human Foot marker.")]
+        public Sprite FootMarkerSprite;
+        [Tooltip("Ordered Foot marker animation frames. When empty, FootMarkerSprite is used.")]
+        public Sprite[] FootMarkerAnimationFrames = new Sprite[0];
+        [Min(0.001f)]
+        [Tooltip("Unscaled presentation time in seconds for each Foot marker animation frame.")]
+        public float FootMarkerAnimationFrameDurationSeconds = 0.08f;
+
+        [Header("Battle Function Keys")]
+        [Tooltip("F7/F8/F9 are denied when no exact gameModeId + battleGameModeId rule matches. Physical keys are consumed only by LocalFreeRun.")]
+        public BattleFunctionKeyModeRule[] BattleFunctionKeyModeRules =
+            new BattleFunctionKeyModeRule[0];
+
+        public BattleFunctionKeyCommand ResolveBattleFunctionKeyCommands(
+            int localGameModeId,
+            int battleGameModeId)
+        {
+            if (BattleFunctionKeyModeRules == null)
+                return BattleFunctionKeyCommand.None;
+
+            for (int index = 0; index < BattleFunctionKeyModeRules.Length; index++)
+            {
+                BattleFunctionKeyModeRule rule = BattleFunctionKeyModeRules[index];
+                if (rule != null && rule.Matches(localGameModeId, battleGameModeId))
+                    return rule.GetAllowedCommands();
+            }
+
+            return BattleFunctionKeyCommand.None;
+        }
+
+        #region 单例访问
+
+        private static GameConfig _instance;
+
+        /// <summary>
+        /// 全局单例访问点
+        /// 需要在游戏启动时由 AppManager 或其他初始化脚本设置
+        /// </summary>
+        public static GameConfig Instance
+        {
+            get => _instance;
+            set
+            {
+                if (_instance == null)
+                {
+                    _instance = value;
+                }
+            }
+        }
+
+        #endregion
+
+        #region 对象池配置
+
+        [Header("对象池配置")]
+        [Tooltip("阴影 Prefab（挂载 SpriteRenderer，所有对象生成时自动添加阴影子节点）")]
+        public GameObject ShadowPrefab;
+        [Tooltip("LF2Object Prefab（可选，不填则运行时动态创建 GameObject）")]
+        public GameObject LF2ObjectPrefab;
+        [Tooltip("对象池预热数量（0=完全懒加载）")]
+        public int PoolInitialSize = 0;
+        [Tooltip("对象池最大容量（对齐反汇编 SceneManager_Init 预分配 400 实体）")]
+        public int PoolMaxSize = 400;
+        [Tooltip("空闲对象超时销毁时间（秒）")]
+        public float PoolExpireTimeSeconds = 120f;
+        [Tooltip("超时检查间隔（秒）")]
+        public float PoolCheckIntervalSeconds = 10f;
+        [Tooltip("Spark SpriteRenderer 桶预热数量")]
+        public int PoolInitialSpritePoolSize = 16;
+
+        [Header("Battle Stage Runtime")]
+        [Tooltip("Unity 战斗场景逻辑宽度（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageWidthPx = 800;
+        [Tooltip("固定全背景战斗取景的水平参考像素宽度；1333保持正式奔跑位移，当前Training完整背景为2048。")]
+        public int BattleFixedViewRunReferenceWidthPx = NTSD.Simulation.BattleSpatialProjection.FormalViewWidthPx;
+        public int BattleFixedViewRunReferenceHeightPx = NTSD.Simulation.BattleSpatialProjection.FormalViewHeightPx;
+        [Tooltip("Unity 战斗场景逻辑 Z 最小值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageZMinPx = 180;
+        [Tooltip("Unity 战斗场景逻辑 Z 最大值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
+        public int BattleStageZMaxPx = 350;
+        [Tooltip("Unity 战斗场景透视近端参数。默认 0，后续按 Unity 场景表现调整。")]
+        public int BattlePerspectiveNear = 0;
+        [Tooltip("Unity 战斗场景透视远端参数。默认 0，后续按 Unity 场景表现调整。")]
+        public int BattlePerspectiveFar = 0;
+
+        #endregion
+
+        #region 队伍配置
+
+        /// <summary>
+        /// 可选的队伍名称列表
+        /// 最后一个选项通常是"独立"(Independent)，表示不属于任何队伍
+        /// </summary>
+        [Header("Team Options")]
+        public Sprite[] TeamOptions = Array.Empty<Sprite>();
+
+        #endregion
+
+        #region 角色选择UI - 空闲状态配置
+
+        /// <summary>
+        /// 空闲状态下玩家名称显示的文本（如"Join?"）
+        /// </summary>
+        public string IdlePlayerText = "Join?";
+
+        /// <summary>
+        /// 空闲状态下角色名称显示的文本（通常为空）
+        /// </summary>
+        public string IdleFighterText = "";
+
+        /// <summary>
+        /// 空闲状态下队伍显示的文本（通常为空）
+        /// </summary>
+        public string IdleTeamText = "";
+
+        /// <summary>
+        /// 空闲状态下图标/文字闪烁的间隔时间（秒）
+        /// </summary>
+        public float IdleFlashInterval = 0.5f;
+
+        /// <summary>
+        /// 闪烁时的第一个颜色
+        /// </summary>
+        public Color IdleFlashColor1 = Color.white;
+
+        /// <summary>
+        /// 闪烁时的第二个颜色（与IdleFlashColor1交替）
+        /// </summary>
+        public Color IdleFlashColor2 = Color.gray;
+
+        #endregion
+
+        #region 角色选择UI - 激活状态配置
+
+        /// <summary>
+        /// 当前正在选择的项目的高亮颜色
+        /// </summary>
+        [Header("Select Role UI - Active State")]
+        public Color SelectedColor = Color.yellow;
+
+        /// <summary>
+        /// 已确认选择的项目的颜色
+        /// </summary>
+        public Color ConfirmedColor = Color.green;
+
+        #endregion
+
+        #region 随机选项配置
+
+        /// <summary>
+        /// "随机"选项的显示名称
+        /// </summary>
+        [Header("Random Option")]
+        public string RandomDisplayName = "Random";
+
+        /// <summary>
+        /// "随机"选项的图标
+        /// </summary>
+        public Sprite RandomIcon;
+
+        #endregion
+
+        #region 倒计时配置
+
+        /// <summary>
+        /// 倒计时精灵数组
+        /// 索引0对应倒计时开始（如显示"5"），索引4对应倒计时结束（如显示"1"）
+        /// 这些精灵会显示在未加入玩家的槽位上
+        /// </summary>
+        [Header("Countdown Display")]
+        public Sprite[] CountdownSprites;
+
+        /// <summary>
+        /// 倒计时总时长（秒）
+        /// 当所有已加入玩家都确认后开始倒计时
+        /// </summary>
+        public float CountdownDuration = 5f;
+
+        /// <summary>
+        /// 倒计时加速倍率
+        /// 当有玩家在倒计时期间取消确认时，倒计时会以此倍率加速
+        /// </summary>
+        public float CountdownAcceleration = 2f;
+
+        #endregion
+
+        #region 常量定义
+
+        /// <summary>
+        /// 表示"随机角色"的特殊ID
+        /// 在最终确定角色时会被替换为实际的随机角色ID
+        /// </summary>
+        public const int RandomCharacterId = -1;
+
+        /// <summary>
+        /// 表示"独立队伍"的特殊ID
+        /// 选择此队伍的玩家不与任何人组队
+        /// </summary>
+        public const int TeamIndependent = -1;
+
+        #endregion
+    }
+}

@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "error": "System.TimeoutException: Role scene prewarm/validation timeout\r\n  at NTSD.Test.Editor.RoleSelectionSceneValidationTemporary.Advance () [0x0001c] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleSelectionSceneValidationTemporary.cs:119 ",
+  "checks": 0,
+  "rows": []
+}

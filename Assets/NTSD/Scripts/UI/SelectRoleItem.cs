@@ -40,7 +40,7 @@ namespace NTSD.UI
     /// - Attack: 确认当前选择，进入下一状态
     /// - Jump: 取消，返回上一状态
     /// </summary>
-    public class SelectRoleItem : MonoBehaviour
+    public class SelectRoleItem : MonoBehaviour, UnityEngine.EventSystems.IPointerClickHandler
     {
         #region UI引用
 
@@ -70,13 +70,10 @@ namespace NTSD.UI
         [SerializeField] private int playerId;                      // 绑定的玩家ID (1-4)
         [SerializeField] private SelectRoleState state = SelectRoleState.Idle;  // 当前状态
         [SerializeField] private int selectedCharacterId = GameConfig.RandomCharacterId;  // 选中的角色ID
-        [SerializeField] private int selectedTeamIndex = 0;         // 选中的队伍索引
+        [SerializeField] private int selectedTeamIndex = -1;         // 选中的队伍索引
 
         private List<int> availableCharacterIds;    // 可选角色ID列表
         private int characterSelectionIndex = 0;    // 当前角色选择索引
-        private float idleFlashTimer;               // 空闲状态闪烁计时器
-        private bool idleFlashToggle;               // 空闲状态闪烁开关
-        private bool CountdownStart;               // 倒计时开始
         #endregion
 
         #region 输入系统
@@ -97,6 +94,11 @@ namespace NTSD.UI
         public SelectRoleState State => state;
         public int SelectedCharacterId => selectedCharacterId;
         public int SelectedTeamIndex => selectedTeamIndex;
+        public IReadOnlyList<int> AvailableCharacterIds => availableCharacterIds;
+        public event System.Action<SelectRoleItem> SelectionChanged;
+        public event System.Action<SelectRoleItem> FocusRequested;
+        private bool initialized;
+
 
         #endregion
 
@@ -108,14 +110,15 @@ namespace NTSD.UI
         /// <param name="index">槽位索引 (0-7)</param>
         public void Initialize(int index)
         {
+            UnbindInput();
+            initialized = true;
             itemIndex = index;
             playerId = (index % 4) + 1;  // 槽位0-3对应玩家1-4，槽位4-7也对应玩家1-4
 
             state = SelectRoleState.Idle;
             selectedCharacterId = GameConfig.RandomCharacterId;
-            selectedTeamIndex = 0;
+            selectedTeamIndex = -1;
             characterSelectionIndex = 0;
-            RoleIcon.gameObject.SetActive(true);
 
             RefreshAvailableCharacters();
             UpdateDisplay();
@@ -125,18 +128,16 @@ namespace NTSD.UI
 
         private void OnEnable()
         {
+            if (initialized) Reset();
             BindInput();
         }
 
         private void OnDisable()
         {
             UnbindInput();
+            if (initialized) Reset();
         }
 
-        private void Update()
-        {
-            UpdateIdleFlash();
-        }
 
         #endregion
 
@@ -151,6 +152,7 @@ namespace NTSD.UI
             if (inputBound) return;
             if (itemIndex + 1 != playerId) return;  // 只绑定对应玩家的输入
 
+            if (!isActiveAndEnabled || !initialized || AppManager.Instance == null || AppManager.Instance.InputModule == null) return;
             inputActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(playerId);
             if (inputActionMap == null) return;
 
@@ -232,7 +234,8 @@ namespace NTSD.UI
         /// </summary>
         private void OnCancelPerformed(InputAction.CallbackContext ctx)
         {
-            if (this.GetComponentInParent<CharacterSelectionController>().Step >= CharacterSelectionStep.ComputerCount)
+            var controller = GetComponentInParent<CharacterSelectionController>();
+            if (controller != null && controller.Step >= CharacterSelectionStep.ComputerCount)
                 return;
 
             MMSoundManagerSoundPlayEvent.Trigger(LeaveSound, MMSoundManagerPlayOptions.Default);
@@ -274,7 +277,7 @@ namespace NTSD.UI
                     OnConfirmCharacter();  // 确认角色，进入队伍选择
                     break;
                 case SelectRoleState.SelectingTeam:
-                    OnConfirmTeam();  // 确认队伍，完成选择
+                    OnCancel();  // 确认队伍，完成选择
                     break;
             }
         }
@@ -294,34 +297,6 @@ namespace NTSD.UI
         /// <summary>
         /// 更新空闲状态的闪烁效果
         /// </summary>
-        private void UpdateIdleFlash()
-        {
-            if (state == SelectRoleState.Confirmed)
-                return;
-
-            if (CountdownStart) return;
-
-            var config = GameConfig.Instance;
-            if (config == null) return;
-
-            idleFlashTimer += Time.deltaTime;
-            if (idleFlashTimer >= config.IdleFlashInterval)
-            {
-                idleFlashTimer = 0f;
-                idleFlashToggle = !idleFlashToggle;
-
-                // 空闲状态：闪烁"Join?"图标
-                if (state == SelectRoleState.Idle)
-                {
-                    if (PlayerNameTxt != null)
-                        PlayerNameTxt.color = idleFlashToggle ? config.IdleFlashColor1 : config.IdleFlashColor2;
-                    
-                }
-
-                // 选择队伍状态：队伍名称闪烁
-            }
-        }
-
         /// <summary>
         /// 刷新可选角色列表
         /// 从 CharacterAnimtorManager 获取所有已加载的角色
@@ -335,7 +310,12 @@ namespace NTSD.UI
                 var loadedIds = CharacterAnimtorManager.Instance.GetAllLoadedCharacterIds();
                 if (loadedIds != null)
                 {
-                    availableCharacterIds.AddRange(loadedIds);
+                    var resources = CharacterUIResourceManager.TryGetInstance();
+                    foreach (int id in loadedIds)
+                    {
+                        if (resources != null && resources.GetCharacterUISprites(id)?.HeadSprite != null)
+                            availableCharacterIds.Add(id);
+                    }
                 }
             }
         }
@@ -382,6 +362,7 @@ namespace NTSD.UI
             if (state != SelectRoleState.SelectingCharacter) return;
 
             state = SelectRoleState.SelectingTeam;
+            selectedTeamIndex = -1;
             UpdateDisplay();
         }
 
@@ -401,7 +382,7 @@ namespace NTSD.UI
             if (selectedTeamIndex < 0)
                 selectedTeamIndex = config.TeamOptions.Length - 1;
             else if (selectedTeamIndex >= config.TeamOptions.Length)
-                selectedTeamIndex = 0;
+                selectedTeamIndex = -1;
 
             UpdateDisplay();
         }
@@ -430,6 +411,7 @@ namespace NTSD.UI
                     break;
                 case SelectRoleState.SelectingTeam:
                     state = SelectRoleState.SelectingCharacter;
+                    selectedTeamIndex = -1;
                     break;
                 case SelectRoleState.Confirmed:
                     state = SelectRoleState.SelectingTeam;
@@ -446,7 +428,7 @@ namespace NTSD.UI
         {
             state = SelectRoleState.Idle;
             selectedCharacterId = GameConfig.RandomCharacterId;
-            selectedTeamIndex = 0;
+            selectedTeamIndex = -1;
             characterSelectionIndex = 0;
             UpdateDisplay();
         }
@@ -461,85 +443,58 @@ namespace NTSD.UI
         private void UpdateDisplay()
         {
             var config = GameConfig.Instance;
-
-            if (state == SelectRoleState.Idle)
-            {
-                UpdateIdleDisplay(config);
-            }
-            else
-            {
-                UpdateActiveDisplay(config);
-            }
-
-            UpdateStateColors(config);
-        }
-
-        /// <summary>
-        /// 更新空闲状态的显示
-        /// </summary>
-        private void UpdateIdleDisplay(GameConfig config)
-        {
+            bool joined = state != SelectRoleState.Idle;
+            if (RoleTxtObj != null) RoleTxtObj.SetActive(!joined);
+            if (RoleIcon != null) RoleIcon.gameObject.SetActive(joined);
             if (PlayerNameTxt != null)
-                PlayerNameTxt.text = config != null ? config.IdlePlayerText : "Join?";
+            {
+                PlayerNameTxt.gameObject.SetActive(joined);
+                PlayerNameTxt.text = joined ? GameLocalSettings.GetPlayerName(playerId - 1) : string.Empty;
+                if (config != null) PlayerNameTxt.color = config.ConfirmedColor;
+            }
+            if (RoleIcon != null)
+            {
+                var resources = CharacterUIResourceManager.TryGetInstance();
+                RoleIcon.sprite = selectedCharacterId == GameConfig.RandomCharacterId
+                    ? config != null ? config.RandomIcon : null
+                    : resources != null ? resources.GetCharacterUISprites(selectedCharacterId)?.HeadSprite : null;
+            }
+            if (TeamIcon != null)
+            {
+                bool selected = state == SelectRoleState.SelectingTeam && config != null &&
+                    selectedTeamIndex >= 0 && config.TeamOptions != null && selectedTeamIndex < config.TeamOptions.Length;
+                TeamIcon.gameObject.SetActive(selected);
+                TeamIcon.sprite = selected ? config.TeamOptions[selectedTeamIndex] : null;
+            }
+            SelectionChanged?.Invoke(this);
         }
 
-        /// <summary>
-        /// 更新激活状态的显示（选择角色/队伍）
-        /// </summary>
-        private void UpdateActiveDisplay(GameConfig config)
+        public void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
         {
-            if (state == SelectRoleState.SelectingCharacter)
-            {
-                if (PlayerNameTxt != null)
-                    PlayerNameTxt.text = GameLocalSettings.GetPlayerName(itemIndex % 4);
-
-                UpdateCharacterDisplay(config);
-
-            }
-
-            if (state == SelectRoleState.SelectingTeam)
-            {
-                UpdateTeamDisplay(config);
-            }
+            if (isActiveAndEnabled && state != SelectRoleState.Idle &&
+                eventData.button == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                FocusRequested?.Invoke(this);
         }
 
-        /// <summary>
-        /// 更新角色显示（图标和名称）
-        /// </summary>
-        private void UpdateCharacterDisplay(GameConfig config)
+        public bool SelectCharacter(int characterId)
         {
-            if (selectedCharacterId == GameConfig.RandomCharacterId)
-            {
-                if (RoleIcon != null && config != null && config.RandomIcon != null) 
-                {
-                    RoleIcon.sprite = config.RandomIcon;
-                    RoleIcon.SetNativeSize();
-                }
-            }
-            else
-            {
-                // 显示具体角色
-                string characterName = "Unknown";
-                Sprite characterIcon = null;
+            if (state != SelectRoleState.SelectingCharacter || availableCharacterIds == null) return false;
+            int index = availableCharacterIds.IndexOf(characterId);
+            if (index < 0) return false;
+            characterSelectionIndex = index;
+            selectedCharacterId = characterId;
+            UpdateDisplay();
+            return true;
+        }
 
-                // 从CharacterAnimtorManager获取角色名称
-                if (CharacterAnimtorManager.Instance != null)
-                {
-                    characterName = CharacterAnimtorManager.Instance.GetCharacterName(selectedCharacterId);
-                }
-
-                // 从CharacterUIResourceManager获取角色头像
-                if (CharacterUIResourceManager.Instance != null)
-                {
-                    characterIcon = CharacterUIResourceManager.Instance.GetHeadSprite(selectedCharacterId);
-                }
-
-                if (RoleIcon != null && characterIcon != null) 
-                {
-                    RoleIcon.sprite = characterIcon;
-                    RoleIcon.SetNativeSize();
-                }
-            }
+        public bool SelectTeam(int index)
+        {
+            var config = GameConfig.Instance;
+            if (state != SelectRoleState.SelectingTeam || config == null || config.TeamOptions == null ||
+                index < 0 || index >= config.TeamOptions.Length) return false;
+            selectedTeamIndex = index;
+            UpdateDisplay();
+            return true;
         }
 
         internal System.Action PrepareNativeResourceRebind(
@@ -578,52 +533,6 @@ namespace NTSD.UI
 
         /// <summary>
         /// 更新队伍显示
-        /// </summary>
-        private void UpdateTeamDisplay(GameConfig config)
-        {
-            if (TeamIcon == null) return;
-
-            if (config != null && config.TeamOptions != null && selectedTeamIndex < config.TeamOptions.Length)
-            {
-                TeamIcon.sprite = config.TeamOptions[selectedTeamIndex];
-            }
-        }
-
-        /// <summary>
-        /// 根据状态更新颜色
-        /// 已确认的项目显示为 ConfirmedColor
-        /// </summary>
-        private void UpdateStateColors(GameConfig config)
-        {
-            if (config == null) return;
-
-            switch (state)
-            {
-                case SelectRoleState.Idle:
-                    return;
-                case SelectRoleState.SelectingCharacter:
-                    // 玩家名已确认（已加入）
-                    if (PlayerNameTxt != null)
-                        PlayerNameTxt.color = config.ConfirmedColor;
-                    break;
-                case SelectRoleState.SelectingTeam:
-                    // 角色已确认
-
-                    break;
-                case SelectRoleState.Confirmed:
-                    // 队伍已确认
-
-                    break;
-            }
-
-        }
-
-        #endregion
-
-        #region 公开获取方法
-
-        /// <summary>
-        /// 根据索引获取角色ID
         /// </summary>
         private int GetCharacterIdAtIndex(int index)
         {
@@ -686,7 +595,6 @@ namespace NTSD.UI
 
             RoleIcon.sprite = countdownSprite;
             RoleIcon.SetNativeSize();
-            CountdownStart = true;
         }
 
         /// <summary>
@@ -698,7 +606,6 @@ namespace NTSD.UI
 
             RoleIcon.gameObject.SetActive(false);
             PlayerNameTxt.text = "--";
-            CountdownStart = false;
         }
 
         #endregion

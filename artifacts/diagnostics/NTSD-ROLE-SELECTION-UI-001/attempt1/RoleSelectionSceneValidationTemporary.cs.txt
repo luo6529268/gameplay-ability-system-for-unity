@@ -1,0 +1,248 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Newtonsoft.Json;
+using NTSD.App;
+using NTSD.Animation;
+using NTSD.UI;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UI;
+
+namespace NTSD.Test.Editor
+{
+    public static class RoleSelectionSceneValidationTemporary
+    {
+        private static readonly string Output = Path.GetFullPath("artifacts/diagnostics/NTSD-ROLE-SELECTION-UI-001");
+        private static readonly List<object> Rows = new List<object>();
+        private static IEnumerator steps;
+        private static int checks;
+        private static double started;
+        [System.Runtime.InteropServices.DllImport("user32.dll")] private static extern bool SetForegroundWindow(IntPtr handle);
+        private static readonly BindingFlags Flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+        private static object Field(object value, string name) => value.GetType().GetField(name, Flags).GetValue(value);
+        private static void Check(bool ok, string label)
+        {
+            Rows.Add(new { assertion = label, passed = ok });
+            if (!ok) throw new Exception(label);
+            checks++;
+        }
+        private static void Bind(UnityEngine.Object owner, string field, UnityEngine.Object value)
+        {
+            var serialized = new SerializedObject(owner);
+            serialized.FindProperty(field).objectReferenceValue = value;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+        }
+        [MenuItem("NTSD/Temporary/Bind Role Selection UI")]
+        public static void Setup()
+        {
+            if (EditorApplication.isPlaying || UnityEngine.SceneManagement.SceneManager.GetActiveScene().isDirty)
+                throw new Exception("Requires nonplaying saved scene; do not discard current scene");
+            var scene = EditorSceneManager.OpenScene("Assets/NTSD/Scene/NTSD_Menu.unity");
+            var selection = UnityEngine.Object.FindObjectOfType<CharacterSelectionController>(true);
+            if (selection == null || selection.GetComponent<CharacterSelectionBoard>() != null)
+                throw new Exception("Missing selection controller or board already bound");
+            var root = selection.transform.Find("bg");
+            var content = root.Find("CharList/Viewport/Content");
+            var item = content.Find("CharItem").gameObject.AddComponent<CharacterChoiceItem>();
+            Bind(item, "icon", item.GetComponent<Image>());
+            Bind(item, "selectionFrame", item.transform.Find("Select").gameObject);
+            Bind(item, "teamIndexText", item.transform.Find("TeamIndexTxt").GetComponent<TMPro.TextMeshProUGUI>());
+            var board = selection.gameObject.AddComponent<CharacterSelectionBoard>();
+            Bind(board, "selection", selection);
+            Bind(board, "characterList", root.Find("CharList").gameObject);
+            Bind(board, "content", content);
+            Bind(board, "template", item);
+            Bind(board, "teamList", root.Find("TeamList").gameObject);
+            var serialized = new SerializedObject(board);
+            var buttons = serialized.FindProperty("teamButtons");
+            var frames = serialized.FindProperty("teamSelections");
+            buttons.arraySize = 5; frames.arraySize = 5;
+            for (int i = 0; i < 5; i++)
+            {
+                var team = root.Find("TeamList/Team" + (i + 1));
+                buttons.GetArrayElementAtIndex(i).objectReferenceValue = team.GetComponent<Button>();
+                frames.GetArrayElementAtIndex(i).objectReferenceValue = team.Find("Select").gameObject;
+            }
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            EditorSceneManager.MarkSceneDirty(scene);
+            if (!EditorSceneManager.SaveScene(scene)) throw new Exception("Scene save failed");
+            File.WriteAllText(Output + "/scene-binding.json", JsonConvert.SerializeObject(new { scene = scene.path, playerSlots = selection.PlayerSlots.Count(x=>x != null), teams = buttons.arraySize }, Formatting.Indented));
+        }
+        [InitializeOnLoadMethod]
+        private static void Install()
+        {
+            EditorApplication.playModeStateChanged += state =>
+            {
+                if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool("RoleSelectionProbe", false))
+                {
+                    SessionState.SetBool("RoleSelectionProbe", false);
+                    started = EditorApplication.timeSinceStartup;
+                    steps = Run();
+                    EditorApplication.update += Advance;
+                }
+                if (state == PlayModeStateChange.EnteredEditMode && File.Exists(Output + "/scene-result.json"))
+                {
+                    var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                    File.WriteAllText(Output + "/scene-postplay.json", JsonConvert.SerializeObject(new { scene = scene.path, dirty = scene.isDirty }, Formatting.Indented));
+                }
+            };
+        }
+        [MenuItem("NTSD/Temporary/Validate Role Selection UI")]
+        public static void Begin()
+        {
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if (EditorApplication.isPlaying || scene.isDirty || scene.name != "NTSD_Menu")
+                throw new Exception("Requires saved Menu scene");
+            Focus();
+            SessionState.SetBool("RoleSelectionProbe", true);
+            EditorApplication.EnterPlaymode();
+        }
+        private static void Focus()
+        {
+            EditorWindow.GetWindow(typeof(EditorWindow).Assembly.GetType("UnityEditor.GameView")).Focus();
+            SetForegroundWindow(System.Diagnostics.Process.GetCurrentProcess().MainWindowHandle);
+        }
+        private static void Advance()
+        {
+            try
+            {
+                if (EditorApplication.timeSinceStartup - started > 480) throw new TimeoutException("Role scene prewarm/validation timeout");
+                if (steps.MoveNext()) return;
+                Finish("PASS", null);
+            }
+            catch (Exception error) { Finish("FAIL", error.ToString()); }
+        }
+        private static void Finish(string status, string error)
+        {
+            EditorApplication.update -= Advance;
+            if (Keyboard.current != null) Keys();
+            File.WriteAllText(Output + "/scene-result.json", JsonConvert.SerializeObject(new { status, error, checks, rows = Rows }, Formatting.Indented));
+            EditorApplication.ExitPlaymode();
+        }
+        private static void Keys(params Key[] keys)
+        {
+            InputSystem.QueueStateEvent(Keyboard.current, new KeyboardState(keys));
+            InputSystem.Update();
+        }
+        private static void Join(SelectRoleItem slot)
+        {
+            var action = AppManager.Instance.InputModule.GetActionMapByPlayerID(slot.PlayerId).FindAction("Attack");
+            var key = action.controls.OfType<KeyControl>().First();
+            Keys(key.keyCode); Keys();
+        }
+        private static void Click(GameObject target)
+        {
+            var canvas = target.GetComponentInParent<Canvas>();
+            var camera = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera;
+            Vector2 point = RectTransformUtility.WorldToScreenPoint(camera, target.transform.position);
+            var data = new PointerEventData(EventSystem.current) { position = point, button = PointerEventData.InputButton.Left, pointerId = 91 };
+            var hits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(data, hits);
+            Check(hits.Count > 0 && ExecuteEvents.GetEventHandler<IPointerClickHandler>(hits[0].gameObject) == target,
+                "actual graphic raycast click " + target.name);
+            ExecuteEvents.Execute(target, data, ExecuteEvents.pointerClickHandler);
+        }
+        private static void ValidateWordsInputs()
+        {
+            string root = Path.Combine(Path.GetTempPath(), "NTSDWordsValidation-" + Guid.NewGuid().ToString("N"));
+            var source = BattleContentSource.ForLoganRuntime(root);
+            Directory.CreateDirectory(Path.Combine(source.DatRoot, "data"));
+            Directory.CreateDirectory(Path.Combine(source.ImageRoot, "sprite/UI"));
+            string[] rows = Enumerable.Range(0,22).Select(i => "pic: sprite/UI/" + (i < 16 ? "unused" + i : "WORDS" + (i-16)) + ".png").ToArray();
+            File.WriteAllText(Path.Combine(source.DatRoot, "data/resource.dat"), "<bmp_begin>\n" + string.Join("\n", rows) + "\n<bmp_end>");
+            Check(LoganVisualContentCandidate.NativeWordsInput.Capture(source, true) == null, "optional missing WORDS group disabled");
+            try { LoganVisualContentCandidate.NativeWordsInput.Capture(source); Check(false, "strict missing input must fail"); }
+            catch (FileNotFoundException e) { Check(e.Message.Contains("WORDS0.png") && e.Message.Contains("Required Logan"), "required missing input has contextual path"); }
+            File.WriteAllBytes(Path.Combine(source.ImageRoot,"sprite/UI/WORDS0.png"), new byte[]{0});
+            Check(LoganVisualContentCandidate.NativeWordsInput.Capture(source, true) == null, "partial WORDS group disabled atomically");
+            for (int i=1;i<6;i++) File.WriteAllBytes(Path.Combine(source.ImageRoot,"sprite/UI/WORDS"+i+".png"), new byte[]{(byte)i});
+            var complete = LoganVisualContentCandidate.NativeWordsInput.Capture(source, true);
+            Check(complete != null && complete.Images.Count == 6, "complete optional WORDS group captured");
+            Check(complete.InputFingerprint == LoganVisualContentCandidate.NativeWordsInput.Capture(source).InputFingerprint, "optional complete group preserves strict identity");
+            File.AppendAllText(Path.Combine(source.DatRoot, "data/resource.dat"), "\nchanged");
+            Check(complete.InputFingerprint != LoganVisualContentCandidate.NativeWordsInput.Capture(source,true).InputFingerprint, "complete group still fingerprints data changes");
+            Rows.Add(new { fixtureRoot = root });
+        }
+        private static IEnumerator Run()
+        {
+            ValidateWordsInputs();
+            while (AppManager.Instance == null || MenuUIController.Instance == null) yield return null;
+            var main = UnityEngine.Object.FindObjectOfType<MainMenuController>(true);
+            var loading = UnityEngine.Object.FindObjectOfType<LoadingPrewarmController>(true);
+            typeof(LoadingPrewarmController).GetField("minTextDisplaySeconds", Flags).SetValue(loading, 0f);
+            main._GameStartButton.OnPointerDown(new PointerEventData(EventSystem.current));
+            while (!loading.IsPrewarmed) yield return null;
+            Rows.Add(new { phase = "formal-prewarm-complete", utc = DateTime.UtcNow.ToString("o") });
+            var mode = UnityEngine.Object.FindObjectOfType<SelectGameModeController>(true);
+            while (!mode.gameObject.activeInHierarchy) yield return null;
+            MenuUIController.Instance.ShowSelectCharacter();
+            Focus(); yield return null; yield return null;
+            var selection = UnityEngine.Object.FindObjectOfType<CharacterSelectionController>();
+            var board = selection.GetComponent<CharacterSelectionBoard>();
+            var slot = selection.PlayerSlots.First(x=>x != null);
+            var teamList = (GameObject)Field(board, "teamList");
+            var buttons = (Button[])Field(board, "teamButtons");
+            var frames = (GameObject[])Field(board, "teamSelections");
+            Check(slot.State == SelectRoleState.Idle && slot.RoleTxtObj.activeSelf && !slot.RoleIcon.gameObject.activeSelf &&
+                !slot.PlayerNameTxt.gameObject.activeSelf && !slot.TeamIcon.gameObject.activeSelf, "original slot initially only Join");
+            Check(!teamList.activeSelf && board.Choices.Count == 0, "original unjoined board hidden");
+            ScreenCapture.CaptureScreenshot(Output + "/role-idle.png"); yield return null; yield return null;
+            Join(slot); yield return null;
+            Check(slot.State == SelectRoleState.SelectingCharacter && slot.SelectedCharacterId == GameConfig.RandomCharacterId &&
+                slot.RoleIcon.sprite == GameConfig.Instance.RandomIcon && !slot.RoleTxtObj.activeSelf, "real mapped Attack joins with configured random portrait");
+            Check(slot.PlayerNameTxt.text == GameLocalSettings.GetPlayerName(slot.PlayerId - 1), "real saved player name");
+            Check(board.Choices.Count > 2, "formal prewarm provides populated candidate pool");
+            Rows.Add(new { phase = "joined", inputId = slot.PlayerId, playerName = slot.PlayerNameTxt.text, candidateCount = board.Choices.Count });
+            var first = board.Choices.First(x=>x.CharacterId == 2);
+            var second = board.Choices.First(x=>x.CharacterId >= 0 && x.CharacterId != 2);
+            Canvas.ForceUpdateCanvases();
+            Click(first.gameObject); yield return null;
+            Check(slot.State == SelectRoleState.SelectingCharacter && slot.SelectedCharacterId == first.CharacterId && !teamList.activeSelf,
+                "A first candidate click previews only");
+            Check(slot.RoleIcon.sprite == CharacterUIResourceManager.Instance.GetCharacterUISprites(first.CharacterId).HeadSprite,
+                "original portrait uses exact HeadSprite");
+            ScreenCapture.CaptureScreenshot(Output + "/role-preview.png"); yield return null; yield return null;
+            Click(second.gameObject); Check(slot.SelectedCharacterId == second.CharacterId && slot.State == SelectRoleState.SelectingCharacter, "cross candidate preview");
+            Click(first.gameObject);
+            for (int round = 0; round < 3; round++)
+            {
+                Click(first.gameObject); yield return null;
+                Check(slot.State == SelectRoleState.SelectingTeam && teamList.activeSelf && buttons.All(x=>x.gameObject.activeInHierarchy), "second same click confirms and shows all five teams");
+                Check(((TMPro.TextMeshProUGUI)Field(first, "teamIndexText")).text == "鍙栨秷", "confirmed CharItem cancel label");
+                Click(second.gameObject); Check(slot.SelectedCharacterId == first.CharacterId && slot.State == SelectRoleState.SelectingTeam, "confirmed different candidate ignored");
+                for (int i = 0; i < 5; i++)
+                {
+                    Click(buttons[i].gameObject);
+                    Check(slot.SelectedTeamIndex == i && slot.TeamIcon.sprite == GameConfig.Instance.TeamOptions[i] &&
+                        frames.Count(x=>x.activeSelf) == 1 && frames[i].activeSelf, "real team exclusive selection " + i);
+                }
+                if (round == 0) { ScreenCapture.CaptureScreenshot(Output + "/role-confirmed-team.png"); yield return null; yield return null; }
+                Click(first.gameObject);
+                Check(slot.State == SelectRoleState.SelectingCharacter && !teamList.activeSelf && !slot.TeamIcon.gameObject.activeSelf &&
+                    frames.All(x=>!x.activeSelf) && ((TMPro.TextMeshProUGUI)Field(first,"teamIndexText")).text == string.Empty,
+                    "third same click cancels and clears team UI");
+            }
+            Check(selection.Step == CharacterSelectionStep.JoinAndSelect, "does not advance to countdown or battle");
+            int count = board.Choices.Count;
+            var identities = board.Choices.Select(x=>x.GetInstanceID()).OrderBy(x=>x).ToArray();
+            MenuUIController.Instance.ShowMainMenu(); yield return null;
+            MenuUIController.Instance.ShowSelectCharacter(); yield return null;
+            Check(slot.State == SelectRoleState.Idle && slot.RoleTxtObj.activeSelf && !teamList.activeSelf, "original menu reentry resets to Join");
+            Join(slot); yield return null; Canvas.ForceUpdateCanvases();
+            Check(board.Choices.Count == count && identities.SequenceEqual(board.Choices.Select(x=>x.GetInstanceID()).OrderBy(x=>x)), "original reentry reuses exact pool instances");
+            first = board.Choices.First(x=>x.CharacterId == 2); Click(first.gameObject); Check(slot.State == SelectRoleState.SelectingCharacter, "no duplicate candidate listener after reentry");
+            ScreenCapture.CaptureScreenshot(Output + "/role-final.png"); yield return null; yield return null;
+        }
+    }
+}
+#endif

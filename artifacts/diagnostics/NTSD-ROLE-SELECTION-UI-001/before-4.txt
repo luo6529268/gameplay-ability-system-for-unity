@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd6905f1c6dbaa4a91769c14bc8b041, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: 
+  BattleContentRuntimeRoot: Assets/NTSD/Content/LoganRuntime
+  BattleRuntimeProfileName: 
+  BattleAiExecutionProfileName: DataOrientedCanonical
+  DesktopInitialRuntimeSlotCapacity: 512
+  BattleCollisionBroadphaseName: 
+  BattlePresentationBackendName: CentralOnly
+  BattleAtlasModeName: 
+  BattleDrawModeName: 
+  FootMarkerSprite: {fileID: 21300000, guid: f6a42a29f1719344eb3f73c0a7da8675, type: 3}
+  FootMarkerAnimationFrames:
+  - {fileID: 21300000, guid: f6a42a29f1719344eb3f73c0a7da8675, type: 3}
+  - {fileID: 21300000, guid: 45c75c89037048547bb05ab503796586, type: 3}
+  - {fileID: 21300000, guid: 260f0ff2f69e5324b8188568dc335556, type: 3}
+  - {fileID: 21300000, guid: f2fb726ed8e6e5b41834b027b2e3bd4a, type: 3}
+  - {fileID: 21300000, guid: 873e5c5304375f94b949c03d0ce2fabc, type: 3}
+  - {fileID: 21300000, guid: b8e89faf556f7e84f8a93bc2a1aafe9c, type: 3}
+  FootMarkerAnimationFrameDurationSeconds: 0.08
+  BattleFunctionKeyModeRules:
+  - gameModeId: 0
+    battleGameModeId: 1
+    enableF7: 1
+    enableF8: 1
+    enableF9: 1
+  ShadowPrefab: {fileID: 7020809651431153169, guid: a74e0aa2ef455834393473f33ee52faf, type: 3}
+  LF2ObjectPrefab: {fileID: 8065137006895327203, guid: 9c107ede7c04d83469572b66618c3680, type: 3}
+  PoolInitialSize: 10
+  PoolMaxSize: 200
+  PoolExpireTimeSeconds: 120
+  PoolCheckIntervalSeconds: 10
+  PoolInitialSpritePoolSize: 16
+  BattleStageWidthPx: 800
+  BattleFixedViewRunReferenceWidthPx: 2048
+  BattleFixedViewRunReferenceHeightPx: 1152
+  BattleStageZMinPx: 180
+  BattleStageZMaxPx: 350
+  BattlePerspectiveNear: 0
+  BattlePerspectiveFar: 0
+  TeamOptions:
+  - {fileID: 21300000, guid: 87f584cfd97551049923c15a677a920d, type: 3}
+  - {fileID: 21300000, guid: 0a801a75c35a889428a1b4efb364580b, type: 3}
+  - {fileID: 21300000, guid: e45e3c20e51226f4a9134f097c57e9eb, type: 3}
+  - {fileID: 21300000, guid: b86f1dc32aa91c946ae0428a081f0b91, type: 3}
+  - {fileID: 21300000, guid: bf7c93cb76be1454ba6927348e2040bb, type: 3}
+  JoinIcon1: {fileID: 21300000, guid: ff4153710d4407841b05383b6249b016, type: 3}
+  JoinIcon2: {fileID: 21300000, guid: 34379c25a465836419338c80151ebc54, type: 3}
+  IdlePlayerText: Join?
+  IdleFighterText: 
+  IdleTeamText: 
+  IdleFlashInterval: 0.1
+  IdleFlashColor1: {r: 1, g: 1, b: 1, a: 1}
+  IdleFlashColor2: {r: 0.45098042, g: 0.627451, b: 1, a: 1}
+  SelectedColor: {r: 0.8000001, g: 0, b: 0, a: 1}
+  ConfirmedColor: {r: 1, g: 1, b: 1, a: 1}
+  RandomDisplayName: Random
+  RandomIcon: {fileID: 21300000, guid: 16f520f456ab78649ae26c1bb98001a5, type: 3}
+  CountdownSprites:
+  - {fileID: 21300000, guid: 188dafa6c20928146b68e329d88e3320, type: 3}
+  - {fileID: 21300000, guid: a26a34b702058274ba4c0329a370ae47, type: 3}
+  - {fileID: 21300000, guid: 4a0a0c26e3917614c8f90f044e9d607e, type: 3}
+  - {fileID: 21300000, guid: 04580ace18fd3f6429462e56db4fb3eb, type: 3}
+  - {fileID: 21300000, guid: 54b88b064f519be44b1883716c12f6c0, type: 3}
+  CountdownDuration: 5
+  CountdownAcceleration: 2

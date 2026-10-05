@@ -1,0 +1,312 @@
+{
+  "status": "PASS",
+  "error": null,
+  "checks": 73,
+  "rows": [
+    {
+      "assertion": "optional missing WORDS group disabled",
+      "passed": true
+    },
+    {
+      "assertion": "required missing input has contextual path",
+      "passed": true
+    },
+    {
+      "assertion": "partial WORDS group disabled atomically",
+      "passed": true
+    },
+    {
+      "assertion": "complete optional WORDS group captured",
+      "passed": true
+    },
+    {
+      "assertion": "optional complete group preserves strict identity",
+      "passed": true
+    },
+    {
+      "assertion": "complete group still fingerprints data changes",
+      "passed": true
+    },
+    {
+      "fixtureRoot": "C:\\Users\\Logan\\AppData\\Local\\Temp\\NTSDWordsValidation-ece7444cfbcf4ce0832305a96220d433"
+    },
+    {
+      "phase": "formal-prewarm-complete",
+      "utc": "2026-10-04T21:46:41.5640338Z"
+    },
+    {
+      "assertion": "original slot initially only Join",
+      "passed": true
+    },
+    {
+      "assertion": "original unjoined board hidden",
+      "passed": true
+    },
+    {
+      "assertion": "real mapped Attack joins with configured random portrait",
+      "passed": true
+    },
+    {
+      "assertion": "real saved player name",
+      "passed": true
+    },
+    {
+      "assertion": "formal prewarm provides populated candidate pool",
+      "passed": true
+    },
+    {
+      "phase": "joined",
+      "inputId": 1,
+      "playerName": "Player1",
+      "candidateCount": 160
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "A first candidate click previews only",
+      "passed": true
+    },
+    {
+      "assertion": "original portrait uses exact HeadSprite",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-1",
+      "passed": true
+    },
+    {
+      "assertion": "cross candidate preview",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "second same click confirms and shows all five teams",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed CharItem cancel label",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-1",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed different candidate ignored",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team1",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team2",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team3",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team4",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 3",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team5",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 4",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "third same click cancels and clears team UI",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "second same click confirms and shows all five teams",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed CharItem cancel label",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-1",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed different candidate ignored",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team1",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team2",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team3",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team4",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 3",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team5",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 4",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "third same click cancels and clears team UI",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "second same click confirms and shows all five teams",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed CharItem cancel label",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-1",
+      "passed": true
+    },
+    {
+      "assertion": "confirmed different candidate ignored",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team1",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 0",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team2",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 1",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team3",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 2",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team4",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 3",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click Team5",
+      "passed": true
+    },
+    {
+      "assertion": "real team exclusive selection 4",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "third same click cancels and clears team UI",
+      "passed": true
+    },
+    {
+      "assertion": "does not advance to countdown or battle",
+      "passed": true
+    },
+    {
+      "assertion": "original menu reentry resets to Join",
+      "passed": true
+    },
+    {
+      "assertion": "original reentry reuses exact pool instances",
+      "passed": true
+    },
+    {
+      "assertion": "actual graphic raycast click CharItem-12",
+      "passed": true
+    },
+    {
+      "assertion": "no duplicate candidate listener after reentry",
+      "passed": true
+    }
+  ]
+}

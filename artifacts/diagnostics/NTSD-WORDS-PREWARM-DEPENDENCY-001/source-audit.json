@@ -1,0 +1,53 @@
+{
+  "formalExeSha256": "336b44e58bea637246b65204afc50fd8734c9aa38969b82836fa685497eb7bd3",
+  "images": [
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS0.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS0.png",
+      "sha256": "ce459cec36289543d4a4d344b133e35e9d9a5bcd5dde0b07afe9e1c99af463e5",
+      "matchesPreDeletion": true,
+      "bytes": 8505
+    },
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS1.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS1.png",
+      "sha256": "e959f2c6a992ed75da9afb335f379d35ecab686d1e9f4b3b60e240d084b265dc",
+      "matchesPreDeletion": true,
+      "bytes": 8902
+    },
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS2.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS2.png",
+      "sha256": "b75fdc4b8413a1427beb7482df10621f91b9b5bcc91589ca6cc1e7aacb673e0a",
+      "matchesPreDeletion": true,
+      "bytes": 8733
+    },
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS3.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS3.png",
+      "sha256": "0a1be25062d8043c9614bf0180fb13f7068b3ba62b77b6533aa873ea6826451a",
+      "matchesPreDeletion": true,
+      "bytes": 8769
+    },
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS4.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS4.png",
+      "sha256": "20879d07ee7deffbd1eff3592e1fe24595b0d2e600ee4755f1704616311fbaa6",
+      "matchesPreDeletion": true,
+      "bytes": 8769
+    },
+    {
+      "target": "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/WORDS5.png",
+      "exists": false,
+      "formalSource": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\sprite\\UI\\WORDS5.png",
+      "sha256": "6f704853cc86d70349c724411e74c89b93ef6bcd8dd637ba321fa1b4ecc73f90",
+      "matchesPreDeletion": true,
+      "bytes": 8418
+    }
+  ]
+}

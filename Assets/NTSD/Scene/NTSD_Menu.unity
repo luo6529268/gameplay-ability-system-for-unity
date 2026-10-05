@@ -2435,6 +2435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 290637677}
   - component: {fileID: 290637678}
+  - component: {fileID: 290637679}
   m_Layer: 5
   m_Name: SelectCharacterPanel
   m_TagString: Untagged
@@ -2495,6 +2496,35 @@ MonoBehaviour:
   players: []
   countdownTimer: 0
   lastDisplayedSecond: -1
+--- !u!114 &290637679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290637676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 963e51890b8f448fa79377dcf6755fd1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  selection: {fileID: 290637678}
+  characterList: {fileID: 419010572}
+  content: {fileID: 1746214347}
+  template: {fileID: 1684319546}
+  teamList: {fileID: 1248236935}
+  teamButtons:
+  - {fileID: 1978585722}
+  - {fileID: 367934235}
+  - {fileID: 675401901}
+  - {fileID: 944000717}
+  - {fileID: 1308152796}
+  teamSelections:
+  - {fileID: 1401721898}
+  - {fileID: 256249388}
+  - {fileID: 598520071}
+  - {fileID: 2038156132}
+  - {fileID: 1349083999}
 --- !u!1 &330982439
 GameObject:
   m_ObjectHideFlags: 0
@@ -13309,6 +13339,7 @@ GameObject:
   - component: {fileID: 1684319543}
   - component: {fileID: 1684319545}
   - component: {fileID: 1684319544}
+  - component: {fileID: 1684319546}
   m_Layer: 5
   m_Name: CharItem
   m_TagString: Untagged
@@ -13375,6 +13406,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684319542}
   m_CullTransparentMesh: 1
+--- !u!114 &1684319546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1684319542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b2c8a446e2641cf9bbf17cba7158f2d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  icon: {fileID: 1684319544}
+  selectionFrame: {fileID: 449894726}
+  teamIndexText: {fileID: 775182628}
 --- !u!1 &1685410034
 GameObject:
   m_ObjectHideFlags: 0

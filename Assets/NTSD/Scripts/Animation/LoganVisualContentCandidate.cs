@@ -72,7 +72,7 @@ namespace NTSD.Animation
                 Images = images.AsReadOnly();
             }
 
-            public static NativeWordsInput Capture(BattleContentSource source)
+            public static NativeWordsInput Capture(BattleContentSource source, bool allowUnavailable = false)
             {
                 if (source == null || !source.IsLoganRuntime)
                     throw new ArgumentException("A Logan runtime source is required.", nameof(source));
@@ -85,7 +85,36 @@ namespace NTSD.Animation
                 IReadOnlyList<string> paths = FirstNativeResourceTable(Encoding.UTF8.GetString(resourceDatBytes));
                 if (paths.Count < FirstWordIndex + WordCount)
                     throw new InvalidDataException("Native resource.dat has no complete WORDS0..WORDS5 index range.");
-                return new NativeWordsInput(source, resourceDatPath, resourceDatBytes, paths);
+
+                if (allowUnavailable)
+                {
+                    var missing = new List<string>();
+                    for (int index = 0; index < WordCount; index++)
+                    {
+                        string path = source.ResolveImagePath(paths[FirstWordIndex + index], null);
+                        if (!File.Exists(path)) missing.Add(path);
+                    }
+                    if (missing.Count > 0)
+                    {
+                        UnityEngine.Debug.LogWarning("Native WORDS publication disabled; optional glyph sheets are absent: " +
+                            string.Join(", ", missing) + ". Project TMP/uGUI text is unaffected.");
+                        return null;
+                    }
+                }
+                try
+                {
+                    return new NativeWordsInput(source, resourceDatPath, resourceDatBytes, paths);
+                }
+                catch (FileNotFoundException error) when (allowUnavailable)
+                {
+                    UnityEngine.Debug.LogWarning("Native WORDS publication disabled; optional input disappeared during capture: " + error.Message);
+                    return null;
+                }
+                catch (DirectoryNotFoundException error) when (allowUnavailable)
+                {
+                    UnityEngine.Debug.LogWarning("Native WORDS publication disabled; optional input directory disappeared during capture: " + error.Message);
+                    return null;
+                }
             }
 
             internal static IReadOnlyList<string> FirstNativeResourceTable(string text)
@@ -323,7 +352,7 @@ namespace NTSD.Animation
                 images.Add(new ImageInput(path,
                     bodySheetPaths.Contains(path) && !requiredUiPaths.Contains(path)));
             var candidate = new LoganVisualContentCandidate(catalog, images,
-                NativeWordsInput.Capture(source),
+                NativeWordsInput.Capture(source, allowUnavailable: true),
                 NativeKillIconInput.Capture(source, catalog.ModeComboInput?.KnockoutFeed),
                 NativeSparkInput.Capture(source));
             candidate.AssertInputsCurrent();
@@ -334,7 +363,7 @@ namespace NTSD.Animation
         public void AssertInputsCurrent()
         {
             Catalog.ModeComboInput?.AssertInputsCurrent();
-            NativeWordsInput currentWords = NativeWordsInput.Capture(Catalog.Source);
+            NativeWordsInput currentWords = NativeWordsInput.Capture(Catalog.Source, allowUnavailable: true);
             if (!string.Equals(currentWords?.InputFingerprint, WordsInput?.InputFingerprint,
                     StringComparison.Ordinal))
                 throw new InvalidDataException("Logan WORDS resource inputs changed after candidate capture.");
@@ -414,9 +443,18 @@ namespace NTSD.Animation
 
         private static string HashFile(string path)
         {
-            using (var stream = File.OpenRead(path))
-            using (var hash = SHA256.Create())
-                return Hex(hash.ComputeHash(stream));
+            if (!File.Exists(path))
+                throw new FileNotFoundException("Required Logan visual input is missing before hashing: " + path, path);
+            try
+            {
+                using (var stream = File.OpenRead(path))
+                using (var hash = SHA256.Create())
+                    return Hex(hash.ComputeHash(stream));
+            }
+            catch (FileNotFoundException error)
+            {
+                throw new FileNotFoundException("Required Logan visual input disappeared while hashing: " + path, path, error);
+            }
         }
 
         private static string HashBytes(byte[] bytes)

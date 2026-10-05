@@ -1,0 +1,7 @@
+System.ArgumentException: Set Method not found for 'Instance'
+  at System.Reflection.RuntimePropertyInfo.SetValue (System.Object obj, System.Object value, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] index, System.Globalization.CultureInfo culture) [0x00026] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.PropertyInfo.SetValue (System.Object obj, System.Object value, System.Object[] index) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.PropertyInfo.SetValue (System.Object obj, System.Object value) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at RoleValidation.<Test>g__Singleton|15_1 (System.String name) [0x00024] in C:\Users\Logan\AppData\Local\Temp\NTSDRoleValidation-001\Assets\Editor\RoleValidation.cs:8 
+  at RoleValidation+<Test>d__15.MoveNext () [0x00182] in C:\Users\Logan\AppData\Local\Temp\NTSDRoleValidation-001\Assets\Editor\RoleValidation.cs:8 
+  at RoleValidation.Step () [0x00002] in C:\Users\Logan\AppData\Local\Temp\NTSDRoleValidation-001\Assets\Editor\RoleValidation.cs:5 

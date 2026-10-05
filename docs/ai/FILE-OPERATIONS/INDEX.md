@@ -72,3 +72,11 @@ NTSD-BATTLE-COMBO-FIXED-SLOTS-001 / PLANNED: user-authored6icon/5arrow slots, re
 NTSD-BATTLE-CONTROLS-BINDING-001 / PLANNED: wire Controls to selected-human immutable HUD InputId. Record docs/ai/CHANGE-RECORDS/NTSD-BATTLE-CONTROLS-BINDING-001.md; audit docs/ai/FILE-OPERATIONS/NTSD-BATTLE-CONTROLS-BINDING-001/RECORD.md.
 
 | NTSD-BATTLE-DIRECTION-HYBRID-001 | Direction UI adapter edits, hookup and audited temporary probe removal | VERIFIED | [Record](NTSD-BATTLE-DIRECTION-HYBRID-001/RECORD.md) |
+
+| NTSD-ROLE-SELECTION-UI-001 | Role selection scoped edits and backups | PARTIAL | [Record](NTSD-ROLE-SELECTION-UI-001/RECORD.md) |
+
+| NTSD-KYUBI-SMALL-120X108-20261005 | User-requested 4t_kyubi_s.png resize 60x54 to120x108; original backup | PLANNED | [Record](NTSD-KYUBI-SMALL-120X108-20261005/RECORD.md) |
+
+| NTSD-KYUBI-SMALL-120X108-20261005 | Completion:120x108,12960 pixel comparisons pass,meta unchanged | VERIFIED | [Record](NTSD-KYUBI-SMALL-120X108-20261005/RECORD.md) |
+
+NTSD-WORDS-PREWARM-DEPENDENCY-001 / PLANNED / scoped prewarm source edit / FILE-OPERATIONS/NTSD-WORDS-PREWARM-DEPENDENCY-001/RECORD.md

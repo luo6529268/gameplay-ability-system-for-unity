@@ -1,0 +1,52 @@
+[LoadingPrewarmController] Start failed with exception: Could not find file "I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Content\LoganRuntime\vfs\sprite\UI\WORDS0.png"
+  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.Boolean anonymous, System.IO.FileOptions options) [0x0019e] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at (wrapper remoting-invoke-with-check) System.IO.FileStream..ctor(string,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare)
+  at System.IO.File.OpenRead (System.String path) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at NTSD.Animation.LoganVisualContentCandidate.HashFile (System.String path) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:417 
+  at NTSD.Animation.LoganVisualContentCandidate+ImageInput.CaptureSha256 () [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:34 
+  at NTSD.Animation.LoganVisualContentCandidate+ImageInput..ctor (System.String path, System.Boolean allowMissingBodySheet) [0x00016] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:29 
+  at NTSD.Animation.LoganVisualContentCandidate+NativeWordsInput..ctor (NTSD.Animation.BattleContentSource source, System.String resourceDatPath, System.Byte[] resourceDatBytes, System.Collections.Generic.IReadOnlyList`1[T] virtualPaths) [0x0006a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:64 
+  at NTSD.Animation.LoganVisualContentCandidate+NativeWordsInput.Capture (NTSD.Animation.BattleContentSource source) [0x00081] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:88 
+  at NTSD.Animation.LoganVisualContentCandidate.Capture (NTSD.Animation.BattleContentSource source, NTSD.App.ProjectBattleModeConfig+Snapshot projectModeSnapshot) [0x001af] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\LoganVisualContentCandidate.cs:325 
+  at NTSD.Animation.CharacterAnimtorManager+<>c__DisplayClass39_0.<PrewarmConfiguredLoganContentCoreAsync>b__0 () [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\Manager\CharacterAnimtorManager.cs:131 
+  at Cysharp.Threading.Tasks.UniTask.RunOnThreadPool[T] (System.Func`1[TResult] func, System.Boolean configureAwait, System.Threading.CancellationToken cancellationToken) [0x000b4] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.Run.cs:187 
+  at Cysharp.Threading.Tasks.UniTask.RunOnThreadPool[T] (System.Func`1[TResult] func, System.Boolean configureAwait, System.Threading.CancellationToken cancellationToken) [0x00151] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.Run.cs:193 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2[TStateMachine,T].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\CompilerServices\StateMachineRunner.cs:342 
+  at Cysharp.Threading.Tasks.UniTask`1+Awaiter[T].GetResult () [0x00025] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.cs:653 
+  at NTSD.Animation.CharacterAnimtorManager.PrewarmConfiguredLoganContentCoreAsync (NTSD.Animation.BattleContentSource source, NTSD.App.ProjectBattleModeConfig+Snapshot modeSnapshot, System.Int32 generation, System.Collections.Generic.List`1[T] callbacks) [0x003a7] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Animation\Manager\CharacterAnimtorManager.cs:130 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2[TStateMachine,T].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\CompilerServices\StateMachineRunner.cs:342 
+  at Cysharp.Threading.Tasks.UniTask`1+MemoizeSource[T].GetResult (System.Int16 token) [0x00088] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.cs:574 
+  at Cysharp.Threading.Tasks.UniTask`1+Awaiter[T].GetResult () [0x00025] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.cs:653 
+  at NTSD.UI.LoadingPrewarmController.PrewarmOnceCoreAsync (System.Int32 generation) [0x00155] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\UI\LoadingPrewarmController.cs:139 
+  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTaskCompletionSource.cs:244 
+  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\CompilerServices\StateMachineRunner.cs:218 
+  at Cysharp.Threading.Tasks.UniTask+MemoizeSource.GetResult (System.Int16 token) [0x00075] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.cs:244 
+  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\Library\PackageCache\com.cysharp.unitask@5cc97c7f00\Runtime\UniTask.cs:312 
+  at NTSD.UI.LoadingPrewarmController.Start () [0x000a5] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\UI\LoadingPrewarmController.cs:51 
+UnityEngine.StackTraceUtility:ExtractStackTrace ()
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])
+UnityEngine.Logger:Log (UnityEngine.LogType,object)
+UnityEngine.Debug:LogError (object)
+NTSD.UI.LoadingPrewarmController/<Start>d__19:MoveNext () (at Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs:66)
+System.Runtime.CompilerServices.AsyncMethodBuilderCore/MoveNextRunner:InvokeMoveNext (object)
+System.Threading.ExecutionContext:RunInternal (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Threading.ExecutionContext:Run (System.Threading.ExecutionContext,System.Threading.ContextCallback,object,bool)
+System.Runtime.CompilerServices.AsyncMethodBuilderCore/MoveNextRunner:Run ()
+Cysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTask.cs:21)
+Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<Cysharp.Threading.Tasks.AsyncUnit>:TrySetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTaskCompletionSource.cs:167)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<NTSD.UI.LoadingPrewarmController/<PrewarmOnceCoreAsync>d__23>:SetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/StateMachineRunner.cs:210)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder:SetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/AsyncUniTaskMethodBuilder.cs:59)
+NTSD.UI.LoadingPrewarmController/<PrewarmOnceCoreAsync>d__23:MoveNext () (at Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs:176)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1<NTSD.UI.LoadingPrewarmController/<PrewarmOnceCoreAsync>d__23>:Run () (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/StateMachineRunner.cs:189)
+Cysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTask.cs:21)
+Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<string>:TrySetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTaskCompletionSource.cs:167)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<NTSD.Animation.CharacterAnimtorManager/<PrewarmConfiguredLoganContentCoreAsync>d__39, string>:SetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/StateMachineRunner.cs:334)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTaskMethodBuilder`1<string>:SetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/AsyncUniTaskMethodBuilder.cs:186)
+NTSD.Animation.CharacterAnimtorManager/<PrewarmConfiguredLoganContentCoreAsync>d__39:MoveNext () (at Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:164)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<NTSD.Animation.CharacterAnimtorManager/<PrewarmConfiguredLoganContentCoreAsync>d__39, string>:Run () (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/CompilerServices/StateMachineRunner.cs:313)
+Cysharp.Threading.Tasks.AwaiterActions:Continuation (object) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTask.cs:21)
+Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1<NTSD.Animation.LoganVisualContentCandidate>:TrySetException (System.Exception) (at ./Library/PackageCache/com.cysharp.unitask@5cc97c7f00/Runtime/UniTaskCompletionSource.cs:167)
+Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`2<Cysharp.Threading.Tasks.UniTask/<RunOnThreadPool>d__85`1<NTSD.Animation.LoganVisualContentCandidate>, NTSD.Animation.LoganVisualContentCandidate>:SetException (System.Excep

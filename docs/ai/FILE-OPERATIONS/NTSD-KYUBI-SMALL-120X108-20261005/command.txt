@@ -1,0 +1,12 @@
+Add-Type -AssemblyName System.Drawing
+$src = [System.Drawing.Bitmap]::new((Join-Path $opDir '4t_kyubi_s.before.png'))
+if ($src.Width -ne 60 -or $src.Height -ne 54) { throw 'Unexpected source dimensions' }
+$dst = [System.Drawing.Bitmap]::new(120,108,[System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+try {
+    for ($y=0; $y -lt 108; $y++) {
+        for ($x=0; $x -lt 120; $x++) {
+            $dst.SetPixel($x,$y,$src.GetPixel([int][Math]::Floor($x/2),[int][Math]::Floor($y/2)))
+        }
+    }
+    $dst.Save($asset,[System.Drawing.Imaging.ImageFormat]::Png)
+} finally { $dst.Dispose(); $src.Dispose() }

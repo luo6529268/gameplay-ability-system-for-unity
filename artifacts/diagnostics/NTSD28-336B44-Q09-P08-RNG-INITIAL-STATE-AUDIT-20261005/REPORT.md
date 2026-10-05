@@ -22,3 +22,7 @@
 旧 Unity 第三轮还早于 Q12 的共用三键重复映射纠正，不能自动当成当前生产程序集的验收。当前总表将此 Record 归 `REUSE`，P0/DEP/ONE 均为 0；本次只闭合“为什么此旧对照不可裁决”的证据，不新增必跑 Play 或生产改动。以后若玩家在当前版复现攻击动作/伤害异常，或共享随机写者改变，才用同角色、**同完整 RNG 初态**、同输入 tick 做一例定向比较；比较应覆盖实际消费的表项、动作/命中/HP 等战斗结果，并按用户例外单独判断画面，而不是逐角色逐操作穷举。
 
 本报告的代码结论来自正式 336B44 对应 playable 源码与仓库现有 Unity 实现；正式根 EXE 的表哈希及旧 Unity 值来自上述原始运行结果。本轮未启动新 Play，也未新增 132 字段同态证书。
+
+## 2026-10-05 后续触发时的最小同态入口（只读核对）
+
+现有 Unity `NTSD28NativeRandom` 已有 `CaptureSynchronizedState()` 和 `RestoreSynchronized(state)`；后者只克隆同步表/索引/计数，不重置 CRT。因而如果未来同一攻击案例出现当前版可复现首差，测试夹具可在 `world.NativeRandom.ResetFromSeed(0u)` 后，从独立的 `NTSD28NativeRandom(2833u)` 捕获同步表并恢复到 World，复现正式 LFR 的“seed0 CRT + seed2833 同步表”混合初态。正式 `game_session_lfr.cpp` 从 LFR manager 恢复表、`game_session.cpp` 初始化后单独恢复表的调用链与此对应。运行前必须核对 CRT state/calls、同步表哈希、index/counter/calls、BGM 固定选择和输入相位；只相同两枚 CRT 标量不够。该入口利用现有 API，不要求修改 DAT 或生产 RNG 规则；本条没有执行新测试、也不把条件门提升为必跑任务。
