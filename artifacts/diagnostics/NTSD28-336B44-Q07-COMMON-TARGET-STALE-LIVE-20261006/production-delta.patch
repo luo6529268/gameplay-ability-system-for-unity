@@ -1,0 +1,27 @@
+--- artifacts\diagnostics\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\before\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs
++++ Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs
+@@ -1544,13 +1544,6 @@
+                     Health.HP = 0;
+                 return;
+             }
+-            if (target.Health == null || target.Health.HP <= 0)
+-            {
+-                if (Health != null)
+-                    Health.HP = 0;
+-                return;
+-            }
+-
+             // Alignment contract: NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.
+             if (Health == null || Health.HP <= 0)
+             {
+@@ -2541,8 +2534,8 @@
+ 
+                 if (bestSlot >= 0)
+                     ObjectAiTargetSlot3F8 = bestSlot;
+-                target = bestSlot >= 0
+-                    ? Match.FindEntityByRuntimeSlotForQuery(bestSlot)
++                target = ObjectAiTargetSlot3F8 >= 0
++                    ? Match.FindEntityByRuntimeSlotForQuery(ObjectAiTargetSlot3F8)
+                     : null;
+             }
+ 

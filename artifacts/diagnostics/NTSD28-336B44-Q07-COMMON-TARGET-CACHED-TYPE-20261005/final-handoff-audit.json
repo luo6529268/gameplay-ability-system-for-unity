@@ -1,0 +1,106 @@
+{
+  "utc": "2026-10-05T15:59:05.462225+00:00",
+  "result": "PASS",
+  "currentPackage": "NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001",
+  "recordStatus": "RUNTIME_PENDING",
+  "scopeStatus": "SCOPED_CACHED_TARGET_DRIVER_PASS",
+  "operationStatus": "VERIFIED",
+  "governanceValidator": {
+    "utc": "2026-10-05T15:58:30.541682+00:00",
+    "command": [
+      "pwsh",
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      "Tools/Validate-ChangeLedger.ps1"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 4.594,
+    "output": "validator-v2-output.log",
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1281",
+      "  Governed code files in diff: 3"
+    ]
+  },
+  "diffCheck": {
+    "utc": "2026-10-05T15:58:31.371134+00:00",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "elapsedSeconds": 0.828,
+    "output": "git-diff-check-v2-output.log",
+    "summary": []
+  },
+  "queue": {
+    "utc": "2026-10-05T15:58:10.417085+00:00",
+    "records": 228,
+    "open": 67,
+    "classes": {
+      "REUSE": 53,
+      "TRIGGER": 14,
+      "P0": 0,
+      "DEP": 0,
+      "ONE": 0
+    },
+    "notARequiredTestCount": true
+  },
+  "recoveryHeads": {
+    "docs/ai/CURRENT-AUTHORITY.md": {
+      "sha256": "3ECEAE387D293A6C9800B2E4275DF99DFABFDD24DF0D4ACECACAE9F5150F5567",
+      "latestHeadContainsCloseEvidence": true
+    },
+    "docs/ai/STATE.md": {
+      "sha256": "C25CA0E27A102B8B3CB4CE734B539F19FBA0D90ABC3A611B3E629A1F00940BA0",
+      "latestHeadContainsCloseEvidence": true
+    },
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": {
+      "sha256": "67E35F4F6957D478E0E686641A434F6DDB78D5667911F0C62D0EE0C34DAAC8BB",
+      "latestHeadContainsCloseEvidence": true
+    },
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md": {
+      "sha256": "57E1FA73DED29678A59988DD1C7385D7F0F47ADB2B71550DD3CDFB0A9AB5EB26",
+      "latestHeadContainsCloseEvidence": true
+    },
+    "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md": {
+      "sha256": "475E23915844FB1106FFDD49D2F012F141B90F3F09902EE3C3185439646A12B3",
+      "latestHeadContainsCloseEvidence": true
+    }
+  },
+  "finalDocuments": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "3ECEAE387D293A6C9800B2E4275DF99DFABFDD24DF0D4ACECACAE9F5150F5567"
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "C25CA0E27A102B8B3CB4CE734B539F19FBA0D90ABC3A611B3E629A1F00940BA0"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "67E35F4F6957D478E0E686641A434F6DDB78D5667911F0C62D0EE0C34DAAC8BB"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "57E1FA73DED29678A59988DD1C7385D7F0F47ADB2B71550DD3CDFB0A9AB5EB26"
+    },
+    {
+      "path": "docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "sha256": "475E23915844FB1106FFDD49D2F012F141B90F3F09902EE3C3185439646A12B3"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "65D871FE98CECDE41B5A0C238AED3D2A15A1F4AF6BFBF2B7F546BDC7B9050E6F"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "EBAD659136AC5DD1C04EE6BDB159EAC174EF87B96F4C7CAA689F23008BDC3069"
+    }
+  ],
+  "goalComplete": false,
+  "wholeBattleParityClaim": false
+}

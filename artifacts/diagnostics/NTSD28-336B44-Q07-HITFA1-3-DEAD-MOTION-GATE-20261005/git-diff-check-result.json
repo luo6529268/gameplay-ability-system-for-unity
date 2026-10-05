@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "utc": "2026-10-05T15:08:07.236947+00:00",
+  "elapsedSeconds": 1.8290000000270084,
+  "exitCode": 0,
+  "outputFile": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\git-diff-check-output.log",
+  "outputTail": "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CURRENT-AUTHORITY.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it\n"
+}

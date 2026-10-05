@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-05T14:14:56.139101+00:00",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa1KeepsNativeVerticalBranchAndPhase",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa1VerticalPhaseSurvivesOneFullDriverTick",
+    "NTSD.Test.Editor.NTSD28Q07HitFa5FullDriverEditorTests.ExistingLiveHitFaRepresentativeRoutingRemainsValid"
+  ],
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d4c4cc76de7342d7a877c919abd3baae",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

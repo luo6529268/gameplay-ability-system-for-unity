@@ -1,0 +1,177 @@
+{
+  "utc": "2026-10-05T14:01:14.071582+00:00",
+  "scripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "sha256": "6E69BB03AD26A2F1703772E808450C1BCD29234364764889EE88E2B8B91B87BC",
+      "bytes": 291118,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "E761B3D3D43C33879E935F01BFF770867D777AFBA5AA53CD3CBB9531104673C9",
+      "bytes": 73523,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "gitStatus": ""
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "82F79E8ADEA46F95A231C8806B80CAF910A9B941E54B4B8DC2009E47901E5D04",
+      "bytes": 347298,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "370ED819C03DEE9B8F37DD029617C7600EDCB0A47B6DC0B7B59CCB146FAB16C8",
+      "bytes": 1497946,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\STATE.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "026248DDB93AEB7473A8D7BBD537FB507945B9B03A7DC3E371BF62160C0EF055",
+      "bytes": 1432342,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "DA1992C58C68918ECAADD46CA4631D9D76008B7C3011FC7D8183B2DB3442AAA9",
+      "bytes": 339413,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "sha256": "12CADEB20EEFF72A7E6BC83E0067E7501DF9604A409ADBF07F74BAA281AC13CE",
+      "bytes": 24244,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "E917D36BF44A64CC6C8B933E2DE7D24CA5DC604259856003F301FBE733878E5F",
+      "bytes": 611165,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "9E0AA33790CDC24FBD4D46A7FDCF3ADB96BB061DB08E9DCD1255F93AB8089029",
+      "bytes": 11798,
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "gitStatus": ""
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "sha256": "5A06544BDA4F60D569BA494AC2425E08694AAC29B90C16144A470CFCC2896EDE"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "sha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761"
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "c/sai/a/ink.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\sai\\a\\ink.dat",
+      "formalSha256": "BFD40B2B4BB3FC3CD173113535321FFC128F8C642AD584D498FB56D0EC5713D9",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\a\\ink.dat",
+      "stagedSha256": "BFD40B2B4BB3FC3CD173113535321FFC128F8C642AD584D498FB56D0EC5713D9"
+    },
+    {
+      "relativePath": "c/sai/sai.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\sai\\sai.dat",
+      "formalSha256": "1D8A8EE87CCE86B09F839F02358CB702488195674DB2883F484BD0968BEDAC01",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\sai\\sai.dat",
+      "stagedSha256": "1D8A8EE87CCE86B09F839F02358CB702488195674DB2883F484BD0968BEDAC01"
+    },
+    {
+      "relativePath": "c/nar/a/atk.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\a\\atk.dat",
+      "formalSha256": "881060DBA197C8FD39B1F089BE0FE89D30CA3D0AABDA37402B5DFAD90918CF99",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\a\\atk.dat",
+      "stagedSha256": "881060DBA197C8FD39B1F089BE0FE89D30CA3D0AABDA37402B5DFAD90918CF99"
+    },
+    {
+      "relativePath": "custom/1genma/a/wind.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\a\\wind.dat",
+      "formalSha256": "99C04D29960B4873BC5BD4001CDDC855810FD76BF1F530ED220F7906AA05E5ED",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\wind.dat",
+      "stagedSha256": "99C04D29960B4873BC5BD4001CDDC855810FD76BF1F530ED220F7906AA05E5ED"
+    },
+    {
+      "relativePath": "data/data.txt",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\data\\data.txt",
+      "formalSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+      "stagedSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0"
+    },
+    {
+      "relativePath": "w/e.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\w\\e.dat",
+      "formalSha256": "178D2653E2BC4AFFF7B933DA2F28A87ECD6217CBD4F99291EA1B19F300704274",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\w\\e.dat",
+      "stagedSha256": "984A0F8D072F0D23A15CE18A740A15711C9D5E00E452D19C08911DCECBDBE337"
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "formalSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A",
+      "stagedSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A"
+    },
+    {
+      "relativePath": "custom/1genma/genma.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\genma.dat",
+      "stagedPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genma.dat",
+      "formalSha256": "AB8F579FB2729750F76D43867164D635F7CF9542EE45B762B70B3D4AA8F7E5E3",
+      "stagedSha256": "AB8F579FB2729750F76D43867164D635F7CF9542EE45B762B70B3D4AA8F7E5E3"
+    }
+  ]
+}

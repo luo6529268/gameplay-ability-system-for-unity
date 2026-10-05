@@ -1,0 +1,10 @@
+{
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\native_cached_type_driver_witness-v2.exe",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime"
+  ],
+  "utc": "2026-10-05T15:44:20.596913+00:00",
+  "exitCode": 0,
+  "stdout": "{\"completedTick\":0,\"sourceX\":500,\"sourceIntegerX\":500,\"sourceY\":-100,\"integerY\":-100,\"sourceZ\":600,\"vx\":0,\"vy\":0,\"vz\":0,\"action\":0,\"counter\":0,\"target\":50,\"hp\":500}\n{\"completedTick\":1,\"sourceX\":500.85000000000002,\"sourceIntegerX\":500,\"sourceY\":-100,\"integerY\":-100,\"sourceZ\":600,\"vx\":0.84999999999999998,\"vy\":0,\"vz\":0,\"action\":0,\"counter\":1,\"target\":50,\"hp\":493}\n",
+  "stderr": ""
+}

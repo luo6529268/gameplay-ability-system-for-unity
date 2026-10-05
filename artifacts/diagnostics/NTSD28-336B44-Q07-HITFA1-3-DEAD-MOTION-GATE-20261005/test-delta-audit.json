@@ -1,0 +1,16 @@
+{
+  "changes": [
+    {
+      "kind": "insert",
+      "oldStart": 512,
+      "oldLines": 0,
+      "newStart": 512,
+      "newLines": 200
+    }
+  ],
+  "newMethods": [
+    "IndexedDeadHitFa3MotionSurvivesOneFullDriverTick",
+    "IndexedDeadHitFa1Or3PreservesNativeMotion"
+  ],
+  "existingLinesUnchanged": true
+}

@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-05T15:34:04.819917+00:00",
+  "operation": "NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001-EDIT-20261005",
+  "reason": "append exact external-build correction, close file operation and sync recovery heads; preserve prior facts",
+  "authorization": "active user battle alignment goal and pre-recorded package metadata scope",
+  "files": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\REPORT.md",
+      "sha256": "294D57752DD66D55CCDBE53AAA62E8B6544D765DB5F25E5329D5EF2BE99B92B3",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\0-REPORT.md"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md",
+      "sha256": "C19B41AFDBA60B2D9EF8F8FF5DFD2C41146CDDFA821EEAA42898874673BAB501",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\1-NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001-EDIT-20261005\\RECORD.md",
+      "sha256": "A7471A2D0523A1E6D0C2EC4D751621272DAAC1E905B5D4FDCAA8ADB3694AC6D6",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\2-RECORD.md"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "B3CB1A5C2C4563A95C88A735E507C91A4A7B513BEFC7F082894A2B798D55E160",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\3-INDEX.md"
+    },
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "BD4D65F2F670652927C6D9370070EEF05A0A2509BBA48CD20737248F06200F03",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\4-CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "01675357605D76FE61E405ECEC7A58279BB7B4992372BAE63F822305C6BEF8E3",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\5-STATE.md"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "798D6A9C04BF93C7BE6ABBCCB77B3DDD75C6F710CE2AB2F09C6C05CFEAFD28CF",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\6-CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "A980AC0913EA8FC6E0C9AF79E5FDFE207E81FE1A2130849862F300D04ABCF2E4",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\audit-close-before\\7-ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    }
+  ]
+}

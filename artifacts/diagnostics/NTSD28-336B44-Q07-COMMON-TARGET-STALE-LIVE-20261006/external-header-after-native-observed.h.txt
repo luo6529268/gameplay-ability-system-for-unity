@@ -1,0 +1,1501 @@
+#pragma once
+
+#include "ntsd28/dat_document.h"
+#include "ntsd28/collision_geometry.h"
+#include "ntsd28/combat_records.h"
+#include "ntsd28/damage_resolution.h"
+#include "ntsd28/defense_resolution.h"
+#include "ntsd28/armor_resolution.h"
+#include "ntsd28/engine_profile.h"
+#include "ntsd28/frame_machine.h"
+#include "ntsd28/frame_motion.h"
+#include "ntsd28/fusion_catalog.h"
+#include "ntsd28/hit_candidates.h"
+#include "ntsd28/hit_response.h"
+#include "ntsd28/input_state.h"
+#include "ntsd28/native_random.h"
+#include "ntsd28/object_catalog.h"
+#include "ntsd28/object_spawning.h"
+#include "ntsd28/physics_integrator.h"
+#include "ntsd28/system_battle_tables.h"
+
+#include <array>
+#include <cstddef>
+#include <cstdint>
+#include <memory>
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+namespace ntsd28 {
+
+struct WorldSparkEvent28 {
+    std::size_t host_slot = EngineProfile28::maximum_slots;
+    int native_spark_id = -1;
+    int world_x = 0;
+    int world_y = 0;
+};
+
+// Native knockout bookkeeping emitted immediately before a lethal HP
+// subtraction.  FUN_0045C2F0/FUN_0045C320 increment Entity28+0x358 on the
+// credited entity and forward the victim/source slot pair to FUN_0045C070.
+struct WorldKnockoutEvent28 {
+    std::uint64_t sequence = 0;
+    // FUN_0045C070 writes a 0x20-byte native result cell.  The first five
+    // dwords are battle time, source definition type, the source followed
+    // through four +0x354 owners, source slot, and victim slot.
+    std::uint64_t battle_time_ticks = 0;
+    int source_object_type = -1;
+    std::size_t four_owner_slot = EngineProfile28::maximum_slots;
+    std::size_t victim_slot = EngineProfile28::maximum_slots;
+    std::size_t source_slot = EngineProfile28::maximum_slots;
+    // Wrapper-specific +0x358 owner.  This is intentionally separate from
+    // four_owner_slot: ordinary damage resolves two owners before entering
+    // FUN_0045C3A0, while FUN_0045C070 independently follows four for its
+    // persistent result record.
+    std::size_t credit_slot = EngineProfile28::maximum_slots;
+};
+
+// War's native result counters are keyed by the victim's participant class
+// (+0x344), not by the transient battle-group field (+0x364).  They are kept
+// separate from the generic knockout event stream because the native damage
+// writer can update damage even when no owner/credit record is available.
+struct NativeWarStatistics28 {
+    std::array<int, 2> deaths{};
+    std::array<int, 2> damage_received{};
+};
+
+struct EntityState28 {
+    std::size_t slot = 0;
+    // Entity28+0x000 is a mutable locomotion-frame counter/control slot,
+    // distinct from the physical index used by BattleWorld28::slots_. Every
+    // walk/run frame selector shares it; kind-9 can also overwrite it with
+    // the attacker's physical slot on the target object.
+    int control_slot_000 = 0;
+    int object_id = -1;
+    int object_type = -1;
+    // Presentation-only stable lifetime identity.  Native slot reuse can
+    // publish the same OID in consecutive ticks; a renderer must not
+    // interpolate those two different objects into a ghost trajectory.
+    // This counter never participates in gameplay, RNG, collision or trace
+    // authority.
+    std::uint64_t presentation_generation = 0;
+    std::shared_ptr<const DatDocument> definition;
+    FrameCursor28 frame;
+    // Core-only orchestration latch.  Native opoints are emitted when a frame
+    // is entered, including a frame reached by the frame-state pass near the
+    // end of the same logic cycle.  Comparing this latch with frame.action
+    // distinguishes a fresh entry from an ordinary wait tick without relying
+    // on frame_counter == 0 (which is also true after several native routes).
+    int opoint_action_latch = -1;
+    // Core-only mirror of Entity28+0x74 for the frame-sound producer at
+    // 0x004238D0.  A sound list is consumed once when an action is entered,
+    // including both an action selected before FUN_0040D000 and a wait/next
+    // destination reached by that same call.
+    int sound_action_latch = -1;
+    Position28 position;
+    Motion28 motion;
+    CollisionBlocks28 collision;
+    int current_hp = 0;
+    int effective_max_hp = 0;
+    int base_max_hp = 0;
+    // Native Entity+0x33C. Tournament persists this separately from HP/OID
+    // across matches; its product meaning is not inferred from that use.
+    // Ordinary locked fixtures retain the existing -1 default.
+    int native_extra_33c = -1;
+    int current_mp = 0;
+    int base_max_mp = 0;
+    // Native character-life fields used by FUN_00451726 and the state-14
+    // branch in FUN_0041C3D0.  A value greater than one at +0x30C makes the
+    // combatant count as alive for result grouping even while HP is zero;
+    // the later state-14 pass decrements it and recreates the combatant.
+    int revive_lives_30c = 1;
+    int revive_next_lives_310 = 0;
+    int revive_next_hp_314 = 0;
+    int revive_visual_id_184 = 0;
+    int revive_visual_runtime_180 = 0;
+    int revive_visual_runtime_318 = 0;
+    int input_hp_consumed_total = 0;  // Entity28 +0x34C
+    int input_mp_consumed_total = 0;  // Entity28 +0x350
+    int input_score_total_348 = 0;    // Entity28 +0x348
+    int knockout_count_358 = 0;       // Entity28 +0x358
+    // Entity28 +0x340.  Positive values scale incoming native damage as
+    // `damage * 100 / value`; zero or negative leaves damage unchanged.
+    int incoming_damage_scale_340 = 0;
+    // FUN_0044FA20 applies a mode-wide percentage after loading stats.defend
+    // into +0x340. Locked local/versus globals are 100, but retaining this
+    // field makes the recovered multiplication order explicit and testable.
+    int mode_damage_scale_percent = 100;
+    // FUN_00451330 writes interpolation steps from positive itr.injury;
+    // FUN_00414BC0 advances the four HUD-facing mirrors once per logic tick.
+    int display_score_1f0 = 0;
+    int display_score_step_1f4 = 0;
+    int display_damage_total_1f8 = 0;
+    int display_damage_step_1fc = 0;
+    int display_current_hp_200 = 0;
+    int display_current_hp_step_204 = 0;
+    int display_effective_max_hp_208 = 0;
+    int display_effective_max_hp_step_20c = 0;
+    // Active 0x100-byte battle/mode record +0x30. FUN_00450260 uses this only
+    // when definition stats.recmp (+0x44) is not positive.
+    // The identity-attested ordinary local-battle record is zero. A positive
+    // value remains available to explicit alternate Scenario28 records.
+    int input_mode_cost_multiplier_30 = 0;
+    // FUN_004503C5 decrements every positive dword in the contiguous native
+    // Entity28+0x198..+0x1BC timer bank once per Tick, outside the positive-HP
+    // status gate. Keep fields whose consumers are not yet named explicitly
+    // offset-labelled instead of inventing gameplay semantics for them.
+    int input_double_cost = 0;        // Entity28+0x19C; itr.facing producer
+    // FUN_00451330 reads two independent hit-resource fields which must not
+    // be conflated with the +0x19C input-cost multiplier above. A positive
+    // +0x1A0 doubles the injury used by the mode-record MP reward, while an
+    // attacker value of one at +0x15C suppresses that reward entirely.
+    int hit_resource_injury_double_1a0 = 0;
+    // Entity28+0x1A4. FUN_00414EE0 adds one to the three-phase MP change while
+    // positive; FUN_0044E055 quest-table kind 8 is the recovered writer.
+    int mp_regen_bonus_timer_1a4 = 0;
+    int hit_resource_suppression_15c = 0;
+    // FUN_00416480 status destinations.  Names retain both the DAT producer
+    // and native offset until every downstream consumer has been recovered.
+    int poison_timer_120 = 0;
+    int poison_type_124 = 0;
+    int poison_strength_128 = 0;
+    int weak_timer_12c = 0;
+    int delay_timer_134 = 0;
+    int join_timer_148 = 0;
+    // Native Entity28+0x0E0/+0x0E4 healing counters.  +0x0E0 uses the
+    // encoded range 1001..1999 and is also held at 1100 while the current
+    // frame state is 1700.  +0x0E4 is the ordinary finite recovery counter
+    // produced by the type-4 support-object branch.
+    int encoded_heal_timer_e0 = 0;
+    int heal_timer_e4 = 0;
+    // FUN_00416700/FUN_004503C5 temporary join identity override.  The
+    // native identity/group value lives at Entity28+0x364 and is represented
+    // by battle_group in this core.
+    int join_override_active_170 = 0;
+    int join_original_battle_group_174 = 0;
+    int bound_state_198 = 0;
+    // FUN_00450C40 returns the active global record whose +0x20 state is
+    // checked by FUN_00412E80 before applying the bound jump-edge gate.
+    // States 1 and 3 bypass that gate; a missing record behaves as zero.
+    int input_global_record_state_20 = 0;
+    int status_dx_1c0 = 0;
+    int status_dy_1c4 = 0;
+    int status_dz_1c8 = 0;
+    int status_gain_1cc = 0;
+    // FUN_0045A600 arms the state-12/18 hard-landing motion override.  The
+    // same +0x1C0..+0x1CC storage is also written by FUN_00416480 statuses,
+    // so the producer order is intentionally observable: a qualifying hit
+    // overwrites +0x1CC with one after the generic gain status was applied.
+    int status_hit_facing_1d0 = 0;
+    int status_picked_action_1d4 = 191;
+    int status_picking_action_1d8 = 185;
+    // FUN_00459900 doubles the definition-driven effective-max-HP and HP
+    // regeneration branches while these native entity flags are positive.
+    // Their producers are retained as explicit runtime state until the
+    // surrounding form/status branches are completely named.
+    int effective_max_regen_double_1a8 = 0;
+    int hp_regen_double_1ac = 0;
+    // Entity28+0x1B0. Positive values make FUN_00459690 restore current and
+    // effective HP to base HP and clear +0x34C/+0x358; quest kind 11 writes it.
+    int full_restore_timer_1b0 = 0;
+    // Entity28+0x1B4. FUN_0044E055 quest-table kind 12 writes an integer
+    // duration. A positive value waives input MP cost until the shared native
+    // timer bank expires it; this must not be modeled as a permanent bool.
+    int input_cost_waived = 0;
+    int interaction_state = 0;
+    // Entity28+0x1B8. FUN_00451000 derives positive values from the
+    // 7001..7999 setup-state family; FUN_00450470 treats every positive
+    // value as a CPU participant and returns the literal "Com" nameplate.
+    int native_computer_state_1b8 = 0;
+    // Entity28+0x1BC belongs to the same exact FUN_004503C5 timer bank. No
+    // locked-corpus producer or consumer has yet been recovered.
+    int native_timer_1bc = 0;
+    // Native renderer FUN_0041A5A0 reads Entity28+0x008 for the four-phase
+    // visibility/shadow gate and Entity28+0x10C as the shadow Z offset.
+    int render_phase_008 = 0;
+    // Internal scheduling marker: FUN_0040D000 decrements +0x008 before it
+    // can arm the state-14 exit value 15.  The independent coordinator keeps
+    // the shared timer pass later in the Tick, so this prevents that newly
+    // armed value from being decremented to 14 in the same Tick.
+    bool render_phase_transition_armed_this_tick = false;
+    int render_shadow_offset_10c = 0;
+    // Entity28+0x35C. The native kind-2 relation helpers increment this
+    // counter only when the holder did not already own a +0x98 relation.
+    // It is kept separate from slot links because later relation cleanup
+    // and definition switching can observe the original count.
+    int interaction_relation_count_35c = 0;
+    // Entity28 +0x130, checked by FUN_0040D900 before changing action.  This
+    // is independent from the relation state at Entity28 +0x98.
+    int input_action_lock_130 = 0;
+    // Entity28+0x144. FUN_0040D900 mirrors each normally accepted input
+    // action here together with +0x70. FUN_00412E80 reuses the same dword as
+    // a countdown only while DAT_004A9F6C is nonzero; the locked 330-DAT
+    // local-battle corpus has no 3,000,000..3,999,999 state producer.
+    int input_last_action_144 = 0;
+    // FUN_00412E80 input-proxy producer fields.  When +0x14C is positive and
+    // +0x17C is nonzero, +0x178 names the source entity slot.
+    int input_proxy_counter_14c = 0;
+    int input_proxy_source_slot_178 = -1;
+    int input_proxy_enabled_17c = 0;
+    // Entity28 +0x138 and byte indices +0x13C..+0x142.  Positive state
+    // remaps the seven sampled current buttons in offline/local mode.
+    int input_remap_state_138 = 0;
+    std::array<unsigned char, input_key_count28> input_remap_indices_13c{{
+        0, 1, 2, 3, 4, 5, 6,
+    }};
+    // Original ObjectDefinition28 +0x44C, parsed from <bmp_begin> use_ai:.
+    // Native helpers use it as an object-id alias for AI and character
+    // special cases, falling back to ObjectDefinition28+0x6F4 object_id.
+    // The shipped 330-object corpus omits the field, so -1 means no alias.
+    int ai_profile_object_id = -1;
+    // Original ObjectDefinition28 +0x7B8, parsed from <bmp_begin> drop:.
+    // Values 4/5 alter the native held-object branch.  The locked corpus does
+    // not declare the field, but edited 2.8 DATs must retain the producer.
+    int definition_drop_mode = 0;
+    // Original Entity28 +0x194/+0x324/+0x328/+0x338 transformation fields
+    // which are also consumed by the native hit_ja special path. FUN_004064D0
+    // and the mode-specific FUN_0041C3D0 branches own definition switching,
+    // while FUN_00417070/FUN_00417155 set/clear +0x194 and initialize/clear
+    // +0x328. They remain explicit instead of being folded into the generic
+    // interaction state so missing transformation integration is visible.
+    int input_special_gate_194 = 0;
+    // Active 0x100-byte battle/mode record +0xB8.  FUN_00446D70 uses this
+    // as the third cost-failure fallback after Entity28+0x194 and
+    // definition stats.caughtact (+0x5C).
+    int input_mode_fallback_action_b8 = 0;
+    int input_linked_definition_id = -1;  // +0x324 saved definition object id
+    int input_special_gate_328 = 0;       // transformation phase/state
+    int input_special_timer_338 = 0;      // transformation countdown
+    // FUN_004064D0 fusion bookkeeping.  The native offsets are kept in the
+    // names because +0x190 is presentation-facing while +0x32C..+0x334 are
+    // the exact partner/original-definition restoration tuple.
+    int fusion_display_timer_190 = 0;
+    int fusion_partner_slot_32c = -1;
+    int fusion_primary_definition_id_330 = -1;
+    int fusion_partner_definition_id_334 = -1;
+    // Entity28+0x0EA. itr.kind=6 writes three; FUN_0040D000 decrements the
+    // positive byte once per surviving-entity state pass. FUN_00412E80 uses
+    // it to alter one input-action family while active.
+    int kind6_input_timer_0ea = 0;
+    // DAT_004A1160 battle-mode context. This is intentionally separate from
+    // the process-wide LF2.NET feature gate at DAT_004A8428.
+    int input_battle_mode_gate = 0;
+    // DAT_0049D034. Besides the ordinary hit-resource tail, the state-5
+    // action-90 input branch uses this global to choose direct action write
+    // versus FUN_00450260-adjusted MP consumption.
+    bool input_local_resource_enabled_49d034 = true;
+    // DAT_004A8428, toggled by the native LF2.NET key sequence. The locked
+    // image initializes it to zero; GameSession projects the process-wide
+    // value to every active entity before input routing.
+    bool feature_gate_4a8428 = false;
+    // Entity28+0x0DC is not a separate entity member: it is byte eight of
+    // EntityInputState28::combo_state (+0x0D4..+0x0DD), i.e. hit_ja.  Native
+    // consumers such as FUN_0044F305 must read input.combo_state[8] directly
+    // so the combo recognizer, AI producer, and rowing redirect share one
+    // authoritative byte.
+    // Entity28 +0x320.  This is shared by the native 182/188 input redirect
+    // and state-12 physics override.  It is not the collision Y reference at
+    // Entity28 +0x0F0.
+    int environment_state_320 = 0;
+    // FUN_0045C2B0 records the thrown entity's own slot at Entity28+0x160
+    // when a positive cpoint.throwinjury arms +0x320.  Landing damage
+    // attribution separately follows the preserved catch-source relation at
+    // +0x90 and then the native +0x354 owner chain.
+    int environment_source_slot_160 = -1;
+    int linked_child_slot = 0;
+    int linked_parent_slot = 0;
+    // FUN_0042E100 kind-1/kind-3 paired catch history. These are native
+    // Entity28 +0x8C (catch target), +0x90 (catch source), and +0x94
+    // (relation timeout) and are independent from +0x98/+0x9C/+0xA0. Native
+    // FUN_00418C30 treats them as active only while current actions expose a
+    // reciprocal kind-1/kind-2 cpoint pair; dormant values persist and a new
+    // confirmed catch overwrites them.
+    // Kind 10/11/17 impact handling reuses +0x90 as 0x2000 plus an owner
+    // slot; consumers must decode that form before following the owner chain.
+    int catch_target_slot_8c = -1;
+    int catch_source_slot_90 = -1;
+    // Entity28+0x92 is the high word sharing the native +0x90 dword.  The
+    // kind-4 candidate producer increments it while +0x320 is positive;
+    // ordinary damage then uses low word +0x90 as the source slot and
+    // decrements this count after attribution.  It is split out here so the
+    // standalone model cannot accidentally corrupt the catch-source slot.
+    int kind4_source_count_92 = 0;
+    int catch_timeout_94 = 0;
+    double catch_anchor_x_58 = 0.0;
+    double catch_anchor_y_60 = 0.0;
+    // Entity28+0x164, written with the physical attacker slot by the native
+    // impact consumer independently of the encoded attribution in +0x90.
+    int impact_source_slot_164 = -1;
+    // Entity28+0x31C. FUN_00406A40 copies ObjectDefinition28+0x90 here;
+    // the DAT parser maps that source to <bmp_begin> weapon_hp. Opoint.hp
+    // may override it for spawned objects, and FUN_0040DA30 subtracts
+    // weapon_drop_hurt (+0x94) on eligible object landings.
+    int weapon_hp_31c = 0;
+    // Entity28+0x344. The ordinary native stage-settlement path uses a
+    // positive value to keep OID 122/123 inside the 100-pixel horizontal
+    // inset instead of culling them as ordinary grounded objects.
+    int participant_class_344 = 0;
+    int runtime_state_code = 0;
+    int attacker_rest = 0;
+    HitImpulseAccumulator28 pending_hit_impulse;
+    // Entity28 +0x0F0/+0x0F4 are reset before FUN_00419380's pair pass.
+    // FUN_00459DA0 operation 30 can arm them with a linked platform's
+    // vertical reference and physical source slot; func_0x0045A130 consumes
+    // the pair during the following frame-motion pass.
+    int collision_y_reference = 0;
+    int platform_source_slot_f4 = 0;
+    // Entity28+0x2F4.  Its broader scene/link meaning is still address-named,
+    // but both ordinary damage branches prove that KO (+0x358) and score
+    // (+0x348) attribution are enabled only at the native sentinel -1.
+    // Locked ordinary local combatants start at that sentinel.
+    int ordinary_credit_gate_2f4 = -1;
+    int hit_reaction_timer = 0;     // Entity28 +0x0B0; native values include 20/40/60/80
+    int bdefend_accumulator = 0;     // Entity28 +0x0B8
+    int runtime_armor_hp = 0;        // Entity28 +0x118; loaded from Armor28.hp (+0x48)
+    int armor_recovery_timer = -1;   // Entity28 +0x11C; -1 disables, positive waits to reload
+    int motion_hold_timer = 0;       // Entity28 +0x0B4; positive/negative values approach zero
+    // Entity28+0x0EB. FUN_0042E100 marks type-1/3/4/6 objects after special
+    // relation hits and suppresses later character-target processing for an
+    // already marked attacker during this native tick; the active-object
+    // frame tail clears it before the next tick's hit scan.
+    bool special_hit_latch_0eb = false;
+    std::unordered_map<std::size_t, std::uint8_t> victim_rest_by_attacker;
+    HitCandidateBuffer28 hit_candidates;
+    // Ordinary mode/<combo> producer state from FUN_004595A0. These are
+    // deliberately separate from input.combo_state: +0x1E0 is the native
+    // displayed hit count and +0x1E4 is the last producer tick. Both the
+    // ordinary hit producer and state-9/caughtact continuation update this
+    // shared native state.
+    int combo_hit_count_1e0 = 0;
+    std::uint64_t combo_hit_last_tick_1e4 = 0;
+    int owner_slot = -1;
+    int battle_group = 0;
+    // FUN_00417F80 writes Entity28+0x2F8 with the holder slot when a
+    // type-1/4/6 held object is released. FUN_00406BA0 follows that slot and
+    // excludes its battle group while selecting a target for non-character
+    // frame hit_d behaviour. This is independent from +0x354 owner/credit.
+    int object_ai_excluded_group_source_slot_2f8 = -1;
+    // FUN_00406BA0's non-character target cache. FUN_004061D0 initializes
+    // Entity28+0x3F8 to -1; the common hit_d path retains a valid hostile
+    // target or replaces it with the nearest eligible type-0 combatant.
+    int object_ai_target_slot_3f8 = -1;
+    // FUN_004094B0 scripted AI target branch. +0x3FC <= -1000 disables the
+    // branch; the battle coordinator writes both coordinates for its mode
+    // scripts and resets them after reaching the 90x90 target region.
+    int ai_target_x_3fc = -1000;
+    int ai_target_z_400 = -1000;
+    int ai_behavior_flag_404 = 0;
+    int ai_target_slot_360 = -1;
+    int ai_force_attack_3e8 = 0;
+    int ai_force_attack_3ec = 0;
+    int ai_force_attack_3f0 = 0;
+    int ai_force_attack_3f4 = 0;
+    // DAT_0049F61C in the recovered branch is the mode AI level multiplied
+    // by three before the +3 random bound is applied.
+    int ai_level_scaled_61c = 0;
+    // DAT_0049F618 is the same base AI level multiplied by five. It feeds
+    // the post-target 0x14 synchronized-RNG bound after adding eight.
+    int ai_level_scaled_618 = 0;
+    int ai_level_scaled_614 = 0;
+    int ai_level_scaled_610 = 0;
+    // Retained scenario/debug mirror. Native AI production code derives the
+    // actual state from the current definition/frame table and never trusts
+    // this mirror as gameplay state.
+    int frame_state_code = 0;
+    EntityInputState28 input;
+    bool lifecycle_resolution_pending = false;
+    int lifecycle_code = 0;
+    std::array<WorldSparkEvent28, 10> spark_events{};
+    std::size_t spark_event_count = 0;
+};
+
+struct SpawnRequest28 {
+    int object_id = -1;
+    int object_type = -1;
+    std::shared_ptr<const DatDocument> definition;
+    int initial_action = 0;
+    Position28 position;
+    int hp = 0;
+    int mp = 0;
+    int owner_slot = -1;
+    int battle_group = 0;
+    int participant_class_344 = 0;
+};
+
+struct WorldMutationResult28 {
+    bool success = false;
+    std::size_t slot = EngineProfile28::maximum_slots;
+    std::string message;
+};
+
+enum class WorldAudioEventSource28 {
+    builtin_channel,
+    frame_sound,
+    definition_weapon_hit,
+    definition_weapon_drop,
+    definition_weapon_broken,
+    mode_sound,
+    // FUN_004378C0 result timer value one calls FUN_004020D0 and
+    // FUN_00401A30 before drawing the story result. The host also clears the
+    // selected looping BGM path; this event stops outstanding effect voices.
+    story_result_stop_all,
+};
+
+struct WorldAudioEvent28 {
+    WorldAudioEventSource28 source = WorldAudioEventSource28::builtin_channel;
+    int world_x = 0;
+    int native_channel = -1;
+    std::string resource_path;
+};
+
+struct WorldFrameEvent28 {
+    std::uint64_t sequence = 0;
+    std::size_t slot = 0;
+    int object_id = -1;
+    FrameStepResult28 frame;
+    // Native declaration order from Frame28+0x1A0/+0x1A4.  One frame pass
+    // can expose two entries: a pending action at its head and a wait/next
+    // destination reached before it returns.
+    std::vector<WorldAudioEvent28> audio_events;
+};
+
+struct WorldMotionResult28 {
+    bool success = false;
+    std::size_t slot = 0;
+    FrameMotionResult28 motion;
+    bool linked_platform_motion_applied = false;
+    bool positional_motion_applied = false;
+    int linked_source_slot = -1;
+    std::string message;
+};
+
+struct WorldTeleportStateResult28 {
+    bool applicable = false;
+    bool target_found = false;
+    bool position_changed = false;
+    int state_code = 0;
+    std::size_t source_slot = EngineProfile28::maximum_slots;
+    std::size_t target_slot = EngineProfile28::maximum_slots;
+    int horizontal_offset = 0;
+};
+
+enum class WorldRevivalStatus28 {
+    revived,
+    continuation_armed,
+    transient_removed,
+    deferred,
+};
+
+struct WorldRevivalEvent28 {
+    std::size_t slot = EngineProfile28::maximum_slots;
+    WorldRevivalStatus28 status = WorldRevivalStatus28::deferred;
+    int lives_before = 0;
+    int lives_after = 0;
+    int selected_action = -1;
+    int presentation_object_id = -1;
+    std::size_t presentation_slot = EngineProfile28::maximum_slots;
+    bool presentation_spawned = false;
+    std::string message;
+};
+
+struct WorldRevivalPass28 {
+    bool success = true;
+    std::size_t revived = 0;
+    std::size_t continuations = 0;
+    std::size_t removed = 0;
+    std::size_t deferred = 0;
+    std::vector<WorldRevivalEvent28> events;
+};
+
+struct WorldPhysicsResult28 {
+    bool success = false;
+    std::size_t slot = 0;
+    PhysicsStepResult28 physics;
+    bool environment_damage_applied = false;
+    int environment_damage = 0;
+    std::string message;
+    std::vector<WorldAudioEvent28> audio_events;
+};
+
+struct WorldCollisionSnapshot28 {
+    bool success = false;
+    std::size_t slot = 0;
+    int frame_id = -1;
+    FrameBoxes28 boxes;
+    std::string message;
+};
+
+struct WorldHitCandidatePass28 {
+    bool success = true;
+    std::size_t active_pairs = 0;
+    std::size_t directed_pairs = 0;
+    std::size_t relation_rest_decrements = 0;
+    std::size_t relation_rest_blocks = 0;
+    std::size_t attacker_rest_blocks = 0;
+    std::size_t candidates_appended = 0;
+    std::size_t capacity_exhaustions = 0;
+    std::size_t pre_candidate_eligibility_rejections = 0;
+    std::size_t kind_table_rejections = 0;
+    std::size_t direct_effect_rejections = 0;
+    std::size_t alternate_depth_projections = 0;
+    std::size_t kind2_relation_gate_rejections = 0;
+    std::size_t platform_interactions_scanned = 0;
+    std::size_t platform_links_armed = 0;
+    std::size_t unsupported_platform_operations = 0;
+    std::vector<std::string> diagnostics;
+};
+
+struct WorldHitRestResult28 {
+    bool success = false;
+    std::size_t attacker_slot = 0;
+    std::size_t target_slot = 0;
+    int attacker_rest = 0;
+    int victim_rest = 0;
+    std::string message;
+};
+
+enum class WorldStandardHitStatus28 {
+    applied,
+    rejected,
+    unsupported,
+};
+
+enum class WorldHitEligibilityStatus28 {
+    eligible,
+    rejected,
+    unresolved,
+};
+
+struct WorldHitEligibility28 {
+    WorldHitEligibilityStatus28 status = WorldHitEligibilityStatus28::rejected;
+    std::size_t attacker_slot = 0;
+    std::size_t target_slot = 0;
+    std::size_t candidate_index = 0;
+    std::optional<InteractionRecord28> interaction;
+    bool terminates_attacker_invocation = false;
+    // FUN_00417400 scans data/system.dat <freeze_column> before the
+    // ordinary group/owner rejection block.  Keep the exact bypass visible
+    // to tests and traces instead of folding it into a generic "eligible".
+    bool freeze_column_group_override = false;
+    std::string message;
+};
+
+struct WorldUnarmoredReaction28 {
+    bool resolved = false;
+    int timer_before = 0;
+    int fall_added = 0;
+    int timer_after = 0;
+    int selected_action = -1;
+    bool forced_by_lethal_hit = false;
+    bool forced_by_frame_state = false;
+    bool forced_by_object_type = false;
+    std::string message;
+};
+
+struct WorldHitResourceTransfer28 {
+    int target_mp_delta = 0;
+    int attacker_mp_delta = 0;
+    int target_injury_mp_delta = 0;
+    int attacker_injury_mp_delta = 0;
+    bool injury_mp_applied = false;
+    bool drain_applied = false;
+    bool gain_applied = false;
+    bool resource_attacker_unresolved = false;
+};
+
+struct NativeHitResourceRules28 {
+    // DAT_0049D034 gates the complete local hit-resource tail in
+    // FUN_00451330, including drain/gain. Keep the low-level world's
+    // historical local-battle behavior enabled, but leave mode percentages
+    // neutral until a host supplies evidence for the selected mode record.
+    bool local_mode_enabled_49d034 = true;
+    // Selected mode record +0x34 rewards the attacker; +0x38 rewards the
+    // target. This direction is fixed by 0x00451521 and 0x00451546.
+    int attacker_injury_mp_percent_34 = 0;
+    int target_injury_mp_percent_38 = 0;
+};
+
+struct WorldStandardHitResult28 {
+    WorldStandardHitStatus28 status = WorldStandardHitStatus28::rejected;
+    std::size_t attacker_slot = 0;
+    std::size_t target_slot = 0;
+    std::size_t candidate_index = 0;
+    std::optional<InteractionRecord28> interaction;
+    bool terminates_attacker_invocation = false;
+    // FUN_004517A0 scales Itr28.injury (+0x44) through the attacker's
+    // ObjectDefinition28 stats.attacking (+0x04), falling back to the
+    // active 0x100-byte mode record +0x1C.  This value is used by armor
+    // injury/HP gates and by weapon durability; ordinary HP damage keeps
+    // its separate weakness path.
+    int native_attacking_injury = 0;
+    // FUN_00416BB0 consumes the held attacker's selected weapon-strength
+    // selfinjury/decrease pair during the unarmored damage tail.
+    int weapon_strength_self_injury_applied = 0;
+    int weapon_strength_decrease_applied = 0;
+    DamageResolution28 damage;
+    DamageMutation28 mutation;
+    DefenseDecision28 defense_decision;
+    std::optional<ArmorRecord28> selected_armor;
+    ArmorDecision28 armor_decision;
+    ArmorActivation28 armor_activation;
+    WorldHitRestResult28 rests;
+    WorldUnarmoredReaction28 unarmored_reaction;
+    HorizontalHitResponse28 horizontal_response;
+    VerticalHitResponse28 vertical_response;
+    WorldHitResourceTransfer28 resources;
+    std::vector<WorldAudioEvent28> audio_events;
+    std::optional<WorldSparkEvent28> spark_event;
+    std::optional<WorldKnockoutEvent28> knockout_event;
+    // FUN_0042E100 @ 0x0042E7AB..0x0042E86E owns two first-Bdy response
+    // ranges before FUN_0045AB20. [1000,1999) writes action kind-1000 and
+    // applies +3/-3 hold; [1999,2999) writes kind-2000 without hold. Both
+    // project Bdy+0x18 respond to the target group and skip ordinary damage.
+    bool first_body_action_response_applied = false;
+    bool first_body_action_hold_applied = false;
+    int first_body_action_kind = 0;
+    int first_body_action_respond = 0;
+    int first_body_target_action = -1;
+    int first_body_projected_group = 0;
+    // FUN_0042E100 @ 0x0042E77A..0x0042E875 reads the first Bdy of the
+    // target's current frame before the ordinary unarmored damage tail.
+    // Values in [1,000,000,000,1,999,999,999) are decoded by FUN_0045AB20.
+    // A successful response skips ordinary damage/combo; a failed positive
+    // chance consumes its synchronized value and continues the normal path.
+    bool encoded_body_recognized = false;
+    bool encoded_body_rng_consumed = false;
+    bool encoded_body_chance_passed = false;
+    bool encoded_body_response_applied = false;
+    int encoded_body_value = 0;
+    int encoded_body_chance = 0;
+    int encoded_body_roll = -1;
+    int encoded_body_target_action = -1;
+    int encoded_body_attacker_action = -1;
+    int encoded_body_effect = 0;
+    int encoded_body_manual_damage = 0;
+    int post_effect_action = -1;
+    // FUN_0044F3A0 -> FUN_0044F1B0 can independently replace the physical
+    // attacker's action with a positive ITR catchingact.  Keep it separate
+    // from attacker_post_hit_action, which belongs to the earlier weapon/
+    // type-3 continuation.
+    int attacker_catching_action_override = -1;
+    // FUN_0042E100 @ 0x0042F72B..0x0042FA43 owns a separate response for a
+    // type-3 entity which is itself the hit target.  This must not be folded
+    // into attacker_post_hit_action: a character can strike a projectile and
+    // make that target select its own hit_Fj/hit_Uj action while ownership is
+    // transferred to the character.
+    int target_type3_post_hit_action = -1;
+    bool target_type3_ownership_transferred = false;
+    bool kind_table_type3_transform_applied = false;
+    int kind_table_effect_object_id = -1;
+    int kind_table_response_action = -1;
+    int attacker_post_hit_action = -1;
+    bool matched_projectile_pair_reset = false;
+    int target_projectile_pair_action = -1;
+    int attacker_projectile_pair_action = -1;
+    int released_motion_hold_slot = -1;
+    int released_motion_hold_timer = 0;
+    // data/system.dat post-hit tables consumed by the unarmored/type-0
+    // continuation of FUN_0042E100.  The flags describe mutations to the
+    // attacking object, not to the character receiving the hit.
+    bool attacker_deactivated_by_henry_arrow_table = false;
+    bool attacker_hp_zeroed_by_john_biscuit_table = false;
+    bool hit_motion_armed = false;
+    bool hit_motion_stabilization_bypass = false;
+    std::string message;
+};
+
+enum class WorldRelationHitStatus28 {
+    applied,
+    rejected,
+    unsupported,
+};
+
+struct WorldRelationHitResult28 {
+    WorldRelationHitStatus28 status = WorldRelationHitStatus28::rejected;
+    std::size_t attacker_slot = 0;
+    std::size_t target_slot = 0;
+    std::size_t candidate_index = 0;
+    int interaction_kind = 0;
+    int attacker_action = -1;
+    int target_action = -1;
+    int timeout = 0;
+    // FUN_004521B0 / FUN_0042E100 itr.kind=8 evidence.  These fields keep
+    // the control relation observable without pretending it is an ordinary
+    // damage hit.
+    int target_type_selector = 0;
+    int relation_selector = 0;
+    int battle_mode_context = 0;
+    int target_mp_delta = 0;
+    int target_encoded_heal_timer = 0;
+    int position_sync_mode = -1;
+    bool precise_position_synchronized = false;
+    bool special_hit_latch_set = false;
+    int attacker_motion_hold_timer = 0;
+    int target_battle_group_after = 0;
+    int target_owner_slot_after = -1;
+    bool target_motion_cleared = false;
+    int target_control_slot_after = 0;
+    int target_environment_state_after = 0;
+    int target_encoded_credit_slot_after = -1;
+    int target_impact_source_slot_after = -1;
+    bool target_horizontal_depth_damped = false;
+    bool target_vertical_impact_applied = false;
+    int target_kind6_input_timer_after = 0;
+    bool kind2_relation_established = false;
+    int attacker_interaction_state_after = 0;
+    int target_interaction_state_after = 0;
+    int attacker_relation_count_after = 0;
+    int attacker_linked_child_slot_after = -1;
+    int target_linked_parent_slot_after = -1;
+    bool target_direction_collision_blocked = false;
+    CollisionBlocks28 target_collision_after;
+    bool target_horizontal_depth_repulsed = false;
+    double target_motion_x_after = 0.0;
+    double target_motion_z_after = 0.0;
+    std::string message;
+};
+
+struct SpecialInteractionRules28 {
+    // FUN_0042E100 @ 0x00430AE2..0x00430B1F checks the parsed system-DAT
+    // <weapon_throw> object-ID table after a type-1 kind-2 pickup. A listed
+    // object changes the holder relation from 1 to 101. The accepted locked
+    // read-only runtime table contains exactly OIDs 120 and 124.
+    bool kind2_weapon_throw_table_audited = true;
+    std::vector<int> kind2_weapon_throw_object_ids =
+        locked_system_table_vector28(LockedSystemBattleTables2833::weapon_throw);
+    // Active battle-rule record +0x94, read by FUN_00425560. The native
+    // fallback is 20 when the record is absent or the value is non-positive.
+    int impact_environment_damage_94 = 20;
+    // Parsed system-DAT <weapon_flute_sky> IDs. The accepted locked read-only
+    // runtime table contains exactly OIDs 201 and 202.
+    // Set audited=false only when a caller supplies an unverified alternate
+    // system.dat; a nonempty audited list applies the branch only to IDs not
+    // found in that list.
+    bool kind10_immunity_table_audited = true;
+    std::vector<int> kind10_immune_object_ids =
+        locked_system_table_vector28(
+            LockedSystemBattleTables2833::weapon_flute_sky);
+};
+
+struct WorldCatchRelationPass28 {
+    bool success = true;
+    std::size_t active_relations = 0;
+    std::size_t timeout_changes = 0;
+    std::size_t released_relations = 0;
+    std::size_t thrown_relations = 0;
+    std::size_t armed_throw_injuries = 0;
+    std::size_t deferred_throw_injuries = 0;
+    std::size_t input_action_transitions = 0;
+    std::size_t direction_control_updates = 0;
+    std::size_t broken_relations = 0;
+    std::vector<std::string> diagnostics;
+};
+
+struct WorldCatchSettlementPass28 {
+    bool success = true;
+    std::size_t active_relations = 0;
+    std::size_t synchronized_targets = 0;
+    std::size_t applied_hold_injuries = 0;
+    std::size_t deferred_hold_injuries = 0;
+    int total_hold_damage = 0;
+    struct HoldInjuryEvent28 {
+        std::size_t catcher_slot = EngineProfile28::maximum_slots;
+        std::size_t caught_slot = EngineProfile28::maximum_slots;
+    };
+    // Positive state-9 cpoint injuries that reached FUN_004187B0's damage
+    // continuation.  The selected mode <combo> caughtact producer consumes
+    // this ordered list in SimulationTickDriver28; BattleWorld28 remains
+    // independent of the active mode record.
+    std::vector<HoldInjuryEvent28> hold_injury_events;
+    std::vector<std::string> diagnostics;
+};
+
+struct WorldHorizontalHitFinalizePass28 {
+    std::size_t finalized = 0;
+    std::size_t pending_contributions = 0;
+    std::vector<HorizontalHitFinalize28> entities;
+};
+
+enum class WorldSpawnIntentStatus28 {
+    spawned,
+    skipped_native_missing_definition,
+    skipped_native_no_slot,
+    skipped_unresolved,
+    rejected,
+};
+
+struct WorldSpawnIntentEvent28 {
+    WorldSpawnIntentStatus28 status = WorldSpawnIntentStatus28::rejected;
+    std::size_t source_line = 0;
+    int object_id = -1;
+    std::size_t slot = EngineProfile28::maximum_slots;
+    bool used_native_default_vitals = false;
+    bool linked_to_parent = false;
+    std::string message;
+};
+
+struct WorldSpawnIntentPass28 {
+    bool success = true;
+    std::size_t intents_planned = 0;
+    std::size_t spawned = 0;
+    std::size_t skipped_native_missing_definition = 0;
+    std::size_t skipped_native_no_slot = 0;
+    std::size_t skipped_unresolved = 0;
+    std::size_t rejected = 0;
+    std::vector<WorldSpawnIntentEvent28> events;
+};
+
+struct HeldRefillSystemRules28 {
+    // Recovered from the shipped system DAT <hp_refill>/<mp_refill> lists.
+    // Vectors preserve the native ability to configure more than one ID.
+    std::vector<int> hp_refill_object_ids =
+        locked_system_table_vector28(LockedSystemBattleTables2833::hp_refill);
+    std::vector<int> mp_refill_object_ids =
+        locked_system_table_vector28(LockedSystemBattleTables2833::mp_refill);
+};
+
+struct WorldHeldRefillPass28 {
+    bool success = true;
+    std::size_t linked_children = 0;
+    std::size_t wpoint_follow_updates = 0;
+    std::size_t wpoint_velocity_releases = 0;
+    std::size_t wpoint_kind3_releases = 0;
+    std::size_t terminal_weapon_actions = 0;
+    std::size_t unsupported_links = 0;
+    std::size_t charging_links = 0;
+    std::size_t hp_refill_updates = 0;
+    std::size_t mp_refill_updates = 0;
+    std::size_t exhausted_links = 0;
+    std::vector<std::string> diagnostics;
+};
+
+struct StageBounds28 {
+    int width = 0;
+    int z_near = 0;
+    int z_far = 0;
+
+    [[nodiscard]] bool valid() const noexcept {
+        return width > 0 && z_near <= z_far;
+    }
+};
+
+struct WorldStageBoundaryPass28 {
+    bool success = true;
+    std::size_t depth_clamps = 0;
+    std::size_t non_type0_depth_clamps = 0;
+    std::size_t horizontal_clamps = 0;
+    std::size_t group5_type0_horizontal_clamps = 0;
+    std::size_t transient_type0_horizontal_clamps = 0;
+    std::size_t protected_mode_type0_horizontal_clamps = 0;
+    std::size_t dynamic_stage_type0_horizontal_clamps = 0;
+    std::size_t type3_offstage_culls = 0;
+    std::size_t grounded_object_offstage_culls = 0;
+    std::size_t special_object_horizontal_clamps = 0;
+    std::vector<std::string> diagnostics;
+};
+
+struct WorldResourcePass28 {
+    std::size_t depleted_effective_max_action_updates = 0;
+    std::size_t previous_state_resource_updates = 0;
+    std::size_t previous_state_stage_center_updates = 0;
+    std::size_t previous_state_life_updates = 0;
+    std::size_t previous_state_group_updates = 0;
+    std::size_t positive_status_mp_updates = 0;
+    std::size_t native_mp_regen_updates = 0;
+    std::size_t native_full_restore_updates = 0;
+    std::size_t negative_environment_updates = 0;
+    std::size_t negative_environment_score_updates = 0;
+    std::size_t malformed_negative_environment_source_skips = 0;
+    std::size_t hp_regen_updates = 0;
+    std::size_t effective_max_hp_updates = 0;
+    std::size_t frame_chp_updates = 0;
+    std::size_t frame_cmp_updates = 0;
+    std::size_t hp_limit_clamps = 0;
+    std::size_t mp_limit_clamps = 0;
+    int total_hp_delta = 0;
+    int total_effective_max_hp_delta = 0;
+    int total_mp_delta = 0;
+};
+
+struct ResourceSystemRules28 {
+    // FUN_00459690 consumes previous-frame state 405 (machine literal 0x195)
+    // by moving the entity to
+    // the active stage center, synchronizing precise coordinates and clearing
+    // all motion. The selected stage pointer is always present in native
+    // battle; isolated tests may omit it to keep malformed external state
+    // memory-safe and observable through a zero update count.
+    std::optional<StageBounds28> stage_bounds;
+    // Active battle-rule record +0x90, returned by FUN_004255A5.  The native
+    // fallback is 9 when the record is absent or its value is non-positive.
+    int negative_environment_damage_90 = 9;
+    // Selected mode record +0x28. FUN_00459900 consults it only when the
+    // character owns a stats record, regen_hp is not -1, and frame chp is
+    // zero. Value one suppresses the otherwise automatic +1/+2 HP fallback.
+    int selected_mode_default_hp_regen_gate_28 = 0;
+    // Selected mode record +0x2C. FUN_00414EE0 suppresses non-negative
+    // stats.regen_mp processing only when this raw field is exactly one. The
+    // accepted locked local-battle trace observed one for all 400 samples.
+    int selected_mode_mp_regen_gate_2c = 1;
+    // DAT_0049D034 permits the negative stats.regen_mp -1..-6 drain branch.
+    bool negative_mp_regen_enabled_49d034 = true;
+    // Selected mode record +0x18. FUN_00459690 treats values 2/3 like a
+    // positive Entity28+0x1B0 timer for the full-HP restoration tail.
+    int selected_mode_full_restore_gate_18 = 0;
+};
+
+struct WorldHealingPass28 {
+    std::size_t encoded_timer_steps = 0;
+    std::size_t ordinary_timer_steps = 0;
+    std::size_t state1700_arms = 0;
+    std::size_t hp_updates = 0;
+    std::size_t completed_timers = 0;
+    int total_hp_delta = 0;
+};
+
+struct FusionSystemRules28 {
+    // DAT_004A8428 and DAT_004A842C.  FUN_004507A0 treats respond 1/2/3 as
+    // first/second/both external feature gates.  Defaults stay disabled so
+    // the independent core never invents protected-runtime global state.
+    bool first_feature_gate_4a8428 = false;
+    bool second_feature_gate_4a842c = false;
+};
+
+enum class WorldFusionStatus28 {
+    fused,
+    defused,
+    unresolved,
+};
+
+struct WorldFusionEvent28 {
+    WorldFusionStatus28 status = WorldFusionStatus28::unresolved;
+    std::size_t primary_slot = EngineProfile28::maximum_slots;
+    std::size_t partner_slot = EngineProfile28::maximum_slots;
+    int primary_object_id = -1;
+    int partner_object_id = -1;
+    int fused_object_id = -1;
+    std::string message;
+};
+
+struct WorldFusionPass28 {
+    bool success = true;
+    bool source_available = true;
+    std::size_t fused = 0;
+    std::size_t defused = 0;
+    std::size_t unresolved = 0;
+    std::vector<WorldFusionEvent28> events;
+};
+
+enum class WorldDefinitionTransitionStatus28 {
+    applied,
+    unresolved,
+};
+
+struct WorldDefinitionTransitionEvent28 {
+    WorldDefinitionTransitionStatus28 status =
+        WorldDefinitionTransitionStatus28::unresolved;
+    std::size_t slot = EngineProfile28::maximum_slots;
+    int source_object_id = -1;
+    int target_object_id = -1;
+    int source_action = -1;
+    int target_action = -1;
+    int encoded_state = 0;
+    std::string message;
+};
+
+struct WorldDefinitionTransitionPass28 {
+    bool success = true;
+    std::size_t applied = 0;
+    std::size_t unresolved = 0;
+    std::vector<WorldDefinitionTransitionEvent28> events;
+};
+
+struct WorldSpecialCloneEvent28 {
+    std::size_t clone_index = 0;
+    int object_id = -1;
+    std::size_t slot = EngineProfile28::maximum_slots;
+    std::string message;
+};
+
+struct WorldSpecialClonePass28 {
+    bool success = true;
+    bool applicable = false;
+    std::size_t spawned = 0;
+    std::size_t unresolved = 0;
+    std::vector<WorldSpecialCloneEvent28> events;
+};
+
+struct WorldState18BrokenWeaponEvent28 {
+    std::size_t source_slot = EngineProfile28::maximum_slots;
+    std::size_t spawned_slot = EngineProfile28::maximum_slots;
+    int object_id = 999;
+    int action = 140;
+    int random_y = 0;
+    int random_x = 0;
+    int random_motion_x = 0;
+    std::string message;
+};
+
+struct WorldState18BrokenWeaponPass28 {
+    bool success = true;
+    bool applicable = false;
+    bool sustained_pair_rng_consumed = false;
+    bool sustained_pair_spawn_selected = false;
+    bool positive_delay_suppressed = false;
+    std::size_t requested = 0;
+    std::size_t spawned = 0;
+    std::size_t unresolved = 0;
+    std::vector<WorldState18BrokenWeaponEvent28> events;
+};
+
+struct WorldWeaponPieceEvent28 {
+    bool builtin_fragment = false;
+    int piece = 0;
+    std::size_t variant_index = 0;
+    std::size_t source_slot = EngineProfile28::maximum_slots;
+    std::size_t spawned_slot = EngineProfile28::maximum_slots;
+    int object_id = -1;
+    int action = 0;
+    std::string message;
+};
+
+struct WorldWeaponPiecePass28 {
+    bool success = true;
+    bool break_triggered = false;
+    bool source_marked_for_removal = false;
+    std::size_t builtin_requested = 0;
+    std::size_t builtin_spawned = 0;
+    std::size_t groups = 0;
+    std::size_t requested = 0;
+    std::size_t spawned = 0;
+    std::size_t skipped_no_slot = 0;
+    std::size_t unresolved = 0;
+    std::vector<WorldAudioEvent28> audio_events;
+    std::vector<WorldWeaponPieceEvent28> events;
+};
+
+enum class WorldLifecycleStatus28 {
+    despawned,
+    encoded_reset,
+    rejected,
+};
+
+struct WorldLifecycleEvent28 {
+    WorldLifecycleStatus28 status = WorldLifecycleStatus28::rejected;
+    std::size_t slot = EngineProfile28::maximum_slots;
+    int object_id = -1;
+    int lifecycle_code = 0;
+    int runtime_state_code = 0;
+    std::string message;
+};
+
+struct WorldLifecyclePass28 {
+    bool success = true;
+    std::size_t pending = 0;
+    std::size_t despawned = 0;
+    std::size_t encoded_resets = 0;
+    std::size_t rejected = 0;
+    std::vector<WorldLifecycleEvent28> events;
+};
+
+class BattleWorld28 {
+public:
+    BattleWorld28();
+    [[nodiscard]] WorldMutationResult28 spawn_at(std::size_t slot,
+                                                 const SpawnRequest28& request);
+    [[nodiscard]] WorldMutationResult28 spawn_transient(const SpawnRequest28& request);
+    [[nodiscard]] WorldMutationResult28 despawn(std::size_t slot);
+
+    [[nodiscard]] EntityState28* entity(std::size_t slot) noexcept;
+    [[nodiscard]] const EntityState28* entity(std::size_t slot) const noexcept;
+    [[nodiscard]] bool slot_available_for_spawn(
+        std::size_t slot) const noexcept;
+    [[nodiscard]] std::size_t active_count() const noexcept;
+    [[nodiscard]] std::uint64_t sequence() const noexcept;
+    [[nodiscard]] NativeRandom28& random() noexcept;
+    [[nodiscard]] const NativeRandom28& random() const noexcept;
+    [[nodiscard]] const std::vector<WorldKnockoutEvent28>&
+    knockout_events() const noexcept;
+    // War result counters are opt-in so local/versus worlds preserve their
+    // historical behavior.  Enabling does not clear accumulated counters;
+    // callers create a fresh BattleWorld28 for a new War session.
+    void set_war_statistics_enabled(bool value) noexcept;
+    [[nodiscard]] const NativeWarStatistics28&
+    war_statistics() const noexcept;
+    // FUN_0045C010 removes expired records from the native 0x20-byte KO
+    // buffer tail. A negative lifetime is an explicit unknown/no-op; callers
+    // with a selected mode-feed record pass its recovered times: value.
+    [[nodiscard]] std::size_t prune_native_knockout_tail(
+        std::uint64_t current_tick,
+        int lifetime_ticks) noexcept;
+
+    // Selected mode record +0x18, read by FUN_00417400 at 0x0041781F.
+    // Values 1 and 3 enable the same-group/different-group exception used
+    // before the ordinary object-type table.  Zero represents the native
+    // null-record/default path; callers with recovered mode DAT evidence can
+    // supply the exact value without baking a guessed mode into the world.
+    void set_active_mode_hit_group_gate_18(int value) noexcept;
+    [[nodiscard]] int active_mode_hit_group_gate_18() const noexcept;
+
+    // Active 0x100-byte battle/mode record +0x1C. FUN_004517A0 uses this
+    // percentage only when the attacker's stats.attacking is not positive.
+    // Zero keeps the native null/non-positive-record no-scaling behavior.
+    void set_active_mode_attacking_percent_1c(int value) noexcept;
+    [[nodiscard]] int active_mode_attacking_percent_1c() const noexcept;
+
+    // War mode FUN_0044FA20 selects one of the two recovered mode percentages
+    // from Entity28+0x364 (battle_group). Groups 1 and 2 map to array slots
+    // zero and one; every other group keeps the native 100-percent path.
+    // The default preserves the local/versus behavior.
+    void set_war_damage_scale_percent(std::array<int, 2> values) noexcept;
+
+    // Local-mode injury/drain/gain tail recovered from FUN_00451330.
+    void set_native_hit_resource_rules(NativeHitResourceRules28 rules) noexcept;
+    [[nodiscard]] const NativeHitResourceRules28&
+    native_hit_resource_rules() const noexcept;
+
+    // DAT_004A9FF4, selected from pre-battle cursor four with L.  The
+    // locked executable consumes 0..5 in FUN_00450990/004509D5/
+    // 00450A1A/00450A65 to shorten the two +0x0B4 hit-stop values and the
+    // unarmored arest/vrest values. The later guarded/selected-armor branch
+    // owns a distinct direct 4..12 rest clamp and does not call these helpers.
+    // Keeping it on the world makes direct
+    // simulation callers and the playable host share one authoritative
+    // native timing input.
+    void set_timing_reduction_4a9ff4(int value) noexcept;
+    [[nodiscard]] int timing_reduction_4a9ff4() const noexcept;
+
+    // Cursor six toggles DAT_004A9FF0 (displayed as 1tu/2tu). At the entry
+    // of FUN_0041C3D0, FUN_00416013 forces DAT_004A0B90 to zero in 1tu and
+    // alternates it 1/0 in 2tu. The phase gates local input remapping and the
+    // original network/replay sampling paths; ordinary world physics still
+    // advances on every call.
+    void set_one_tu_4a9ff0(bool value) noexcept;
+    [[nodiscard]] bool one_tu_4a9ff0() const noexcept;
+    void restore_input_update_phase_4a0b90(int value) noexcept;
+    [[nodiscard]] int input_update_phase_4a0b90() const noexcept;
+    [[nodiscard]] int advance_input_update_phase_4a0b90() noexcept;
+    // FUN_0041C3D0 toggles DAT_004A0BD8 once per ordinary battle Tick;
+    // state-400/401 teleport dispatch runs only when the new value is zero.
+    [[nodiscard]] int advance_teleport_phase_4a0bd8() noexcept;
+
+    void snapshot_actions() noexcept;
+    // FUN_00403270, dispatched by FUN_0041C3D0 for active frame states
+    // 400/401. State 400 selects the nearest living enemy and state 401 the
+    // farthest living teammate, then places the source beside that target.
+    // FUN_0041AD10 first copies the target's Entity28+0x0F0 collision Y
+    // reference (or the source's own reference when no target exists) into
+    // source integer Y. Even when no eligible target exists, the native tail
+    // clears motion and synchronizes all precise coordinates from the integer
+    // mirrors. The source itself is not restricted to definition type 0.
+    [[nodiscard]] WorldTeleportStateResult28 resolve_native_teleport_state(
+        std::size_t slot) noexcept;
+    [[nodiscard]] WorldMotionResult28 apply_frame_motion(std::size_t slot,
+                                                         DepthIntent28 depth_intent);
+    [[nodiscard]] WorldPhysicsResult28 step_physics(std::size_t slot,
+                                                    PhysicsContext28 context);
+    // FUN_004154E0 is called immediately after each slot's FUN_0040DA30
+    // physics pass. A dead type-0 entity keeps HP/base max HP but has its
+    // effective max HP and MP cleared on every following native Tick.
+    [[nodiscard]] bool normalize_native_dead_character_resources(
+        std::size_t slot) noexcept;
+    [[nodiscard]] WorldCollisionSnapshot28 collision_snapshot(std::size_t slot) const;
+    void decrement_attacker_rests() noexcept;
+    void decrement_attacker_rest_slot(std::size_t slot) noexcept;
+    void advance_native_display_values() noexcept;
+    void advance_native_display_values_slot(std::size_t slot) noexcept;
+    // FUN_0041A5A0 advances each active hit-spark cell once per native
+    // battle presentation pass.  Keeping this mutation out of snapshot
+    // construction makes repeated renderer redraws deterministic and makes
+    // pause/single-step behavior follow the fixed 33 ms battle cadence.
+    void advance_native_sparks() noexcept;
+    // Recovered ordinary local-battle resource tail of FUN_0041C3D0,
+    // FUN_00459900 and FUN_00459690. The native 12-step and 3-step phase
+    // counters belong to the world and advance exactly once per logic tick.
+    [[nodiscard]] WorldResourcePass28 advance_native_resources(
+        const ResourceSystemRules28& system_rules = {}) noexcept;
+    // Slot-ordered tail entry points. The native coordinator advances the
+    // two global resource phases and the world sequence once, then processes
+    // occupied slots in ascending order; an opoint child allocated above the
+    // current slot therefore receives this tail later in the same cycle.
+    void begin_native_resource_tick() noexcept;
+    // FUN_0041C3D0 runs the periodic HP/MP/environment work before
+    // FUN_00414BC0 updates the presentation mirrors, then enters
+    // FUN_00459690 only after that display pass. These split entry points
+    // let the unified coordinator preserve that observable phase boundary.
+    [[nodiscard]] WorldResourcePass28 advance_native_resources_pre_display_slot(
+        std::size_t slot,
+        const ResourceSystemRules28& system_rules = {}) noexcept;
+    [[nodiscard]] WorldResourcePass28 advance_native_resources_post_display_slot(
+        std::size_t slot,
+        const ResourceSystemRules28& system_rules = {}) noexcept;
+    // Compatibility entry point for isolated resource tests/callers that do
+    // not own a display pass. It executes both native resource halves.
+    [[nodiscard]] WorldResourcePass28 advance_native_resources_slot(
+        std::size_t slot,
+        const ResourceSystemRules28& system_rules = {}) noexcept;
+    // Recovered Entity28+0x0E0/+0x0E4 tail in FUN_0041C3D0. This pass is
+    // intentionally separate from 12/3-phase DAT resources.
+    [[nodiscard]] WorldHealingPass28 advance_native_healing() noexcept;
+    [[nodiscard]] WorldHealingPass28 advance_native_healing_slot(
+        std::size_t slot) noexcept;
+    // Recovered local fusion/defusion coordinator FUN_004064D0. The table
+    // must come from either a strictly parsed data\fusion.dat or the locked
+    // identity-attested 2.8.3.3 runtime table. An unavailable source is
+    // returned as unresolved rather than silently behaving as no records.
+    [[nodiscard]] WorldFusionPass28 advance_native_fusions(
+        const FusionCatalog28& fusions,
+        const ObjectDefinitionCatalog28& definitions,
+        const FusionSystemRules28& rules = {});
+    // Recovered state-9996 / state-8,000,000..9,000,000 five-clone branch.
+    // FUN_00415FC0 writes OID 217/218 into the caller stack for state 9996;
+    // the caller then gates the branch on Entity28+0x088 frame_counter==1.
+    // The encoded 8M family has no locked DAT producer and retains a visible
+    // fail-closed boundary for its address-derived first target.
+    [[nodiscard]] WorldSpecialClonePass28 materialize_special_state_clones(
+        std::size_t source_slot,
+        const ObjectDefinitionCatalog28& catalog);
+    // FUN_0041C3D0 @ 0x0042113F..0x004214AE compares the frame selected by
+    // Entity28+0x78 with the post-FUN_0040D000 current frame. A transition
+    // out of state 18/19 emits seven OID-999 broken-weapon particles; a
+    // sustained 18/19 pair calls the 0x00416A30 delay-gated RNG thunk and
+    // emits one only when its upper-4 result is zero.
+    [[nodiscard]] WorldState18BrokenWeaponPass28
+    materialize_state18_broken_weapon_particles(
+        std::size_t source_slot,
+        const ObjectDefinitionCatalog28& catalog,
+        int global_delay_duration_4a9f6c = 0);
+    // FUN_00416290 runs immediately before a terminal object slot is
+    // cleared. It expands the definition's <weapon_piece> groups into real
+    // transient entities and owns their synchronized RNG call order.
+    [[nodiscard]] WorldWeaponPiecePass28 materialize_weapon_piece_fragments(
+        std::size_t source_slot,
+        const ObjectDefinitionCatalog28& catalog);
+    [[nodiscard]] WorldDefinitionTransitionPass28 apply_definition_transitions(
+        const ObjectDefinitionCatalog28& catalog);
+    [[nodiscard]] WorldDefinitionTransitionPass28 apply_definition_transition_slot(
+        std::size_t slot,
+        const ObjectDefinitionCatalog28& catalog);
+    void advance_reaction_timers() noexcept;
+    void advance_reaction_timers_slot(std::size_t slot) noexcept;
+    void advance_armor_recovery() noexcept;
+    void advance_armor_recovery_slot(std::size_t slot) noexcept;
+    [[nodiscard]] std::uint8_t victim_rest(std::size_t target_slot,
+                                           std::size_t attacker_slot) const noexcept;
+    [[nodiscard]] WorldHitRestResult28 apply_standard_hit_rest(
+        std::size_t attacker_slot,
+        std::size_t target_slot,
+        const InteractionRecord28& interaction);
+    [[nodiscard]] WorldHitCandidatePass28 rebuild_geometric_hit_candidates(
+        int battle_mode_context = 0,
+        const KindCatalog28* kind_catalog = nullptr);
+    [[nodiscard]] WorldHitEligibility28 classify_ordinary_hit_eligibility(
+        std::size_t attacker_slot,
+        std::size_t candidate_index) const;
+    [[nodiscard]] WorldStandardHitResult28 resolve_ordinary_unarmored_standard_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index);
+    [[nodiscard]] WorldStandardHitResult28 resolve_confirmed_unarmored_standard_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        bool eligibility_confirmed);
+    [[nodiscard]] WorldStandardHitResult28 resolve_confirmed_defended_standard_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        bool eligibility_confirmed,
+        const DefenseSystemRules28& system_rules = {});
+    [[nodiscard]] WorldStandardHitResult28 resolve_ordinary_type1_armor_standard_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        const ArmorSystemRules28& system_rules);
+    [[nodiscard]] WorldRelationHitResult28 resolve_kind3_catch_relation(
+        std::size_t attacker_slot,
+        std::size_t candidate_index);
+    // Dispatches the non-ordinary relation/control kinds whose native
+    // consumer has been recovered. Kind 3 is retained through the older
+    // named entry point; kind 8 is classified through FUN_004521B0, whose
+    // respond:4 tail compares owner_slot with the battle-mode context passed
+    // to FUN_00417400 by the native caller.
+    [[nodiscard]] WorldRelationHitResult28 resolve_special_relation_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        int battle_mode_context,
+        const SpecialInteractionRules28& rules = {});
+    [[nodiscard]] WorldCatchRelationPass28 advance_catch_relations();
+    [[nodiscard]] WorldCatchSettlementPass28 settle_catch_relations();
+    [[nodiscard]] WorldHorizontalHitFinalizePass28 finalize_horizontal_hit_impulses();
+    [[nodiscard]] WorldSpawnIntentPass28 materialize_supported_spawns(
+        std::size_t parent_slot,
+        const ObjectDefinitionCatalog28& catalog);
+    [[nodiscard]] WorldHeldRefillPass28 settle_held_refill_objects(
+        const HeldRefillSystemRules28& system_rules = {});
+    // Exact active-slot scan of native FUN_00417F80. Type 0 uses the stage
+    // Z interval; every other object type uses its one-unit-expanded interval.
+    // The native coordinator invokes this twice per logic cycle. The legacy
+    // method name is retained to avoid breaking existing preview callers.
+    [[nodiscard]] WorldStageBoundaryPass28 clamp_type0_stage_depth(
+        const StageBounds28& bounds);
+    // Ordinary local/versus portion of FUN_0041B5D0, after the second
+    // FUN_00417F80 call. Type-3 objects are culled outside the native
+    // [-300, stage-width + 300] interval. Other grounded non-type-0 objects
+    // use [100, stage-width], while participant OID 122/123 objects are
+    // clamped to the 100-pixel inset. With no protected mode record, type-0
+    // slots 0..19 use [0, stage-width], except battle group 5 which uses
+    // [-300, stage-width]; transient slots 20..999 use
+    // [-100, stage-width + 10]. When the selected mode record +0x50 is 1 or
+    // 3, FUN_004161C0 routes every type-0 slot through the character branch
+    // and FUN_00416190 changes the special group from 5 to -1.
+    // The common tail truncates precise X into integer X for every surviving
+    // object and saves the displaced integer value in Position28::previous_x.
+    [[nodiscard]] WorldStageBoundaryPass28 settle_ordinary_stage_bounds(
+        const StageBounds28& bounds,
+        int selected_mode_record_gate_50 = 0,
+        int battle_mode = 0,
+        int selected_stage_participant_gate_178914 = 0,
+        int stage_progress_boundary_4a0bb4 = 0,
+        int selected_stage_facing_178934 = 0,
+        int selected_mode_dynamic_boundary_gate_48 = 0);
+    [[nodiscard]] WorldLifecyclePass28 resolve_pending_lifecycles();
+    [[nodiscard]] WorldLifecyclePass28 resolve_pending_lifecycle(
+        std::size_t slot);
+    // Caller-provided floor values are the recovered FUN_0044E220 result for
+    // each physical slot.  The world does not replace missing complex-stage
+    // terrain evidence with a guessed flat floor.
+    [[nodiscard]] WorldRevivalPass28 advance_native_revivals(
+        const std::vector<std::optional<int>>& floor_y_by_slot);
+    [[nodiscard]] std::vector<WorldFrameEvent28> step_frames(
+        FrameStepOptions28 options = {});
+    void begin_frame_tick() noexcept;
+    [[nodiscard]] std::vector<WorldFrameEvent28> step_frame_slot(
+        std::size_t slot,
+        FrameStepOptions28 options = {});
+
+private:
+    // Rebuild Entity28+0x340 from the definition's positive, non-100
+    // stats.defend value and the War group percentage. The source definition
+    // is used on every call so repeated initialization never compounds an
+    // already-scaled +0x340 value.
+    void apply_war_damage_scale(EntityState28& entity) noexcept;
+    [[nodiscard]] WorldResourcePass28 advance_native_resources_range(
+        std::size_t begin_slot,
+        std::size_t end_slot,
+        const ResourceSystemRules28& system_rules,
+        bool advance_phases) noexcept;
+    [[nodiscard]] WorldResourcePass28 advance_native_resources_post_display_range(
+        std::size_t begin_slot,
+        std::size_t end_slot,
+        const ResourceSystemRules28& system_rules) noexcept;
+    [[nodiscard]] WorldDefinitionTransitionPass28
+    apply_definition_transitions_range(
+        std::size_t begin_slot,
+        std::size_t end_slot,
+        const ObjectDefinitionCatalog28& catalog);
+    [[nodiscard]] WorldLifecyclePass28 resolve_pending_lifecycles_range(
+        std::size_t begin_slot,
+        std::size_t end_slot);
+    [[nodiscard]] std::vector<WorldFrameEvent28> step_frames_range(
+        std::size_t begin_slot,
+        std::size_t end_slot,
+        FrameStepOptions28 options,
+        bool advance_sequence);
+    [[nodiscard]] std::optional<InteractionRecord28>
+    resolve_standard_damage_interaction(
+        const EntityState28& attacker,
+        const HitCandidate28& candidate,
+        bool* substituted_kind5 = nullptr) const;
+    [[nodiscard]] bool candidate_passes_native_group_filter(
+        const HitCandidate28& candidate,
+        const InteractionRecord28& interaction) const noexcept;
+    [[nodiscard]] static bool candidate_passes_native_direct_effect_filter(
+        const HitCandidate28& candidate,
+        const InteractionRecord28& interaction) noexcept;
+    [[nodiscard]] WorldStandardHitResult28 resolve_confirmed_unarmored_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        bool eligibility_confirmed,
+        bool nonzero_armor_fallback_confirmed,
+        const ArmorRecord28* broken_armor = nullptr);
+    [[nodiscard]] DefenseDecision28 classify_confirmed_defense(
+        const EntityState28& attacker,
+        const EntityState28& target,
+        const InteractionRecord28& interaction,
+        const DefenseSystemRules28& system_rules) const;
+    [[nodiscard]] WorldStandardHitResult28 resolve_confirmed_reduced_hit(
+        std::size_t attacker_slot,
+        std::size_t candidate_index,
+        bool eligibility_confirmed,
+        const std::optional<ArmorRecord28>& selected_armor,
+        const DefenseDecision28& defense_decision);
+    [[nodiscard]] WorldHitRestResult28 apply_reduced_hit_rest(
+        std::size_t attacker_slot,
+        std::size_t target_slot,
+        const InteractionRecord28& interaction,
+        const std::optional<ArmorRecord28>& selected_armor = std::nullopt);
+    [[nodiscard]] int release_native_attacker_motion_hold(
+        EntityState28& attacker) noexcept;
+    [[nodiscard]] int mirror_native_negative_relation_hit_stop(
+        EntityState28& attacker) noexcept;
+    [[nodiscard]] bool reset_native_matched_projectile_pair(
+        EntityState28& target,
+        EntityState28& attacker,
+        WorldStandardHitResult28& result) noexcept;
+    void apply_native_weapon_strength_self_cost(
+        EntityState28& attacker,
+        WorldStandardHitResult28& result) noexcept;
+    void clear_relation_column(std::size_t attacker_slot) noexcept;
+    void clear_entity_links(std::size_t slot) noexcept;
+    [[nodiscard]] std::optional<WorldKnockoutEvent28> record_native_knockout(
+        std::size_t victim_slot,
+        std::size_t source_slot,
+        std::size_t credit_slot) noexcept;
+    void record_native_war_damage(const EntityState28& victim,
+                                  int damage) noexcept;
+    void record_native_war_death(const EntityState28& victim) noexcept;
+    // FUN_0044E360 selects the physical source through +0x92/+0x90 and then
+    // follows Entity28+0x354 exactly twice before FUN_0045C3A0/0044E31F
+    // update knockout and damage-score bookkeeping.
+    [[nodiscard]] std::optional<std::pair<std::size_t, std::size_t>>
+    resolve_native_standard_hit_attribution(std::size_t attacker_slot) noexcept;
+    // FUN_0044E680 is a distinct owner helper used inside FUN_00451330. It
+    // starts at the unredirected attacker slot and follows +0x354 exactly
+    // twice. Unlike standard-hit score attribution it never consults the
+    // kind-4 +0x92/+0x90 redirection fields.
+    [[nodiscard]] EntityState28* resolve_native_hit_resource_attacker(
+        std::size_t attacker_slot) noexcept;
+    // A world owns 1000 comparatively large entity records.  Keeping this
+    // vector's payload on the heap prevents ordinary stack-allocated worlds
+    // (including the console test gates) from approaching the Windows stack
+    // guard as recovered per-entity fields are added.
+    std::vector<std::optional<EntityState28>> slots_;
+    // Native fusion clears the partner's active byte but retains its entity
+    // allocation for restoration.  This parallel heap store models that
+    // inactive-yet-owned slot without exposing it as an active combatant.
+    std::vector<std::optional<EntityState28>> fusion_suspended_;
+    std::uint64_t sequence_ = 0;
+    std::uint64_t next_presentation_generation_ = 1;
+    int resource_phase_12_ = 0;
+    int resource_phase_3_ = 0;
+    int active_mode_hit_group_gate_18_ = 0;
+    int active_mode_attacking_percent_1c_ = 0;
+    std::array<int, 2> war_damage_scale_percent_{{100, 100}};
+    bool war_damage_scale_enabled_ = false;
+    NativeHitResourceRules28 native_hit_resource_rules_{};
+    int timing_reduction_4a9ff4_ = 0;
+    bool one_tu_4a9ff0_ = false;
+    int input_update_phase_4a0b90_ = 0;
+    int teleport_phase_4a0bd8_ = 0;
+    // Valid from the current FUN_00419380 candidate phase through its
+    // immediately following FUN_0042E100 consumer phase.
+    const KindCatalog28* active_kind_catalog_ = nullptr;
+    FrameMachine28 frame_machine_;
+    FrameMotion28 frame_motion_;
+    PhysicsIntegrator28 physics_integrator_;
+    NativeRandom28 random_;
+    std::vector<WorldKnockoutEvent28> knockout_events_;
+    NativeWarStatistics28 war_statistics_{};
+    bool war_statistics_enabled_ = false;
+};
+
+}  // namespace ntsd28

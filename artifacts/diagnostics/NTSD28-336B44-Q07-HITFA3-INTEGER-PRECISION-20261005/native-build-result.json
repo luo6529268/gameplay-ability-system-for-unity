@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T14:37:59.069377+00:00",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\native_hitfa3_driver_witness.cpp: In lambda function:\nI:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\native_hitfa3_driver_witness.cpp:79:49: error: 'struct ntsd28::EntityState28' has no member named 'hp'\n   79 |                       << \",\\\"hp\\\":\" << subject->hp\n      |                                                 ^~\n"
+}

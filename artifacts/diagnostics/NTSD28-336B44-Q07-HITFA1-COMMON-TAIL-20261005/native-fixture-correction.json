@@ -1,0 +1,6 @@
+{
+  "reason": "formal spawn_at initializes precise_y from integer request.y; first three source runs had invalid fractional initial state",
+  "v1SourceSha256": "CD9E3DF0FF9AD78801F3F9AF20843BB4D771253CA6869232330CE133DF32B588",
+  "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\native_ai_hitfa1_witness-v1.cpp",
+  "expectedCorrection": "restore controlled precise_y after spawn and assert integer and precise initial state before emit0"
+}

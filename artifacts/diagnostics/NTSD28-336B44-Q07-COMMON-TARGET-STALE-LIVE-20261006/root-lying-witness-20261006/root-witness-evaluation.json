@@ -1,0 +1,254 @@
+{
+  "utc": "2026-10-05T17:23:41.101629+00:00",
+  "status": "FORMAL_ROOT_ACTIVE_LYING_TARGET_FOUR_TICK_SCOPED_PASS",
+  "formalExecutableSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "rootPid": 102440,
+  "rootExit": 0,
+  "reportPassed": true,
+  "traceRows": 5,
+  "samples": [
+    {
+      "tick": 0,
+      "subject": {
+        "action": 54,
+        "frameCounter": 0,
+        "x": 500,
+        "y": -100,
+        "z": 600,
+        "preciseX": 500,
+        "preciseY": -100,
+        "preciseZ": 600,
+        "vx": 0,
+        "vy": 0,
+        "vz": 0,
+        "hp": 500
+      },
+      "target": {
+        "oid": 99,
+        "state": 14,
+        "action": 230,
+        "frameCounter": 0,
+        "hp": 500,
+        "preciseX": 1000,
+        "preciseY": 0,
+        "preciseZ": 600
+      }
+    },
+    {
+      "tick": 1,
+      "subject": {
+        "action": 54,
+        "frameCounter": 1,
+        "x": 500,
+        "y": -100,
+        "z": 576,
+        "preciseX": 500.7,
+        "preciseY": -100,
+        "preciseZ": 576,
+        "vx": 0.7,
+        "vy": 0,
+        "vz": 0,
+        "hp": 500
+      },
+      "target": {
+        "oid": 99,
+        "state": 14,
+        "action": 230,
+        "frameCounter": 1,
+        "hp": 500,
+        "preciseX": 1000,
+        "preciseY": 0,
+        "preciseZ": 575
+      }
+    },
+    {
+      "tick": 2,
+      "subject": {
+        "action": 54,
+        "frameCounter": 2,
+        "x": 502,
+        "y": -100,
+        "z": 576,
+        "preciseX": 502.09999999999997,
+        "preciseY": -100,
+        "preciseZ": 576,
+        "vx": 1.4,
+        "vy": 0,
+        "vz": 0,
+        "hp": 500
+      },
+      "target": {
+        "oid": 99,
+        "state": 14,
+        "action": 230,
+        "frameCounter": 2,
+        "hp": 500,
+        "preciseX": 1000,
+        "preciseY": 0,
+        "preciseZ": 575
+      }
+    },
+    {
+      "tick": 3,
+      "subject": {
+        "action": 54,
+        "frameCounter": 3,
+        "x": 504,
+        "y": -100,
+        "z": 576,
+        "preciseX": 504.2,
+        "preciseY": -100,
+        "preciseZ": 576,
+        "vx": 2.0999999999999996,
+        "vy": 0,
+        "vz": 0,
+        "hp": 500
+      },
+      "target": {
+        "oid": 99,
+        "state": 14,
+        "action": 230,
+        "frameCounter": 3,
+        "hp": 500,
+        "preciseX": 1000,
+        "preciseY": 0,
+        "preciseZ": 575
+      }
+    },
+    {
+      "tick": 4,
+      "subject": {
+        "action": 0,
+        "frameCounter": 0,
+        "x": 507,
+        "y": -100,
+        "z": 576,
+        "preciseX": 507,
+        "preciseY": -100,
+        "preciseZ": 576,
+        "vx": 2.8,
+        "vy": 0,
+        "vz": 0,
+        "hp": 500
+      },
+      "target": {
+        "oid": 99,
+        "state": 14,
+        "action": 230,
+        "frameCounter": 4,
+        "hp": 500,
+        "preciseX": 1000,
+        "preciseY": 0,
+        "preciseZ": 575
+      }
+    }
+  ],
+  "reusedSubjectFieldComparisons": [
+    {
+      "label": "priorNativeHealthyTarget",
+      "compared": 55,
+      "sameWithin1e-12": 55,
+      "firstDifference": null
+    },
+    {
+      "label": "priorUnityHealthyTarget",
+      "compared": 55,
+      "sameWithin1e-12": 55,
+      "firstDifference": null
+    }
+  ],
+  "comparisonFields": [
+    "completedTick",
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "hp"
+  ],
+  "excludedComparisonFields": [
+    "sourceZ",
+    "target3F8",
+    "allWorld",
+    "RNG",
+    "HostCadence",
+    "naturalInput",
+    "GPU"
+  ],
+  "inputRowsZero": true,
+  "targetRemainsActiveLyingHp500": true,
+  "protectedChecks": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "before": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "after": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "before": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "after": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "before": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "after": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "before": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "after": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "before": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "after": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "before": "94B3C5416ECAD75F27A3455928C313C4224084D2859F56412927EBF1F1D54550",
+      "after": "94B3C5416ECAD75F27A3455928C313C4224084D2859F56412927EBF1F1D54550",
+      "stable": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "before": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "after": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "stable": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+      "before": "0F9222EABD9A4FC44B32A65580C58A9CF7896368DCCFB8637FB6368759F76E08",
+      "after": "0F9222EABD9A4FC44B32A65580C58A9CF7896368DCCFB8637FB6368759F76E08",
+      "stable": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\sna.dat",
+      "before": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035",
+      "after": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035",
+      "stable": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\nar.dat",
+      "before": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9",
+      "after": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9",
+      "stable": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-AUX-TYPE3-DOUBLE-REACH-001\\capture-a\\source.lfr",
+      "before": "C8120CA59EEE752F606A843BD456D9FCEEB334F34D0EE5700E4C3549D7E83F00",
+      "after": "C8120CA59EEE752F606A843BD456D9FCEEB334F34D0EE5700E4C3549D7E83F00",
+      "stable": true
+    }
+  ],
+  "nativeParityClaimFromRootReport": false,
+  "limitation": "Root initial lying target vs prior Unity healthy cached target; same observable subject motion only. Formal background clamps subject Z600 to576 and target Z600 to575, unlike project map. Does not expose root private cache/rescan/HP0 or verify natural knockdown."
+}

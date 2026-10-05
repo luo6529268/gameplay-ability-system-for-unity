@@ -1,0 +1,8 @@
+# 共用目标解析后续候选：当前源码证据，尚未运行首差
+
+本文件只保留本轮审阅发现，防止上下文压缩遗漏。现有Fa10普通type0目标三模式/两完整tick证据不会裁决这两类初态。不将它们写成已修复、已对齐或新的批量角色测试。
+
+1. Q07-R05-COMMON-TARGET-2F8：当前paired native_ai.cpp:289起从object_ai_excluded_group_source_slot_2f8取原始槽的实时battle_group；Unity LF2Entity.ResolveFrameLogicTargetByHitFa取SpawnerEntityIndex。Core/NTSDEntityRuntime已具独立ObjectAiExcludedGroupSourceSlot2F8（默认-1），旧carrier Record仅历史说明carrier复制/重置，不是当前规则或consumer已接线证书。当前正式battle_world.cpp:8258在特定held release写2F8；需按当前生产writer/出生/反射及共享resolver实际初态闭合，在同组冗余排除下不制造首差。取证后用独立Task/Record修共享consumer，不改本包或DAT。
+2. Q07-R05-COMMON-TARGET-CACHED-TYPE：当前native缓存有效性不要求type0，重扫候选才要求type0；Unity缓存块额外IsCharacterFrameLogicTarget。需先确认正式可达缓存非角色/槽复用初态，在当前共用行为中实际改变目标或运动，native/Unity最窄首差后再开独立包。不能因本包type0目标通过而宣称全部缓存对象已对齐。
+
+后续优先核对这些已观察的源码合同差异与可达生产状态；不继续人工临界精度矩阵，不重测51/52份复用证据，也不扩到非战斗UI。

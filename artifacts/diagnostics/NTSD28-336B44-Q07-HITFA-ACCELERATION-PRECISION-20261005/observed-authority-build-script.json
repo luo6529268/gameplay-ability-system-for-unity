@@ -1,0 +1,23 @@
+{
+  "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+  "beforeSha256": "BE7B002CBEDD5405F51AA777AA2173701C8AD8F74D5756F15AFA97F15BB8D978",
+  "currentSha256": "5A06544BDA4F60D569BA494AC2425E08694AAC29B90C16144A470CFCC2896EDE",
+  "executor": "unknown; this task did not write the external file",
+  "oldObservedBytesMatchBefore": true,
+  "sourceInputBuildScriptSameAsFinal": true,
+  "diff": [
+    "--- \n",
+    "+++ \n",
+    "@@ -174,7 +174,9 @@\n",
+    " ",
+    " if ($Target -eq 'frontend_menu_render_tests' -or $Target -eq 'tournament_page_render_tests' -or",
+    "     ($Target -eq 'all')) {",
+    "-    $menuTargets = if ($Target -eq 'all') { @('tournament_page_render_tests') } else { @($Target) }",
+    "+    $menuTargets = if ($Target -eq 'all') {",
+    "+        @('frontend_menu_render_tests', 'tournament_page_render_tests')",
+    "+    } else { @($Target) }",
+    "     foreach ($menuTarget in $menuTargets) {",
+    "     $menuArguments = @(",
+    "         '-std=c++17', '-O2', '-Wall', '-Wextra', '-Wpedantic',"
+  ]
+}

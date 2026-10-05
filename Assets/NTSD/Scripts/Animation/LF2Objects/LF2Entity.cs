@@ -1489,17 +1489,10 @@ namespace NTSD.Animation.LF2Objects
 
             if (hitFa == 10)
             {
-                if (Runtime.Vx < 0f)
-                    Runtime.Vx -= 1.1f;
-                else
-                    Runtime.Vx += 1.1f;
-
-                Runtime.Vx = System.Math.Clamp(Runtime.Vx, -30.0, 30.0);
-                if (Runtime.Y > 3f)
-                    Runtime.Y = 3f;
-
-                SwitchDir(Runtime.Vx > 0f ? "right" : "left");
-                Runtime.YInt = (int)Runtime.Y;
+                // Alignment contract: NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.
+                ResolveFrameLogicTargetByHitFa(hitFa);
+                if (ObjectAiTargetSlot3F8 == -1 && Health != null)
+                    Health.HP = 0;
                 return;
             }
 
@@ -1551,10 +1544,9 @@ namespace NTSD.Animation.LF2Objects
                     Health.HP = 0;
                 return;
             }
-            if (target.Health == null || target.Health.HP <= 0)
+            // Alignment contract: NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.
+            if (Health == null || Health.HP <= 0)
             {
-                if (Health != null)
-                    Health.HP = 0;
                 return;
             }
 
@@ -1562,22 +1554,23 @@ namespace NTSD.Animation.LF2Objects
                 out int selfX, out int targetX, out int selfZ, out int targetZ);
 
             if (targetX > selfX)
-                Runtime.Vx += 0.85f;
+                Runtime.Vx += 0.85;
             if (targetX < selfX)
-                Runtime.Vx -= 0.85f;
+                Runtime.Vx -= 0.85;
             if (targetZ > selfZ + 7)
-                Runtime.Vz += 0.3f;
+                Runtime.Vz += 0.3;
             if (targetZ < selfZ - 7)
-                Runtime.Vz -= 0.3f;
+                Runtime.Vz -= 0.3;
 
-            Runtime.Vy *= 0.7142857142857143; // P0-f-2b B2-3a: VALUE-BUG 5f/7f鈫?.7142857142857143 (baseline FrameAdvance.cs Vy*=0.7142857142857143)
+            // Alignment contract: NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001.
+            Runtime.Vy /= 1.4;
 
             if (IsCharacterFrameLogicTarget(target))
             {
                 if (Runtime.Y + 10f < target.Runtime.Y)
-                    Runtime.Y += 1.2f;
+                    Runtime.Y += 1.2;
                 if (Runtime.Y + 10f > target.Runtime.Y)
-                    Runtime.Y -= 1.2f;
+                    Runtime.Y -= 1.2;
             }
             else if (Runtime.Y > 0f)
             {
@@ -1586,11 +1579,8 @@ namespace NTSD.Animation.LF2Objects
 
             Runtime.Vx = System.Math.Clamp(Runtime.Vx, -13.0, 13.0);
             Runtime.Vz = System.Math.Clamp(Runtime.Vz, -2.0, 2.0);
-            if (Runtime.Y > 1f)
-                Runtime.Y = 1f;
 
             SwitchDir(Runtime.Vx > 0f ? "right" : "left");
-            Runtime.YInt = (int)Runtime.Y;
         }
 
         private void RunHitFa3FrameLogic()
@@ -1606,21 +1596,21 @@ namespace NTSD.Animation.LF2Objects
 
             if (Health == null || Health.HP <= 0)
             {
-                ApplyHitFa3NoTargetDrift();
                 return;
             }
 
             ResolveFrameLogicPositionPair(target, null,
                 out int selfX, out int targetX, out int selfZ, out int targetZ);
 
+            // Alignment contract: NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001.
             if (targetX > selfX)
-                Runtime.Vx += 0.7f;
+                Runtime.Vx += 0.7;
             if (targetX < selfX)
-                Runtime.Vx -= 0.7f;
+                Runtime.Vx -= 0.7;
             if (targetZ > selfZ + 10)
-                Runtime.Vz += 0.17f;
+                Runtime.Vz += 0.17;
             if (targetZ < selfZ - 10)
-                Runtime.Vz -= 0.17f;
+                Runtime.Vz -= 0.17;
 
             Runtime.Vx = System.Math.Clamp(Runtime.Vx, -16.0, 16.0);
             Runtime.Vz = System.Math.Clamp(Runtime.Vz, -2.4, 2.4);
@@ -2473,7 +2463,6 @@ namespace NTSD.Animation.LF2Objects
             if (target != null)
             {
                 bool valid = !IsDeadLikeFrameLogicTarget(target) &&
-                             IsCharacterFrameLogicTarget(target) &&
                              target.GetState() != LF2States.Lying &&
                              Mathf.Abs(target.HitStun) <= 2f &&
                              ResolveFrameLogicRelationIdentity(target) != selfTeam;
@@ -2545,8 +2534,8 @@ namespace NTSD.Animation.LF2Objects
 
                 if (bestSlot >= 0)
                     ObjectAiTargetSlot3F8 = bestSlot;
-                target = bestSlot >= 0
-                    ? Match.FindEntityByRuntimeSlotForQuery(bestSlot)
+                target = ObjectAiTargetSlot3F8 >= 0
+                    ? Match.FindEntityByRuntimeSlotForQuery(ObjectAiTargetSlot3F8)
                     : null;
             }
 

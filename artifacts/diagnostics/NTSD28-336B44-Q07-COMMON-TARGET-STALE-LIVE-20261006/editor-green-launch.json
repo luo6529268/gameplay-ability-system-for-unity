@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T16:40:53.334900+00:00",
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "9d69c11e3abd48b282ea1c5b675725c9",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

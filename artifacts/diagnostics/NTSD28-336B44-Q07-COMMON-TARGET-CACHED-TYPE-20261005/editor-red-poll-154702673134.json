@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "2513d9f526c941b583fb0b83709659f7",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791215145391,
+      "finished_unix_ms": 1791215202587,
+      "last_update_unix_ms": 1791215202587,
+      "progress": {
+        "completed": 3,
+        "total": 8897,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791215193206,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(0)",
+        "last_finished_unix_ms": 1791215200092,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesOneDriverTick",
+            "message": "  Expected: 50\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(500)",
+            "message": "  Expected: 50\r\n  But was:  0\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

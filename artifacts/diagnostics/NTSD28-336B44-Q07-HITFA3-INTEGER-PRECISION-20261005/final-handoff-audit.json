@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T14:48:25.688224+00:00",
+  "requiredRegistrations": {
+    "docs/ai/CHANGE-LEDGER.md": true,
+    "docs/ai/STATE.md": true,
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": true,
+    "docs/ai/CURRENT-AUTHORITY.md": true,
+    "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md": true,
+    "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md": true,
+    "docs/ai/FILE-OPERATIONS/INDEX.md": true
+  },
+  "status": "RUNTIME_PENDING",
+  "operation": "VERIFIED",
+  "noRunningJobs": true,
+  "evidence": "editor-final-state.json/terminal GREEN original job",
+  "parentGoal": "active"
+}

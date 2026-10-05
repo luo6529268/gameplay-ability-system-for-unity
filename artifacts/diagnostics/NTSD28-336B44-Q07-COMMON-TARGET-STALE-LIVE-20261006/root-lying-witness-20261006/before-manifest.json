@@ -1,0 +1,79 @@
+{
+  "utc": "2026-10-05T17:18:46.929829+00:00",
+  "operation": "NTSD28-336B44-Q07-STALE-LIVE-ROOT-DOC-20261006",
+  "task": "NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001",
+  "documents": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 356189,
+      "sha256": "4C9362308BC14C11A7ADD17A06D4EB2760156D30C2C6AB0A5CFE9B44FF802355",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1508298,
+      "sha256": "3A443ABBA85085B2DD432CD830DF75159BCE66FBBDFB2BA6A995B4DAB5250C71",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\STATE.md",
+      "gitStatus": " M docs/ai/STATE.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1442697,
+      "sha256": "FD7DA2D3EBDDC3E3E33424C058942FB24496B53AF15208B6984DCCB89DEA7D6C",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 350183,
+      "sha256": "E868C08E917275ED86B0A195BE14E068C75549EEBD26A69B0B62272B6DA5987E",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "bytes": 4993,
+      "sha256": "747B3FCFB113B57BC0382E119519EF5C1C470DF852C8D5E255E263B7241F8F4C",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\TASKS\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "gitStatus": "?? docs/ai/TASKS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md\n"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "bytes": 5836,
+      "sha256": "7A7490C4BEBC05C2F77E0733A596B7CF28BA8DAF7F0FF74200788C0A254EBFBA",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md",
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md\n"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 612943,
+      "sha256": "506762DF99E2B11E8C3F58DE965C85795DF1A74DDEE403D903EE58DC3DEA7EEA",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\REPORT.md",
+      "bytes": 5228,
+      "sha256": "690BBE17B2F80C4BA72DE333A68F8977E751EE8912ED4D6E4A4D8A786AEFA299",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\REPORT.md",
+      "gitStatus": "?? artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/REPORT.md\n"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 13058,
+      "sha256": "84BB00DB14407FEA43645F8F769AF841C6BD3A907E7C46AC017C64D9E5B589CA",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+    }
+  ]
+}

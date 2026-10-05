@@ -1,0 +1,8 @@
+{
+  "utc": "2026-10-05T15:43:38.725236+00:00",
+  "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\native_cached_type_driver_witness.cpp",
+  "beforeSha256": "968146190BFAA7CC9B9C935B0A0CF1733A13E28F9AA031E63DB138969F5980BE",
+  "backup": "native_cached_type_driver_witness-before-latch-fix.cpp.txt",
+  "reason": "actual FrameMachine resets counter when action != action_latch; controlled held frame399/c3 must declare latch399 too; original run failed before measured tick, no production difference claimed",
+  "command": "apply_patch add explicit frame.action_latch=399 before terminal step; compile new v2 executable, preserve original outputs"
+}

@@ -1,0 +1,10 @@
+{
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\native_cached_type_driver_witness.exe",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime"
+  ],
+  "utc": "2026-10-05T15:42:55.770445+00:00",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "formal terminal frame did not release slot while retaining cache\n"
+}

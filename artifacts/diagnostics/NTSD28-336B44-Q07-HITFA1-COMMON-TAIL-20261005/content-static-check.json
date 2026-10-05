@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-05T14:16:18.592765+00:00",
+  "content": [
+    {
+      "relativePath": "c/sai/a/ink.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "c/sai/sai.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "c/nar/a/atk.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "custom/1genma/a/wind.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "data/data.txt",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "w/e.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": false
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    },
+    {
+      "relativePath": "custom/1genma/genma.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "currentBothSame": true
+    }
+  ],
+  "correction": "scope-static-check dat list was empty due key name; actual before group is content with eight two-sided DAT entries"
+}

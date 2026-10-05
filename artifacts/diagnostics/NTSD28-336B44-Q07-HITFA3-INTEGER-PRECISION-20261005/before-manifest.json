@@ -1,0 +1,133 @@
+{
+  "utc": "2026-10-05T14:30:14.420409+00:00",
+  "scripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "FAFFA92AE874F7AB00B7394C614FEEF613B7ADFA8F296F439C3BAA8910A77ECA",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "bytes": 290960,
+      "gitStatus": " M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs\n"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "E986AD1E9E4F4AEE61D5C3E93E5CEBD5B921420E6B060CAD78C0C81B02A43362",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "bytes": 85200,
+      "gitStatus": " M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs\n"
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "C029A2947D1FC4D6574C96ED814DED182BA2AF5599DF1D770560BB12A8AD0430",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 348726,
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "11AB56765D0C57DD55C6F313A2C5B89097B1A3E1B478280B4F55EE0712841996",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\docs\\ai\\STATE.md",
+      "bytes": 1499724,
+      "gitStatus": " M docs/ai/STATE.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "1E1F8BEFDC8D994ECDF73A4E93B2CA91EA13091276491754928AF2C191E90530",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1434123,
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "BF22D700C093D96C5F5F3015B281639B28F46D513BE0282E7EB94F74568F4A83",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 341098,
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n"
+    },
+    {
+      "path": "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "sha256": "9C2261D1380A41C2890A835FF2FE54A4FD61C6E7066226F83F71D31593599A89",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "bytes": 25961,
+      "gitStatus": " M docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md\n"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "ED14F3962E5D32DC33F35661215C3B491656A59E09A0B47E21DDC92316FC57E6",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 611495,
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "B08719A7E5E62562B08A30CFF29DF53986C0365CDD094AA781DD426B27B127FA",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 12022,
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "sha256": "D46CD858DDF763D43D96F1220918FAFBB0F804C2E6B6D40D2FC99546C8FD6E0D"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "sha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761"
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "data/data.txt",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\data\\data.txt",
+      "formalSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+      "stagedSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0"
+    },
+    {
+      "relativePath": "c/dei/a/cla2.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+      "formalSha256": "0F9222EABD9A4FC44B32A65580C58A9CF7896368DCCFB8637FB6368759F76E08",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+      "stagedSha256": "0F9222EABD9A4FC44B32A65580C58A9CF7896368DCCFB8637FB6368759F76E08"
+    },
+    {
+      "relativePath": "c/dei/bir.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\dei\\bir.dat",
+      "formalSha256": "156A2798327699964DAC1A67A76AF7E9EA3C1787DBCC00413CD147777F971D12",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\bir.dat",
+      "stagedSha256": "156A2798327699964DAC1A67A76AF7E9EA3C1787DBCC00413CD147777F971D12"
+    }
+  ]
+}

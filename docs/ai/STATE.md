@@ -1,3 +1,47 @@
+> **2026-10-06 正式根倒地目标四tick限定补证完成：** 同Task内正式336B44 EXE headless回放exit0/passed=true，206/frame54面对持续99/frame230/state14/HP500目标，四tick X500→500.7→502.1→504.2→507、Vx0.7/1.4/2.1/2.8、末动作0。目标仍在场/倒地，直接证明本例追踪运动继续；私有3F8未导出。复用旧健康目标Core/Unity11主体字段各55/55同，仅输出对照，非完整同初态/全World。正式地图Z钳制另列用户例外。未改C#/DAT/Scene/源码、未运行Unity/旧七项，11保护SHA稳。用户确认非战斗修改不引出全局恢复前置；父Record仍RUNTIME_PENDING，父Q/目标开放，229Record/68未关REUSE54/TRIGGER14不变。本出口完成，下一仅按当前总表实际首差/必要终验，停止源码历史扩检。 [正式原件](../../artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md)
+
+> **2026-10-06 用户边界澄清与正式出口：** 用户确认近期修改只涉及非战斗场景逻辑，本任务不因这些变化扩大源码恢复/非战斗审计或阻塞战斗对齐；正式根EXE仍336B44，候选不晋升。已有共用目标7/7、Core26/26/direct15/15限定证据保留。下一在同Task内仅一次正式EXE206/frame54→99/frame230倒地目标四tick诊断；初态受控/零输入，不改DAT、Scene或C#，不重跑七项。自然击倒/HP0/私有3F8/整场不由该例推出；父Q及总目标仍开放。229Record/68未关REUSE54/TRIGGER14保持，此次是既有包一个出口，非新增生产任务。
+
+> **2026-10-06 最终源码对应关系复核前置：** 正式根EXE仍为336B44，规则/资源权威不切换；本包7/7与Core声明字段26/26、direct15/15限定结果保留，生产RUNTIME_PENDING。native v2编译前后70输入稳定后，收尾README_SOURCE.md已由外部C0BA→DE936改为“持续开发的锦标赛候选、当前源快照与根发行EXE不能视为逐字节对应”；当前其余69输入及根/三个规则body稳，完整源树对应关系须重新确认。下一先只读核冻结源和正式根对应证据，禁止用候选或当前源树新变化定义336B44战斗规则；不因此重跑旧七项/全套或修改非战斗。详当前包AUTHORITY-PROVENANCE-CORRECTION.md与final-handoff-audit.json；下方“收尾70全稳”只指更早快照。229Record/68未关REUSE54/TRIGGER14不变，不等于总体已闭。
+
+> **2026-10-06 共用活跃旧目标限定收尾：** NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001 / RUNTIME_PENDING / SCOPED_STALE_LIVE_TARGET_DRIVER_PASS；原Editor四RED三个预期首差，修后七具名7/7 PASS，当前native v2完整Driver声明26/26/direct15/15同、view残差0。仅两共用hunk/test222插入，不改DAT/非战斗/inactive语义；原Battle clean/nonPlay/Console0error、四保护/三DAT两端/九备份稳。外部build与v1头文件漂移保留，v2当前70输入稳定，不称原before或全playable闭包同一。必要ONE完成；229Record/68未关REUSE54/TRIGGER14/P0=DEP=ONE=0，不是68必跑任务。Q12代表六子门复用，自然/根EXE/Host/GPU与整场未知不晋升，父Q及目标开放；下方PLANNED/ONE1是事前快照。
+
+> **2026-10-06 共用活跃旧目标候选必要诊断：** NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001 / PLANNED；native重扫无结果保留3F8且旧槽active仍继续，Unity返回null/Fa1额外目标死血门。只两准确脚本/三direct与一个完整tick先证首差，不改DAT/非战斗/inactive语义；229Record/68未关REUSE53/TRIGGER14/ONE1/P0=DEP=0，父Q及目标开放。Q12代表六门已只读核原件、无缺失必跑门，不重跑旧样本。
+
+> **2026-10-05 共用缓存目标类型限定收尾：** NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001 / RUNTIME_PENDING / SCOPED_CACHED_TARGET_DRIVER_PASS；两个预期RED首差＋HP0控制、修后4/4 PASS；正式Core实际OPoint/受控终止/槽复用后完整Driver，subject26/26同、view残差0。仅缓存type一行移除、scan及其它规则保持，不改DAT/非战斗。原Battle clean/nonPlay/Console0error，四保护/五权威/六DAT两端/九备份/76native输入稳。2F8无共用消费者正式可达新首差，保持条件门；228Record/67未关REUSE53/TRIGGER14/P0=DEP=ONE=0。自然/根EXE/Host/GPU及不同World边界不升级整场，父Q及总目标开放；下方PLANNED/ONE1为事前快照。
+
+> NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001 / CODE_WRITTEN：测试与native诊断已写，production未改；原Editor RED和native实际链待运行。两准确脚本、无DAT/2F8/非战斗改动。
+
+> **2026-10-05 共用缓存目标type候选预登记：** NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001 / PLANNED；正式缓存块不限制type，Unity额外限制角色。只两准确脚本，native实际正式OPoint/生命周期槽复用与三RED先确认，尚无本包运行首差，不改DAT/2F8/非战斗。228份同名Record/67未关闭，REUSE52/TRIGGER14/ONE1/P0=DEP=0；旧证据不重跑，父Q及目标开放。
+
+> **2026-10-05 hitFa10最终审计收尾：** NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 保持RUNTIME_PENDING / SCOPED_TWO_TICK_DRIVER_PASS；实际5/5与39/39限定证据有效。外部build.ps1变更已保存观察和当前字节，已用28Core声明相同、其余73输入稳定；不再称最终五权威/74输入全稳。四保护/五DAT两端/十before备份保持，文件Operation已VERIFIED，最终治理见本包GOVERNANCE-CHECK。未新增代码/测试或权威晋升，227份Record/66未关闭REUSE52/TRIGGER14/ONE0，父Q及目标开放。
+
+> **2026-10-05 共用10目标/旧运动限定收尾：** NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 / RUNTIME_PENDING / SCOPED_TWO_TICK_DRIVER_PASS；原Editor四RED首差，修后同四案例＋局部SelfCheck5/5 PASS。native当前Core正常902/0→4→5两tick实际1/10消费，声明字段39/39同、source500/V0/HP0与比例保持；cached/scan/no-target三模式通过。仅10分支接共同目标与sentinelHP、移旧运动，纠正对应旧自检，不改DAT/其它分支/非战斗。原Battle clean/nonPlay/Console0error；自然/正式根/Host/GPU及共有2F8/cache类型候选另留条件证据边界。本必要ONE完成，227份同名Record/66未关闭，REUSE52/TRIGGER14/P0=DEP=ONE=0，父Q/总目标开放；下方PLANNED/CODE_WRITTEN/ONE1为事前快照。
+
+> NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 / CODE_WRITTEN：仅两方法四案例与新native两步诊断已写，production/旧SelfCheck保持；native/RED待运行，未宣称通过。
+
+> **2026-10-05 共用10目标/旧运动候选预登记：** NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 / PLANNED，当前native common-only10含目标缓存/重扫/无目标处理后返回，Unity旧分支跳目标并额外运动；正式902/4/5可达。只三准确脚本（含旧误断言局部SelfCheck），native两完整tick/四RED先验证；不改DAT/其它分支/非战斗。227份同名Record/66未关闭，REUSE51/TRIGGER14/ONE1/P0=DEP=0；旧证据不重跑，父Q/总目标开放。
+
+> **2026-10-05 共用1/3非正HP门限定收尾：** NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001 / RUNTIME_PENDING / SCOPED_FULL_DRIVER_PASS；原Editor三个RED预期首差，修后同三项＋局部SelfCheck4/4 PASS。native完整Core两模式HP0单步均停追踪运动、帧正常推进；206完整Driver声明字段26/26同，源500/V0/counter1及统一比例保持。只Fa1补自身HP门、Fa3删旧漂移调用，不改DAT/物理/生命周期/非战斗。原Battle clean/nonPlay/Console0error、四保护/五DAT两端/五权威稳；自然降血/正式根/完整Host/GPU等仅实际首差或相关改动回访。本必要ONE完成，226份同名Record/65未关闭，REUSE51/TRIGGER14/P0=DEP=ONE=0，父Q/总目标开放；下方PLANNED/CODE_WRITTEN/ONE1为事前快照。
+
+> 2026-10-05T14:55:29.691985+00:00 NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001 / CODE_WRITTEN：两个测试方法/三RED参数与新native诊断已写，production未改；等待实际差异。
+
+> **2026-10-05 共用1/3非正HP门候选预登记：** NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001 / PLANNED，正式common目标解析后HP<=0停追踪，Unity1缺自身HP门、3有旧漂移。只两既有脚本、三个RED与局部SelfCheck，native完整Core一步先验证；不改DAT/其它分支/非战斗。226份同名Record/65未关闭，REUSE50/TRIGGER14/ONE1/P0=DEP=0，旧证据不重跑，父Q/总目标开放。
+
+> **2026-10-05 behavior3四tick整数首差限定收尾：** NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 / RUNTIME_PENDING / SCOPED_FULL_DRIVER_PASS；原Editor三项RED均预期首差，修后同三项＋局部SelfCheck4/4 PASS。正式206/54正常wait3四tick，native完整Core与Unity声明字段65/65同，最终源X507/整数507/Vx2.8/frame0，view统一比例保持。只修同共用分支四float常量为double，不改DAT/非战斗。原Battle clean/nonPlay/Console0error、四保护/三DAT两端稳；自然出生/706/完整Host/正式根/GPU等仅相关改动或真实首差回访。必要ONE完成，225份同名Record/64未关闭，REUSE50/TRIGGER14/P0=DEP=ONE=0，父Q/总目标开放；下方PLANNED/ONE1为事前快照。
+
+> 2026-10-05T14:41:52.727585+00:00 NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 / COMPILE_PASS: both generated builds 0 errors; native full Core and original Editor RED confirm tick4 source integer507/506. Four common literals corrected, original GREEN pending.
+
+> 2026-10-05T14:37:13.994714+00:00 NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 / CODE_WRITTEN: test-first three cases and native full-Core four-tick diagnostic written; production unchanged. Pending native guard and original Editor RED.
+
+> **2026-10-05 behavior3四tick整数候选预登记：** NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 / PLANNED，正式206/54 wait3正常四tick静态预判源整数507/506，仅一个完整四tick与±Z邻例RED后决定四常量修复；不改DAT/其它分支/非战斗。225份同名Record/64未关闭，REUSE49/TRIGGER14/ONE1/P0=DEP=0，旧证据不重跑，父Q/总目标开放。
+
+> **2026-10-05 behavior1共用消费者限定收尾：** `NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001 / RUNTIME_PENDING / SCOPED_FULL_DRIVER_PASS`；[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005/REPORT.md)。原Editor六项RED预期首差，修后7/7（五参数＋同完整tick＋局部SelfCheck）PASS，Y-2.05/Vy-2/Vx9/previousY-1/sourceX409与统一view比例符合；native v2三分数初态实际AI消费通过，仅源码消费者。只修同共用分支步长/除法/多余Y cap与提前整数，DAT/非战斗保持。四保护/八DAT两端/EXE及三个规则文件稳，原Battle clean/nonPlay/Console0error；外部build变化与诊断初态/启动守卫/闭包核对更正均留原件。必要ONE完成；224份同名Record/63未关闭，REUSE49/TRIGGER14/P0=DEP=ONE=0。自然/正式根/GPU等仅真实首差或相关改动回访，父Q及总目标开放。下方PLANNED/ONE1为事前快照。
+
+> **2026-10-05 behavior1共用消费者生成编译：** `NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001 / COMPILE_PASS`；原Editor六项RED预期失败后，生产声明增量已写，native v2三受控AI消费者初态/输出守卫通过；生成GREEN 0error，原Editor刷新后七项终态待验。下方PLANNED/CODE_WRITTEN为事前快照。
+
+> **2026-10-05 behavior1共用消费者必要复核：** `NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001 / CODE_WRITTEN`。正式902/0存在double1.2顺序比较、额外Y cap/早整数的明确规则候选；只五参数＋单完整tick RED后整体恢复同一消费者，不改DAT/非战斗。共同2/4/12 Vy及hitFa3浮点末位候选未证规则后果，保持条件门、不补临界矩阵。224份同名Record/63未关闭，`REUSE48/TRIGGER14/ONE1/P0=DEP=0`，父Q及总目标开放。
+
 > **2026-10-05 共用加速精度限定收尾：** `NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001 / RUNTIME_PENDING / SCOPED_TEN_TICK_DRIVER_PASS`。原Editor五项RED均首差，修后6/6（左右X/±Z＋同一十tick＋局部SelfCheck）PASS；完整tick10由action2转3/Vx7.000000000000001，源X438.5/view比例保持。当前28core nativeAI十次实函数witness action3，非正式EXE或完整native轨迹。仅共同四处加速常量去f，不改DAT/非战斗/其它分支。四保护/六DAT及EXE/三个规则文件稳，原Battle clean/nonPlay/Console0error；外部build变化有观察原件、不晋升。必要ONE完成；223份同名Record/62未关闭，`REUSE48/TRIGGER14/P0=DEP=ONE=0`。自然/根同初态/GPU等只真实首差或改动回访，父Q及总目标开放；下方PLANNED/ONE1为事前快照。
 
 > **2026-10-05 共用加速精度候选预登记：** `NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001 / COMPILE_PASS`。正式double0.7/0.4与Unityfloat字面量在十次累积的严格7阈值出现静态动作候选；仅两个既有脚本四参数RED先行及一个十tick完整Driver，尚无本包运行结果。不改DAT/非战斗/其它分支。223份同名Record/62未关闭，`REUSE47/TRIGGER14/ONE1/P0=DEP=0`；旧证据不重跑，父Q及总目标开放。

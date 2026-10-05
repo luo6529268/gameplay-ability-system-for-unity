@@ -1,0 +1,57 @@
+{
+  "utc": "2026-10-05T15:06:24.724168+00:00",
+  "evidenceClass": "controlled 206/54 current formal DAT; complete Core vs Unity Driver declared subject fields only",
+  "nativeTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\native-mode3.jsonl",
+  "declaredFields": [
+    "completedTick",
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "target",
+    "hp"
+  ],
+  "rowCount": 2,
+  "identityLimit": "Unity uses legacy scenario/schema/seed/diagnostic Stage23, current LoganRuntime/project mode Asset and partial target initial state; no complete World/Host identity claim",
+  "comparisons": {
+    "red": {
+      "unityTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\unity-full-driver-1b91552d6ac044fab42e4562c5fd7338.jsonl",
+      "checked": 26,
+      "matched": 23,
+      "differences": [
+        {
+          "completedTick": 1,
+          "field": "sourceX",
+          "native": 500,
+          "unity": 502.0
+        },
+        {
+          "completedTick": 1,
+          "field": "sourceIntegerX",
+          "native": 500,
+          "unity": 502
+        },
+        {
+          "completedTick": 1,
+          "field": "vx",
+          "native": 0,
+          "unity": 2.0
+        }
+      ],
+      "maxViewProjectionResidualPx": 0.0
+    },
+    "green": {
+      "unityTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\unity-full-driver-461277cbe76c4393b8971179a9b14a74.jsonl",
+      "checked": 26,
+      "matched": 26,
+      "differences": [],
+      "maxViewProjectionResidualPx": 0.0
+    }
+  }
+}

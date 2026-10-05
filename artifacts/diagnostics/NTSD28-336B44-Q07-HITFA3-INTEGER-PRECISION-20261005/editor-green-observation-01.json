@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "d4ddaf3ac2dd47a8826f24773d842c6e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791211313825,
+      "finished_unix_ms": 1791211366471,
+      "last_update_unix_ms": 1791211366471,
+      "progress": {
+        "completed": 4,
+        "total": 8887,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791211333602,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa3IntegerPositionSurvivesFourFullDriverTicks",
+        "last_finished_unix_ms": 1791211363766,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 43.9026606,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

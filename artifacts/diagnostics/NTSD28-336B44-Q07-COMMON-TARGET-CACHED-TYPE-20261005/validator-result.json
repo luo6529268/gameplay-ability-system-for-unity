@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-05T15:51:10.948047+00:00",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 5.5,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1281",
+    "  Governed code files in diff: 3"
+  ],
+  "output": "validator-output.log"
+}

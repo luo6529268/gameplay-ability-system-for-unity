@@ -1,0 +1,143 @@
+{
+  "utc": "2026-10-05T16:10:25.564671+00:00",
+  "operation": "NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001-EDIT-20261006",
+  "scripts": [
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "bytes": 290958,
+      "sha256": "800F67827DE867D69EE037950E65B180CEFFD670FD7ABE1764C895BB35C170A2",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "gitStatus": " M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs\n"
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "bytes": 130544,
+      "sha256": "C254BCC271B5BC44A23DABB5F56D290152FEC154C172AD899F5D352C8E8BECD8",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "gitStatus": " M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs\n"
+    }
+  ],
+  "documents": [
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 354079,
+      "sha256": "3ECEAE387D293A6C9800B2E4275DF99DFABFDD24DF0D4ACECACAE9F5150F5567",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n"
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1506188,
+      "sha256": "C25CA0E27A102B8B3CB4CE734B539F19FBA0D90ABC3A611B3E629A1F00940BA0",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\docs\\ai\\STATE.md",
+      "gitStatus": " M docs/ai/STATE.md\n"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1440587,
+      "sha256": "67E35F4F6957D478E0E686641A434F6DDB78D5667911F0C62D0EE0C34DAAC8BB",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "bytes": 347762,
+      "sha256": "57E1FA73DED29678A59988DD1C7385D7F0F47ADB2B71550DD3CDFB0A9AB5EB26",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n"
+    },
+    {
+      "path": "docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "bytes": 31889,
+      "sha256": "475E23915844FB1106FFDD49D2F012F141B90F3F09902EE3C3185439646A12B3",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "gitStatus": " M docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md\n"
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 612658,
+      "sha256": "65D871FE98CECDE41B5A0C238AED3D2A15A1F4AF6BFBF2B7F546BDC7B9050E6F",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 12851,
+      "sha256": "EBAD659136AC5DD1C04EE6BDB159EAC174EF87B96F4C7CAA689F23008BDC3069",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "sha256": "5F400FDAD956BB1FF9A9FE680033049F7E1A869827F08D9E08DCCC89714E4DE0"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "sha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761"
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "data/data.txt",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\data\\data.txt",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+      "formalSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+      "stagedSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0"
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "formalSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A",
+      "stagedSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A"
+    },
+    {
+      "relativePath": "c/nar/sna.dat",
+      "formalPath": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\sna.dat",
+      "stagedPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\sna.dat",
+      "formalSha256": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035",
+      "stagedSha256": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035"
+    }
+  ]
+}

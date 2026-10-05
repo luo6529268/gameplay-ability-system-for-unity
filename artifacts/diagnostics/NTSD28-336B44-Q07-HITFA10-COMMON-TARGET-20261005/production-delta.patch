@@ -1,0 +1,27 @@
+--- before-dirty
+
++++ after-current
+
+@@ -1489,17 +1489,10 @@
+
+ 
+             if (hitFa == 10)
+             {
+-                if (Runtime.Vx < 0f)
+-                    Runtime.Vx -= 1.1f;
+-                else
+-                    Runtime.Vx += 1.1f;
+-
+-                Runtime.Vx = System.Math.Clamp(Runtime.Vx, -30.0, 30.0);
+-                if (Runtime.Y > 3f)
+-                    Runtime.Y = 3f;
+-
+-                SwitchDir(Runtime.Vx > 0f ? "right" : "left");
+-                Runtime.YInt = (int)Runtime.Y;
++                // Alignment contract: NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.
++                ResolveFrameLogicTargetByHitFa(hitFa);
++                if (ObjectAiTargetSlot3F8 == -1 && Health != null)
++                    Health.HP = 0;
+                 return;
+             }
+ 

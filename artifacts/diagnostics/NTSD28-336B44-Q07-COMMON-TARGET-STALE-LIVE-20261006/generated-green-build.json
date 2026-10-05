@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-05T16:31:19.007295+00:00",
+  "command": [
+    "dotnet",
+    "build",
+    "Assembly-CSharp-Editor.csproj",
+    "--no-restore",
+    "--nologo",
+    "-v:q",
+    "-clp:ErrorsOnly"
+  ],
+  "exitCode": 0,
+  "elapsedSeconds": 28.359000000054948,
+  "stdout": "\n已成功生成。\n    334 个警告\n    0 个错误\n\n已用时间 00:00:27.87\n",
+  "stderr": ""
+}

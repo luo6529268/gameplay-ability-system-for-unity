@@ -1,0 +1,11 @@
+{
+  "mode": "EditMode",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(500)",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(0)",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesOneDriverTick",
+    "NTSD.Test.Editor.NTSD28Q07HitFa5FullDriverEditorTests.ExistingLiveHitFaRepresentativeRoutingRemainsValid"
+  ],
+  "includeDetails": true,
+  "includeFailedTests": true
+}

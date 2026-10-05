@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-05T13:47:56.996525+00:00",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa2AccelerationBandSurvivesTenFullDriverTicks",
+    "NTSD.Test.Editor.NTSD28Q07HitFa5FullDriverEditorTests.ExistingLiveHitFaRepresentativeRoutingRemainsValid"
+  ],
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "83829345b2c84ee79aab5a96cb42e6ce",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-05T14:47:28.372900+00:00",
+  "oldAudit": {
+    "missingRoutes": [
+      "NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001",
+      "NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001"
+    ],
+    "routeCounts": {
+      "REUSE": 48,
+      "TRIGGER": 14
+    }
+  },
+  "corrected": {
+    "missing": [],
+    "counts": {
+      "REUSE": 50,
+      "TRIGGER": 14
+    }
+  },
+  "noExtraTests": true
+}

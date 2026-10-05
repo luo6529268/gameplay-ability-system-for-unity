@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-05T15:24:29.470227+00:00",
+  "evidenceClass": "controlled formal902/0 HP0, actualAI1->10 in two complete Core/Unity Driver ticks; declared subject fields only",
+  "declaredFields": [
+    "completedTick",
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "target",
+    "hp"
+  ],
+  "rowCount": 3,
+  "identityLimit": "Unity currentLoganRuntime/projectmode with legacy schema/seed/Stage23/partial target state, no completeWorld/Host/formalEXE claim",
+  "comparisons": {
+    "red": {
+      "unityTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\unity-full-driver-acaa640db96f40ffa72b61f86f3f3d60.jsonl",
+      "checked": 39,
+      "matched": 36,
+      "differences": [
+        {
+          "completedTick": 2,
+          "field": "sourceX",
+          "native": 500,
+          "unity": 501.10000002384186
+        },
+        {
+          "completedTick": 2,
+          "field": "sourceIntegerX",
+          "native": 500,
+          "unity": 501
+        },
+        {
+          "completedTick": 2,
+          "field": "vx",
+          "native": 0,
+          "unity": 1.100000023841858
+        }
+      ],
+      "maxViewProjectionResidualPx": 0.0
+    },
+    "green": {
+      "unityTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\unity-full-driver-d0088f1459f94bcb8f6c95d4ca3bfa7c.jsonl",
+      "checked": 39,
+      "matched": 39,
+      "differences": [],
+      "maxViewProjectionResidualPx": 0.0
+    }
+  }
+}

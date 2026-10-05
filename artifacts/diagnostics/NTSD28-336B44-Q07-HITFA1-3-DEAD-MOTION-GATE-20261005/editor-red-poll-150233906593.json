@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "77c232993d844af493fc38a014a5c81b",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791212491197,
+      "finished_unix_ms": 1791212540955,
+      "last_update_unix_ms": 1791212540955,
+      "progress": {
+        "completed": 3,
+        "total": 8890,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791212509502,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedDeadHitFa3MotionSurvivesOneFullDriverTick",
+        "last_finished_unix_ms": 1791212538394,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedDeadHitFa1Or3PreservesNativeMotion(902,0,1)",
+            "message": "  Expected: 0\r\n  But was:  0.84999999999999998d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedDeadHitFa1Or3PreservesNativeMotion(206,54,3)",
+            "message": "  Expected: 0\r\n  But was:  2.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedDeadHitFa3MotionSurvivesOneFullDriverTick",
+            "message": "  nonpositive HP must not accelerate the complete driver source\r\n  Expected: 500\r\n  But was:  502\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

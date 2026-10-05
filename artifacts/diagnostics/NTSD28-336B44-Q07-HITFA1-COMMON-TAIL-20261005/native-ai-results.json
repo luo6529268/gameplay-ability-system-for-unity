@@ -1,0 +1,113 @@
+{
+  "utc": "2026-10-05T14:05:05.030658+00:00",
+  "results": [
+    {
+      "mode": "boundary",
+      "exitCode": 0,
+      "rows": [
+        {
+          "call": 0,
+          "vx": 0,
+          "vy": 0,
+          "vz": 0,
+          "integerY": -11,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": -11,
+          "sourceZ": 600
+        },
+        {
+          "call": 1,
+          "vx": 0,
+          "vy": 0,
+          "vz": 0,
+          "integerY": -11,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": -11,
+          "sourceZ": 600
+        }
+      ],
+      "stderr": "",
+      "command": [
+        "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\native_ai_hitfa1_witness.exe",
+        "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+        "boundary"
+      ]
+    },
+    {
+      "mode": "cross",
+      "exitCode": 0,
+      "rows": [
+        {
+          "call": 0,
+          "vx": 9,
+          "vy": -2.8,
+          "vz": 0,
+          "integerY": -1,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": -1,
+          "sourceZ": 600
+        },
+        {
+          "call": 1,
+          "vx": 9,
+          "vy": -2,
+          "vz": 0.3,
+          "integerY": -1,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": 0.19999999999999996,
+          "sourceZ": 600
+        }
+      ],
+      "stderr": "",
+      "command": [
+        "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\native_ai_hitfa1_witness.exe",
+        "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+        "cross"
+      ]
+    },
+    {
+      "mode": "positive",
+      "exitCode": 0,
+      "rows": [
+        {
+          "call": 0,
+          "vx": 0,
+          "vy": 0,
+          "vz": 0,
+          "integerY": 3,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": 3,
+          "sourceZ": 600
+        },
+        {
+          "call": 1,
+          "vx": 0,
+          "vy": 0,
+          "vz": 0,
+          "integerY": 3,
+          "action": 0,
+          "target": 0,
+          "sourceX": 400,
+          "sourceY": 4.2,
+          "sourceZ": 600
+        }
+      ],
+      "stderr": "",
+      "command": [
+        "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\native_ai_hitfa1_witness.exe",
+        "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+        "positive"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "source": "/root/d024_noncharacter_remainder read-only final message",
+  "zip": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan.zip",
+  "sourceFileCount": 151,
+  "sourceBytes": 3990495,
+  "normalizedSourceSha256": "E3CE2D07AAC3B82F1161684EAF21929E30CBA2E96EB93FE7CDA4288238D75258",
+  "g0SourceFileCount": 159,
+  "g0SourceBytes": 4371509,
+  "g0NormalizedSourceSha256": "2924DDD8C153EE34378081578D21D7EF9EB7E8BDF73799695C89C56DC3418CA1",
+  "nativeAiZipEqualsV2": true,
+  "nativeAiSha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+  "zipDriverPhysicsWorldAndHeaderDifferFromG0": true,
+  "conclusion": "Single native_ai file has an exact ZIP original; ZIP is not complete G0 source identity. User nonbattle clarification stops global source recovery; formal root observable case evaluated independently. No extraction/restoration/build/Editor action performed."
+}

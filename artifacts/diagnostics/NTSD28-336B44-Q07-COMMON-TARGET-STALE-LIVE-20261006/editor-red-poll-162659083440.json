@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "508d5e1656fd4d03ad2f0ced9f935d05",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791217353338,
+      "finished_unix_ms": 1791217473157,
+      "last_update_unix_ms": 1791217473157,
+      "progress": {
+        "completed": 4,
+        "total": 8901,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791217458669,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.StaleLiveTargetSurvivesFailedScan(0,0,True)",
+        "last_finished_unix_ms": 1791217469115,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedInvalidLiveTargetSurvivesOneDriverTick",
+            "message": "  Expected: 0.84999999999999998d\r\n  But was:  0.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.StaleLiveTargetSurvivesFailedScan(500,230,False)",
+            "message": "  Expected: 0.84999999999999998d\r\n  But was:  0.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.StaleLiveTargetSurvivesFailedScan(0,0,False)",
+            "message": "  Expected: 0.84999999999999998d\r\n  But was:  0.0d\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

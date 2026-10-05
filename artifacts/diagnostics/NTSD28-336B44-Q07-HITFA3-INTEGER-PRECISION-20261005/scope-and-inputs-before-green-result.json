@@ -1,0 +1,140 @@
+{
+  "utc": "2026-10-05T14:42:27.105093+00:00",
+  "protected": [
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "before": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "now": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "before": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "now": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "before": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "now": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "before": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "now": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "unchanged": true
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "data/data.txt",
+      "formalPath": {
+        "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\data\\data.txt",
+        "unchanged": true
+      },
+      "stagedPath": {
+        "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+        "unchanged": true
+      },
+      "sameContentIdentity": true
+    },
+    {
+      "relativePath": "c/dei/a/cla2.dat",
+      "formalPath": {
+        "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+        "unchanged": true
+      },
+      "stagedPath": {
+        "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\a\\cla2.dat",
+        "unchanged": true
+      },
+      "sameContentIdentity": true
+    },
+    {
+      "relativePath": "c/dei/bir.dat",
+      "formalPath": {
+        "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\dei\\bir.dat",
+        "unchanged": true
+      },
+      "stagedPath": {
+        "path": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\dei\\bir.dat",
+        "unchanged": true
+      },
+      "sameContentIdentity": true
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "before": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "now": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "before": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "now": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "before": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "now": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "before": "D46CD858DDF763D43D96F1220918FAFBB0F804C2E6B6D40D2FC99546C8FD6E0D",
+      "now": "D46CD858DDF763D43D96F1220918FAFBB0F804C2E6B6D40D2FC99546C8FD6E0D",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "before": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "now": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "unchanged": true
+    }
+  ],
+  "backupValid": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "valid": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "valid": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "valid": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "valid": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "valid": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "valid": true
+    },
+    {
+      "path": "docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "valid": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "valid": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "valid": true
+    }
+  ],
+  "productionOutsideFunctionBytesUnchanged": true,
+  "nativeInputCount": 69,
+  "changedNativeInputs": []
+}

@@ -1,0 +1,10 @@
+--- artifacts\diagnostics\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\before\Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs
++++ Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs
+@@ -2470,7 +2470,6 @@
+             if (target != null)
+             {
+                 bool valid = !IsDeadLikeFrameLogicTarget(target) &&
+-                             IsCharacterFrameLogicTarget(target) &&
+                              target.GetState() != LF2States.Lying &&
+                              Mathf.Abs(target.HitStun) <= 2f &&
+                              ResolveFrameLogicRelationIdentity(target) != selfTeam;

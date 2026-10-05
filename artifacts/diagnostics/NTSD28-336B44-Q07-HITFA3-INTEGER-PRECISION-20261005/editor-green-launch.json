@@ -1,0 +1,21 @@
+{
+  "tests": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa3IntegerPositionSurvivesFourFullDriverTicks",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa3DepthAccelerationUsesNativeDouble",
+    "NTSD.Test.Editor.NTSD28Q07HitFa5FullDriverEditorTests.ExistingLiveHitFaRepresentativeRoutingRemainsValid"
+  ],
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d4ddaf3ac2dd47a8826f24773d842c6e",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

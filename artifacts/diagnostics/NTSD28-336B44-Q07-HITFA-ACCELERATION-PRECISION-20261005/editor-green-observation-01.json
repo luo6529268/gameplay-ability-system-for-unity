@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-05T13:49:00.797533+00:00",
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "83829345b2c84ee79aab5a96cb42e6ce",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791208076592,
+        "finished_unix_ms": 1791208140699,
+        "last_update_unix_ms": 1791208140699,
+        "progress": {
+          "completed": 6,
+          "total": 8878,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791208130993,
+          "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFaDoubleAccelerationKeepsNativeThreshold(207,115,0,-1,1)",
+          "last_finished_unix_ms": 1791208137419,
+          "stuck_suspected": false,
+          "editor_is_focused": true,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 6,
+            "passed": 6,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 56.3994129,
+            "resultState": "Passed"
+          },
+          "results": []
+        }
+      }
+    }
+  }
+}

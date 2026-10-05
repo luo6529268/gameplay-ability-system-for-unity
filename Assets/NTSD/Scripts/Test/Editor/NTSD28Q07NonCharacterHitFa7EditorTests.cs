@@ -211,6 +211,218 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [TestCase(-11.2, 0, 0, 0, 0, 0, -10.0, 0, false)]
+        [TestCase(-1.25, 100, -2.8, 9, 0, 0, -0.05, -2.0, true)]
+        [TestCase(3.75, 100, 0, 0, 0, 0, 4.95, 0, false)]
+        [TestCase(-30, 0, 0, 0, 1, 1, -28.8, 0, false)]
+        [TestCase(-30, 0, 0, 0, -1, -1, -28.8, 0, false)]
+        public void IndexedHitFa1KeepsNativeVerticalBranchAndPhase(
+            double initialY, double targetY, double initialVy, double initialVx,
+            int xDirection, int zDirection, double expectedY, double expectedVy,
+            bool consumePhysics)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 902).Type, Is.EqualTo(3));
+            Assert.That(configs[902].characterData.frames.Single(frame =>
+                frame.frameId == 0).hit_Fa, Is.EqualTo(1));
+
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null,
+                loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+
+            var target = new LF2Character { ObjectId = 99 };
+            target.ModuleInitialize();
+            target.SetRequiredRuntimeSlot(0);
+            target.ModuleBind(configs[99], 99, world);
+            target.Initialize(500, 500);
+            target.Team = 2;
+            target.RelationTeam = 2;
+            var subject = new LF2SpecialAttack { ObjectId = 902 };
+            subject.FrameCache.Load(configs[902]);
+            subject.ImmediateFrame(0);
+            subject.SetRequiredRuntimeSlot(50);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 500;
+            subject.ObjectAiTargetSlot3F8 = 0;
+            world.Register(subject);
+
+            void Place(NTSDEntityRuntime runtime, int sourceX, double y, int sourceZ)
+            {
+                runtime.SetPosition(
+                    world.SpatialProjection.SourceToViewX(sourceX), y,
+                    world.SpatialProjection.SourceToViewZ(sourceZ));
+                runtime.SyncIntegerPosition();
+                runtime.SetSourceRulePosition(sourceX, sourceZ);
+                runtime.SyncSourceRuleIntegerPosition();
+                runtime.SetVelocity(0, 0, 0);
+            }
+
+            try
+            {
+                Place(subject.Runtime, 400, initialY, 600);
+                Place(target.Runtime, 400 + xDirection * 300, targetY,
+                    zDirection == 0 ? 604 : 600 + zDirection * 20);
+                subject.Runtime.SetVelocity(initialVx, initialVy, 0);
+                int initialYInt = subject.Runtime.YInt;
+
+                subject.RunFrameLogicBeforeAdvance();
+
+                Assert.That(subject.Runtime.Y, Is.EqualTo(expectedY).Within(1e-9));
+                Assert.That(subject.Runtime.YInt, Is.EqualTo(initialYInt));
+                Assert.That(subject.Runtime.Vy, Is.EqualTo(expectedVy).Within(1e-9));
+                Assert.That(subject.Runtime.Vx, Is.EqualTo(initialVx + xDirection * 0.85));
+                Assert.That(subject.Runtime.Vz, Is.EqualTo(zDirection * 0.3));
+                Assert.That(subject.Frame.N, Is.Zero);
+                Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(400));
+                Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                Assert.That(subject.Health.HP, Is.EqualTo(500));
+                Assert.That(target.Health.HP, Is.EqualTo(500));
+                Assert.That(world.ObjectCount, Is.EqualTo(2));
+                if (consumePhysics)
+                {
+                    CharacterMechanics.StepNonCharacterBattleLogic(
+                        subject.Runtime, 0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale);
+                    Assert.That(subject.Runtime.Vx, Is.EqualTo(initialVx));
+                    Assert.That(subject.Runtime.Y,
+                        Is.EqualTo(expectedY + expectedVy).Within(1e-9));
+                    Assert.That(subject.Runtime.NativePreviousY104, Is.EqualTo(initialYInt));
+                    Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(400 + initialVx));
+                }
+            }
+            finally
+            {
+                world.Unregister(subject);
+                world.Unregister(target);
+            }
+        }
+
+        [Test]
+        public void IndexedHitFa1VerticalPhaseSurvivesOneFullDriverTick()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            LF2CharacterDataWrapper definition = configs[902];
+            LF2FrameData sourceFrame = definition.characterData.frames.First(frame =>
+                frame.frameId == 0);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 902).Type, Is.EqualTo(3));
+            Assert.That(definition.characterData.type_sub, Is.EqualTo(902));
+            Assert.That(sourceFrame.hit_Fa, Is.EqualTo(1));
+            Assert.That(sourceFrame.wait, Is.EqualTo(1));
+            Assert.That(sourceFrame.state, Is.EqualTo(3000));
+            Assert.That(sourceFrame.nativeDvx, Is.Zero);
+            Assert.That(sourceFrame.nativeDvy, Is.Zero);
+            Assert.That(sourceFrame.nativeDvz, Is.Zero);
+            Assert.That(sourceFrame.opoint, Is.Null);
+            Assert.That(sourceFrame.opoints, Is.Empty);
+
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot),
+                ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity target = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(target?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    Assert.That(world.StageDepthBoundsArePhysical, Is.False);
+
+                    world.Unregister(oldSubject);
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.Null);
+                    Assert.That(oldSubject.RegisteredWorldForSimulation, Is.Null);
+                    Assert.That(oldSubject.Runtime.SlotIndex, Is.LessThan(0));
+
+                    var subject = new LF2SpecialAttack { ObjectId = 902 };
+                    subject.FrameCache.Load(definition);
+                    subject.ImmediateFrame(0);
+                    subject.InitializeNativeDefinitionIdentityForSpawn();
+                    subject.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                    subject.SetRequiredRuntimeSlot(1);
+                    subject.Team = 1;
+                    subject.RelationTeam = 1;
+                    subject.OwnerEntityIndex = 1;
+                    subject.Health.HP = 500;
+                    subject.Runtime.HPBound = 500;
+                    subject.Runtime.HP3 = 500;
+                    subject.Runtime.MP = 200;
+                    subject.Runtime.PP = 200;
+                    subject.ObjectAiTargetSlot3F8 = 0;
+                    world.Register(subject);
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.SameAs(subject));
+                    Assert.That(subject.RegisteredWorldForSimulation, Is.SameAs(world));
+                    Assert.That(LF2Entity.ResolveCurrentDataObjectType(subject), Is.EqualTo(3));
+                    Assert.That(subject.AttackingCounter, Is.Zero);
+                    Assert.That(subject.Runtime.PlatformSourceSlotF4, Is.Zero);
+                    Assert.That(subject.Runtime.CollisionYReference, Is.Zero);
+
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    Assert.That(rosterSlot.Active, Is.True);
+                    Assert.That(rosterSlot.RuntimeSlotIndex, Is.EqualTo(1));
+                    rosterSlot.CharacterId = 902;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    Assert.That(world.Runtime.Roster.Slots[1].StableId,
+                        Is.EqualTo(subject.Runtime.StableId));
+                    Assert.That(world.Runtime.Roster.ActiveSlotCount, Is.EqualTo(2));
+
+                    void Place(LF2Entity entity, double y, int sourceZ)
+                    {
+                        entity.Runtime.SetPosition(
+                            world.SpatialProjection.SourceToViewX(400), y,
+                            world.SpatialProjection.SourceToViewZ(sourceZ));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(400, sourceZ);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+
+                    Place(subject, -1.25, 600);
+                    Place(target, 100, 640);
+                    subject.Runtime.SetVelocity(9, -2.8, 0);
+                    double initialViewX = subject.Runtime.X;
+                    double initialViewZ = subject.Runtime.Z;
+                    Assert.That(world.ObjectCount, Is.EqualTo(2));
+
+                    Assert.That(driver.StepOneTick(
+                        inputs[0], ignorePaused: true,
+                        buildPresentation: false), Is.True);
+
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.SameAs(subject));
+                    Assert.That(subject.Frame.N, Is.EqualTo(0));
+                    Assert.That(subject.Frame.D.state, Is.EqualTo(3000));
+                    Assert.That(subject.Runtime.Y, Is.EqualTo(-2.05).Within(1e-9));
+                    Assert.That(subject.Runtime.Vy, Is.EqualTo(-2.0).Within(1e-9));
+                    Assert.That(subject.Runtime.Vx, Is.EqualTo(9));
+                    Assert.That(subject.Runtime.Vz, Is.EqualTo(0.3).Within(1e-6));
+                    Assert.That(subject.Runtime.NativePreviousY104, Is.EqualTo(-1));
+                    Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(409).Within(1e-9));
+                    Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600.3).Within(1e-6));
+                    Assert.That(subject.Runtime.X - initialViewX,
+                        Is.EqualTo(9 * 2048.0 / 1333.0).Within(1e-9));
+                    Assert.That(subject.Runtime.Z - initialViewZ,
+                        Is.EqualTo(0.3 * 1152.0 / 730.0).Within(1e-6));
+                    Assert.That(target.Runtime.SourceRuleZ, Is.EqualTo(640));
+                    Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                    Assert.That(world.ObjectCount, Is.EqualTo(2));
+                },
+                useProjectMode: true);
+        }
+
         [TestCase(518, 1, 1, 0, 10)]
         [TestCase(518, 1, -1, 0, 10)]
         [TestCase(207, 115, 0, 1, 1)]
@@ -297,6 +509,1066 @@ namespace NTSD.Test.Editor
                     Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
                     Assert.That(subject.Runtime.Vy, Is.Zero);
                 }
+            }
+            finally
+            {
+                world.Unregister(subject);
+                world.Unregister(target);
+            }
+        }
+
+        [Test]
+        public void IndexedHitFa10AfterDeadFrameTransitionSurvivesTwoDriverTicks()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            LF2CharacterDataWrapper definition = configs[902];
+            LF2FrameData frame = definition.characterData.frames.Single(candidate =>
+                candidate.frameId == 0);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 902).Type, Is.EqualTo(3));
+            Assert.That(frame.hit_Fa, Is.EqualTo(1));
+            Assert.That(frame.wait, Is.EqualTo(1));
+            Assert.That(frame.next, Is.EqualTo(1));
+            Assert.That(frame.nativeDvx, Is.Zero);
+            Assert.That(frame.nativeDvy, Is.Zero);
+            Assert.That(frame.nativeDvz, Is.Zero);
+            Assert.That(frame.opoint, Is.Null);
+            Assert.That(frame.opoints, Is.Empty);
+            foreach (int frameId in new[] { 4, 5 })
+            {
+                LF2FrameData commonFrame = definition.characterData.frames.Single(candidate =>
+                    candidate.frameId == frameId);
+                Assert.That(commonFrame.hit_Fa, Is.EqualTo(10));
+                Assert.That(commonFrame.nativeDvx, Is.Zero);
+                Assert.That(commonFrame.nativeDvy, Is.Zero);
+                Assert.That(commonFrame.nativeDvz, Is.Zero);
+                Assert.That(commonFrame.opoint, Is.Null);
+                Assert.That(commonFrame.opoints, Is.Empty);
+            }
+
+            string output = ProjectPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005/" +
+                "unity-full-driver-" + Guid.NewGuid().ToString("N") + ".jsonl");
+            using var trace = new StreamWriter(new FileStream(
+                output, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot),
+                ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity target = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(target?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    Assert.That(world.StageDepthBoundsArePhysical, Is.False);
+                    world.Unregister(oldSubject);
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.Null);
+
+                    var subject = new LF2SpecialAttack { ObjectId = 902 };
+                    subject.FrameCache.Load(definition);
+                    subject.ImmediateFrame(0);
+                    subject.InitializeNativeDefinitionIdentityForSpawn();
+                    subject.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                    subject.SetRequiredRuntimeSlot(1);
+                    subject.Team = 1;
+                    subject.RelationTeam = 1;
+                    subject.OwnerEntityIndex = 1;
+                    subject.Health.HP = 0;
+                    subject.Runtime.HPBound = 0;
+                    subject.Runtime.HP3 = 0;
+                    subject.Runtime.MP = 200;
+                    subject.Runtime.PP = 200;
+                    subject.ObjectAiTargetSlot3F8 = 0;
+                    world.Register(subject);
+                    Assert.That(LF2Entity.ResolveCurrentDataObjectType(subject), Is.EqualTo(3));
+                    Assert.That(subject.AttackingCounter, Is.Zero);
+                    Assert.That(subject.Runtime.PlatformSourceSlotF4, Is.Zero);
+                    Assert.That(subject.Runtime.CollisionYReference, Is.Zero);
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    rosterSlot.CharacterId = 902;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    Assert.That(world.Runtime.Roster.ActiveSlotCount, Is.EqualTo(2));
+
+                    void Place(LF2Entity entity, int sourceX, int y, int sourceZ)
+                    {
+                        entity.Runtime.SetPosition(
+                            world.SpatialProjection.SourceToViewX(sourceX), y,
+                            world.SpatialProjection.SourceToViewZ(sourceZ));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(sourceX, sourceZ);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+
+                    void Capture(int tick)
+                    {
+                        trace.WriteLine(new JObject
+                        {
+                            ["completedTick"] = tick,
+                            ["sourceX"] = subject.Runtime.SourceRuleX,
+                            ["sourceIntegerX"] = subject.Runtime.SourceRuleXInt,
+                            ["viewX"] = subject.Runtime.X,
+                            ["sourceY"] = subject.Runtime.Y,
+                            ["integerY"] = subject.Runtime.YInt,
+                            ["sourceZ"] = subject.Runtime.SourceRuleZ,
+                            ["vx"] = subject.Runtime.Vx,
+                            ["vy"] = subject.Runtime.Vy,
+                            ["vz"] = subject.Runtime.Vz,
+                            ["action"] = subject.Frame.N,
+                            ["counter"] = subject.AttackingCounter,
+                            ["target"] = subject.ObjectAiTargetSlot3F8,
+                            ["hp"] = subject.Health.HP,
+                            ["entityCount"] = world.ObjectCount,
+                        }.ToString(Newtonsoft.Json.Formatting.None));
+                        trace.Flush();
+                    }
+
+                    Place(subject, 500, -100, 600);
+                    Place(target, 1000, 0, 604);
+                    Capture(0);
+                    for (int tick = 1; tick <= 2; tick++)
+                    {
+                        Assert.That(driver.StepOneTick(
+                            new FrameInputSet(tick, inputs[0].Players),
+                            ignorePaused: true, buildPresentation: false), Is.True);
+                        Capture(tick);
+                        Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.SameAs(subject));
+                        Assert.That(subject.Frame.N, Is.EqualTo(tick == 1 ? 4 : 5));
+                        Assert.That(subject.AttackingCounter, Is.EqualTo(tick == 1 ? 1 : 0));
+                    }
+
+                    Assert.That(subject.Runtime.SourceRuleXInt, Is.EqualTo(500),
+                        "common-only hitFa10 must preserve motion after the natural frame transition");
+                    Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500.0));
+                    Assert.That(subject.Runtime.Vx, Is.Zero);
+                    Assert.That(subject.Runtime.X,
+                        Is.EqualTo(500.0 * 2048.0 / 1333.0).Within(1e-9));
+                    Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                    Assert.That(subject.Runtime.Vy, Is.Zero);
+                    Assert.That(subject.Runtime.Vz, Is.Zero);
+                    Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                    Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                    Assert.That(world.ObjectCount, Is.EqualTo(2));
+                },
+                useProjectMode: true);
+        }
+
+        [TestCase(500, 230, false)]
+        [TestCase(0, 0, false)]
+        [TestCase(0, 0, true)]
+        public void StaleLiveTargetSurvivesFailedScan(int targetHp, int targetFrame, bool hasAlternative)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(configs[99].characterData.frames.Single(frame =>
+                frame.frameId == 230).state, Is.EqualTo(14));
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null, loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+            LF2Character Character(int slot, int group)
+            {
+                var entity = new LF2Character { ObjectId = 99 };
+                entity.ModuleInitialize();
+                entity.SetRequiredRuntimeSlot(slot);
+                entity.ModuleBind(configs[99], 99, world);
+                entity.Initialize(500, 500);
+                entity.Team = group;
+                entity.RelationTeam = group;
+                entity.ImmediateFrame(0);
+                return entity;
+            }
+            void Place(LF2Entity entity, int x, int y, int z)
+            {
+                entity.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(x), y,
+                    world.SpatialProjection.SourceToViewZ(z));
+                entity.Runtime.SyncIntegerPosition();
+                entity.Runtime.SetSourceRulePosition(x, z);
+                entity.Runtime.SyncSourceRuleIntegerPosition();
+                entity.Runtime.SetVelocity(0, 0, 0);
+            }
+            LF2Character alternate = Character(0, 1);
+            LF2Character target = Character(50, 2);
+            var subject = new LF2SpecialAttack { ObjectId = 902 };
+            subject.FrameCache.Load(configs[902]);
+            subject.ImmediateFrame(0);
+            subject.SetRequiredRuntimeSlot(51);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 500;
+            subject.ObjectAiTargetSlot3F8 = -1;
+            world.Register(subject);
+            try
+            {
+                Place(alternate, 100, 0, 600);
+                Place(target, 700, 0, 604);
+                Place(subject, 500, -100, 600);
+                subject.RunFrameLogicBeforeAdvance();
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(50));
+                target.ImmediateFrame(targetFrame);
+                target.Health.HP = targetHp;
+                alternate.Team = hasAlternative ? 2 : 1;
+                alternate.RelationTeam = alternate.Team;
+                Place(subject, 500, -100, 600);
+                subject.RunFrameLogicBeforeAdvance();
+                string output = ProjectPath(
+                    "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/" +
+                    "unity-direct-" + targetHp + "-" + targetFrame + "-" + hasAlternative + "-" +
+                    Guid.NewGuid().ToString("N") + ".json");
+                using (var trace = new StreamWriter(new FileStream(
+                    output, FileMode.CreateNew, FileAccess.Write, FileShare.Read)))
+                {
+                    trace.Write(new JObject
+                    {
+                        ["target"] = subject.ObjectAiTargetSlot3F8,
+                        ["vx"] = subject.Runtime.Vx,
+                        ["y"] = subject.Runtime.Y,
+                        ["hp"] = subject.Health.HP,
+                        ["targetHp"] = target.Health.HP,
+                        ["targetFrame"] = target.Frame.N,
+                        ["targetActive"] = ReferenceEquals(
+                            world.FindEntityByRuntimeSlotForQuery(50), target),
+                        ["hasAlternative"] = hasAlternative,
+                    }.ToString(Newtonsoft.Json.Formatting.None));
+                }
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(hasAlternative ? 0 : 50));
+                Assert.That(subject.Runtime.Vx, Is.EqualTo(hasAlternative ? -0.85 : 0.85));
+                Assert.That(subject.Runtime.Y, Is.EqualTo(-98.8).Within(1e-12));
+                Assert.That(subject.Health.HP, Is.EqualTo(500));
+                Assert.That(world.FindEntityByRuntimeSlotForQuery(50), Is.SameAs(target));
+            }
+            finally
+            {
+                world.Unregister(subject);
+                world.Unregister(target);
+                world.Unregister(alternate);
+            }
+            Assert.That(world.ObjectCount, Is.Zero);
+        }
+
+        [Test]
+        public void CachedInvalidLiveTargetSurvivesOneDriverTick()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(configs[902].characterData.frames.Single(frame =>
+                frame.frameId == 0).hit_Fa, Is.EqualTo(1));
+            Assert.That(configs[99].characterData.frames.Single(frame =>
+                frame.frameId == 230).state, Is.EqualTo(14));
+            string output = ProjectPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/" +
+                "unity-full-driver-" + Guid.NewGuid().ToString("N") + ".jsonl");
+            using var trace = new StreamWriter(new FileStream(
+                output, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot), ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity alternate = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(alternate?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    world.Unregister(oldSubject);
+                    LF2SpecialAttack Spawn(int slot, int action, int group)
+                    {
+                        var entity = new LF2SpecialAttack { ObjectId = 902 };
+                        entity.FrameCache.Load(configs[902]);
+                        entity.ImmediateFrame(action);
+                        entity.InitializeNativeDefinitionIdentityForSpawn();
+                        entity.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                        entity.SetRequiredRuntimeSlot(slot);
+                        entity.Team = group;
+                        entity.RelationTeam = group;
+                        entity.OwnerEntityIndex = slot;
+                        entity.Health.HP = 500;
+                        entity.Runtime.HPBound = 500;
+                        entity.Runtime.HP3 = 500;
+                        entity.Runtime.MP = 200;
+                        entity.Runtime.PP = 200;
+                        world.Register(entity);
+                        return entity;
+                    }
+                    LF2SpecialAttack subject = Spawn(1, 0, 1);
+                    alternate.Team = 1;
+                    alternate.RelationTeam = 1;
+                    var replacement = new LF2Character { ObjectId = 99 };
+                    replacement.ModuleInitialize();
+                    replacement.SetRequiredRuntimeSlot(50);
+                    replacement.ModuleBind(configs[99], 99, world);
+                    replacement.Initialize(500, 500);
+                    replacement.Team = 2;
+                    replacement.RelationTeam = 2;
+                    replacement.ImmediateFrame(230);
+                    subject.ObjectAiTargetSlot3F8 = 50;
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    rosterSlot.CharacterId = 902;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    void Place(LF2Entity entity, int x, int y, int z)
+                    {
+                        entity.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(x), y,
+                            world.SpatialProjection.SourceToViewZ(z));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(x, z);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+                    void Capture(int tick)
+                    {
+                        trace.WriteLine(new JObject
+                        {
+                            ["completedTick"] = tick,
+                            ["sourceX"] = subject.Runtime.SourceRuleX,
+                            ["sourceIntegerX"] = subject.Runtime.SourceRuleXInt,
+                            ["sourceY"] = subject.Runtime.Y,
+                            ["integerY"] = subject.Runtime.YInt,
+                            ["sourceZ"] = subject.Runtime.SourceRuleZ,
+                            ["vx"] = subject.Runtime.Vx,
+                            ["vy"] = subject.Runtime.Vy,
+                            ["vz"] = subject.Runtime.Vz,
+                            ["action"] = subject.Frame.N,
+                            ["counter"] = subject.AttackingCounter,
+                            ["target"] = subject.ObjectAiTargetSlot3F8,
+                            ["hp"] = subject.Health.HP,
+                            ["viewX"] = subject.Runtime.X,
+                            ["entityCount"] = world.ObjectCount,
+                            ["targetActive"] = world.FindEntityByRuntimeSlotForQuery(50) != null,
+                            ["targetHp"] = replacement.Health.HP,
+                            ["targetFrame"] = replacement.Frame.N,
+                        }.ToString(Newtonsoft.Json.Formatting.None));
+                        trace.Flush();
+                    }
+                    try
+                    {
+                        Place(alternate, 100, 0, 600);
+                        Place(replacement, 700, 0, 604);
+                        Place(subject, 500, -100, 600);
+                        Capture(0);
+                        Assert.That(driver.StepOneTick(
+                            new FrameInputSet(1, inputs[0].Players),
+                            ignorePaused: true, buildPresentation: false), Is.True);
+                        Capture(1);
+                        Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(50));
+                        Assert.That(subject.Runtime.Vx, Is.EqualTo(0.85));
+                        Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500.85));
+                        Assert.That(subject.Runtime.Y, Is.EqualTo(-98.8).Within(1e-12));
+                        Assert.That(subject.Runtime.Vz, Is.Zero);
+                        Assert.That(world.FindEntityByRuntimeSlotForQuery(50), Is.SameAs(replacement));
+                        Assert.That(subject.Health.HP, Is.EqualTo(493));
+                        Assert.That(subject.Runtime.X,
+                            Is.EqualTo(500.85 * 2048.0 / 1333.0).Within(1e-9));
+                    }
+                    finally
+                    {
+                        world.Unregister(replacement);
+                    }
+                },
+                useProjectMode: true);
+        }
+
+        [TestCase(500)]
+        [TestCase(0)]
+        public void CachedNonCharacterTargetSurvivesSlotReuse(int replacementHp)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 33).Type, Is.Zero);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 902).Type, Is.EqualTo(3));
+            Assert.That(configs[902].characterData.frames.Single(frame =>
+                frame.frameId == 0).hit_Fa, Is.EqualTo(1));
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null,
+                loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+            LF2Character Character(int oid, int slot)
+            {
+                var entity = new LF2Character { ObjectId = oid };
+                entity.ModuleInitialize();
+                entity.SetRequiredRuntimeSlot(slot);
+                entity.ModuleBind(configs[oid], oid, world);
+                entity.Initialize(500, 500);
+                entity.Team = 2;
+                entity.RelationTeam = 2;
+                return entity;
+            }
+            void Place(LF2Entity entity, int x, int y, int z)
+            {
+                entity.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(x), y,
+                    world.SpatialProjection.SourceToViewZ(z));
+                entity.Runtime.SyncIntegerPosition();
+                entity.Runtime.SetSourceRulePosition(x, z);
+                entity.Runtime.SyncSourceRuleIntegerPosition();
+                entity.Runtime.SetVelocity(0, 0, 0);
+            }
+            LF2Character alternate = Character(99, 0);
+            LF2Character clone = Character(33, 50);
+            var subject = new LF2SpecialAttack { ObjectId = 902 };
+            subject.FrameCache.Load(configs[902]);
+            subject.ImmediateFrame(0);
+            subject.SetRequiredRuntimeSlot(51);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 500;
+            subject.ObjectAiTargetSlot3F8 = -1;
+            world.Register(subject);
+            LF2SpecialAttack replacement = null;
+            try
+            {
+                Place(alternate, 100, 0, 600);
+                Place(clone, 700, 0, 604);
+                Place(subject, 500, -100, 600);
+                subject.RunFrameLogicBeforeAdvance();
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(50));
+                world.Unregister(clone);
+                Assert.That(world.FindEntityByRuntimeSlotForQuery(50), Is.Null);
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(50));
+                replacement = new LF2SpecialAttack { ObjectId = 902 };
+                replacement.FrameCache.Load(configs[902]);
+                replacement.ImmediateFrame(40);
+                replacement.SetRequiredRuntimeSlot(50);
+                replacement.Team = 2;
+                replacement.RelationTeam = 2;
+                replacement.Health.HP = replacementHp;
+                world.Register(replacement);
+                Place(replacement, 700, 0, 604);
+                Place(subject, 500, -100, 600);
+                subject.RunFrameLogicBeforeAdvance();
+                string output = ProjectPath(
+                    "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/" +
+                    "unity-direct-hp" + replacementHp + "-" + Guid.NewGuid().ToString("N") + ".json");
+                using (var trace = new StreamWriter(new FileStream(
+                    output, FileMode.CreateNew, FileAccess.Write, FileShare.Read)))
+                {
+                    trace.Write(new JObject
+                    {
+                        ["target"] = subject.ObjectAiTargetSlot3F8,
+                        ["vx"] = subject.Runtime.Vx,
+                        ["y"] = subject.Runtime.Y,
+                        ["hp"] = subject.Health.HP,
+                        ["replacementHp"] = replacement.Health.HP,
+                        ["replacementType"] = LF2Entity.ResolveCurrentDataObjectType(replacement),
+                    }.ToString(Newtonsoft.Json.Formatting.None));
+                }
+                Assert.That(subject.ObjectAiTargetSlot3F8,
+                    Is.EqualTo(replacementHp > 0 ? 50 : 0));
+                Assert.That(subject.Runtime.Vx, Is.EqualTo(replacementHp > 0 ? 0.85 : -0.85));
+                Assert.That(subject.Runtime.Y, Is.EqualTo(replacementHp > 0 ? -100 : -98.8));
+                Assert.That(subject.Health.HP, Is.EqualTo(500));
+                Assert.That(world.ObjectCount, Is.EqualTo(3));
+            }
+            finally
+            {
+                if (replacement != null)
+                    world.Unregister(replacement);
+                else if (world.FindEntityByRuntimeSlotForQuery(50) == clone)
+                    world.Unregister(clone);
+                world.Unregister(subject);
+                world.Unregister(alternate);
+            }
+        }
+
+        [Test]
+        public void CachedNonCharacterTargetSurvivesOneDriverTick()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(configs[902].characterData.frames.Single(frame =>
+                frame.frameId == 0).hit_Fa, Is.EqualTo(1));
+            Assert.That(configs[902].characterData.frames.Single(frame =>
+                frame.frameId == 40).state, Is.EqualTo(3000));
+            string output = ProjectPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005/" +
+                "unity-full-driver-" + Guid.NewGuid().ToString("N") + ".jsonl");
+            using var trace = new StreamWriter(new FileStream(
+                output, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot), ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity alternate = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(alternate?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    world.Unregister(oldSubject);
+                    LF2SpecialAttack Spawn(int slot, int action, int group)
+                    {
+                        var entity = new LF2SpecialAttack { ObjectId = 902 };
+                        entity.FrameCache.Load(configs[902]);
+                        entity.ImmediateFrame(action);
+                        entity.InitializeNativeDefinitionIdentityForSpawn();
+                        entity.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                        entity.SetRequiredRuntimeSlot(slot);
+                        entity.Team = group;
+                        entity.RelationTeam = group;
+                        entity.OwnerEntityIndex = slot;
+                        entity.Health.HP = 500;
+                        entity.Runtime.HPBound = 500;
+                        entity.Runtime.HP3 = 500;
+                        entity.Runtime.MP = 200;
+                        entity.Runtime.PP = 200;
+                        world.Register(entity);
+                        return entity;
+                    }
+                    LF2SpecialAttack subject = Spawn(1, 0, 1);
+                    LF2SpecialAttack replacement = Spawn(50, 40, 2);
+                    subject.ObjectAiTargetSlot3F8 = 50;
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    rosterSlot.CharacterId = 902;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    void Place(LF2Entity entity, int x, int y, int z)
+                    {
+                        entity.Runtime.SetPosition(world.SpatialProjection.SourceToViewX(x), y,
+                            world.SpatialProjection.SourceToViewZ(z));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(x, z);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+                    void Capture(int tick)
+                    {
+                        trace.WriteLine(new JObject
+                        {
+                            ["completedTick"] = tick,
+                            ["sourceX"] = subject.Runtime.SourceRuleX,
+                            ["sourceIntegerX"] = subject.Runtime.SourceRuleXInt,
+                            ["sourceY"] = subject.Runtime.Y,
+                            ["integerY"] = subject.Runtime.YInt,
+                            ["sourceZ"] = subject.Runtime.SourceRuleZ,
+                            ["vx"] = subject.Runtime.Vx,
+                            ["vy"] = subject.Runtime.Vy,
+                            ["vz"] = subject.Runtime.Vz,
+                            ["action"] = subject.Frame.N,
+                            ["counter"] = subject.AttackingCounter,
+                            ["target"] = subject.ObjectAiTargetSlot3F8,
+                            ["hp"] = subject.Health.HP,
+                            ["viewX"] = subject.Runtime.X,
+                            ["entityCount"] = world.ObjectCount,
+                        }.ToString(Newtonsoft.Json.Formatting.None));
+                        trace.Flush();
+                    }
+                    try
+                    {
+                        Place(alternate, 100, 0, 600);
+                        Place(replacement, 700, 0, 604);
+                        Place(subject, 500, -100, 600);
+                        Capture(0);
+                        Assert.That(driver.StepOneTick(
+                            new FrameInputSet(1, inputs[0].Players),
+                            ignorePaused: true, buildPresentation: false), Is.True);
+                        Capture(1);
+                        Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(50));
+                        Assert.That(subject.Runtime.Vx, Is.EqualTo(0.85));
+                        Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500.85));
+                        Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                        Assert.That(subject.Runtime.Vz, Is.Zero);
+                        Assert.That(subject.Runtime.X,
+                            Is.EqualTo(500.85 * 2048.0 / 1333.0).Within(1e-9));
+                    }
+                    finally
+                    {
+                        world.Unregister(replacement);
+                    }
+                },
+                useProjectMode: true);
+        }
+
+        [TestCase(0, 1.0)]
+        [TestCase(1, -1.0)]
+        [TestCase(2, 1.0)]
+        public void IndexedHitFa10CommonTargetHasNoMotion(int targetMode, double initialVx)
+        {
+            const int objectId = 902;
+            const int frameId = 4;
+            const int hitFa = 10;
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == objectId).Type, Is.EqualTo(3));
+            Assert.That(configs[objectId].characterData.frames.Single(frame =>
+                frame.frameId == frameId).hit_Fa, Is.EqualTo(hitFa));
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null,
+                loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+            var target = new LF2Character { ObjectId = 99 };
+            target.ModuleInitialize();
+            target.SetRequiredRuntimeSlot(0);
+            target.ModuleBind(configs[99], 99, world);
+            target.Initialize(500, 500);
+            if (targetMode == 2)
+                target.Health.HP = 0;
+            target.Team = 2;
+            target.RelationTeam = 2;
+            var subject = new LF2SpecialAttack { ObjectId = objectId };
+            subject.FrameCache.Load(configs[objectId]);
+            subject.ImmediateFrame(frameId);
+            subject.SetRequiredRuntimeSlot(50);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 500;
+            subject.ObjectAiTargetSlot3F8 = targetMode == 0 ? 0 : -1;
+            world.Register(subject);
+
+            void Place(NTSDEntityRuntime runtime, int sourceX, int sourceZ)
+            {
+                runtime.SetPosition(world.SpatialProjection.SourceToViewX(sourceX), 9,
+                    world.SpatialProjection.SourceToViewZ(sourceZ));
+                runtime.SyncIntegerPosition();
+                runtime.SetSourceRulePosition(sourceX, sourceZ);
+                runtime.SyncSourceRuleIntegerPosition();
+                runtime.SetVelocity(0, 0, 0);
+            }
+
+            try
+            {
+                Place(subject.Runtime, 500, 600);
+                Place(target.Runtime, 1000, 604);
+                subject.Runtime.Vx = initialVx;
+                subject.SwitchDir("left");
+                subject.RunFrameLogicBeforeAdvance();
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(targetMode == 2 ? -1 : 0));
+                Assert.That(subject.Health.HP, Is.EqualTo(targetMode == 2 ? 0 : 500));
+                Assert.That(subject.Runtime.Vz, Is.Zero);
+                Assert.That(subject.Runtime.Vx, Is.EqualTo(initialVx));
+                Assert.That(subject.Runtime.Vy, Is.Zero);
+                Assert.That(subject.Runtime.Y, Is.EqualTo(9));
+                Assert.That(subject.Runtime.YInt, Is.EqualTo(9));
+                Assert.That(subject.Runtime.Dir, Is.EqualTo("left"));
+                Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500));
+                Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                Assert.That(subject.Frame.N, Is.EqualTo(frameId));
+                Assert.That(target.Health.HP, Is.EqualTo(targetMode == 2 ? 0 : 500));
+                Assert.That(world.ObjectCount, Is.EqualTo(2));
+            }
+            finally
+            {
+                world.Unregister(subject);
+                world.Unregister(target);
+            }
+        }
+
+        [Test]
+        public void IndexedDeadHitFa3MotionSurvivesOneFullDriverTick()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            LF2CharacterDataWrapper definition = configs[206];
+            LF2FrameData frame = definition.characterData.frames.Single(candidate =>
+                candidate.frameId == 54);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 206).Type, Is.EqualTo(3));
+            Assert.That(frame.hit_Fa, Is.EqualTo(3));
+            Assert.That(frame.wait, Is.EqualTo(3));
+            Assert.That(frame.next, Is.EqualTo(999));
+            Assert.That(frame.nativeDvx, Is.Zero);
+            Assert.That(frame.nativeDvy, Is.Zero);
+            Assert.That(frame.nativeDvz, Is.Zero);
+            Assert.That(frame.opoint, Is.Null);
+            Assert.That(frame.opoints, Is.Empty);
+
+            string output = ProjectPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005/" +
+                "unity-full-driver-" + Guid.NewGuid().ToString("N") + ".jsonl");
+            using var trace = new StreamWriter(new FileStream(
+                output, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot),
+                ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity target = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(target?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    Assert.That(world.StageDepthBoundsArePhysical, Is.False);
+                    world.Unregister(oldSubject);
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.Null);
+
+                    var subject = new LF2SpecialAttack { ObjectId = 206 };
+                    subject.FrameCache.Load(definition);
+                    subject.ImmediateFrame(54);
+                    subject.InitializeNativeDefinitionIdentityForSpawn();
+                    subject.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                    subject.SetRequiredRuntimeSlot(1);
+                    subject.Team = 1;
+                    subject.RelationTeam = 1;
+                    subject.OwnerEntityIndex = 1;
+                    subject.Health.HP = 0;
+                    subject.Runtime.HPBound = 0;
+                    subject.Runtime.HP3 = 0;
+                    subject.Runtime.MP = 200;
+                    subject.Runtime.PP = 200;
+                    subject.ObjectAiTargetSlot3F8 = 0;
+                    world.Register(subject);
+                    Assert.That(LF2Entity.ResolveCurrentDataObjectType(subject), Is.EqualTo(3));
+                    Assert.That(subject.AttackingCounter, Is.Zero);
+                    Assert.That(subject.Runtime.PlatformSourceSlotF4, Is.Zero);
+                    Assert.That(subject.Runtime.CollisionYReference, Is.Zero);
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    rosterSlot.CharacterId = 206;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    Assert.That(world.Runtime.Roster.ActiveSlotCount, Is.EqualTo(2));
+
+                    void Place(LF2Entity entity, int sourceX, int y, int sourceZ)
+                    {
+                        entity.Runtime.SetPosition(
+                            world.SpatialProjection.SourceToViewX(sourceX), y,
+                            world.SpatialProjection.SourceToViewZ(sourceZ));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(sourceX, sourceZ);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+
+                    void Capture(int tick)
+                    {
+                        trace.WriteLine(new JObject
+                        {
+                            ["completedTick"] = tick,
+                            ["sourceX"] = subject.Runtime.SourceRuleX,
+                            ["sourceIntegerX"] = subject.Runtime.SourceRuleXInt,
+                            ["viewX"] = subject.Runtime.X,
+                            ["sourceY"] = subject.Runtime.Y,
+                            ["integerY"] = subject.Runtime.YInt,
+                            ["sourceZ"] = subject.Runtime.SourceRuleZ,
+                            ["vx"] = subject.Runtime.Vx,
+                            ["vy"] = subject.Runtime.Vy,
+                            ["vz"] = subject.Runtime.Vz,
+                            ["action"] = subject.Frame.N,
+                            ["counter"] = subject.AttackingCounter,
+                            ["target"] = subject.ObjectAiTargetSlot3F8,
+                            ["hp"] = subject.Health.HP,
+                            ["entityCount"] = world.ObjectCount,
+                        }.ToString(Newtonsoft.Json.Formatting.None));
+                        trace.Flush();
+                    }
+
+                    Place(subject, 500, -100, 600);
+                    Place(target, 1000, 0, 604);
+                    Capture(0);
+                    for (int tick = 1; tick <= 1; tick++)
+                    {
+                        Assert.That(driver.StepOneTick(
+                            new FrameInputSet(tick, inputs[0].Players),
+                            ignorePaused: true, buildPresentation: false), Is.True);
+                        Capture(tick);
+                        Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.SameAs(subject));
+                        Assert.That(subject.Frame.N, Is.EqualTo(54));
+                        Assert.That(subject.AttackingCounter, Is.EqualTo(1));
+                    }
+
+                    Assert.That(subject.Runtime.SourceRuleXInt, Is.EqualTo(500),
+                        "nonpositive HP must not accelerate the complete driver source");
+                    Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500.0));
+                    Assert.That(subject.Runtime.Vx, Is.Zero);
+                    Assert.That(subject.Runtime.X,
+                        Is.EqualTo(500.0 * 2048.0 / 1333.0).Within(1e-9));
+                    Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                    Assert.That(subject.Runtime.Vy, Is.Zero);
+                    Assert.That(subject.Runtime.Vz, Is.Zero);
+                    Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                    Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                    Assert.That(world.ObjectCount, Is.EqualTo(2));
+                },
+                useProjectMode: true);
+        }
+
+        [TestCase(902, 0, 1)]
+        [TestCase(206, 54, 3)]
+        public void IndexedDeadHitFa1Or3PreservesNativeMotion(int objectId, int frameId, int hitFa)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == objectId).Type, Is.EqualTo(3));
+            Assert.That(configs[objectId].characterData.frames.Single(frame =>
+                frame.frameId == frameId).hit_Fa, Is.EqualTo(hitFa));
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null,
+                loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+            var target = new LF2Character { ObjectId = 99 };
+            target.ModuleInitialize();
+            target.SetRequiredRuntimeSlot(0);
+            target.ModuleBind(configs[99], 99, world);
+            target.Initialize(500, 500);
+            target.Team = 2;
+            target.RelationTeam = 2;
+            var subject = new LF2SpecialAttack { ObjectId = objectId };
+            subject.FrameCache.Load(configs[objectId]);
+            subject.ImmediateFrame(frameId);
+            subject.SetRequiredRuntimeSlot(50);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 0;
+            subject.ObjectAiTargetSlot3F8 = 0;
+            world.Register(subject);
+
+            void Place(NTSDEntityRuntime runtime, int sourceX, int sourceZ)
+            {
+                runtime.SetPosition(world.SpatialProjection.SourceToViewX(sourceX), -100,
+                    world.SpatialProjection.SourceToViewZ(sourceZ));
+                runtime.SyncIntegerPosition();
+                runtime.SetSourceRulePosition(sourceX, sourceZ);
+                runtime.SyncSourceRuleIntegerPosition();
+                runtime.SetVelocity(0, 0, 0);
+            }
+
+            try
+            {
+                Place(subject.Runtime, 500, 600);
+                Place(target.Runtime, 1000, 604);
+                subject.RunFrameLogicBeforeAdvance();
+                Assert.That(subject.Runtime.Vz, Is.Zero);
+                Assert.That(subject.Runtime.Vx, Is.Zero);
+                Assert.That(subject.Runtime.Vy, Is.Zero);
+                Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500));
+                Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                Assert.That(subject.Frame.N, Is.EqualTo(frameId));
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                Assert.That(subject.Health.HP, Is.Zero);
+                Assert.That(target.Health.HP, Is.EqualTo(500));
+                Assert.That(world.ObjectCount, Is.EqualTo(2));
+            }
+            finally
+            {
+                world.Unregister(subject);
+                world.Unregister(target);
+            }
+        }
+
+        [Test]
+        public void IndexedHitFa3IntegerPositionSurvivesFourFullDriverTicks()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            LF2CharacterDataWrapper definition = configs[206];
+            LF2FrameData frame = definition.characterData.frames.Single(candidate =>
+                candidate.frameId == 54);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 206).Type, Is.EqualTo(3));
+            Assert.That(frame.hit_Fa, Is.EqualTo(3));
+            Assert.That(frame.wait, Is.EqualTo(3));
+            Assert.That(frame.next, Is.EqualTo(999));
+            Assert.That(frame.nativeDvx, Is.Zero);
+            Assert.That(frame.nativeDvy, Is.Zero);
+            Assert.That(frame.nativeDvz, Is.Zero);
+            Assert.That(frame.opoint, Is.Null);
+            Assert.That(frame.opoints, Is.Empty);
+
+            string output = ProjectPath(
+                "artifacts/diagnostics/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005/" +
+                "unity-full-driver-" + Guid.NewGuid().ToString("N") + ".jsonl");
+            using var trace = new StreamWriter(new FileStream(
+                output, FileMode.CreateNew, FileAccess.Write, FileShare.Read));
+            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                ProjectPath(RuntimeRoot),
+                ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                BattleRuntimeProfile.Authority400, 3,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                    LF2Entity target = world.FindEntityByRuntimeSlotForQuery(0);
+                    LF2Entity oldSubject = world.FindEntityByRuntimeSlotForQuery(1);
+                    Assert.That(target?.ObjectId, Is.EqualTo(99));
+                    Assert.That(oldSubject?.ObjectId, Is.EqualTo(875));
+                    Assert.That(world.StageDepthBoundsArePhysical, Is.False);
+                    world.Unregister(oldSubject);
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.Null);
+
+                    var subject = new LF2SpecialAttack { ObjectId = 206 };
+                    subject.FrameCache.Load(definition);
+                    subject.ImmediateFrame(54);
+                    subject.InitializeNativeDefinitionIdentityForSpawn();
+                    subject.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+                    subject.SetRequiredRuntimeSlot(1);
+                    subject.Team = 1;
+                    subject.RelationTeam = 1;
+                    subject.OwnerEntityIndex = 1;
+                    subject.Health.HP = 500;
+                    subject.Runtime.HPBound = 500;
+                    subject.Runtime.HP3 = 500;
+                    subject.Runtime.MP = 200;
+                    subject.Runtime.PP = 200;
+                    subject.ObjectAiTargetSlot3F8 = 0;
+                    world.Register(subject);
+                    Assert.That(LF2Entity.ResolveCurrentDataObjectType(subject), Is.EqualTo(3));
+                    Assert.That(subject.AttackingCounter, Is.Zero);
+                    Assert.That(subject.Runtime.PlatformSourceSlotF4, Is.Zero);
+                    Assert.That(subject.Runtime.CollisionYReference, Is.Zero);
+                    var rosterSlot = world.Runtime.Roster.Slots[1];
+                    rosterSlot.CharacterId = 206;
+                    rosterSlot.StableId = subject.Runtime.StableId;
+                    Assert.That(world.Runtime.Roster.ActiveSlotCount, Is.EqualTo(2));
+
+                    void Place(LF2Entity entity, int sourceX, int y, int sourceZ)
+                    {
+                        entity.Runtime.SetPosition(
+                            world.SpatialProjection.SourceToViewX(sourceX), y,
+                            world.SpatialProjection.SourceToViewZ(sourceZ));
+                        entity.Runtime.SyncIntegerPosition();
+                        entity.Runtime.SetSourceRulePosition(sourceX, sourceZ);
+                        entity.Runtime.SyncSourceRuleIntegerPosition();
+                        entity.Runtime.SetVelocity(0, 0, 0);
+                    }
+
+                    void Capture(int tick)
+                    {
+                        trace.WriteLine(new JObject
+                        {
+                            ["completedTick"] = tick,
+                            ["sourceX"] = subject.Runtime.SourceRuleX,
+                            ["sourceIntegerX"] = subject.Runtime.SourceRuleXInt,
+                            ["viewX"] = subject.Runtime.X,
+                            ["sourceY"] = subject.Runtime.Y,
+                            ["integerY"] = subject.Runtime.YInt,
+                            ["sourceZ"] = subject.Runtime.SourceRuleZ,
+                            ["vx"] = subject.Runtime.Vx,
+                            ["vy"] = subject.Runtime.Vy,
+                            ["vz"] = subject.Runtime.Vz,
+                            ["action"] = subject.Frame.N,
+                            ["counter"] = subject.AttackingCounter,
+                            ["target"] = subject.ObjectAiTargetSlot3F8,
+                            ["hp"] = subject.Health.HP,
+                            ["entityCount"] = world.ObjectCount,
+                        }.ToString(Newtonsoft.Json.Formatting.None));
+                        trace.Flush();
+                    }
+
+                    Place(subject, 500, -100, 600);
+                    Place(target, 1000, 0, 604);
+                    Capture(0);
+                    for (int tick = 1; tick <= 4; tick++)
+                    {
+                        Assert.That(driver.StepOneTick(
+                            new FrameInputSet(tick, inputs[0].Players),
+                            ignorePaused: true, buildPresentation: false), Is.True);
+                        Capture(tick);
+                        Assert.That(world.FindEntityByRuntimeSlotForQuery(1), Is.SameAs(subject));
+                        Assert.That(subject.Frame.N, Is.EqualTo(tick < 4 ? 54 : 0));
+                        Assert.That(subject.AttackingCounter, Is.EqualTo(tick < 4 ? tick : 0));
+                    }
+
+                    Assert.That(subject.Runtime.SourceRuleXInt, Is.EqualTo(507),
+                        "four native double accelerations must reach source integer 507");
+                    Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(507.0));
+                    Assert.That(subject.Runtime.Vx, Is.EqualTo(2.8));
+                    Assert.That(subject.Runtime.X,
+                        Is.EqualTo(507.0 * 2048.0 / 1333.0).Within(1e-9));
+                    Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                    Assert.That(subject.Runtime.Vy, Is.Zero);
+                    Assert.That(subject.Runtime.Vz, Is.Zero);
+                    Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                    Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                    Assert.That(world.ObjectCount, Is.EqualTo(2));
+                },
+                useProjectMode: true);
+        }
+
+        [TestCase(1)]
+        [TestCase(-1)]
+        public void IndexedHitFa3DepthAccelerationUsesNativeDouble(int zDirection)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(catalog.Entries.Single(entry => entry.Id == 206).Type, Is.EqualTo(3));
+            Assert.That(configs[206].characterData.frames.Single(frame =>
+                frame.frameId == 54).hit_Fa, Is.EqualTo(3));
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.BindLogicReferencePool(new BattleLogicReferencePool());
+            world.PrepareRuntimeDataCatalogForBattle(
+                catalog.Entries.Select(entry =>
+                    new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper)
+                    ? wrapper : null,
+                loganCatalog: catalog);
+            world.SetLogicOnlyEntityMaterialization(true);
+            var target = new LF2Character { ObjectId = 99 };
+            target.ModuleInitialize();
+            target.SetRequiredRuntimeSlot(0);
+            target.ModuleBind(configs[99], 99, world);
+            target.Initialize(500, 500);
+            target.Team = 2;
+            target.RelationTeam = 2;
+            var subject = new LF2SpecialAttack { ObjectId = 206 };
+            subject.FrameCache.Load(configs[206]);
+            subject.ImmediateFrame(54);
+            subject.SetRequiredRuntimeSlot(50);
+            subject.Team = 1;
+            subject.RelationTeam = 1;
+            subject.Health.HP = 500;
+            subject.ObjectAiTargetSlot3F8 = 0;
+            world.Register(subject);
+
+            void Place(NTSDEntityRuntime runtime, int sourceZ)
+            {
+                runtime.SetPosition(world.SpatialProjection.SourceToViewX(500), -100,
+                    world.SpatialProjection.SourceToViewZ(sourceZ));
+                runtime.SyncIntegerPosition();
+                runtime.SetSourceRulePosition(500, sourceZ);
+                runtime.SyncSourceRuleIntegerPosition();
+                runtime.SetVelocity(0, 0, 0);
+            }
+
+            try
+            {
+                Place(subject.Runtime, 600);
+                Place(target.Runtime, 600 + zDirection * 20);
+                subject.RunFrameLogicBeforeAdvance();
+                Assert.That(subject.Runtime.Vz, Is.EqualTo(zDirection * 0.17));
+                Assert.That(subject.Runtime.Vx, Is.Zero);
+                Assert.That(subject.Runtime.Vy, Is.Zero);
+                Assert.That(subject.Runtime.Y, Is.EqualTo(-100));
+                Assert.That(subject.Runtime.SourceRuleX, Is.EqualTo(500));
+                Assert.That(subject.Runtime.SourceRuleZ, Is.EqualTo(600));
+                Assert.That(subject.Frame.N, Is.EqualTo(54));
+                Assert.That(subject.ObjectAiTargetSlot3F8, Is.Zero);
+                Assert.That(subject.Health.HP, Is.EqualTo(500));
+                Assert.That(target.Health.HP, Is.EqualTo(500));
+                Assert.That(world.ObjectCount, Is.EqualTo(2));
             }
             finally
             {

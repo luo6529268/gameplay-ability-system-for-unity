@@ -1,0 +1,61 @@
+--- before-dirty
+
++++ after-current
+
+@@ -22413,6 +22413,7 @@
+
+             other.Runtime.SetVelocity(1, 0, 0);
+             other.Runtime.SyncIntegerPosition();
+             other.SwitchDir("left");
++            other.ObjectAiTargetSlot3F8 = -1;
+             world.Register(other);
+ 
+             var characterShell = new BoundsSelfCheckCharacter(LF2ObjectType.SpecialAttack);
+@@ -22421,6 +22422,7 @@
+
+             characterShell.Runtime.SetVelocity(-1, 0, 0);
+             characterShell.Runtime.SyncIntegerPosition();
+             characterShell.SwitchDir("right");
++            characterShell.ObjectAiTargetSlot3F8 = -1;
+             world.Register(characterShell);
+ 
+             var special = new AlternateDamageSelfCheckSpecialAttack();
+@@ -22429,23 +22431,27 @@
+
+             special.Runtime.SetVelocity(1, 0, 0);
+             special.Runtime.SyncIntegerPosition();
+             special.SwitchDir("left");
++            special.ObjectAiTargetSlot3F8 = -1;
+             world.Register(special);
+ 
+             world.FrameLogicBeforeAdvanceAll(1);
+ 
+-            Expect(Nearly(other.Runtime.Vx, 2.1) && Nearly(other.Runtime.Y, 3.0) && other.Runtime.Dir == "right",
+-                "LF2OtherObject current non-character DAT must execute shared hit_Fa=10 in the pre-advance pass");
+-            Expect(Nearly(characterShell.Runtime.Vx, -2.1) &&
+-                   Nearly(characterShell.Runtime.Y, 3.0) &&
+-                   characterShell.Runtime.Dir == "left",
+-                "a character CLR shell with current SpecialAttack DAT must execute the shared non-character frame logic");
+-            Expect(Nearly(special.Runtime.Vx, 2.1) && Nearly(special.Runtime.Y, 3.0) && special.Runtime.Dir == "right",
+-                "LF2SpecialAttack must execute hit_Fa=10 through the shared base frame-logic path");
++            // Alignment contract: NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.
++            Expect(Nearly(other.Runtime.Vx, 1.0) && Nearly(other.Runtime.Y, 9.0) &&
++                   other.Runtime.Dir == "left" && other.Health.HP == 0,
++                "LF2OtherObject hit_Fa=10 must resolve no target without adding motion");
++            Expect(Nearly(characterShell.Runtime.Vx, -1.0) &&
++                   Nearly(characterShell.Runtime.Y, 9.0) &&
++                   characterShell.Runtime.Dir == "right" && characterShell.Health.HP == 0,
++                "a current SpecialAttack DAT on a character CLR shell must share the target-only path");
++            Expect(Nearly(special.Runtime.Vx, 1.0) && Nearly(special.Runtime.Y, 9.0) &&
++                   special.Runtime.Dir == "left" && special.Health.HP == 0,
++                "LF2SpecialAttack hit_Fa=10 must share no-target resolution without adding motion");
+ 
+             special.SimTU(1);
+-            Expect(Nearly(special.Runtime.Vx, 1.1) && Nearly(special.Runtime.X, 2.1),
++            Expect(Nearly(special.Runtime.Vx, 0.0) && Nearly(special.Runtime.X, 1.0),
+                 "LF2SpecialAttack SimTU must apply one ground-friction tick after moving by pre-friction Vx, " +
+-                "without a second hit_Fa execution (which would leave Vx=2.2)");
++                "without adding another hit_Fa motion tail");
+ 
+             CheckCurrentDatFrameLogicRepresentativeCategories();
+         }

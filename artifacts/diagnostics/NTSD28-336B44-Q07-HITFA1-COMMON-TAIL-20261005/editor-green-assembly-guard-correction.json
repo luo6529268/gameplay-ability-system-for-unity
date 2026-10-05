@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-05T14:14:55.860564+00:00",
+  "previousLaunchAttempt": "local freshness assertion stopped before run_tests; no job started",
+  "correction": "each assembly checked against its own changed script; unchanged Editor DLL had already run six RED cases",
+  "runtimeFresh": true,
+  "testFresh": true
+}

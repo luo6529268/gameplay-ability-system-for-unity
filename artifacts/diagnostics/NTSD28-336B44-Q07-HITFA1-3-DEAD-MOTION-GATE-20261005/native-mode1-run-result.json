@@ -1,0 +1,12 @@
+{
+  "command": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\native_dead_tracking_witness.exe",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "1"
+  ],
+  "utc": "2026-10-05T15:00:59.758723+00:00",
+  "elapsedSeconds": 1.312999999965541,
+  "exitCode": 0,
+  "stdout": "{\"completedTick\":0,\"sourceX\":500,\"sourceIntegerX\":500,\"sourceY\":-100,\"integerY\":-100,\"sourceZ\":600,\"vx\":0,\"vy\":0,\"vz\":0,\"action\":0,\"counter\":0,\"target\":0,\"hp\":0,\"behavior\":0,\"unsupported\":0}\n{\"completedTick\":1,\"sourceX\":500,\"sourceIntegerX\":500,\"sourceY\":-100,\"integerY\":-100,\"sourceZ\":600,\"vx\":0,\"vy\":0,\"vz\":0,\"action\":4,\"counter\":1,\"target\":0,\"hp\":0,\"behavior\":1,\"unsupported\":0}\n",
+  "stderr": ""
+}

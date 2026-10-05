@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "utc": "2026-10-05T15:27:25.273794+00:00",
+  "elapsedSeconds": 1.1709999999729916,
+  "exitCode": 0,
+  "summary": [],
+  "outputFile": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\\git-diff-check-output.log",
+  "errorTail": ""
+}

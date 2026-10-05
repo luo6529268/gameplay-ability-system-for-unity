@@ -6,6 +6,10 @@
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
+| NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 | RUNTIME_PENDING | Q07 current native common-only10 target/no motion, exact three scripts | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md) | [Task](TASKS/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md) |
+| NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001 | RUNTIME_PENDING | 共用1/3非正HP运动门，先完整tick RED | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.md) | [Task](TASKS/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.md) |
+| NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 | RUNTIME_PENDING | behavior3四tick整数边界与double步长；两脚本＋诊断cpp | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001.md) | [SCOPED_FULL_DRIVER_PASS](../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005/REPORT.md) |
+| NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001 | RUNTIME_PENDING | behavior1共用double纵向/速度与整数Y物理阶段；两脚本＋诊断cpp | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001.md) | 原Editor六项RED、7/7 GREEN含同完整tick与局部SelfCheck；ONE完成→REUSE，DAT/非战斗不改。 |
 | NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001 | RUNTIME_PENDING | 共用2/4/12/14 double加速及2严格7阈值；两既有脚本＋新native诊断cpp | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-001.md) | 原Editor五项预期RED、修后6/6（含同一十tick及局部SelfCheck）通过；native十次实函数源码witness一致选帧。四保护/DAT保持，ONE完成REUSE；自然根/GPU未验。 |
 | NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-001 | RUNTIME_PENDING | 2/4/12共用纵向追踪及整数Y物理阶段合同；两个脚本 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA-VERTICAL-PHASE-001.md) | 原Editor六项RED五首差、修后6/6＋907/190完整Driver一步1/1，摩擦Vx9/previousY-1及零残留符合。修前1902高度误写留证更正，ONE完成REUSE；自然/根同初态/GPU未知。 |
 | NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001 | RUNTIME_PENDING | 正式14共用尾部Y/Vy/YInt/action保持；三脚本限定 | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA14-COMMON-TAIL-001.md) | 原Editor七例RED五首差、修后8/8 GREEN＋正式207/115完整Driver一步1/1，正常scope零残留/Scene稳。两次callback前OID别名误断言已留证更正，必要ONE完成REUSE；自然Sai/根同初态/GPU未覆盖。 |
@@ -1718,3 +1722,12 @@ NTSD-WORDS-PREWARM-DEPENDENCY-001 / IN_PROGRESS: user intentional WORDS deletion
 NTSD-ROLE-SELECTION-UI-001 / VERIFIED (scoped): original Unity Menu formal prewarm succeeded with deleted WORDS absent; original Play73assertions PASS, Scene clean after exit. Role independent115assertions retained (P1/P2 fixture); original Scene only one configured player. Full battle SelfCheck/native overlay visual parity not claimed. Audited temporary probe removed; evidence artifacts/diagnostics/NTSD-ROLE-SELECTION-UI-001/scene-result.json and screenshots.
 
 NTSD-WORDS-PREWARM-DEPENDENCY-001 / VERIFIED (scoped): original Unity Menu formal prewarm succeeded with deleted WORDS absent; original Play73assertions PASS, Scene clean after exit. Role independent115assertions retained (P1/P2 fixture); original Scene only one configured player. Full battle SelfCheck/native overlay visual parity not claimed. Audited temporary probe removed; evidence artifacts/diagnostics/NTSD-ROLE-SELECTION-UI-001/scene-result.json and screenshots.
+
+
+| NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001 | RUNTIME_PENDING | Q07 shared cached target type predicate only, two exact scripts | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001.md) | [Task](TASKS/NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-001.md) |
+
+| NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001 | RUNTIME_PENDING | Q07 active stale target after unsuccessful scan, exact shared owner | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md) | [Task](TASKS/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001.md) |
+
+2026-10-05T17:18:46.929829+00:00 > **2026-10-06 用户边界澄清与正式出口：** 用户确认近期修改只涉及非战斗场景逻辑，本任务不因这些变化扩大源码恢复/非战斗审计或阻塞战斗对齐；正式根EXE仍336B44，候选不晋升。已有共用目标7/7、Core26/26/direct15/15限定证据保留。下一在同Task内仅一次正式EXE206/frame54→99/frame230倒地目标四tick诊断；初态受控/零输入，不改DAT、Scene或C#，不重跑七项。自然击倒/HP0/私有3F8/整场不由该例推出；父Q及总目标仍开放。229Record/68未关REUSE54/TRIGGER14保持，此次是既有包一个出口，非新增生产任务。
+
+2026-10-05T17:25:40.204162+00:00 > **2026-10-06 正式根倒地目标四tick限定补证完成：** 同Task内正式336B44 EXE headless回放exit0/passed=true，206/frame54面对持续99/frame230/state14/HP500目标，四tick X500→500.7→502.1→504.2→507、Vx0.7/1.4/2.1/2.8、末动作0。目标仍在场/倒地，直接证明本例追踪运动继续；私有3F8未导出。复用旧健康目标Core/Unity11主体字段各55/55同，仅输出对照，非完整同初态/全World。正式地图Z钳制另列用户例外。未改C#/DAT/Scene/源码、未运行Unity/旧七项，11保护SHA稳。用户确认非战斗修改不引出全局恢复前置；父Record仍RUNTIME_PENDING，父Q/目标开放，229Record/68未关REUSE54/TRIGGER14不变。本出口完成，下一仅按当前总表实际首差/必要终验，停止源码历史扩检。 原件：artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md

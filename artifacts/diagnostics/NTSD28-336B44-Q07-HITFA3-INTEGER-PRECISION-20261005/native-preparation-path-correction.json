@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-05T14:37:59.069377+00:00",
+  "failure": "manifest read FileNotFoundError before compiler launch; decoded_dat omitted in previous input paths",
+  "correction": "use exact formalPath/stagedPath from pre-change manifest; no old files overwritten",
+  "compilerWasStarted": false
+}

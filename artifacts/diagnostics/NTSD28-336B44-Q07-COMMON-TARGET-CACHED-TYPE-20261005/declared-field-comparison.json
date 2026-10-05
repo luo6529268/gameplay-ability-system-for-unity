@@ -1,0 +1,74 @@
+{
+  "utc": "2026-10-05T15:52:10.331596+00:00",
+  "fields": [
+    "completedTick",
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "target",
+    "hp"
+  ],
+  "native": "native-full-driver-v2.jsonl",
+  "redFile": "unity-full-driver-dd4c1281f5d34167aeb631013fd9fa21.jsonl",
+  "greenFile": "unity-full-driver-79425a08cd5e4240a39937da9a4f3e97.jsonl",
+  "red": {
+    "declaredFields": 13,
+    "rows": 2,
+    "total": 26,
+    "equal": 20,
+    "differences": [
+      {
+        "tick": 1,
+        "field": "sourceX",
+        "native": 500.85,
+        "unity": 499.15
+      },
+      {
+        "tick": 1,
+        "field": "sourceIntegerX",
+        "native": 500,
+        "unity": 499
+      },
+      {
+        "tick": 1,
+        "field": "sourceY",
+        "native": -100,
+        "unity": -98.8
+      },
+      {
+        "tick": 1,
+        "field": "integerY",
+        "native": -100,
+        "unity": -98
+      },
+      {
+        "tick": 1,
+        "field": "vx",
+        "native": 0.85,
+        "unity": -0.85
+      },
+      {
+        "tick": 1,
+        "field": "target",
+        "native": 50,
+        "unity": 0
+      }
+    ]
+  },
+  "green": {
+    "declaredFields": 13,
+    "rows": 2,
+    "total": 26,
+    "equal": 26,
+    "differences": []
+  },
+  "viewRatioResidual": 0.0,
+  "limit": "subject declared fields only; different subject slot, alternative character identities/count, old Unity scenario seed/schema/Stage23; native controlled preparatory lifecycle, no full World or natural skill proof"
+}

@@ -1,0 +1,22 @@
+# NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-001
+
+PLANNED / 2026-10-05T16:10:25.564671+00:00。本包先执行一个必要的共用规则诊断，尚未取得本包运行首差，不称生产缺口已实测。正式336B44 paired native_ai.cpp301-389：缓存HP0/state14无效且scan无候选时保留旧3F8；仅-1杀subject，旧槽仍有实体则继续1/3等行为。Unity ResolveFrameLogicTargetByHitFa保留旧数字却bestSlot<0返回null；Fa1另有target HP0清subject HP。独立只读审阅确认当前live候选，前包缓存type的HP0控制有新候选，不覆盖本边界。
+
+准确路径仅两既有脚本：
+- Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs：仅ResolveFrameLogicTargetByHitFa扫描尾按最终缓存查询active target，及RunHitFa1FrameLogic移除目标HP门（必须实际首差后）；保留subject HP门、-1 sentinel、scan资格/组/相位/排序、inactive槽仍null，禁止IncludingPending/raw造目标。
+- Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs：新增StaleLiveTargetSurvivesFailedScan三个参数(HP500/lying/无替代)、(HP0/standing/无替代)、(HP0/standing/有替代)；正式99/frame230 state14、902/frame0 Fa1，先实际共用AI从-1选50，再显式受控进入lying/HP0、重置source/V0，缓存50无扫描新结果应继续Vx+.85/Y-98.8/HP500，有活体替代应改0/Vx-.85。一个完整Driver CachedInvalidLiveTargetSurvivesOneDriverTick：旧scenario载体正式LoganRuntime/projectmode，subject902/frame0正HP、type0目标99/230槽50保持活跃、有同组替代99槽0；3F8=50/源500,-100,600。真实一个生产tick/CreateNew声明13字段+view/targetActive/count。全部旧行保持。
+
+新 diagnostic-source-path: artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/native_stale_live_target_driver_witness.cpp。当前声明28 Core CPP/C++17 O2无fastmath，全输入SHA前后。真实扫描先选50，显式受控99/230或HP0后再真实共用消费者，三direct守卫；完整Driver保留active旧目标，旧槽inactive不得恢复运动。控制输入不是自然玩家倒地/击杀，源与Unitysubject槽/部分初态不同只比声明subject字段，非根EXE/Host/全World/GPU验收。
+
+先native实际消费者及原Editor四RED（预计三个差异失败、替代控制通过），证明首不同tick/字段后才修生产；否则停止候选并只更新条件门。GREEN同四＋前包缓存type两控制＋既有共用局部SelfCheck共七具名，不运行全套/角色矩阵。两MCPRefresh各一次、原Editor idle/nonPlay/clean/DLL新鲜、同job续查。生成编译、最终最窄独立diff/声明字段比较、Ledger和diffcheck。
+
+不新增runtime模块；direct finally Unregister、完整wrapper原零残留保持，有序关闭11阶段不改。精确两脚本七文档九before备份见manifest；正式源码/EXE、DAT、图片、Scene/InputActions、地图/模式、Unity/GAS/非战斗/33ms/pass与旧dirty保护。回滚另获批仅本包before精确hunk，不restore/reset/clean或删文件。当前229Record/68未关：REUSE53/TRIGGER14/ONE1/P0=DEP=0；ONE是诊断，不称已证生产P0，父Q及目标开放。
+
+2026-10-05T16:47:59.727067+00:00 RUNTIME_PENDING / SCOPED_STALE_LIVE_TARGET_DRIVER_PASS：原Editor GREEN job9d69c11e3abd48b282ea1c5b675725c9终态7/7 PASS/0fail/0skip；仅本包四例＋缓存type两控制＋局部SelfCheck。两批各一次Refresh/DLL新鲜，首查询30s超时续同job不重启。生成GREEN0error334warning，当前native v2 compile/run0、70输入前后/收尾稳。subject初态+完整tick13×2 GREEN26/26（RED22/26），direct15/15（RED11/15），view残差0；scope与原件见本包REPORT/declared-field-comparison。四保护/三DAT两端/九备份稳，原Battle clean/nonPlay/Console0error。生产仅两hunk/test222插入且旧行全保留，独立只读审阅无阻断。外部build5F400→5E85与v1 headerBC03→22D5保留更正；只接纳v2当前身份，不称旧输入或全playable闭包稳。无自然玩家/根EXE/Host/GPU整场证书，父Q/目标开放；必要ONE→REUSE，229Record/68未关REUSE54/TRIGGER14/P0=DEP=ONE=0。
+
+2026-10-05T16:55:28.900628+00:00 最终身份更正：此前scope-pre-final-check时当前70输入稳，native v2编译/运行前后70稳定证书仍有效；随后最终guard失败实际仅README_SOURCE.md C0BA→DE936，不是新header/CPP变化。已保存当前全文post-green-current-0-README_SOURCE.md.txt。其现声明源目录为持续开发的锦标赛候选，不能把当前源快照与旧根发行EXE视为逐字节对应。根336B44/三个规则body/当前其余69输入稳，但今后不能把当前源树自动当336B44对应权威；下一先只读核冻结源码及根EXE对应关系，不用候选定新规则，不重跑七项或重编仅为README变更。已通过7/7、Core26/26/direct15/15证据保留，RUNTIME_PENDING/父Q与目标开放。最终不称70输入全稳或已对齐根EXE。
+
+2026-10-05T17:18:46.929829+00:00 > **2026-10-06 用户边界澄清与正式出口：** 用户确认近期修改只涉及非战斗场景逻辑，本任务不因这些变化扩大源码恢复/非战斗审计或阻塞战斗对齐；正式根EXE仍336B44，候选不晋升。已有共用目标7/7、Core26/26/direct15/15限定证据保留。下一在同Task内仅一次正式EXE206/frame54→99/frame230倒地目标四tick诊断；初态受控/零输入，不改DAT、Scene或C#，不重跑七项。自然击倒/HP0/私有3F8/整场不由该例推出；父Q及总目标仍开放。229Record/68未关REUSE54/TRIGGER14保持，此次是既有包一个出口，非新增生产任务。
+正式root单例验收计划：复用C053旧LFR的格式/RNG/资源身份字节，新增诊断副本；物理slot0=206/group1/X500/Y-100/Z600/action54、slot1=99/group2/X1000/Y0/Z600/action230、slot2=2/group1/X1500/Y0/Z600/action0，HP/MP500。声明end3为实际四step、所有input/functionKey为0；HP checksum预声明1500，三logical header初态控制无额外score/cost。只调用正式EXE现有headless LFR/report/trace接口，trace逐tick判断active/type/frame/state/位置/速度/HP；四tick共用追踪预期X500.7/502.1/504.2/507、Vx0.7/1.4/2.1/2.8，动作54/54/54/0。本预期只是已有消费者待正式验证假设。若manager前置或header失败，保存原FAIL，最多一次仅修诊断结构的新副本重试，不修改游戏规则/正式资源；相同trace才能讨论结构更正。只复用既有Unity同消费者证据，初态不同不冒称严格配对。
+
+2026-10-05T17:25:40.204162+00:00 > **2026-10-06 正式根倒地目标四tick限定补证完成：** 同Task内正式336B44 EXE headless回放exit0/passed=true，206/frame54面对持续99/frame230/state14/HP500目标，四tick X500→500.7→502.1→504.2→507、Vx0.7/1.4/2.1/2.8、末动作0。目标仍在场/倒地，直接证明本例追踪运动继续；私有3F8未导出。复用旧健康目标Core/Unity11主体字段各55/55同，仅输出对照，非完整同初态/全World。正式地图Z钳制另列用户例外。未改C#/DAT/Scene/源码、未运行Unity/旧七项，11保护SHA稳。用户确认非战斗修改不引出全局恢复前置；父Record仍RUNTIME_PENDING，父Q/目标开放，229Record/68未关REUSE54/TRIGGER14不变。本出口完成，下一仅按当前总表实际首差/必要终验，停止源码历史扩检。 原件：artifacts/diagnostics/NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006/root-lying-witness-20261006/REPORT.md

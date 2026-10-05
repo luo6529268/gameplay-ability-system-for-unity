@@ -1,0 +1,501 @@
+{
+  "utc": "2026-10-05T14:20:55.070644+00:00",
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "same": true,
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "same": true,
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "same": true,
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "same": true,
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "same": true,
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "same": true,
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "same": true,
+      "sha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "same": false,
+      "sha256": "D46CD858DDF763D43D96F1220918FAFBB0F804C2E6B6D40D2FC99546C8FD6E0D"
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "same": true,
+      "sha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761"
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "c/sai/a/ink.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "c/sai/sai.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "c/nar/a/atk.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "custom/1genma/a/wind.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "data/data.txt",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "w/e.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalSame": true,
+      "stagedSame": true
+    },
+    {
+      "relativePath": "custom/1genma/genma.dat",
+      "formalSame": true,
+      "stagedSame": true
+    }
+  ],
+  "sourceBuildInputs": [
+    {
+      "path": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\fusion_catalog.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\minibar_catalog.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\object_catalog.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_machine.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_motion.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_random.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_response.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\damage_resolution.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\defense_resolution.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\armor_resolution.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\object_spawning.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_flow.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\background_definition.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_resource_catalog.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_frame_hud.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_combo_hud.cpp",
+      "same": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\native_ai_hitfa1_witness.cpp",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "same": false
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\catalog.csv",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\armor_resolution.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\background_definition.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_flow.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_world.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\collision_geometry.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\combat_records.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\damage_resolution.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_document.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_parser.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\defense_resolution.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\engine_profile.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_machine.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_motion.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\fusion_catalog.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_candidates.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_response.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_routing.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_state.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\kind_catalog.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\minibar_catalog.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_ai.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_combo_hud.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_frame_hud.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_random.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_resource_catalog.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_catalog.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_spawning.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\physics_integrator.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\render_snapshot.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\simulation_tick_driver.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\system_battle_tables.h",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\genma.dat",
+      "same": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\STATE.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "same": true
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "same": true
+    }
+  ],
+  "state": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791210053362,
+        "sequence": 8,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "guid": "9a044b4462e171548a6466aaa64f92e5",
+            "name": "NTSD_Battle"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791209769553,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791209634832
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": 1791209695961,
+          "started_by": "unknown",
+          "last_run": {
+            "finished_unix_ms": 1791209768505,
+            "result": "unknown",
+            "counts": null
+          }
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "scene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Battle",
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "buildIndex": 1,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 11
+      }
+    }
+  },
+  "console": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  },
+  "gitStatusExitCode": 0,
+  "gitStatus": "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]\n M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md\n M docs/ai/STATE.md\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/GOVERNANCE-CHECK.md\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/REPORT.md\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/editor-green-launch.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/editor-green-observation-01.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/editor-green-readiness-01.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/editor-green-refresh.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/final-authority-diff-and-editor-state.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/observed-authority-build-script.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/observed-authority-build-script.ps1\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/paired-unity-first-difference.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/unity-full-driver-052c7b3fd81147af91f8a32bc0bd473a.jsonl\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005/written-diff.json\n?? artifacts/diagnostics/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-20261005/\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl\n?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001.md\n?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001-EDIT-20261005/\n?? docs/ai/TASKS/NTSD28-336B44-Q07-HITFA1-COMMON-TAIL-001.md\n"
+}

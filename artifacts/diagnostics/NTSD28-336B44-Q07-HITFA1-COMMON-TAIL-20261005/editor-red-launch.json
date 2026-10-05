@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-05T14:04:43.349535+00:00",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa1KeepsNativeVerticalBranchAndPhase",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.IndexedHitFa1VerticalPhaseSurvivesOneFullDriverTick"
+  ],
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "6ee8f4ec1cd44ecb9b81cd9ef0c3bf1e",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

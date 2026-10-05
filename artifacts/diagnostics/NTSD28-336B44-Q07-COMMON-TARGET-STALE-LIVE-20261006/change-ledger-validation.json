@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-05T16:49:10.437688+00:00",
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1"
+  ],
+  "exitCode": 0,
+  "output": "change-ledger-validation.txt"
+}

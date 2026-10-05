@@ -1,0 +1,458 @@
+{
+  "utc": "2026-10-05T15:55:32.648333+00:00",
+  "protected": [
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "beforeSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "afterSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "beforeSha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "afterSha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "beforeSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "afterSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "unchanged": true
+    },
+    {
+      "path": "Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "beforeSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "afterSha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "unchanged": true
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "beforeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "afterSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "beforeSha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "afterSha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "beforeSha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "afterSha256": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "beforeSha256": "5F400FDAD956BB1FF9A9FE680033049F7E1A869827F08D9E08DCCC89714E4DE0",
+      "afterSha256": "5F400FDAD956BB1FF9A9FE680033049F7E1A869827F08D9E08DCCC89714E4DE0",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "beforeSha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "afterSha256": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "unchanged": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "matchesBefore": true
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\docs\\ai\\STATE.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "matchesBefore": true
+    }
+  ],
+  "content": [
+    {
+      "path": "data/data.txt",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    },
+    {
+      "path": "custom/1genma/a/shuriken.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    },
+    {
+      "path": "custom/1genma/genma.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    },
+    {
+      "path": "c/nar/nar.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    },
+    {
+      "path": "c/nar/ncl.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    },
+    {
+      "path": "c/nar/sna.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "formalEqualsStagedRaw": true,
+      "normalizedEqual": true
+    }
+  ],
+  "nativeInputs": [
+    {
+      "path": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\fusion_catalog.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\minibar_catalog.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\object_catalog.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_machine.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_motion.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_random.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_response.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\damage_resolution.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\defense_resolution.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\armor_resolution.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\object_spawning.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_flow.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\background_definition.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_resource_catalog.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_frame_hud.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\native_combo_hud.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\armor_resolution.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\background_definition.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_flow.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_world.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\collision_geometry.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\combat_records.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\damage_resolution.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_document.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_parser.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\defense_resolution.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\engine_profile.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_machine.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_motion.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\fusion_catalog.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_candidates.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_response.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_routing.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_state.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\kind_catalog.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\minibar_catalog.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_ai.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_combo_hud.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_frame_hud.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_random.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_resource_catalog.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_catalog.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_spawning.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\physics_integrator.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\render_snapshot.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\simulation_tick_driver.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\system_battle_tables.h",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\README_SOURCE.md",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-CACHED-TYPE-20261005\\native_cached_type_driver_witness.cpp",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\data\\data.txt",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\a\\shuriken.dat",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\custom\\1genma\\genma.dat",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\custom\\1genma\\genma.dat",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\nar.dat",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\nar.dat",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\ncl.dat",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\ncl.dat",
+      "unchanged": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\sna.dat",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\sna.dat",
+      "unchanged": true
+    }
+  ]
+}

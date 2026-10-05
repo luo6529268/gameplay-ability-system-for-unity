@@ -1,0 +1,88 @@
+--- artifacts\diagnostics\NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-20261005\external-build-current-observed.ps1.txt
++++ J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\scripts\build.ps1
+@@ -1,6 +1,6 @@
+ [CmdletBinding()]
+ param(
+-    [ValidateSet('all', 'playable', 'parity_runner', 'scenario_gate', 'scenario_trace_encoding_tests', 'game_session_tests', 'selection_loop_tests', 'story_frontend_tests', 'war_frontend_tests', 'tournament_setup_tests', 'tournament_setup_stream_tests', 'tournament_roster_tests', 'tournament_roster_stream_tests', 'tournament_render_tests', 'tournament_page_render_tests', 'tournament_assets_tests', 'tournament_catalog_tests', 'tournament_assignment_tests', 'tournament_menu_context_tests', 'tournament_parameter_return_tests', 'tournament_competition_tests', 'tournament_battle_plan_tests', 'tournament_lifecycle_tests', 'tournament_roster_render_tests', 'tournament_roster_page_render_tests', 'frontend_menu_render_tests', 'frontend_playback_tests', 'presentation_interpolation_tests', 'game_session_function_keys_tests', 'win32_input_bindings_tests', 'native_function_keys_tests', 'lfr_recorder_tests', 'game_session_lfr_tests', 'game_session_function_keys_lfr_tests', 'recording_application_tests', 'recording_fixture', 'recording_playback_ko_fixture', 'offscreen_gate', 'audio_backend_tests', 'audio_reference_corpus_tests')]
++    [ValidateSet('all', 'playable', 'parity_runner', 'scenario_gate', 'scenario_trace_encoding_tests', 'game_session_tests', 'selection_loop_tests', 'story_frontend_tests', 'war_frontend_tests', 'tournament_post_menu_tests', 'tournament_frontend_render_tests', 'tournament_frontend_tests', 'tournament_setup_tests', 'tournament_setup_stream_tests', 'tournament_roster_tests', 'tournament_roster_stream_tests', 'tournament_render_tests', 'tournament_page_render_tests', 'tournament_assets_tests', 'tournament_catalog_tests', 'tournament_assignment_tests', 'tournament_menu_context_tests', 'tournament_parameter_return_tests', 'tournament_competition_tests', 'tournament_battle_plan_tests', 'tournament_lifecycle_tests', 'tournament_roster_render_tests', 'tournament_roster_page_render_tests', 'frontend_menu_render_tests', 'frontend_playback_tests', 'presentation_interpolation_tests', 'game_session_function_keys_tests', 'win32_input_bindings_tests', 'native_function_keys_tests', 'lfr_recorder_tests', 'game_session_lfr_tests', 'game_session_function_keys_lfr_tests', 'recording_application_tests', 'recording_fixture', 'recording_playback_ko_fixture', 'offscreen_gate', 'audio_backend_tests', 'audio_reference_corpus_tests')]
+     [string]$Target = 'all',
+     [string]$Compiler = '',
+     [string]$OutputRoot = ''
+@@ -198,6 +198,49 @@
+     }
+ }
+ 
++if ($Target -eq 'tournament_post_menu_tests' -or $Target -eq 'all') {
++    $tournamentPostMenuArguments = @(
++        '-std=c++17', '-O2', '-Wall', '-Wextra', '-Wpedantic',
++        '-finput-charset=UTF-8', '-fexec-charset=UTF-8',
++        ('-I' + (Join-Path $coreRoot 'include')),
++        ('-I' + (Join-Path $playableRoot 'include')),
++        (Join-Path $playableRoot 'src\selection_flow.cpp'),
++        (Join-Path $playableRoot 'tests\tournament_post_menu_tests.cpp'),
++        '-static-libgcc', '-static-libstdc++',
++        '-o', (Join-Path $buildRoot 'tournament_post_menu_tests.exe')
++    )
++    Write-Host '[build] tournament_post_menu_tests.exe (tournament post-roster menu validation)'
++    & $compiler @tournamentPostMenuArguments
++    if ($LASTEXITCODE -ne 0) { throw "tournament post-menu test build failed: $LASTEXITCODE" }
++    if ($Target -eq 'tournament_post_menu_tests') {
++        Write-Host "[build] focused complete: $buildRoot"
++        return
++    }
++}
++
++if ($Target -eq 'tournament_frontend_render_tests' -or $Target -eq 'all') {
++    $tournamentFrontendRenderArguments = @(
++        '-std=c++17', '-O2', '-Wall', '-Wextra', '-Wpedantic',
++        '-finput-charset=UTF-8', '-fexec-charset=UTF-8',
++        ('-I' + (Join-Path $coreRoot 'include')),
++        ('-I' + (Join-Path $playableRoot 'include')),
++        (Join-Path $coreRoot 'src\data\dat_document.cpp'),
++        (Join-Path $coreRoot 'src\data\dat_parser.cpp'),
++        (Join-Path $coreRoot 'src\data\object_catalog.cpp'),
++        (Join-Path $playableRoot 'src\selection_flow.cpp'),
++        (Join-Path $playableRoot 'tests\tournament_frontend_render_tests.cpp'),
++        '-static-libgcc', '-static-libstdc++',
++        '-o', (Join-Path $buildRoot 'tournament_frontend_render_tests.exe')
++    )
++    Write-Host '[build] tournament_frontend_render_tests.exe (tournament frontend projection validation)'
++    & $compiler @tournamentFrontendRenderArguments
++    if ($LASTEXITCODE -ne 0) { throw "tournament frontend render test build failed: $LASTEXITCODE" }
++    if ($Target -eq 'tournament_frontend_render_tests') {
++        Write-Host "[build] focused complete: $buildRoot"
++        return
++    }
++}
++
+ if ($Target -eq 'tournament_assets_tests' -or $Target -eq 'tournament_roster_render_tests' -or
+     $Target -eq 'tournament_catalog_tests' -or $Target -eq 'tournament_assignment_tests' -or
+     $Target -eq 'tournament_menu_context_tests' -or $Target -eq 'tournament_lifecycle_tests' -or
+@@ -393,12 +436,15 @@
+     return
+ }
+ 
+-if ($Target -eq 'selection_loop_tests' -or $Target -eq 'story_frontend_tests' -or $Target -eq 'war_frontend_tests') {
+-    $warRenderSources = if ($Target -eq 'war_frontend_tests') {
++if ($Target -eq 'selection_loop_tests' -or $Target -eq 'story_frontend_tests' -or
++    $Target -eq 'war_frontend_tests' -or $Target -eq 'tournament_frontend_tests') {
++    $warRenderSources = if ($Target -eq 'war_frontend_tests' -or
++                            $Target -eq 'tournament_frontend_tests') {
+         @((Join-Path $playableRoot 'src\d3d11_renderer.cpp'),
+           (Join-Path $playableRoot 'src\presentation_interpolation.cpp'))
+     } else { @() }
+-    $warRenderLibraries = if ($Target -eq 'war_frontend_tests') {
++    $warRenderLibraries = if ($Target -eq 'war_frontend_tests' -or
++                              $Target -eq 'tournament_frontend_tests') {
+         @('-ld3d11', '-ldxgi', '-ld3dcompiler', '-lwindowscodecs', '-lole32',
+           '-lshell32', '-lgdi32', '-luuid')
+     } else { @() }
+@@ -426,7 +472,7 @@
+     Write-Host "[build] $Target.exe (frontend scene ownership validation)"
+     & $compiler @selectionLoopTestArguments
+     if ($LASTEXITCODE -ne 0) {
+-        throw "selection_loop_tests build failed with exit code $LASTEXITCODE"
++        throw "$Target build failed with exit code $LASTEXITCODE"
+     }
+     Write-Host "[build] focused complete: $buildRoot"
+     return

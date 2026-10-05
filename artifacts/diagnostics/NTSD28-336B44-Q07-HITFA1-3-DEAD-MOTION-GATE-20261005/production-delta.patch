@@ -1,0 +1,23 @@
+--- before-dirty
++++ after-current
+@@ -1558,6 +1558,12 @@
+                 return;
+             }
+ 
++            // Alignment contract: NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.
++            if (Health == null || Health.HP <= 0)
++            {
++                return;
++            }
++
+             ResolveFrameLogicPositionPair(target, null,
+                 out int selfX, out int targetX, out int selfZ, out int targetZ);
+ 
+@@ -1604,7 +1610,6 @@
+ 
+             if (Health == null || Health.HP <= 0)
+             {
+-                ApplyHitFa3NoTargetDrift();
+                 return;
+             }
+ 

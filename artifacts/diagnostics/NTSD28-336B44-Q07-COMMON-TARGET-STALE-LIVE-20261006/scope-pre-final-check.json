@@ -1,0 +1,165 @@
+{
+  "utc": "2026-10-05T16:43:32.726591+00:00",
+  "backups": [
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "sha256": "800F67827DE867D69EE037950E65B180CEFFD670FD7ABE1764C895BB35C170A2",
+      "expected": "800F67827DE867D69EE037950E65B180CEFFD670FD7ABE1764C895BB35C170A2",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "C254BCC271B5BC44A23DABB5F56D290152FEC154C172AD899F5D352C8E8BECD8",
+      "expected": "C254BCC271B5BC44A23DABB5F56D290152FEC154C172AD899F5D352C8E8BECD8",
+      "same": true
+    },
+    {
+      "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "3ECEAE387D293A6C9800B2E4275DF99DFABFDD24DF0D4ACECACAE9F5150F5567",
+      "expected": "3ECEAE387D293A6C9800B2E4275DF99DFABFDD24DF0D4ACECACAE9F5150F5567",
+      "same": true
+    },
+    {
+      "path": "docs\\ai\\STATE.md",
+      "sha256": "C25CA0E27A102B8B3CB4CE734B539F19FBA0D90ABC3A611B3E629A1F00940BA0",
+      "expected": "C25CA0E27A102B8B3CB4CE734B539F19FBA0D90ABC3A611B3E629A1F00940BA0",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "67E35F4F6957D478E0E686641A434F6DDB78D5667911F0C62D0EE0C34DAAC8BB",
+      "expected": "67E35F4F6957D478E0E686641A434F6DDB78D5667911F0C62D0EE0C34DAAC8BB",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "57E1FA73DED29678A59988DD1C7385D7F0F47ADB2B71550DD3CDFB0A9AB5EB26",
+      "expected": "57E1FA73DED29678A59988DD1C7385D7F0F47ADB2B71550DD3CDFB0A9AB5EB26",
+      "same": true
+    },
+    {
+      "path": "docs\\ai\\NTSD28-336B44-OPEN-RECORD-TRIAGE-20261004.md",
+      "sha256": "475E23915844FB1106FFDD49D2F012F141B90F3F09902EE3C3185439646A12B3",
+      "expected": "475E23915844FB1106FFDD49D2F012F141B90F3F09902EE3C3185439646A12B3",
+      "same": true
+    },
+    {
+      "path": "docs\\ai\\CHANGE-LEDGER.md",
+      "sha256": "65D871FE98CECDE41B5A0C238AED3D2A15A1F4AF6BFBF2B7F546BDC7B9050E6F",
+      "expected": "65D871FE98CECDE41B5A0C238AED3D2A15A1F4AF6BFBF2B7F546BDC7B9050E6F",
+      "same": true
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "EBAD659136AC5DD1C04EE6BDB159EAC174EF87B96F4C7CAA689F23008BDC3069",
+      "expected": "EBAD659136AC5DD1C04EE6BDB159EAC174EF87B96F4C7CAA689F23008BDC3069",
+      "same": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "sha256": "6E4EF9F1F571754EB54DD534E5EE9784550BEF52C999C81972A83AE261775A09",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "same": true
+    },
+    {
+      "path": "Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "same": true
+    }
+  ],
+  "content": [
+    {
+      "relativePath": "data/data.txt",
+      "formalSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+      "stagedSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "rawEqual": true
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A",
+      "stagedSha256": "6D85FAA4A1974F177CBCA9A5368C5CA9C2328A550DAB5D2C1269D6C00B87CD8A",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "rawEqual": true
+    },
+    {
+      "relativePath": "c/nar/sna.dat",
+      "formalSha256": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035",
+      "stagedSha256": "5993F9EC8E391C9C7DFE6F079CEFE37A3AD4D3ED1DC447BB88906F95C0E6D035",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "rawEqual": true
+    }
+  ],
+  "authority": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "before": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "after": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\native_ai.cpp",
+      "before": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "after": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\simulation_tick_driver.cpp",
+      "before": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "after": "0E27D6729E8709630276C1B1F1954363E35C6D6ECF71AB0CD1260B19DD8AFCFC",
+      "same": true
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_playable\\scripts\\build.ps1",
+      "before": "5F400FDAD956BB1FF9A9FE680033049F7E1A869827F08D9E08DCCC89714E4DE0",
+      "after": "5E85AC5327AC9F867BBA0FE1C746C70819D5E0E8C80086DC3EE55BE2A0AA5289",
+      "same": false
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "before": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "after": "47960E8DDA51785AE67EFD829B540061E63297C50F247D6BB717C23CBB397761",
+      "same": true
+    }
+  ],
+  "nativeV2InputsChecked": 70,
+  "nativeV2InputsChanges": [],
+  "productionChanges": [
+    {
+      "tag": "delete",
+      "beforeStart": 1547,
+      "beforeEnd": 1553,
+      "afterStart": 1547,
+      "afterEnd": 1546,
+      "old": "            if (target.Health == null || target.Health.HP <= 0)\r\n            {\r\n                if (Health != null)\r\n                    Health.HP = 0;\r\n                return;\r\n            }\r\n\r\n",
+      "new": ""
+    },
+    {
+      "tag": "replace",
+      "beforeStart": 2544,
+      "beforeEnd": 2545,
+      "afterStart": 2537,
+      "afterEnd": 2538,
+      "old": "                target = bestSlot >= 0\r\n                    ? Match.FindEntityByRuntimeSlotForQuery(bestSlot)\r\n",
+      "new": "                target = ObjectAiTargetSlot3F8 >= 0\r\n                    ? Match.FindEntityByRuntimeSlotForQuery(ObjectAiTargetSlot3F8)\r\n"
+    }
+  ],
+  "productionSha256": "837623226B30C1D8312B534DEA7B4B77E2B2DE88D836724A03C5EFCC0F833008",
+  "testSha256": "94B3C5416ECAD75F27A3455928C313C4224084D2859F56412927EBF1F1D54550",
+  "testInsertions": 222,
+  "allOldTestLinesRetained": true
+}

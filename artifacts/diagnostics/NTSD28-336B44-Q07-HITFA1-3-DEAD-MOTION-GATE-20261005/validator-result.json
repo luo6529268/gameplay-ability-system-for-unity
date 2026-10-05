@@ -1,0 +1,15 @@
+{
+  "command": [
+    "pwsh",
+    "-NoProfile",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-File",
+    "Tools/Validate-ChangeLedger.ps1"
+  ],
+  "utc": "2026-10-05T15:08:05.405163+00:00",
+  "elapsedSeconds": 7.795999999972992,
+  "exitCode": 0,
+  "outputFile": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-20261005\\validator-output.log",
+  "outputTail": "1 declares Tools/DatSkillFlowWeb/tests/unit/diagnostics.test.ts, which is not in the current code diff.\n  WARNING: Record WEB-CADENCE-001 declares Tools/DatSkillFlowWeb/tests/unit/launcher-contract.test.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/src/client/main.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/src/client/preview-renderer.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/src/client/render-cadence-sampler.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/render-cadence-sampler.test.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/preview-renderer.test.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/client-project-contract.test.ts, which is not in the current code diff.\n  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/project-open-lifecycle.test.ts, which is not in the current code diff.\n  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.\n  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.\n  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff.\n"
+}

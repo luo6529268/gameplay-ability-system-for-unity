@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-05T16:51:19.405401+00:00",
+  "checked": 70,
+  "changes": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\README_SOURCE.md",
+      "before": "C0BA44DB4A9037E5086348668F1046A83A760D351F2BB2D6062E724676BB3D85",
+      "after": "DE936A0EF8000448696BAA077D0D083B81815C01AE7D6CD4BB6AD0D0CD1BDC19"
+    }
+  ],
+  "failureStage": "Final handoff guard after passed GREEN, not native v2 compile/run guard."
+}

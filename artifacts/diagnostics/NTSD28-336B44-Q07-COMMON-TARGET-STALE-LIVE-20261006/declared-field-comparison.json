@@ -1,0 +1,233 @@
+{
+  "utc": "2026-10-05T16:44:41.731011+00:00",
+  "native": "native-trace-v2.jsonl",
+  "declaredSubjectFields": [
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "target",
+    "hp",
+    "targetActive"
+  ],
+  "fullDriver": {
+    "red": {
+      "file": "unity-full-driver-5f5afaa4b14746b7ba9953b6a9c0aedf.jsonl",
+      "total": 26,
+      "matched": 22,
+      "differences": [
+        {
+          "completedTick": 1,
+          "field": "sourceX",
+          "native": 500.85,
+          "unity": 500.0,
+          "same": false
+        },
+        {
+          "completedTick": 1,
+          "field": "sourceY",
+          "native": -98.8,
+          "unity": -100.0,
+          "same": false
+        },
+        {
+          "completedTick": 1,
+          "field": "integerY",
+          "native": -98,
+          "unity": -100,
+          "same": false
+        },
+        {
+          "completedTick": 1,
+          "field": "vx",
+          "native": 0.85,
+          "unity": 0.0,
+          "same": false
+        }
+      ],
+      "rows": [
+        {
+          "completedTick": 0,
+          "sourceX": 500.0,
+          "sourceIntegerX": 500,
+          "sourceY": -100.0,
+          "integerY": -100,
+          "sourceZ": 600.0,
+          "vx": 0.0,
+          "vy": 0.0,
+          "vz": 0.0,
+          "action": 0,
+          "counter": 0,
+          "target": 50,
+          "hp": 500,
+          "viewX": 768.192048012003,
+          "entityCount": 3,
+          "targetActive": true,
+          "targetHp": 500,
+          "targetFrame": 230
+        },
+        {
+          "completedTick": 1,
+          "sourceX": 500.0,
+          "sourceIntegerX": 500,
+          "sourceY": -100.0,
+          "integerY": -100,
+          "sourceZ": 600.0,
+          "vx": 0.0,
+          "vy": 0.0,
+          "vz": 0.0,
+          "action": 0,
+          "counter": 1,
+          "target": 50,
+          "hp": 493,
+          "viewX": 768.192048012003,
+          "entityCount": 3,
+          "targetActive": true,
+          "targetHp": 500,
+          "targetFrame": 230
+        }
+      ]
+    },
+    "green": {
+      "file": "unity-full-driver-6806622e2e3045d0b6d66a563cf69d99.jsonl",
+      "total": 26,
+      "matched": 26,
+      "differences": [],
+      "rows": [
+        {
+          "completedTick": 0,
+          "sourceX": 500.0,
+          "sourceIntegerX": 500,
+          "sourceY": -100.0,
+          "integerY": -100,
+          "sourceZ": 600.0,
+          "vx": 0.0,
+          "vy": 0.0,
+          "vz": 0.0,
+          "action": 0,
+          "counter": 0,
+          "target": 50,
+          "hp": 500,
+          "viewX": 768.192048012003,
+          "entityCount": 3,
+          "targetActive": true,
+          "targetHp": 500,
+          "targetFrame": 230
+        },
+        {
+          "completedTick": 1,
+          "sourceX": 500.85,
+          "sourceIntegerX": 500,
+          "sourceY": -98.8,
+          "integerY": -98,
+          "sourceZ": 600.0,
+          "vx": 0.85,
+          "vy": 0.0,
+          "vz": 0.0,
+          "action": 0,
+          "counter": 1,
+          "target": 50,
+          "hp": 493,
+          "viewX": 769.4979744936235,
+          "entityCount": 3,
+          "targetActive": true,
+          "targetHp": 500,
+          "targetFrame": 230
+        }
+      ]
+    }
+  },
+  "directConsumer": [
+    {
+      "phase": "red",
+      "scenario": 0,
+      "unityFile": "unity-direct-500-230-False-22c19f9e69fd4e68bf9b90322e9abf70.json",
+      "total": 5,
+      "matched": 3,
+      "differences": [
+        {
+          "field": "vx",
+          "native": 0.85,
+          "unity": 0.0,
+          "same": false
+        },
+        {
+          "field": "sourceY",
+          "native": -98.8,
+          "unity": -100.0,
+          "same": false
+        }
+      ]
+    },
+    {
+      "phase": "green",
+      "scenario": 0,
+      "unityFile": "unity-direct-500-230-False-8b28abe797394fe6b372ed171aeb6ea2.json",
+      "total": 5,
+      "matched": 5,
+      "differences": []
+    },
+    {
+      "phase": "red",
+      "scenario": 1,
+      "unityFile": "unity-direct-0-0-False-7f09ceb6c49a43bda1e096f57e0d9f5d.json",
+      "total": 5,
+      "matched": 3,
+      "differences": [
+        {
+          "field": "vx",
+          "native": 0.85,
+          "unity": 0.0,
+          "same": false
+        },
+        {
+          "field": "sourceY",
+          "native": -98.8,
+          "unity": -100.0,
+          "same": false
+        }
+      ]
+    },
+    {
+      "phase": "green",
+      "scenario": 1,
+      "unityFile": "unity-direct-0-0-False-2527e0d8a6bf40b2a8ec11e2e50b64c0.json",
+      "total": 5,
+      "matched": 5,
+      "differences": []
+    },
+    {
+      "phase": "red",
+      "scenario": 2,
+      "unityFile": "unity-direct-0-0-True-72ff7316109e4098a945a101c6d079a5.json",
+      "total": 5,
+      "matched": 5,
+      "differences": []
+    },
+    {
+      "phase": "green",
+      "scenario": 2,
+      "unityFile": "unity-direct-0-0-True-3867a904e83c48eca220869195502141.json",
+      "total": 5,
+      "matched": 5,
+      "differences": []
+    }
+  ],
+  "viewResiduals": [
+    {
+      "tick": 0,
+      "residual": 0.0
+    },
+    {
+      "tick": 1,
+      "residual": 0.0
+    }
+  ],
+  "scope": "Controlled state/HP preparation and distinct subject slots/Worlds; only the declared subject fields, not natural keys, whole World, root EXE, Host or GPU."
+}

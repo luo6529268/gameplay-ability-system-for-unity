@@ -1,0 +1,7 @@
+{
+  "command": "dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q -clp:ErrorsOnly",
+  "exitCode": 0,
+  "warnings": 334,
+  "errors": 0,
+  "elapsedSeconds": 13.72
+}

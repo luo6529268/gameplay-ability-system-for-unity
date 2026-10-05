@@ -1,0 +1,97 @@
+{
+  "scope": "same Unity fixture before/after; C++ is a separate native AI consumer, not full Driver trace",
+  "red": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005\\unity-full-driver-df2582d8517a4ca983fb0cbfac9fe8ce.jsonl",
+  "green": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA-ACCELERATION-PRECISION-20261005\\unity-full-driver-052c7b3fd81147af91f8a32bc0bd473a.jsonl",
+  "rowsEach": 11,
+  "firstAnyDiff": {
+    "tick": 1,
+    "field": "motionX",
+    "red": 0.699999988079071,
+    "green": 0.7
+  },
+  "firstActionDiff": {
+    "tick": 10,
+    "field": "action",
+    "red": 2,
+    "green": 3
+  },
+  "differences": [
+    {
+      "tick": 1,
+      "field": "motionX",
+      "red": 0.699999988079071,
+      "green": 0.7
+    },
+    {
+      "tick": 2,
+      "field": "motionX",
+      "red": 1.399999976158142,
+      "green": 1.4
+    },
+    {
+      "tick": 3,
+      "field": "motionX",
+      "red": 2.099999964237213,
+      "green": 2.0999999999999996
+    },
+    {
+      "tick": 4,
+      "field": "motionX",
+      "red": 2.799999952316284,
+      "green": 2.8
+    },
+    {
+      "tick": 5,
+      "field": "motionX",
+      "red": 3.4999999403953552,
+      "green": 3.5
+    },
+    {
+      "tick": 6,
+      "field": "motionX",
+      "red": 4.199999928474426,
+      "green": 4.2
+    },
+    {
+      "tick": 7,
+      "field": "motionX",
+      "red": 4.899999916553497,
+      "green": 4.9
+    },
+    {
+      "tick": 8,
+      "field": "motionX",
+      "red": 5.599999904632568,
+      "green": 5.6000000000000005
+    },
+    {
+      "tick": 9,
+      "field": "motionX",
+      "red": 6.299999892711639,
+      "green": 6.300000000000001
+    },
+    {
+      "tick": 10,
+      "field": "action",
+      "red": 2,
+      "green": 3
+    },
+    {
+      "tick": 10,
+      "field": "motionX",
+      "red": 6.9999998807907104,
+      "green": 7.000000000000001
+    }
+  ],
+  "nativeConsumer": {
+    "call": 10,
+    "vx": 7.000000000000001,
+    "action": 3,
+    "target": 0,
+    "sourceX": 400,
+    "sourceY": -90,
+    "sourceZ": 600
+  },
+  "assertedFinalSourceX": 438.5,
+  "assertedFinalSourceZ": 600
+}

@@ -1,0 +1,10 @@
+{
+  "mode": "EditMode",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(500)",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesSlotReuse(0)",
+    "NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.CachedNonCharacterTargetSurvivesOneDriverTick"
+  ],
+  "includeDetails": true,
+  "includeFailedTests": true
+}

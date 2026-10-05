@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T15:35:43.640425+00:00",
+  "status": "PASS_WITH_RECORDED_EXTERNAL_BUILD_CHANGE",
+  "validatorExitCode": 0,
+  "scopeFile": "final-scope-check.json",
+  "scopeStatus": "PASS_WITH_RECORDED_EXTERNAL_BUILD_CHANGE",
+  "operation": "VERIFIED",
+  "productionRecordStatus": "RUNTIME_PENDING",
+  "evidence": "SCOPED_TWO_TICK_DRIVER_PASS",
+  "parentStagesOpen": [
+    "Q07",
+    "Q09",
+    "Q12"
+  ],
+  "goalOpen": true,
+  "next": "only bounded first-difference analysis of shared resolver candidate; no redundant regression or nonbattle work"
+}

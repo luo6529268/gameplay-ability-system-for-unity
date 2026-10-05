@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-05T14:40:44.344850+00:00",
+  "nativeFile": "native-full-driver.jsonl",
+  "unityFile": "unity-full-driver-7c7a73e88445489d8d2f88aa2a71af9e.jsonl",
+  "firstDeclaredDifference": {
+    "tick": 1,
+    "field": "sourceX",
+    "native": 500.7,
+    "unity": 500.69999998807907
+  },
+  "firstSourceIntegerDifference": {
+    "tick": 4,
+    "native": 507,
+    "unity": 506
+  },
+  "limit": "controlled branch and declared fields; no complete world/GameSession or formal EXE claim"
+}

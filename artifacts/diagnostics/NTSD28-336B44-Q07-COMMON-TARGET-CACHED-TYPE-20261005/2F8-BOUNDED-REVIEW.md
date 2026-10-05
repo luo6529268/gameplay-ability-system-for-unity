@@ -1,0 +1,15 @@
+# 2F8 排除组候选有界审阅
+
+只读源码证据，不称运行首差。本次审阅没有闭合出正式可达且不被本体同组过滤掩盖的LF2Entity共用消费者初态，因此仍按TRIGGER/条件门，不建修复包或人工差组矩阵。
+
+native字段 battle_world.h:376 默认-1；native_ai.cpp:289-300读取2F8 raw slot所指当前group，缓存和重扫排除。当前battle_world.cpp:8249-8274 held WPoint dvx!=0、子type1/4/6写2F8=parent并投掷解除关系；kind2 pickup5527-5536已同步owner/group，普通投掷本体组与2F8组相同，过滤冗余。
+Unity独立carrier NTSDEntityRuntime.cs:150-152/990/1244，LF2WeaponHeldStateResolver.cs:130与BattleHeldObjectWriter.cs:235的release正确写2F8；LF2Entity共同resolver仍读Spawner。此为来源差异静态事实，不等于当前实际规则首差。
+
+写2F8的1/4/6正式索引正Fa帧只找到OID124/type4 w/9.dat40-55/Fa12，实际走LF2WeaponFrameLogicResolver.ResolveWeaponHitFa12Target专用消费者，不能嫁接为仅改LF2Entity可修。
+正式OPoint object_spawning.cpp146和world7926-7927以及UnityBattleNativeOpointBirthWriter16-20仅继承/覆盖group/owner，不设Spawner或继承2F8；不能凭Genma生成902推断它有GenmaSpawner。
+普通type3反射world7060-7158与UnityBattleDamageWriter2262-2313改组/owner等不写2F8/Spawner；正式OPoint出生默认-1的902不能凭反射制造旧Spawner排除问题。
+
+当前build Core包含native_ai/world并被playable参数消费；外部build变化已记录，未晋升候选EXE。
+未证明的真实触发条件：持有者投124后槽group改变/复用；带非默认2F8对象发生正式type/definition变化进入共同分支；实际正式Spawner非默认对象进入共用Fa且来源group与本体不同。已见join组变化写者，但未证与本链的正式DAT阳性，不能人工settimer当自然证据。
+只有后续实际trace出现上述条件才从实际owner取证。此结论不证明所有正式状态永远无差异。
+审阅者 /root/d024_noncharacter_remainder；未写入/构建/测试/操作Editor。根代理将审阅结果留档。

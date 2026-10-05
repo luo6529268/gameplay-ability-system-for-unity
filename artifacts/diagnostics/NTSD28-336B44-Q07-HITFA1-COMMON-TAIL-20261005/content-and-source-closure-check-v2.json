@@ -1,0 +1,78 @@
+{
+  "utc": "2026-10-05T14:18:04.338205+00:00",
+  "allTwoSidedFilesUnchanged": true,
+  "content": [
+    {
+      "relativePath": "c/sai/a/ink.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "c/sai/sai.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "c/nar/a/atk.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "custom/1genma/a/wind.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "data/data.txt",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "w/e.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": false,
+      "afterPairRawSame": false,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "custom/1genma/a/shuriken.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    },
+    {
+      "relativePath": "custom/1genma/genma.dat",
+      "formalUnchanged": true,
+      "stagedUnchanged": true,
+      "beforePairRawSame": true,
+      "afterPairRawSame": true,
+      "decodedTextIgnoringLineEndingsSame": true
+    }
+  ],
+  "sourceClosure": {
+    "declaredCount": 28,
+    "compiledCount": 28,
+    "sameSet": true,
+    "missing": [],
+    "extra": []
+  },
+  "correction": "previous closure audit core path had omitted source; v2 uses guarded build.parents[2]. Old failed evidence preserved; only w/e.dat has preexisting raw line-ending difference, not Genma/shuriken."
+}

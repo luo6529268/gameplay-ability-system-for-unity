@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-05T14:39:28.302831+00:00",
+  "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\native_hitfa3_driver_witness.cpp",
+  "beforeSha256": "1C7D1B32C05CB3C2B18B6EE9C62F7269CB22EDE15AC30615C3B4C94092328E26",
+  "backup": "artifacts\\diagnostics\\NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005\\before\\native_hitfa3_driver_witness-v1.cpp",
+  "reason": "diagnostic-only compiler error: EntityState28 uses current_hp, not SpawnRequest28 hp; no production change"
+}

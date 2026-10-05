@@ -1,0 +1,48 @@
+{
+  "utc": "2026-10-05T14:43:28.095281+00:00",
+  "nativeFile": "native-full-driver.jsonl",
+  "redUnityFile": "unity-full-driver-7c7a73e88445489d8d2f88aa2a71af9e.jsonl",
+  "greenUnityFile": "unity-full-driver-3553ea29903c40c9adb6cb913cd0ef4d.jsonl",
+  "declaredFields": [
+    "completedTick",
+    "sourceX",
+    "sourceIntegerX",
+    "sourceY",
+    "integerY",
+    "sourceZ",
+    "vx",
+    "vy",
+    "vz",
+    "action",
+    "counter",
+    "target",
+    "hp"
+  ],
+  "rows": 5,
+  "comparedFields": 65,
+  "equalFields": 65,
+  "firstDifference": null,
+  "viewResiduals": [
+    {
+      "tick": 0,
+      "residualPixels": 0.0
+    },
+    {
+      "tick": 1,
+      "residualPixels": 1.1368683772161603e-13
+    },
+    {
+      "tick": 2,
+      "residualPixels": 1.1368683772161603e-13
+    },
+    {
+      "tick": 3,
+      "residualPixels": 1.1368683772161603e-13
+    },
+    {
+      "tick": 4,
+      "residualPixels": 1.1368683772161603e-13
+    }
+  ],
+  "limitation": "same declared subject fields only; initial target/seed/mode/world/host not fully identical, no natural birth or formal root EXE runtime/GPU claim"
+}

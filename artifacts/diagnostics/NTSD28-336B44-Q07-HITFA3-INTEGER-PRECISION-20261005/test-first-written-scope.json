@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-05T14:37:13.994714+00:00",
+  "scripts": [
+    {
+      "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+      "sha256": "FAFFA92AE874F7AB00B7394C614FEEF613B7ADFA8F296F439C3BAA8910A77ECA",
+      "changed": false
+    },
+    {
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07NonCharacterHitFa7EditorTests.cs",
+      "sha256": "50F27ACF15A4539CC8BBB22CA6098EB7FA00C32307E9EC0DDEE63B67B58B6507",
+      "changed": true
+    }
+  ]
+}
