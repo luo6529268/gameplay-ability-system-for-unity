@@ -1,0 +1,22 @@
+{
+    "status": "PASS",
+    "phase": "EXITING",
+    "startedUtc": "2026-10-06T06:50:40.0031756Z",
+    "error": "",
+    "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "pipeline": "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset",
+    "bindingMode": "SourceTexture2D",
+    "visualId": 2,
+    "pic": 1,
+    "tick": 5,
+    "gpuPlacements": 21,
+    "maxGutter": 0,
+    "meshStride": 44,
+    "centralSubmitted": true,
+    "orderedShutdown": true,
+    "sceneClean": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0
+}

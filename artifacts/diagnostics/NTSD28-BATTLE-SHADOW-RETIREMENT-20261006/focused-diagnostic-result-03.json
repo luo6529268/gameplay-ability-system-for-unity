@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5d9fe3940d1649509b003826dd156ed2",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791270829950,
+      "finished_unix_ms": 1791270863683,
+      "last_update_unix_ms": 1791270863683,
+      "progress": {
+        "completed": 1,
+        "total": 9005,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791270837074,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28ShadowRetirementEditorTests.CaptureActualDatEndToEndLifetimes",
+        "last_finished_unix_ms": 1791270861343,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 24.8226711,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

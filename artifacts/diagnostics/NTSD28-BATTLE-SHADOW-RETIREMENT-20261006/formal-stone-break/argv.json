@@ -1,0 +1,63 @@
+{
+  "argv": [
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+    "--resource-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--complete-vfs-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--headless-playback-lfr",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-stone-break\\input.lfr",
+    "--headless-playback-report",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-stone-break\\report.json",
+    "--headless-playback-trace",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-stone-break\\trace.jsonl",
+    "--lfr-slot0-action",
+    "65",
+    "--lfr-slot1-action",
+    "0",
+    "--lfr-slot0-facing",
+    "1",
+    "--lfr-slot1-facing",
+    "0",
+    "--lfr-slot0-mp",
+    "500",
+    "--lfr-slot1-mp",
+    "500"
+  ],
+  "actors": [
+    [
+      1,
+      150,
+      1,
+      0,
+      500,
+      0,
+      600,
+      500,
+      0,
+      500,
+      -1,
+      0,
+      0
+    ],
+    [
+      1,
+      2,
+      2,
+      0,
+      1500,
+      0,
+      600,
+      500,
+      1,
+      500,
+      -1,
+      0,
+      0
+    ]
+  ],
+  "base": "artifacts\\diagnostics\\NTSD28-336B44-Q07-COMMON-TARGET-STALE-LIVE-20261006\\root-lying-witness-20261006\\lying-target-four-tick.lfr",
+  "baseSha": "64cdaba8341512ca555f1c1d4e8af4d1520995eade602312dfde3ba00926431e",
+  "formalSha": "336b44e58bea637246b65204afc50fd8734c9aa38969b82836fa685497eb7bd3",
+  "tickCount": 120
+}

@@ -3060,7 +3060,11 @@ namespace NTSD.Simulation.Presentation
                                   entity.State != 3005 && entity.State != 9997 &&
                                   entity.LinkState >= 0 && entity.CurrentDatObjectId != 223 &&
                                   entity.CurrentDatObjectId != 224 && hasCommonShadow &&
-                                  LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop);
+                                  LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop) &&
+                                  LF2ObjectRenderer.ShouldDrawShadowForBodyViewport(
+                                      entity.CurrentDatObjType, entity.YInt, entity.DisplayZ,
+                                      entity.CenterY, entity.LocalOffsetPixels.y,
+                                      frame.SpatialProjection.VerticalScale);
                 if (drawShadow)
                 {
                     Vector3 shadowPosition = entity.RenderShadowOffset10C == 0

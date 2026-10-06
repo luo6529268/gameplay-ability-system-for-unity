@@ -1,0 +1,54 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    "sha256": "d51f85e9d3cd2144c5cbe811a7db547451cbf1fbbf246a8399a990c2cb142d8a"
+  },
+  {
+    "path": "Assets/NTSD/Shaders/BattleCentralTransparent.shader",
+    "sha256": "8e76494c31681b25dc5d1f55c83f8dd2dcfcaadc7918fc0cd029eb6bbfd945d7"
+  },
+  {
+    "path": "Assets/NTSD/Shaders/BattleCentralTransparentArray.shader",
+    "sha256": "010d34a0f3c1eb5a55366621ef3336604e13b5a7a2f967390cfe3ca777d24639"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineEditorTests.cs",
+    "sha256": "6fe5117c4d1344376b797181cd7c0bb82ad218c1c42f5e7f737fe57fe195f35f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineEditorTests.cs.meta",
+    "sha256": "3cd67d07e546cbc29c51a8367db71e192ad492008f711cdea091e075f18ca105"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineSceneProbeEditor.cs",
+    "sha256": "20768b0a3de7f98defeb9db499272c20fa33af27ff223195def22857d90358d8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineSceneProbeEditor.cs.meta",
+    "sha256": "0ac33faa159569d83af3cba6a1af336ac06141adaafcebf8a73321326ae8f7aa"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha256": "f4527f5d918e83569a7240258ea33cdbd311acc9f28aea480b3657c02169baef"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha256": "28ca7e9c0371c8c2d680c28e52466989c79d07b04df5ef51ccf85865d699e46a"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "sha256": "9c149b4625765de055c1678b8e26908e15e237947be6b268411543a1b9f8cf08"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha256": "30aab2a84b9ceeed0c39f7e9fb10bf4459bd648b36b14ba75f19723dc035eccb"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha256": "8b4a53b4ebbf9a413f47b51d2a1cc4c2e5cfd8b176a0354abaf293be6b71fbce"
+  },
+  {
+    "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "sha256": "a57a789b01e1bb82b63c25f55be67f66d1398109ebcb3b95ea5129042b76e3f4"
+  }
+]

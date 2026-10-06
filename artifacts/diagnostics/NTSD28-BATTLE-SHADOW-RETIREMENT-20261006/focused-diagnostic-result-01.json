@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "92ca5e4ad525450eb1158ae1a54746d5",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791270715999,
+      "finished_unix_ms": 1791270725971,
+      "last_update_unix_ms": 1791270725971,
+      "progress": {
+        "completed": 1,
+        "total": 9005,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791270725386,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28ShadowRetirementEditorTests.CaptureActualDatEndToEndLifetimes",
+        "last_finished_unix_ms": 1791270725429,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28ShadowRetirementEditorTests.CaptureActualDatEndToEndLifetimes",
+            "message": "System.IO.InvalidDataException : Scenario reference EXE identity mismatch."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

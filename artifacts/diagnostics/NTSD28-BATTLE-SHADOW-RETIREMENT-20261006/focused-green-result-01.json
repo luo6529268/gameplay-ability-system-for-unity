@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "69c037d8c9c94d1ea1800a41090aee06",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791271802653,
+      "finished_unix_ms": 1791271810600,
+      "last_update_unix_ms": 1791271810600,
+      "progress": {
+        "completed": 5,
+        "total": 9008,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791271810159,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q09NativeShadowGateEditorTests.FormalShadowFieldsGateBothPresentationStates(2,2,True)",
+        "last_finished_unix_ms": 1791271810160,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 5,
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.9266583,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

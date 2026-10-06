@@ -629,6 +629,30 @@ namespace NTSD.Animation.LF2Objects
             return new Vector2(pivotX, pivotY);
         }
 
+        internal static bool ShouldDrawShadowForBodyViewport(
+            int dataType,
+            int yInt,
+            float displayZ,
+            float centerY,
+            float localOffsetY,
+            double verticalScale)
+        {
+            // Alignment contract: NTSD28-BATTLE-SHADOW-RETIREMENT-001 (presentation only).
+            if (dataType == (int)LF2ObjectType.Character || yInt <= 0)
+                return true;
+
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            if (camera == null || !camera.orthographic || camera.orthographicSize <= 0f)
+                return true;
+
+            NTSDRenderSpace.ViewportTransformSnapshot viewport = NTSDRenderSpace.CaptureViewportTransform();
+            float bodyTopPixels = (int)displayZ + (float)(yInt * verticalScale) +
+                                  (localOffsetY - centerY) * NTSDRenderSpace.BattleVisualScale;
+            float bodyTopWorld = viewport.ScreenPixelToWorld(0f, bodyTopPixels).y;
+            float cameraBottomWorld = camera.transform.position.y - camera.orthographicSize;
+            return bodyTopWorld > cameraBottomWorld;
+        }
+
         internal static void GetState9997CameraPixelBounds(
             NTSDRenderSpace.ViewportTransformSnapshot viewport,
             out float visibleLeft,

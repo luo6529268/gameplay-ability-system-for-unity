@@ -35,6 +35,7 @@ Shader "NTSD/BattleCentralTransparent"
                 half4 color : COLOR;
                 float2 uv : TEXCOORD0;
                 float atlasSlice : TEXCOORD1;
+                float4 uvSampleBounds : TEXCOORD2;
             };
 
             struct Varyings
@@ -43,6 +44,7 @@ Shader "NTSD/BattleCentralTransparent"
                 half4 color : COLOR;
                 float2 uv : TEXCOORD0;
                 float atlasSlice : TEXCOORD1;
+                float4 uvSampleBounds : TEXCOORD2;
             };
 
             TEXTURE2D(_MainTex);
@@ -59,12 +61,22 @@ Shader "NTSD/BattleCentralTransparent"
                 output.color = input.color * _Color;
                 output.uv = TRANSFORM_TEX(input.uv, _MainTex);
                 output.atlasSlice = input.atlasSlice;
+                output.uvSampleBounds = 0;
+                if (input.uvSampleBounds.z > 0 && input.uvSampleBounds.w > 0)
+                {
+                    float2 first = TRANSFORM_TEX(input.uvSampleBounds.xy, _MainTex);
+                    float2 last = TRANSFORM_TEX(input.uvSampleBounds.zw, _MainTex);
+                    output.uvSampleBounds = float4(min(first, last), max(first, last));
+                }
                 return output;
             }
 
             half4 Frag(Varyings input) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv) * input.color;
+                float2 uv = input.uv;
+                if (input.uvSampleBounds.z > 0 && input.uvSampleBounds.w > 0)
+                    uv = clamp(uv, input.uvSampleBounds.xy, input.uvSampleBounds.zw);
+                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv) * input.color;
                 color.rgb *= color.a;
                 return color;
             }

@@ -1,0 +1,132 @@
+[
+  {
+    "name": "formal-fragment",
+    "exit": 46,
+    "passed": false,
+    "ticks": 141,
+    "first": [
+      {
+        "slot": 0,
+        "oid": 999,
+        "action": 4,
+        "pic": 4,
+        "state": 9999,
+        "preciseY": -20,
+        "vy": 1.7,
+        "hp": 500
+      },
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 0,
+        "pic": 0,
+        "state": 0,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      }
+    ],
+    "last": [
+      {
+        "slot": 0,
+        "oid": 999,
+        "action": 7,
+        "pic": 7,
+        "state": 9999,
+        "preciseY": 1153,
+        "vy": 8.5,
+        "hp": 500
+      },
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 3,
+        "pic": 3,
+        "state": 0,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      }
+    ]
+  },
+  {
+    "name": "formal-rasenshuriken-hit",
+    "exit": 46,
+    "passed": false,
+    "ticks": 141,
+    "first": [
+      {
+        "slot": 0,
+        "oid": 518,
+        "action": 350,
+        "pic": 24,
+        "state": 3000,
+        "preciseY": -20,
+        "vy": 0,
+        "hp": 500
+      },
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 0,
+        "pic": 0,
+        "state": 0,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      }
+    ],
+    "last": [
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 189,
+        "pic": 33,
+        "state": 12,
+        "preciseY": -77.89999999999615,
+        "vy": 69.60000000000011,
+        "hp": 295
+      }
+    ]
+  },
+  {
+    "name": "formal-stone-break",
+    "exit": 46,
+    "passed": false,
+    "ticks": 141,
+    "first": [
+      {
+        "slot": 0,
+        "oid": 150,
+        "action": 65,
+        "pic": 999,
+        "state": 1004,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      },
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 0,
+        "pic": 0,
+        "state": 0,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      }
+    ],
+    "last": [
+      {
+        "slot": 1,
+        "oid": 2,
+        "action": 3,
+        "pic": 3,
+        "state": 0,
+        "preciseY": 0,
+        "vy": 0,
+        "hp": 500
+      }
+    ]
+  }
+]

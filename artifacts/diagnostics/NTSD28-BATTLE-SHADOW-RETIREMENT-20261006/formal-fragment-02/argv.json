@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+    "--resource-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--complete-vfs-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--headless-playback-lfr",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-fragment-02\\input.lfr",
+    "--headless-playback-report",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-fragment-02\\report.json",
+    "--headless-playback-trace",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-fragment-02\\trace.jsonl",
+    "--lfr-slot0-action",
+    "4",
+    "--lfr-slot1-action",
+    "0",
+    "--lfr-slot0-facing",
+    "1",
+    "--lfr-slot1-facing",
+    "0",
+    "--lfr-slot0-mp",
+    "500",
+    "--lfr-slot1-mp",
+    "500"
+  ],
+  "correction": "participant count2/ticks140/checksum1000; zero input140 rows; throw targetX420; old failures retained"
+}

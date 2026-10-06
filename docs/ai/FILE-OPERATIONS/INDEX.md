@@ -1,3 +1,5 @@
+> NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / PLANNED / scoped edits only; [Record](NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md); six exact doc backups before edits, diagnostic new test, no delete/move.
+
 # 文件操作与未计划缺失索引
 
 执行删除、移动、覆盖或丢弃内容前，先按 [审计合同](../file-removal-audit-contract.md) 建立记录并登记本表。状态变化追加到记录中，不删除历史事实。
@@ -150,3 +152,7 @@ Checkpoint NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006: backed-up owned pr
 | NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006 | PLANNED | original common audio/catch bounded fixes; exact before bytes; nodelete/move | [Record](NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006/RECORD.md) |
 
 - NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006 / VERIFIED: 18 backup hashes stable, final exact after-manifest, 681 protected/978WAV unchanged; no delete/move/Gitdiscard. [Record](NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006/RECORD.md).
+
+- NTSD28-BATTLE-SPRITE-RED-LINE-20261006 / RUNNING: declared red-line crop/GPU diagnosis exact before bytes, create-only probes. [Record](NTSD28-BATTLE-SPRITE-RED-LINE-20261006/RECORD.md).
+
+- NTSD28-BATTLE-SPRITE-RED-LINE-20261006 / COMPLETED_SCOPED: exact3 production backups valid; protected5053 unchanged; current18/18 + original Battle actual mesh21 zero-gutter PASS, normal shutdown/Scene unchanged; final ChangeLedger/git diff check0. [Record](NTSD28-BATTLE-SPRITE-RED-LINE-20261006/RECORD.md). No deletion/move; ScreenCapture rejected as Game View proof.

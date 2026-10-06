@@ -530,7 +530,11 @@ namespace NTSD.Animation.LF2Objects
                 Frame?.D,
                 Runtime.LinkState,
                 ResolveCurrentDataObjectId(this),
-                Runtime.HitStop) || IsNativeShadowSuppressedForPresentation(Frame?.D);
+                Runtime.HitStop) || IsNativeShadowSuppressedForPresentation(Frame?.D) ||
+                !LF2ObjectRenderer.ShouldDrawShadowForBodyViewport(
+                    GetCurrentDataObjectTypeForSimulation(), Runtime.YInt, GetDisplayZ(),
+                    Frame?.D?.centery ?? 0f, Sprite?.LocalOffsetPixels.y ?? 0f,
+                    RegisteredWorldForSimulation?.SpatialProjection.VerticalScale ?? 1.0);
 
             if (hide)
                 Sprite?.HideShadow();

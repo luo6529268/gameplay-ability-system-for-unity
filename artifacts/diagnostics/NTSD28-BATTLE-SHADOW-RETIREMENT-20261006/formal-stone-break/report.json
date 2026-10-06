@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": false,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-stone-break\\input.lfr",
+  "failureCode": 46,
+  "failureStage": "playback_tick_or_checksum",
+  "error": "LFR HP checksum mismatch at source row 0 after 1 playback ticks: expected 2000, got 1000 | slot=0 oid=150 hp=500 action=65 frameCounter=1 x=500 y=0 z=576 | slot=1 oid=2 hp=500 action=0 frameCounter=1 x=1330 y=0 z=575",
+  "declaredTicks": 3,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 65, "slot1": 0},
+  "initialFacingOverrides": {"slot0": 1, "slot1": 0},
+  "initialMpOverrides": {"slot0": 500, "slot1": 500},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 0,
+  "scene": {"p1ObjectId": 150, "p2ObjectId": 2, "backgroundId": 1},
+  "winnerGroup": 2,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006\\formal-stone-break\\trace.jsonl", "rows": 2, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

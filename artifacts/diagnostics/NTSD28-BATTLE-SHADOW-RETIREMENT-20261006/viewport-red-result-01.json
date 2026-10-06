@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "322c8f4d3b884fe78e019e1c731afe32",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791271657004,
+      "finished_unix_ms": 1791271666279,
+      "last_update_unix_ms": 1791271666279,
+      "progress": {
+        "completed": 1,
+        "total": 9008,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791271665432,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28ShadowRetirementEditorTests.LegacyShadowDisappearsWithBodyBelowViewportAndReturnsAboveIt",
+        "last_finished_unix_ms": 1791271665544,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28ShadowRetirementEditorTests.LegacyShadowDisappearsWithBodyBelowViewportAndReturnsAboveIt",
+            "message": "  Entire body below viewport must not leave ground shadow.\r\n  Expected: False\r\n  But was:  True\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

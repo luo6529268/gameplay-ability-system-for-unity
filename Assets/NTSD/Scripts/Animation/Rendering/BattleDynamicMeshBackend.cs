@@ -446,6 +446,7 @@ namespace NTSD.Animation.Rendering
             public Color32 Color;
             public Vector2 Uv;
             public float AtlasSlice;
+            public Vector4 UvSampleBounds;
         }
 
         private struct SegmentBoundsAccumulator
@@ -513,6 +514,7 @@ namespace NTSD.Animation.Rendering
                 new VertexAttributeDescriptor(VertexAttribute.Color, VertexAttributeFormat.UNorm8, 4),
                 new VertexAttributeDescriptor(VertexAttribute.TexCoord0, VertexAttributeFormat.Float32, 2),
                 new VertexAttributeDescriptor(VertexAttribute.TexCoord1, VertexAttributeFormat.Float32, 1),
+                new VertexAttributeDescriptor(VertexAttribute.TexCoord2, VertexAttributeFormat.Float32, 4),
             };
 
             private readonly BattleQuadVertex[] vertices = new BattleQuadVertex[VerticesPerChunk];
@@ -599,6 +601,15 @@ namespace NTSD.Animation.Rendering
                 float z = command.Position.z;
 
                 Rect uv = resource.NormalizedUv;
+                // Alignment contract: NTSD28-BATTLE-SPRITE-RED-LINE-001; keep edge lookup inside this sprite.
+                Vector4 uvSampleBounds = default;
+                if (resource.Texture != null && uv.width > 0f && uv.height > 0f)
+                {
+                    float insetU = Mathf.Min(0.5f / resource.Texture.width, uv.width * 0.5f);
+                    float insetV = Mathf.Min(0.5f / resource.Texture.height, uv.height * 0.5f);
+                    uvSampleBounds = new Vector4(uv.xMin + insetU, uv.yMin + insetV,
+                        uv.xMax - insetU, uv.yMax - insetV);
+                }
                 float u0 = command.FlipX ? uv.xMax : uv.xMin;
                 float u1 = command.FlipX ? uv.xMin : uv.xMax;
                 float v0 = command.FlipY ? uv.yMax : uv.yMin;
@@ -606,10 +617,10 @@ namespace NTSD.Animation.Rendering
                 int vertex = quadIndex * VerticesPerQuad;
                 Color32 color = resource.Color;
                 float atlasSlice = resource.AtlasSlice;
-                WriteVertex(ref vertices[vertex], left, bottom, z, u0, v0, color, atlasSlice);
-                WriteVertex(ref vertices[vertex + 1], left, top, z, u0, v1, color, atlasSlice);
-                WriteVertex(ref vertices[vertex + 2], right, bottom, z, u1, v0, color, atlasSlice);
-                WriteVertex(ref vertices[vertex + 3], right, top, z, u1, v1, color, atlasSlice);
+                WriteVertex(ref vertices[vertex], left, bottom, z, u0, v0, color, atlasSlice, uvSampleBounds);
+                WriteVertex(ref vertices[vertex + 1], left, top, z, u0, v1, color, atlasSlice, uvSampleBounds);
+                WriteVertex(ref vertices[vertex + 2], right, bottom, z, u1, v0, color, atlasSlice, uvSampleBounds);
+                WriteVertex(ref vertices[vertex + 3], right, top, z, u1, v1, color, atlasSlice, uvSampleBounds);
 
                 float minX = left <= right ? left : right;
                 float minY = bottom <= top ? bottom : top;
@@ -838,7 +849,8 @@ namespace NTSD.Animation.Rendering
                 float u,
                 float v,
                 Color32 color,
-                float atlasSlice)
+                float atlasSlice,
+                Vector4 uvSampleBounds)
             {
                 vertex.Position.x = x;
                 vertex.Position.y = y;
@@ -847,6 +859,7 @@ namespace NTSD.Animation.Rendering
                 vertex.Uv.x = u;
                 vertex.Uv.y = v;
                 vertex.AtlasSlice = atlasSlice;
+                vertex.UvSampleBounds = uvSampleBounds;
             }
 
             private void Encapsulate(

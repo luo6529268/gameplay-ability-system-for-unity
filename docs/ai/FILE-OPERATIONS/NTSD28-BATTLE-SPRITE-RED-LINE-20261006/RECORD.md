@@ -1,0 +1,12 @@
+# NTSD28-BATTLE-SPRITE-RED-LINE-20261006
+Status: RUNNING
+User screenshot reports a red horizontal line beneath Naruto; inspect actual DAT source rect and GPU sampling, fix shared confirmed display path. Preserve original PNG straight RGBA, DAT width/height/pivot and battle collision/movement/scale. No color-key red deletion, source image/DAT/Scene/importer/ProjectSettings/thirdparty/nonbattle edits. Initially diagnostic new Editor test/probe only; production path and backup added before any exact fix. Original saved Battle idle confirmed by user and MCP, no computer-use/second Editor/full roster/full suite. GPU before-after plus representative rect/alpha boundary checks and original scene targeted witness; owner-generated Mesh/Texture/RenderTexture only local finally cleanup or existing ordered shutdown, no runtime manager/world field/worker/shutdown stage.
+
+New Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineEditorTests.cs/.meta; GPU results and screenshots create-only under artifacts same task. Docs before-manifest exact backups. Script backup/exact code paths before production fix. No delete/move/Gitdiscard.
+StartedUTC 2026-10-06T06:38:08.579848+00:00
+
+Production fix declared before editing: exact three paths in production-before.json and byte-for-byte backups. GPU RED source/page/array each118 adjacent-gutter pixels at half-pixel placement; all4 source-rect checks PASS. Shared mesh adds per-quad texel-center bounds; both existing shaders clamp only sampling inside those bounds, original UV/geometry/pivot/scale unchanged. No source color filtering. Protected resource/Scene/config/settings manifest captured. User explicit red-line bugfix authorizes these necessary minimal edits.
+
+Before creation declared Assets/NTSD/Scripts/Test/Editor/NTSD28SpriteRedLineSceneProbeEditor.cs and its .meta: create-only original saved Battle pause-after-start actual central mesh/texture GPU capture, Game screenshot, existing11-stage shutdown, savedScene hash/dirty checks. No roster or Scene/DAT modification. User current idle confirmation reused.
+
+COMPLETED_SCOPED: shader/mesh source changes exactly declared3, new Editor tests/probe/.meta4, operation after-manifest.json; protected5053 unchanged, backups3 SHA match, ChangeLedger02/git diff --check exit0. Exact18/18 PASS and originalScene01 live-mesh GPU21/0-gutter, ordered shutdown0, Scene clean/hash stable. FullGame ScreenCapture rejected, retained. No deletion/move/Git-discard/Scene or source-resource writes.
