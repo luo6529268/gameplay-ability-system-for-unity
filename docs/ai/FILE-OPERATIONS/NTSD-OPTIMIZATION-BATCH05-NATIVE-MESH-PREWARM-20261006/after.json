@@ -1,0 +1,345 @@
+{
+  "time": "2026-10-06T20:23:55.5921490+08:00",
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/change-ledger-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\change-ledger-validation.json",
+      "bytes": 703,
+      "sha256": "A0C5FD60D2743451E7657B9BF01A42924519513080F397E71C9678D2365974DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/editor-post.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\editor-post.json",
+      "bytes": 2497,
+      "sha256": "CAEF7E01BB432D611D15ED9E521A9B2C8981EB76169D710B3324488460925291"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/editor-pre.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\editor-pre.json",
+      "bytes": 3443,
+      "sha256": "04ED703F306DDED57093832CCAA7E383D6F2E6C0216FA7605824A47B3F0701F5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-compile-host.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-compile-host.json",
+      "bytes": 505,
+      "sha256": "81C54E7F4AF81128C1C55BAE966D88224408A321D614727398558B9D1D981A3D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-compile-state.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-compile-state.json",
+      "bytes": 1802,
+      "sha256": "32B814501DEC53516EDD8537DA08C4DF58F92C209C1C6478117F4888760780BC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-initial-compile-host.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-initial-compile-host.json",
+      "bytes": 611,
+      "sha256": "CAABA899EBD33B47C03DA2BAEC8650BB724A11E0B67381F4B36FA6DF32405458"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-initial-compile-state.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-initial-compile-state.json",
+      "bytes": 1802,
+      "sha256": "CB608D807C318ACEC186CD393340AA17962885282D2FEB622FCE5D34BDC193B8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-result.json",
+      "bytes": 5015,
+      "sha256": "1192A60E565F28AB8711D4BCE855B3784478A9808C018CF4CD4CCA46882467B0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/green-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\green-start.json",
+      "bytes": 356,
+      "sha256": "3DA2883BB68A345DFB9822397F1751A7852D89E49DF3942AB5ABF52A358F2F59"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/red-compile-host.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\red-compile-host.json",
+      "bytes": 553,
+      "sha256": "C0D5FD68CDF65465BD758E0DCD892292D540AC84DCA6CC0D2EFF4704AD18768B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/red-compile-state.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\red-compile-state.json",
+      "bytes": 1802,
+      "sha256": "E3C2361FAE1DA0866D4BAD4FA9DDE6257ADB553B9C8CD668BF5BB6662B0B6E32"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/red-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\red-result.json",
+      "bytes": 3159,
+      "sha256": "758926E912B8DB3C86D15259EBCA3927AC0EEB1F66A42936D96BB717F3326447"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/red-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\red-start.json",
+      "bytes": 356,
+      "sha256": "D5D3E7F136C8A229E8E0D0227693BB898BF4190058E480A54A120A084A58E094"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/refresh-comment-sync.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\refresh-comment-sync.json",
+      "bytes": 400,
+      "sha256": "840B057EDEE4D2F9C52EECB1C8062B2D6212FFBC06A0FE41539598A845884BAB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/refresh-green.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\refresh-green.json",
+      "bytes": 399,
+      "sha256": "7D76DF8911C076F95E32A54E48E60CC940D55A3435BCF9D1793AA86A2045C3A9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/refresh-red.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\refresh-red.json",
+      "bytes": 400,
+      "sha256": "CFEB7CA35CBA40AB1433DFEC8F8D0B762443D4B03F6E7B9851B9B79FC2D070FD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/regression-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\regression-result.json",
+      "bytes": 52620,
+      "sha256": "E817E272FAD1054E4E81132DE645A03027ED4A73BE287F951C0036A79053BE97"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/regression-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\regression-start.json",
+      "bytes": 356,
+      "sha256": "23019721FC57359296E3F3924E6C21CD17E3ACCB6E3EE6FA33048063A29391E8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\REPORT.md",
+      "bytes": 6552,
+      "sha256": "197C73F07CC49DB9D5136945D95EA96FA89CDF37CEF25BEA2819DBD404068AFD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/scoped-links-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\scoped-links-validation.json",
+      "bytes": 860,
+      "sha256": "B64C81A185B7E88C6F6907DCFFE66EE35355FF41E3197D609D01BC1B611DD043"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/static-validation-v2.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\static-validation-v2.json",
+      "bytes": 23178,
+      "sha256": "253FC98AE45647E4FA65D09057D452F336430A4319D4C6246D59E215145F73DF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/static-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\static-validation.json",
+      "bytes": 20870,
+      "sha256": "B7ACE6A0B1E338477DAC108E29E126C9034D4DD59EFDEDAF00F8543601C199DC"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 19212,
+      "sha256": "E76FEF749DF5B424C4E37B382337025238A0FE6757C0CBC9C6F7FC2276FD1F0E"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md",
+      "bytes": 10598,
+      "sha256": "422E7BF79C0D5534062F6A606C5353368D13E11DEFDC50796313CEDBA16FC446"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 16233,
+      "sha256": "08954BDF7B6D4CDCE30F98BF81432B7E000B084E7974DAFB56B928019335B0BB"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1465213,
+      "sha256": "83AEF9624CAF0B060FFC038EA96034780C213BDE499B4A79EED5A26D191E206A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleDynamicMeshBackend.cs",
+      "bytes": 43133,
+      "sha256": "64C43AB36E438150D12E6B36F30382C11B00E9CBA5CCA9E0DC2EB449590F0316"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleNativeMeshPrewarmEditorTests.cs",
+      "bytes": 12084,
+      "sha256": "636B86000CD8DC48C3EEC85EB74F95109606C16C8E894CC2FFF382A3DB11DC3B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleNativeMeshPrewarmEditorTests.cs.meta",
+      "bytes": 241,
+      "sha256": "905E6B76A0F0FF9695B303EA502EE9419143D43FD5427F5511C8ED79DCF64A4D"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 634751,
+      "sha256": "E030663EC3E758E0BDD28CA20805048F95B1DD1BEF51E272ABC5B876D57F8B9A"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+      "bytes": 4346,
+      "sha256": "508FDCCD5981122207E9C8BAC3C2AE415632814E46EAE9DB366CB509B8E531AB"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 25927,
+      "sha256": "927E57F2024AA7EB4A19D68488FD66A446F31129DD1E441697255C2B8D7E4344"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\before.json",
+      "bytes": 6874,
+      "sha256": "0E842AC11DDB28F11E367EA32A7443BFBA0D4EB905DC555C84BE89EF47A9E0D2"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006\\RECORD.md",
+      "bytes": 4953,
+      "sha256": "DEFD5DC36FE57FBFB358A0BF63E5747827B187010186D7F03D006860E424941C"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1534782,
+      "sha256": "0B6B2078EF4D14F65337F0B90BEFB5195F65AA451CE5A15C09D2513685DA1728"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md",
+      "bytes": 3551,
+      "sha256": "777B4C4D4914C0F9A7D26650E08676559059AFD412726A3B2B3EA9FD42A7AEAF"
+    }
+  ],
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+    " M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-AUX-CAPACITY-SEAL-003.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-RESOLVER-SEAL-004.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md"
+  ],
+  "diffExit": 0,
+  "diffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "operation": "NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006",
+  "operationStatus": "VERIFIED_FILE_OPERATIONS_ONLY",
+  "taskStatus": "RUNTIME_PENDING",
+  "changeId": "NTSD-OPT-H11-NATIVE-MESH-PREWARM-005",
+  "changeStatus": "RUNTIME_PENDING",
+  "parentH11Status": "OPEN / RUNTIME_PENDING",
+  "validation": {
+    "time": "2026-10-06T20:20:17.5825080+08:00",
+    "command": "Tools/Validate-ChangeLedger.ps1",
+    "exitCode": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1301",
+      "  Governed code files in diff: 13"
+    ],
+    "warningCount": 4238,
+    "errors": [],
+    "coverage": [
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs -> NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-H11-NATIVE-MESH-PREWARM-005, NTSD28-BATTLE-SPRITE-RED-LINE-001",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs -> NTSD-OPT-H11-NATIVE-MESH-PREWARM-005"
+    ]
+  },
+  "staticValidation": {
+    "protectedCount": 99,
+    "protectedUnchanged": true,
+    "backupCount": 8,
+    "backupsUnchanged": true,
+    "trackerCounts": {
+      "medium": 14,
+      "low": 8,
+      "unique": 34,
+      "high": 12,
+      "all": 34
+    },
+    "scopedLinks": 116,
+    "missing": [],
+    "correctionArtifact": "static-validation-v2.json"
+  },
+  "testResults": {
+    "newPassed": 12,
+    "regressionPassed": 120,
+    "distinctTotal": 132,
+    "redJob": "ee3e05dddd9e4c148e75d35074b652d7",
+    "greenJob": "8a13f03c355d4d76b68db49d665ae954",
+    "regressionJob": "d40f11c3b4454c3c9b134fff59cbdeb8",
+    "failed": 0,
+    "skipped": 0
+  },
+  "proofLimits": [
+    "Synthetic resolver and first recovered Build/Upload (25 Builds per group) managed 0B only",
+    "No actual Battle reenter/no-domain-reload, full central path/SelfCheck/M0/GPU/native/1000AI/Android certification",
+    "Q06 active methods not read or modified; no changed segment/lease/GPU consumer policy",
+    "Native mesh loss during sealed battle still follows original lazy recovery; not a closed native-allocation guarantee"
+  ]
+}

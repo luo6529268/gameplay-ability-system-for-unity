@@ -1,0 +1,29 @@
+{
+  "time": "2026-10-06T21:58:42.4439523+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 109092,
+      "lastWriteTime": "2026-10-06T21:58:10.6725027+08:00",
+      "sha256": "FAAF0C6814166763B68228FCF11C8F0753EBD0AFC795D7187232E30EDA82913C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationBuildAttributionEditorTests.cs",
+      "bytes": 21882,
+      "lastWriteTime": "2026-10-06T21:56:09.5833282+08:00",
+      "sha256": "DCCABC57A845C8F54AF6B338D5B53349A1CE2D6F9C32D3A4563D98B738657F50"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "bytes": 4209152,
+      "lastWriteTime": "2026-10-06T21:58:18.0280102+08:00",
+      "sha256": "117BBB08F4F2FA39F5B37E7A6F9828F6FE8785C92E968AED3517BC2E2539AE07"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "bytes": 6139904,
+      "lastWriteTime": "2026-10-06T21:58:21.5968199+08:00",
+      "sha256": "47562831C2789D62DA8EF06DB2C2CD04FC739DFBC75E8FECEB97E57ADA052E16"
+    }
+  ]
+}

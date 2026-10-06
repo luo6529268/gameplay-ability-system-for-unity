@@ -1,0 +1,33 @@
+{
+  "time": "2026-10-06T21:13:14.9407060+08:00",
+  "linkCount": 122,
+  "missingLinks": [],
+  "protectedCount": 174,
+  "protectedMismatches": [],
+  "backups": 8,
+  "backupMismatches": [],
+  "head": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "rowCount": 34,
+  "high": 12,
+  "middle": 14,
+  "low": 8,
+  "diffCheckExit": 0,
+  "diffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ]
+}

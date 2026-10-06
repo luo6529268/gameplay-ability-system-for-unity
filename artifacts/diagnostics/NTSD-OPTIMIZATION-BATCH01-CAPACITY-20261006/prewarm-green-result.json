@@ -1,0 +1,104 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "2bc5c122aa65405ba5066eba0a8fcd57",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791283368272,
+      "finished_unix_ms": 1791283375646,
+      "last_update_unix_ms": 1791283375646,
+      "progress": {
+        "completed": 7,
+        "total": 9028,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791283374488,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreservesDescriptorStorageAcrossNewSegmentHighWater",
+        "last_finished_unix_ms": 1791283374489,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 7,
+          "passed": 7,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.6064109,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CentralPrewarm_PreparesDisplayMotionForReservedRuntimeSlots",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.CentralPrewarm_PreparesDisplayMotionForReservedRuntimeSlots",
+            "state": "Passed",
+            "durationSeconds": 0.0046763,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DisplayPrewarm_HighSlotInterpolationReusesAllStorageWithoutAllocation",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.DisplayPrewarm_HighSlotInterpolationReusesAllStorageWithoutAllocation",
+            "state": "Passed",
+            "durationSeconds": 0.0054351,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(1)",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0011631,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(32)",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(32)",
+            "state": "Passed",
+            "durationSeconds": 0.0003373,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4096)",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4096)",
+            "state": "Passed",
+            "durationSeconds": 0.0004855,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4097)",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4097)",
+            "state": "Passed",
+            "durationSeconds": 0.0033371,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MeshPrewarm_PreservesDescriptorStorageAcrossNewSegmentHighWater",
+            "fullName": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreservesDescriptorStorageAcrossNewSegmentHighWater",
+            "state": "Passed",
+            "durationSeconds": 0.001145,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

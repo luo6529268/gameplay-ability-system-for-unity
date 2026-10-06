@@ -1,0 +1,16 @@
+{
+  "time": "2026-10-06T20:20:17.5825080+08:00",
+  "command": "Tools/Validate-ChangeLedger.ps1",
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1301",
+    "  Governed code files in diff: 13"
+  ],
+  "warningCount": 4238,
+  "errors": [],
+  "coverage": [
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs -> NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-H11-NATIVE-MESH-PREWARM-005, NTSD28-BATTLE-SPRITE-RED-LINE-001",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs -> NTSD-OPT-H11-NATIVE-MESH-PREWARM-005"
+  ]
+}

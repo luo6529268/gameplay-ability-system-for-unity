@@ -69,6 +69,11 @@ namespace NTSD.Animation.Rendering
         private int submittedGeneration;
         private int submittedTickIndex = -1;
         private int submittedDrawCount;
+        private bool capacityPrepared;
+        private bool capacitySealed;
+        private int sealedEntityCapacity;
+        private int sealedHitRecordCapacity;
+        private int sealedCommandCapacity;
 
         internal BattleCentralSubmission(
             BattleDynamicMeshBackend backend,
@@ -110,8 +115,12 @@ namespace NTSD.Animation.Rendering
         {
             if (!IsReusable)
                 throw new InvalidOperationException("Cannot capture into a leased central submission slot.");
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (!CanCaptureFrame(source))
+                throw new InvalidOperationException("Central submission capacity exceeded; whole frame rejected.");
             frozenFrame.CopyFrom(
-                source ?? throw new ArgumentNullException(nameof(source)),
+                source,
                 detailDiagnostics);
             return frozenFrame;
         }
@@ -126,6 +135,8 @@ namespace NTSD.Animation.Rendering
                 throw new InvalidOperationException(
                     "Cannot resize a central submission while it is published or leased.");
             }
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot resize a sealed central submission slot.");
 
             frozenFrame.PrepareCapacity(
                 entityCapacity,
@@ -135,6 +146,38 @@ namespace NTSD.Animation.Rendering
                 Math.Min(entityCapacity, BattleFootMarkerBatchBackend.MaximumMarkersPerBatch));
             HealthBackend.PrepareCapacity(
                 Math.Min(entityCapacity, BattleHealthBarBatchBackend.MaximumBarsPerBatch));
+            sealedEntityCapacity = entityCapacity;
+            sealedHitRecordCapacity = hitRecordCapacity;
+            sealedCommandCapacity = commandCapacity;
+            capacityPrepared = true;
+        }
+
+        internal void SealCapacity()
+        {
+            if (!capacityPrepared || !IsReusable || capacitySealed)
+                throw new InvalidOperationException("Central submission capacity must be prepared before sealing.");
+            FootMarkerBackend.SealCapacity(
+                Math.Min(sealedEntityCapacity, BattleFootMarkerBatchBackend.MaximumMarkersPerBatch));
+            HealthBackend.SealCapacity(
+                Math.Min(sealedEntityCapacity, BattleHealthBarBatchBackend.MaximumBarsPerBatch));
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            FootMarkerBackend.UnsealCapacity();
+            HealthBackend.UnsealCapacity();
+            capacitySealed = false;
+        }
+
+        internal bool CanCaptureFrame(BattlePresentationFrame source)
+        {
+            return source != null && (!capacitySealed ||
+                ((uint)source.EntityCount <= (uint)sealedEntityCapacity &&
+                 (uint)source.HitRecordCount <= (uint)sealedHitRecordCapacity &&
+                 (uint)source.CommandCount <= (uint)sealedCommandCapacity &&
+                 (uint)source.MotionStateCount <= (uint)sealedEntityCapacity &&
+                 (uint)source.PreviousMotionStateCount <= (uint)sealedEntityCapacity));
         }
 
         internal void Publish(

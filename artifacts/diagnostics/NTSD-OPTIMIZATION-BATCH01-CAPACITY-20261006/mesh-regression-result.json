@@ -1,0 +1,113 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "e9e9a108d17c4512850c3d472c81ee95",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791283300381,
+      "finished_unix_ms": 1791283310533,
+      "last_update_unix_ms": 1791283310533,
+      "progress": {
+        "completed": 8,
+        "total": 9028,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791283309476,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+        "last_finished_unix_ms": 1791283309481,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.2068176,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "AccumulatedBounds_MatchLegacyVertexScanAcrossRandomSegments",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_MatchLegacyVertexScanAcrossRandomSegments",
+            "state": "Passed",
+            "durationSeconds": 0.1743422,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_ResetAcrossFramesChunksAndEmptyClear",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_ResetAcrossFramesChunksAndEmptyClear",
+            "state": "Passed",
+            "durationSeconds": 0.0970601,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_SteadyStateAddsNoManagedAllocation",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_SteadyStateAddsNoManagedAllocation",
+            "state": "Passed",
+            "durationSeconds": 0.0142249,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_StrictModeKeepsOneExactBoundsPerQuad",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_StrictModeKeepsOneExactBoundsPerQuad",
+            "state": "Passed",
+            "durationSeconds": 0.0027103,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PrepareCapacity_PreventsManagedBackendGrowthDuringFirstBuild",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.PrepareCapacity_PreventsManagedBackendGrowthDuringFirstBuild",
+            "state": "Passed",
+            "durationSeconds": 0.001499,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_HandlesPhysicalSubMeshCountBelowPreviousActiveCount",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_HandlesPhysicalSubMeshCountBelowPreviousActiveCount",
+            "state": "Passed",
+            "durationSeconds": 0.0048318,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_PreservesChunkRangesAndRecoversDestroyedMesh",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesChunkRangesAndRecoversDestroyedMesh",
+            "state": "Passed",
+            "durationSeconds": 0.056994,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+            "state": "Passed",
+            "durationSeconds": 0.0046537,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

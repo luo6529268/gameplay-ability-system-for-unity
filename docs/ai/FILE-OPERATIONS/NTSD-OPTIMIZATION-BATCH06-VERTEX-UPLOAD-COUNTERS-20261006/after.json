@@ -1,0 +1,481 @@
+{
+  "time": "2026-10-06T20:47:13.7598466+08:00",
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleDynamicMeshBackend.cs",
+      "bytes": 43617,
+      "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderTypes.cs",
+      "bytes": 61681,
+      "sha256": "CEE95E74A6A2F1D9E16631E210F5C8BACE8F517D1F0C3A1B20932BAB24127090"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 4833,
+      "sha256": "A0717950CAF88C096C44C54436AE1C5E75A33D5B6BC4A43A41A70FF097AE3812"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 17876,
+      "sha256": "725F948237A229BA7B7EEA5C790D40E122C4AA6EF5342EB3B0FDAF95CEDD933A"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 19672,
+      "sha256": "446A0FAF74EF810B34FCC41C3F831A4DDC5D3F113C6D3612AAB748885E22D938"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1466027,
+      "sha256": "1BD110498E1A42D5BD3B22BDE81FFC07F00DB112EC15DA27CA15AA26B770C560"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 635079,
+      "sha256": "3AFA34F36685757A2EAECB65DFC188C2143A0AF817FD8825B6AABB6362B1B914"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1535483,
+      "sha256": "9F27859980BC4197431422DC00BD79A020DEC85F868ADEAD4C5A04DC40135970"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 26509,
+      "sha256": "EF637172A4A3254A0D4729B821C0BFAE60E72035EE55036AC7E66CF663F6BCAA"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before.json",
+      "bytes": 9383,
+      "sha256": "CC56B98A2DEADA755A1B4ED2B5D8D63E51B52CB3052F9D45D50E442DB06ED8B3"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/protected-before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\protected-before.json",
+      "bytes": 24434,
+      "sha256": "B6FE1E2673ADA7DD8A1D65B9A875307A2BE96914DE859D6A9CEE6F6CB0D0A002"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\RECORD.md",
+      "bytes": 4802,
+      "sha256": "8E7973D4FF756C72A1F7320438219E2F400844A9DEB73E2B0D521306E6248299"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006.md",
+      "bytes": 3553,
+      "sha256": "69D3A990E53F6D2886D5D4FBB162F0F8A2AE1F51A71557DA01BFAECB3702AF16"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006.md",
+      "bytes": 4305,
+      "sha256": "04D9C9B230D9A6D34A9C6A030FBE7D9FA10EA27A421BCBF2274EA6F442942E35"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleVertexUploadDiagnosticsEditorTests.cs",
+      "bytes": 12220,
+      "sha256": "0498DD4B5E5BC33057D582BBA1D17EED8BCA6C5B82A8E4877A371EE0A17A7508"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleVertexUploadDiagnosticsEditorTests.cs.meta",
+      "bytes": 60,
+      "sha256": "64611CB28F10E4C841E9609E2AC4D862C495533865EBE62643E9C15C1E461141"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/editor-preflight.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\editor-preflight.json",
+      "bytes": 3443,
+      "sha256": "69B6F824D1B125CD826FCF711EBCAA781EB54A6EECC7BC6BE1AB617D160DED7F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/refresh-red.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\refresh-red.json",
+      "bytes": 399,
+      "sha256": "58A1F02A3CE600E2769C73D79DA9385BC35544EA58D83692AE39994127A51627"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/backup-verification.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\backup-verification.json",
+      "bytes": 3276,
+      "sha256": "C52789E20E126CD7122A041F53577AD45216E930D4BC050088377BBD81F9B1C4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\REPORT.md",
+      "bytes": 6174,
+      "sha256": "D750632B3F1596A838F422EC886D54E41F22C364E5CC2060A4E599161A4EB196"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/red-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\red-result.json",
+      "bytes": 6481,
+      "sha256": "340F9EC1D2127C7349702F8863622E166EAC8CB089604AEF949D4501BA0DE3FF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/compiled-artifacts.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\compiled-artifacts.json",
+      "bytes": 1575,
+      "sha256": "FD2EFB07061AFE5C59468842F4D18EB79B2F4B8775B8690874EB973033B2B824"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/compile-state.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\compile-state.json",
+      "bytes": 2105,
+      "sha256": "3EDBD65DF30867DE168CA84C8B75B22D3DC6385B2EB00BE9C93BB7A68B99283B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/refresh-green.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\refresh-green.json",
+      "bytes": 400,
+      "sha256": "A87331A898B9480E85247E492A842133B666354EAC149A3E6D6868E91BBE5030"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/red-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\red-start.json",
+      "bytes": 2362,
+      "sha256": "6CE81E68CEE819295434394E871B07AF9614E3FB5B8A41C936A90D044B009C8E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/initial-reload-retry.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\initial-reload-retry.json",
+      "bytes": 420,
+      "sha256": "55C4B27AC7F4E7661AD97A4FC8C95AA3085B98385DA7CFEDD2D6A3390166329C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/green-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\green-start.json",
+      "bytes": 260,
+      "sha256": "6183B1C43BCCE474E2F7B80A42AB0CF7C27CFC8DDAE21299BC40CB60DDB32A52"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/green-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\green-result.json",
+      "bytes": 8349,
+      "sha256": "6AC7288AFFBCBDA69DBEA61B8645C0759F790D2D8595155BF4A6E59EE202526D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/regression-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\regression-result.json",
+      "bytes": 57569,
+      "sha256": "C579ED4BF9A15FEB1DFFF12A233B6BB8017FF2D348C8DA65EA933F755B4B5351"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/change-ledger-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\change-ledger-validation.json",
+      "bytes": 278,
+      "sha256": "644EF0FB871C37D8BCA69275E0302903FD3D0D90A929A34B44E6A375B034567E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/static-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\static-validation.json",
+      "bytes": 2786,
+      "sha256": "0A997AFE55841AB261E688774427974742E49B096B228809A3D44AED7AB027C6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/editor-post.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\editor-post.json",
+      "bytes": 2497,
+      "sha256": "9871490E8C43D83D3A650614394EDA609C78896FD5491A5F74C241E6F55D0F72"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/regression-request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\regression-request.json",
+      "bytes": 1593,
+      "sha256": "FACB7DB9C91E0EA7167D2FD29BB2C8FBC94B1715D467CAC253A18D54809D6532"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/contract-status.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\contract-status.json",
+      "bytes": 974,
+      "sha256": "A7C5727711947AD6887EDEAC6A8492EC89EF9FCF8D2BA0045580C2337C9D0D5E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/static-final.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\static-final.json",
+      "bytes": 3870,
+      "sha256": "BF1214BE58F9498E1C2B9328B37DC3214F7389971C209960998ACC48F14606C3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/whitespace-baseline.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\whitespace-baseline.json",
+      "bytes": 705,
+      "sha256": "A36488BE6281E7F995D99FC8D5AF3B8AA7DE022D5B91C60061DF713EED12547D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleDynamicMeshBackend.cs",
+      "bytes": 43133,
+      "sha256": "64C43AB36E438150D12E6B36F30382C11B00E9CBA5CCA9E0DC2EB449590F0316"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderTypes.cs",
+      "bytes": 61193,
+      "sha256": "42724013B2C40CE5D57FA48AB8F9ECFA105A2EF78DCFEF88E21B637DA76352CF"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 3277,
+      "sha256": "EE064FF89EBBA316D88ED7112F02362F2FD573004E309EB4A501CACECD5597F9"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 16233,
+      "sha256": "08954BDF7B6D4CDCE30F98BF81432B7E000B084E7974DAFB56B928019335B0BB"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 19212,
+      "sha256": "E76FEF749DF5B424C4E37B382337025238A0FE6757C0CBC9C6F7FC2276FD1F0E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1465213,
+      "sha256": "83AEF9624CAF0B060FFC038EA96034780C213BDE499B4A79EED5A26D191E206A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 634751,
+      "sha256": "E030663EC3E758E0BDD28CA20805048F95B1DD1BEF51E272ABC5B876D57F8B9A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\docs\\ai\\STATE.md",
+      "bytes": 1534782,
+      "sha256": "0B6B2078EF4D14F65337F0B90BEFB5195F65AA451CE5A15C09D2513685DA1728"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006\\before-backups\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 25927,
+      "sha256": "927E57F2024AA7EB4A19D68488FD66A446F31129DD1E441697255C2B8D7E4344"
+    }
+  ],
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+    " M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-AUX-CAPACITY-SEAL-003.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-RESOLVER-SEAL-004.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006.md"
+  ],
+  "operation": "NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006",
+  "operationStatus": "VERIFIED_SCOPED_FILE_OPERATIONS",
+  "taskStatus": "RUNTIME_PENDING",
+  "changeId": "NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006",
+  "changeStatus": "RUNTIME_PENDING",
+  "parentM03Status": "OPEN",
+  "parentH11Status": "OPEN",
+  "validation": {
+    "time": "2026-10-06T20:43:10.3089261+08:00",
+    "command": "Tools/Validate-ChangeLedger.ps1",
+    "exitCode": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1302",
+      "  Governed code files in diff: 14"
+    ],
+    "warningCount": 4238,
+    "errors": []
+  },
+  "staticValidation": {
+    "time": "2026-10-06T20:45:51.0980766+08:00",
+    "protectedCount": 127,
+    "protectedMismatch": [],
+    "backupsCount": 9,
+    "backupMismatch": [],
+    "diffExit": 0,
+    "diffOutput": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "scopedLinkCount": 116,
+    "missingLinks": [],
+    "whitespaceCheckedPaths": 15,
+    "whitespaceBad": [
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "line": 4258
+      },
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "line": 4260
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "line": 805
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "line": 806
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "line": 807
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "line": 4422
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "line": 4474
+      }
+    ],
+    "codeHashes": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+        "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+        "sha256": "CEE95E74A6A2F1D9E16631E210F5C8BACE8F517D1F0C3A1B20932BAB24127090"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+        "sha256": "0498DD4B5E5BC33057D582BBA1D17EED8BCA6C5B82A8E4877A371EE0A17A7508"
+      }
+    ],
+    "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6"
+  },
+  "whitespaceBaseline": {
+    "time": "2026-10-06T20:46:35.9436816+08:00",
+    "checks": [
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "beforeCount": 2,
+        "afterCount": 2,
+        "differenceCount": 0,
+        "unchanged": true
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "beforeCount": 3,
+        "afterCount": 3,
+        "differenceCount": 0,
+        "unchanged": true
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "beforeCount": 2,
+        "afterCount": 2,
+        "differenceCount": 0,
+        "unchanged": true
+      }
+    ],
+    "newWhitespaceCount": 0,
+    "note": "The seven trailing-whitespace lines are pre-existing identical content in the exact dirty backups; preserved without cleanup."
+  },
+  "testResults": {
+    "red": {
+      "jobId": "55dbdae760a44456833c5c515e2f873d",
+      "completed": 18,
+      "expectedFailed": 18,
+      "reason": "VertexUploadCallCount property not present; production unchanged"
+    },
+    "green": {
+      "jobId": "14486f1f5037435fa49389e8dd3be893",
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0
+    },
+    "regression": {
+      "jobId": "47356cdbfea543a3b760504767ebfe91",
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 5.1463824,
+      "resultState": "Passed"
+    },
+    "distinctPassedCases": 150
+  },
+  "proofLimits": "Only central Mesh API completed vertex payload counters and warmed fixture Build/Upload current-thread managed 0B; no change to upload algorithm, no full materializer/RenderPass/GPU flow or 1000 AI/Android/M0 certificate; EXT-1/MONO/ATLAS special gates unchanged."
+}

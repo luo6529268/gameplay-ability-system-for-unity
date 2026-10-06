@@ -1,0 +1,90 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "21d2fb44b417485c8a9ead86e1d55121",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791285828137,
+      "finished_unix_ms": 1791285836642,
+      "last_update_unix_ms": 1791285836642,
+      "progress": {
+        "completed": 15,
+        "total": 9059,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791285835999,
+        "last_finished_test_full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.HealthDirectBuild_RejectsLogicalOverflowBeforeMutation",
+        "last_finished_unix_ms": 1791285836000,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_CountsOnlyEligibleCommands(False)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_CountsOnlyEligibleCommands(True)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(False,17)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(True,17)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(False,4096)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(True,1365)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_ZeroLimitAllowsDisabledButRejectsVisibleOutput(False)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_ZeroLimitAllowsDisabledButRejectsVisibleOutput(True)",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySealedBuild_AlternatingFramesReuseStorageAndAllocateZeroBytes",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(False,False)",
+            "message": "  Expected: String containing \"capacity\"\r\n  But was:  \"The bound battle world camera is unavailable or disabled.\"\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(False,True)",
+            "message": "  Expected: String containing \"capacity\"\r\n  But was:  \"The bound battle world camera is unavailable or disabled.\"\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(True,False)",
+            "message": "  Expected: String containing \"capacity\"\r\n  But was:  \"The bound battle world camera is unavailable or disabled.\"\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(True,True)",
+            "message": "  Expected: String containing \"capacity\"\r\n  But was:  \"The bound battle world camera is unavailable or disabled.\"\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralSeal_SealsBothAuxiliaryOwnersAndEndUnsealsThem",
+            "message": "  capacitySealed\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.HealthDirectBuild_RejectsLogicalOverflowBeforeMutation",
+            "message": "  SealCapacity\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+]

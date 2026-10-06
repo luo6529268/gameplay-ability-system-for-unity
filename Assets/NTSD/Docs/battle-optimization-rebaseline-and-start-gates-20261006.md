@@ -1,12 +1,14 @@
 # NTSD 优化文档重基线与启动门（2026-10-06）
 
 > 标识：`NTSD-OPTIMIZATION-DOC-REBASELINE-20261006`
-> 文档状态：`DOCUMENTS_REBASELINED / WAITING_USER_APPROVAL`
-> 用户本轮仅批准整理，完成后再决定是否启动；无代码、构建、测试、Profiler、GPU或M0授权。
+> 文档状态：`DOCUMENTS_REBASELINED / IMPLEMENTATION_STARTED`
+> 文档整理阶段仅授权说明保留为历史。用户后续已批准按文档开始优化；
+> 当前H-11最小预热及聚焦验证，统一状态见[独立进度总表](battle-optimization-progress-tracker.md)。
+> EXT-1、MONO、资源/Scene/配置专项门不因总体授权自动取消，完整M0未完成。
 >
 > 主表：[34项优化风险登记表](android-mobile-readiness-priority-risk-register.md)。
 > 主表只管理说明/进度/留痕，本文件管理共同合同与启动门，各项方案管理具体解决方案和验收。
-> 本轮静态重扫证据时间为2026-10-06；下列“测试”与批次均是未来条件，不是执行结果。
+> 静态重扫证据时间为2026-10-06；下列矩阵为验收条件，实际首批结果仅在进度总表/具名报告中记录。
 
 ## 1. 优先级与证据规则
 
@@ -101,20 +103,24 @@
 material variant/binding mode/render state；opaque key可还原tuple。
 EXT-1附加schema仍属待批，不据CPU命令推导GPU batch，不提前冻bank/格式。
 
-## 5. 建议下一批（仅建议，均未获本轮启动授权）
+## 5. 分批顺序与当前启动范围
 
 | 顺序 | 建议包 | 输出/停止条件 |
 |---|---|---|
-| 0 | 用户确认文档及测量范围 | 确认平台/workload/运行窗口/写入范围；不自动启动 |
+| 0 | 用户确认文档及测量范围 | 总体启动已批准；完整M0的平台/workload/运行窗口/准确范围仍须具名 |
 | 1 | 当前版本基础取证与总内存/0GC基线 | 先复用既有计数；缺埋点另立Change，记录加载/稳定/过渡/退出、worker和插值成本 |
-| 2a | H-11最小容量补齐 | 若基线确认增长路径，按准确缓存范围修补；不做instancing/算法重写 |
+| 2a | H-11最小容量补齐 | 子批01两处现有预热已接入并聚焦通过；父项完整seal/overflow/0GC仍开放；不做instancing/算法重写 |
 | 2b | H-08/H-10资源依赖和预处理设计 | 先Manifest/闭包/Lease/预算决策，再分批烘焙及按局加载；资源写入另批批准 |
 | 3 | 数据驱动热点优化 | 现有碰撞/AI/声音/上传路径A/B，收益不成立或first difference即不采用 |
 | 4 | B0及后续seam批次 | 单独批准，不因GPU或资源优化自动解冻MONO |
 | 5 | Android功能和持续证书 | 工具链/ABI/内容/触屏具备后按H-05/H-07/M-08运行 |
 
-基础取证不是EXT-1专项M0。PERF/ATLAS D1历史方案批准保留，但当前用户要求先整理再批准，
-故此表的所有启动状态均`WAITING_USER_APPROVAL`。
+基础取证不是EXT-1专项M0。PERF/ATLAS D1历史方案批准保留。整理阶段曾为
+`WAITING_USER_APPROVAL`，后续总体启动授权已替代该状态；未选批次排队，单列专项门保持。
+
+2026-10-06 后续启动更正：上句为整理阶段快照。用户已明确批准启动，
+首批采用现有聚焦测试确认两处缓存遗漏，先H-11预热子批；
+完整整局/M0基线和父H-11验收仍开放，未测量收益不晋升。
 
 ## 6. 实施前批准字段与验收底线
 
@@ -126,7 +132,8 @@ EXT-1附加schema仍属待批，不据CPU命令推导GPU batch，不提前冻ban
 compile → focused/SelfCheck → 固定输入/checksum/RNG/事件A/B →
 真实Scene表现/first-visible/UV/透明/声音 → 0GC/steady-transition →
 11阶段关闭及重进 → Player/Android具名证书。
-本轮以上全未运行；项目级全部完成只在对应证据齐备时声明。
+文档整理阶段以上全未运行；后续子批01已执行编译/具名聚焦，
+其余门未运行。项目级全部完成只在对应证据齐备时声明。
 预算/容量/硬性能门数值在获批测量后冻结，不因现在未冻结数字制造文档阻断项。
 
 ## 7. 文档收口条件与留痕
@@ -137,5 +144,6 @@ PERF/ATLAS/MONO与EXT-1状态边界不冲突、无新增运行授权、历史证
 
 Task：[本轮任务](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006.md)；
 操作：[before/after与恢复来源](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006/RECORD.md)。
-2026-10-06：用户批准仅文档整理；34项重基线，6项新增，M-03调高。
-EXT-1维持`PROPOSED / MODIFY_REQUIRED`，不升格、不启动专项M0；实施待用户下一条明确批准。
+2026-10-06 文档阶段历史：用户批准仅文档整理；34项重基线，6项新增，M-03调高。
+2026-10-06 后续实施：用户明确批准开始；H-11子批01编译/聚焦通过，父项RUNTIME_PENDING。
+EXT-1仍维持`PROPOSED / MODIFY_REQUIRED`，不升格、不启动专项M0。

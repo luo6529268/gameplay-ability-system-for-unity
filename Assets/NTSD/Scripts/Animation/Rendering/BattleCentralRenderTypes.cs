@@ -250,6 +250,11 @@ namespace NTSD.Animation.Rendering
         public BattleCentralResourceStatus FirstUnresolvedStatus { get; internal set; }
         public int ActiveChunkCount { get; internal set; }
         public int SegmentCount { get; internal set; }
+        // Completed Mesh API payload in the current entered Build scope, not GPU traffic.
+        // Pre-admission rejection leaves the previous scope intact; Clear resets it.
+        public int VertexUploadCallCount { get; internal set; }
+        public long UploadedVertexCount { get; internal set; }
+        public long UploadedVertexBytes { get; internal set; }
         public int CapacityGrowthCount { get; internal set; }
         public BattleCentralDrawMode DrawMode { get; internal set; }
 
@@ -266,6 +271,9 @@ namespace NTSD.Animation.Rendering
             FirstUnresolvedStatus = BattleCentralResourceStatus.Resolved;
             ActiveChunkCount = 0;
             SegmentCount = 0;
+            VertexUploadCallCount = 0;
+            UploadedVertexCount = 0;
+            UploadedVertexBytes = 0;
             DrawMode = drawMode;
         }
     }
@@ -324,6 +332,9 @@ namespace NTSD.Animation.Rendering
                 throw new ArgumentOutOfRangeException(nameof(entityTemplateCapacity));
             if (trustedResourceCapacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(trustedResourceCapacity));
+
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot prepare resolver capacity after the battle capacity seal.");
 
             entityTemplates.EnsureCapacity(entityTemplateCapacity);
             trustedResources.PrepareCapacity(trustedResourceCapacity);

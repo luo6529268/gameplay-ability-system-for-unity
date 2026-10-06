@@ -1,0 +1,28 @@
+{
+  "requests": [
+    {
+      "type": "run_tests",
+      "params": {
+        "mode": "EditMode",
+        "testNames": [
+          "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests"
+        ],
+        "includeDetails": true,
+        "includeFailedTests": true
+      }
+    }
+  ],
+  "responses": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "21d2fb44b417485c8a9ead86e1d55121",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  ]
+}

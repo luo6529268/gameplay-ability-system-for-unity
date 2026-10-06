@@ -1,0 +1,35 @@
+[
+  {
+    "success": true,
+    "message": "Pipeline: Universal (URP), Quality: Ultra",
+    "data": {
+      "pipeline": "Universal",
+      "pipelineName": "Universal (URP)",
+      "qualityLevel": 5,
+      "qualityLevelName": "Ultra",
+      "qualityLevels": [
+        "Very Low",
+        "Low",
+        "Medium",
+        "High",
+        "Very High",
+        "Ultra"
+      ],
+      "colorSpace": "Gamma",
+      "hasVolumeSystem": true,
+      "pipelineAsset": "New Universal Render Pipeline Asset",
+      "pipelineAssetPath": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "pipelineAssetType": "UniversalRenderPipelineAsset",
+      "settings": {
+        "renderScale": 1,
+        "supportsHDR": true,
+        "msaaSampleCount": 1,
+        "shadowDistance": 50,
+        "shadowCascadeCount": 1,
+        "maxAdditionalLightsCount": 4,
+        "supportsSoftShadows": false,
+        "colorGradingMode": "LowDynamicRange"
+      }
+    }
+  }
+]

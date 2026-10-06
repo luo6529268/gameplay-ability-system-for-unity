@@ -1,0 +1,167 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "df4cf4969eab4408bb15a7243a8b390d",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791291930390,
+      "finished_unix_ms": 1791291989916,
+      "last_update_unix_ms": 1791291989916,
+      "progress": {
+        "completed": 14,
+        "total": 9118,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791291985790,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.WarmupPayload_IsExcludedFromAcceptedSampleSummary",
+        "last_finished_unix_ms": 1791291989445,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 14,
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 54.4811075,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "AvailableZeroPayload_IsAnObservedZero",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.AvailableZeroPayload_IsAnObservedZero",
+            "state": "Passed",
+            "durationSeconds": 3.9961401,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DelayedDrain_DoesNotPresentAgain_OrReadLivePayload",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.DelayedDrain_DoesNotPresentAgain_OrReadLivePayload",
+            "state": "Passed",
+            "durationSeconds": 3.9014554,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FrameAndSummaryProjection_RemainFrozen_AfterDiagnosticsChange",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.FrameAndSummaryProjection_RemainFrozen_AfterDiagnosticsChange",
+            "state": "Passed",
+            "durationSeconds": 3.7296683,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InapplicableOrMissingDiagnostics_AreUnavailable_NotMeasuredZero(False,True)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.InapplicableOrMissingDiagnostics_AreUnavailable_NotMeasuredZero(False,True)",
+            "state": "Passed",
+            "durationSeconds": 3.6227996,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InapplicableOrMissingDiagnostics_AreUnavailable_NotMeasuredZero(True,False)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.InapplicableOrMissingDiagnostics_AreUnavailable_NotMeasuredZero(True,False)",
+            "state": "Passed",
+            "durationSeconds": 3.691368,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "IndependentSamples_ArePerBuild_NotAccumulated",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.IndependentSamples_ArePerBuild_NotAccumulated",
+            "state": "Passed",
+            "durationSeconds": 4.3531246,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OptionalDiagnostics_DoNotChangeV5MandatorySchema_OrVerdict",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.OptionalDiagnostics_DoNotChangeV5MandatorySchema_OrVerdict",
+            "state": "Passed",
+            "durationSeconds": 3.6393067,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RejectedCompletedFrame_UsesRetrySnapshot_NotRejectedAttempt",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.RejectedCompletedFrame_UsesRetrySnapshot_NotRejectedAttempt",
+            "state": "Passed",
+            "durationSeconds": 3.9991735,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Scope_ExplicitlyExcludesGpuProductionAndRejectedAttempts",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.Scope_ExplicitlyExcludesGpuProductionAndRejectedAttempts",
+            "state": "Passed",
+            "durationSeconds": 3.6237482,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Snapshot_FreezesSuccessfulPresentPayload_WithUnitsAndLongBytes",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.Snapshot_FreezesSuccessfulPresentPayload_WithUnitsAndLongBytes",
+            "state": "Passed",
+            "durationSeconds": 3.6888801,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SnapshotHelper_AfterPreparation_AllocatesZeroManagedBytes(True)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.SnapshotHelper_AfterPreparation_AllocatesZeroManagedBytes(True)",
+            "state": "Passed",
+            "durationSeconds": 3.6275834,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SnapshotHelper_AfterPreparation_AllocatesZeroManagedBytes(False)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.SnapshotHelper_AfterPreparation_AllocatesZeroManagedBytes(False)",
+            "state": "Passed",
+            "durationSeconds": 4.2659612,
+            "message": null,
+            "stackTrace": null,
+            "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:12045 (active clients: 1)\r\n"
+          },
+          {
+            "name": "ThrowingPresent_CommitsNoSample_AndNextSuccessUsesFreshPayload",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.ThrowingPresent_CommitsNoSample_AndNextSuccessUsesFreshPayload",
+            "state": "Passed",
+            "durationSeconds": 3.9174616,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "WarmupPayload_IsExcludedFromAcceptedSampleSummary",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleVertexUploadReportEditorTests.WarmupPayload_IsExcludedFromAcceptedSampleSummary",
+            "state": "Passed",
+            "durationSeconds": 3.6554518,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

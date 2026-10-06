@@ -1,0 +1,82 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "934bbcd0d51c433d898709bd68a716b2",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791287091773,
+      "finished_unix_ms": 1791287097348,
+      "last_update_unix_ms": 1791287097348,
+      "progress": {
+        "completed": 15,
+        "total": 9074,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791287096853,
+        "last_finished_test_full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+        "last_finished_unix_ms": 1791287096854,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.CentralOwner_SealsBothResolversAndEndAllowsPreparationAgain",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,False)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,False)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,False)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,True)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,True)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,True)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedConfigure_MaterialChangesClearBindingsButReusePreparedStorage",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(0,0)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,17)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(512,17)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,512)",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+            "message": "System.ArgumentException : Object of type 'NTSD.Simulation.Presentation.BattleSpriteRenderState' cannot be converted to type 'System.Boolean'."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+]

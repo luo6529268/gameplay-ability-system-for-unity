@@ -1,0 +1,102 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "55dbdae760a44456833c5c515e2f873d",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791290230139,
+      "finished_unix_ms": 1791290237798,
+      "last_update_unix_ms": 1791290237798,
+      "progress": {
+        "completed": 18,
+        "total": 9104,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791290237320,
+        "last_finished_test_full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(StrictOrderedDraw)",
+        "last_finished_unix_ms": 1791290237320,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(1)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(17)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4096)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4097)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.DrawMode_ChangesSegmentsNotVertexUploadCalls(OrderedChunks)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.DrawMode_ChangesSegmentsNotVertexUploadCalls(StrictOrderedDraw)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.EmptyOrNullFrame_HasNoVertexUpload(False)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.EmptyOrNullFrame_HasNoVertexUpload(True)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.PrepareAndNativeMeshRecovery_DoNotCountIndexBufferOrReservation",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.SameFrameRepeatedBuild_IsCountedAgainWithoutAccumulating",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.SealedCapacityReject_BeforeBuildKeepsPriorDiagnostics",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.ShrinkAndClear_ResetWithoutCountingInertTailMetadata",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UnresolvedCommands_CountOnlyResolvedPayload(False)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UnresolvedCommands_CountOnlyResolvedPayload(True)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(0)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(4096)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(OrderedChunks)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(StrictOrderedDraw)",
+            "message": "  VertexUploadCallCount must directly describe completed Mesh API payload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+]

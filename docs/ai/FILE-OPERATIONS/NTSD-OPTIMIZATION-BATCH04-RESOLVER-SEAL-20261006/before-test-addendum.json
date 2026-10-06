@@ -1,0 +1,9 @@
+{
+  "time": "2026-10-06T19:50:10.3137430+08:00",
+  "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+  "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleCatalogCentralResourceResolverEditorTests.cs",
+  "bytes": 73242,
+  "sha256": "BEFE1046DB0EEB09E4238C1035FCAB7F10044F05730BF7179E672301EA5E8D2A",
+  "gitStatus": [],
+  "reason": "Current compiled command metadata confirms trusted RenderState constructor now has 28 parameters; old helper uses obsolete 27. Minimal focused test compatibility only; production unaffected."
+}

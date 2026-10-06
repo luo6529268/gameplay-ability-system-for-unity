@@ -1,0 +1,163 @@
+{
+  "time": "2026-10-06T21:26:48.1560813+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006",
+  "changeId": "NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008",
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+    " M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-AUX-CAPACITY-SEAL-003.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-RESOLVER-SEAL-004.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-UPLOAD-REPORT-007.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006.md"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "type": "File",
+      "bytes": 99398,
+      "sha256": "447AA42F190F4C141523490D5EB22845801A26F2413E0755801D9AF0259A1688",
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "type": "File",
+      "bytes": 6632,
+      "sha256": "C073042E88AD10CEFBB26CF45B20A37E511C4FEE1643103C97DE3BEFDC7FFA3F",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "type": "File",
+      "bytes": 19456,
+      "sha256": "BB20CE2F49E40BB0AD0CCF46F7CD45BEF86EB992D368219A88D4349472EF189C",
+      "gitStatus": [
+        "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "type": "File",
+      "bytes": 20160,
+      "sha256": "81DA1A370BFEC823487F6F65AD4488A70F3B64E4B43283CF71BFD4E3E4B9BBC0",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "type": "File",
+      "bytes": 1467186,
+      "sha256": "FAA8D497A5B868416B5456C0C95BCCA8BD67FD269E770DFC92EB0D14B1C37B97",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "type": "File",
+      "bytes": 636117,
+      "sha256": "1E1824E6539EAFD2FD0FC8524B618C3F845E7565C621E02D882230CEE0A9AF2C",
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "type": "File",
+      "bytes": 1536479,
+      "sha256": "776938EC82E33BB5DDDE78FEA713AB46E3D0211A96C2454A8421A948C78C5008",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "type": "File",
+      "bytes": 27066,
+      "sha256": "FB743D4384F77C0AC624372B2EFC84B3E9F3862218C299A3213A1AEBB407CEA3",
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "protectedMismatches": []
+}

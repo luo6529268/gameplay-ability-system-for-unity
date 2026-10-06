@@ -1,0 +1,12 @@
+{
+  "time": "2026-10-06T21:11:30.4917525+08:00",
+  "command": "Tools/Validate-ChangeLedger.ps1",
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1303",
+    "  Governed code files in diff: 16"
+  ],
+  "warningCount": 4237,
+  "errors": []
+}

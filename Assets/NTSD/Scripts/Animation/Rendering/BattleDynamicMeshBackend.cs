@@ -31,6 +31,10 @@ namespace NTSD.Animation.Rendering
         private int segmentCount;
         private int mutationVersion;
         private bool disposed;
+        private bool capacityPrepared;
+        private bool capacitySealed;
+        private int preparedCommandCapacity;
+        private int sealedCommandCapacity;
         private BattlePresentationFrame builtFrame;
 #if UNITY_EDITOR
         private int lastInactiveChunkClearCount;
@@ -84,16 +88,55 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
             if (commandCapacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(commandCapacity));
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot resize a sealed central mesh backend.");
             if (commandCapacity == 0)
+            {
+                preparedCommandCapacity = 0;
+                capacityPrepared = true;
                 return;
+            }
 
             int requiredChunkCount =
                 (commandCapacity + QuadsPerChunk - 1) / QuadsPerChunk;
             for (int chunkIndex = 0; chunkIndex < requiredChunkCount; chunkIndex++)
+            {
                 EnsureChunk(chunkIndex);
+                // A managed chunk can survive a Play exit that destroys its native mesh.
+                // Recover missing native storage here, before the battle capacity seal.
+                _ = chunks[chunkIndex].Mesh;
+                int maximumSegments = Math.Min(
+                    QuadsPerChunk,
+                    commandCapacity - chunkIndex * QuadsPerChunk);
+                chunks[chunkIndex].PrepareSubMeshCapacity(maximumSegments);
+            }
             EnsureSegmentCapacity(commandCapacity);
             dirtyChunkCount = 0;
             diagnostics.CapacityGrowthCount = 0;
+            preparedCommandCapacity = commandCapacity;
+            capacityPrepared = true;
+        }
+
+        internal void SealCapacity(int commandCapacity)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
+            if (!capacityPrepared || commandCapacity < 0 || commandCapacity > preparedCommandCapacity)
+                throw new InvalidOperationException("Central mesh capacity must be prepared before sealing.");
+            if (capacitySealed)
+                throw new InvalidOperationException("Central mesh capacity is already sealed.");
+            sealedCommandCapacity = commandCapacity;
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
+
+        internal bool CanBuildFrame(BattlePresentationFrame frame)
+        {
+            return !capacitySealed || (uint)(frame?.CommandCount ?? 0) <= (uint)sealedCommandCapacity;
         }
 
         internal Vector2 GetChunkVertexUv(int chunkIndex, int vertexIndex)
@@ -121,6 +164,8 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
             if (resolver == null)
                 throw new ArgumentNullException(nameof(resolver));
+            if (!CanBuildFrame(frame))
+                throw new InvalidOperationException("Central mesh command capacity exceeded; whole frame rejected.");
 
             mutationVersion++;
             builtFrame = frame;
@@ -320,6 +365,7 @@ namespace NTSD.Animation.Rendering
                             segmentBounds,
                             ref segmentCursor,
                             segmentCount,
+                            diagnostics,
                             detailDiagnostics);
                     }
                 }
@@ -522,6 +568,7 @@ namespace NTSD.Animation.Rendering
             private readonly ushort[] indexTemplate = new ushort[IndicesPerChunk];
             private readonly int chunkIndex;
             private Mesh mesh;
+            private int vertexBufferStride;
             private int activeSubMeshCount;
             private bool hasBounds;
             private float boundsMinX;
@@ -552,6 +599,12 @@ namespace NTSD.Animation.Rendering
             public Mesh Mesh => EnsureMesh();
             public int ActiveQuadCount { get; private set; }
             public int PendingSegmentCount { get; set; }
+
+            public void PrepareSubMeshCapacity(int maximumSegments)
+            {
+                if (subMeshDescriptors == null || subMeshDescriptors.Length < maximumSegments)
+                    Array.Resize(ref subMeshDescriptors, maximumSegments);
+            }
 
             public ushort GetIndexTemplateValue(int index)
             {
@@ -638,6 +691,7 @@ namespace NTSD.Animation.Rendering
                 SegmentBoundsAccumulator[] allSegmentBounds,
                 ref int segmentCursor,
                 int totalSegments,
+                BattleCentralBuildDiagnostics buildDiagnostics,
                 BattleTickDetailPhaseDiagnostics detailDiagnostics)
             {
                 int activeVertices = activeQuads * VerticesPerQuad;
@@ -668,6 +722,9 @@ namespace NTSD.Animation.Rendering
                             0,
                             MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
                             MeshUpdateFlags.DontNotifyMeshUsers);
+                        buildDiagnostics.VertexUploadCallCount++;
+                        buildDiagnostics.UploadedVertexCount += activeVertices;
+                        buildDiagnostics.UploadedVertexBytes += (long)activeVertices * vertexBufferStride;
                     }
                     finally
                     {
@@ -812,6 +869,7 @@ namespace NTSD.Animation.Rendering
                 };
                 createdMesh.MarkDynamic();
                 createdMesh.SetVertexBufferParams(VerticesPerChunk, VertexLayout);
+                vertexBufferStride = createdMesh.GetVertexBufferStride(0);
                 createdMesh.SetIndexBufferParams(IndicesPerChunk, IndexFormat.UInt16);
                 createdMesh.SetIndexBufferData(
                     indexTemplate,

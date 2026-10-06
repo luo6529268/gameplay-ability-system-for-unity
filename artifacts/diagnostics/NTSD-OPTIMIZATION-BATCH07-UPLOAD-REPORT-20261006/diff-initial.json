@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-06T21:11:31.5088834+08:00",
+  "diffCheckExit": 2,
+  "diffCheckOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md:5460: new blank line at EOF.",
+    "docs/ai/CHANGE-LEDGER.md:1839: new blank line at EOF.",
+    "docs/ai/STATE.md:6296: new blank line at EOF."
+  ],
+  "newFileTrailingWhitespace": []
+}

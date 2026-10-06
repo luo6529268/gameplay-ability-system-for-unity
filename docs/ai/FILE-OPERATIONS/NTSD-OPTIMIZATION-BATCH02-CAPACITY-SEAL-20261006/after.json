@@ -1,0 +1,484 @@
+{
+  "time": "2026-10-06T19:13:51.6551151+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006",
+  "taskStatus": "RUNTIME_PENDING",
+  "changeStatus": "RUNTIME_PENDING",
+  "focusedResult": "16/16 new and 30/30 regression",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/change-ledger-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\change-ledger-validation.json",
+      "bytes": 934,
+      "sha256": "09011BFB8E1C2258CD90D281425766A23B7FDC0CDCBB332D4247D1DCAAB3E8DF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/compile-state.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\compile-state.json",
+      "bytes": 3593,
+      "sha256": "43DC9D22BBA12105EA7D1E0380BF9ED8E264E5AF53CF51627B484700C726AFBF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/editor-post.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\editor-post.json",
+      "bytes": 2497,
+      "sha256": "29C9D3F9FA3680973805DBBC90A6152F8E897215E2317FEC3BDC90E581F9CFD6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/green-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\green-result.json",
+      "bytes": 7670,
+      "sha256": "BBB15C593B7AE7B01392B2F2D15572386E7754BA01CC5AA3355807CFBC646C84"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/green-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\green-start.json",
+      "bytes": 582,
+      "sha256": "337C7F832D69CAA6AE0FE5041E7A2E97D2EE5700C54781EA164A4D7B6CBABC86"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/red-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\red-result.json",
+      "bytes": 5100,
+      "sha256": "97D9C05577CF5AC47C46194F62AD5EE212A42FFD066D366BC85A2381254D1336"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/red-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\red-start.json",
+      "bytes": 582,
+      "sha256": "48EFDE4DFC8E829E229B0F48347E53DD682F77742BF06475581E3E872156DAA5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/regression-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\regression-result.json",
+      "bytes": 14061,
+      "sha256": "56C4CBC273BB9D2D9146025E06BE129C8B868B0E23F2E9C27EDEDE8C5D397EE6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/regression-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\regression-start.json",
+      "bytes": 1108,
+      "sha256": "EF1E343C852774D468696C81D2452C67C37D4082D76BEB7B965AC58D418680CB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\REPORT.md",
+      "bytes": 3976,
+      "sha256": "11ECF4EFA47AD89D9623E4A06CDB5AEDBD07D75E07D657F4C2412EBDE3C9E6C5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/static-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\static-validation.json",
+      "bytes": 7002,
+      "sha256": "09051EBF55AD803900B26EA05E630699543D3BD1EF09A9B105B115661C4EBA03"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 17838,
+      "sha256": "34808A145CED21128FE62FD9805980AB7B8FE76BDC0B80564BC74E5742E80ED5"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md",
+      "bytes": 6771,
+      "sha256": "A4E00698F711FDA3696DEC32D61D6E24559F7C6356D8F98AD7133199945ABC64"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 11964,
+      "sha256": "68E3ED370C9C85B9097D7205F380CFBC3D9D209FC61D867AF97B2AC5441EEEC9"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1462552,
+      "sha256": "19CC3F8B73B411C8D633E6B9B6957EB09B75438EA81C74AF6616A801981F0D30"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "bytes": 98926,
+      "sha256": "A9AD450D74C80F9549DD04265756792ADF37634E11A82E6EEFE07F4A9BB8BADA"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleDynamicMeshBackend.cs",
+      "bytes": 42906,
+      "sha256": "902CFBC6C966AD584294B59426D0CF8FC5C3073A92AF401A5D7C3FB64C9B5BB9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattlePixelFramePlan.cs",
+      "bytes": 13828,
+      "sha256": "579AF31FF78D2EC7F26654DC400E0774FAFE5D108F2C777BC5617CDC52A1F1B7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationDisplayMotion.cs",
+      "bytes": 8638,
+      "sha256": "DAD3C1DBA0968C181921DCA009FA4CB03749FA5209FD89A36282C56983C49213"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattlePresentationCapacitySealEditorTests.cs",
+      "bytes": 12134,
+      "sha256": "63F9A06E632B7300D1CBF4C396136AD032FE9423CE9240CC7666999CD4DF6A5B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattlePresentationCapacitySealEditorTests.cs.meta",
+      "bytes": 243,
+      "sha256": "67939FE266C95483C8CC7A03BE72E4A375216D4A198D508055E0F1C3820473C2"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 632298,
+      "sha256": "2CEEC8C9042A64A54B051B13238C9BA7BE0F9532E11AA1C7AB115EB459D8E396"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+      "bytes": 5025,
+      "sha256": "E98DC1D4216D96EC87752AD6965279711DB3FB1609493156599C605B2F69DB91"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 23893,
+      "sha256": "FA330A05C0047C2D0E6C6EA3E57A5960DA45A9C90FA376F7C0AB6A16BDEE019B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\before.json",
+      "bytes": 9189,
+      "sha256": "094AAE94E10B60310B427BED57A536DDA23BEE11A92E555C08C34334D7F648D1"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006\\RECORD.md",
+      "bytes": 3709,
+      "sha256": "DDB85E15D12B44BF6D0BD21561D24498E2068B862745909AD3291BFE00F40208"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1532301,
+      "sha256": "DCD9271E842DA7F0EDF85D6E715922D2478DA85EA6B179AD2EB20D6C7E300575"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+      "bytes": 2419,
+      "sha256": "899E6BF794D3EBBCC03E2D55A87E344899394DC05A065EBA1B4E29D46621081C"
+    }
+  ],
+  "priorBatchChecks": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/change-ledger-validation.json",
+      "sha256": "224D595A54E678CA6A091073ED3BCC2510460C3907F2EBA8EF029DA9BD2DC393",
+      "expected": "224D595A54E678CA6A091073ED3BCC2510460C3907F2EBA8EF029DA9BD2DC393",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-post.json",
+      "sha256": "FE05A1347A259D09C1818965D437E5A9431C91AC20C2252CCF9C112F9574DCB9",
+      "expected": "FE05A1347A259D09C1818965D437E5A9431C91AC20C2252CCF9C112F9574DCB9",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-pre-and-red-compile.json",
+      "sha256": "A18F88ADFBCD6EBD7AD8772E593437D78AF170B4BF2C8C28463B69C98EC1E124",
+      "expected": "A18F88ADFBCD6EBD7AD8772E593437D78AF170B4BF2C8C28463B69C98EC1E124",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-compile-request.json",
+      "sha256": "6CAB4673B1F464E7A6FAA7829B7C9B430C6BC360741C1EA7E511FBDB25FDA07C",
+      "expected": "6CAB4673B1F464E7A6FAA7829B7C9B430C6BC360741C1EA7E511FBDB25FDA07C",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-start.json",
+      "sha256": "073CAF739D9297E567CA28EDDCBDAB9630CDBB123E48327D5C99BE05F05B4D91",
+      "expected": "073CAF739D9297E567CA28EDDCBDAB9630CDBB123E48327D5C99BE05F05B4D91",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/mesh-regression-result.json",
+      "sha256": "14E9F32A55FB82ECD6A787C4CD043D42A0081CFB4CAC077AD07107354AB7E3BC",
+      "expected": "14E9F32A55FB82ECD6A787C4CD043D42A0081CFB4CAC077AD07107354AB7E3BC",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-result.json",
+      "sha256": "13A8EA8CB581885CB650AF6CD7A4A557F012797FF81E5BD9D0E8C39017DD636E",
+      "expected": "13A8EA8CB581885CB650AF6CD7A4A557F012797FF81E5BD9D0E8C39017DD636E",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-start.json",
+      "sha256": "BADC431726533FCBEF6F7730F5A9770B83BD510EF4B67FEAA0A72F43B823CFD5",
+      "expected": "BADC431726533FCBEF6F7730F5A9770B83BD510EF4B67FEAA0A72F43B823CFD5",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-result.json",
+      "sha256": "665EDC5B3323AAFA6EF3C7B1C6543926DAF88A115ADBAE991FB2E54326FFDAE5",
+      "expected": "665EDC5B3323AAFA6EF3C7B1C6543926DAF88A115ADBAE991FB2E54326FFDAE5",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-start.json",
+      "sha256": "391B85246BCAD497D13B7C4B012F0DB462292810E05924B998E3043CE2D4A35B",
+      "expected": "391B85246BCAD497D13B7C4B012F0DB462292810E05924B998E3043CE2D4A35B",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/REPORT.md",
+      "sha256": "82B4D1DB5820602AC129FAD4FEF558C649F5058A1B0EABD9DCE3DC4BECE46EC0",
+      "expected": "82B4D1DB5820602AC129FAD4FEF558C649F5058A1B0EABD9DCE3DC4BECE46EC0",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/static-validation.json",
+      "sha256": "D4C245FCFB468B637A3DE96C505D093810B945A62214E719BE18138996E817DA",
+      "expected": "D4C245FCFB468B637A3DE96C505D093810B945A62214E719BE18138996E817DA",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+      "sha256": "0081975A6CD42C40CD7D3E436E4D38FF713AC477F67BFD9088953D35DE82E712",
+      "expected": "0081975A6CD42C40CD7D3E436E4D38FF713AC477F67BFD9088953D35DE82E712",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "sha256": "3FC0AA6448535A6660975D3F6675018623D0C3527A5182F5AF6BA829C11EA3DA",
+      "expected": "3FC0AA6448535A6660975D3F6675018623D0C3527A5182F5AF6BA829C11EA3DA",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+      "sha256": "81419D05B4665F69A7AAD2F351AC99594A7572EF2B4F11493A9DE7D5502AFEED",
+      "expected": "81419D05B4665F69A7AAD2F351AC99594A7572EF2B4F11493A9DE7D5502AFEED",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+      "sha256": "06B45D752ACCC2EC66E6A2F8ACAEF06E2D7662276780A96FCB33E906548BC83A",
+      "expected": "06B45D752ACCC2EC66E6A2F8ACAEF06E2D7662276780A96FCB33E906548BC83A",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+      "sha256": "C63C5B4850B4F2F649BF4E0A576C1B81D0A4562E5C39A42AD1FA0D1028CA6943",
+      "expected": "C63C5B4850B4F2F649BF4E0A576C1B81D0A4562E5C39A42AD1FA0D1028CA6943",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/before.json",
+      "sha256": "F88E928658D7CBD32553545F65C8AB4A09D20A09687F7EB3D668BF6644F991A8",
+      "expected": "F88E928658D7CBD32553545F65C8AB4A09D20A09687F7EB3D668BF6644F991A8",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/RECORD.md",
+      "sha256": "EE229A9FB93D4DAA1B5686D0EA2F26BCF8249D34F27FC6D3957B9C6E3DBF4B43",
+      "expected": "EE229A9FB93D4DAA1B5686D0EA2F26BCF8249D34F27FC6D3957B9C6E3DBF4B43",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+      "sha256": "D275335B92336CD4955868BF7C2F58B286BFB2521BBD36410721540613EE4DF7",
+      "expected": "D275335B92336CD4955868BF7C2F58B286BFB2521BBD36410721540613EE4DF7",
+      "unchanged": true
+    }
+  ],
+  "allPriorUnownedFilesUnchanged": true,
+  "retainedUntracked": [
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "expected": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "unchanged": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "expected": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "unchanged": true
+    }
+  ],
+  "allRetainedUntrackedUnchanged": true,
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    " M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md"
+  ],
+  "globalDiffCheck": {
+    "exitCode": 0,
+    "output": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+    ]
+  },
+  "noDeleteMoveOrDestructiveGit": true,
+  "beforeManifest": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/before.json",
+  "validationManifest": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/static-validation.json",
+  "editorGenerated": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "expected": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "actual": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "expected": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "actual": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "expected": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "actual": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "unchanged": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "expected": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "actual": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparent.shader",
+      "expected": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "actual": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparentArray.shader",
+      "expected": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "actual": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "expected": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "actual": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "expected": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "actual": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "unchanged": true
+    }
+  ],
+  "allProtectedUnchanged": true,
+  "backupChecks": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "expected": "04D15E82120F672D9A0E67FF32C1DD04419C2C86E1DB333F3675B45329234392",
+      "actual": "04D15E82120F672D9A0E67FF32C1DD04419C2C86E1DB333F3675B45329234392",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "expected": "87EC226AD8C73A3863A28D4E523212E6AAAF79AA93442D5C228F46A615C373E2",
+      "actual": "87EC226AD8C73A3863A28D4E523212E6AAAF79AA93442D5C228F46A615C373E2",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+      "expected": "C96B2E794CDDC74811C6ADF914657A112B627F49878049158BAC94897919B294",
+      "actual": "C96B2E794CDDC74811C6ADF914657A112B627F49878049158BAC94897919B294",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+      "expected": "FCF000529ECB127DAD5FDDD3E254373575F44BE124A099B21782C575376D7AD7",
+      "actual": "FCF000529ECB127DAD5FDDD3E254373575F44BE124A099B21782C575376D7AD7",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "expected": "8AF9BEFABF27E5271BE7DE5C4CAFA3BE4FE7ADB496C2F5456AD5019B893F6950",
+      "actual": "8AF9BEFABF27E5271BE7DE5C4CAFA3BE4FE7ADB496C2F5456AD5019B893F6950",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "expected": "2C32A1114569974167B61869416EFBF1ABD813EC1B3C71AB54ED6FB76E4B75F6",
+      "actual": "2C32A1114569974167B61869416EFBF1ABD813EC1B3C71AB54ED6FB76E4B75F6",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "expected": "6D9D8613CF32AD43B5D5A08B78FA28BD8A20DEB6EB30C80EEA6E374D44126286",
+      "actual": "6D9D8613CF32AD43B5D5A08B78FA28BD8A20DEB6EB30C80EEA6E374D44126286",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "expected": "1622337FC028EEB83573303471C7C9E83430D8D8EBC55526760FBA769FD3E01B",
+      "actual": "1622337FC028EEB83573303471C7C9E83430D8D8EBC55526760FBA769FD3E01B",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "expected": "4B84596CB33E3BDD3D1B6AB4F1F67E36C31F4F1CB057AC979D2F56B479BB7651",
+      "actual": "4B84596CB33E3BDD3D1B6AB4F1F67E36C31F4F1CB057AC979D2F56B479BB7651",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "expected": "C4B7F6682E27596C536DAAED2A22D98A4632E4A5354CD682B788C308C6128FE7",
+      "actual": "C4B7F6682E27596C536DAAED2A22D98A4632E4A5354CD682B788C308C6128FE7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "expected": "48F829142596658AACF79F1D6669C4513FD7521F9949085B6C20AB72485A261C",
+      "actual": "48F829142596658AACF79F1D6669C4513FD7521F9949085B6C20AB72485A261C",
+      "unchanged": true
+    }
+  ]
+}

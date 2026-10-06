@@ -1,0 +1,116 @@
+{
+  "time": "2026-10-06T18:30:38.8815454+08:00",
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 97191,
+      "sha256": "9EB25754712EBC31BCA08437D965320DE845D51CA39B698BFDD45F8F0E6B293F",
+      "status": ""
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "bytes": 40771,
+      "sha256": "D51F85E9D3CD2144C5CBE811A7DB547451CBF1FBBF246A8399A990C2CB142D8A",
+      "status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 16686,
+      "sha256": "AAE81CCB1C04E1C6B13BB8A446518F961F48FACEBB7FA828230B4943D82E82D3",
+      "status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "bytes": 11407,
+      "sha256": "3F68E0E25197D7F4490621E998B830692C5591518A53A806E12DC05428F2B1E9",
+      "status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "bytes": 4189,
+      "sha256": "AFDC3CBB79ECB347611F9D52BDCEA53E2703AAAAAA26566EBAB8A0D3548FCB8F",
+      "status": ""
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 630138,
+      "sha256": "CE4132CD23C815F8613F394B296639B55A3338C117D492E39F6C0788712AC9A3",
+      "status": ""
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1530141,
+      "sha256": "E0664F23F95AAEB3D636A2E1A571C1AA65E0FB65C57ADCBC7BF80328567D1797",
+      "status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1460324,
+      "sha256": "2D87EF13AA792AFA51404A152068B262090BAAE052346D1297E4556D10F40440",
+      "status": ""
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 22671,
+      "sha256": "B83D773841004C561F46CC339B9293D887FD9E0CE7E10A4D29F50678090D17F2",
+      "status": ""
+    }
+  ],
+  "new": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": false
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+      "exists": false
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+      "exists": false
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+      "exists": false
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/REPORT.md",
+      "exists": false
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "sha256": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparent.shader",
+      "sha256": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7"
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparentArray.shader",
+      "sha256": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    }
+  ]
+}

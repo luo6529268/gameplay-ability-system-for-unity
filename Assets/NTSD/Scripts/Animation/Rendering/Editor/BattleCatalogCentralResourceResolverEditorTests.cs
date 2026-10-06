@@ -977,6 +977,7 @@ namespace NTSD.Animation.Rendering.Editor
                     typeof(bool),
                     typeof(bool),
                     typeof(float),
+                    typeof(BattlePresentationMotionAnchor),
                 },
                 null);
             Assert.That(constructor, Is.Not.Null);
@@ -1010,6 +1011,7 @@ namespace NTSD.Animation.Rendering.Editor
                     source.HasStableFootAnchor,
                     source.ShowSelfFootMarker,
                     source.FootMarkerScale,
+                    source.MotionAnchor,
                 });
         }
 

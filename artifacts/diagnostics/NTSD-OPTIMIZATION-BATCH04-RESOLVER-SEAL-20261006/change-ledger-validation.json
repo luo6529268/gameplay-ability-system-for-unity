@@ -1,0 +1,17 @@
+{
+  "time": "2026-10-06T19:57:48.5460707+08:00",
+  "command": "Tools/Validate-ChangeLedger.ps1",
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1300",
+    "  Governed code files in diff: 12"
+  ],
+  "warningCount": 4238,
+  "errors": [],
+  "coverage": [
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs -> NTSD-OPT-H11-RESOLVER-SEAL-004, NTSD28-Q09-BPOINT-BLEED-CENTRAL-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs -> BATTLE-CENTRAL-RUNTIME-HEALTH-001, NTSD-OPT-H11-RESOLVER-SEAL-004, NTSD28-Q09-BPOINT-BLEED-CENTRAL-001, NTSD28-Q09-TRUSTED-COMMAND-TEST-CONSTRUCTOR-001",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs -> NTSD-OPT-H11-RESOLVER-SEAL-004"
+  ]
+}

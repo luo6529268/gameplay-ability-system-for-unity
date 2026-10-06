@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-06T21:45:27.6869749+08:00",
+  "newScriptTrailingWhitespace": [],
+  "testAttributes": 20
+}
+41:        public long MaterializationRequestCount { get; internal set; }
+49:        public long SameUnityFrameReuseCount { get; internal set; }
+51:        public long ReentrantSkipCount { get; internal set; }
+57:        internal BattleCentralDisplaySampleKind RecordMaterializationRequest(
+80:            MaterializationRequestCount++;
+87:        internal void RecordMaterializationAttempt(BattleCentralDisplaySampleKind kind)
+107:        internal void ResetMaterializationCounters()
+109:            MaterializationRequestCount = 0;
+117:            SameUnityFrameReuseCount = 0;
+119:            ReentrantSkipCount = 0;
+511:                    ? RuntimeDiagnostics.RecordMaterializationRequest(world, publicationVersion, displayAlpha)
+527:                            RuntimeDiagnostics.SameUnityFrameReuseCount++;
+538:                    RuntimeDiagnostics.ReentrantSkipCount++;
+562:                    RuntimeDiagnostics.RecordMaterializationAttempt(sampleKind);
+1794:            RuntimeDiagnostics.ResetMaterializationCounters();

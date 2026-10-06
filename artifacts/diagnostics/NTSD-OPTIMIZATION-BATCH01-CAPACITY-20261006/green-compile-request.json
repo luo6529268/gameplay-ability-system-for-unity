@@ -1,0 +1,25 @@
+{
+  "requests": [
+    {
+      "type": "refresh_unity",
+      "params": {
+        "scope": "scripts",
+        "mode": "if_dirty",
+        "compile": "request",
+        "wait_for_ready": false
+      }
+    }
+  ],
+  "responses": [
+    {
+      "success": true,
+      "message": "Refresh requested.",
+      "data": {
+        "refresh_triggered": false,
+        "compile_requested": true,
+        "resulting_state": "compiling",
+        "hint": "If Unity enters compilation/domain reload, poll editor_state until ready_for_tools is true."
+      }
+    }
+  ]
+}

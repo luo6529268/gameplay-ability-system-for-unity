@@ -1,0 +1,54 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "117da49c9b9340b6a02cde0683ddecaf",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791282997110,
+      "finished_unix_ms": 1791283008938,
+      "last_update_unix_ms": 1791283008938,
+      "progress": {
+        "completed": 7,
+        "total": 9028,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791283008007,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreservesDescriptorStorageAcrossNewSegmentHighWater",
+        "last_finished_unix_ms": 1791283008008,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.CentralPrewarm_PreparesDisplayMotionForReservedRuntimeSlots",
+            "message": "  previousIndexBySlot\r\n  Expected: greater than or equal to 1050\r\n  But was:  16\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(1)",
+            "message": "  Managed descriptors must exist before Upload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(32)",
+            "message": "  Managed descriptors must exist before Upload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4096)",
+            "message": "  Managed descriptors must exist before Upload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreparesWorstCaseDescriptorsInEveryRequiredChunk(4097)",
+            "message": "  Managed descriptors must exist before Upload.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests.MeshPrewarm_PreservesDescriptorStorageAcrossNewSegmentHighWater",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+]

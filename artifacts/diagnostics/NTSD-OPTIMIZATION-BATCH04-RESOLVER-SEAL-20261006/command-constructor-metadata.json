@@ -1,0 +1,465 @@
+{
+  "command": "Mono.Cecil.ReadAssembly of current Assembly-CSharp.dll; constructor signature metadata only, no method bodies/IL",
+  "data": [
+    {
+      "public": true,
+      "assembly": false,
+      "count": 26,
+      "parameters": [
+        {
+          "name": "type",
+          "type": "NTSD.Simulation.Presentation.BattleRenderCommandType"
+        },
+        {
+          "name": "handle",
+          "type": "NTSD.Simulation.RuntimeEntityHandle"
+        },
+        {
+          "name": "stableId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "visualDataId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "effectivePic",
+          "type": "System.Int32"
+        },
+        {
+          "name": "zInt",
+          "type": "System.Int32"
+        },
+        {
+          "name": "runtimeSlot",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortOrder",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortingLayerId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "localSequence",
+          "type": "System.Int32"
+        },
+        {
+          "name": "position",
+          "type": "UnityEngine.Vector3"
+        },
+        {
+          "name": "size",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "pivot",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "normalizedUv",
+          "type": "UnityEngine.Rect"
+        },
+        {
+          "name": "flipX",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "spriteDescriptor",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteValueDescriptor"
+        },
+        {
+          "name": "showOverheadHealthBar",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "currentHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "recoverableHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "maximumHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "stableHealthAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableHealthAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "stableFootAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableFootAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "showSelfFootMarker",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "footMarkerScale",
+          "type": "System.Single"
+        }
+      ]
+    },
+    {
+      "public": false,
+      "assembly": true,
+      "count": 27,
+      "parameters": [
+        {
+          "name": "type",
+          "type": "NTSD.Simulation.Presentation.BattleRenderCommandType"
+        },
+        {
+          "name": "handle",
+          "type": "NTSD.Simulation.RuntimeEntityHandle"
+        },
+        {
+          "name": "stableId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "visualDataId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "effectivePic",
+          "type": "System.Int32"
+        },
+        {
+          "name": "zInt",
+          "type": "System.Int32"
+        },
+        {
+          "name": "runtimeSlot",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortOrder",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortingLayerId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "localSequence",
+          "type": "System.Int32"
+        },
+        {
+          "name": "position",
+          "type": "UnityEngine.Vector3"
+        },
+        {
+          "name": "size",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "pivot",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "normalizedUv",
+          "type": "UnityEngine.Rect"
+        },
+        {
+          "name": "flipX",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "spriteDescriptor",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteValueDescriptor"
+        },
+        {
+          "name": "trustedResourceIdentity",
+          "type": "System.Object"
+        },
+        {
+          "name": "showOverheadHealthBar",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "currentHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "recoverableHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "maximumHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "stableHealthAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableHealthAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "stableFootAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableFootAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "showSelfFootMarker",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "footMarkerScale",
+          "type": "System.Single"
+        }
+      ]
+    },
+    {
+      "public": true,
+      "assembly": false,
+      "count": 27,
+      "parameters": [
+        {
+          "name": "type",
+          "type": "NTSD.Simulation.Presentation.BattleRenderCommandType"
+        },
+        {
+          "name": "handle",
+          "type": "NTSD.Simulation.RuntimeEntityHandle"
+        },
+        {
+          "name": "stableId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "visualDataId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "effectivePic",
+          "type": "System.Int32"
+        },
+        {
+          "name": "zInt",
+          "type": "System.Int32"
+        },
+        {
+          "name": "runtimeSlot",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortOrder",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortingLayerId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "localSequence",
+          "type": "System.Int32"
+        },
+        {
+          "name": "position",
+          "type": "UnityEngine.Vector3"
+        },
+        {
+          "name": "size",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "pivot",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "normalizedUv",
+          "type": "UnityEngine.Rect"
+        },
+        {
+          "name": "renderState",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteRenderState"
+        },
+        {
+          "name": "spriteDescriptor",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteValueDescriptor"
+        },
+        {
+          "name": "showOverheadHealthBar",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "currentHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "recoverableHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "maximumHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "stableHealthAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableHealthAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "stableFootAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableFootAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "showSelfFootMarker",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "footMarkerScale",
+          "type": "System.Single"
+        },
+        {
+          "name": "motionAnchor",
+          "type": "NTSD.Simulation.Presentation.BattlePresentationMotionAnchor"
+        }
+      ]
+    },
+    {
+      "public": false,
+      "assembly": true,
+      "count": 28,
+      "parameters": [
+        {
+          "name": "type",
+          "type": "NTSD.Simulation.Presentation.BattleRenderCommandType"
+        },
+        {
+          "name": "handle",
+          "type": "NTSD.Simulation.RuntimeEntityHandle"
+        },
+        {
+          "name": "stableId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "visualDataId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "effectivePic",
+          "type": "System.Int32"
+        },
+        {
+          "name": "zInt",
+          "type": "System.Int32"
+        },
+        {
+          "name": "runtimeSlot",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortOrder",
+          "type": "System.Int32"
+        },
+        {
+          "name": "sortingLayerId",
+          "type": "System.Int32"
+        },
+        {
+          "name": "localSequence",
+          "type": "System.Int32"
+        },
+        {
+          "name": "position",
+          "type": "UnityEngine.Vector3"
+        },
+        {
+          "name": "size",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "pivot",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "normalizedUv",
+          "type": "UnityEngine.Rect"
+        },
+        {
+          "name": "renderState",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteRenderState"
+        },
+        {
+          "name": "spriteDescriptor",
+          "type": "NTSD.Simulation.Presentation.BattleSpriteValueDescriptor"
+        },
+        {
+          "name": "trustedResourceIdentity",
+          "type": "System.Object"
+        },
+        {
+          "name": "showOverheadHealthBar",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "currentHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "recoverableHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "maximumHealth",
+          "type": "System.Int32"
+        },
+        {
+          "name": "stableHealthAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableHealthAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "stableFootAnchorWorld",
+          "type": "UnityEngine.Vector2"
+        },
+        {
+          "name": "hasStableFootAnchor",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "showSelfFootMarker",
+          "type": "System.Boolean"
+        },
+        {
+          "name": "footMarkerScale",
+          "type": "System.Single"
+        },
+        {
+          "name": "motionAnchor",
+          "type": "NTSD.Simulation.Presentation.BattlePresentationMotionAnchor"
+        }
+      ]
+    }
+  ]
+}

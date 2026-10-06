@@ -1,0 +1,37 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "test_names": [
+      "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests",
+      "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests",
+      "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+      "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests",
+      "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests",
+      "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests",
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+      "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+      "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+      "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests",
+      "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeHealthBarEditorTests",
+      "NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests",
+      "NTSD.Test.BattleResolverCapacitySealEditorTests",
+      "NTSD.Test.BattleNativeMeshPrewarmEditorTests"
+    ],
+    "include_details": true,
+    "include_failed_tests": true
+  },
+  "reply": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "47356cdbfea543a3b760504767ebfe91",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "requests": [
+    {
+      "type": "run_tests",
+      "params": {
+        "mode": "EditMode",
+        "testNames": [
+          "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests"
+        ],
+        "includeDetails": true,
+        "includeFailedTests": true
+      }
+    }
+  ],
+  "responses": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "117da49c9b9340b6a02cde0683ddecaf",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  ]
+}

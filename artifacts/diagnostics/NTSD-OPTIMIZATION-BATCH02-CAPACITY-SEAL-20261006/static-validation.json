@@ -1,0 +1,145 @@
+{
+  "time": "2026-10-06T19:11:35.8092323+08:00",
+  "backupChecks": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "expected": "04D15E82120F672D9A0E67FF32C1DD04419C2C86E1DB333F3675B45329234392",
+      "actual": "04D15E82120F672D9A0E67FF32C1DD04419C2C86E1DB333F3675B45329234392",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "expected": "87EC226AD8C73A3863A28D4E523212E6AAAF79AA93442D5C228F46A615C373E2",
+      "actual": "87EC226AD8C73A3863A28D4E523212E6AAAF79AA93442D5C228F46A615C373E2",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+      "expected": "C96B2E794CDDC74811C6ADF914657A112B627F49878049158BAC94897919B294",
+      "actual": "C96B2E794CDDC74811C6ADF914657A112B627F49878049158BAC94897919B294",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+      "expected": "FCF000529ECB127DAD5FDDD3E254373575F44BE124A099B21782C575376D7AD7",
+      "actual": "FCF000529ECB127DAD5FDDD3E254373575F44BE124A099B21782C575376D7AD7",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "expected": "8AF9BEFABF27E5271BE7DE5C4CAFA3BE4FE7ADB496C2F5456AD5019B893F6950",
+      "actual": "8AF9BEFABF27E5271BE7DE5C4CAFA3BE4FE7ADB496C2F5456AD5019B893F6950",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "expected": "2C32A1114569974167B61869416EFBF1ABD813EC1B3C71AB54ED6FB76E4B75F6",
+      "actual": "2C32A1114569974167B61869416EFBF1ABD813EC1B3C71AB54ED6FB76E4B75F6",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "expected": "6D9D8613CF32AD43B5D5A08B78FA28BD8A20DEB6EB30C80EEA6E374D44126286",
+      "actual": "6D9D8613CF32AD43B5D5A08B78FA28BD8A20DEB6EB30C80EEA6E374D44126286",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "expected": "1622337FC028EEB83573303471C7C9E83430D8D8EBC55526760FBA769FD3E01B",
+      "actual": "1622337FC028EEB83573303471C7C9E83430D8D8EBC55526760FBA769FD3E01B",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "expected": "4B84596CB33E3BDD3D1B6AB4F1F67E36C31F4F1CB057AC979D2F56B479BB7651",
+      "actual": "4B84596CB33E3BDD3D1B6AB4F1F67E36C31F4F1CB057AC979D2F56B479BB7651",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "expected": "C4B7F6682E27596C536DAAED2A22D98A4632E4A5354CD682B788C308C6128FE7",
+      "actual": "C4B7F6682E27596C536DAAED2A22D98A4632E4A5354CD682B788C308C6128FE7",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "expected": "48F829142596658AACF79F1D6669C4513FD7521F9949085B6C20AB72485A261C",
+      "actual": "48F829142596658AACF79F1D6669C4513FD7521F9949085B6C20AB72485A261C",
+      "unchanged": true
+    }
+  ],
+  "allBackupsUnchanged": true,
+  "protectedChecks": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "expected": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "actual": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "expected": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "actual": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "expected": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "actual": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "unchanged": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "expected": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "actual": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparent.shader",
+      "expected": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "actual": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparentArray.shader",
+      "expected": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "actual": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "expected": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "actual": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "expected": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "actual": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "unchanged": true
+    }
+  ],
+  "allProtectedUnchanged": true,
+  "trackerCounts": {
+    "all": 34,
+    "unique": 34,
+    "high": 12,
+    "medium": 14,
+    "low": 8
+  },
+  "linkCount": 94,
+  "missingLinks": [],
+  "scopedDiffExit": 0,
+  "scopedDiffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "newTestTrailingWhitespaceLines": []
+}

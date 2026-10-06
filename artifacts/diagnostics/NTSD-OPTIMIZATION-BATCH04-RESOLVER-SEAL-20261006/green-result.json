@@ -1,0 +1,185 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "30da70bca4934400a76c075037a0e7e3",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791287478247,
+      "finished_unix_ms": 1791287484985,
+      "last_update_unix_ms": 1791287484985,
+      "progress": {
+        "completed": 16,
+        "total": 9074,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791287484434,
+        "last_finished_test_full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+        "last_finished_unix_ms": 1791287484436,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.2227504,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Resolve_TrustedIdentityCache_ReusesResourceAndKeepsPerCommandColor",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.Resolve_TrustedIdentityCache_ReusesResourceAndKeepsPerCommandColor",
+            "state": "Passed",
+            "durationSeconds": 0.1687072,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CentralOwner_SealsBothResolversAndEndAllowsPreparationAgain",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.CentralOwner_SealsBothResolversAndEndAllowsPreparationAgain",
+            "state": "Passed",
+            "durationSeconds": 0.0118244,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Prepare_NegativeArgumentStillRejectsBeforeMutation(-1,17)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.Prepare_NegativeArgumentStillRejectsBeforeMutation(-1,17)",
+            "state": "Passed",
+            "durationSeconds": 0.0012921,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Prepare_NegativeArgumentStillRejectsBeforeMutation(17,-1)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.Prepare_NegativeArgumentStillRejectsBeforeMutation(17,-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0002096,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,False)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.011465,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,False)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,False)",
+            "state": "Passed",
+            "durationSeconds": 0.007327,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,False)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0048275,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,True)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0084127,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,True)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0075461,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,True)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0051283,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedConfigure_MaterialChangesClearBindingsButReusePreparedStorage",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedConfigure_MaterialChangesClearBindingsButReusePreparedStorage",
+            "state": "Passed",
+            "durationSeconds": 0.001232,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(0,0)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(0,0)",
+            "state": "Passed",
+            "durationSeconds": 0.0022296,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,17)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,17)",
+            "state": "Passed",
+            "durationSeconds": 0.0008798,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(512,17)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(512,17)",
+            "state": "Passed",
+            "durationSeconds": 0.0008299,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,512)",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,512)",
+            "state": "Passed",
+            "durationSeconds": 0.0008329,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+            "fullName": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+            "state": "Passed",
+            "durationSeconds": 0.0015983,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

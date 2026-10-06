@@ -8,6 +8,8 @@ namespace NTSD.Simulation.Presentation
     public sealed class BattlePresentationDisplayMotion
     {
         private int generation;
+        private bool capacitySealed;
+        private int sealedRuntimeSlotCapacity;
         private int[] previousIndexBySlot = new int[16];
         private int[] previousGenerationBySlot = new int[16];
         private int[] sampledGenerationBySlot = new int[16];
@@ -19,8 +21,45 @@ namespace NTSD.Simulation.Presentation
 
         public void PrepareCapacity(int runtimeSlotCapacity)
         {
+            if (runtimeSlotCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(runtimeSlotCapacity));
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot resize sealed presentation motion storage.");
             if (runtimeSlotCapacity > 0)
                 EnsureCapacity(runtimeSlotCapacity);
+        }
+
+        internal void SealCapacity(int runtimeSlotCapacity)
+        {
+            if (capacitySealed || runtimeSlotCapacity < 0 || runtimeSlotCapacity > previousIndexBySlot.Length)
+                throw new InvalidOperationException("Presentation motion capacity must be prepared before sealing.");
+            sealedRuntimeSlotCapacity = runtimeSlotCapacity;
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
+
+        internal bool CanPrepare(BattlePresentationFrame frame)
+        {
+            if (!capacitySealed || frame == null)
+                return true;
+            if ((uint)frame.PreviousMotionStateCount > (uint)sealedRuntimeSlotCapacity ||
+                (uint)frame.MotionStateCount > (uint)sealedRuntimeSlotCapacity)
+                return false;
+            for (int index = 0; index < frame.PreviousMotionStateCount; index++)
+            {
+                if (frame.GetPreviousMotionState(index).Handle.Slot >= sealedRuntimeSlotCapacity)
+                    return false;
+            }
+            for (int index = 0; index < frame.MotionStateCount; index++)
+            {
+                if (frame.GetMotionState(index).Handle.Slot >= sealedRuntimeSlotCapacity)
+                    return false;
+            }
+            return true;
         }
 
         public void Prepare(
@@ -39,6 +78,8 @@ namespace NTSD.Simulation.Presentation
             double viewScaleY,
             double viewScaleZ)
         {
+            if (!CanPrepare(frame))
+                throw new InvalidOperationException("Presentation motion slot capacity exceeded; whole frame rejected.");
             if (generation == int.MaxValue)
             {
                 Array.Clear(previousGenerationBySlot, 0,

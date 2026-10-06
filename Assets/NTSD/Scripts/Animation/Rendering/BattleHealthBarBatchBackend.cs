@@ -144,6 +144,8 @@ namespace NTSD.Animation.Rendering
         private Mesh mesh;
         private int capacity;
         private bool disposed;
+        private bool capacitySealed;
+        private int sealedBarCapacity;
 
         public Mesh Mesh => mesh;
         public int ActiveBarCount { get; private set; }
@@ -160,6 +162,8 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleHealthBarBatchBackend));
             if (requiredBars < 0 || requiredBars > MaximumBarsPerBatch)
                 throw new ArgumentOutOfRangeException(nameof(requiredBars));
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot resize sealed health bar storage.");
             if (requiredBars <= capacity)
                 return;
 
@@ -187,6 +191,37 @@ namespace NTSD.Animation.Rendering
             RecreateMesh();
         }
 
+        internal void SealCapacity(int barCapacity)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(BattleHealthBarBatchBackend));
+            if (capacitySealed || barCapacity < 0 || barCapacity > capacity)
+                throw new InvalidOperationException("Health bar capacity must be prepared before sealing.");
+            sealedBarCapacity = barCapacity;
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
+
+        internal bool CanBuildFrame(BattlePresentationFrame frame, bool enabled)
+        {
+            if (!capacitySealed || frame == null || !enabled)
+                return true;
+            int barCount = 0;
+            for (int index = 0; index < frame.CommandCount; index++)
+            {
+                BattleRenderCommand command = frame.GetCommand(index);
+                if (command.Type == BattleRenderCommandType.Entity &&
+                    command.ShowOverheadHealthBar && command.MaximumHealth > 0 &&
+                    ++barCount > sealedBarCapacity)
+                    return false;
+            }
+            return true;
+        }
+
         public void Build(
             BattleHealthBarInstance[] instances,
             int instanceCount,
@@ -198,10 +233,13 @@ namespace NTSD.Animation.Rendering
                 throw new ArgumentNullException(nameof(instances));
             if (instanceCount < 0 || instanceCount > instances.Length)
                 throw new ArgumentOutOfRangeException(nameof(instanceCount));
+            if (capacitySealed && instanceCount > sealedBarCapacity)
+                throw new InvalidOperationException("Health bar capacity exceeded; whole build rejected.");
 
             BuiltFrame = null;
             MutationVersion++;
-            PrepareCapacity(instanceCount);
+            if (!capacitySealed)
+                PrepareCapacity(instanceCount);
             BattleHealthBarStyle style = configuredStyle.Normalized();
             int writtenBars = 0;
             bool hasBounds = false;
@@ -322,11 +360,14 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleHealthBarBatchBackend));
             if (frame == null)
                 throw new ArgumentNullException(nameof(frame));
+            if (!CanBuildFrame(frame, enabled))
+                throw new InvalidOperationException("Health bar capacity exceeded; whole frame rejected.");
 
             int maximumCandidateCount = enabled
                 ? Mathf.Min(frame.EntityCount, MaximumBarsPerBatch)
                 : 0;
-            PrepareCapacity(maximumCandidateCount);
+            if (!capacitySealed)
+                PrepareCapacity(maximumCandidateCount);
             int count = 0;
             if (enabled)
             {

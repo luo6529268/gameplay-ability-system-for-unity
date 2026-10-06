@@ -1,0 +1,23 @@
+{
+  "time": "2026-10-06T19:12:35.7650746+08:00",
+  "command": "Tools/Validate-ChangeLedger.ps1",
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "Records: 1298",
+    "Governed code files in diff: 6"
+  ],
+  "warningCount": 4246,
+  "errors": [],
+  "coveredByBatch02": [
+    "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    "Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs"
+  ],
+  "batch01AlsoCovered": [
+    "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs"
+  ],
+  "note": "Normalized final invocation summary; historical not-in-current-diff warnings retained by validator, no errors."
+}

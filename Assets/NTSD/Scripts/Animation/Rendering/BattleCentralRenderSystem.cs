@@ -9,6 +9,60 @@ using UnityEngine.Rendering.Universal;
 
 namespace NTSD.Animation.Rendering
 {
+    public enum BattleCentralDisplaySampleKind : byte
+    {
+        None = 0,
+        PublicationChanged = 1,
+        AlphaChanged = 2,
+        Repeated = 3,
+    }
+
+    public sealed class BattleCentralMaterializationBuildCounters
+    {
+        public long BuildInvocationCount { get; private set; }
+        public long AdmittedBuildCount { get; private set; }
+        public long CompletedBuildCount { get; private set; }
+        public long RejectedBeforeBuildCount { get; private set; }
+        public long FailedBuildCount { get; private set; }
+        public long VertexUploadCallCount { get; private set; }
+        public long UploadedVertexCount { get; private set; }
+        public long UploadedVertexBytes { get; private set; }
+
+        internal void Record(bool admitted, bool completed, BattleCentralBuildDiagnostics diagnostics)
+        {
+            BuildInvocationCount++;
+            if (!admitted)
+            {
+                RejectedBeforeBuildCount++;
+                return;
+            }
+
+            AdmittedBuildCount++;
+            if (completed)
+                CompletedBuildCount++;
+            else
+                FailedBuildCount++;
+            if (diagnostics != null)
+            {
+                VertexUploadCallCount += diagnostics.VertexUploadCallCount;
+                UploadedVertexCount += diagnostics.UploadedVertexCount;
+                UploadedVertexBytes += diagnostics.UploadedVertexBytes;
+            }
+        }
+
+        internal void Reset()
+        {
+            BuildInvocationCount = 0;
+            AdmittedBuildCount = 0;
+            CompletedBuildCount = 0;
+            RejectedBeforeBuildCount = 0;
+            FailedBuildCount = 0;
+            VertexUploadCallCount = 0;
+            UploadedVertexCount = 0;
+            UploadedVertexBytes = 0;
+        }
+    }
+
     public sealed class BattleCentralRuntimeDiagnostics
     {
         public BattlePresentationBackendMode RequestedMode { get; internal set; }
@@ -28,6 +82,130 @@ namespace NTSD.Animation.Rendering
         public bool IsStale { get; internal set; }
         public string Reason { get; internal set; } = string.Empty;
         public string RefusalReason { get; internal set; } = string.Empty;
+
+        // Request/Prepare-entry counts are not successful Build, upload or GPU draw counts.
+        public long MaterializationRequestCount { get; internal set; }
+        public long PublicationChangedRequestCount { get; internal set; }
+        public long AlphaChangedRequestCount { get; internal set; }
+        public long RepeatedSampleRequestCount { get; internal set; }
+        public long MaterializationAttemptCount { get; internal set; }
+        public long PublicationChangedAttemptCount { get; internal set; }
+        public long AlphaChangedAttemptCount { get; internal set; }
+        public long RepeatedSampleAttemptCount { get; internal set; }
+        public long SameUnityFrameReuseCount { get; internal set; }
+        public long SameSampleReuseCount { get; internal set; }
+        public long ReentrantSkipCount { get; internal set; }
+
+        public BattleCentralMaterializationBuildCounters MaterializationBuilds { get; } =
+            new BattleCentralMaterializationBuildCounters();
+        public BattleCentralMaterializationBuildCounters PublicationChangedBuilds { get; } =
+            new BattleCentralMaterializationBuildCounters();
+        public BattleCentralMaterializationBuildCounters AlphaChangedBuilds { get; } =
+            new BattleCentralMaterializationBuildCounters();
+        public BattleCentralMaterializationBuildCounters RepeatedSampleBuilds { get; } =
+            new BattleCentralMaterializationBuildCounters();
+
+        private SimulationWorld lastObservedWorld;
+        private int lastObservedPublicationVersion;
+        private double lastObservedDisplayAlpha = double.NaN;
+
+        internal BattleCentralDisplaySampleKind RecordMaterializationRequest(
+            SimulationWorld world,
+            int publicationVersion,
+            double displayAlpha)
+        {
+            BattleCentralDisplaySampleKind kind;
+            if (!ReferenceEquals(lastObservedWorld, world) ||
+                lastObservedPublicationVersion != publicationVersion)
+            {
+                kind = BattleCentralDisplaySampleKind.PublicationChanged;
+                PublicationChangedRequestCount++;
+            }
+            else if (lastObservedDisplayAlpha != displayAlpha)
+            {
+                kind = BattleCentralDisplaySampleKind.AlphaChanged;
+                AlphaChangedRequestCount++;
+            }
+            else
+            {
+                kind = BattleCentralDisplaySampleKind.Repeated;
+                RepeatedSampleRequestCount++;
+            }
+
+            MaterializationRequestCount++;
+            lastObservedWorld = world;
+            lastObservedPublicationVersion = publicationVersion;
+            lastObservedDisplayAlpha = displayAlpha;
+            return kind;
+        }
+
+        internal void RecordMaterializationAttempt(BattleCentralDisplaySampleKind kind)
+        {
+            switch (kind)
+            {
+                case BattleCentralDisplaySampleKind.PublicationChanged:
+                    PublicationChangedAttemptCount++;
+                    break;
+                case BattleCentralDisplaySampleKind.AlphaChanged:
+                    AlphaChangedAttemptCount++;
+                    break;
+                case BattleCentralDisplaySampleKind.Repeated:
+                    RepeatedSampleAttemptCount++;
+                    break;
+                default:
+                    return;
+            }
+
+            MaterializationAttemptCount++;
+        }
+
+        internal void ResetMaterializationCounters()
+        {
+            MaterializationBuilds.Reset();
+            PublicationChangedBuilds.Reset();
+            AlphaChangedBuilds.Reset();
+            RepeatedSampleBuilds.Reset();
+            MaterializationRequestCount = 0;
+            PublicationChangedRequestCount = 0;
+            AlphaChangedRequestCount = 0;
+            RepeatedSampleRequestCount = 0;
+            MaterializationAttemptCount = 0;
+            PublicationChangedAttemptCount = 0;
+            AlphaChangedAttemptCount = 0;
+            RepeatedSampleAttemptCount = 0;
+            SameUnityFrameReuseCount = 0;
+            SameSampleReuseCount = 0;
+            ReentrantSkipCount = 0;
+            lastObservedWorld = null;
+            lastObservedPublicationVersion = 0;
+            lastObservedDisplayAlpha = double.NaN;
+        }
+
+        internal void RecordBackendBuild(
+            BattleCentralDisplaySampleKind kind,
+            bool admitted,
+            bool completed,
+            BattleCentralBuildDiagnostics diagnostics)
+        {
+            BattleCentralMaterializationBuildCounters category;
+            switch (kind)
+            {
+                case BattleCentralDisplaySampleKind.PublicationChanged:
+                    category = PublicationChangedBuilds;
+                    break;
+                case BattleCentralDisplaySampleKind.AlphaChanged:
+                    category = AlphaChangedBuilds;
+                    break;
+                case BattleCentralDisplaySampleKind.Repeated:
+                    category = RepeatedSampleBuilds;
+                    break;
+                default:
+                    return;
+            }
+
+            MaterializationBuilds.Record(admitted, completed, diagnostics);
+            category.Record(admitted, completed, diagnostics);
+        }
     }
 
     public static class BattleCentralRenderSystem
@@ -189,10 +367,16 @@ namespace NTSD.Animation.Rendering
                 throw new ArgumentOutOfRangeException(nameof(commandCapacity));
             if (catalogEntryCapacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(catalogEntryCapacity));
+            for (int index = 0; index < SlotSubmissions.Length; index++)
+            {
+                if (!SlotSubmissions[index].IsReusable)
+                    throw new InvalidOperationException("Cannot prepare central capacity while a submission is published or leased.");
+            }
 
             int hitRecordCapacity = checked(
                 entityCapacity *
                 NTSD.Animation.LF2Objects.LF2Entity.MaxHitRecordSlots);
+            DisplayMotion.PrepareCapacity(entityCapacity);
             for (int index = 0; index < Backends.Length; index++)
             {
                 Backends[index].PrepareCapacity(commandCapacity);
@@ -212,12 +396,24 @@ namespace NTSD.Animation.Rendering
                 trustedResourceCapacity);
             CatalogResolver.SealCapacity();
             DiagnosticCatalogResolver.SealCapacity();
+            DisplayMotion.SealCapacity(entityCapacity);
+            for (int index = 0; index < Backends.Length; index++)
+            {
+                Backends[index].SealCapacity(commandCapacity);
+                SlotSubmissions[index].SealCapacity();
+            }
         }
 
         internal static void EndBattleCapacitySeal()
         {
             CatalogResolver.UnsealCapacity();
             DiagnosticCatalogResolver.UnsealCapacity();
+            DisplayMotion.UnsealCapacity();
+            for (int index = 0; index < Backends.Length; index++)
+            {
+                Backends[index].UnsealCapacity();
+                SlotSubmissions[index].UnsealCapacity();
+            }
         }
 
         internal static void RegisterFeature(
@@ -395,22 +591,38 @@ namespace NTSD.Animation.Rendering
             }
 
             double displayAlpha = ResolveDisplayAlpha(world, publicationVersion);
+            BattleCentralDisplaySampleKind sampleKind =
+                world.BattlePresentation?.Mode == BattlePresentationBackendMode.CentralOnly
+                    ? RuntimeDiagnostics.RecordMaterializationRequest(world, publicationVersion, displayAlpha)
+                    : BattleCentralDisplaySampleKind.None;
             bool displaySampleChanged =
                 world.BattlePresentation?.Mode == BattlePresentationBackendMode.CentralOnly &&
                 displayAlpha != lastBuiltDisplayAlpha;
 
             if (!force)
             {
-                if (Volatile.Read(ref lastMaterializedUnityFrame) == unityFrame ||
+                bool sameUnityFrame = Volatile.Read(ref lastMaterializedUnityFrame) == unityFrame;
+                if (sameUnityFrame ||
                     Volatile.Read(ref lastMaterializedPublicationVersion) == publicationVersion &&
                     !displaySampleChanged)
                 {
+                    if (sampleKind != BattleCentralDisplaySampleKind.None)
+                    {
+                        if (sameUnityFrame)
+                            RuntimeDiagnostics.SameUnityFrameReuseCount++;
+                        else
+                            RuntimeDiagnostics.SameSampleReuseCount++;
+                    }
                     return CurrentPixelFramePlan;
                 }
             }
 
             if (Interlocked.CompareExchange(ref materializationInProgress, 1, 0) != 0)
+            {
+                if (sampleKind != BattleCentralDisplaySampleKind.None)
+                    RuntimeDiagnostics.ReentrantSkipCount++;
                 return CurrentPixelFramePlan;
+            }
 
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
@@ -432,7 +644,8 @@ namespace NTSD.Animation.Rendering
                 BattlePixelFramePlan plan;
                 try
                 {
-                    plan = PrepareFrameImmediate(world, displayAlpha);
+                    RuntimeDiagnostics.RecordMaterializationAttempt(sampleKind);
+                    plan = PrepareFrameForMaterialization(world, displayAlpha, sampleKind);
                 }
                 finally
                 {
@@ -459,6 +672,14 @@ namespace NTSD.Animation.Rendering
         private static BattlePixelFramePlan PrepareFrameImmediate(
             SimulationWorld world,
             double displayAlpha)
+        {
+            return PrepareFrameForMaterialization(world, displayAlpha, BattleCentralDisplaySampleKind.None);
+        }
+
+        private static BattlePixelFramePlan PrepareFrameForMaterialization(
+            SimulationWorld world,
+            double displayAlpha,
+            BattleCentralDisplaySampleKind sampleKind)
         {
             using ProfilerMarker.AutoScope materializeFrameScope =
                 MaterializeFrameMarker.Auto();
@@ -525,6 +746,15 @@ namespace NTSD.Animation.Rendering
                 FootMarkerBackends[backendIndex];
             BattleHealthBarBatchBackend stagingHealthBackend = HealthBackends[backendIndex];
             BattlePresentationFrame buildFrame;
+            if (mode == BattlePresentationBackendMode.CentralOnly && frame != null &&
+                (!stagingSubmission.CanCaptureFrame(frame) ||
+                 !stagingBackend.CanBuildFrame(frame) || !DisplayMotion.CanPrepare(frame) ||
+                 !stagingFootMarkerBackend.CanBuildFrame(frame, runtimeFootMarkerSprite, runtimeFootMarkersEnabled) ||
+                 !stagingHealthBackend.CanBuildFrame(frame, runtimeHealthBarsEnabled)))
+            {
+                return CommitCentralFailurePlan(world, simulationTick,
+                    "Central submission capacity exceeded before capture; whole frame rejected.");
+            }
             try
             {
                 using (CaptureSubmissionFrameMarker.Auto())
@@ -621,6 +851,13 @@ namespace NTSD.Animation.Rendering
                                     presentationDiagnostics);
                                 if (mode == BattlePresentationBackendMode.CentralOnly)
                                 {
+                                    if (!stagingBackend.CanBuildFrame(buildFrame) || !DisplayMotion.CanPrepare(buildFrame) ||
+                                        !stagingFootMarkerBackend.CanBuildFrame(buildFrame, runtimeFootMarkerSprite, runtimeFootMarkersEnabled) ||
+                                        !stagingHealthBackend.CanBuildFrame(buildFrame, runtimeHealthBarsEnabled))
+                                    {
+                                        return CommitCentralFailurePlan(world, simulationTick,
+                                            "Central submission capacity exceeded after command materialization; whole frame rejected.");
+                                    }
                                     DisplayMotion.Prepare(
                                         buildFrame, displayAlpha,
                                         world.FixedViewRunDistanceScale,
@@ -665,10 +902,12 @@ namespace NTSD.Animation.Rendering
                 }
                 using (BuildMeshMarker.Auto())
                 {
-                    stagingBackend.Build(
+                    BuildMeshForMaterialization(
+                        stagingBackend,
                         buildFrame,
                         CatalogResolver,
                         drawMode,
+                        sampleKind,
                         detailDiagnostics,
                         presentationDiagnostics);
                     stagingFootMarkerBackend.BuildFromFrame(
@@ -780,6 +1019,34 @@ namespace NTSD.Animation.Rendering
         public static bool ShouldSuppressLegacyMaterializers(SimulationWorld world)
         {
             return CentralOnlyOwnsPixels(world);
+        }
+
+        internal static void BuildMeshForMaterialization(
+            BattleDynamicMeshBackend backend,
+            BattlePresentationFrame frame,
+            IBattleCentralResourceResolver resolver,
+            BattleCentralDrawMode mode,
+            BattleCentralDisplaySampleKind sampleKind,
+            BattleTickDetailPhaseDiagnostics detailDiagnostics,
+            BattlePresentationPhaseDiagnostics presentationDiagnostics)
+        {
+            int mutationBefore = backend.MutationVersion;
+            bool completed = false;
+            try
+            {
+                backend.Build(frame, resolver, mode, detailDiagnostics, presentationDiagnostics);
+                completed = true;
+            }
+            finally
+            {
+                // Admission rejects retain old diagnostics; entered failures are captured before outer Clear.
+                bool admitted = backend.MutationVersion != mutationBefore;
+                RuntimeDiagnostics.RecordBackendBuild(
+                    sampleKind,
+                    admitted,
+                    completed,
+                    admitted ? backend.Diagnostics : null);
+            }
         }
 
         public static bool ShouldUseCentralPixels(SimulationWorld world)
@@ -1647,6 +1914,7 @@ namespace NTSD.Animation.Rendering
             lastBuiltHealthBackend = HealthBackends[0];
             lastAttemptedBuildDiagnostics = default;
             requestedMode = BattlePresentationBackendMode.CentralOnly;
+            RuntimeDiagnostics.ResetMaterializationCounters();
             ResetPerFrameDiagnostics(BattlePresentationBackendMode.CentralOnly, false);
             RuntimeDiagnostics.RefusalReason = string.Empty;
         }

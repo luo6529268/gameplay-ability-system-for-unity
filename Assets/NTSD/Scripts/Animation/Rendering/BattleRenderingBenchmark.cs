@@ -650,6 +650,9 @@ namespace NTSD.Animation.Rendering
         public BattleBenchmarkMetric ResolvedCommands { get; internal set; }
         public BattleBenchmarkMetric UnresolvedCommands { get; internal set; }
         public BattleBenchmarkMetric ResourceSegments { get; internal set; }
+        public BattleBenchmarkMetric CentralVertexUploadCalls { get; internal set; } = BattleBenchmarkMetric.Unavailable("count");
+        public BattleBenchmarkMetric CentralUploadedVertices { get; internal set; } = BattleBenchmarkMetric.Unavailable("count");
+        public BattleBenchmarkMetric CentralUploadedVertexBytes { get; internal set; } = BattleBenchmarkMetric.Unavailable("bytes");
         public BattleBenchmarkMetric MeshChunks { get; internal set; }
         public string RequestedBackend { get; internal set; } = string.Empty;
         public string EffectiveBackend { get; internal set; } = string.Empty;
@@ -663,6 +666,9 @@ namespace NTSD.Animation.Rendering
                 ["benchmarkOwnedTextureMemoryBytes"] = BenchmarkOwnedTextureMemoryBytes.ToProjection(),
                 ["benchmarkResourceGeneration"] = BenchmarkResourceGeneration,
                 ["commandCount"] = CommandCount,
+                ["centralVertexUploadCalls"] = CentralVertexUploadCalls.ToProjection(),
+                ["centralUploadedVertices"] = CentralUploadedVertices.ToProjection(),
+                ["centralUploadedVertexBytes"] = CentralUploadedVertexBytes.ToProjection(),
                 ["drawCalls"] = DrawCalls.ToProjection(),
                 ["effectiveBackend"] = EffectiveBackend,
                 ["frameIndex"] = FrameIndex,
@@ -1060,6 +1066,8 @@ namespace NTSD.Animation.Rendering
             {
                 ["drawAndGpuCounterScope"] =
                     "ProfilerRecorder frame counters include the complete Editor/Player frame; presenter-specific work is separately reported.",
+                ["centralVertexUploadScope"] =
+                    "Optional benchmark-local central Mesh API completed vertex payload, frozen after successful Present. Per-frame and summary values cover accepted completed-frame attempts only; warmup and rejected retries are excluded, not a whole-run total. These are not GPU traffic, production RenderPass/submission counts or GPU draw/batch counts. Legacy or missing diagnostics are unavailable, not measured zero. They do not change the v5 mandatory metrics or verdict.",
                 ["renderTargetScope"] =
                     $"Screen resolution describes the Editor/Player window; the benchmark presentation workload renders to {BenchmarkRenderTargetWidth}x{BenchmarkRenderTargetHeight}.",
                 ["legacyPresenterScope"] =
@@ -1122,6 +1130,9 @@ namespace NTSD.Animation.Rendering
             {
                 ["benchmarkOwnedMemoryBytes"] = Summarize(frame => frame.BenchmarkOwnedMemoryBytes),
                 ["benchmarkOwnedTextureMemoryBytes"] = Summarize(frame => frame.BenchmarkOwnedTextureMemoryBytes),
+                ["centralVertexUploadCalls"] = Summarize(frame => frame.CentralVertexUploadCalls),
+                ["centralUploadedVertices"] = Summarize(frame => frame.CentralUploadedVertices),
+                ["centralUploadedVertexBytes"] = Summarize(frame => frame.CentralUploadedVertexBytes),
                 ["drawCalls"] = Summarize(frame => frame.DrawCalls),
                 ["frameTimeMs"] = Summarize(frame => frame.FrameTimeMs),
                 ["gpuFrameTimeMs"] = Summarize(frame => frame.GpuFrameTimeMs),
@@ -2005,6 +2016,9 @@ namespace NTSD.Animation.Rendering
         private bool pendingLeakFrame;
         private int pendingSampleAttempt;
         private double pendingPresentationMs;
+        private BattleBenchmarkMetric pendingCentralVertexUploadCalls;
+        private BattleBenchmarkMetric pendingCentralUploadedVertices;
+        private BattleBenchmarkMetric pendingCentralUploadedVertexBytes;
         private int completedFrameRejectedAttemptCount;
         private string completedFrameSamplingFailureReason = string.Empty;
         private int leakFramesCaptured;
@@ -2306,6 +2320,7 @@ namespace NTSD.Animation.Rendering
                 completedFrameCollector.Request(pendingGeneration);
                 pendingPresentationMs = presenter.Present();
                 ValidatePresenterWorkload();
+                SnapshotVertexUploadMetrics();
             }
             catch
             {
@@ -2316,6 +2331,24 @@ namespace NTSD.Animation.Rendering
                 pendingSampleAttempt = 0;
                 throw;
             }
+        }
+
+        private void SnapshotVertexUploadMetrics()
+        {
+            pendingCentralVertexUploadCalls = BattleBenchmarkMetric.Unavailable("count");
+            pendingCentralUploadedVertices = BattleBenchmarkMetric.Unavailable("count");
+            pendingCentralUploadedVertexBytes = BattleBenchmarkMetric.Unavailable("bytes");
+            if (config.Backend != BattlePresentationBackendMode.CentralOnly)
+                return;
+
+            BattleCentralBuildDiagnostics diagnostics = presenter.Diagnostics;
+            if (diagnostics == null)
+                return;
+
+            // Alignment contract: NTSD-OPT-M03-UPLOAD-REPORT-007; freeze before completed-frame drain.
+            pendingCentralVertexUploadCalls = BattleBenchmarkMetric.FromValue(diagnostics.VertexUploadCallCount, "count");
+            pendingCentralUploadedVertices = BattleBenchmarkMetric.FromValue(diagnostics.UploadedVertexCount, "count");
+            pendingCentralUploadedVertexBytes = BattleBenchmarkMetric.FromValue(diagnostics.UploadedVertexBytes, "bytes");
         }
 
         public void Dispose()
@@ -2393,6 +2426,9 @@ namespace NTSD.Animation.Rendering
                     workload.CommandCount - presenter.ResolvedCommandCount,
                     "count"),
                 ResourceSegments = BattleBenchmarkMetric.FromValue(presenter.ResourceSegmentCount, "count"),
+                CentralVertexUploadCalls = pendingCentralVertexUploadCalls,
+                CentralUploadedVertices = pendingCentralUploadedVertices,
+                CentralUploadedVertexBytes = pendingCentralUploadedVertexBytes,
                 MeshChunks = diagnostics == null
                     ? BattleBenchmarkMetric.Unavailable("count")
                     : BattleBenchmarkMetric.FromValue(diagnostics.ActiveChunkCount, "count"),

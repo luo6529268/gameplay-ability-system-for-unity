@@ -1,0 +1,256 @@
+{
+  "time": "2026-10-06T18:49:21.0337089+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006",
+  "taskStatus": "RUNTIME_PENDING",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/change-ledger-validation.json",
+      "bytes": 984,
+      "sha256": "224D595A54E678CA6A091073ED3BCC2510460C3907F2EBA8EF029DA9BD2DC393"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-post.json",
+      "bytes": 2497,
+      "sha256": "FE05A1347A259D09C1818965D437E5A9431C91AC20C2252CCF9C112F9574DCB9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-pre-and-red-compile.json",
+      "bytes": 4134,
+      "sha256": "A18F88ADFBCD6EBD7AD8772E593437D78AF170B4BF2C8C28463B69C98EC1E124"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-compile-request.json",
+      "bytes": 552,
+      "sha256": "6CAB4673B1F464E7A6FAA7829B7C9B430C6BC360741C1EA7E511FBDB25FDA07C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-start.json",
+      "bytes": 260,
+      "sha256": "073CAF739D9297E567CA28EDDCBDAB9630CDBB123E48327D5C99BE05F05B4D91"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/mesh-regression-result.json",
+      "bytes": 4633,
+      "sha256": "14E9F32A55FB82ECD6A787C4CD043D42A0081CFB4CAC077AD07107354AB7E3BC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-result.json",
+      "bytes": 4116,
+      "sha256": "13A8EA8CB581885CB650AF6CD7A4A557F012797FF81E5BD9D0E8C39017DD636E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-start.json",
+      "bytes": 260,
+      "sha256": "BADC431726533FCBEF6F7730F5A9770B83BD510EF4B67FEAA0A72F43B823CFD5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-result.json",
+      "bytes": 2627,
+      "sha256": "665EDC5B3323AAFA6EF3C7B1C6543926DAF88A115ADBAE991FB2E54326FFDAE5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-start.json",
+      "bytes": 585,
+      "sha256": "391B85246BCAD497D13B7C4B012F0DB462292810E05924B998E3043CE2D4A35B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/REPORT.md",
+      "bytes": 5139,
+      "sha256": "82B4D1DB5820602AC129FAD4FEF558C649F5058A1B0EABD9DCE3DC4BECE46EC0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/static-validation.json",
+      "bytes": 292,
+      "sha256": "D4C245FCFB468B637A3DE96C505D093810B945A62214E719BE18138996E817DA"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 17484,
+      "sha256": "6D9D8613CF32AD43B5D5A08B78FA28BD8A20DEB6EB30C80EEA6E374D44126286"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "bytes": 5519,
+      "sha256": "2C32A1114569974167B61869416EFBF1ABD813EC1B3C71AB54ED6FB76E4B75F6"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 10760,
+      "sha256": "8AF9BEFABF27E5271BE7DE5C4CAFA3BE4FE7ADB496C2F5456AD5019B893F6950"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+      "bytes": 158,
+      "sha256": "0081975A6CD42C40CD7D3E436E4D38FF713AC477F67BFD9088953D35DE82E712"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "bytes": 12108,
+      "sha256": "3FC0AA6448535A6660975D3F6675018623D0C3527A5182F5AF6BA829C11EA3DA"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1461354,
+      "sha256": "C4B7F6682E27596C536DAAED2A22D98A4632E4A5354CD682B788C308C6128FE7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 97250,
+      "sha256": "04D15E82120F672D9A0E67FF32C1DD04419C2C86E1DB333F3675B45329234392"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "bytes": 41304,
+      "sha256": "87EC226AD8C73A3863A28D4E523212E6AAAF79AA93442D5C228F46A615C373E2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+      "bytes": 7824,
+      "sha256": "81419D05B4665F69A7AAD2F351AC99594A7572EF2B4F11493A9DE7D5502AFEED"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+      "bytes": 243,
+      "sha256": "06B45D752ACCC2EC66E6A2F8ACAEF06E2D7662276780A96FCB33E906548BC83A"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 631134,
+      "sha256": "1622337FC028EEB83573303471C7C9E83430D8D8EBC55526760FBA769FD3E01B"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+      "bytes": 4363,
+      "sha256": "C63C5B4850B4F2F649BF4E0A576C1B81D0A4562E5C39A42AD1FA0D1028CA6943"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 23312,
+      "sha256": "48F829142596658AACF79F1D6669C4513FD7521F9949085B6C20AB72485A261C"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/before.json",
+      "bytes": 3905,
+      "sha256": "F88E928658D7CBD32553545F65C8AB4A09D20A09687F7EB3D668BF6644F991A8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/RECORD.md",
+      "bytes": 6922,
+      "sha256": "EE229A9FB93D4DAA1B5686D0EA2F26BCF8249D34F27FC6D3957B9C6E3DBF4B43"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1531137,
+      "sha256": "4B84596CB33E3BDD3D1B6AB4F1F67E36C31F4F1CB057AC979D2F56B479BB7651"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+      "bytes": 2077,
+      "sha256": "D275335B92336CD4955868BF7C2F58B286BFB2521BBD36410721540613EE4DF7"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "beforeSha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "afterSha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "beforeSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "afterSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "unchanged": true
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "beforeSha256": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "afterSha256": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338",
+      "unchanged": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "beforeSha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "afterSha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparent.shader",
+      "beforeSha256": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "afterSha256": "8E76494C31681B25DC5D1F55C83F8DD2DCFCAADC7918FC0CD029EB6BBFD945D7",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Shaders/BattleCentralTransparentArray.shader",
+      "beforeSha256": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "afterSha256": "010D34A0F3C1EB5A55366621EF3336604E13B5A7A2F967390CFE3CA777D24639",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "beforeSha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "afterSha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "beforeSha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "afterSha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "unchanged": true
+    }
+  ],
+  "allProtectedUnchanged": true,
+  "retainedUntracked": [
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+      "exists": true,
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "action": "not edited, moved or deleted by this task"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+      "exists": true,
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+      "action": "not edited, moved or deleted by this task"
+    }
+  ],
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "gitStatus": [
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/change-ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-post.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/editor-pre-and-red-compile.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-compile-request.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/green-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/mesh-regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/prewarm-green-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/red-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/before.json",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md"
+  ],
+  "createdByEditor": [
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta"
+  ],
+  "noDeleteMoveOrDestructiveGit": true
+}

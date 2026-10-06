@@ -1,0 +1,52 @@
+{
+  "ledger": {
+    "time": "2026-10-06T21:47:01.7225831+08:00",
+    "exitCode": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "Records: 1304",
+      "Governed code files in diff: 17"
+    ],
+    "warningCount": 4237,
+    "errors": []
+  },
+  "diffCheck": {
+    "exitCode": 0,
+    "output": "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it\n"
+  },
+  "links": {
+    "time": "2026-10-06T21:46:53.9725784+08:00",
+    "linkCount": 127,
+    "missing": [],
+    "scopes": [
+      "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006.md",
+      "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008.md",
+      "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/RECORD.md",
+      "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH08-MATERIALIZATION-COUNTERS-20261006/REPORT.md"
+    ],
+    "governanceFilter": "batch08/change008 only"
+  },
+  "protected": {
+    "time": "2026-10-06T21:47:50.1811630+08:00",
+    "protectedCount": 211,
+    "protectedMismatch": [],
+    "backupCount": 8,
+    "backupMismatch": [],
+    "sourceMismatch": [],
+    "head": "5a5cde34b9685739326b638f9c5550b69eda7ef6"
+  },
+  "tracker": {
+    "items": 34,
+    "high": 12,
+    "medium": 14,
+    "low": 8,
+    "parentClosed": 0
+  },
+  "newTests": 20,
+  "green": 20,
+  "oldRegression": 182,
+  "unique": 202
+}

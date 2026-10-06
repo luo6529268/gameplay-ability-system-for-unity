@@ -1,0 +1,526 @@
+{
+  "time": "2026-10-06T21:16:13.1801365+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006",
+  "status": "FILE_OPERATION_VERIFIED_ONLY",
+  "taskChangeStatus": "RUNTIME_PENDING",
+  "commit": "5a5cde34b9685739326b638f9c5550b69eda7ef6",
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattlePixelFramePlan.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+    " M Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleAuxiliaryPresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleNativeMeshPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacityPrewarmEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattlePresentationCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleResolverCapacitySealEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-AUX-CAPACITY-SEAL-003.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CACHE-PREWARM-001.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAPACITY-SEAL-002.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-NATIVE-MESH-PREWARM-005.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-RESOLVER-SEAL-004.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-UPLOAD-REPORT-007.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH01-CAPACITY-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH02-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH03-AUX-CAPACITY-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH04-RESOLVER-SEAL-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH05-NATIVE-MESH-PREWARM-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH06-VERTEX-UPLOAD-COUNTERS-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006.md"
+  ],
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/compile-evidence.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\compile-evidence.json",
+      "type": "File",
+      "bytes": 978,
+      "sha256": "1337EC76AC48E34260D4F77DBDC6F5FA13EC076081BAF25B7B2451BFC3AF617E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/diff-initial.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\diff-initial.json",
+      "type": "File",
+      "bytes": 1342,
+      "sha256": "7310CA49107B91B8F1C518639A0E827A1D275BDBAD93DD1F603F4DA9E4D2FE2E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/editor-post.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\editor-post.json",
+      "type": "File",
+      "bytes": 2897,
+      "sha256": "3327B85D1211D44AF7A546F173BE84EF0296A68F5101A298D3D4FD5498A88BD8",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/editor-preflight.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\editor-preflight.json",
+      "type": "File",
+      "bytes": 2809,
+      "sha256": "BDAF6749EB8737B7EFF570615B40F653212CBAA820790E4FB8978A4001C9CF0E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/green-request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\green-request.json",
+      "type": "File",
+      "bytes": 2362,
+      "sha256": "DB068C21EBEA066B487A7FCCD3CCD9A2AF4BB84AD819F01B0C32154F5C0EA282",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/green-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\green-result.json",
+      "type": "File",
+      "bytes": 7170,
+      "sha256": "696633ABDAEB18A6CD54E46380C6B0CF2D2607DAB04DB4C94F4FF6F6E40319CA",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/ledger-final.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\ledger-final.json",
+      "type": "File",
+      "bytes": 278,
+      "sha256": "AA5140C184511F2555DD55CF9F6D53834B1A577C8EDFFBE8DCD25A1A8E94DE7C",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/ledger-initial.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\ledger-initial.json",
+      "type": "File",
+      "bytes": 197,
+      "sha256": "DA7D4431AB65ACBAC3FFD77E9B147A7CA95DC023D2E54AF62A2A50B8E7B4F2D6",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/red-initial-request-compile-error.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\red-initial-request-compile-error.json",
+      "type": "File",
+      "bytes": 3172,
+      "sha256": "622F1D90B3852BA191B54D0B23A6E9A36E3019C4919B03726F0ABA0FB078E275",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/red-initial-zero-selection.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\red-initial-zero-selection.json",
+      "type": "File",
+      "bytes": 1609,
+      "sha256": "73B2C23337802785C94A24B72E1F5EBB615A3BC626917B727E73AC7D81761A1E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/red-reload-retry.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\red-reload-retry.json",
+      "type": "File",
+      "bytes": 420,
+      "sha256": "55C4B27AC7F4E7661AD97A4FC8C95AA3085B98385DA7CFEDD2D6A3390166329C",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/red-valid-request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\red-valid-request.json",
+      "type": "File",
+      "bytes": 2362,
+      "sha256": "886F87A3308B7FC47C97E9198CD100A167D21B1B8536542FE637ADA2051E9FDE",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/red-valid-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\red-valid-result.json",
+      "type": "File",
+      "bytes": 5130,
+      "sha256": "5D713E269D25B42B211F5D726FC926043A6224F5B814FD6CCCF41F81B0612B57",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/refresh-green.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\refresh-green.json",
+      "type": "File",
+      "bytes": 302,
+      "sha256": "EC41EF167916AE78424D6FE5C2E023C0E0AA509CA3F7A5901B3C377564B72764",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/refresh-red.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\refresh-red.json",
+      "type": "File",
+      "bytes": 302,
+      "sha256": "EC41EF167916AE78424D6FE5C2E023C0E0AA509CA3F7A5901B3C377564B72764",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/regression-request.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\regression-request.json",
+      "type": "File",
+      "bytes": 260,
+      "sha256": "F7A3AE05DEBAEF46DE05B5E069EE069FA11BE59ED028A10C178BD3C01E0E3BB8",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/regression-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\regression-result.json",
+      "type": "File",
+      "bytes": 72482,
+      "sha256": "FD52F5D1069FD83B20FC6F628221468E1E3DE2F0FE88851E73D64D8C2AC7CE86",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\REPORT.md",
+      "type": "File",
+      "bytes": 5012,
+      "sha256": "268226AEFEEC48CFDE1AED72D4066A8082A31DBF9BDF6E747E281474AF491C1E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/static-final.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\static-final.json",
+      "type": "File",
+      "bytes": 2930,
+      "sha256": "D220EA027C05EB8581E67A9636D9A39B2C53775F5C78D0C3C8BE51520A297475",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "type": "File",
+      "bytes": 20160,
+      "sha256": "81DA1A370BFEC823487F6F65AD4488A70F3B64E4B43283CF71BFD4E3E4B9BBC0",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "type": "File",
+      "bytes": 6632,
+      "sha256": "C073042E88AD10CEFBB26CF45B20A37E511C4FEE1643103C97DE3BEFDC7FFA3F",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "type": "File",
+      "bytes": 19456,
+      "sha256": "BB20CE2F49E40BB0AD0CCF46F7CD45BEF86EB992D368219A88D4349472EF189C",
+      "gitStatus": [
+        "?? Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "type": "File",
+      "bytes": 1467186,
+      "sha256": "FAA8D497A5B868416B5456C0C95BCCA8BD67FD269E770DFC92EB0D14B1C37B97",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderingBenchmark.cs",
+      "type": "File",
+      "bytes": 190492,
+      "sha256": "33E5E91A87D86E47D5425864CCCC0D721843EE8AFA038F4EBFE29F818FC1182A",
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleVertexUploadReportEditorTests.cs",
+      "type": "File",
+      "bytes": 19164,
+      "sha256": "954914AAB98239C84CAFB8F159C2CA141372A2D8BAE1792737F1A5F2C8F1EB75",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleVertexUploadReportEditorTests.cs.meta",
+      "type": "File",
+      "bytes": 60,
+      "sha256": "24E5EAC9C7E11F470F4C46DDC4E3AAE42E0A6CF397A93D0DB3F650BADC43E637",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs.meta"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "type": "File",
+      "bytes": 636117,
+      "sha256": "1E1824E6539EAFD2FD0FC8524B618C3F845E7565C621E02D882230CEE0A9AF2C",
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-UPLOAD-REPORT-007.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-M03-UPLOAD-REPORT-007.md",
+      "type": "File",
+      "bytes": 3476,
+      "sha256": "46F03DB52C5DE398A9D18FC48980490F764C926CA5727D3052C0B2635E8141DC",
+      "gitStatus": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-UPLOAD-REPORT-007.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "type": "File",
+      "bytes": 27066,
+      "sha256": "FB743D4384F77C0AC624372B2EFC84B3E9F3862218C299A3213A1AEBB407CEA3",
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "type": "File",
+      "bytes": 19672,
+      "sha256": "446A0FAF74EF810B34FCC41C3F831A4DDC5D3F113C6D3612AAB748885E22D938",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "type": "File",
+      "bytes": 4833,
+      "sha256": "A0717950CAF88C096C44C54436AE1C5E75A33D5B6BC4A43A41A70FF097AE3812",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "type": "File",
+      "bytes": 17876,
+      "sha256": "725F948237A229BA7B7EEA5C790D40E122C4AA6EF5342EB3B0FDAF95CEDD933A",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "type": "File",
+      "bytes": 1466027,
+      "sha256": "1BD110498E1A42D5BD3B22BDE81FFC07F00DB112EC15DA27CA15AA26B770C560",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderingBenchmark.cs",
+      "type": "File",
+      "bytes": 187424,
+      "sha256": "7AA349625CBBCCF0819D94F1595E2FE8E497DBFDF52EB995D46B2E2F6DC939EC",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\docs\\ai\\CHANGE-LEDGER.md",
+      "type": "File",
+      "bytes": 635079,
+      "sha256": "3AFA34F36685757A2EAECB65DFC188C2143A0AF817FD8825B6AABB6362B1B914",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "type": "File",
+      "bytes": 26509,
+      "sha256": "EF637172A4A3254A0D4729B821C0BFAE60E72035EE55036AC7E66CF663F6BCAA",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before-backups/docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before-backups\\docs\\ai\\STATE.md",
+      "type": "File",
+      "bytes": 1535483,
+      "sha256": "9F27859980BC4197431422DC00BD79A020DEC85F868ADEAD4C5A04DC40135970",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\before.json",
+      "type": "File",
+      "bytes": 10877,
+      "sha256": "0534EB042557CC1F5523DCB69C0BF7A3EE1F1D6372E5EC25F0958A56B1A2D90A",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/protected-before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\protected-before.json",
+      "type": "File",
+      "bytes": 34089,
+      "sha256": "B864D2586DD85480D76BD172881ADE2D7739C02FA7AE46AE72C7C591EEA13866",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006\\RECORD.md",
+      "type": "File",
+      "bytes": 4310,
+      "sha256": "6A4664677E47CFE08A4386AF767D9B5C32E556D8F58E100B77574795BD96FA65",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006/"
+      ],
+      "gitStatusInheritedFromDirectory": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "type": "File",
+      "bytes": 1536479,
+      "sha256": "776938EC82E33BB5DDDE78FEA713AB46E3D0211A96C2454A8421A948C78C5008",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006.md",
+      "type": "File",
+      "bytes": 3420,
+      "sha256": "226E626245D608D54920D106CC3E8247B4225B63D5A02BCEEE78DAC4E0EA961C",
+      "gitStatus": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH07-UPLOAD-REPORT-20261006.md"
+      ]
+    }
+  ],
+  "gitStatusScope": "Per-file entries use exact status matches or inherited untracked-directory entries; full root Git status is also preserved."
+}

@@ -1,0 +1,36 @@
+{
+  "requests": [
+    {
+      "type": "run_tests",
+      "params": {
+        "mode": "EditMode",
+        "testNames": [
+          "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+          "NTSD.Test.BattlePresentationCapacityPrewarmEditorTests",
+          "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests",
+          "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests",
+          "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+          "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+          "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+          "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests",
+          "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeHealthBarEditorTests"
+        ],
+        "includeDetails": true,
+        "includeFailedTests": true
+      }
+    }
+  ],
+  "responses": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "fdfc71935b064d4f81a7a6cdcb4d2feb",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  ]
+}

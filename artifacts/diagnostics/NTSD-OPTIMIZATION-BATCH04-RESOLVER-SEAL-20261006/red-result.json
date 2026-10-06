@@ -1,0 +1,54 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "f11432bc9b3f498ead19bcd495e786fc",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791287376166,
+      "finished_unix_ms": 1791287382704,
+      "last_update_unix_ms": 1791287382704,
+      "progress": {
+        "completed": 16,
+        "total": 9074,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791287382140,
+        "last_finished_test_full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+        "last_finished_unix_ms": 1791287382145,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.Resolve_TrustedIdentityCache_ReusesResourceAndKeepsPerCommandColor",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.CentralOwner_SealsBothResolversAndEndAllowsPreparationAgain",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(0,0)",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,17)",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(512,17)",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,512)",
+            "message": "  Expected: <System.InvalidOperationException>\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+]

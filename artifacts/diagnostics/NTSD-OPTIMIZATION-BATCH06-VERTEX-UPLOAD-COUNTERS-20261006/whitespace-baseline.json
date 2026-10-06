@@ -1,0 +1,28 @@
+{
+  "time": "2026-10-06T20:46:35.9436816+08:00",
+  "checks": [
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeCount": 2,
+      "afterCount": 2,
+      "differenceCount": 0,
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeCount": 3,
+      "afterCount": 3,
+      "differenceCount": 0,
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeCount": 2,
+      "afterCount": 2,
+      "differenceCount": 0,
+      "unchanged": true
+    }
+  ],
+  "newWhitespaceCount": 0,
+  "note": "The seven trailing-whitespace lines are pre-existing identical content in the exact dirty backups; preserved without cleanup."
+}

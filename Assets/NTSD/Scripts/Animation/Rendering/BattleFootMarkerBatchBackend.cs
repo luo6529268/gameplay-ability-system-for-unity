@@ -103,6 +103,8 @@ namespace NTSD.Animation.Rendering
         private Mesh mesh;
         private int capacity;
         private bool disposed;
+        private bool capacitySealed;
+        private int sealedMarkerCapacity;
 
         public Mesh Mesh => mesh;
         public Texture Texture { get; private set; }
@@ -120,6 +122,8 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleFootMarkerBatchBackend));
             if (requiredMarkers < 0 || requiredMarkers > MaximumMarkersPerBatch)
                 throw new ArgumentOutOfRangeException(nameof(requiredMarkers));
+            if (capacitySealed)
+                throw new InvalidOperationException("Cannot resize sealed foot marker storage.");
             if (requiredMarkers <= capacity)
                 return;
 
@@ -146,6 +150,36 @@ namespace NTSD.Animation.Rendering
             RecreateMesh();
         }
 
+        internal void SealCapacity(int markerCapacity)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(nameof(BattleFootMarkerBatchBackend));
+            if (capacitySealed || markerCapacity < 0 || markerCapacity > capacity)
+                throw new InvalidOperationException("Foot marker capacity must be prepared before sealing.");
+            sealedMarkerCapacity = markerCapacity;
+            capacitySealed = true;
+        }
+
+        internal void UnsealCapacity()
+        {
+            capacitySealed = false;
+        }
+
+        internal bool CanBuildFrame(BattlePresentationFrame frame, Sprite sprite, bool enabled)
+        {
+            if (!capacitySealed || frame == null || !enabled || sprite == null || sprite.texture == null)
+                return true;
+            int markerCount = 0;
+            for (int index = 0; index < frame.CommandCount; index++)
+            {
+                BattleRenderCommand command = frame.GetCommand(index);
+                if (command.Type == BattleRenderCommandType.Entity && command.ShowSelfFootMarker &&
+                    ++markerCount > sealedMarkerCapacity)
+                    return false;
+            }
+            return true;
+        }
+
         public void BuildFromFrame(
             BattlePresentationFrame frame,
             Sprite sprite,
@@ -156,6 +190,8 @@ namespace NTSD.Animation.Rendering
                 throw new ObjectDisposedException(nameof(BattleFootMarkerBatchBackend));
             if (frame == null)
                 throw new ArgumentNullException(nameof(frame));
+            if (!CanBuildFrame(frame, sprite, enabled))
+                throw new InvalidOperationException("Foot marker capacity exceeded; whole frame rejected.");
 
             MutationVersion++;
             BuiltFrame = frame;
@@ -170,7 +206,8 @@ namespace NTSD.Animation.Rendering
             int maximumCandidateCount = Mathf.Min(
                 frame.EntityCount > 0 ? frame.EntityCount : frame.CommandCount,
                 MaximumMarkersPerBatch);
-            PrepareCapacity(maximumCandidateCount);
+            if (!capacitySealed)
+                PrepareCapacity(maximumCandidateCount);
             BattleFootMarkerStyle style = configuredStyle.Normalized();
             Rect uv = ResolveNormalizedUv(sprite);
             float offsetX = style.OffsetPixels.x * NTSDRenderSpace.UnitsPerPixelX;

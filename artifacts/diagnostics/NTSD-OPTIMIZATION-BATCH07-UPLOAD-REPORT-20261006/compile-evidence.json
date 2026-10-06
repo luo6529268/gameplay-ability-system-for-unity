@@ -1,0 +1,24 @@
+{
+  "time": "2026-10-06T21:07:44.7577443+08:00",
+  "editorPid": 19040,
+  "editorPort": 6401,
+  "productionDll": "2026-10-06T21:04:57.8448046+08:00",
+  "testDll": "2026-10-06T21:05:08.6541339+08:00",
+  "sourceFiles": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+      "sourceTime": "2026-10-06T21:04:52.0698584+08:00",
+      "sha256": "33E5E91A87D86E47D5425864CCCC0D721843EE8AFA038F4EBFE29F818FC1182A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs",
+      "sourceTime": "2026-10-06T21:02:18.6872509+08:00",
+      "sha256": "954914AAB98239C84CAFB8F159C2CA141372A2D8BAE1792737F1A5F2C8F1EB75"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleVertexUploadReportEditorTests.cs.meta",
+      "sourceTime": "2026-10-06T21:01:30.9702795+08:00",
+      "sha256": "24E5EAC9C7E11F470F4C46DDC4E3AAE42E0A6CF397A93D0DB3F650BADC43E637"
+    }
+  ]
+}

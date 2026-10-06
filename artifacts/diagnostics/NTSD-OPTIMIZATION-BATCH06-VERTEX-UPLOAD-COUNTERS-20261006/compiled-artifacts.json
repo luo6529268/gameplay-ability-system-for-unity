@@ -1,0 +1,49 @@
+{
+  "time": "2026-10-06T20:38:41.8066390+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "lastWriteTime": "2026-10-06T20:37:50.7138816+08:00",
+      "bytes": 43617,
+      "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs",
+      "lastWriteTime": "2026-10-06T20:37:50.7109030+08:00",
+      "bytes": 61681,
+      "sha256": "CEE95E74A6A2F1D9E16631E210F5C8BACE8F517D1F0C3A1B20932BAB24127090"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleVertexUploadDiagnosticsEditorTests.cs",
+      "lastWriteTime": "2026-10-06T20:36:19.8622313+08:00",
+      "bytes": 12220,
+      "sha256": "0498DD4B5E5BC33057D582BBA1D17EED8BCA6C5B82A8E4877A371EE0A17A7508"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "lastWriteTime": "2026-10-06T20:38:00.9090005+08:00",
+      "bytes": 4198912,
+      "sha256": "93277AF04AA64428FDE1457F7EB92D9F9935C2162248A13043F886B6E43B842F"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "lastWriteTime": "2026-10-06T20:38:05.2961702+08:00",
+      "bytes": 6108672,
+      "sha256": "BC2282B626CC8005866660115568FF71E8C04E64C51913FC602DC66D1F2B44B9"
+    }
+  ],
+  "ports": [
+    {
+      "LocalPort": 6402,
+      "OwningProcess": 140072
+    },
+    {
+      "LocalPort": 6401,
+      "OwningProcess": 19040
+    },
+    {
+      "LocalPort": 6400,
+      "OwningProcess": 127156
+    }
+  ]
+}
