@@ -1,0 +1,50 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "66bae213e068471caf49bc3a85e0b6a1",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791311783117,
+      "finished_unix_ms": 1791311791314,
+      "last_update_unix_ms": 1791311791314,
+      "progress": {
+        "completed": 1,
+        "total": 9276,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791311790540,
+        "last_finished_test_full_name": "NTSD",
+        "last_finished_unix_ms": 1791311790598,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 0,
+          "passed": 0,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.0522109,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "NTSD",
+            "fullName": "NTSD",
+            "state": "Passed",
+            "durationSeconds": 0.0522109,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

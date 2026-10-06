@@ -1,0 +1,495 @@
+{
+  "time": "2026-10-06T23:16:28.8231572+08:00",
+  "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ab-comparison.json",
+      "bytes": 13629,
+      "sha256": "C01B91B05235A99CF105062A064C836C3BCD36037FA9B8AC9A175B9BF16AB2A7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ab-comparison.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-after-tests.json",
+      "bytes": 2497,
+      "sha256": "077489D564F6076F5F9C4DCC6B2FEDD3A8B6BE44AA19CA8CC6FADF9F62BF1541",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-after-tests.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-before.json",
+      "bytes": 3355,
+      "sha256": "DC0CAC5663F90D68C03C5A472FCBE696E8AE0E5E4A1244F50C538B1B9F705746",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-final.json",
+      "bytes": 3443,
+      "sha256": "C0A1027FE70BE0654FACCB882741F5BB884E1691F0828E9A8517B72775E3C7C3",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-code-written.json",
+      "bytes": 1953,
+      "sha256": "4BF3239548DE632F9678A551FEFF166F57AEB44DB72AD22FB7C9CF71C6A6C8F2",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-code-written.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-final.json",
+      "bytes": 1953,
+      "sha256": "D8FB0825AFB1483335FD9E08475C3110D5B24859C1F632B4E2F95E85311A3773",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-pre.json",
+      "bytes": 3715,
+      "sha256": "3B560EDDD336A3AC5F82D75525886CA2FC856F47199E8999CA8C493CCF772655",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-pre.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-ready.json",
+      "bytes": 2105,
+      "sha256": "D4D6FDDA14FABCF9BBEE45E66AD7D5EC5DE738AE82F659D3A81B3C7E68E2380B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-ready.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-reloading.json",
+      "bytes": 281,
+      "sha256": "6E7D6E2AF1A9188E1D8E304DE2B4F9ED24B63868E661E7057EC38324E89C9153",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-reloading.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-refresh.json",
+      "bytes": 302,
+      "sha256": "EC41EF167916AE78424D6FE5C2E023C0E0AA509CA3F7A5901B3C377564B72764",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-samples.json",
+      "bytes": 59550,
+      "sha256": "9B2CCCD2F2276C2C554B8FFD976ED3C185A8A351153176DB6A493132576A01A6",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-samples.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-source-manifest.json",
+      "bytes": 2545,
+      "sha256": "CDEDCBF94C04612667C256FE790B6F7B0EA0727D8168653E5E2C07C7287F69CA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-source-manifest.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-result.json",
+      "bytes": 61304,
+      "sha256": "976A5C0AA50E62A58AB50C7092ACB8A0B57BD32E8F1D2B393052ADE930E4DD55",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-start.json",
+      "bytes": 260,
+      "sha256": "BF445B607064DB412C7344FC46D30ED8C3859CA3A11ACE9E3E2430CE5652DBC5",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready-02.json",
+      "bytes": 2104,
+      "sha256": "A350EEFBD1BBF46688945ECF9092D807D70EF55FADA142102B25EF05CB0D523F",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready.json",
+      "bytes": 2105,
+      "sha256": "3542AA71FF9AD5E86C96600936CDDC57C8A953C4EBA4F71BE5D343A3DEF7FB99",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-reloading.json",
+      "bytes": 281,
+      "sha256": "6E7D6E2AF1A9188E1D8E304DE2B4F9ED24B63868E661E7057EC38324E89C9153",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-reloading.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-first-failed.json",
+      "bytes": 1541,
+      "sha256": "02B5CF790D9331749207DD82574852B378F51B4E921C13DB3124A5C64DBC9F8D",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-first-failed.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-protected-check.json",
+      "bytes": 228,
+      "sha256": "28AC2D019A404F1A2F7116432B15384B048BF025521545AE7A21F96559338E4B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-protected-check.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-refresh.json",
+      "bytes": 302,
+      "sha256": "EC41EF167916AE78424D6FE5C2E023C0E0AA509CA3F7A5901B3C377564B72764",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-samples.json",
+      "bytes": 59565,
+      "sha256": "7174A117FC4EEF29FDE8A897F148BD5CD7D51AD5CB21784B9E7FAC4C2475C2DA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-samples.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest-02.json",
+      "bytes": 1656,
+      "sha256": "D7095CC9AAB586B2E91D5659304A5E6146138CE81046B37D570752FA59E79EA4",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest.json",
+      "bytes": 2545,
+      "sha256": "B17A4F73D7DE14F9691214997A16678C60378D36E250EC6611156FBCFEC1F1D7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-result.json",
+      "bytes": 63954,
+      "sha256": "80E354DC39E0848FA621CC9FE9924ED2763546006C25858574AA2D41D8D71563",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start-02.json",
+      "bytes": 260,
+      "sha256": "2D8A253032FA12942B96C3CA13EA2E6F443ECAA2EA1829F45B16F9057AA019F4",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start.json",
+      "bytes": 260,
+      "sha256": "CF664A031473A7B75B4C675FD3126B2013F8E477DB9CAC9698DCFD7DADDADDCA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-result.json",
+      "bytes": 30762,
+      "sha256": "7B4AD44184E951A7BF6098541039B4B0C5C2CDA79508077B9129F961AC12C049",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-start.json",
+      "bytes": 260,
+      "sha256": "BA30A7E7DC2C1E9FFA387DF988D0C44EC8ACE59F2C1210564AC9008F95D68C30",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/REPORT.md",
+      "bytes": 11010,
+      "sha256": "9AD75B39ED63E7C6923D54351EBDAA4F395DBA1550F78E3886D81220BDE7109C",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/REPORT.md"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-final.json",
+      "bytes": 403,
+      "sha256": "5CC06BEC941CE364C3FB47F141CE13BF9751BD6DF0EC1585BB0403B24C954456",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-first-final.json",
+      "bytes": 403,
+      "sha256": "5E1A384D733A26C80B8D708B0EA77F5408D1402EFDB8CB94E8B078838FF7BC4A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-first-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/unique-and-contract-summary.json",
+      "bytes": 13347,
+      "sha256": "40C40CB2195673C834F0148E724FF703CBBA21255464042C0F8E6C464E608B9E",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/unique-and-contract-summary.json"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 22137,
+      "sha256": "6D222AF98649667F71A1F2E4A677ED061802EE792376F84A6C82C7012231429A",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 18155,
+      "sha256": "12727DB0C35B40F005BE494348BEF0B5B3FDA5250EEBB9D61F5E07DD8AD2CA8C",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 29393,
+      "sha256": "EC2E71DFA243DD3F373B5D3A071219C531E588055AF557133E9EC0E6A10A0933",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1472927,
+      "sha256": "B0DC88DE7474C0A6DACA03452084AD5D6C00A5EDE5BD1A4A38416307DED187DD",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "bytes": 43926,
+      "sha256": "F5519E8F5AD9634244C5D1DC1E67A6B3415054FAF8F9EAFAC9C694E096E52292",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+      "bytes": 20037,
+      "sha256": "44639619250EE50B3D588F0F194BE6E2606234A5FFCC5C4386AA11A84402EAE8",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 641630,
+      "sha256": "7210C4F1DE301F216011CF8D7FFEB36C4F4389786E1F2463C8471B4555336773",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.md",
+      "bytes": 4360,
+      "sha256": "EA0C41941CB413B38FE3065FFBA19310AEFEB5A4F056F0A25F80FBFEC471FD47",
+      "git": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 30955,
+      "sha256": "36D8D1806A9E29AEFE94A54C707CE05C470A821D0C3949AEFD9B23E28C7883D4",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backup-verification.json",
+      "bytes": 3281,
+      "sha256": "00C5DD061A5BFCB682627EA43598F68BE8EE259B7A777D90CA3C9673808BF1CB",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness__m-03-dynamic-mesh-upload.md.before",
+      "bytes": 16211,
+      "sha256": "FAC00127B080C0F14E75A2C50BA6AA604B2B3991D8290EBFE8487605958FBAB1",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness__m-03-dynamic-mesh-upload.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md.before",
+      "bytes": 21889,
+      "sha256": "9AA5BCDC4F562A9C62744AD66E49B86DF0B246762E866FC04AB946FBD60F471F",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__battle-optimization-progress-tracker.md.before",
+      "bytes": 27532,
+      "sha256": "5335010B9A30D73514CF307268E8DD96585934DA7976D8B3BD9BBA6D63745BB4",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__battle-optimization-progress-tracker.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md.before",
+      "bytes": 1471911,
+      "sha256": "7BB5AA403AFA6D3E57F8B5F675FA10FEA4F8FA0E9A87FE571E5ECE32D7C6DCFF",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__BattleDynamicMeshBackend.cs.before",
+      "bytes": 43617,
+      "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__BattleDynamicMeshBackend.cs.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__Editor__BattleDynamicMeshBackendSubMeshEditorTests.cs.before",
+      "bytes": 13172,
+      "sha256": "D9A2274F1EA8B346556FBF724AA6E6188787C98AAD046791122AAF8949CF684B",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__Editor__BattleDynamicMeshBackendSubMeshEditorTests.cs.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__CHANGE-LEDGER.md.before",
+      "bytes": 640648,
+      "sha256": "41F471A78F36D693BAF19BA312ADA158D2B95419031A29B5AD498BAD733BB08D",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__CHANGE-LEDGER.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__FILE-OPERATIONS__INDEX.md.before",
+      "bytes": 30330,
+      "sha256": "3E9F948E65C59DF48BB81EBFE50FC1E263772655C52E6876081CFF8551242CA7",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__FILE-OPERATIONS__INDEX.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__STATE.md.before",
+      "bytes": 1541015,
+      "sha256": "3DE7137A58FAC30ADB805F1976383F3CDBD944495EEBDE6BB5907D1F686DEC5C",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__STATE.md.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/before.json",
+      "bytes": 6324,
+      "sha256": "603A4439B45973B098E3CAE77E46DFD30CFA28FA713A2BBDC1FB01064AD70458",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/protected-before.json",
+      "bytes": 83170,
+      "sha256": "447A57F8D557EB2ABB8DA0608259F452A3BD5B71C3D0C04A0774CA60C4F8846C",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/protected-before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/RECORD.md",
+      "bytes": 3423,
+      "sha256": "A860A146D5211CB73E2D9707B80A9DA2C335176BAE50E0145131AF61F6ABBF84",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/RECORD.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1541997,
+      "sha256": "6280975DA1946363AEA497794549CB68A0DB326F65BB4D1B5E5B04C079B00321",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006.md",
+      "bytes": 4199,
+      "sha256": "ECD1F83D6099AC565812AFED81163A6A10755B873D484F15AA6095B87AC92751",
+      "git": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006.md"
+      ]
+    }
+  ],
+  "excludedSelf": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/after.json",
+  "status": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-BACKEND-BASELINE-011.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006.md"
+  ]
+}

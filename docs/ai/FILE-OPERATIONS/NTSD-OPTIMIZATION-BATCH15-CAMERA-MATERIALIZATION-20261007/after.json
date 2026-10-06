@@ -1,0 +1,897 @@
+{
+  "time": "2026-10-07T00:45:31.6532826+08:00",
+  "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-first-state.json",
+      "bytes": 1899,
+      "sha256": "E93E5899B5ECE45124BC3EC4F4B76F0D7476978C7549E15FA73B41D60FAFB8A6",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-first-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-ready.json",
+      "bytes": 2057,
+      "sha256": "7050BF82EB05B514BEAE1BBABB2F3660928557CA6522FB4CEC8EE7FC1AFA881C",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-ready.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-second-state.json",
+      "bytes": 2048,
+      "sha256": "E8B0BFDD6E3273DD977432CDE172422E100651BD02230A0AD43D77EB695A6834",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-second-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-01.json",
+      "bytes": 308,
+      "sha256": "FD073B96011633CA44C7ABF5BD91163B604608E13426850E0A0DDF5BF54C0093",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-02.json",
+      "bytes": 552,
+      "sha256": "81E168D4888C5B15EC74EF98E66652DB8BF564E1FD77728164710F8C26868DEE",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-01.json",
+      "bytes": 4351,
+      "sha256": "8CC3AFD9CF386C228C16E783EF990441A10F1F626C9F2B5FE0FD2EE11EDBA1A9",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-02.json",
+      "bytes": 4349,
+      "sha256": "3B7A1EFBB1A935ACECF87C32CE27FD30B3151710F13E3618250604B9FF4D2ECD",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-01.json",
+      "bytes": 137030,
+      "sha256": "6EB2F9644FBFD263173FC5484EEFD5C3689C1857417D4FEC1E04CCD2C07E0128",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-02.json",
+      "bytes": 113292,
+      "sha256": "249079FD929BD6A0861725B0390AE3C541FB262F65045DC5625824C4ABF38B30",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-compiled-inputs.json",
+      "bytes": 1523,
+      "sha256": "1BE96EA3ED9C6B8C015BDF83164BC9C630BA4F9497FFDACAD768488733BAFE40",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-compiled-inputs.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-end-state.json",
+      "bytes": 2237,
+      "sha256": "9F1BFDB6178AD0C99E36F4E50CA9267087A6A9E15740F1227E7BCDCD2B7E7A7E",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-end-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-scene.json",
+      "bytes": 2250,
+      "sha256": "49E7801861877A5EDB1BE7B3786BAAF82577AC324C7376EC0A9FA5D5C08F5ACF",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-scene.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-start.json",
+      "bytes": 303,
+      "sha256": "7F24BA2594B6F7A2B083AE9028AFA02D516AF28C05B933DBC3CA7EA57E0F667B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-summary.json",
+      "bytes": 8857,
+      "sha256": "F798879F187A81D8D7521407104B582D2A00067036C098300C21A1F4E4268F86",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-summary.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/materialization-window-01.json",
+      "bytes": 4379,
+      "sha256": "DB7CEFBA96FB984CD55493A1CCA376D3E58D53855381532D67BA0335368B79AA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/materialization-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/production-window-01.json",
+      "bytes": 126669,
+      "sha256": "49132EFCD674C41993AD67221414FA09144ED896C8BC1E6C7D9CC9AD57DD680C",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/production-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/change-ledger-validation.json",
+      "bytes": 3996,
+      "sha256": "945D8949D9D4067669743A8F2EE437FE70ADEA8E19EB13A4044C779EB1A99974",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/change-ledger-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-final.json",
+      "bytes": 6245,
+      "sha256": "84AC90EA15AC2DB7AF3A8A1A277E8E06EE81412C29F742C5E2DE3D4E5E2B0A71",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-first.json",
+      "bytes": 4176,
+      "sha256": "737561316444D61E7837220323A752C18C738046C1515C0477D510F9E2424FF6",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-first.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/compiled-manifest.json",
+      "bytes": 1568,
+      "sha256": "4BAE17A13DA750D23E179EF3BCBACEC3953B18A8D84991E0EE3FE0BA6F89844B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/compiled-manifest.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases-summary.json",
+      "bytes": 954,
+      "sha256": "4273846867FFEDA92E9F9F498511CB632972DFDDD0553FED827C7EF48604E141",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases-summary.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases.json",
+      "bytes": 27826,
+      "sha256": "17BE1F27C2FA437F3DA30041AD9BF6D91F43A02FED4C3B3715920EF4C4D49FB6",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/editor-before.json",
+      "bytes": 2769,
+      "sha256": "99274CB75FD21533EA0F2E303C4332027019583B27A95154FF1C01351C5B9066",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/editor-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-compiled-inputs.json",
+      "bytes": 1523,
+      "sha256": "B38233D4982DAC458D436E062DA75E8B060FE64BE2822BF09600A6A8AA43F5F1",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-compiled-inputs.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-ready.json",
+      "bytes": 1806,
+      "sha256": "E7DADA6A873D923482F1AEED3513155ED5FA6F588CB7C5788EFDCF0E2B316AB4",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-ready.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-refresh.json",
+      "bytes": 409,
+      "sha256": "EF29674AD3B5F79A8502A668D96909B22F0DFD916DFB4B1F0F949178CBC002CA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-ready-state.json",
+      "bytes": 1806,
+      "sha256": "04ED231BF1757AFC5C36E2DD52D783DC4886730CAD002EBC5C720B8612C1844B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-ready-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-refresh.json",
+      "bytes": 400,
+      "sha256": "AC544A32C79A754A07FDF66E4B0AF34671E1AA626A00C6C34103D371391DFEAF",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-result.json",
+      "bytes": 5494,
+      "sha256": "3F269BD1DBD808247BB6AD8E088C4DC741C7BE7A76E376F3FE922BA3C324428A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-start.json",
+      "bytes": 358,
+      "sha256": "6183ACA1082C817D1A1C07238D539AA7A6359005E50621DE4DFCD22A319151BD",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/menu-restoration.json",
+      "bytes": 813,
+      "sha256": "D9DE8A46EB51E2C716EFF7C4F544B743B5BB234F5A4C75E7100F54E41E63616A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/menu-restoration.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/production-scope-check.json",
+      "bytes": 146,
+      "sha256": "357FCF6E8D5559DF9855D2B1D755E5288C360F8B1B63B4A3F95DACECF0C82B8B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/production-scope-check.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compile-state.json",
+      "bytes": 1816,
+      "sha256": "6C9B30D3CCE3A024E2B208B3BFE9BAEDFB55CBFBC0D3DC6671231172488258E7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compile-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compiled-inputs.json",
+      "bytes": 1523,
+      "sha256": "6D98E82821744C3D9DC1633BAA58DC67F81D2E325565737093C5981BD729AAAE",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compiled-inputs.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready-state.json",
+      "bytes": 3092,
+      "sha256": "2B13F3EE9D176207583C3807394DF961C398A8AAB3BD1AF451A24E36A34B6594",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready.json",
+      "bytes": 1811,
+      "sha256": "C06E14F153C4ABD848E2A95942DC3E157BB3CD20C3E54F40E154E9E78CDD9724",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-refresh.json",
+      "bytes": 400,
+      "sha256": "6C2A2635DB52C8241319A0296E37A86CCD7FFE4BE6F6E5826D6AA042D590E740",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-result.json",
+      "bytes": 1598,
+      "sha256": "AAE7E010099C1EA2C5FE147BFDB222975642B86AEF92F0B635B3586929DF7023",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-start.json",
+      "bytes": 358,
+      "sha256": "074CE15F37A3B5ACB2071AE8528605D135A58DDEFC631C975AD3D348F99FC293",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-result.json",
+      "bytes": 46277,
+      "sha256": "AD23E0CCE08EB6F23CB72EE865CB96F336AD0CED770CDA214A3618B5EADE94A7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-start.json",
+      "bytes": 1308,
+      "sha256": "8BA6830711666721DB2584E181D28E1AF2C97C06939582EECBCFA0B05E21C7E0",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/REPORT.md",
+      "bytes": 8037,
+      "sha256": "748F68177B414CC6E4BE6647EC8265BE266E6BE4DE009ED20EA113527A22B31E",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/REPORT.md"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-mid.json",
+      "bytes": 503,
+      "sha256": "646DE25DAA9D4CD1052160593D654F351888428435AD2AD85B307CC2B05E48BA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-mid.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-validation.json",
+      "bytes": 404,
+      "sha256": "527BA3C792A1FE6710521FA55ACB9BEE629D98FBCFDCD180B98E393095C5C29B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-validation.json"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 23129,
+      "sha256": "3FB067E28F86FEEEE58D43E4651A97F0A5A6225431604E7ACA7E2218AE13940B",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 23064,
+      "sha256": "5398EE6E1515607919852724F7ABBC9A0C424C09F210E99319B947AC2A51ADA5",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 32815,
+      "sha256": "31D0DD134B0462D7D8C18EADECD292F7F4752A343985CCC80F1F006109B947F5",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1476077,
+      "sha256": "C3BA78BC40ACC17EFB4E555E4CD134CE004C4AD26A1D2DC296CFC620028A30E2",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 110478,
+      "sha256": "1B9DF54C2DEACE50A808ABEAAC6C0C4090F552EA36A30E812703DF6E81CD7499",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs",
+      "bytes": 11513,
+      "sha256": "59C187A0112F64304DFA6B88642B4573B70E223452B6B3C722137A516A7A5160",
+      "git": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs.meta",
+      "bytes": 60,
+      "sha256": "00269A4B9F4B208D286E5BA815E01992CFBDA206D7C12E8A09385C14410EF239",
+      "git": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs.meta"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs",
+      "bytes": 41330,
+      "sha256": "97C034A7D79E57F19E7AF83CF49DFECEF21FD747BB7D510C2D9FF65ABB89D6FE",
+      "git": [
+        " M Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 27129,
+      "sha256": "E8D8CA3BEC37B976EC3767E70ADB6B746AE5430EFC21D5B8CA7548A234C6A3FC",
+      "git": [
+        "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "bytes": 240,
+      "sha256": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "git": [
+        "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 644695,
+      "sha256": "73F27B65A5BF8EC649257368A2039124F12C8C4CB8F715E6F85F0340CE6B1EB0",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-CAMERA-MATERIALIZATION-015.md",
+      "bytes": 6292,
+      "sha256": "E054671431ADD890D5A67DA45F8E25D5835D1708920752AAF15B7D4643AAA7A5",
+      "git": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-CAMERA-MATERIALIZATION-015.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 32650,
+      "sha256": "C4ABC605AF25332DE71D7905101C8C6C88ABE5D32DA7BD8415FE12FD093324EC",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backup-verification.json",
+      "bytes": 4237,
+      "sha256": "C1CE7A8EB6A2E07B28A7C6FEC345C35B06E883B4F485D2F8C8F0CDB01DD8DA48",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 22338,
+      "sha256": "D5D2303B9CAFF15E18F34FA4B5724A059A2E993C8A9A022624B21B1D7900909A",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 20680,
+      "sha256": "BD08A76557D693A13A66E2588FA7B08F8B1FECE7352176F0B742460B167A7EA0",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 31515,
+      "sha256": "77AA5D7A03BFAB5D6033B27DE54236810A241C8D2349CAEE7F18CCFA419A2570",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1474156,
+      "sha256": "7BF03A5CEE51CFA79C33CB5E4A3CD24E2CA4A5DDCE9EBB79253C3ED0D3DFD433",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 109459,
+      "sha256": "7456B9D501298817D10B7495473CC807A875AD5208C4683AE1CB70F10509B7F5",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs",
+      "bytes": 41260,
+      "sha256": "CEEA2D4062C17164B72D8F9E17B8A5DC0D2C72A8446CD9B081150BEE9651DF7F",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 25046,
+      "sha256": "8D9A6901975072636E7474878764159B066115B572E7BDA5EB3E8329D6E1F7D3",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 642825,
+      "sha256": "6631FADA1D821BE0972E34DDF2BD805453EF723C2C4DE06134826272FF6B3B09",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 31674,
+      "sha256": "1034B6C5A59CCDE72E9995CFF603C81101BCEB674A4B01CF6C70C416E664A3C6",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/STATE.md",
+      "bytes": 1543192,
+      "sha256": "F9DB1F562B09067B8550446C7A5F5C31597797EA17176DAD4532A58DF8898792",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before.json",
+      "bytes": 149822,
+      "sha256": "1E9F555A21B2D1D253E7E9235CF561535D0FF23B2B62C14CF733A2263A470831",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/RECORD.md",
+      "bytes": 3668,
+      "sha256": "C7BD2A0981F50F5B24052D208E9FA3636071BC252D3197589293B068348A56A1",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/RECORD.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/supplementary-protection.json",
+      "bytes": 1068,
+      "sha256": "90E5FCE162B9743459873FB96B76DC10380992ED4F85F405B906865494A69585",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/supplementary-protection.json"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1545062,
+      "sha256": "6377CD9144034EE0E80030FB66F2960023CD5EE5D06A13D68CE30B09E286666A",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007.md",
+      "bytes": 4918,
+      "sha256": "2609CB778FDA125D10F076D103AF634121B890D704EDE5707F266C87630994F7",
+      "git": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007.md"
+      ]
+    }
+  ],
+  "excludedSelf": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after.json",
+  "status": [
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+    " M Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/backup-verification.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/change-ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/compiled-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-post.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-preflight.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-compile.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-compile.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-targets.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-initial.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/baseline-editor-after.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/baseline-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/baseline-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/baseline-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/compile-before-import.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/compile-current.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/compile-descriptor-fixture-failure.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/compile-fixture-failure.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/compiled-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/editor-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/editor-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/hardware-and-links.txt",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/preflight-failed.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/refresh-import.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/refresh-scripts.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-first-progress.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-current.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-reloading.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compiled-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-after-tests.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-first-output-note.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/observation-and-unique.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-first.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ab-comparison.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-after-tests.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/editor-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-code-written.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/ledger-pre.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-ready.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-compile-reloading.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/post-tests-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-ready.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-compile-reloading.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-first-failed.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-protected-check.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/pre-tests-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/static-first-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/unique-and-contract-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/change-ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compile-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compiled-inputs-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/confirmed-cases.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compile-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compiled-inputs.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-console.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-editor-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-probe-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle01-derived-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-derived-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-editor-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-orphan-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-reload-retry.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/final-compiled-inputs.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/guard-compiled-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-after.txt",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-compile-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-ready-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/materialization-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/menu-restoration.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/orphan-session-recovery.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/owned-diff-summary.txt",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-probe-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-mid.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/supplementary-audit.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-first-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-ready.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-second-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after-start-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/materialization-window-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/after/production-window-02.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-compiled-inputs.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-end-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-scene.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/materialization-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before/production-window-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/change-ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/comparison-first.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/compiled-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/confirmed-cases.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/editor-before.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-compiled-inputs.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-ready.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/final-fixture-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-ready-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/green-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/menu-restoration.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/production-scope-check.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compile-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-compiled-inputs.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-ready.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/red-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-mid.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/static-validation.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-CAMERA-MATERIALIZATION-015.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-BACKEND-BASELINE-011.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-WINDOW-014.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/protected-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before-backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/protected-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/protected-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness__m-03-dynamic-mesh-upload.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__battle-optimization-progress-tracker.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__BattleDynamicMeshBackend.cs.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__Editor__BattleDynamicMeshBackendSubMeshEditorTests.cs.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__CHANGE-LEDGER.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__FILE-OPERATIONS__INDEX.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__STATE.md.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/protected-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/play-trace.txt",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.cs.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.cs.before",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backup-verification.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007/supplementary-protection.json",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007.md"
+  ],
+  "staged": []
+}

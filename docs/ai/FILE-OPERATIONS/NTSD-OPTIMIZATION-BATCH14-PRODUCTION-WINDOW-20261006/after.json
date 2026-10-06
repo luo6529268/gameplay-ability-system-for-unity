@@ -1,0 +1,659 @@
+{
+  "time": "2026-10-07T00:07:18.0642740+08:00",
+  "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/change-ledger-validation.json",
+      "bytes": 2090,
+      "sha256": "E49A1A49357F0F054679C9C0210085C7E8845F806F494820688DF25155FA82B8",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/change-ledger-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compile-state.json",
+      "bytes": 1535,
+      "sha256": "9EBFA3F26CE106A8FE2BFE2DC9D3073A06E14AE9478887AB454E7AD29E5BA971",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compile-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compiled-inputs-before.json",
+      "bytes": 2078,
+      "sha256": "98FF107A569421BE627BC0ECAD89FB97EAAFA96AD987B38E622658090AC26502",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/compiled-inputs-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/confirmed-cases.json",
+      "bytes": 19407,
+      "sha256": "BB42E7798F8F8A230B3C91FEAA70C04118EE3B40FE58AB59D42319F65E8F11F4",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/confirmed-cases.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-01.json",
+      "bytes": 4379,
+      "sha256": "165803A081A3CF06C2217D4F82E9CFE91B12150CBB591AB5ACB7D064B4C5F94B",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-02.json",
+      "bytes": 4379,
+      "sha256": "14336CC46E5F9C189308EADF2FC594CB3A19015EEBD13589BF3000190156D693",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/materialization-window-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-01.json",
+      "bytes": 122757,
+      "sha256": "88D30C0B723C616913B803033827B3844BB049AF0C20623BB4BF2349FC3280B9",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-02.json",
+      "bytes": 130332,
+      "sha256": "8B85094D58A17C518D85860CC5354A9691B89EB85E805D56CBA1D96959D70C54",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/production-window-02.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compile-state.json",
+      "bytes": 1539,
+      "sha256": "A6E957E95E288CD10AD3D4E4DC6CF3EFF1D9676EB039F4C4D9A7F3F84F4D926C",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compile-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compiled-inputs.json",
+      "bytes": 844,
+      "sha256": "642D9B39AF625D72AAA238061C7DD444EB3573CA0B7CCD20370F8338A684760E",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-compiled-inputs.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-console.json",
+      "bytes": 293,
+      "sha256": "13BD327EE8276A81F269B7E272F5D5F4FE40DE93B297593CE82922CF9C0EFC94",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-console.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-editor-state.json",
+      "bytes": 2300,
+      "sha256": "8153146348BE9FB8BF0B6CBDDB01E647155444B9CA02B715C11ACA29E8A9E813",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-cycle01-editor-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-probe-start.json",
+      "bytes": 391,
+      "sha256": "231CF04CF7D67F27F2C0A0C63645C08C193EA643250CBF12DE3D3DE3C858E297",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-probe-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle01-derived-summary.json",
+      "bytes": 3447,
+      "sha256": "B5B22F07C07D7E233005AE9DF9E98CBD871C4B346B0C827EC1714BD1805A4015",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle01-derived-summary.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-derived-summary.json",
+      "bytes": 3431,
+      "sha256": "46EBD74D4111DE45A735D864DC6A79EA97F3A5B7A968711D4C27E2F2C9F298A7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-derived-summary.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-editor-state.json",
+      "bytes": 2300,
+      "sha256": "153D30EEF1EEF355E8C2A0627CA958C61740EC0D40B78B20F311673214E6AC5E",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/cycle02-editor-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-result.json",
+      "bytes": 916,
+      "sha256": "25927E14087523EC5EB9592E52E0EAA9EE79F2B66BFB1588D0AA7E4B5D763DE0",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-start.json",
+      "bytes": 204,
+      "sha256": "C624504BA749DB9AFC9DE2F5168716111EC3DE41E29D3B7F10806FC9DE6C51D0",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-empty-filter-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-orphan-state.json",
+      "bytes": 2092,
+      "sha256": "B856867AAB8EF0F1B4003172455382AC8DBFE43E198C324B18060E6C1FB755D9",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-orphan-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-reload-retry.json",
+      "bytes": 114,
+      "sha256": "ED2BDBF5A9DCC0E543DEF5958DE825F8E68C6C1D4E5BE4877666486FD75C1F73",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-reload-retry.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-result.json",
+      "bytes": 114,
+      "sha256": "ED2BDBF5A9DCC0E543DEF5958DE825F8E68C6C1D4E5BE4877666486FD75C1F73",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-start.json",
+      "bytes": 204,
+      "sha256": "EB7A8D8CD1A59AEE4B294FF141C8F7256512DAF60125829BA368C2C142DEEC01",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-motion-capacity-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-result.json",
+      "bytes": 8669,
+      "sha256": "EC9F162C1368AAC9D438C5E443FC9A75E6499974147F25033B5657FA99291DD7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-start.json",
+      "bytes": 204,
+      "sha256": "A2218224016032D00DC09AD941408AD03EC891A89D3553A14DA3BF4AE1B3EB28",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-pure-motion-capacity-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-result.json",
+      "bytes": 26300,
+      "sha256": "5FDA9E2A63DA3F21DE89F1662675FA3C1A8D3B4DEE475C0EA822F210233127C6",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-start.json",
+      "bytes": 204,
+      "sha256": "7141A86504C38CC6ADE92961DD83882D676E2D2EF7C6307733F664D5AC49DD01",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editmode-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-before.json",
+      "bytes": 2490,
+      "sha256": "051107D5E866C1F92D9949705B94D40A7C719DE23C921256F74269F34082A489",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-final.json",
+      "bytes": 2735,
+      "sha256": "BA05516A63CD10E8187A7EB9831E4215F26AAFA0BBF0CF7A9D18926C93B306D3",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/editor-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/final-compiled-inputs.json",
+      "bytes": 2507,
+      "sha256": "4A213382FB7AC43C18620082774523864CD2C88E0D93C4334E9E69B2200B6A18",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/final-compiled-inputs.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/guard-compiled-state.json",
+      "bytes": 1535,
+      "sha256": "8589EC250954CB82588C42455F57926BC023C179FDD8253B612F032BF5B1F571",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/guard-compiled-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-after.txt",
+      "bytes": 16,
+      "sha256": "69DE7D50455DFE40362713F04D4679651AAD61BAE58744DD4883690A03E00320",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-after.txt"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-compile-state.json",
+      "bytes": 2300,
+      "sha256": "D4CF10EBB2F801238F0AF6809642F1BDC342D4F4AD935772391DB3B6D71CC0D7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-compile-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-ready-state.json",
+      "bytes": 2300,
+      "sha256": "D4CF10EBB2F801238F0AF6809642F1BDC342D4F4AD935772391DB3B6D71CC0D7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-ready-state.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-refresh.json",
+      "bytes": 302,
+      "sha256": "EC41EF167916AE78424D6FE5C2E023C0E0AA509CA3F7A5901B3C377564B72764",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-start.json",
+      "bytes": 200,
+      "sha256": "F48826304C284408FF5E05F42C4D88143524936F8B809BA2314F6AEDAD61419D",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/manual-cycle-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/materialization-window-01.json",
+      "bytes": 4372,
+      "sha256": "0184819B5963555E6A39CED4CC25C986EE08C853FC84CD2F8ADDE106813F4897",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/materialization-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/menu-restoration.json",
+      "bytes": 211,
+      "sha256": "6C6A949714C83E479EC1A15433333DE7F5BC5321EA19391663EDB82E827322F8",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/menu-restoration.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/orphan-session-recovery.json",
+      "bytes": 2431,
+      "sha256": "D404BDBBFA64DE766632277CFFD2E965F334545A4ECE68053342A5068B4A36C4",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/orphan-session-recovery.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/owned-diff-summary.txt",
+      "bytes": 1114,
+      "sha256": "CFBF0E32A34AC59091A8C4738EBE0C6758939388C26CD9F2CE6611B00E68A446",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/owned-diff-summary.txt"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-probe-start.json",
+      "bytes": 569,
+      "sha256": "F5EFEC6D68B597A40C9CA686599B90642E97C7B09BAC505DB0117E76D10A48A9",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-probe-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-window-01.json",
+      "bytes": 114769,
+      "sha256": "920417E971D0F649CA84378C3442FE1D7CEF922FA21903EC40AF3F4783A458F7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/production-window-01.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-mid.json",
+      "bytes": 182,
+      "sha256": "B9BA6A09EFC9DEDCF3B05EB85B60F6EF3DF0A876F2CA075AAE1FAB60C2EE2989",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-mid.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/REPORT.md",
+      "bytes": 11664,
+      "sha256": "DBA7B8DFB67A5A02ABE4FF1D33B47892FCA9DC6018980DBC157C0414A4A4A221",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/REPORT.md"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/static-validation.json",
+      "bytes": 403,
+      "sha256": "93C388B05DB111104C9E54F099CB6F947E3BB7DBF44875CDB850519AE2226BF2",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/static-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/supplementary-audit.json",
+      "bytes": 1456,
+      "sha256": "621FF46AF2EF63642366B7C2DF5821539A07BF508459058C8E92A243DA33C47F",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/supplementary-audit.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/play-trace.txt",
+      "bytes": 16,
+      "sha256": "69DE7D50455DFE40362713F04D4679651AAD61BAE58744DD4883690A03E00320",
+      "git": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 22338,
+      "sha256": "D5D2303B9CAFF15E18F34FA4B5724A059A2E993C8A9A022624B21B1D7900909A",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 20680,
+      "sha256": "BD08A76557D693A13A66E2588FA7B08F8B1FECE7352176F0B742460B167A7EA0",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 31515,
+      "sha256": "77AA5D7A03BFAB5D6033B27DE54236810A241C8D2349CAEE7F18CCFA419A2570",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1474156,
+      "sha256": "7BF03A5CEE51CFA79C33CB5E4A3CD24E2CA4A5DDCE9EBB79253C3ED0D3DFD433",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 25046,
+      "sha256": "8D9A6901975072636E7474878764159B066115B572E7BDA5EB3E8329D6E1F7D3",
+      "git": [
+        "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "bytes": 240,
+      "sha256": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "git": [
+        "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 642825,
+      "sha256": "6631FADA1D821BE0972E34DDF2BD805453EF723C2C4DE06134826272FF6B3B09",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-WINDOW-014.md",
+      "bytes": 7086,
+      "sha256": "12EC78AB9C1DED90025E3201D6F0E6F13191DFB5CB450B74471A31BE451404EF",
+      "git": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-WINDOW-014.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 31674,
+      "sha256": "1034B6C5A59CCDE72E9995CFF603C81101BCEB674A4B01CF6C70C416E664A3C6",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backup-verification.json",
+      "bytes": 2670,
+      "sha256": "98A52648DB387ECFFAA4B84CF9811DBF6A7CA00B9F11A39911E7DA86EE30A95B",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/play-trace.txt",
+      "bytes": 16,
+      "sha256": "69DE7D50455DFE40362713F04D4679651AAD61BAE58744DD4883690A03E00320",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/play-trace.txt"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 22137,
+      "sha256": "6D222AF98649667F71A1F2E4A677ED061802EE792376F84A6C82C7012231429A",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 18155,
+      "sha256": "12727DB0C35B40F005BE494348BEF0B5B3FDA5250EEBB9D61F5E07DD8AD2CA8C",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 29393,
+      "sha256": "EC2E71DFA243DD3F373B5D3A071219C531E588055AF557133E9EC0E6A10A0933",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1472927,
+      "sha256": "B0DC88DE7474C0A6DACA03452084AD5D6C00A5EDE5BD1A4A38416307DED187DD",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 641630,
+      "sha256": "7210C4F1DE301F216011CF8D7FFEB36C4F4389786E1F2463C8471B4555336773",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 30955,
+      "sha256": "36D8D1806A9E29AEFE94A54C707CE05C470A821D0C3949AEFD9B23E28C7883D4",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/STATE.md",
+      "bytes": 1541997,
+      "sha256": "6280975DA1946363AEA497794549CB68A0DB326F65BB4D1B5E5B04C079B00321",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/backups/docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/before.json",
+      "bytes": 22290,
+      "sha256": "EBFD7739ABD965DF373D323A101954C5F8A47EAAD8D1AFB053564F4C4B3D1104",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-backup-verification.json",
+      "bytes": 539,
+      "sha256": "B23C1BC0EB82FD1697F1D15417E3598F61ED13F2793BF4235D3F9980BA9B1898",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-before.json",
+      "bytes": 431,
+      "sha256": "FF028D15C820BC80090C5E97555653AC5EA291DAAB0A07966BC5AC48C987197C",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/legacy-test-trace-before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-backup-verification.json",
+      "bytes": 441,
+      "sha256": "3836DF2FE1C301ECB1CF158C3F19958CECFD996FE5B6A8354BCF2F5F63FBAD38",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.cs.before",
+      "bytes": 23109,
+      "sha256": "16738526AF806B20E85A13F5AD65493A9EAB20863D46D7F40C2A024B101979AE",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.cs.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.json",
+      "bytes": 371,
+      "sha256": "51E8CCB634105B8C1017CD3CC604F53F3C3D294A0E418BBA5CE54B680EB660EE",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v1-before-correction.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.cs.before",
+      "bytes": 24163,
+      "sha256": "91F106E51CCCCAFE0A2F604053D15B0DBA96B49AC019D0C0504B0129CF2D17DA",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.cs.before"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.json",
+      "bytes": 330,
+      "sha256": "8308A3F48B56902B6C4CE15FA64292089B520B3B9E770AEE89724896E441EBCB",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/probe-v2-before-manual-cycle.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-before.json",
+      "bytes": 213565,
+      "sha256": "6BECEB6B9E063DF268CECED53E4C07A4EA72A6A4FC1D18C0D4C9A84C777DB94B",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/protected-before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/RECORD.md",
+      "bytes": 4871,
+      "sha256": "294046DFBB81CC241F8E75BA5839D3F9359A598655F66CB05821C3DDEC9D5AC7",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/RECORD.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1543192,
+      "sha256": "F9DB1F562B09067B8550446C7A5F5C31597797EA17176DAD4532A58DF8898792",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006.md",
+      "bytes": 6113,
+      "sha256": "656E9C770781D01D391E01A69B65BADE0BD0CCA52FEFBE3ACE92D78C35EA7562",
+      "git": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006.md"
+      ]
+    }
+  ],
+  "excludedSelf": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/after.json",
+  "status": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "?? Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-BACKEND-BASELINE-011.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-WINDOW-014.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006.md"
+  ]
+}

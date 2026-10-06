@@ -1,0 +1,40 @@
+{
+  "initial": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d70510b5287c4498bc1064e99cee388c",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  ],
+  "corrected": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "42f2b585714c40bba418d87fb5b425d9",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  ],
+  "correctedTestNames": [
+    "NTSD.Test.BattleRealTextureSubmissionEditorTests.RealTextures_PreparedCaptureMotionUploadRecordExecuteLease_ZeroGc(1000,OrderedChunks,True)",
+    "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+    "NTSD.Test.BattlePresentationMotionSamplerEditorTests",
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion"
+  ],
+  "behavior": "Only log-affected performance case rerun with 54 related checks; no Editor query during corrected execution"
+}

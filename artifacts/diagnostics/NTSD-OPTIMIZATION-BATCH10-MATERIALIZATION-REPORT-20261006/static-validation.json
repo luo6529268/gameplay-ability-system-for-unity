@@ -1,0 +1,22 @@
+{
+  "time": "2026-10-06T22:21:06.0189100+08:00",
+  "links": 133,
+  "missingLinks": [],
+  "rows": 34,
+  "high": 12,
+  "medium": 14,
+  "low": 8,
+  "diffCheckExit": 0,
+  "diffMessages": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "newCodeWhitespace": [],
+  "compiledSourceMismatchCount": 0
+}

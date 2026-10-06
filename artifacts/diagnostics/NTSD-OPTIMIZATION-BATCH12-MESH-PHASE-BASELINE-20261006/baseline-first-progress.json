@@ -1,0 +1,7 @@
+{
+  "chunk_id": "211555",
+  "wall_time_seconds": 0.0824012,
+  "exit_code": 0,
+  "original_token_count": 217,
+  "output": "[{\"success\": true, \"message\": \"Test job status retrieved.\", \"data\": {\"job_id\": \"fee8c39d9afb4f10b8a02c0d1cec8fc2\", \"status\": \"running\", \"mode\": \"EditMode\", \"started_unix_ms\": 1791298165858, \"finished_unix_ms\": null, \"last_update_unix_ms\": 1791298208801, \"progress\": {\"completed\": 8, \"total\": 9239, \"current_test_full_name\": \"NTSD.Animation.Rendering.Editor.BattleMeshUploadBaselineEditorTests.CurrentBackend_ControlledWarmUploadBaseline\", \"current_test_started_unix_ms\": 1791298208801, \"last_finished_test_full_name\": \"NTSD.Animation.Rendering.Editor.BattleMeshUploadBaselineEditorTests.CurrentBackend_ControlledWarmPhaseBaseline(4097,OrderedChunks,True,False)\", \"last_finished_unix_ms\": 1791298208799, \"stuck_suspected\": false, \"editor_is_focused\": false, \"blocked_reason\": null, \"failures_so_far\": [], \"failures_capped\": false}, \"error\": null, \"result\": null}}]\r\n"
+}

@@ -1,0 +1,275 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "a841f7adcfca424da9ec6a1c56d5da28",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791297337495,
+      "finished_unix_ms": 1791297345486,
+      "last_update_unix_ms": 1791297345486,
+      "progress": {
+        "completed": 26,
+        "total": 9231,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791297344695,
+        "last_finished_test_full_name": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(StrictOrderedDraw)",
+        "last_finished_unix_ms": 1791297345039,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 26,
+          "passed": 26,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.9036779,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "AccumulatedBounds_MatchLegacyVertexScanAcrossRandomSegments",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_MatchLegacyVertexScanAcrossRandomSegments",
+            "state": "Passed",
+            "durationSeconds": 0.008006,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_ResetAcrossFramesChunksAndEmptyClear",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_ResetAcrossFramesChunksAndEmptyClear",
+            "state": "Passed",
+            "durationSeconds": 0.0114831,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_SteadyStateAddsNoManagedAllocation",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_SteadyStateAddsNoManagedAllocation",
+            "state": "Passed",
+            "durationSeconds": 0.0085623,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AccumulatedBounds_StrictModeKeepsOneExactBoundsPerQuad",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.AccumulatedBounds_StrictModeKeepsOneExactBoundsPerQuad",
+            "state": "Passed",
+            "durationSeconds": 0.0018394,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PrepareCapacity_PreventsManagedBackendGrowthDuringFirstBuild",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSegmentBoundsEditorTests.PrepareCapacity_PreventsManagedBackendGrowthDuringFirstBuild",
+            "state": "Passed",
+            "durationSeconds": 0.000769,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_HandlesPhysicalSubMeshCountBelowPreviousActiveCount",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_HandlesPhysicalSubMeshCountBelowPreviousActiveCount",
+            "state": "Passed",
+            "durationSeconds": 0.0026947,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_PreservesChunkRangesAndRecoversDestroyedMesh",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesChunkRangesAndRecoversDestroyedMesh",
+            "state": "Passed",
+            "durationSeconds": 0.0372496,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+            "state": "Passed",
+            "durationSeconds": 0.0029961,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(1)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0028192,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(17)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(17)",
+            "state": "Passed",
+            "durationSeconds": 0.0003275,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4096)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4096)",
+            "state": "Passed",
+            "durationSeconds": 0.0052737,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4097)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.Build_CountsOnlyActiveVertexPrefixUsingActualMeshStride(4097)",
+            "state": "Passed",
+            "durationSeconds": 0.0057475,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DrawMode_ChangesSegmentsNotVertexUploadCalls(OrderedChunks)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.DrawMode_ChangesSegmentsNotVertexUploadCalls(OrderedChunks)",
+            "state": "Passed",
+            "durationSeconds": 0.0007919,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DrawMode_ChangesSegmentsNotVertexUploadCalls(StrictOrderedDraw)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.DrawMode_ChangesSegmentsNotVertexUploadCalls(StrictOrderedDraw)",
+            "state": "Passed",
+            "durationSeconds": 0.0004082,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EmptyOrNullFrame_HasNoVertexUpload(False)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.EmptyOrNullFrame_HasNoVertexUpload(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0007208,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EmptyOrNullFrame_HasNoVertexUpload(True)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.EmptyOrNullFrame_HasNoVertexUpload(True)",
+            "state": "Passed",
+            "durationSeconds": 0.000347,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PrepareAndNativeMeshRecovery_DoNotCountIndexBufferOrReservation",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.PrepareAndNativeMeshRecovery_DoNotCountIndexBufferOrReservation",
+            "state": "Passed",
+            "durationSeconds": 0.0010677,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SameFrameRepeatedBuild_IsCountedAgainWithoutAccumulating",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.SameFrameRepeatedBuild_IsCountedAgainWithoutAccumulating",
+            "state": "Passed",
+            "durationSeconds": 0.0007809,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedCapacityReject_BeforeBuildKeepsPriorDiagnostics",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.SealedCapacityReject_BeforeBuildKeepsPriorDiagnostics",
+            "state": "Passed",
+            "durationSeconds": 0.0019651,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ShrinkAndClear_ResetWithoutCountingInertTailMetadata",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.ShrinkAndClear_ResetWithoutCountingInertTailMetadata",
+            "state": "Passed",
+            "durationSeconds": 0.0212556,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnresolvedCommands_CountOnlyResolvedPayload(False)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UnresolvedCommands_CountOnlyResolvedPayload(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0008973,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnresolvedCommands_CountOnlyResolvedPayload(True)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UnresolvedCommands_CountOnlyResolvedPayload(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0003455,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(0)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0061211,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(4096)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.UploadFailure_ReportsOnlyAlreadyCompletedApiCalls(4096)",
+            "state": "Passed",
+            "durationSeconds": 0.0060387,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "WarmedBuildWithCounters_AllocatesNoManagedMemory(OrderedChunks)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(OrderedChunks)",
+            "state": "Passed",
+            "durationSeconds": 0.0667728,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "WarmedBuildWithCounters_AllocatesNoManagedMemory(StrictOrderedDraw)",
+            "fullName": "NTSD.Test.BattleVertexUploadDiagnosticsEditorTests.WarmedBuildWithCounters_AllocatesNoManagedMemory(StrictOrderedDraw)",
+            "state": "Passed",
+            "durationSeconds": 0.3448176,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+]

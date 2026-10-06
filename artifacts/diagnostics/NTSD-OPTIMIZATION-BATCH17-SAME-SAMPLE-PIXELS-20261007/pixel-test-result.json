@@ -1,0 +1,95 @@
+[
+  {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "02ff380553534cf69405f591bb79c52e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791307236348,
+      "finished_unix_ms": 1791307247121,
+      "last_update_unix_ms": 1791307247121,
+      "progress": {
+        "completed": 6,
+        "total": 9262,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791307246064,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(2,StrictOrderedDraw)",
+        "last_finished_unix_ms": 1791307246147,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.9125128,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(0,OrderedChunks)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(0,OrderedChunks)",
+            "state": "Passed",
+            "durationSeconds": 0.6936123,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":0,\"drawMode\":0,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          },
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(1,OrderedChunks)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(1,OrderedChunks)",
+            "state": "Passed",
+            "durationSeconds": 0.1238184,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":1,\"drawMode\":0,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          },
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(2,OrderedChunks)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(2,OrderedChunks)",
+            "state": "Passed",
+            "durationSeconds": 0.1100167,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":2,\"drawMode\":0,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          },
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(0,StrictOrderedDraw)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(0,StrictOrderedDraw)",
+            "state": "Passed",
+            "durationSeconds": 0.0877857,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":0,\"drawMode\":1,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          },
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(1,StrictOrderedDraw)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(1,StrictOrderedDraw)",
+            "state": "Passed",
+            "durationSeconds": 0.0945461,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":1,\"drawMode\":1,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          },
+          {
+            "name": "InterpolatedOverlap_MatchesIndependentQuadOracle(2,StrictOrderedDraw)",
+            "fullName": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.InterpolatedOverlap_MatchesIndependentQuadOracle(2,StrictOrderedDraw)",
+            "state": "Passed",
+            "durationSeconds": 0.0823335,
+            "message": null,
+            "stackTrace": null,
+            "output": "{\"bindingMode\":2,\"drawMode\":1,\"comparedSamples\":15,\"comparedPixels\":138240,\"maximumChannelError\":0,\"reverseOrderDifferentPixels\":819,\"minimumContentPixels\":846,\"status\":\"PASS\"}\r\n"
+          }
+        ]
+      }
+    }
+  }
+]

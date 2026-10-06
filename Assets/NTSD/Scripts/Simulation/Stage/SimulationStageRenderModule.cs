@@ -439,7 +439,8 @@ namespace NTSD.Simulation
         {
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
-            BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
+            BattleCentralRenderSystem.PresentLatestPublishedFrame(
+                world, Application.isPlaying && !Application.isBatchMode);
             if (!BattleCentralRenderSystem.ShouldSuppressLegacyMaterializers(world))
             {
                 detailDiagnostics?.BeginPhase(

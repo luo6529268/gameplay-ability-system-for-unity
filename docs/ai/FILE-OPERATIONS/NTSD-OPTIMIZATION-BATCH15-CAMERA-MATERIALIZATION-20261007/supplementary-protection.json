@@ -1,0 +1,24 @@
+{
+  "time": "2026-10-07T00:40:03.2598169+08:00",
+  "note": "Late supplemental protection: earlier after manifests cannot include their own file; no task edits to these files. This is not a pre-task digest claim.",
+  "files": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/after.json",
+      "bytes": 30718,
+      "modifiedUtc": "2026-10-06T14:22:20.5564958Z",
+      "sha256": "0D5071E152417B849A154BA6A44F807F6D476CD9B803FEDA210A97D80D22D10D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/after.json",
+      "bytes": 24145,
+      "modifiedUtc": "2026-10-06T15:16:51.5920806Z",
+      "sha256": "8C6682B5354956E4E07E16AFF5596BCDE1F267E646ECE1CD51E648D237634E21"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/after.json",
+      "bytes": 32063,
+      "modifiedUtc": "2026-10-06T16:07:18.8379878Z",
+      "sha256": "7AA1D8484441D67A5460B3E2EB05C4E5FB15F3FCDEB2A9D14A7D3B478E017D48"
+    }
+  ]
+}

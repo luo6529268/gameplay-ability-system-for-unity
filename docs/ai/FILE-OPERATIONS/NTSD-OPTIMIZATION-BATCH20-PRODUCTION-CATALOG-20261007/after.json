@@ -1,0 +1,171 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007",
+  "frozenAt": "2026-10-07T02:28:00.3153680+08:00",
+  "status": "COMPLETED_SCOPED / RUNTIME_PARTIAL",
+  "selfExcluded": true,
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/compile-state.json",
+      "bytes": 1534,
+      "sha256": "2995B41627EA9D36F791D6D7E241CE9FA6278712D4D0840579FF8BAA2F102266"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/editor-preflight.json",
+      "bytes": 2578,
+      "sha256": "95B88F311F6AF0EE945BE666AE93915E5847AB584BD30992EFFD15251B67E7AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/final-validation.json",
+      "bytes": 7113,
+      "sha256": "AF7E707CEA858A8E7B666A8BDE4CC3ACD01CB4DBD32DC681EF9B70D92B61DE5C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/play-dispatch.json",
+      "bytes": 3561,
+      "sha256": "567AA50A8B1777FB14B546018F24BA1807582F1586929A3A7F951E9FDFDD9127"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/REPORT.md",
+      "bytes": 7049,
+      "sha256": "9DDC18775E68F4035B958847BA66FFE9261858D93E3186DDB8FA871690BC7ECB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/run-01/materialization-window-01.json",
+      "bytes": 4407,
+      "sha256": "F7DB40D5F700E89B58F2F6555364634E498B2E7715A11E54EC1FCD9F9A8D6733"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/run-01/production-window-01.json",
+      "bytes": 2993098,
+      "sha256": "41333AC80DD9F9F80779D76444D4DDB38585FD1FB63D2A500533A67D97B2EC50"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/scene-restoration.json",
+      "bytes": 5376,
+      "sha256": "147565D6DEF237C204712284F698EC8700A34295DFAE2A293057D73EF15BC021"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/test-dispatch.json",
+      "bytes": 1098,
+      "sha256": "64D72670334DC95F8A272E50D5AE1BE037ECAE60CBCE730F5E92A374C8BDAB43"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/test-results.json",
+      "bytes": 19599,
+      "sha256": "0AC9C8EB4157E17C8274654E8FE7C437B88142D3F0078785E7C2C39C6F8BF55D"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 28778,
+      "sha256": "0D367E6735AA5751C6A0349C45EC43863CF2A5888D2EC8AFBD7B7430F5B17160"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 36415,
+      "sha256": "8CBB7278C6E1E516A882C745648A175F97DA520FFE188C76A510E825D708C6B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 40587,
+      "sha256": "99414E369411C3C63F193150AF34802F07BF6776A7A32AAC56F935E4BABC378A"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1482109,
+      "sha256": "C59D31FFFE12A6B6D799B8B9791F12D7D06F088B2834174B4C76E2442BD74268"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 56396,
+      "sha256": "D27FD15576AE7718474D8574F9EFB4880568E3B61FB792DB7F65D1C427E0D260"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs",
+      "bytes": 20387,
+      "sha256": "532C87E8BA9C268488BE802888CFCEF1A4D98DADEB93D0A6915B0EF862698EDC"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs.meta",
+      "bytes": 60,
+      "sha256": "DF3689AD3A179F524E5B7567F1C505EA163FFE34E93058C5102A4F5AA6EE937A"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 650520,
+      "sha256": "E18F31FA57966B347648CF8C07C1F7DC976931DD1F54706174F617D76583D26D"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-CATALOG-020.md",
+      "bytes": 3226,
+      "sha256": "C39FAACFFD60D755C31EFA85514A2AEDA8E2C82B885E5F65E54A5A4EC81097B3"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 38552,
+      "sha256": "3D1D94477F1CC53E02F472A38536C7B496153DE94A62F070ED80ED3EBA9ED74B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 27231,
+      "sha256": "8C55BC335D46C074E5C7909DD646C6FDAE77D68E70646CEED4BBA9559965E05B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 33066,
+      "sha256": "7DFDC5EC9FBE26F6C8C8E2B5CAF63CF70C11CC8A23F840E74452DC1A04CCEC6C"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 38407,
+      "sha256": "976CADFD04CA841A9FC3D0647AAF375BB349268748B55619A2B53350AA22E52E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1480649,
+      "sha256": "398B0CA70160099498A5239B857C6EEE66FAE3E4E86C3A4C6D6C44694A5C6D22"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 52319,
+      "sha256": "5898FE0F9C5BA1A2B1DF7252316C4478DFC9CA0CDD99CF04AE38A2CABFB5415A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 649097,
+      "sha256": "E7131A4E76138BB12D569A92766E1B859F41B396324076CC1F4EBC6F21AF89A8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 37106,
+      "sha256": "7594C968AC406DFD180769B4DE74B87D1FE798B356A161B7C41F0F67D2D9D890"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/backups/docs/ai/STATE.md",
+      "bytes": 1549464,
+      "sha256": "8C87C4AC0BCD9FD59B2857320EFAB7D66CC475956C7AC31B9B33C42F96EB9C1B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/before.json",
+      "bytes": 180349,
+      "sha256": "EDF3C5645F8CA837792ABFFEF2847BB7E96F6C03129D8270F80D202754577C96"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/RECORD.md",
+      "bytes": 3057,
+      "sha256": "408FC43AF5EF27AB2FC2596228CBBACC93C202CF23B305FDF29AF6219F5031A7"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1550887,
+      "sha256": "24B08B3EB809E4C0F953EA29321875BBA62EC567573680AF735A68D71E422F16"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007.md",
+      "bytes": 4711,
+      "sha256": "A302C7407BC8467441F75092FC51089408D64AE6630EA72E9359888E5C330165"
+    }
+  ],
+  "protectedCount": 708,
+  "backupCount": 8,
+  "runtimeResult": "FAIL / Foot coverage unmet, replay NOT_RUN"
+}

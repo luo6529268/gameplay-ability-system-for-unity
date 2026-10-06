@@ -1,0 +1,109 @@
+{
+  "time": "2026-10-06T22:47:11.4795738+08:00",
+  "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 14409,
+      "sha256": "46A196CEDACFFB6A87AA742868D6251DFFF7C7AE1879072FA7523C6B5D86F9CA",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 26163,
+      "sha256": "70DD43A3E1A673B65B1DC942834CB497795F450CEF3E6FB125FF8C5680680973",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21635,
+      "sha256": "BF4193CB3FB9562F3CF631FFEC88EB7A681BDDC6E4A755BB6C79DB76910A0485",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1471002,
+      "sha256": "8315265F4D8BCA927923FE3A4CDBE3DB335929553C8AF09792FDB5372D6E4FF3",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 639773,
+      "sha256": "BA92127CE6A8812B639DCA6A19518343A4B000CC2D218DDC71FF58E537B94F5D",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1540140,
+      "sha256": "FFC8A0F582492BDD306883F3C0618CC1AE6473AED88CD4C1501F76B1752AF47D",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 29765,
+      "sha256": "3B362781C17F7E8DC601E42C858CADEBAED38D7E1CC9EB050F6E4FEA32D91365",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleMeshUploadBaselineEditorTests.cs",
+      "bytes": 11483,
+      "sha256": "8479E060ABAFD0E1E7F9BA95437A1E2BFD08DE09A58CFAAD8574F5BAABDE2ABE",
+      "git": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs"
+      ]
+    }
+  ],
+  "status": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-BACKEND-BASELINE-011.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006.md"
+  ],
+  "staged": []
+}

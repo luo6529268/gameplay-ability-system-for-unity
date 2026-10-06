@@ -1,0 +1,79 @@
+{
+  "time": "2026-10-06T22:11:24.7188240+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006",
+  "changeId": "NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+  "commit": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "bytes": 109092,
+      "sha256": "FAAF0C6814166763B68228FCF11C8F0753EBD0AFC795D7187232E30EDA82913C",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "gitStatus": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 10987,
+      "sha256": "CD5FD5287D0DAD5742DFF9FCBA0720B6580A28282084227C37672E3C199E686A",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "gitStatus": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 22747,
+      "sha256": "2BD3B2DD0A3E85AA79429AF80634FB551CFA5E5755360D2D81E572B0D55ACE7C",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "gitStatus": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21147,
+      "sha256": "68C5F90670627BF1FCA3CE25036613E085EF89B2F738FF1977237A7FC96BB01A",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "gitStatus": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1468972,
+      "sha256": "A0CC79B24C1F8936145B3E12A144F0834B1815EF7E7DB0398068A7B7AA73CB13",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": []
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 637811,
+      "sha256": "6834CB067D6B6F3080FB2906DAF90225E4813F715CF18B367A93B2C8BAB08306",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+      "gitStatus": []
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1538178,
+      "sha256": "7A4027905EEED1ED31BCF65E830FEBD93175BF7C67502CD4E1FA080E70E35B9C",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/STATE.md",
+      "gitStatus": []
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 28345,
+      "sha256": "0BBFC19A38EE38D9A675A63BED0210E2C27D371B3812732694028461DD8A1FDC",
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "gitStatus": []
+    }
+  ],
+  "gitStatus": [
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json"
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "source": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness__m-03-dynamic-mesh-upload.md.before",
+      "sha256": "FAC00127B080C0F14E75A2C50BA6AA604B2B3991D8290EBFE8487605958FBAB1",
+      "bytes": 16211
+    },
+    {
+      "source": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__battle-optimization-progress-tracker.md.before",
+      "sha256": "5335010B9A30D73514CF307268E8DD96585934DA7976D8B3BD9BBA6D63745BB4",
+      "bytes": 27532
+    },
+    {
+      "source": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md.before",
+      "sha256": "9AA5BCDC4F562A9C62744AD66E49B86DF0B246762E866FC04AB946FBD60F471F",
+      "bytes": 21889
+    },
+    {
+      "source": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md.before",
+      "sha256": "7BB5AA403AFA6D3E57F8B5F675FA10FEA4F8FA0E9A87FE571E5ECE32D7C6DCFF",
+      "bytes": 1471911
+    },
+    {
+      "source": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__CHANGE-LEDGER.md.before",
+      "sha256": "41F471A78F36D693BAF19BA312ADA158D2B95419031A29B5AD498BAD733BB08D",
+      "bytes": 640648
+    },
+    {
+      "source": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__STATE.md.before",
+      "sha256": "3DE7137A58FAC30ADB805F1976383F3CDBD944495EEBDE6BB5907D1F686DEC5C",
+      "bytes": 1541015
+    },
+    {
+      "source": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/docs__ai__FILE-OPERATIONS__INDEX.md.before",
+      "sha256": "3E9F948E65C59DF48BB81EBFE50FC1E263772655C52E6876081CFF8551242CA7",
+      "bytes": 30330
+    },
+    {
+      "source": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__BattleDynamicMeshBackend.cs.before",
+      "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD",
+      "bytes": 43617
+    },
+    {
+      "source": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/backups/Assets__NTSD__Scripts__Animation__Rendering__Editor__BattleDynamicMeshBackendSubMeshEditorTests.cs.before",
+      "sha256": "D9A2274F1EA8B346556FBF724AA6E6188787C98AAD046791122AAF8949CF684B",
+      "bytes": 13172
+    }
+  ],
+  "verified": true
+}

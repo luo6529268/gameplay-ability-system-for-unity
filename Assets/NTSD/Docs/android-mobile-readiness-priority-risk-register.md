@@ -1,10 +1,37 @@
+> 2026-10-07 第21批事前：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / IN_PROGRESS；NTSD-OPT-M03-FOOT-AUTHORING-021 / PLANNED。仅原savedBattle 64实际camera只读Foot配置/Self前置诊断，不改production/Scene/Q06 body，不降第20批严格门；8准确备份/733保护完成。34项高12中14低8、父M03/H11 OPEN，专项门保持，尚未实施或测试。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
+
+> 2026-10-07 第20批PARTIAL / FOOT_COVERAGE_UNMET：NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007；NTSD-OPT-M03-PRODUCTION-CATALOG-020 / RUNTIME_PENDING。7新＋54相关=61/61 Passed；原Battle1800 distinct camera/tick8→1563、1800Build/0growth、9700实际CPU DrawMesh、catalog/Health活动、camera/observer各0B、两slot/CPUlease0；Foot每帧0导致严格window FAIL，原件保留，三档replay NOT_RUN。Editor两fullGC硬门false/global三代collection各3，非全链0GC/1000AI/Android。关闭三残留0、Scene同/原Menu恢复，8备份/708保护；34项高12中14低8关闭0，父OPEN/专项门保持。下一先只读定位Foot接线，不改Scene/降门槛；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/REPORT.md) / [留痕](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-CATALOG-020.md)。
+
+> 2026-10-07 第20批事前：NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007 / IN_PROGRESS；NTSD-OPT-M03-PRODUCTION-CATALOG-020 / PLANNED。原生产1800 distinct camera观察＋实际catalog的100/500/1000重复显示命令重放分证据；只Editor诊断，不改production/World真值。准确8文件备份完成，708既有保护；34项高12/中14/低8、父M03/H11 OPEN/RUNTIME_PENDING，EXT1/Mono/ATLAS专项门保持。尚未实施或测试。 [留痕](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-CATALOG-020.md)。
+
 # Android 移动端就绪度与 1000 AI 优化风险登记表
+
+> 2026-10-07 子批19限定通过：NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007 / SCOPED_REAL_TEXTURE_CPU_BRIDGE_PASS；NTSD-OPT-M03-REAL-TEXTURE-SUBMISSION-019 / FOCUSED_TEST_PASS。六唯一真实项目Texture2D受控CPU桥窗10800samples，当前线程0B/零扩容/零CPU read lease，两slot/stride44；1000连续2segment、交错/Strict各1000，4097为2chunk/3segment。初7completed作业一项MCP超时连接日志failed保留；仅受影响case＋54回归补跑55/55 Passed。只新Editor fixture，无production改动/收益A-B，7备份/679保护；原Menu clean非Play，父M03/H11 OPEN/RUNTIME_PENDING、34项高12中14低8不关闭；实际生产RenderPass/catalog/活动辅助/高负载全链及设备待验，专项门不解冻。下方事前与中间状态保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/REPORT.md)。
+
+> 2026-10-07 子批19事前：NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007 / IN_PROGRESS；NTSD-OPT-M03-REAL-TEXTURE-SUBMISSION-019 / PLANNED。仅新Editor真实项目纹理/高command受控CPU提交桥，7当前字节备份/679保护；100/500/1000/4097 command、64warm/1800samples，两slot snapshot/motion/Mesh/DrawMesh/Graphics.Execute/lease。非生产RenderPass/自然AI/完整PlayerLoop/Android；production/Q06/Scene资源与专项门不变，尚未测试。 [留痕](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-REAL-TEXTURE-SUBMISSION-019.md)。
+
+> 2026-10-07 子批18限定通过：NTSD-OPTIMIZATION-BATCH18-DISPLAY-SAMPLE-TIMING-20261007 / SCOPED_DISPLAY_SAMPLE_TIMING_PASS；NTSD-OPT-M03-DISPLAY-SAMPLE-TIMING-018 / RUNTIME_PENDING。54/54回归；原Battle自然240tick/293camera、53同publication对/378命令差值核验（100运动）、误差最大0.000048px、293alpha CPU区间通过。queue→首次CPUcamera-end均5.72/max10.05ms不是screen/GPU latency；observer/camera各0B、关闭三残留0/Scene同/原Menu恢复。只Editor扩展，8备份/653保护，父OPEN/设备与专项门保持。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH18-DISPLAY-SAMPLE-TIMING-20261007/REPORT.md)。
+
+
+> 2026-10-07 子批18事前：NTSD-OPTIMIZATION-BATCH18-DISPLAY-SAMPLE-TIMING-20261007 / IN_PROGRESS；NTSD-OPT-M03-DISPLAY-SAMPLE-TIMING-018 / PLANNED；仅Editor原Battle alpha/CPUcamera时序只读核验，8当前备份/653保护；production/Q06/Scene/资源及专项门不变，尚未测试/Play。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-DISPLAY-SAMPLE-TIMING-018.md)。
+
+
+> 2026-10-07 子批17限定通过：NTSD-OPTIMIZATION-BATCH17-SAME-SAMPLE-PIXELS-20261007 / SCOPED_SAME_SAMPLE_PIXEL_PASS；NTSD-OPT-M03-SAME-SAMPLE-PIXELS-017 / FOCUSED_TEST_PASS。新6/6＋相关54/54，90同显示样本/829440像素最大通道差0、反序負控制每组819差异；只新Editor fixture，无production改动。原Menu clean/8roots/非Play，7当前备份/611保护；自然排序/first-visible/latency、完整0GC/高负载/设备及父OPEN不晋升。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH17-SAME-SAMPLE-PIXELS-20261007/REPORT.md)。
+
+
+> 2026-10-07 子批17事前：NTSD-OPTIMIZATION-BATCH17-SAME-SAMPLE-PIXELS-20261007 / IN_PROGRESS；NTSD-OPT-M03-SAME-SAMPLE-PIXELS-017 / PLANNED；同显示样本离屏像素/插值契约验证，只新Editor测试，不改production/Q06/Scene/资源，不启动专项M0。7准确当前备份/611保护；父OPEN及专项门保持。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-SAME-SAMPLE-PIXELS-017.md)。
+
+
+
+> 2026-10-07 M-03子批16限定通过：[Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH16-DYNAMIC-DISPLAY-20261007.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-DYNAMIC-DISPLAY-016.md)。50/50、自然240tick/308camera、1183snapshot、18新增/16离开publication；只Editor探针，production未改，三关闭残留0/Scene保持。34项/高12中14低8不变；透明像素/first-visible/完整链/设备仍开放。
+
+> 2026-10-07 M-03子批15限定通过：[Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH15-CAMERA-MATERIALIZATION-20261007.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-CAMERA-MATERIALIZATION-015.md)。149去重Passed、原Battle前后窗口Build/camera2→1、entity vertex bytes/camera1408→704；非整场/GPU/FPS50%。两次重进关闭/Scene通过，production RUNTIME_PENDING、34项/高12中14低8/父OPEN保持。
 
 > 当前需处理：整局视觉/音频内存、表现层 0GC、插值物化与上传、1000 AI/碰撞/worker、
 > Android 内容/构建/输入/设备认证，以及架构、证据和发布配置。
 >
 > 文档 ID：`ANDROID-MOBILE-READINESS-RISK-REGISTER-001`
-> 建立日期：2026-09-05；最后更新：2026-10-06
+> 建立日期：2026-09-05；最后更新：2026-10-07
 > 当前状态：`DOCUMENTS_REBASELINED / IMPLEMENTATION_STARTED / ANDROID_NOT_CERTIFIED`
 > 本文只记录说明、优先级、状态、进度、详情入口与留痕；方案、验收和测试条件在独立文档中。
 > 2026-10-06 后续授权：用户已批准按优化文档开始。统一实施进度见
@@ -30,8 +57,17 @@ M-03子批06补中央实体Mesh每Build的API上传次数/顶点数/字节数，
 子批09实际Build admission/outcome与成功API payload按三类request归属已补，新23/23+旧202/202（去重225）。
 准入拒绝不重复旧值、失败在Clear前冻结，completed不等于像素成功；局部wrapper+Build0B。
 尚未减少上传，生产分组报告/真实基线/完整链0GC/1000AI/Android继续待验收。
-局部插值Prepare/lookup及辅助双backend交错帧0B，详进度总表；本优化任务仍无新的Player构建、
-真实Battle Play、GPU、完整渲染链0GC或真机性能证据；统一结果见进度总表。
+子批10显式生产冻结快照/JSON及同source同epoch窗口已补，新58/58+旧225/225（去重283）。
+跨Reset/来源/非累计端点或counter倒退整份拒绝；导出非热路径有分配，未自动开启采样。
+真实生产窗口/基线、完整链0GC/dirty优化/收益/1000AI/Android继续待验收。
+局部插值Prepare/lookup及辅助双backend交错帧0B，详进度总表。
+2026-10-07子批14原Battle自然两窗口已通过：101回归，camera128+136/Build256+272，
+局部记录分配0B/growth0，关闭三残留0/Scene不变；发现同显示帧LateUpdate与camera两物化。
+本优化任务仍无新的Player/GPU/完整渲染链0GC/1000AI或真机性能证据；统一结果见进度总表。
+
+子批15 warm中央host只Queue与原clock取样，geometry留原camera；14新+135旧Passed。
+before132camera/264Build，after143/143及118/118；每camera实体vertex1408→704bytes。
+两次重进零扩容/失败/拒绝、记录分配0B/关闭三残留0/Scene同SHA；动态/像素/完整链和设备仍开放。
 
 | 总体能力 | 当前进度 | 留痕与限制 |
 |---|---|---|
@@ -45,7 +81,7 @@ M-03子批06补中央实体Mesh每Build的API上传次数/顶点数/字节数，
 | 音频内存 | 正式音频/PCM 适配已存在；优化待批 | 约 210 MiB 为已有副本 payload 估算，不是实测 RSS/峰值 |
 | 当前战斗正确性 | 用户接受限定收尾；优化回归仍强制 | 当前336B44及已声明例外保持，不自动重开旧 campaign |
 | Mono/Core/Presentation | 方案及正文修正已记录；代码实施仍 USER_HOLD | 从 B0 重新 inventory，不能把目录整理当分层完成 |
-| 本轮优化 | 文档基线及34项进度入口已建立；H-11子批01/02/03/04/05已写并聚焦通过 | 完整M0、真实Battle及真机门仍待验收；其他条目排队/保留原专项门 |
+| 本轮优化 | 34项高12/中14/低8；H-11子批01～05、M-03子批06～19限定通过；20 PARTIAL | 第20批61/61＋原Battle1800camera有生产catalog/Health/CPU提交和局部0B证据；Foot每帧0、严格FAIL保留/replay NOT_RUN；先只读定位Foot覆盖前置。完整0GC/高负载/真机与专项门保持，不新增无证据方向 |
 
 条目共 **34 项：高 12、中 14、低 8**。原 28 项保留 ID/路径，新增 H-10/H-11、
 M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全性/潜在成本/前置重要性，
@@ -76,7 +112,7 @@ M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全
 | `H-08` | 全量视觉预热与源纹理回退仍可能造成高驻留及启动峰值。 | `OPEN / SOURCE_FALLBACK_EXISTS / PREBAKE_PENDING` | [H-08 方案](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 全量 sprites/textures/atlas sources；Auto 超 atlas 预算保留 SourceTexture2D | 2026-10-06 |
 | `H-10` | 全量音频预热与双声道 PCM 副本增加整局内存和启动成本。 | `OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED` | [H-10 方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 已有报告：965 副本约 209.99 MiB 静态估算，非 RSS/峰值实测 | 2026-10-06 |
 | `H-11` | 多类预热/硬限/resolver封口与native Mesh再预热已聚焦通过，完整 0GC 尚未闭合。 | `OPEN / RUNTIME_PENDING / CACHE_PREWARM_AND_CAPACITY_GUARD_FOCUSED_PASS` | [H-11 方案](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | [批次进度](battle-optimization-progress-tracker.md)；子批05新12/12、旧120/120；父项未关闭 | 2026-10-06 |
-| `M-03` | request/Prepare及实际Build与成功API按类归属已补，脏区优化未实施。 | `OPEN / RUNTIME_PENDING / UPLOAD_REPORT_FOCUSED_PASS / REQUEST_COUNTER_FOCUSED_PASS / BUILD_ATTRIBUTION_FOCUSED_PASS / PROFILING_REQUIRED` | [M-03 方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | [批次进度](battle-optimization-progress-tracker.md)；子批09新23/23+旧202/202，生产分组报告/基线/完整链/收益开放 | 2026-10-06 |
+| `M-03` | metadata、warm消重、像素/alpha及真实纹理受控高command CPU桥限定通过；生产全链/设备待验。 | `OPEN / RUNTIME_PENDING / SCOPED_REAL_TEXTURE_CPU_BRIDGE_PASS` | [M-03 方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | [批次进度](battle-optimization-progress-tracker.md)；子批19六窗10800sample/0B/零扩容，补跑55/55；下一生产catalog/活动辅助/RenderPass高负载全链及设备，非GPU/FPS收益证书 | 2026-10-07 |
 | `H-07` | 缺少能覆盖当前代码、内容、插值及音频链的 1000 AI 性能证书。 | `OPEN / CURRENT_CERTIFICATE_MISSING` | [H-07 方案](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 历史 Windows/Editor 压测不构成当前 Android 证书 | 2026-10-06 |
 | `H-01` | 正式 DAT、角色图片和公共资源仍依赖项目文件路径，Android 部署链待闭合。 | `OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED` | [H-01 方案](android-mobile-readiness/h-01-content-deployment.md) | LoganRuntime 项目根 File 路径；D-023 背景/模式排除保持 | 2026-10-06 |
 | `H-02` | Menu/Battle 场景列表已接线，但 Android 构建和冷启动闭包仍待验收。 | `OPEN / UNITY_SCENE_LIST_AND_EDITOR_CALLBACK_PASS / ANDROID_BUILD_PENDING` | [H-02 方案](android-mobile-readiness/h-02-android-build-scene-closure.md) | EditorBuildSettings 两场景；复用既有 Editor 限定报告 | 2026-10-06 |
@@ -135,6 +171,9 @@ M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全
 | 2026-10-06 | M-03子批06：每Build成功API顶点上传计数已补，新18/18、旧132/132；局部0B，未减少上传，未测GPU/帧率/1000AI/Android，父项开放。 |
 | 2026-10-06 | M-03子批07：计数接入可选报告并在Present后冻结，新14/14+旧168/168；v5必测判据不变，仅接受样本/非GPU或全程累计；局部helper0B不替代完整链或性能验收，父项开放。 |
 | 2026-10-06 | M-03子批09：实际Build准入/成功/失败及完成API按request三分类归属，新23/23+旧202/202；局部wrapper+Build0B，不是像素/全链/性能通过；未减少上传，生产分组报告/基线/设备开放。 |
+| 2026-10-06 | M-03子批10：显式生产快照/JSON及同来源同epoch窗口，新58/58+旧225/225；导出非热路径有分配，不自动采样；真实基线/完整链/dirty/收益/设备开放。 |
+| 2026-10-06 | M-03子批12：8阶段+12控制20/20、旧34/34；36000 Build局部0B/growth0，高segment metadata含descriptor mean1.14～1.20ms，非纯API/GPU。生产未改，下一最小A/B，父项/专项门保持。 |
+| 2026-10-06 | M-03子批13：稳定fully-active多submesh批量metadata，仅4新增/1删除；改前26/26、改后20/20、相关71/71，91去重。局部1000段无诊断mean降46～47%，72000 Build局部0B/growth0/payload不变；非整场/GPU/设备，父OPEN/RUNTIME_PENDING与专项门保持。 |
 
 本次整理任务与文件操作：
 [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006.md) /

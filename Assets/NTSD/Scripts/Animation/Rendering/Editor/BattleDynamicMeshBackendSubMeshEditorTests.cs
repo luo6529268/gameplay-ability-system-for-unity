@@ -148,7 +148,136 @@ namespace NTSD.Animation.Rendering.Editor
             AssertInertTail(secondMesh, 0);
         }
 
-        private static void BuildFrame(BattlePresentationFrame frame, int tickIndex, int commandCount, bool alternating)
+        [TestCase(BattleCentralDrawMode.OrderedChunks)]
+        [TestCase(BattleCentralDrawMode.StrictOrderedDraw)]
+        public void Upload_StableMultipleDescriptorsMoveAndClearCachedTail(
+            BattleCentralDrawMode drawMode)
+        {
+            using var backend = new BattleDynamicMeshBackend();
+            var frame = new BattlePresentationFrame();
+            var resolver = new DescriptorResolver();
+            const int commandCount = 64;
+            backend.PrepareCapacity(commandCount);
+
+            BuildFrame(frame, 1, commandCount, true);
+            backend.Build(frame, resolver, drawMode);
+            Mesh mesh = backend.GetChunkMesh(0);
+            int meshId = mesh.GetInstanceID();
+            Bounds previousBounds = mesh.bounds;
+            var previousDescriptors = new SubMeshDescriptor[commandCount];
+            for (int index = 0; index < commandCount; index++)
+                previousDescriptors[index] = mesh.GetSubMesh(index);
+            Vector3[] previousVertices = mesh.vertices;
+            Vector2[] previousUvs = mesh.uv;
+            Color32[] previousColors = mesh.colors32;
+
+            const float positionOffset = 100f;
+            Vector3 displacement = new Vector3(positionOffset, -positionOffset, 0f);
+            BuildFrame(frame, 2, commandCount, true, positionOffset);
+            backend.Build(frame, resolver, drawMode);
+            Assert.That(backend.GetChunkMesh(0), Is.SameAs(mesh));
+            Assert.That(mesh.GetInstanceID(), Is.EqualTo(meshId));
+            AssertVectorNear(mesh.bounds.center, previousBounds.center + displacement);
+            AssertVectorNear(mesh.bounds.size, previousBounds.size);
+            Assert.That(backend.SegmentCount, Is.EqualTo(commandCount));
+            Vector3[] movedVertices = mesh.vertices;
+            Assert.That(mesh.uv, Is.EqualTo(previousUvs));
+            Assert.That(mesh.colors32, Is.EqualTo(previousColors));
+            for (int index = 0; index < commandCount; index++)
+            {
+                SubMeshDescriptor previous = previousDescriptors[index];
+                SubMeshDescriptor current = mesh.GetSubMesh(index);
+                Assert.That(current.indexStart, Is.EqualTo(previous.indexStart));
+                Assert.That(current.indexCount, Is.EqualTo(previous.indexCount));
+                Assert.That(current.firstVertex, Is.EqualTo(previous.firstVertex));
+                Assert.That(current.vertexCount, Is.EqualTo(previous.vertexCount));
+                Assert.That(current.baseVertex, Is.EqualTo(previous.baseVertex));
+                Assert.That(current.topology, Is.EqualTo(previous.topology));
+                AssertVectorNear(current.bounds.center, previous.bounds.center + displacement);
+                AssertVectorNear(current.bounds.size, previous.bounds.size);
+                BattleCentralRenderSegment segment = backend.GetSegment(index);
+                Assert.That(segment.ChunkIndex, Is.Zero);
+                Assert.That(segment.SubMeshIndex, Is.EqualTo(index));
+                Assert.That(segment.FirstCommandIndex, Is.EqualTo(index));
+                Assert.That(segment.FirstQuad, Is.EqualTo(index));
+                Assert.That(segment.QuadCount, Is.EqualTo(1));
+                for (int corner = 0; corner < BattleDynamicMeshBackend.VerticesPerQuad; corner++)
+                {
+                    int vertex = index * BattleDynamicMeshBackend.VerticesPerQuad + corner;
+                    AssertVectorNear(movedVertices[vertex], previousVertices[vertex] + displacement);
+                }
+            }
+
+            BuildFrame(frame, 3, 2, true);
+            backend.Build(frame, resolver, drawMode);
+            AssertActivePrefix(mesh, 2);
+            AssertInertTail(mesh, 2);
+            Assert.That(mesh.subMeshCount, Is.EqualTo(commandCount));
+            BuildFrame(frame, 4, 0, false);
+            backend.Build(frame, resolver, drawMode);
+            AssertInertTail(mesh, 0);
+            BuildFrame(frame, 5, 3, true);
+            backend.Build(frame, resolver, drawMode);
+            AssertActivePrefix(mesh, 3);
+            AssertInertTail(mesh, 3);
+            BuildFrame(frame, 6, 3, true, positionOffset);
+            backend.Build(frame, resolver, drawMode);
+            AssertActivePrefix(mesh, 3);
+            AssertInertTail(mesh, 3);
+            BuildFrame(frame, 7, 1, false);
+            backend.Build(frame, resolver, drawMode);
+            AssertActivePrefix(mesh, 1);
+            AssertInertTail(mesh, 1);
+            Assert.That(mesh.subMeshCount, Is.EqualTo(commandCount));
+            Assert.That(backend.Diagnostics.CapacityGrowthCount, Is.Zero);
+            Assert.That(backend.Diagnostics.VertexUploadCallCount, Is.EqualTo(1));
+            Assert.That(backend.Diagnostics.UploadedVertexBytes,
+                Is.EqualTo(BattleDynamicMeshBackend.VerticesPerQuad * mesh.GetVertexBufferStride(0)));
+        }
+
+        [Test]
+        public void Upload_StableSmallPrefixAfterHighWaterAllocatesZeroManagedBytes()
+        {
+            using var backend = new BattleDynamicMeshBackend();
+            var frame = new BattlePresentationFrame();
+            var resolver = new DescriptorResolver();
+            backend.PrepareCapacity(64);
+            BuildFrame(frame, 1, 64, true);
+            backend.Build(frame, resolver);
+            Mesh mesh = backend.GetChunkMesh(0);
+            BuildFrame(frame, 2, 2, true);
+            for (int warmup = 0; warmup < 8; warmup++)
+                backend.Build(frame, resolver);
+
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < 64; iteration++)
+                backend.Build(frame, resolver);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(allocated, Is.Zero);
+            Assert.That(backend.GetChunkMesh(0), Is.SameAs(mesh));
+            Assert.That(mesh.subMeshCount, Is.EqualTo(64));
+            AssertActivePrefix(mesh, 2);
+            AssertInertTail(mesh, 2);
+            Assert.That(backend.SegmentCount, Is.EqualTo(2));
+            Assert.That(backend.Diagnostics.CapacityGrowthCount, Is.Zero);
+        }
+
+        private static void AssertVectorNear(Vector3 actual, Vector3 expected)
+        {
+            // Translation changes float rounding at the new coordinate magnitude.
+            const float epsilon = 0.00002f;
+            Assert.That(actual.x, Is.EqualTo(expected.x).Within(epsilon));
+            Assert.That(actual.y, Is.EqualTo(expected.y).Within(epsilon));
+            Assert.That(actual.z, Is.EqualTo(expected.z).Within(epsilon));
+        }
+
+        private static void BuildFrame(
+            BattlePresentationFrame frame,
+            int tickIndex,
+            int commandCount,
+            bool alternating,
+            float positionOffset = 0f)
         {
             FrameAccess.Reset(frame, tickIndex);
             for (int index = 0; index < commandCount; index++)
@@ -164,7 +293,7 @@ namespace NTSD.Animation.Rendering.Editor
                     index,
                     0,
                     index,
-                    new Vector3(index, 0f, 0f),
+                    new Vector3(index + positionOffset, -positionOffset, 0f),
                     Vector2.one,
                     new Vector2(0.5f, 0.5f),
                     new Rect(0f, 0f, 1f, 1f),

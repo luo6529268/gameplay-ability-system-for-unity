@@ -1,0 +1,136 @@
+{
+  "report": {
+    "status": "PASS",
+    "phase": "DONE",
+    "startedUtc": "2026-10-06T15:50:21.1356236Z",
+    "error": "",
+    "cycle": 1,
+    "startTick": 8,
+    "endTick": 104,
+    "sampleCount": 128,
+    "observedSubmissionSlots": 2,
+    "configuredRenderFps": 120,
+    "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneClean": true,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "cameraRenderEnvelopeAllocatedBytes": 0,
+    "cameraRenderEnvelopeNonzeroFrames": 0,
+    "observerAllocatedBytes": 0,
+    "collectionControlSupported": false,
+    "playerLoopHardGateSupported": false,
+    "memoryBefore": {
+      "tickBytes": 0,
+      "driverUpdateBytes": 0,
+      "latePresentationBytes": 0,
+      "playerLoopBytes": 0,
+      "gen0Collections": 0,
+      "gen1Collections": 0,
+      "gen2Collections": 0
+    },
+    "memoryAfter": {
+      "tickBytes": 0,
+      "driverUpdateBytes": 0,
+      "latePresentationBytes": 0,
+      "playerLoopBytes": 0,
+      "gen0Collections": 0,
+      "gen1Collections": 0,
+      "gen2Collections": 0
+    }
+  },
+  "counts": {
+    "builds": {
+      "alphaChanged": {
+        "admittedBuildCount": 160,
+        "buildInvocationCount": 160,
+        "completedBuildCount": 160,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 112640,
+        "uploadedVertexCount": 2560,
+        "vertexUploadCallCount": 160
+      },
+      "publicationChanged": {
+        "admittedBuildCount": 96,
+        "buildInvocationCount": 96,
+        "completedBuildCount": 96,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 67584,
+        "uploadedVertexCount": 1536,
+        "vertexUploadCallCount": 96
+      },
+      "repeated": {
+        "admittedBuildCount": 0,
+        "buildInvocationCount": 0,
+        "completedBuildCount": 0,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 0,
+        "uploadedVertexCount": 0,
+        "vertexUploadCallCount": 0
+      },
+      "total": {
+        "admittedBuildCount": 256,
+        "buildInvocationCount": 256,
+        "completedBuildCount": 256,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 180224,
+        "uploadedVertexCount": 4096,
+        "vertexUploadCallCount": 256
+      }
+    },
+    "prepareAttempts": {
+      "alphaChanged": 160,
+      "publicationChanged": 96,
+      "repeated": 0,
+      "total": 256
+    },
+    "requests": {
+      "alphaChanged": 160,
+      "publicationChanged": 96,
+      "repeated": 0,
+      "total": 256
+    },
+    "returnGates": {
+      "reentrant": 0,
+      "sameSample": 0,
+      "sameUnityFrame": 0
+    }
+  },
+  "alphaMin": 0.1164090913458676,
+  "alphaMax": 0.9812393997496219,
+  "beginEndGenerationDelta": [
+    1
+  ],
+  "beginEndSlots": [
+    "0/1"
+  ],
+  "meshIdentityPairs": [
+    "-2373500/-2373512"
+  ],
+  "firstEntityPositionVariants": [
+    "{\"x\":2.1300344467163086,\"y\":-9.190000534057617,\"z\":0.0}",
+    "{\"x\":2.1450345516204834,\"y\":-9.190000534057617,\"z\":0.0}"
+  ],
+  "sameTickDisplayGroups": 32,
+  "growth": [
+    0
+  ],
+  "entities": [
+    2
+  ],
+  "commands": [
+    4
+  ],
+  "draws": [
+    5
+  ],
+  "lease": [
+    0
+  ]
+}

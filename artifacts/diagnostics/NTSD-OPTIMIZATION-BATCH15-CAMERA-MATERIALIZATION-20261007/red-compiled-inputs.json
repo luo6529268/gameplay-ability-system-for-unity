@@ -1,0 +1,7 @@
+{
+  "chunk_id": "573abe",
+  "wall_time_seconds": 0.3344099,
+  "exit_code": 0,
+  "original_token_count": 327,
+  "output": "{\"time\":\"2026-10-07T00:21:45.8274573+08:00\",\"files\":[{\"path\":\"Library/ScriptAssemblies/Assembly-CSharp.dll\",\"bytes\":4215296,\"time\":\"2026-10-06T15:08:47.3629819Z\",\"sha256\":\"B2B46521BE40C2E92F546EF21F73D642E25DDB38BAD00F425EB3B6502F6754CA\"},{\"path\":\"Library/ScriptAssemblies/Assembly-CSharp-Editor.dll\",\"bytes\":6175232,\"time\":\"2026-10-06T15:58:13.8974410Z\",\"sha256\":\"53AAAC6511A651A89F95F2935D6EDDA3A9225F3CC9FC9395794EC8FDECBE6690\"},{\"path\":\"Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs\",\"bytes\":109459,\"time\":\"2026-10-06T14:15:04.9779080Z\",\"sha256\":\"7456B9D501298817D10B7495473CC807A875AD5208C4683AE1CB70F10509B7F5\"},{\"path\":\"Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs\",\"bytes\":41260,\"time\":\"2026-10-05T08:44:29.5304881Z\",\"sha256\":\"CEEA2D4062C17164B72D8F9E17B8A5DC0D2C72A8446CD9B081150BEE9651DF7F\"},{\"path\":\"Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs\",\"bytes\":27129,\"time\":\"2026-10-06T16:21:06.2138562Z\",\"sha256\":\"E8D8CA3BEC37B976EC3767E70ADB6B746AE5430EFC21D5B8CA7548A234C6A3FC\"},{\"path\":\"Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs\",\"bytes\":11165,\"time\":\"2026-10-06T16:21:06.2024841Z\",\"sha256\":\"C39583B7E2B551778046409203EA3BFE03560EF593F99837AA828EC6F1E6B66B\"}]}\r\n"
+}

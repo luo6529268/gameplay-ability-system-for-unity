@@ -1,0 +1,516 @@
+#if UNITY_EDITOR
+using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using NTSD.Animation;
+using NTSD.Animation.Rendering;
+using NTSD.App;
+using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test.Editor
+{
+    [InitializeOnLoad]
+    internal static class BattleCentralProductionWindowSceneProbeEditor
+    {
+        private const string ScenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
+        private const string OutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH14-PRODUCTION-WINDOW-20261006/corrected-02/";
+        private const string SessionKey = "NTSD.Optimization.ProductionWindow.14";
+        private const int WindowTicks = 96;
+        private const int MaximumSamples = 2048;
+        private static Report report;
+        private static SimulationTickDriver driver;
+        private static FrameSample[] samples;
+        private static BattleCentralMaterializationReport baseline;
+        private static Func<SimulationWorld, double> readAlpha;
+        private static readonly BattleCentralSubmission[] observedSlots = new BattleCentralSubmission[2];
+        private static bool cameraObservationOpen;
+        private static long cameraAllocationStart;
+        private static int beginPlanGeneration;
+        private static int beginPlanSlot;
+        private static int beginMeshIdentity;
+
+        [Serializable]
+        private sealed class Report
+        {
+            public string status = "RUNNING";
+            public string phase = "STARTUP";
+            public string startedUtc;
+            public string error;
+            public int cycle;
+            public int startTick;
+            public int endTick;
+            public int sampleCount;
+            public int observedSubmissionSlots;
+            public int configuredRenderFps;
+            public string sceneHashBefore;
+            public string sceneHashAfter;
+            public bool sceneClean;
+            public bool orderedShutdown;
+            public int remainingObjects = -1;
+            public int remainingSlots = -1;
+            public int remainingBorrowers = -1;
+            public long cameraRenderEnvelopeAllocatedBytes;
+            public int cameraRenderEnvelopeNonzeroFrames;
+            public long observerAllocatedBytes;
+            public bool collectionControlSupported;
+            public bool playerLoopHardGateSupported;
+            public MemorySnapshot memoryBefore;
+            public MemorySnapshot memoryAfter;
+            public FrameSample[] frames;
+        }
+
+        [Serializable]
+        private struct MemorySnapshot
+        {
+            public long tickBytes;
+            public long driverUpdateBytes;
+            public long latePresentationBytes;
+            public long playerLoopBytes;
+            public int gen0Collections;
+            public int gen1Collections;
+            public int gen2Collections;
+        }
+
+        [Serializable]
+        private struct FrameSample
+        {
+            public int unityFrame;
+            public int logicTick;
+            public int publicationTick;
+            public int displayTick;
+            public int generation;
+            public int beginPlanGeneration;
+            public int beginPlanSlot;
+            public int beginMeshIdentity;
+            public double alpha;
+            public int entities;
+            public int commands;
+            public int resolvedCommands;
+            public int segments;
+            public int chunks;
+            public int capacityGrowth;
+            public int vertexUploadCalls;
+            public long uploadedVertexBytes;
+            public int renderPassRecordedDraws;
+            public int submissionSlot;
+            public int meshIdentity;
+            public int leaseCountAfterCamera;
+            public long cameraRenderEnvelopeAllocatedBytes;
+            public Vector3 firstEntityPosition;
+        }
+
+        static BattleCentralProductionWindowSceneProbeEditor()
+        {
+            EditorApplication.update += Poll;
+            EditorApplication.playModeStateChanged += OnPlay;
+            RenderPipelineManager.beginCameraRendering += BeginCamera;
+            RenderPipelineManager.endCameraRendering += EndCamera;
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Production Window Two Cycles")]
+        private static void Start()
+        {
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            Require(!File.Exists(ResultPath(1)) && !File.Exists(ResultPath(2)),
+                "Refuses to overwrite prior evidence.");
+            report = new Report { cycle = 1, startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene() };
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        private static void Poll()
+        {
+            if (EditorApplication.isCompiling || EditorApplication.isUpdating)
+                return;
+            RestoreSession();
+            if (report == null || report.phase == "SHUTDOWN_FAILED")
+                return;
+            try
+            {
+                Require((DateTime.UtcNow - DateTime.Parse(report.startedUtc).ToUniversalTime()).TotalSeconds < 900,
+                    "Production-window deadline exceeded.");
+                Require(report.phase != "STARTUP" ||
+                    (DateTime.UtcNow - DateTime.Parse(report.startedUtc).ToUniversalTime()).TotalSeconds < 600,
+                    "Original Scene startup deadline exceeded.");
+                if (report.phase == "EXITING")
+                {
+                    if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                        Finish();
+                    return;
+                }
+                if (!EditorApplication.isPlaying)
+                    return;
+                if (report.phase == "COMPLETE")
+                {
+                    CompleteWindow();
+                    Exit();
+                    return;
+                }
+                if (report.phase == "OBSERVING")
+                    return;
+                driver = Resources.FindObjectsOfTypeAll<SimulationTickDriver>()
+                    .FirstOrDefault(value => value != null && value.isActiveAndEnabled && !EditorUtility.IsPersistent(value));
+                if (driver?.World == null || driver.CurrentTickIndex < 8 ||
+                    !driver.ManagedMemoryBoundary.BattleWindowOpen)
+                    return;
+                Require(!driver.IsPaused, "Original scene must run naturally; no forced stepping.");
+                BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
+                if (!plan.UsesCentralPixels || plan.IsStale ||
+                    !BattleCentralRenderSystem.Diagnostics.SubmittedPixelsLastFrame)
+                    return;
+                samples = new FrameSample[MaximumSamples];
+                Array.Clear(observedSlots, 0, observedSlots.Length);
+                readAlpha = (Func<SimulationWorld, double>)typeof(BattleCentralRenderSystem)
+                    .GetMethod("LastResolvedDisplayAlphaForWorld", BindingFlags.Static | BindingFlags.NonPublic)
+                    .CreateDelegate(typeof(Func<SimulationWorld, double>));
+                baseline = BattleCentralRenderSystem.Diagnostics.CaptureMaterializationReport();
+                report.memoryBefore = CaptureMemory(driver.ManagedMemoryBoundary);
+                report.collectionControlSupported = driver.ManagedMemoryBoundary.ManagedCollectionControlSupported;
+                report.playerLoopHardGateSupported = driver.ManagedMemoryBoundary.PlayerLoopEnvelopeHardGateSupported;
+                report.configuredRenderFps = new SerializedObject(driver).FindProperty("battleRenderFps").intValue;
+                report.startTick = driver.CurrentTickIndex;
+                report.phase = "OBSERVING";
+                SaveSession();
+            }
+            catch (Exception exception)
+            {
+                Fail(exception);
+            }
+        }
+
+        private static void BeginCamera(ScriptableRenderContext context, Camera camera)
+        {
+            if (report == null || report.phase != "OBSERVING" || driver?.World == null ||
+                camera != NTSDRenderSpace.WorldCamera)
+                return;
+            long observerStart = GC.GetAllocatedBytesForCurrentThread();
+            BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
+            beginPlanGeneration = plan.Generation;
+            beginPlanSlot = plan.Submission != null ? ObserveSlot(plan.Submission) : -1;
+            beginMeshIdentity = plan.Submission?.Backend.ActiveChunkCount > 0
+                ? plan.Submission.Backend.GetChunkMesh(0).GetInstanceID() : 0;
+            report.observerAllocatedBytes += Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - observerStart);
+            cameraObservationOpen = true;
+            cameraAllocationStart = GC.GetAllocatedBytesForCurrentThread();
+        }
+
+        private static void EndCamera(ScriptableRenderContext context, Camera camera)
+        {
+            if (!cameraObservationOpen || camera != NTSDRenderSpace.WorldCamera)
+                return;
+            long envelopeBytes = Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - cameraAllocationStart);
+            cameraObservationOpen = false;
+            long observerStart = GC.GetAllocatedBytesForCurrentThread();
+            try
+            {
+                // Alignment contract: NTSD-OPT-M03-PRODUCTION-WINDOW-014.
+                // Read-only after the real camera; never force Build or treat CPU lease release as GPU completion.
+                CaptureSample(envelopeBytes);
+                report.observerAllocatedBytes += Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - observerStart);
+            }
+            catch (Exception exception)
+            {
+                report.status = "FAIL";
+                report.error = exception.ToString();
+                report.phase = "COMPLETE";
+            }
+        }
+
+        private static void CaptureSample(long envelopeBytes)
+        {
+            Require(report.sampleCount < MaximumSamples, "Diagnostic sample capacity exceeded; no truncation.");
+            SimulationWorld world = driver.World;
+            BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
+            BattlePresentationFrame publication = world.BattlePresentation.PublishedFrame;
+            BattlePresentationFrame captured = plan.CapturedFrame;
+            Require(plan.UsesCentralPixels && !plan.IsStale && ReferenceEquals(plan.World, world),
+                "Natural camera did not have a current central plan.");
+            Require(publication != null && captured != null && !ReferenceEquals(publication, captured) &&
+                !publication.CommandsMaterialized && !publication.PresentationOrderMaterialized &&
+                captured.CommandsMaterialized && captured.PresentationOrderMaterialized,
+                "Publication isolation/materialization contract failed.");
+            Require(plan.SimulationTick == publication.TickIndex && plan.DisplayTick == captured.TickIndex,
+                "Publication and display tick mismatch.");
+            BattleDynamicMeshBackend backend = plan.Submission.Backend;
+            BattleCentralBuildDiagnostics diagnostics = backend.Diagnostics;
+            Require(diagnostics.CapacityGrowthCount == 0 && diagnostics.UnresolvedCommandCount == 0,
+                "Production backend grew or failed resource resolution.");
+            int priorEnd = 0;
+            for (int index = 0; index < backend.SegmentCount; index++)
+            {
+                BattleCentralRenderSegment segment = backend.GetSegment(index);
+                Require(segment.FirstCommandIndex >= priorEnd && segment.CommandCount > 0 &&
+                    segment.FirstCommandIndex + segment.CommandCount <= captured.CommandCount &&
+                    segment.Texture != null && segment.Material != null,
+                    "Physical segment range/order/binding invalid.");
+                priorEnd = segment.FirstCommandIndex + segment.CommandCount;
+                Mesh mesh = backend.GetChunkMesh(segment.ChunkIndex);
+                Require(mesh != null && mesh.GetVertexBufferStride(0) == 44, "Production vertex layout changed.");
+                Bounds bounds = mesh.GetSubMesh(segment.SubMeshIndex).bounds;
+                Require(IsFinite(bounds.center) && IsFinite(bounds.extents), "Non-finite production bounds.");
+            }
+            int slot = ObserveSlot(plan.Submission);
+            Require(slot >= 0, "Unexpected third submission slot.");
+            Vector3 firstEntityPosition = default;
+            for (int index = 0; index < captured.CommandCount; index++)
+            {
+                BattleRenderCommand command = captured.GetCommand(index);
+                if (command.Type == BattleRenderCommandType.Entity)
+                {
+                    firstEntityPosition = command.Position;
+                    break;
+                }
+            }
+            int draws = BattleCentralRenderSystem.Diagnostics.LastSubmissionDrawCount;
+            Require(draws > 0 && BattleCentralRenderSystem.Diagnostics.SubmittedPixelsLastFrame,
+                "Production RenderPass recorded no central draws.");
+            samples[report.sampleCount++] = new FrameSample
+            {
+                unityFrame = Time.frameCount, logicTick = driver.CurrentTickIndex,
+                publicationTick = publication.TickIndex, displayTick = plan.DisplayTick, generation = plan.Generation,
+                beginPlanGeneration = beginPlanGeneration, beginPlanSlot = beginPlanSlot, beginMeshIdentity = beginMeshIdentity,
+                alpha = readAlpha(world), entities = captured.EntityCount, commands = captured.CommandCount,
+                resolvedCommands = diagnostics.ResolvedCommandCount, segments = backend.SegmentCount,
+                chunks = backend.ActiveChunkCount, capacityGrowth = diagnostics.CapacityGrowthCount,
+                vertexUploadCalls = diagnostics.VertexUploadCallCount, uploadedVertexBytes = diagnostics.UploadedVertexBytes,
+                renderPassRecordedDraws = draws, submissionSlot = slot,
+                meshIdentity = backend.ActiveChunkCount > 0 ? backend.GetChunkMesh(0).GetInstanceID() : 0,
+                leaseCountAfterCamera = plan.Submission.ReadLeaseCount,
+                cameraRenderEnvelopeAllocatedBytes = envelopeBytes, firstEntityPosition = firstEntityPosition,
+            };
+            report.cameraRenderEnvelopeAllocatedBytes += envelopeBytes;
+            if (envelopeBytes > 0)
+                report.cameraRenderEnvelopeNonzeroFrames++;
+            report.endTick = driver.CurrentTickIndex;
+            if (report.endTick - report.startTick >= WindowTicks)
+                report.phase = "COMPLETE";
+        }
+
+        private static void CompleteWindow()
+        {
+            report.frames = new FrameSample[report.sampleCount];
+            if (samples != null)
+                Array.Copy(samples, report.frames, report.sampleCount);
+            if (report.status == "FAIL")
+                return;
+            BattleCentralMaterializationReport end = BattleCentralRenderSystem.Diagnostics.CaptureMaterializationReport();
+            Require(end.TryCreateWindow(baseline, out BattleCentralMaterializationReport window, out string reason), reason);
+            report.memoryAfter = CaptureMemory(driver.ManagedMemoryBoundary);
+            SaveNew(OutputRoot + "materialization-window-" + report.cycle.ToString("00") + ".json",
+                window.ToJson());
+            Require(report.observedSubmissionSlots >= 1 && report.observedSubmissionSlots <= 2 && report.sampleCount > 1,
+                "No valid submission-slot observation window.");
+            report.status = "PASS";
+        }
+
+        private static MemorySnapshot CaptureMemory(BattleManagedMemoryBoundary memory)
+        {
+            return new MemorySnapshot
+            {
+                tickBytes = memory.AllocatedBytes, driverUpdateBytes = memory.DriverUpdateAllocatedBytes,
+                latePresentationBytes = memory.PresentationAllocatedBytes, playerLoopBytes = memory.PlayerLoopAllocatedBytes,
+                gen0Collections = memory.Generation0Collections, gen1Collections = memory.Generation1Collections,
+                gen2Collections = memory.Generation2Collections,
+            };
+        }
+
+        private static int ObserveSlot(BattleCentralSubmission submission)
+        {
+            for (int index = 0; index < observedSlots.Length; index++)
+            {
+                if (ReferenceEquals(observedSlots[index], submission))
+                    return index;
+                if (observedSlots[index] == null)
+                {
+                    observedSlots[index] = submission;
+                    report.observedSubmissionSlots++;
+                    return index;
+                }
+            }
+            return -1;
+        }
+
+        private static bool IsFinite(Vector3 value)
+        {
+            return !float.IsNaN(value.x) && !float.IsInfinity(value.x) &&
+                !float.IsNaN(value.y) && !float.IsInfinity(value.y) &&
+                !float.IsNaN(value.z) && !float.IsInfinity(value.z);
+        }
+
+        private static void Fail(Exception exception)
+        {
+            report.status = "FAIL";
+            report.error = exception.ToString();
+            Exit();
+        }
+
+        private static void Exit()
+        {
+            cameraObservationOpen = false;
+            if (driver == null && EditorApplication.isPlaying)
+            {
+                driver = Resources.FindObjectsOfTypeAll<SimulationTickDriver>()
+                    .FirstOrDefault(value => value != null && value.isActiveAndEnabled && !EditorUtility.IsPersistent(value));
+            }
+            if (driver?.World != null)
+            {
+                BattleRuntimeShutdownReport shutdown = driver.ShutdownBattleRuntime();
+                bool mapCleared = true;
+                if (shutdown.RuntimeStagesCompleted)
+                {
+                    foreach (BattleBootstrap bootstrap in Resources.FindObjectsOfTypeAll<BattleBootstrap>())
+                    {
+                        if (bootstrap == null || EditorUtility.IsPersistent(bootstrap))
+                            continue;
+                        bootstrap.DisablePresentation();
+                        mapCleared &= bootstrap.IsRuntimeMapCleared;
+                    }
+                    shutdown = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(mapCleared);
+                }
+                report.remainingObjects = shutdown.RemainingWorldObjects;
+                report.remainingSlots = shutdown.RemainingRuntimeSlots;
+                report.remainingBorrowers = shutdown.RemainingPoolBorrowers;
+                report.orderedShutdown = shutdown.IsComplete && driver.World == null;
+                if (!report.orderedShutdown)
+                {
+                    report.status = "FAIL";
+                    report.error += " Ordered shutdown failed: " + shutdown.FailureReason;
+                    report.phase = "SHUTDOWN_FAILED";
+                    SaveSession();
+                    return;
+                }
+            }
+            report.phase = "EXITING";
+            SaveSession();
+            EditorApplication.ExitPlaymode();
+        }
+
+        private static void OnPlay(PlayModeStateChange state)
+        {
+            RestoreSession();
+            if (report == null)
+                return;
+            if (state == PlayModeStateChange.ExitingPlayMode && report.phase != "EXITING")
+            {
+                report.status = "FAIL";
+                report.error = "Play stopped externally before the production-window probe completed.";
+                report.phase = "EXITING";
+                SaveSession();
+            }
+            if (state == PlayModeStateChange.EnteredEditMode && report.phase == "EXITING")
+                Finish();
+        }
+
+        private static void Finish()
+        {
+            Scene scene = SceneManager.GetActiveScene();
+            report.sceneHashAfter = HashScene();
+            report.sceneClean = scene.path == ScenePath && !scene.isDirty && SceneManager.sceneCount == 1 &&
+                report.sceneHashBefore == report.sceneHashAfter;
+            if (!report.sceneClean)
+            {
+                report.status = "FAIL";
+                report.error += " Saved Scene identity/dirty state changed.";
+            }
+            report.phase = "DONE";
+            SaveNew(ResultPath(report.cycle), JsonUtility.ToJson(report, true));
+            bool nextCycle = report.status == "PASS" && report.cycle == 1;
+            SessionState.EraseString(SessionKey);
+            report = null;
+            driver = null;
+            samples = null;
+            baseline = null;
+            cameraObservationOpen = false;
+            Array.Clear(observedSlots, 0, observedSlots.Length);
+            if (nextCycle)
+                EditorApplication.delayCall += StartSecondCycle;
+        }
+
+        private static void StartSecondCycle()
+        {
+            RequireIdleOriginalScene();
+            Require(!File.Exists(ResultPath(2)), "Second-cycle evidence exists.");
+            report = new Report { cycle = 2, startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene() };
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Production Window Second Cycle When Idle")]
+        private static void StartSecondCycleWhenIdle()
+        {
+            RequireIdleOriginalScene();
+            RestoreSession();
+            Require(report == null || (report.cycle == 2 && report.phase == "STARTUP"),
+                "Refuses to interrupt an active observation or shutdown.");
+            Require(File.Exists(ResultPath(1)) && !File.Exists(ResultPath(2)),
+                "Requires first-cycle evidence and refuses to overwrite the second cycle.");
+            Report first = JsonUtility.FromJson<Report>(File.ReadAllText(ResultPath(1)));
+            Require(first.status == "PASS" && first.cycle == 1 && first.sceneClean && first.orderedShutdown,
+                "First cycle must have passed with clean ordered shutdown.");
+            StartSecondCycle();
+        }
+
+        private static void RequireIdleOriginalScene()
+        {
+            Require(!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling &&
+                !EditorApplication.isUpdating, "Editor must be idle.");
+            MethodInfo isTestRunActive = typeof(UnityEditor.TestTools.TestRunner.Api.TestRunnerApi)
+                .GetMethod("IsRunActive", BindingFlags.Static | BindingFlags.NonPublic);
+            Require(isTestRunActive != null && !(bool)isTestRunActive.Invoke(null, null),
+                "An actual Unity Test Runner run is still active; bridge metadata alone is insufficient.");
+            Scene scene = SceneManager.GetActiveScene();
+            Require(scene.path == ScenePath && !scene.isDirty && SceneManager.sceneCount == 1,
+                "Requires one saved original Battle Scene.");
+        }
+
+        private static void Require(bool condition, string reason)
+        {
+            if (!condition)
+                throw new InvalidOperationException(reason);
+        }
+
+        private static string ResultPath(int cycle) => OutputRoot + "production-window-" + cycle.ToString("00") + ".json";
+
+        private static void SaveNew(string path, string json)
+        {
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
+            using var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private static string HashScene()
+        {
+            using var sha = SHA256.Create();
+            using var file = File.OpenRead(ScenePath);
+            return BitConverter.ToString(sha.ComputeHash(file)).Replace("-", string.Empty);
+        }
+
+        private static void SaveSession() => SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
+
+        private static void RestoreSession()
+        {
+            if (report != null)
+                return;
+            string saved = SessionState.GetString(SessionKey, string.Empty);
+            if (string.IsNullOrEmpty(saved))
+                return;
+            report = JsonUtility.FromJson<Report>(saved);
+            if (report.phase == "OBSERVING" || report.phase == "COMPLETE")
+            {
+                report.status = "FAIL";
+                report.error = "Unexpected domain reload interrupted a live observation window.";
+                report.phase = "COMPLETE";
+            }
+        }
+    }
+}
+#endif

@@ -96,6 +96,9 @@ namespace NTSD.Animation.Rendering
         public long SameSampleReuseCount { get; internal set; }
         public long ReentrantSkipCount { get; internal set; }
 
+        public long MaterializationCounterEpoch { get; private set; }
+        internal object MaterializationReportSourceToken { get; } = new object();
+
         public BattleCentralMaterializationBuildCounters MaterializationBuilds { get; } =
             new BattleCentralMaterializationBuildCounters();
         public BattleCentralMaterializationBuildCounters PublicationChangedBuilds { get; } =
@@ -108,6 +111,11 @@ namespace NTSD.Animation.Rendering
         private SimulationWorld lastObservedWorld;
         private int lastObservedPublicationVersion;
         private double lastObservedDisplayAlpha = double.NaN;
+
+        public BattleCentralMaterializationReport CaptureMaterializationReport()
+        {
+            return BattleCentralMaterializationReport.Capture(this);
+        }
 
         internal BattleCentralDisplaySampleKind RecordMaterializationRequest(
             SimulationWorld world,
@@ -161,6 +169,7 @@ namespace NTSD.Animation.Rendering
 
         internal void ResetMaterializationCounters()
         {
+            MaterializationCounterEpoch++;
             MaterializationBuilds.Reset();
             PublicationChangedBuilds.Reset();
             AlphaChangedBuilds.Reset();
@@ -472,6 +481,26 @@ namespace NTSD.Animation.Rendering
         public static BattlePixelFramePlan PrepareFrame(SimulationWorld world)
         {
             return FlushLatestPublishedFrame(world);
+        }
+
+        internal static void PresentLatestPublishedFrame(SimulationWorld world, bool interactiveDisplay)
+        {
+            QueueLatestPublishedFrame(world);
+            BattlePixelFramePlan plan = CurrentPixelFramePlan;
+            if (interactiveDisplay && world != null &&
+                world.BattlePresentation.Mode == BattlePresentationBackendMode.CentralOnly &&
+                world.BattlePresentationRenderFps > 30 &&
+                ReferenceEquals(Volatile.Read(ref pendingPublishedWorld), world) &&
+                plan.IsValid && !plan.IsStale && ShouldUseCentralPixels(world) &&
+                TryValidateActiveRenderer(out _))
+            {
+                // Alignment contract: NTSD-OPT-M03-CAMERA-MATERIALIZATION-015.
+                // Keep the host clock sample; only the camera consumes the queued geometry.
+                ResolveDisplayAlpha(world, Volatile.Read(ref pendingPublicationVersion));
+                return;
+            }
+
+            FlushLatestPublishedFrame(world);
         }
 
         public static BattlePixelFramePlan FlushLatestPublishedFrame(SimulationWorld world)

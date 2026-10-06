@@ -1,0 +1,245 @@
+{
+  "schema": "ntsd-optimization-batch19-final-validation-v1",
+  "batch": "NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007",
+  "change": "NTSD-OPT-M03-REAL-TEXTURE-SUBMISSION-019",
+  "taskStatus": "SCOPED_REAL_TEXTURE_CPU_BRIDGE_PASS",
+  "changeStatus": "FOCUSED_TEST_PASS",
+  "parentStatus": "OPEN / RUNTIME_PENDING",
+  "scope": "New Editor fixture only; prepared synthetic preordered publication/motion with two actual imported source Texture2D. No production algorithm change or optimization A/B.",
+  "audit": {
+    "observedAt": "2026-10-07T02:03:52.8787774+08:00",
+    "protectedCount": 679,
+    "protectedDrift": [],
+    "backupCount": 7,
+    "backupDrift": [],
+    "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+    "headUnchanged": true,
+    "staged": [],
+    "diffCheck": {
+      "exitCode": 0,
+      "output": [
+        "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    "identities": [
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs",
+        "sha256": "06CCF6376BA6A9E36B06B179F7921A82644234563089580C21E59C7137F1DB60"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs.meta",
+        "sha256": "A5A26F286A82CACEA79C6BE19218FE4E836BBD42F13F345B23D1CDC88A11EB47"
+      },
+      {
+        "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+        "sha256": "A49C69CE527D7E0268661F96F6A5A28B0C79E6204872BDA6EAF1A1930270AE8D"
+      },
+      {
+        "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+        "sha256": "3F506A83F28122ED6E9A8949CED20A863977DF44329DC622C57F7440ADBA558A"
+      },
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "sha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+      },
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+      },
+      {
+        "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+        "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+      }
+    ],
+    "sourceLineCount": 496
+  },
+  "ledger": {
+    "exitCode": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1315",
+      "  Governed code files in diff: 11"
+    ],
+    "warningCount": 4260,
+    "currentChangeWarnings": [],
+    "currentCoverage": [
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs -> NTSD-OPT-M03-REAL-TEXTURE-SUBMISSION-019"
+    ],
+    "errors": []
+  },
+  "editorFinal": [
+    {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791309830336,
+        "sequence": 13,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791309337019,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791309163906
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": 1791309318883,
+          "started_by": "unknown",
+          "last_run": {
+            "finished_unix_ms": 1791309335907,
+            "result": "unknown",
+            "counts": null
+          }
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    },
+    {
+      "success": true,
+      "message": "1 scene(s) loaded.",
+      "data": {
+        "scenes": [
+          {
+            "name": "NTSD_Menu",
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "buildIndex": 0,
+            "isLoaded": true,
+            "isDirty": false,
+            "isActive": true,
+            "rootCount": 8
+          }
+        ]
+      }
+    },
+    {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  ],
+  "workloads": {
+    "acceptedCaseCount": 6,
+    "acceptedSamples": 10800,
+    "acceptedWarmupSamples": 384,
+    "allExecutedPerformanceSamples": 12600,
+    "initialJob": {
+      "id": "d70510b5287c4498bc1064e99cee388c",
+      "status": "failed",
+      "completed": 7,
+      "reportedFailures": 1,
+      "reason": "unhandled MCP disposed NetworkStream Error log after mid-test query timed out; per-window assertions all PASS; failed-job serializer hides leaf result payload"
+    },
+    "correctedJob": {
+      "id": "42f2b585714c40bba418d87fb5b425d9",
+      "summary": {
+        "total": 55,
+        "passed": 55,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 11.7232852,
+        "resultState": "Passed"
+      }
+    },
+    "windowEvidence": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/window-summary.json"
+  },
+  "progress": {
+    "total": 34,
+    "high": 12,
+    "medium": 14,
+    "low": 8,
+    "riskRegisterItems": 34,
+    "parentClosed": 0
+  },
+  "sourceReview": "496 lines fully read; prepared typed delegates and fixed arrays; own native object cleanup in finally; no shared texture destruction; no blocking new source findings observed.",
+  "unchangedGates": {
+    "cadence": "33 ms normal / 3 ms fast / max 2 intervals unchanged",
+    "authority": "336B44 unchanged",
+    "q06": "Active method bodies not read or edited; sorting/first-visible/transparent overlap not closed",
+    "ext1": "PROPOSED / MODIFY_REQUIRED; no special M0/instancing",
+    "mono": "USER_HOLD",
+    "atlas": "bank/budget/format/segment/fail-closed unchanged"
+  },
+  "notRunOrNotCertified": [
+    "production RenderPass/ScriptableRenderContext performance",
+    "active Foot/Health geometry",
+    "production DAT decoder/crop/catalog resource resolver",
+    "full PlayerLoop/other-thread/native allocation",
+    "1800 physical display frames",
+    "formal simulation/checksum/replay or 1000 AI",
+    "GPU batch/SetPass/timing/fence completion",
+    "FPS/Android/ARM64/IL2CPP/Adreno/Mali sustained certification"
+  ],
+  "evidenceRefs": [
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/compile-state.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/focused-initial-job.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/test-job-poll-timeout.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/corrected-and-regression-job.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/test-dispatches.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH19-REAL-TEXTURE-SUBMISSION-20261007/REPORT.md"
+  ],
+  "next": "Production publication/catalog/active auxiliary/actual RenderPass bounded high-load and complete allocation verification before minimal optimization; no further repeat of accepted six synthetic CPU windows.",
+  "localLinkValidation": {
+    "observedAt": "2026-10-07T02:04:39.5601785+08:00",
+    "scopedLinkCount": 38,
+    "missing": [],
+    "status": "PASS"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "time": "2026-10-06T22:55:38.4161888+08:00",
+  "exitCode": 0,
+  "outputFirst": [
+    "Change ledger validation PASSED.",
+    "  Records: 1308",
+    "  Governed code files in diff: 4",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION-009, NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008, NTSD-OPT-M03-MATERIALIZATION-REPORT-010, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs -> NTSD-OPT-M03-MESH-BACKEND-BASELINE-011, NTSD-OPT-M03-MESH-PHASE-BASELINE-012"
+  ],
+  "outputLast": [
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+  ],
+  "warningCount": 4275,
+  "newScopeWarnings": [],
+  "errors": [],
+  "rawLineCount": 4282
+}

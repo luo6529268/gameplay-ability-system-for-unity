@@ -1,0 +1,12 @@
+{
+  "operation": "get_test_job",
+  "job_id": "d70510b5287c4498bc1064e99cee388c",
+  "shell": {
+    "chunk_id": "a08ed5",
+    "wall_time_seconds": 0.0000156,
+    "exit_code": 1,
+    "original_token_count": 300,
+    "output": "Socket timeout during framed receive\r\nUnity communication attempt 1 failed: Timeout receiving Unity response\r\nTraceback (most recent call last):\r\n  File \"I:\\GitHub\\Unity_GAS\\unity-mcp\\Server\\src\\transport\\legacy\\unity_connection.py\", line 184, in receive_full_response\r\n    header = self._read_exact(sock, 8)\r\n             ^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"I:\\GitHub\\Unity_GAS\\unity-mcp\\Server\\src\\transport\\legacy\\unity_connection.py\", line 164, in _read_exact\r\n    chunk = sock.recv(count - len(data))\r\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nTimeoutError: timed out\r\n\r\nThe above exception was the direct cause of the following exception:\r\n\r\nTraceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\n  File \"I:\\GitHub\\Unity_GAS\\unity-mcp\\Server\\src\\transport\\legacy\\unity_connection.py\", line 380, in send_command\r\n    response_data = self.receive_full_response(self.sock)\r\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"I:\\GitHub\\Unity_GAS\\unity-mcp\\Server\\src\\transport\\legacy\\unity_connection.py\", line 204, in receive_full_response\r\n    raise TimeoutError(\"Timeout receiving Unity response\") from exc\r\nTimeoutError: Timeout receiving Unity response\r\n"
+  },
+  "note": "Read-only poll timed out while synchronous EditMode sampling was active; not a test verdict. No test rerun or Editor termination."
+}

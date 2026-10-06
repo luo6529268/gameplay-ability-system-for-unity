@@ -1,0 +1,41 @@
+{
+  "observedAt": "2026-10-06T22:50:09.2132093+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+      "bytes": 18888,
+      "lastWriteTime": "2026-10-06T22:48:41.5890679+08:00",
+      "sha256": "C435FAFAFECDE6A994AAE65368C7A0FC48FBB418165B522F34EC782D496E0C63"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "bytes": 43617,
+      "lastWriteTime": "2026-10-06T20:37:50.7138816+08:00",
+      "sha256": "5A6E2CE84153AA71CFCBCC315A9FCE516DD676C04F17656D252989C0605F36DD"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationPhaseDiagnostics.cs",
+      "bytes": 9108,
+      "lastWriteTime": "2026-08-20T19:28:54.0979021+08:00",
+      "sha256": "22523DB614C1CD2532461F23DAD9D7F306C33164C2B6F08BB1240E07C5814BA8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "bytes": 39150,
+      "lastWriteTime": "2026-08-20T19:28:55.8214950+08:00",
+      "sha256": "9B7A960BEFED7E5B04E69B45ECB8F306824B0CE83FEB5FB2CEC07FEA69E3C13D"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "bytes": 6160384,
+      "lastWriteTime": "2026-10-06T22:48:57.8122718+08:00",
+      "sha256": "B07D02740841765F4A169B883F43D55A794513F79621CB10877C416375B18744"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "bytes": 4215296,
+      "lastWriteTime": "2026-10-06T22:15:24.1988590+08:00",
+      "sha256": "2A8A4BA99E774367C65EADD98BE473EC72E5DB725A3BAC1603DC43A48246E7A2"
+    }
+  ]
+}

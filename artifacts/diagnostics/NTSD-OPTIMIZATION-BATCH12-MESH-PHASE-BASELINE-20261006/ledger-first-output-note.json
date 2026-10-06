@@ -1,0 +1,5 @@
+{
+  "exitCode": 0,
+  "head": "Warning: truncated output (original token count: 193083)\nTotal output lines: 4283\n\nChange ledger validation PASSED.\r\n  Records: 1308\r\n  Governed code files in diff: 4\r\n  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010\r\n  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION",
+  "note": "First 2>&1 pipeline did not capture Write-Host info stream; console output truncated. Do not use its zero warning count. Re-run *>&1 captured all streams."
+}

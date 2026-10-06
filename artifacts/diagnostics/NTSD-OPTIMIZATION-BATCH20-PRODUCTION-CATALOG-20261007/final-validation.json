@@ -1,0 +1,218 @@
+{
+  "batch": "NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007",
+  "status": "PARTIAL / FOOT_COVERAGE_UNMET",
+  "change": "NTSD-OPT-M03-PRODUCTION-CATALOG-020",
+  "changeStatus": "RUNTIME_PENDING",
+  "tests": {
+    "jobId": "5a110f803ee44ac39ac131e50c0d832a",
+    "executed": 61,
+    "passed": 61,
+    "failed": 0,
+    "skipped": 0,
+    "newPolicy": 7,
+    "related": 54
+  },
+  "naturalWindow": {
+    "strictStatus": "FAIL",
+    "distinctCameraFrames": 1800,
+    "startTick": 8,
+    "endTick": 1563,
+    "builds": 1800,
+    "publicationChangedBuilds": 1489,
+    "alphaChangedBuilds": 311,
+    "entityUploadedVertexBytes": 1399552,
+    "entityCapacityGrowth": 0,
+    "unresolvedCommands": 0,
+    "executedCpuDrawMeshCommands": 9700,
+    "perCameraDrawCountMismatch": 0,
+    "activeFootMarkersAllSamples": 0,
+    "activeHealthBarsAllSamples": 2,
+    "catalogPresentAllSamples": true,
+    "cameraAllocatedBytes": 0,
+    "observerAllocatedBytes": 0,
+    "submissionSlots": 2,
+    "readLeaseCountAfterCamera": 0,
+    "collectionControlSupported": false,
+    "playerLoopHardGateSupported": false,
+    "gen0Collections": 3,
+    "gen1Collections": 3,
+    "gen2Collections": 3,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "sceneClean": true
+  },
+  "replay": {
+    "status": "NOT_RUN",
+    "reason": "activeFootMarkers=0 caused strict prerequisite refusal; no capacity or allocation thresholds changed."
+  },
+  "safety": {
+    "checkedAt": "2026-10-07T02:27:29.3973218+08:00",
+    "protectedCount": 708,
+    "protectedChanges": [],
+    "backupCount": 8,
+    "backupMismatches": [],
+    "hashes": [
+      {
+        "Hash": "A49C69CE527D7E0268661F96F6A5A28B0C79E6204872BDA6EAF1A1930270AE8D",
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll"
+      },
+      {
+        "Hash": "3031CC117D8475CCF86A581C932265079776DF7F2166524C45CDC950AB10622F",
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll"
+      },
+      {
+        "Hash": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity"
+      },
+      {
+        "Hash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity"
+      },
+      {
+        "Hash": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+        "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe"
+      }
+    ],
+    "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+    "staged": []
+  },
+  "ledger": {
+    "exitCode": 0,
+    "lineCount": 4275,
+    "warningCount": 4260,
+    "errorCount": 0,
+    "records": 1316,
+    "governedCodeFiles": 12,
+    "batchSpecificCovered": [
+      "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs"
+    ],
+    "note": "Fresh Validate-ChangeLedger.ps1 summary; historical warnings unchanged from prior batch."
+  },
+  "checks": {
+    "gitDiffCheckExit": 0,
+    "sourceChecks": [
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+        "lineCount": 1071,
+        "trailingWhitespace": 0,
+        "conflictMarkers": 0
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs",
+        "lineCount": 380,
+        "trailingWhitespace": 0,
+        "conflictMarkers": 0
+      }
+    ],
+    "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+    "staged": [],
+    "note": "git diff --check exit0; LF-to-CRLF advisory warnings retained."
+  },
+  "scopedLinkValidation": {
+    "checked": 37,
+    "broken": 0,
+    "note": "final-validation self-link rechecked after creation before freeze; legacy/unrelated links not repaired."
+  },
+  "finalEditor": [
+    {
+      "success": true,
+      "message": "Retrieved 2 log entries.",
+      "data": [
+        "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+        "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+      ]
+    },
+    {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791311203233,
+        "sequence": 14,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791310989659,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791310736684
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    },
+    {
+      "success": true,
+      "message": "1 scene(s) loaded.",
+      "data": {
+        "scenes": [
+          {
+            "name": "NTSD_Menu",
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "buildIndex": 0,
+            "isLoaded": true,
+            "isDirty": false,
+            "isActive": true,
+            "rootCount": 8
+          }
+        ]
+      }
+    }
+  ],
+  "scope": "No production changes; no 1000AI/GPU/FPS/Android/full-chain zero-GC certification; EXT1/MONO/ATLAS gates unchanged."
+}

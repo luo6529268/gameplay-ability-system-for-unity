@@ -1,0 +1,7 @@
+{
+  "chunk_id": "333e7c",
+  "wall_time_seconds": 2.6316267,
+  "exit_code": 0,
+  "original_token_count": 155,
+  "output": "[{\"success\": true, \"message\": \"Scene 'Assets/NTSD/Scene/NTSD_Menu.unity' loaded successfully.\", \"data\": {\"path\": \"Assets/NTSD/Scene/NTSD_Menu.unity\", \"name\": \"NTSD_Menu\"}}, {\"success\": true, \"message\": \"Retrieved active scene information.\", \"data\": {\"name\": \"NTSD_Menu\", \"path\": \"Assets/NTSD/Scene/NTSD_Menu.unity\", \"buildIndex\": 0, \"isDirty\": false, \"isLoaded\": true, \"rootCount\": 8}}, {\"success\": true, \"message\": \"1 scene(s) loaded.\", \"data\": {\"scenes\": [{\"name\": \"NTSD_Menu\", \"path\": \"Assets/NTSD/Scene/NTSD_Menu.unity\", \"buildIndex\": 0, \"isLoaded\": true, \"isDirty\": false, \"isActive\": true, \"rootCount\": 8}]}}]\r\n"
+}

@@ -1,0 +1,26 @@
+{
+  "testNames": [
+    "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+    "NTSD.Test.BattlePresentationMotionSamplerEditorTests",
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion"
+  ],
+  "dispatch": [
+    {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "5a110f803ee44ac39ac131e50c0d832a",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  ]
+}

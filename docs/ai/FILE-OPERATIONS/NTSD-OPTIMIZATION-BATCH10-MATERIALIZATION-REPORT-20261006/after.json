@@ -1,0 +1,476 @@
+{
+  "time": "2026-10-06T22:22:20.0192808+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006",
+  "changeId": "NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+  "commit": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "previousCommit": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "bytes": 109459,
+      "sha256": "7456B9D501298817D10B7495473CC807A875AD5208C4683AE1CB70F10509B7F5",
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 12837,
+      "sha256": "16159EB49F1B286BE7C897A5C10A8AA9D6BF91AE4A3E04BA2321583CC2F5CABD",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 24413,
+      "sha256": "0CF0C2D6303CDEEA458CBF654DB6A928DA8025E6345A069AE1D7CF2F759101D0",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21631,
+      "sha256": "608D5FDD582671D3BBA4C67F40C2E484619FD38D0F17878ED13F2A13664F51C9",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1469964,
+      "sha256": "1420C0ACF93F82DE6B729E1D4A2853FA5EEBD391B4A4B90EAD5CC8F44D0935D4",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 638769,
+      "sha256": "56769E32F6F52F387532AFAF1F9003F8E8717DEEBB03357C021A96DDB29693A9",
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1539136,
+      "sha256": "8DCAED6D133AD6EACC87C581CAA50FCFA4E639C47B3477C6E5CAA6D4FA8626BD",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 29004,
+      "sha256": "D0740A2C8E1D03158663E8BD82FD28D73B1C40A2CE684664FA30039359732A72",
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md",
+      "bytes": 4195,
+      "sha256": "0D882FDB4AF4E5CAB63D0788A848AD0CE58C7B1ABD0537D64335229EBB04BC63",
+      "gitStatus": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+      "bytes": 3325,
+      "sha256": "7A55A270B5753E216D4AEB844CBC68CBFAEFD5DAF8CDB00ACEFCAF933CC52E7C",
+      "gitStatus": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\RECORD.md",
+      "bytes": 2273,
+      "sha256": "AB8CFD5F152097B5458B08A979FD92673805299FF70E620C77AE0DC875BC2FC1",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before.json",
+      "bytes": 4879,
+      "sha256": "8BF429AA9D808B18CB6095FC2C95C135FA3FF153688421BBB2AC194B38E27718",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/protected-before.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\protected-before.json",
+      "bytes": 60245,
+      "sha256": "47BF78E64B3B2FCF365231AE813F79FE5B1D9660B10A582E4F2CB06CF8FBB157",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/protected-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/REPORT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\REPORT.md",
+      "bytes": 5810,
+      "sha256": "8F672445EFEA4FAA46CB1F8374257DCE845EAD38BB91E5A769101376DA8D182E",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/REPORT.md"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-preflight.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\editor-preflight.json",
+      "bytes": 2559,
+      "sha256": "8A53C44CE2AC509A124080EAC9DA5441AC3A0887CB49FD809621985C2C99DA6F",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-preflight.json"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleMaterializationReportEditorTests.cs",
+      "bytes": 14540,
+      "sha256": "DFA90696D733BB757D4471550EC6B3CB7B8EC7729F841ECE9F16319593EF3144",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleMaterializationReportEditorTests.cs.meta",
+      "bytes": 60,
+      "sha256": "1474322BABD010EFD4EAD2AB608AD62AC93244A3C185383DBEE072D034D407B8",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-refresh.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\red-refresh.json",
+      "bytes": 252,
+      "sha256": "FB923AF23862D6EC671F3A26B175B960E7AD5D488AE262F0C0CA0E248E84AAA5",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-compile.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\red-compile.json",
+      "bytes": 1535,
+      "sha256": "39B570329F5B50D8F4C35BA0154026725D859A4DC5CF3AC960DB9F3CEB1EC006",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-compile.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\red-start.json",
+      "bytes": 204,
+      "sha256": "C97B0DBA7A8D61619B2405638459CA0BDEDD6C8AD2A7650513B5B1C28216D477",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\red-result.json",
+      "bytes": 7158,
+      "sha256": "1D824A386729D46F81EB46C60E5F6385BB2276F61CDA92340D8266977F064BDD",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-result.json"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralMaterializationReport.cs",
+      "bytes": 9048,
+      "sha256": "5DC34A70042476B5899A4987DB558BADBD3201827CBB8FEEB9DF2A0028F17D68",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralMaterializationReport.cs.meta",
+      "bytes": 60,
+      "sha256": "6198D235148AEA01AD45AE5FD989B64A64937D7DDC871B3BE72C43A33DD1E812",
+      "gitStatus": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-refresh.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\green-refresh.json",
+      "bytes": 252,
+      "sha256": "FB923AF23862D6EC671F3A26B175B960E7AD5D488AE262F0C0CA0E248E84AAA5",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-refresh.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-compile.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\green-compile.json",
+      "bytes": 1534,
+      "sha256": "AE2FC02FF462830F0B5E11D4AC840E8B3769DADB23AAE45E82D59FBF5F487339",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-compile.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\green-start.json",
+      "bytes": 204,
+      "sha256": "1A9F764CF37C79455144D8B2D9A06FB3D06C703B1DDC0D2A5D12C41F3DBD0C6A",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\green-result.json",
+      "bytes": 18471,
+      "sha256": "B10989984273BEB9546720CD53217CCC23F863593C0328ADAB3D2960A38F49EA",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/compiled-source-manifest.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\compiled-source-manifest.json",
+      "bytes": 1334,
+      "sha256": "E64F2893734DC683A08589867C28394CE012E060A0CF7CE5D8810C85344D4507",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/compiled-source-manifest.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-start.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\regression-start.json",
+      "bytes": 204,
+      "sha256": "30D1A13AFB92EA40E20F2A2C472FED92835B8805E4A0FD330B711FDC96095119",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-targets.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\regression-targets.json",
+      "bytes": 3967,
+      "sha256": "D7BA9892F0917FF711F96CA2F179C30344ECA72EEEA59018C4F0C8FAD20CE64C",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-targets.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/backup-verification.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\backup-verification.json",
+      "bytes": 85,
+      "sha256": "F275B62B6026E9BCD866FC8FC4C4FFD7D795DB642974E62C16DC4D2256A4F628",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/backup-verification.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-result.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\regression-result.json",
+      "bytes": 72666,
+      "sha256": "5A9733F18C4E72AC27160341BE33659F41EB35347CC524BE8C850115D01F715A",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-post.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\editor-post.json",
+      "bytes": 1827,
+      "sha256": "FDE806AA5A70A2A19BAABA18F70710103336DE9499CD76B0BAA46D5A2C40D601",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-post.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/change-ledger-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\change-ledger-validation.json",
+      "bytes": 252,
+      "sha256": "B2CC836448CA3404F7174CCB3B0DD8CE5991EE8A6D85C80859489E1A850837FB",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/change-ledger-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-initial.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\static-initial.json",
+      "bytes": 1686,
+      "sha256": "8CFB474DC29CF6736B7A945AE0EB3AB60CC2BA6739A118CBFE6B7FC31BC16BAC",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-initial.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-validation.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\static-validation.json",
+      "bytes": 1426,
+      "sha256": "4768E35B0B82C4BE7E8CA2E301599A277D3030212F2C16A726F8CBE9A52B5EE7",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-final.json",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\static-final.json",
+      "bytes": 1426,
+      "sha256": "A41E0CDF91692563D6756160BA31E1C032453DF166CDC5B183EEAAFFCC7918A2",
+      "gitStatus": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-final.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "bytes": 109092,
+      "sha256": "FAAF0C6814166763B68228FCF11C8F0753EBD0AFC795D7187232E30EDA82913C",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 10987,
+      "sha256": "CD5FD5287D0DAD5742DFF9FCBA0720B6580A28282084227C37672E3C199E686A",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 22747,
+      "sha256": "2BD3B2DD0A3E85AA79429AF80634FB551CFA5E5755360D2D81E572B0D55ACE7C",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21147,
+      "sha256": "68C5F90670627BF1FCA3CE25036613E085EF89B2F738FF1977237A7FC96BB01A",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1468972,
+      "sha256": "A0CC79B24C1F8936145B3E12A144F0834B1815EF7E7DB0398068A7B7AA73CB13",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 637811,
+      "sha256": "6834CB067D6B6F3080FB2906DAF90225E4813F715CF18B367A93B2C8BAB08306",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\docs\\ai\\STATE.md",
+      "bytes": 1538178,
+      "sha256": "7A4027905EEED1ED31BCF65E830FEBD93175BF7C67502CD4E1FA080E70E35B9C",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006\\before-backups\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 28345,
+      "sha256": "0BBFC19A38EE38D9A675A63BED0210E2C27D371B3812732694028461DD8A1FDC",
+      "gitStatus": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    }
+  ],
+  "ownedCount": 8,
+  "newFileCount": 29,
+  "backupCount": 8,
+  "protectedCount": 286,
+  "protectedMismatchCount": 0,
+  "protectedMismatches": [
+    null
+  ],
+  "backupMismatchCount": 0,
+  "afterExcludesItself": true,
+  "gitStatus": [
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs.meta",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs",
+    "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/backup-verification.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/change-ledger-validation.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/compiled-source-manifest.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-post.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/editor-preflight.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-compile.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/green-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-compile.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-refresh.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/red-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-result.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-start.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/regression-targets.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-final.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-initial.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/static-validation.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MATERIALIZATION-REPORT-010.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/after.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before-backups/docs/ai/STATE.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/before.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/protected-before.json",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006.md"
+  ]
+}

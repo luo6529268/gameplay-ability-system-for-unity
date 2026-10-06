@@ -1,0 +1,16 @@
+{
+  "uniqueCount": 149,
+  "groups": {
+    "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests": 14,
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests": 13,
+    "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests": 6,
+    "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests": 58,
+    "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests": 15,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests": 16,
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests": 3,
+    "NTSD.Test.BattleResolverCapacitySealEditorTests": 15,
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests": 4,
+    "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests": 5
+  },
+  "note": "Grouping uses the signature before parameter text. The draft confirmed-cases.json group keys split decimal arguments; its exact cases and uniqueCount remain correct."
+}

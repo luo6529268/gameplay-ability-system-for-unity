@@ -1,0 +1,12 @@
+{
+  "Name": "13th Gen Intel(R) Core(TM) i5-13600KF",
+  "NumberOfCores": 14,
+  "NumberOfLogicalProcessors": 20
+}
+Assets\NTSD\Scripts\Animation\Rendering\Editor\BattleMeshUploadBaselineEditorTests.cs.meta
+Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md:4:> 状态：`OPEN / RUNTIME_PENDING / UPLOAD_COUNTER_FOCUSED_PASS / UPLOAD_REPORT_FOCUSED_PASS / REQUEST_COUNTER_FOCUSED_PASS / BUILD_ATTRIBUTION_FOCUSED_PASS / PRODUCTION_COUNTER_REPORT_FOCUSED_PASS / SCOPED_BACKEND_BASELINE_PASS / PROFILING_REQUIRED`
+Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md:148:### 2026-10-06 子批11：当前backend受控基线（限定通过，父项未关闭）
+Assets/NTSD/Docs/battle-optimization-progress-tracker.md:13:> M-03子批11受控backend基线：新12/12、相关旧26/26（去重38）；12组各1800采样，局部0B/零growth。1000命令单段与1000物理段CPU有差异，真实生产/完整链/收益仍待验收。
+Assets/NTSD/Docs/battle-optimization-progress-tracker.md:40:| M-03 | 高 | 计数/生产报告及当前backend受控基线已补；1000物理segment会放大局部CPU成本，尚未减少上传。 | RUNTIME_PENDING（子批06～10聚焦、11局部基线通过） | OPEN / INTERPOLATION_EXISTS / PROFILING_REQUIRED | [方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md)；子批11新12/12+旧26/26→分段阶段成本、生产基线/完整0GC/最小A/B |
+Assets/NTSD/Docs/battle-optimization-progress-tracker.md:76:| 11 受控backend基线 | M-03（部分） | [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006.md) / [Change](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-BACKEND-BASELINE-011.md) | 原Editorcompile、新12/12+旧26/26（去重38）；SCOPED_BACKEND_BASELINE_PASS；[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH11-MESH-BACKEND-BASELINE-20261006/REPORT.md) | 100/500/1000及4097命令×1800；局部0B/零growth；非自然publication/素材/AI/GPU。下一分阶段定位/最小A/B、真实生产窗口/完整链/收益/设备 |
+Assets/NTSD/Docs/battle-optimization-progress-tracker.md:94:- 2026-10-06：子批11只新增Editor fixture，生产无改；原Editor12/12局部采样、相关26/26，38去重Passed。

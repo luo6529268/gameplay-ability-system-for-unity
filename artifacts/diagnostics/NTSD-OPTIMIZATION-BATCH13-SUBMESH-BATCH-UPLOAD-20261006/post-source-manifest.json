@@ -1,0 +1,61 @@
+{
+  "time": "2026-10-06T23:09:34.7676803+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "bytes": 43926,
+      "time": "2026-10-06T23:08:42.0544546+08:00",
+      "sha256": "F5519E8F5AD9634244C5D1DC1E67A6B3415054FAF8F9EAFAC9C694E096E52292"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs",
+      "bytes": 20037,
+      "time": "2026-10-06T23:06:34.0583072+08:00",
+      "sha256": "44639619250EE50B3D588F0F194BE6E2606234A5FFCC5C4386AA11A84402EAE8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+      "bytes": 18888,
+      "time": "2026-10-06T22:48:41.5890679+08:00",
+      "sha256": "C435FAFAFECDE6A994AAE65368C7A0FC48FBB418165B522F34EC782D496E0C63"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "bytes": 109459,
+      "time": "2026-10-06T22:15:04.9779080+08:00",
+      "sha256": "7456B9D501298817D10B7495473CC807A875AD5208C4683AE1CB70F10509B7F5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "bytes": 175639,
+      "time": "2026-10-06T15:28:47.6223786+08:00",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs.meta",
+      "bytes": 254,
+      "time": "2026-07-31T11:10:09.9575514+08:00",
+      "sha256": "6FB8575173ABD5506E5FD45C0BEA5DD465C86F40CC4FA92732182CCE84A2F625"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs.meta",
+      "bytes": 62,
+      "time": "2026-07-31T11:10:09.9946068+08:00",
+      "sha256": "4778C24F2400156FD175FA38CE620FDAEF8F002633D1A6FE463A5777A21A6DAD"
+    }
+  ],
+  "assemblies": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "bytes": 6162944,
+      "time": "2026-10-06T23:06:39.3299604+08:00",
+      "sha256": "F6FABB8E1E70CECEBD25DD6DC076056045EDE8824F7F5DE2D5F90228CFE9AD9B"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "bytes": 4215296,
+      "time": "2026-10-06T23:08:47.3629819+08:00",
+      "sha256": "B2B46521BE40C2E92F546EF21F73D642E25DDB38BAD00F425EB3B6502F6754CA"
+    }
+  ]
+}

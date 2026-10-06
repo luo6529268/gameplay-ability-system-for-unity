@@ -1,0 +1,184 @@
+{
+  "time": "2026-10-07T00:38:28.9064017+08:00",
+  "rows": [
+    {
+      "run": "before-1",
+      "status": "PASS",
+      "error": "",
+      "startTick": 8,
+      "endTick": 104,
+      "samples": 132,
+      "configuredRenderFps": 120,
+      "builds": 264,
+      "buildsPerCamera": 2,
+      "uploadedVertexBytes": 185856,
+      "bytesPerCamera": 1408,
+      "publicationBuilds": 96,
+      "alphaBuilds": 168,
+      "repeatBuilds": 0,
+      "failures": 0,
+      "rejections": 0,
+      "entities": [
+        2
+      ],
+      "commands": [
+        4
+      ],
+      "segments": [
+        4
+      ],
+      "chunks": [
+        1
+      ],
+      "growth": [
+        0
+      ],
+      "recordedCpuDraws": [
+        5
+      ],
+      "planDelta": [
+        1
+      ],
+      "slots": 2,
+      "meshIds": [
+        -2504306
+      ],
+      "leasesAfterCamera": [
+        0
+      ],
+      "alphaMin": 0.11524848540428853,
+      "alphaMax": 1,
+      "firstPosition": {
+        "x": 2.1300344467163086,
+        "y": -9.190000534057617,
+        "z": 0
+      },
+      "lastPosition": {
+        "x": 2.1300344467163086,
+        "y": -9.190000534057617,
+        "z": 0
+      },
+      "cameraAllocatedBytes": 0,
+      "observerAllocatedBytes": 0,
+      "memoryBefore": {
+        "tickBytes": 0,
+        "driverUpdateBytes": 0,
+        "latePresentationBytes": 0,
+        "playerLoopBytes": 0,
+        "gen0Collections": 0,
+        "gen1Collections": 0,
+        "gen2Collections": 0
+      },
+      "memoryAfter": {
+        "tickBytes": 0,
+        "driverUpdateBytes": 0,
+        "latePresentationBytes": 0,
+        "playerLoopBytes": 0,
+        "gen0Collections": 0,
+        "gen1Collections": 0,
+        "gen2Collections": 0
+      },
+      "collectionControlSupported": false,
+      "playerLoopHardGateSupported": false,
+      "shutdown": true,
+      "remaining": [
+        0,
+        0,
+        0
+      ],
+      "sceneClean": true,
+      "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "run": "after-1",
+      "status": "PASS",
+      "error": "",
+      "startTick": 8,
+      "endTick": 104,
+      "samples": 143,
+      "configuredRenderFps": 120,
+      "builds": 143,
+      "buildsPerCamera": 1,
+      "uploadedVertexBytes": 100672,
+      "bytesPerCamera": 704,
+      "publicationBuilds": 96,
+      "alphaBuilds": 47,
+      "repeatBuilds": 0,
+      "failures": 0,
+      "rejections": 0,
+      "entities": [
+        2
+      ],
+      "commands": [
+        4
+      ],
+      "segments": [
+        4
+      ],
+      "chunks": [
+        1
+      ],
+      "growth": [
+        0
+      ],
+      "recordedCpuDraws": [
+        5
+      ],
+      "planDelta": [
+        1
+      ],
+      "slots": 2,
+      "meshIds": [
+        -2571248,
+        -2571236
+      ],
+      "leasesAfterCamera": [
+        0
+      ],
+      "alphaMin": 0.10132727290887852,
+      "alphaMax": 0.8674969742082613,
+      "firstPosition": {
+        "x": 2.1300344467163086,
+        "y": -9.190000534057617,
+        "z": 0
+      },
+      "lastPosition": {
+        "x": 2.1300344467163086,
+        "y": -9.190000534057617,
+        "z": 0
+      },
+      "cameraAllocatedBytes": 0,
+      "observerAllocatedBytes": 0,
+      "memoryBefore": {
+        "tickBytes": 0,
+        "driverUpdateBytes": 0,
+        "latePresentationBytes": 0,
+        "playerLoopBytes": 0,
+        "gen0Collections": 0,
+        "gen1Collections": 0,
+        "gen2Collections": 0
+      },
+      "memoryAfter": {
+        "tickBytes": 0,
+        "driverUpdateBytes": 0,
+        "latePresentationBytes": 0,
+        "playerLoopBytes": 0,
+        "gen0Collections": 0,
+        "gen1Collections": 0,
+        "gen2Collections": 0
+      },
+      "collectionControlSupported": false,
+      "playerLoopHardGateSupported": false,
+      "shutdown": true,
+      "remaining": [
+        0,
+        0,
+        0
+      ],
+      "sceneClean": true,
+      "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ]
+}

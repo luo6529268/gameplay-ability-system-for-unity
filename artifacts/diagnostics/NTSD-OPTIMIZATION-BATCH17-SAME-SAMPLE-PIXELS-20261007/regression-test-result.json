@@ -1,0 +1,525 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "4d24bb88b9034ecdb28a3e355428c69b",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1791307280964,
+    "finished_unix_ms": 1791307291181,
+    "last_update_unix_ms": 1791307291181,
+    "progress": {
+      "completed": 54,
+      "total": 9262,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1791307290584,
+      "last_finished_test_full_name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.StructuralShutdown_RejectsRegisterButAllowsExistingWorldReset",
+      "last_finished_unix_ms": 1791307290586,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 54,
+        "passed": 54,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 2.1449858,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "CamerasCannotAcquireOldSubmissionUntilLatestPublicationIsMaterialized",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CamerasCannotAcquireOldSubmissionUntilLatestPublicationIsMaterialized",
+          "state": "Passed",
+          "durationSeconds": 0.1588791,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CatchUpPublications_MaterializeOnlyLatestSnapshot",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CatchUpPublications_MaterializeOnlyLatestSnapshot",
+          "state": "Passed",
+          "durationSeconds": 0.0031174,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CentralIntermediateTick_SkipsPublicationAndRendererShellLatePass",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralIntermediateTick_SkipsPublicationAndRendererShellLatePass",
+          "state": "Passed",
+          "durationSeconds": 0.0037837,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CentralOnly_CapturesBeforeMaterializingCommands",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralOnly_CapturesBeforeMaterializingCommands",
+          "state": "Passed",
+          "durationSeconds": 0.0019012,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CentralSubmission_PrepareCapacity_PrewarmsFrozenFrameStorage",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralSubmission_PrepareCapacity_PrewarmsFrozenFrameStorage",
+          "state": "Passed",
+          "durationSeconds": 0.0040777,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ExplicitFlush_BypassesUnityFrameGateAndMaterializesLatestSnapshot",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.ExplicitFlush_BypassesUnityFrameGateAndMaterializesLatestSnapshot",
+          "state": "Passed",
+          "durationSeconds": 0.0015101,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "NonCentralOnlyModes_IgnorePresentationSuppression(LegacyOnly)",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.NonCentralOnlyModes_IgnorePresentationSuppression(LegacyOnly)",
+          "state": "Passed",
+          "durationSeconds": 0.0031629,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "NonCentralOnlyModes_IgnorePresentationSuppression(CentralShadowBuild)",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.NonCentralOnlyModes_IgnorePresentationSuppression(CentralShadowBuild)",
+          "state": "Passed",
+          "durationSeconds": 0.0021132,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "RepeatedCameraSubmissionWithoutNewPublication_DoesNotRebuild",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.RepeatedCameraSubmissionWithoutNewPublication_DoesNotRebuild",
+          "state": "Passed",
+          "durationSeconds": 0.0016856,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ResetRuntime_DropsPendingWorldAndPreventsStaleMaterialization",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.ResetRuntime_DropsPendingWorldAndPreventsStaleMaterialization",
+          "state": "Passed",
+          "durationSeconds": 0.0016697,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SameUnityFrame_MaterializesAtMostOnce_AndNextFrameCatchesUp",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.SameUnityFrame_MaterializesAtMostOnce_AndNextFrameCatchesUp",
+          "state": "Passed",
+          "durationSeconds": 0.0015586,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SuppressedCatchUp_FinalSnapshotMatchesSingleFinalBuild",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.SuppressedCatchUp_FinalSnapshotMatchesSingleFinalBuild",
+          "state": "Passed",
+          "durationSeconds": 0.0027951,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "WorldSwitchAfterMaterialization_DoesNotSubmitPreviousWorldInSameUnityFrame",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.WorldSwitchAfterMaterialization_DoesNotSubmitPreviousWorldInSameUnityFrame",
+          "state": "Passed",
+          "durationSeconds": 0.0028232,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ColdOrChangedWorld_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ColdOrChangedWorld_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0065371,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "DisabledCamera_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.DisabledCamera_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0035307,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "DisabledFeature_StillFlushesAndDoesNotClaimReady",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.DisabledFeature_StillFlushesAndDoesNotClaimReady",
+          "state": "Passed",
+          "durationSeconds": 0.0029746,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ExplicitFlush_StillConsumesPendingPublicationImmediately",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ExplicitFlush_StillConsumesPendingPublicationImmediately",
+          "state": "Passed",
+          "durationSeconds": 0.0031015,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MissingMaterial_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.MissingMaterial_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0031538,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MissingRecentRouteObservation_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.MissingRecentRouteObservation_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0033064,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "NonCentralOnlyHost_StillFlushes(LegacyOnly)",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonCentralOnlyHost_StillFlushes(LegacyOnly)",
+          "state": "Passed",
+          "durationSeconds": 0.0033135,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "NonCentralOnlyHost_StillFlushes(CentralShadowBuild)",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonCentralOnlyHost_StillFlushes(CentralShadowBuild)",
+          "state": "Passed",
+          "durationSeconds": 0.002784,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "NonInteractiveHost_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonInteractiveHost_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0028971,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "PendingPublication_RejectsOldLeaseUntilCameraMaterializesLatest",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.PendingPublication_RejectsOldLeaseUntilCameraMaterializesLatest",
+          "state": "Passed",
+          "durationSeconds": 0.0029887,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "StalePlan_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.StalePlan_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0237482,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ThirtyFpsHost_StillFlushes",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ThirtyFpsHost_StillFlushes",
+          "state": "Passed",
+          "durationSeconds": 0.0774034,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "WarmHost_AllocatedBytesRemainZeroAfterWarmup",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.WarmHost_AllocatedBytesRemainZeroAfterWarmup",
+          "state": "Passed",
+          "durationSeconds": 0.0031988,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "WarmInteractiveCentralHost_QueuesWithoutReplacingCapturedGeometry",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.WarmInteractiveCentralHost_QueuesWithoutReplacingCapturedGeometry",
+          "state": "Passed",
+          "durationSeconds": 0.0219056,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(False)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(False)",
+          "state": "Passed",
+          "durationSeconds": 0.005621,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(True)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(True)",
+          "state": "Passed",
+          "durationSeconds": 0.0898043,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(17)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(17)",
+          "state": "Passed",
+          "durationSeconds": 0.0019963,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4096)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4096)",
+          "state": "Passed",
+          "durationSeconds": 0.0098331,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4097)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4097)",
+          "state": "Passed",
+          "durationSeconds": 0.0114526,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MeshSeal_ZeroCapacityAndUnsealDoNotUseChunkSizeAsLimit",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_ZeroCapacityAndUnsealDoNotUseChunkSizeAsLimit",
+          "state": "Passed",
+          "durationSeconds": 0.0012155,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MotionSeal_AcceptedVaryingSamplesAndPreflightAllocateZeroBytes",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_AcceptedVaryingSamplesAndPreflightAllocateZeroBytes",
+          "state": "Passed",
+          "durationSeconds": 0.0012377,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,0.5d)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,0.5d)",
+          "state": "Passed",
+          "durationSeconds": 0.0010125,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,0.5d)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,0.5d)",
+          "state": "Passed",
+          "durationSeconds": 0.000217,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,1.0d)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,1.0d)",
+          "state": "Passed",
+          "durationSeconds": 0.0001659,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,1.0d)",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,1.0d)",
+          "state": "Passed",
+          "durationSeconds": 0.0001662,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"EntityCount\")",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"EntityCount\")",
+          "state": "Passed",
+          "durationSeconds": 0.0015558,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"HitRecordCount\")",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"HitRecordCount\")",
+          "state": "Passed",
+          "durationSeconds": 0.0003093,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"CommandCount\")",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"CommandCount\")",
+          "state": "Passed",
+          "durationSeconds": 0.0002537,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"MotionStateCount\")",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"MotionStateCount\")",
+          "state": "Passed",
+          "durationSeconds": 0.0002556,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"PreviousMotionStateCount\")",
+          "fullName": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"PreviousMotionStateCount\")",
+          "state": "Passed",
+          "durationSeconds": 0.0002567,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+          "fullName": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+          "state": "Passed",
+          "durationSeconds": 0.0016731,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Lookup_RejectsGenerationRelationAndSkippedTick",
+          "fullName": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+          "state": "Passed",
+          "durationSeconds": 0.0004294,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+          "fullName": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+          "state": "Passed",
+          "durationSeconds": 0.0007743,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_ProjectsRoundedGlobalHeightOnlyForPresentation",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_ProjectsRoundedGlobalHeightOnlyForPresentation",
+          "state": "Passed",
+          "durationSeconds": 0.0014967,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_RejectsTeleportButAcceptsMotionSupportedDash",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_RejectsTeleportButAcceptsMotionSupportedDash",
+          "state": "Passed",
+          "durationSeconds": 0.0007414,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_RejectsTickIdentityAndEveryRelationChange",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_RejectsTickIdentityAndEveryRelationChange",
+          "state": "Passed",
+          "durationSeconds": 0.0007232,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_UsesNativeRoundingBeforeApprovedViewScale",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_UsesNativeRoundingBeforeApprovedViewScale",
+          "state": "Passed",
+          "durationSeconds": 0.0004722,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "DriverShutdown_ClosesRuntimeStagesBeforeStoppedAndIsIdempotent",
+          "fullName": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.DriverShutdown_ClosesRuntimeStagesBeforeStoppedAndIsIdempotent",
+          "state": "Passed",
+          "durationSeconds": 0.0132723,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "LogicOpointShutdown_RejectsAndRecyclesWithoutMaterializing",
+          "fullName": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.LogicOpointShutdown_RejectsAndRecyclesWithoutMaterializing",
+          "state": "Passed",
+          "durationSeconds": 0.0913707,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "ObjectPoolShutdown_ReturnsAllBorrowersAndQuiesces",
+          "fullName": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.ObjectPoolShutdown_ReturnsAllBorrowersAndQuiesces",
+          "state": "Passed",
+          "durationSeconds": 0.0120543,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "StructuralShutdown_RejectsRegisterButAllowsExistingWorldReset",
+          "fullName": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.StructuralShutdown_RejectsRegisterButAllowsExistingWorldReset",
+          "state": "Passed",
+          "durationSeconds": 0.001951,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  }
+}

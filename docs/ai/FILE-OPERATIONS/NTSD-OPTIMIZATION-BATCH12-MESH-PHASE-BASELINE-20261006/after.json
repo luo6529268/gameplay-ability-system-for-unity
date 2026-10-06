@@ -1,0 +1,385 @@
+{
+  "time": "2026-10-06T22:57:37.6404620+08:00",
+  "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "selfExcluded": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/after.json",
+  "files": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-first-progress.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\baseline-first-progress.json",
+      "bytes": 1051,
+      "sha256": "582EF8D3BA61240F3D777ADCDCD3378E3C35700282FE2EB9DB01F1B80A10C78A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-first-progress.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-result.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\baseline-result.json",
+      "bytes": 61073,
+      "sha256": "58A6B2A76D294E3F39A55E9F4CCC03530EC83DA4E59A3834600A5B31B023C3D1",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-samples.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\baseline-samples.json",
+      "bytes": 56407,
+      "sha256": "5B1B4C990A9E7A5EFB56A08DC073F65CACDB8B82A45EDFE75D15E18E67D37EA7",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-samples.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-start.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\baseline-start.json",
+      "bytes": 355,
+      "sha256": "78826D5E20DE3F5A4ACD70E735F3446C31EEDC5F69CB45D4145BD01329EBFB8A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/baseline-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-current.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\compile-current.json",
+      "bytes": 1801,
+      "sha256": "86482E1AD90D8F40FC7F62EA8A64EFB597F7B67D38E973B35B55908291EFD285",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-current.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-reloading.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\compile-reloading.json",
+      "bytes": 383,
+      "sha256": "F6761C72886B22D580D84D908154801568CB7F2282ED7E361ABD19C25143821A",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compile-reloading.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compiled-source-manifest.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\compiled-source-manifest.json",
+      "bytes": 1665,
+      "sha256": "14B82B3EEE83BB0A4D98444C81F9D2F614FDDB606A95F83F2F34231C164DB9D1",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/compiled-source-manifest.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-after-tests.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\editor-after-tests.json",
+      "bytes": 365,
+      "sha256": "D2FBE9651542839B0DF4BE6E8F25F632A0030575E3B0FE9C7AA86119908A7161",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-after-tests.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-before.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\editor-before.json",
+      "bytes": 2854,
+      "sha256": "9E08FA8EB4BCEA4636CDA10139C984CDBC1FA6239A8E05D64F2B43E90BE4D882",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-before.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-final.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\editor-final.json",
+      "bytes": 2126,
+      "sha256": "BBD6CC8E24AEE7C4A11708D8A19419F2FBDF547FD285D46D3A3DC9314B2970B5",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/editor-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-first-output-note.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\ledger-first-output-note.json",
+      "bytes": 963,
+      "sha256": "178CC38CF06B632BA55598D7B65317705F094C2A22BD14AC96901F0B081A63BA",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-first-output-note.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation-final.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\ledger-validation-final.json",
+      "bytes": 255,
+      "sha256": "6FA0786DA312734CC7CEDB3C51517CE108BB13EBCA2547D59841379A846CFE56",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\ledger-validation.json",
+      "bytes": 1796,
+      "sha256": "8A562D5E0F8E469B6F85610CFD6F59498041C134B77E333F7A333804D3C63886",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/ledger-validation.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/observation-and-unique.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\observation-and-unique.json",
+      "bytes": 1980,
+      "sha256": "4F951B3F4450DC8C9C9B41F50EA4211F6A2634FAACA42853E7F201378E553172",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/observation-and-unique.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-result.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\regression-result.json",
+      "bytes": 14427,
+      "sha256": "97EB3877957670D5669E5105A4CDB92059B317B8754C66F1CD9B26BAB850F5B1",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-result.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-start.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\regression-start.json",
+      "bytes": 356,
+      "sha256": "95A3FBC2F0A9FBC2F17C4042DFD5FE7FD720D8FB09A7F82D2D974CD4936FB081",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/regression-start.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\REPORT.md",
+      "bytes": 10874,
+      "sha256": "0DB735594A85740A9F504928AE3B211169775D3C9BF787FF014A69C0AC89F1E9",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/REPORT.md"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-final.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\static-final.json",
+      "bytes": 404,
+      "sha256": "D7C5905C9A49B1E96D888E048B0AF12FD8B4A26573C43EB84AB7A7B4123F33F8",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-final.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-first.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\static-first.json",
+      "bytes": 1751,
+      "sha256": "79923530DB2ED90DC448125078A148C9C4C87F6F4AE1EF69BA2D3F0869D8BE11",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-first.json"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-validation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\static-validation.json",
+      "bytes": 404,
+      "sha256": "955DAB56C78EE604E478E7B856FBD58801F22930F3DD68B9485CC8E3BE92CDAF",
+      "git": [
+        "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/static-validation.json"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21889,
+      "sha256": "9AA5BCDC4F562A9C62744AD66E49B86DF0B246762E866FC04AB946FBD60F471F",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 16211,
+      "sha256": "FAC00127B080C0F14E75A2C50BA6AA604B2B3991D8290EBFE8487605958FBAB1",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 27532,
+      "sha256": "5335010B9A30D73514CF307268E8DD96585934DA7976D8B3BD9BBA6D63745BB4",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1471911,
+      "sha256": "7BB5AA403AFA6D3E57F8B5F675FA10FEA4F8FA0E9A87FE571E5ECE32D7C6DCFF",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleMeshUploadBaselineEditorTests.cs",
+      "bytes": 18888,
+      "sha256": "C435FAFAFECDE6A994AAE65368C7A0FC48FBB418165B522F34EC782D496E0C63",
+      "git": [
+        "?? Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 640648,
+      "sha256": "41F471A78F36D693BAF19BA312ADA158D2B95419031A29B5AD498BAD733BB08D",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md",
+      "bytes": 3096,
+      "sha256": "9C2A7EFF2AC0F1C91798AC77E44322336AC0A5AA49110FC9495930C347331162",
+      "git": [
+        "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-MESH-PHASE-BASELINE-012.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 30330,
+      "sha256": "3E9F948E65C59DF48BB81EBFE50FC1E263772655C52E6876081CFF8551242CA7",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/backup-verification.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\backup-verification.json",
+      "bytes": 2739,
+      "sha256": "0B4624ED95EFA4FAE76DCA1AA8AF2CE24DCB7D31202F0AD3A4AA04F3EC5FB509",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/backup-verification.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 21635,
+      "sha256": "BF4193CB3FB9562F3CF631FFEC88EB7A681BDDC6E4A755BB6C79DB76910A0485",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "bytes": 14409,
+      "sha256": "46A196CEDACFFB6A87AA742868D6251DFFF7C7AE1879072FA7523C6B5D86F9CA",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 26163,
+      "sha256": "70DD43A3E1A673B65B1DC942834CB497795F450CEF3E6FB125FF8C5680680973",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1471002,
+      "sha256": "8315265F4D8BCA927923FE3A4CDBE3DB335929553C8AF09792FDB5372D6E4FF3",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleMeshUploadBaselineEditorTests.cs",
+      "bytes": 11483,
+      "sha256": "8479E060ABAFD0E1E7F9BA95437A1E2BFD08DE09A58CFAAD8574F5BAABDE2ABE",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 639773,
+      "sha256": "BA92127CE6A8812B639DCA6A19518343A4B000CC2D218DDC71FF58E537B94F5D",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 29765,
+      "sha256": "3B362781C17F7E8DC601E42C858CADEBAED38D7E1CC9EB050F6E4FEA32D91365",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before-backups\\docs\\ai\\STATE.md",
+      "bytes": 1540140,
+      "sha256": "FFC8A0F582492BDD306883F3C0618CC1AE6473AED88CD4C1501F76B1752AF47D",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before-backups/docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\before.json",
+      "bytes": 5711,
+      "sha256": "00890A29055A48261B6191E2A0F3CBE24BC8CF37772B6C332C989F4EE68BEF57",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/protected-before.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\protected-before.json",
+      "bytes": 75446,
+      "sha256": "72C0C5365C7FAB8CF08415B23512A0DB2CF87214B3D8595947F52669EE9E1911",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/protected-before.json"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006\\RECORD.md",
+      "bytes": 4640,
+      "sha256": "485DAF2AA5066B64E8120131C1D769CE67E73103136E9ECC010403BF814F028C",
+      "git": [
+        "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006/RECORD.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1541015,
+      "sha256": "3DE7137A58FAC30ADB805F1976383F3CDBD944495EEBDE6BB5907D1F686DEC5C",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md",
+      "bytes": 4084,
+      "sha256": "054CC7A9B306D10BD64183F669694296BB24F875FA3C18BA7A9EF0A5F6A00C4A",
+      "git": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH12-MESH-PHASE-BASELINE-20261006.md"
+      ]
+    }
+  ]
+}

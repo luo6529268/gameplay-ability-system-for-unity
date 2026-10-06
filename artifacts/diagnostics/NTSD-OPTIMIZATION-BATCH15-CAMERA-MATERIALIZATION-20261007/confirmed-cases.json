@@ -1,0 +1,617 @@
+{
+  "uniqueCount": 149,
+  "group": {
+    "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests": 14,
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests": 13,
+    "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests": 6,
+    "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests": 58,
+    "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests": 15,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests": 12,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,0": 1,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,0": 1,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,1": 1,
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,1": 1,
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests": 3,
+    "NTSD.Test.BattleResolverCapacitySealEditorTests": 15,
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests": 4,
+    "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests": 5
+  },
+  "cases": [
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ColdOrChangedWorld_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.DisabledCamera_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.DisabledFeature_StillFlushesAndDoesNotClaimReady",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ExplicitFlush_StillConsumesPendingPublicationImmediately",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.MissingMaterial_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.MissingRecentRouteObservation_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonCentralOnlyHost_StillFlushes(LegacyOnly)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonCentralOnlyHost_StillFlushes(CentralShadowBuild)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.NonInteractiveHost_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.PendingPublication_RejectsOldLeaseUntilCameraMaterializesLatest",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.StalePlan_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.ThirtyFpsHost_StillFlushes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.WarmHost_AllocatedBytesRemainZeroAfterWarmup",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests.WarmInteractiveCentralHost_QueuesWithoutReplacingCapturedGeometry",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CamerasCannotAcquireOldSubmissionUntilLatestPublicationIsMaterialized",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CatchUpPublications_MaterializeOnlyLatestSnapshot",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralIntermediateTick_SkipsPublicationAndRendererShellLatePass",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralOnly_CapturesBeforeMaterializingCommands",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralSubmission_PrepareCapacity_PrewarmsFrozenFrameStorage",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.ExplicitFlush_BypassesUnityFrameGateAndMaterializesLatestSnapshot",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.NonCentralOnlyModes_IgnorePresentationSuppression(LegacyOnly)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.NonCentralOnlyModes_IgnorePresentationSuppression(CentralShadowBuild)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.RepeatedCameraSubmissionWithoutNewPublication_DoesNotRebuild",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.ResetRuntime_DropsPendingWorldAndPreventsStaleMaterialization",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.SameUnityFrame_MaterializesAtMostOnce_AndNextFrameCatchesUp",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.SuppressedCatchUp_FinalSnapshotMatchesSingleFinalBuild",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.WorldSwitchAfterMaterialization_DoesNotSubmitPreviousWorldInSameUnityFrame",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_HandlesPhysicalSubMeshCountBelowPreviousActiveCount",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesChunkRangesAndRecoversDestroyedMesh",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_PreservesDescriptorsAndPhysicalHighWaterAcrossTailTransitions",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_StableMultipleDescriptorsMoveAndClearCachedTail(OrderedChunks)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_StableMultipleDescriptorsMoveAndClearCachedTail(StrictOrderedDraw)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests.Upload_StableSmallPrefixAfterHighWaterAllocatesZeroManagedBytes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(0)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(1)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(2)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(3)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(4)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(5)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(6)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(7)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(8)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(9)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(10)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(11)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(12)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(13)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(14)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(15)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(16)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(18)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(19)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(20)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(21)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(22)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(23)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(24)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(25)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(26)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(27)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(28)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(29)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(30)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(31)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(32)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(33)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(34)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(35)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(36)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(37)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(38)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(39)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(40)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(41)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.AnyCounterDecrease_RejectsWholeWindow_NoClamp(42)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.BuildCategories_KeepRejectedFailedAndCompletedApiSeparate(PublicationChanged,\"publicationChanged\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.BuildCategories_KeepRejectedFailedAndCompletedApiSeparate(AlphaChanged,\"alphaChanged\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.BuildCategories_KeepRejectedFailedAndCompletedApiSeparate(Repeated,\"repeated\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.Capture_IsAnExplicitRead_NoLiveCounterResetOrBuild",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.DifferentSource_RejectsIdenticalCountersAndEpoch",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.EmptyWindow_IsValidObservedZero",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.EpochResetAndExistingAggregation_WarmedHotPathAllocatesZero",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.NullBaseline_IsRejectedWithoutPartialResult",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.ProjectionMutation_DoesNotChangeFrozenReportOrFutureProjection",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.Reset_RejectsOldBaseline_EvenWhenCountsCatchUp(False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.Reset_RejectsOldBaseline_EvenWhenCountsCatchUp(True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.Snapshot_FreezesAllLongValues_AfterLiveMutationAndReset",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.Window_UsesFrozenEndpoints_AndDeltaNotLiveCounters",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.WindowCannotBeReusedAsCumulativeEndpoint",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests.ZeroSnapshot_HasCompleteSchema_ExplicitScopeAndUnits",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_CountsOnlyEligibleCommands(False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_CountsOnlyEligibleCommands(True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(False,17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(True,17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(False,4096)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_RejectsWholeOverflowBeforeChangingStorage(True,1365)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_ZeroLimitAllowsDisabledButRejectsVisibleOutput(False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySeal_ZeroLimitAllowsDisabledButRejectsVisibleOutput(True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.AuxiliarySealedBuild_AlternatingFramesReuseStorageAndAllocateZeroBytes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(False,False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(False,True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(True,False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralAuxiliaryOverflow_RejectsWholeSubmissionAndPreservesLease(True,True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.CentralSeal_SealsBothAuxiliaryOwnersAndEndUnsealsThem",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests.HealthDirectBuild_RejectsLogicalOverflowBeforeMutation",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.CentralSeal_RejectsWholeSubmissionAndPreservesLastGoodReadLease(True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4096)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_RejectsWholeOverLimitFrameBeforeChangingGeometry(4097)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MeshSeal_ZeroCapacityAndUnsealDoNotUseChunkSizeAsLimit",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_AcceptedVaryingSamplesAndPreflightAllocateZeroBytes",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,0.5d)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,0.5d)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(False,1.0d)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.MotionSeal_RejectsEitherGenerationBeyondLogicalSlotLimit(True,1.0d)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"EntityCount\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"HitRecordCount\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"CommandCount\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"MotionStateCount\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationCapacitySealEditorTests.SubmissionSeal_RejectsCountOverflowBeforeCopyingAnySnapshot(\"PreviousMotionStateCount\")",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.CentralOwner_SealsBothResolversAndEndAllowsPreparationAgain",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Prepare_NegativeArgumentStillRejectsBeforeMutation(-1,17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Prepare_NegativeArgumentStillRejectsBeforeMutation(17,-1)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,False)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(0,True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(1,True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedCache_ColdMissesAndFullCacheKeepEveryResolvedOutputWithoutGrowth(17,True)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedConfigure_MaterialChangesClearBindingsButReusePreparedStorage",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(0,0)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(512,17)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.SealedPrepare_RejectsBeforeChangingWarmedStorageAndLimits(17,512)",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleResolverCapacitySealEditorTests.Unseal_AllowsNextPreparationWithoutDroppingWarmedBindings",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.DriverShutdown_ClosesRuntimeStagesBeforeStoppedAndIsIdempotent",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.LogicOpointShutdown_RejectsAndRecyclesWithoutMaterializing",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.ObjectPoolShutdown_ReturnsAllBorrowersAndQuiesces",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.StructuralShutdown_RejectsRegisterButAllowsExistingWorldReset",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests.BattleWindow_RecordsAllocationSeparatelyFromCollection",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests.BattleWindow_RecordsPlayerLoopEnvelopeSeparately",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests.BattleWindow_SeparatesTickDriverUpdateAndPresentationAllocations",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests.BattleWindow_UsesEditorObservationMode_AndPreservesGcMode",
+      "state": "Passed"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests.FormalBattleSettings_DisableAllocatingFullSnapshotDiagnostics",
+      "state": "Passed"
+    }
+  ]
+}

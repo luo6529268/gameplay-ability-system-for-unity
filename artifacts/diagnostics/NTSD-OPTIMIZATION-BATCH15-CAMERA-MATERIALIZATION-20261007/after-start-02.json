@@ -1,0 +1,7 @@
+{
+  "chunk_id": "282759",
+  "wall_time_seconds": 0.6588239,
+  "exit_code": 0,
+  "original_token_count": 99,
+  "output": "[{\"success\": true, \"message\": \"Retrieved active scene information.\", \"data\": {\"name\": \"NTSD_Battle\", \"path\": \"Assets/NTSD/Scene/NTSD_Battle.unity\", \"buildIndex\": 1, \"isDirty\": false, \"isLoaded\": true, \"rootCount\": 11}}, {\"success\": true, \"message\": \"Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch15 Production After Second'. Check Unity logs for confirmation or errors.\"}]\r\n"
+}

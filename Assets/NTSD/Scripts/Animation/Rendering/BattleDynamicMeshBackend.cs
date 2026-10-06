@@ -787,7 +787,10 @@ namespace NTSD.Animation.Rendering
 
                     // Alignment contract: NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001.
                     // Count/range changes must not expose overlapping or uninitialized native descriptors.
-                    if (publishBatch)
+                    // Alignment contract: NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013.
+                    // Batch a fully active multi-submesh prefix; keep sparse high-water tails on the old path.
+                    if (publishBatch ||
+                        (desiredActiveSubMeshCount > 1 && desiredActiveSubMeshCount == retainedSubMeshCount))
                     {
                         targetMesh.SetSubMeshes(subMeshDescriptors, 0, retainedSubMeshCount,
                             MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |

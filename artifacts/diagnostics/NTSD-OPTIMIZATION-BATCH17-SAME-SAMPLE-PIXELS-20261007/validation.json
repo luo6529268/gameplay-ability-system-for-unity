@@ -1,0 +1,80 @@
+{
+  "audit": {
+    "protectedCount": 611,
+    "drift": [],
+    "backupCount": 7,
+    "backupDrift": [],
+    "hashes": [
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+        "Hash": "A49C69CE527D7E0268661F96F6A5A28B0C79E6204872BDA6EAF1A1930270AE8D"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+        "Hash": "4DF2B444D50ED1A52F6BF6F16A512432C8272706E0ADCFC80D6DAC1CDDBB926C"
+      },
+      {
+        "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+        "Hash": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralSameSamplePixelEditorTests.cs",
+        "Hash": "37C061B74FDC0F6EB5266233D5CF882F30EAE30D832CD0FC0ABE1DFC2EDEDD3E"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+        "Hash": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+        "Hash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+      }
+    ],
+    "head": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+    "staged": [],
+    "at": "2026-10-07T01:22:35.8676032+08:00"
+  },
+  "ledgerFinal": {
+    "exitCode": 0,
+    "lineCount": 4273,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1313",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION-009, NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008, NTSD-OPT-M03-MATERIALIZATION-REPORT-010, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs -> NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-H11-NATIVE-MESH-PREWARM-005, NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013, NTSD-OPT-M03-VERTEX-UPLOAD-COUNTERS-006, NTSD28-BATTLE-SPRITE-RED-LINE-001",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralPresentationDeferralEditorTests.cs -> NTSD-OPT-M03-CAMERA-MATERIALIZATION-015",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs -> NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001, NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs -> NTSD-OPT-M03-MESH-BACKEND-BASELINE-011, NTSD-OPT-M03-MESH-PHASE-BASELINE-012",
+      "  COVERED: Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs -> NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q07-D024-PROJECT-STAGE-CLAMP-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001, NTSD28-Q09-SAME-Z-PAINTER-ORDER-001, NTSD28-USER-NONCHAR-EARLY-STAGE-Z-001, NTSD28-USER-NONCHAR-WALKABLE-TTL-001, NTSD28-USER-SOURCE-STAGE-DEPTH-001, SIMULATION-DIRECTORY-REORGANIZATION-001",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs -> NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-DYNAMIC-DISPLAY-016, NTSD-OPT-M03-PRODUCTION-WINDOW-014",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs -> NTSD-OPT-M03-SAME-SAMPLE-PIXELS-017"
+    ],
+    "last": [
+      "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/preview-renderer.test.ts, which is not in the current code diff.",
+      "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/client-project-contract.test.ts, which is not in the current code diff.",
+      "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/project-open-lifecycle.test.ts, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+    ],
+    "scopedWarnings": []
+  },
+  "ledgerInitialFailure": {
+    "attempts": 2,
+    "shell": "Windows PowerShell5",
+    "exitCode": 1,
+    "reason": "default RepositoryRoot Split-Path PSScriptRoot empty; validator did not start"
+  },
+  "tests": [
+    "NTSD.Animation.Rendering.Editor.BattleCentralPresentationDeferralEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+    "NTSD.Test.BattlePresentationMotionSamplerEditorTests",
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion"
+  ]
+}

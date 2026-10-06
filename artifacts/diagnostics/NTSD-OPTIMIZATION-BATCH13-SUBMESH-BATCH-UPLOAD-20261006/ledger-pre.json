@@ -1,0 +1,29 @@
+{
+  "time": "2026-10-06T23:06:53.3262393+08:00",
+  "exit": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1309",
+    "  Governed code files in diff: 5",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralMaterializationReport.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION-009, NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008, NTSD-OPT-M03-MATERIALIZATION-REPORT-010, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleDynamicMeshBackendSubMeshEditorTests.cs -> NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001, NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMaterializationReportEditorTests.cs -> NTSD-OPT-M03-MATERIALIZATION-REPORT-010",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleMeshUploadBaselineEditorTests.cs -> NTSD-OPT-M03-MESH-BACKEND-BASELINE-011, NTSD-OPT-M03-MESH-PHASE-BASELINE-012",
+    "  WARNING: Record CLIENT-FORMAL-KERNEL-WPOINT-VALUE-SEAM-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCooldownPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-336B44-Q07-C012-SPECIAL-HIT-LATCH-TAIL-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPostFrameTailPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-B2-AI-SAMPLE-PROXY-TWO-PASS-001 declares Assets/NTSD/Scripts/Test/Editor/NTSD28AiSampleProxyTwoPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-B3-C25P-HEALING-OWNER-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPostFrameTailPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-B3-C25P-HEALING-OWNER-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsFramePostProcessPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-PRODUCTION-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsPositiveLinkValidationPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-Q08-PROJECT-STAGE-GATE-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPreFrameBoundsPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-USER-NONCHAR-EARLY-STAGE-Z-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterStageZPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-USER-STAGE-DEPTH-HISTORY-WITNESS-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterStageZPassEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record NTSD28-USER-STAGE-EDGE-HISTORY-WITNESS-001 declares Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPreFrameBoundsPassEditorTests.cs, which is not in the current code diff."
+  ],
+  "errors": [],
+  "warnings": 4275,
+  "scopedWarnings": [
+    "  WARNING: Record NTSD-OPT-M03-SUBMESH-BATCH-UPLOAD-013 declares Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs, which is not in the current code diff."
+  ]
+}

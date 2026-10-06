@@ -1,0 +1,77 @@
+{
+  "observations": [
+    {
+      "n": 1000,
+      "mode": "OrderedChunks",
+      "move": false,
+      "variant": false,
+      "observedMeanDeltaMs": 0.36151088888888894,
+      "phaseSubmeshShareOfUpload": 0.006139735674699377
+    },
+    {
+      "n": 1000,
+      "mode": "OrderedChunks",
+      "move": true,
+      "variant": false,
+      "observedMeanDeltaMs": 0.3767435,
+      "phaseSubmeshShareOfUpload": 0.005604789798322974
+    },
+    {
+      "n": 1000,
+      "mode": "StrictOrderedDraw",
+      "move": false,
+      "variant": false,
+      "observedMeanDeltaMs": 0.40460183333333344,
+      "phaseSubmeshShareOfUpload": 0.8544701939286207
+    },
+    {
+      "n": 1000,
+      "mode": "StrictOrderedDraw",
+      "move": true,
+      "variant": false,
+      "observedMeanDeltaMs": 0.46198672222222226,
+      "phaseSubmeshShareOfUpload": 0.8558728738598826
+    },
+    {
+      "n": 1000,
+      "mode": "OrderedChunks",
+      "move": false,
+      "variant": true,
+      "observedMeanDeltaMs": 0.33205988888888904,
+      "phaseSubmeshShareOfUpload": 0.8515721299179593
+    },
+    {
+      "n": 1000,
+      "mode": "OrderedChunks",
+      "move": true,
+      "variant": true,
+      "observedMeanDeltaMs": 0.36659288888888875,
+      "phaseSubmeshShareOfUpload": 0.8536495133881068
+    },
+    {
+      "n": 4097,
+      "mode": "OrderedChunks",
+      "move": false,
+      "variant": false,
+      "observedMeanDeltaMs": 1.5585864999999997,
+      "phaseSubmeshShareOfUpload": 0.0038255503897639733
+    },
+    {
+      "n": 4097,
+      "mode": "OrderedChunks",
+      "move": true,
+      "variant": false,
+      "observedMeanDeltaMs": 1.4250711666666667,
+      "phaseSubmeshShareOfUpload": 0.003594304249616275
+    }
+  ],
+  "unique": {
+    "count": 54,
+    "allPassed": true,
+    "sumSamples": 36000,
+    "sumWarmup": 1280,
+    "zeroAllocation": true,
+    "zeroGrowth": true
+  },
+  "note": "Same batch unmatched instrumented vs control mean differences, not exact recorder overhead or speedup."
+}

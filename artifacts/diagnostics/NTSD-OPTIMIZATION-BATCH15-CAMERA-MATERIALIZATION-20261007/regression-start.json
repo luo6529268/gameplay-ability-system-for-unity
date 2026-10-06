@@ -1,0 +1,22 @@
+{
+  "testNames": [
+    "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleDynamicMeshBackendSubMeshEditorTests",
+    "NTSD.Animation.Rendering.Editor.BattleMaterializationReportEditorTests",
+    "NTSD.Test.Editor.BattleManagedMemoryBoundaryEditorTests",
+    "NTSD.Test.BattlePresentationCapacitySealEditorTests",
+    "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+    "NTSD.Test.BattleAuxiliaryPresentationCapacitySealEditorTests",
+    "NTSD.Test.BattleResolverCapacitySealEditorTests",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+    "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion"
+  ],
+  "raw": {
+    "chunk_id": "436361",
+    "wall_time_seconds": 0.4814823,
+    "exit_code": 0,
+    "original_token_count": 52,
+    "output": "[{\"success\": true, \"message\": \"Test job started.\", \"data\": {\"job_id\": \"b17ba0b5f4694ebc860d10cdbe1c396b\", \"status\": \"running\", \"mode\": \"EditMode\", \"include_details\": false, \"include_failed_tests\": false}}]\r\n"
+  }
+}
