@@ -1,0 +1,195 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-DOC-REBASELINE-20261006",
+  "phase": "FINAL_STATIC_CHECK",
+  "time": "2026-10-06T16:55:45.2482336+08:00",
+  "documentCount": 42,
+  "itemCount": 34,
+  "counts": [
+    {
+      "priority": "低",
+      "count": 8
+    },
+    {
+      "priority": "高",
+      "count": 12
+    },
+    {
+      "priority": "中",
+      "count": 14
+    }
+  ],
+  "localLinks": 130,
+  "errors": [],
+  "extSha256": "02A6712DA32E9F104EF9ADCAECA2237F98EE584EA1AF411EF21DB9375BDEEC26",
+  "extUnchanged": true,
+  "diffCheckExitCode": 0,
+  "diffCheckOutput": [],
+  "projectExecution": "NOT_RUN",
+  "implementationAuthorization": "WAITING_USER_APPROVAL",
+  "whitespaceCheckScope": "ADDED_TRACKED_DIFF_LINES_AND_NEW_DOCUMENTS",
+  "preservedHistoricalMarkdownHardBreaks": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 4,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 1,
+      "newWhitespaceLines": 0
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "currentWhitespaceLines": 1,
+      "originalWhitespaceLines": 3,
+      "newWhitespaceLines": 0
+    }
+  ],
+  "checkerRefinement": "Whole-file scan flagged 27 unchanged historical Markdown hard-break lines. Verified each against fixed pre-operation commit; no new trailing-whitespace lines. No history cleanup performed. An intermediate diagnostic-command parse error made no file changes; command corrected and re-run."
+}

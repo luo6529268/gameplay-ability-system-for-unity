@@ -1,0 +1,80 @@
+{
+  "time": "2026-10-06T07:42:44.550111+00:00",
+  "files": [
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "841cb7ae57245e38f39b9ebc7ac4324611e0c4f054174d3e9a30cca7df553b78",
+      "bytes": 628187
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "5243cb0945ec71b06af2edcdda7ff819756e2543ec778ad37a46d4a8272f80c5",
+      "bytes": 1528008
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "a531f72b08f8d5ac1379c094218d071a35b20afb213d77ced6ac4e435899e0bd",
+      "bytes": 371096
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "dd05fc01365e4ce72e013f6dc396b6b3c273cfbe6bb8221b37b02e71d2f902e8",
+      "bytes": 20900
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "2dde92623633adc1fc3041583c462df06c0145ce32e27e05875e253ff92969c0",
+      "bytes": 1458129
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "694afde1c9956fa92349cec7f7167da5b12a7c513cc74bc28e403495eb0bbdbb",
+      "bytes": 367522
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md",
+      "sha256": "600b6636f507118332851e93317043f6927bd62351c392ee654edb6b56097a7c",
+      "bytes": 6140
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-BATTLE-SHADOW-RETIREMENT-20261006.md",
+      "sha256": "04a9402abe7b7b9c1d4a350a8740fa76fd173c060aaefbc46ece4b325e96ee1e",
+      "bytes": 1636
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/REPORT.md",
+      "sha256": "5cd5d447dc52b894f1983fc70da02516bce52e36c1b02f6d9ea59948c3cf97ad",
+      "bytes": 6107
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md",
+      "sha256": "96e6d029b30de35921ada4b471dff63a1df414a48de288caafa5f9d4be967439",
+      "bytes": 3473
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs",
+      "sha256": "a6aa82f091a4b203e98b208dc8b89a9924990e1baee4c1779d7fd9a03946bf5e",
+      "bytes": 36011
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b",
+      "bytes": 290776
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816f8acbd15cf2c7920071c8d2aaf2e1106f8225a121af15e4aa0a764d5b5",
+      "bytes": 175639
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ShadowRetirementEditorTests.cs",
+      "sha256": "70357996dd876df63e23d05464bf6ed6d19fa4545d869b1a0115f89c51566801",
+      "bytes": 13761
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ShadowRetirementSceneProbeEditor.cs",
+      "sha256": "4df6cd1cb2e4dacbf07935c2cb67629b4582010d1805574e3080550c84734eac",
+      "bytes": 15752
+    }
+  ]
+}

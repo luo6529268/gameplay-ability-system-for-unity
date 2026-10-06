@@ -184,8 +184,10 @@ namespace NTSD.UI
             for (int i = 0; i < cells.Count; i++)
             {
                 int id = ids[i];
-                Sprite sprite = id == GameConfig.RandomCharacterId ? randomCandidateSprite
-                    : resources != null ? resources.GetCharacterUISprites(id)?.SmallSprite : null;
+                CharacterUISprites sprites = resources != null ? resources.GetCharacterUISprites(id) : null;
+                Sprite sprite = id == GameConfig.RandomCharacterId
+                    ? randomCandidateSprite != null ? randomCandidateSprite : GameConfig.Instance?.RandomIcon
+                    : sprites?.SmallSprite != null ? sprites.SmallSprite : sprites?.HeadSprite;
                 cells[i].Bind(id, sprite, HandleCharacterClick);
             }
         }

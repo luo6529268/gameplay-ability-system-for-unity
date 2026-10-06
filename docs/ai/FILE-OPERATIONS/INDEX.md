@@ -1,11 +1,16 @@
+> **2026-10-06 阴影任务操作收尾：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / VERIFIED（限定编辑）；本包三处生产脚本与两份测试/探针、文档留痕，无删除/移动，before-final 保存收尾前当前字节，保留本轮期间外部提交。 [Record](NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md)。
+
 > NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / PLANNED / scoped edits only; [Record](NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md); six exact doc backups before edits, diagnostic new test, no delete/move.
 
 # 文件操作与未计划缺失索引
+
+> `NTSD-MENU-CHARACTER-DATA-ITEMS-001-PREPARE / PLANNED`：三个UI脚本编辑/一聚焦测试创建/治理追加；十文件精确备份。[Record](NTSD-MENU-CHARACTER-DATA-ITEMS-001-PREPARE/RECORD.md)。
 
 执行删除、移动、覆盖或丢弃内容前，先按 [审计合同](../file-removal-audit-contract.md) 建立记录并登记本表。状态变化追加到记录中，不删除历史事实。
 
 | Operation / Event ID | 类型 | 状态 | 记录与证据 |
 |---|---|---|---|
+| NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 | 定向脚本/文档编辑、备份与诊断新增 | VERIFIED | [Record](NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md) |
 | NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001-EDIT-20261005 | 三脚本七文档精准编辑与新诊断 | VERIFIED | [Record](NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001-EDIT-20261005/RECORD.md) |
 | NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001-EDIT-20261005 | 两脚本七文档精准编辑与新诊断 | VERIFIED | [Record](NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001-EDIT-20261005/RECORD.md) |
 | NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001-EDIT-20261005 | 两脚本七文档精准增量，逐SHA保护dirty | VERIFIED | [Record](NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001-EDIT-20261005/RECORD.md) |
@@ -156,3 +161,16 @@ Checkpoint NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006: backed-up owned pr
 - NTSD28-BATTLE-SPRITE-RED-LINE-20261006 / RUNNING: declared red-line crop/GPU diagnosis exact before bytes, create-only probes. [Record](NTSD28-BATTLE-SPRITE-RED-LINE-20261006/RECORD.md).
 
 - NTSD28-BATTLE-SPRITE-RED-LINE-20261006 / COMPLETED_SCOPED: exact3 production backups valid; protected5053 unchanged; current18/18 + original Battle actual mesh21 zero-gutter PASS, normal shutdown/Scene unchanged; final ChangeLedger/git diff check0. [Record](NTSD28-BATTLE-SPRITE-RED-LINE-20261006/RECORD.md). No deletion/move; ScreenCapture rejected as Game View proof.
+
+- NTSD-OPTIMIZATION-DOC-REBASELINE-20261006 / PLANNED: [Record](NTSD-OPTIMIZATION-DOC-REBASELINE-20261006/RECORD.md)。用户仅授权优化文档整理；精确 before SHA/固定 commit 和 dirty INDEX 字节备份已记录，不删文件、不改代码、不启动 Unity/测试/M0，实施待用户批准。
+
+- NTSD-OPTIMIZATION-DOC-REBASELINE-20261006 / VERIFIED (DOCUMENT_ONLY): [Record](NTSD-OPTIMIZATION-DOC-REBASELINE-20261006/RECORD.md)。34项文档统一为高12/中14/低8，方案/验收/测试条件独立留存；静态一致性/链接与diff空白检查通过，EXT-1原文保持、dirty脚本保护哈希一致。无代码实施或Unity/测试/M0启动；IMPLEMENTATION_WAITING_USER_APPROVAL。
+
+
+2026-10-06 NTSD-MENU-CHARACTER-DATA-ITEMS-001-PREPARE：EXECUTED / VERIFIED（限定UI生成），精确备份与后镜像均保留，三UI脚本/新增测试及治理追加，Scene/配置SHA不变，无删除移动。[Record](NTSD-MENU-CHARACTER-DATA-ITEMS-001-PREPARE/RECORD.md)。
+
+
+2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001-PREPARE / PLANNED：可配置当前Scene TMP字体补齐工具原地替代、精确备份与治理追加，无Scene/font保存、无删除移动。[Record](NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001-PREPARE/RECORD.md)。
+
+
+2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001-PREPARE / VERIFIED：原Editor工具替代/新增聚焦验证，精确前镜像保留，Scene/font/meta SHA不变；保留原dirty，不执行真实Scene批量操作。[Record](NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001-PREPARE/RECORD.md)。

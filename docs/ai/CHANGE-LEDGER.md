@@ -1,13 +1,18 @@
+> **2026-10-06 阴影残留共用显示修复限定验收：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / SCOPED_SHADOW_DISPLAY_FIX_VERIFIED；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / VERIFIED。原 Editor 聚焦12/12＋既有几何self-check1/1通过；原saved Battle300tick，石头碎片central阴影20→0，仙法手里剑命中HP500→295、结束阴影0；有序关闭objects/slots/borrowers0，Scene clean/SHA不变。仅向下离开画面的非角色共用阴影显示门，不删仍活跃的native碎片，不改DAT/模拟/非战斗；受控释放/破碎入口，不称物理按键/随机掉落或正式EXE全World/GPU一致。旧总目标收尾保持，下方PLANNED为事前快照。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
+
 > **2026-10-06 阴影残留定向任务：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / IN_PROGRESS；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / PLANNED。用户报告武器破碎/投掷命中/技能消失残留阴影，只查共用生命周期和表现首差，先新聚焦测试；无生产结论，不改DAT/Scene/非战斗，旧总目标收尾及红线修复保持。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
 
 > 新增脚本前Record：`NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001 / PLANNED`；[Record](CHANGE-RECORDS/NTSD28-336B44-Q07-D024-HITFA7-SOURCE-DEPTH-001.md)。仅既有875参数测试与LF2Entity非角色7的active-target Z域，具名四例候选RED待测；不改DAT/空槽/其它分支。
 
 # NTSD 脚本改动审计账本
 
+> 2026-10-06 `NTSD-MENU-CHARACTER-DATA-ITEMS-001 / PLANNED`：仅菜单data.txt角色Item生成、随机首项和刷新时机；[Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
 > **2026-10-05 D-024持有挂点最窄诊断已登记：** 现有武器逻辑X/Z位置已投影、全局Y已走统一出口，但旧显示补偿仍按visualScale-1；尚无本轮显示首差实测。在同一纵向Task内[新测试Record](CHANGE-RECORDS/NTSD28-336B44-Q07-D024-WPOINT-VIEW-ANCHOR-PROBE-001.md)脚本前限定到原武器测试新增方法，复用正式OID2/OID120自然拾取前2tick、恒等/固定视野两例，仅检查source字段和实际生产几何WPoint接触。当前PLANNED/必要诊断ONE=1，不改生产或资源、不重跑24tick矩阵；先存原件再判断是否存在非例外首差。
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
+| NTSD28-BATTLE-SHADOW-RETIREMENT-001 | VERIFIED | 共用向下离屏非角色阴影显示；原场景定向验收 | [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md) | [Report](../../artifacts/diagnostics/NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/REPORT.md) |
 | NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001 | RUNTIME_PENDING | Q07 current native common-only10 target/no motion, exact three scripts | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md) | [Task](TASKS/NTSD28-336B44-Q07-HITFA10-COMMON-TARGET-001.md) |
 | NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001 | RUNTIME_PENDING | 共用1/3非正HP运动门，先完整tick RED | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.md) | [Task](TASKS/NTSD28-336B44-Q07-HITFA1-3-DEAD-MOTION-GATE-001.md) |
 | NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001 | RUNTIME_PENDING | behavior3四tick整数边界与double步长；两脚本＋诊断cpp | [Record](CHANGE-RECORDS/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-001.md) | [SCOPED_FULL_DRIVER_PASS](../../artifacts/diagnostics/NTSD28-336B44-Q07-HITFA3-INTEGER-PRECISION-20261005/REPORT.md) |
@@ -1796,3 +1801,15 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
 2026-10-06 red-line Task IN_PROGRESS; NTSD28-BATTLE-SPRITE-RED-LINE-001 FOCUSED_TEST_PASS. Shared shader lookup clamp at authored texel centers, no crop/geometry/source color change. Original Editor exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3), GPU105 placements zero gutter; original saved Battle targeted capture started. Old campaign closure retained; no full suite/roster. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md.
 
 2026-10-06 reported foot red-line fix SCOPED_CROP_SAMPLING_FIX_VERIFIED; NTSD28-BATTLE-SPRITE-RED-LINE-001 VERIFIED(scoped). GPU RED3 paths each118 gutter pixels at half-pixel placement; unchanged-source crop4 PASS. Shared mesh carries per-quad texel-center bounds, shaders clamp lookup; original UV/size/pivot/scale/RGBA unchanged. Current exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3). Original saved Battle01 PASS tick5 actual Naruto2/pic1/SourceTexture2D stride44, central submitted, GPU21 placements maxGutter0; ordered11-stage shutdown objects/slot/borrower0, Scene clean/SHA unchanged, original Editor idle/non-Play. Accepted actual mesh PNG; Editor ScreenCapture rejected as full Game View evidence. No DAT/PNG/importer/Scene/settings/nonbattle/delete/Git changes. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md. Old campaign scoped closure preserved; not full roster/camera/device parity.
+
+
+> 2026-10-06 角色Item生成进展：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / COMPILE_PASS。三UI脚本及三项定向测试已写；生成C#工程0error，原Menu Play定向job运行中。仅data.txt默认可见type0注册顺序、随机首项、现有模板/池及预热刷新；其他选择流程不变。[Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 角色Item生成限定完成：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / VERIFIED（仅菜单生成）。当前data.txt默认可见type0按注册顺序，随机首项共51；三个独立通过记录含原Menu Play默认随机/头像绑定/点击确认取消/重开51实例复用。compile-04 0error，Menu/Battle/GameConfig SHA不变、原Editor非Play/idle/Scene clean。桥重载回调缺失不当成功计数，使用测试全部断言后的直接通过记录；未测试完整多人/比赛流程。 [Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / PLANNED：用户要求可配置当前Scene缺失TMP字体工具，原Editor脚本与聚焦测试限定；先建Record、精确备份，既有字体/Scene/其它dirty均保留。[Record](CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / VERIFIED（限定Editor工具）：原迁移脚本改为可选TMP FontAsset的当前活动Scene缺失字体窗口，含inactive/disabled，跳过已指定，Undo/Prefab覆盖，手动保存。原Editor两项直接断言通过，生成工程0error；未在真实Menu赋字体，当前dirty=true保持，Scene/font/meta磁盘SHA不变，旧测试前置失败原件保留。 [Record](CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。

@@ -1,0 +1,84 @@
+{
+  "id": "NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001",
+  "time": "2026-10-06T10:12:06.654558+00:00",
+  "existing": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs",
+      "before": "f180695a0fc277dd55ff33714f107d4be4512b134bda42f5fe3e5ae4418b6a72",
+      "after": "8311c1aa48f50fbd21d82181ff4563bd3d475c936d5023fc1334b56ec132e7f4",
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "before": "2d0a66e2555455d89320b20aa5fde28a8c4e2858a028da158e17a0c90b6968db",
+      "after": "ce4132cd23c815f8613f394b296639b55a3338c117d492e39f6c0788712ac9a3",
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "before": "80650ac947955d57f79a4a8d965461f17d558aa05694c40abc8909c4ab78fd99",
+      "after": "e0664f23f95aaeb3d636a2e1a571c1aa65e0fb65c57adcbc7bf80328567d1797",
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "before": "c3eea5c77208ba14b6677192cddf17b9974ba1e885627bae33ae9d87b9d457ec",
+      "after": "2d87ef13aa792afa51404a152068b262090baae052346d1297e4556d10f40440",
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "before": "a0fbb3e7e49c931867bb66b4a3c2c8798840e0c97a95a3401696c27950a00c0d",
+      "after": "b83d773841004c561f46cc339b9293d887fd9e0ce7e10a4d29f50678090d17f2",
+      "backup_unchanged": true
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "before": "367e01e7c699dd9929ffe8319c5a9cca215109a066f2b5f12ef3559169584e01",
+      "after": "367e01e7c699dd9929ffe8319c5a9cca215109a066f2b5f12ef3559169584e01",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "before": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "after": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "before": "946edab6367a6c3bd118a0263b42922f3877e8330731bd43ba80ad3829922346",
+      "after": "946edab6367a6c3bd118a0263b42922f3877e8330731bd43ba80ad3829922346",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs.meta",
+      "before": "ee1282b44c3902721e8c89de67ee1ae58cee61118548ef53d72b94e714432173",
+      "after": "ee1282b44c3902721e8c89de67ee1ae58cee61118548ef53d72b94e714432173",
+      "unchanged": true
+    }
+  ],
+  "new": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditorTests.cs",
+      "sha256": "d5f22ca4367a9f00f248033efec1a401a097879c534840de0b4e77650e96752e"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditorTests.cs.meta",
+      "sha256": "74b53ff9ab7b1620bd82f9f67eca78139762de2073f5a05a03d7c620e11e020b"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md",
+      "sha256": "036d6ba1027a3b70a1b6ea5985f724e79e81625bb5ca478efdb9e2c68baea151"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md",
+      "sha256": "7131484cd891bdef31f6a829dba9955aa0ef38d243b2b66b6069f6f41e984b96"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001-PREPARE/RECORD.md",
+      "sha256": "659511a6775d60650e9b933c91cdbdce6c31ea0af90a091292671b9ef2929d8a"
+    }
+  ]
+}

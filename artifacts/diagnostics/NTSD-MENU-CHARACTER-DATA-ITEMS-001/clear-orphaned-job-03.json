@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Stuck job cleared.",
+    "data": {
+      "cleared": true
+    }
+  }
+}

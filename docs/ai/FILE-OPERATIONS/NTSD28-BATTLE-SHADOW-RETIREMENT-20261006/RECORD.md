@@ -1,5 +1,5 @@
 # NTSD28-BATTLE-SHADOW-RETIREMENT-20261006
-Status: PLANNED
+Status: VERIFIED
 Operation: audited scoped edits, no deletion or move
 Executor: /root
 Time: 2026-10-06T15:09:31.553520+08:00
@@ -11,3 +11,8 @@ API: Python exact-path create/prepend; apply_patch for declared C#; original PID
 Predeclared display-only fix: shared LF2ObjectRenderer viewport predicate; legacy LF2Entity.UpdateShadow and central BuildCommands use it. Cull only non-character shadows when downward Y is positive and the entire authored body lies below current world-camera viewport. Above-screen airborne objects, characters, normal pic999/HitStop blink gates remain. Camera-dependent culling stays main-thread presentation, never managed worker state or simulation. Original formal traces show same999 downward behavior; this is user-requested Unity viewport cleanup, not native lifecycle first-difference or physical-rule rewrite. No entity deletion, runtime fields, manager, shutdown stage or DAT edits. New create-only original Scene probe planned, existing ordered shutdown.
 
 Exact3 production scripts backed up with current bytes; new Scene probe/.meta. Only these paths and initial new diagnostic test permitted.
+
+2026-10-06 scoped closure: shared downward noncharacter body-viewport shadow cull VERIFIED. Exact12/12 focused tests and existing BattleRuntimeSelfCheck geometry1/1 pass. Original Battle300 directed production ticks: actual central fragments20->0, Sage throw HP500->295 then skill/shadows0; ordered11 shutdown objects/slots/borrowers0, Scene clean/SHA unchanged. Controlled actual release/break entries, not physical key/random-drop or formal full-world/GPU parity. Formal LFR exploratory final-header failures retained, no full parity claim. No DAT/assets/Scene/nonbattle or simulation/lifecycle rewrite. Old user-accepted campaign closure unchanged.
+Before-final10 paths/bytes/SHA and current external HEAD recorded before final metadata/prepend edits. Final verification and after-manifest follow. No file deletion/move.
+
+Final evidence: validator-02.json PowerShell7 Tools/Validate-ChangeLedger.ps1 exit0 (historical declared-path-outside-current-diff warnings retained, no validation errors); protected-final-02.json checked5087, changed0, formal336B44 exact SHA unchanged; git-diff-check-final.json exit0. Current-byte final evidence additions also backed up. No additional production change or repeated runtime validation.

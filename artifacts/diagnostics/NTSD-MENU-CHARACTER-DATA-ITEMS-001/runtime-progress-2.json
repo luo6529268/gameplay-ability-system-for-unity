@@ -1,0 +1,167 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved hierarchy page for scene 'NTSD_Menu'.",
+    "data": {
+      "scope": "roots",
+      "cursor": 0,
+      "pageSize": 50,
+      "next_cursor": null,
+      "truncated": false,
+      "total": 8,
+      "items": [
+        {
+          "name": "UI_Camera",
+          "instanceID": 104276,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "MainCamera",
+          "layer": 5,
+          "isStatic": false,
+          "path": "UI_Camera",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "Camera",
+            "AudioListener",
+            "UniversalAdditionalCameraData"
+          ]
+        },
+        {
+          "name": "Directional Light",
+          "instanceID": 103838,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "Directional Light",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "Light",
+            "UniversalAdditionalLightData"
+          ]
+        },
+        {
+          "name": "AppManagerGO",
+          "instanceID": 104596,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "AppManagerGO",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "AppManager"
+          ]
+        },
+        {
+          "name": "SoundManager",
+          "instanceID": 104124,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "SoundManager",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "MMSoundManager"
+          ]
+        },
+        {
+          "name": "GlobalTickDriver",
+          "instanceID": 104270,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "GlobalTickDriver",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "NTSD_GlobalTickDriver"
+          ]
+        },
+        {
+          "name": "MenuFocusManager",
+          "instanceID": 104546,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "MenuFocusManager",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "MenuFocusManager"
+          ]
+        },
+        {
+          "name": "MenuCanvas ",
+          "instanceID": 103738,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 5,
+          "isStatic": false,
+          "path": "MenuCanvas ",
+          "childCount": 1,
+          "childrenTruncated": true,
+          "childrenCursor": "0",
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "RectTransform",
+            "Canvas",
+            "CanvasScaler",
+            "GraphicRaycaster"
+          ]
+        },
+        {
+          "name": "EventSystem",
+          "instanceID": 104658,
+          "activeSelf": true,
+          "activeInHierarchy": true,
+          "tag": "Untagged",
+          "layer": 0,
+          "isStatic": false,
+          "path": "EventSystem",
+          "childCount": 0,
+          "childrenTruncated": false,
+          "childrenCursor": null,
+          "childrenPageSizeDefault": 200,
+          "componentTypes": [
+            "Transform",
+            "EventSystem",
+            "StandaloneInputModule"
+          ]
+        }
+      ]
+    }
+  }
+}

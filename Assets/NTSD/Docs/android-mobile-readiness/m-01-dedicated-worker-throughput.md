@@ -1,19 +1,20 @@
 # M-01 Dedicated Worker 吞吐优化方案
 
 > 优先级：中  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / PROFILING_REQUIRED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / PROFILING_REQUIRED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
 
-当前 dedicated worker 是单一模拟线程、输入容量 1，并在 publication 后等待表现 acknowledgment。它能隔离主线程但不会自动并行 1000 AI。线程数量不是规则；任何拆分都必须保持 pass、双 RNG、slot 和消费顺序。
+dedicated worker当前仍是条件性单线程/单飞，输入容量1、publication/ack背压；默认启用开关不能证明生产场景持续active。Unity presentation bindings等资格拒绝可能让tick同步执行。当前AI已有DataOrientedCanonical、SoA/增量查询和fallback，先复用这些路径，不假定1000个旧Mono AI。任何优化保持pass/RNG/slot/消费顺序。
 
 ## 解决方案
 
-1. 先分别测量 AI sensing、decision、candidate、hit、lifecycle、publication 与 ack 等待时间。
-2. 优先减少算法复杂度和无效工作；H-06 Broadphase 通常比盲目增加线程更优先。
-3. 只有 M-11 L1 边界完成后，才把无 Unity Object、无共享写入、可确定性合并的纯 kernel 评估为 Burst/Jobs 或分区并行候选。
+1. 第一组先测eligible/active/实际线程、拒绝原因、同步fallback比例、in-flight与ack/publication latency；再拆AI sensing/查询/decision、candidate/hit/lifecycle与捕获物化。
+2. 按实测热点排名复用现有AI/碰撞优化路径、减无效扫描与缓存失效，不预设H-06必然最大瓶颈或盲目增加线程。
+3. worker生产准入深化遵循PERF StepB及M-11前置；Burst/Jobs只对实测热点kernel独立评估，固定版本/FloatMode/精度，分别x86_64/ARM64逐位shadow compare。单线程Burst不自动确定性，差异即保持managed/canonical。
 4. 并行结果按稳定 slot/order 归并；每个 RNG 调用的 stream、次数和顺序不得变化。
 5. 保留串行 canonical 路径做 shadow compare 和回滚。
 
@@ -36,6 +37,6 @@
 
 ## 证据与留痕
 
-- 当前证据：`SimulationTickDriver.cs:1180-1189`、`BattleSimulationWorkerBoundary.cs:443-653`。
+- 2026-10-06重扫：`Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs:207,1516-1537`；默认开关和资格拒绝存在。当前AI默认见`Simulation/Ai/Runtime/BattleAiExecutionProfile.cs:24`，实际活跃/收益仍待测。
 - 保存每次 profile、候选 kernel 的确定性合同、shadow first difference 和性能结果。
 - 2026-09-06：方案建立；未选择并行算法。

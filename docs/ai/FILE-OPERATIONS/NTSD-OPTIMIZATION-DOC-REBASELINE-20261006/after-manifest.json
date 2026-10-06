@@ -1,0 +1,294 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-DOC-REBASELINE-20261006",
+  "time": "2026-10-06T16:53:33.1718816+08:00",
+  "diagnosticShellPid": 142796,
+  "workspace": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "documentSnapshotCount": 43,
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md",
+      "bytes": 4635,
+      "sha256": "AF71AF610D38143E6C439C1372BE0972DC0C05F90A2C24E2BFCA2024834596DD"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md",
+      "bytes": 2214,
+      "sha256": "9E41C0936C89769B16E3B1002C7E04BE70C59F16B024F08D4F0153BDAB1FE5BC"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md",
+      "bytes": 2695,
+      "sha256": "58572CC461E00324A1E9DC03A90988A0FC5D3FCE0BB794F80B8482A66639B454"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md",
+      "bytes": 2136,
+      "sha256": "E348B6966027117E344A88AACBC8ABB71A3C794DD9B23C6A21C0F7D27A284B12"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md",
+      "bytes": 2228,
+      "sha256": "6E42D5E7D15FBB2F54AA2965A16D72B9C0DEAA65F0F0C21A1A6EDDCB34F930A0"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md",
+      "bytes": 2710,
+      "sha256": "AA105F8AAC037BF910B30F3470581F05778A328E39BD485A61A5234C725CCF36"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md",
+      "bytes": 2769,
+      "sha256": "5FF5A8B1CD0E2F6ADA35A076BB85BE113A38670D238F9D9ABE434D4AA985DDCA"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md",
+      "bytes": 2713,
+      "sha256": "F42A9A5E757B63A9E3ECA622093848ACFA1255206D946E583AF5D851EBACF48D"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "bytes": 3277,
+      "sha256": "EE064FF89EBBA316D88ED7112F02362F2FD573004E309EB4A501CACECD5597F9"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md",
+      "bytes": 3091,
+      "sha256": "491632F26936B4A221EB00DB34E1DA99D0F8E372FE18A3EAE42A0A852F939780"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md",
+      "bytes": 2969,
+      "sha256": "D2BC8811D39FB024B899335F5D5527F2582F50CE1050C112D904CCD0200597F2"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md",
+      "bytes": 2182,
+      "sha256": "3FAF6BAA20CC50EEB06353059AA86A38C4596DE460EB0CF8302F57C466DF9B10"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md",
+      "bytes": 2002,
+      "sha256": "B2B60981DBBA7F09F8E01C98507DF87A68C7C1B69C0CED068555DC9BC31F5B08"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md",
+      "bytes": 1873,
+      "sha256": "1C0B4717B4962DC9F3CA16764B920D64B62358B7105C8CA4FD1809C0D570AF04"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md",
+      "bytes": 1984,
+      "sha256": "D15CD9E4EA49258F81F474FE839A2353EDA2CA0A7258919AA47C6C56A282CE7D"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md",
+      "bytes": 1830,
+      "sha256": "AC332E4719988436F4282EDC7A14ACAD3C835551086C53E92E8C9BB3108AA587"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md",
+      "bytes": 1920,
+      "sha256": "DE63D4AE17263854B83571377D153D774C1BCBF910B2335EC647030F975788B7"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md",
+      "bytes": 1938,
+      "sha256": "C96516F2D238E2022707463F7633473A75EE0310809174023D6B5C547BA17707"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md",
+      "bytes": 1832,
+      "sha256": "9B668208A3EA2FA1BBC0B71FCF184017F1DACD9DDD015B747B04C81A8330255B"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md",
+      "bytes": 3634,
+      "sha256": "FB6F8A986E02E8A2023F7B4FEAA025AFAF2292C96F2E642716B48ADC566F5969"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+      "bytes": 4775,
+      "sha256": "63AB030660FB983E21897392BDCAB7326CDA952FF61178F97FBCAC7498DCFD7D"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "bytes": 3256,
+      "sha256": "31F42359AA7432DF3EC7CA450A9BFDAC38E7FCA14AE1124E7B0268D7E8521BDF"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "bytes": 3722,
+      "sha256": "4A702EF94FA3246247C557422A74FD130A74304C269866293E938A1200D94C08"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md",
+      "bytes": 2755,
+      "sha256": "398062778E6233B47C89C4372EBE510225529A8B6C3FDB977753BDA2D470AEF2"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md",
+      "bytes": 2707,
+      "sha256": "DB5BE66CBFD1CF7D8D8D36846CE994EEA0E8F951D667CD45095D936F82E193F1"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md",
+      "bytes": 2866,
+      "sha256": "0FEB3C1B40BBC4514C7F9EDB022105BD27EC066B2B289B4E08BB891E35986C96"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md",
+      "bytes": 3848,
+      "sha256": "A11E6C32C77E7B0B152B08CB5D630641F056B69DD131CBC03F1C1D856EABBFE2"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "bytes": 4425,
+      "sha256": "504FCB1F91DFBAEF9566EEEBC15F9A33E5E01BF776744731BEDCCAD6BB4F6E1F"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "bytes": 16686,
+      "sha256": "AAE81CCB1C04E1C6B13BB8A446518F961F48FACEBB7FA828230B4943D82E82D3"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "bytes": 27269,
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "bytes": 24069,
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "bytes": 43193,
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "bytes": 28102,
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "bytes": 11407,
+      "sha256": "3F68E0E25197D7F4490621E998B830692C5591518A53A806E12DC05428F2B1E9"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "bytes": 4390,
+      "sha256": "F5D9F09BB9310981C5FA5C27A111F4DB23BBB7CD753E6B3B260C7C2D50C74D7D"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "bytes": 4189,
+      "sha256": "AFDC3CBB79ECB347611F9D52BDCEA53E2703AAAAAA26566EBAB8A0D3548FCB8F"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md",
+      "bytes": 2608,
+      "sha256": "52A0D081E0DB1895466CAB3C40ABA2A0D943536C48398F76277450065898E4BC"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md",
+      "bytes": 2312,
+      "sha256": "9ED81FED8FB03A71E9A0BCB1CD50EF1A8E46364991B11AEA95F09A667486E100"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md",
+      "bytes": 2369,
+      "sha256": "A4F8C7103D37C8C40D74BB40A4D66C1014D91B28B5FF79CC0A845D5517FBE4FA"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md",
+      "bytes": 2287,
+      "sha256": "5E05BE11BB80CF68FBB6C0D050E22CF13B7A490D52968FDF4C91311C96DC5CDC"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006.md",
+      "bytes": 3358,
+      "sha256": "C3A5FA44C5A4D81DCA8B1178726EC99345253E32A2E782D29C7EDFB0AA5F1B34"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006/RECORD.md",
+      "bytes": 13921,
+      "sha256": "19F85335AE6FA20ACBF488BA5F88E6AA11DD6D94390DF2A906E34C4FFF59C661"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 22112,
+      "sha256": "A0FBB3E7E49C931867BB66B4A3C2C8798840E0C97A95A3401696C27950A00C0D"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ShadowRetirementEditorTests.cs",
+      "beforeSha256": "70357996DD876DF63E23D05464BF6ED6D19FA4545D869B1A0115F89C51566801",
+      "afterSha256": "70357996DD876DF63E23D05464BF6ED6D19FA4545D869B1A0115F89C51566801",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionBoard.cs",
+      "beforeSha256": "BB4E1006047D55043E297360EFD9DB6B9C8CAD50E2C03B17E985E6D4B318B049",
+      "afterSha256": "BB4E1006047D55043E297360EFD9DB6B9C8CAD50E2C03B17E985E6D4B318B049",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs",
+      "beforeSha256": "9F70C6CACD3C84BB1DCBAB3B1053D656C5DE811315E8F0848EFFE5A39B58FE52",
+      "afterSha256": "9F70C6CACD3C84BB1DCBAB3B1053D656C5DE811315E8F0848EFFE5A39B58FE52",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+      "beforeSha256": "1EF76855E15D6F3BFBA2853F8291FFCAB35115751C37A6BBF459348249E63CD1",
+      "afterSha256": "1EF76855E15D6F3BFBA2853F8291FFCAB35115751C37A6BBF459348249E63CD1",
+      "unchanged": true
+    }
+  ],
+  "observedMetadata": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md.meta",
+      "bytes": 158,
+      "sha256": "5AC9C6BA7C46B7CF5806C16A8C41FBAE55A3A312C49299A0EF4B27049802C18B",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md.meta",
+      "bytes": 158,
+      "sha256": "083811747AD3A22A19DDAFF9A2D837EAF9ED5FB9DF7B6D99880D023FB3E3BB66",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md.meta",
+      "bytes": 158,
+      "sha256": "FDD8322E972B4E29F08AD19199CC57A943CD65AC493B5722071E2BEA0601A094",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md.meta",
+      "bytes": 158,
+      "sha256": "2260571879771C4C0D00C7916BC10CFDA13C628DA619B973CFC02BAE682A14E8",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md.meta",
+      "bytes": 158,
+      "sha256": "79797A4F5C45BDA68C7B3DC1D18349428CDCE613E29AC1F8CC9BE4A58E1F34C5",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md.meta",
+      "bytes": 158,
+      "sha256": "4D470285F007BF610E794F9FA45690F7C08F102E391E72A1252AC42418F9B26C",
+      "ownership": "OBSERVED_EXTERNAL_CREATOR_UNCONFIRMED_NOT_MODIFIED"
+    }
+  ],
+  "backup": {
+    "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REBASELINE-20261006/INDEX-before.md",
+    "sha256": "3B9182073F8080087EEEB183AFC9660C970E0279BBCC9A1A2D88DD720877D4A8"
+  },
+  "projectExecution": "NOT_RUN",
+  "implementationAuthorization": "WAITING_USER_APPROVAL"
+}

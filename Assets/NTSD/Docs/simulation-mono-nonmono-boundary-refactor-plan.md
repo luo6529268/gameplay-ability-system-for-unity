@@ -1,5 +1,12 @@
 # Simulation Mono / 非 Mono 边界整理与重构计划
 
+> **2026-10-06 文档重基线（仅整理，实施继续USER_HOLD）：**
+> 当前正式336B44及D-023排除边界以CURRENT-AUTHORITY为准；旧2.4/旧EXE/可变开发
+> 源码不定义新规则。P-1…P-5文档正文已在9/14落地，B0-B9代码未由本轮启动。
+> 新插值/音频/Kernel/publication代码进入下一次B0清点，不重写既有端口和单一World。
+> [统一优先级/启动门](battle-optimization-rebaseline-and-start-gates-20261006.md) /
+> [M-11独立方案](android-mobile-readiness/m-11-mono-core-presentation-layering.md)。
+
 > **2026-09-02 权威更新，不改变 USER_HOLD：** 后续若恢复本计划，必须先读
 > `docs/ai/CURRENT-AUTHORITY.md`，并按 NTSD 2.8-Logan 的 33 ms 正常逻辑间隔、1000 物理 slot、
 > 双 RNG 流和新 tick 入口重新盘点。本文及旧根规则中依赖 NTSD 2.4 或固定 30 Hz 的边界只保留为
@@ -18,6 +25,10 @@
 
 本计划用于在后续独立任务中，把 Unity/Mono 生命周期适配与确定性战斗模拟明确分层。
 当前先冻结目标、边界、依赖方向、迁移批次和验收标准，不立即执行代码重构。
+
+本计划取得的是所有权、线程资格和可测试边界，不自动提高Stats或逻辑吞吐；
+现有worker资格/回退/ack与AI/碰撞/表现成本需PERF独立测量。局部容量/资源优化与现状
+测量不要求先完成整套L1；PERF StepB深化仍遵循其B0-B6前置和独立批准。
 
 最终目标不是机械地把所有 `MonoBehaviour` 移到一个目录，也不是为了“纯 C#”替换所有
 Unity value type，而是建立可由代码和程序集共同验证的所有权边界：
@@ -148,8 +159,9 @@ Unity Presentation Adapter
    持有 `SimulationTickDriver`。
 7. `NTSDBattleTickSystem` 同时编排模拟阶段和 presentation dispatch/finalization，边界
    尚未完全显式化。
-8. Core/Runtime/Pass/ECS 中仍存在 `Vector2/Vector3/Mathf/Debug` 等 UnityEngine 依赖。
-   它们不是 L1 的首要违规，但属于 L2 inventory。
+8. Core/Runtime/Pass/ECS的Vector2/Vector3/Mathf纯值依赖属于可后置L2 inventory；
+   Debug属于Unity服务依赖，按9.9/13.6在worker热路径清零、L1 Core依赖归零，
+   不能继续将Debug统一后置至L2。
 9. `Simulation` 下没有 asmdef/asmref，当前目录边界不能阻止 Core 重新引用 Host 或
    Rendering。
 
@@ -870,3 +882,29 @@ USER_HOLD
 - 状态：`CORRECTION_SET_APPROVED / BODY_UPDATE_DONE /
   IMPLEMENTATION_NOT_STARTED / USER_HOLD`。代码实施仍按 B0→B9 分批，须
   用户逐批批准；头部计划状态行保持 `DOCUMENTED / USER_HOLD` 语义。
+
+## 20. 2026-10-06 当前代码复核与未来B0恢复要求
+
+本节只更新文档事实基线，不改变B0-B9、asmdef后置、non-blocking ack、epoch链、
+33ms/3ms、11阶段关闭、Debug硬门或正式规则。旧19节是具名历史，不把其job/行号当当前状态。
+
+1. 当前存在DataOriented/SoA、logic-only生成、条件性worker和显示插值；B0盘点必须从
+   实际调用链/所有权出发，而非把整个模拟核当未数据化。
+   当前TickDriver:1516-1537仍可因Unity presentation bindings等拒绝worker；
+   实际资格/回退是待测，不能用默认true推定已取得资格。
+2. 重新枚举Registry/World→Renderer/Sprite/MountRegistry、Lockstep→具体Driver、
+   Runtime Mono probes、线程相关API/Debug及完整allocation seal债务；
+   baseline逐文件/symbol/owner/批次/退出门具名，旧债务只减少、不新增。
+   不读/干扰当时活跃Q06排序方法；排序/first-visible未核内容仍标待确认。
+3. H-11显示插值缓存/submesh描述预热缺口、M-03同publication不同alpha物化、
+   H-10音频Lease/cache关闭、M-15本地Kernel依赖须纳入交叉模块owner图；
+   不把这些性能修补与B3/B4实体释放语义或算法切换合成大包。
+4. 端口优先复用当前纯值publication/handle与正式Kernel合同，不再建第二份logic state。
+   合约数值/字段按当前schema与冻结来源确认，不机械搬旧2.4/C#命名。
+   B0文档/guard批准不等于B1-B9实施授权，也不等于Packages/Server写权限。
+5. 获批后恢复步骤仍为第18节；每批先Task/Change和准确路径，再test-first/focused、
+   逐位/真实Play/关停与性能证据。未知预算/容量数值在批准基线后定，不作为本轮文档阻断。
+
+2026-10-06留痕：仅文档整理，未创建边界代码Change、未改C#/asmdef、未运行Unity/测试。
+最终状态保持 `DOCUMENTED / IMPLEMENTATION_NOT_STARTED / USER_HOLD`，
+测量和实施均等待用户下一次明确批准。

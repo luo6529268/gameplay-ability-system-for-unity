@@ -1,19 +1,20 @@
 # M-02 中央渲染 Draw Segmentation 控制方案
 
 > 优先级：中  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / DEVICE_MEASUREMENT_REQUIRED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / DEVICE_MEASUREMENT_REQUIRED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
 
-中央渲染按资源、材质、binding mode、atlas page 与 chunk 形成 segment；FootSelf 和血条另行提交。目标不是虚构“全战斗固定一个 draw”，而是让 segment 数量有界且与资源分包、GPU 时间相匹配。
+中央backend按资源/材质/binding mode/命令顺序及chunk、StrictOrderedDraw形成物理segment；Foot/health另提交。逻辑连续兼容run不等于物理segment，一个实体可有多命令，segment也不是每实体一个。每有效segment有中央DrawMesh命令，但CPU命令数、RenderPass/ExecuteCommandBuffer与真实GPU batch不同；SRP Batcher开关不是GPU合批证据。
 
 ## 解决方案
 
-1. 统一统计 source/resolved command、resource segment、chunk、submission draw、SetPass 与 unresolved。
+1. 分开记录逻辑run、物理segment/chunk、中央CommandBuffer.DrawMesh、生产RenderPass/ExecuteCommandBuffer、benchmark-local Graphics.DrawMesh、全帧Profiler draw及GPU batch/SetPass，后者由获批Frame Debugger/GPU capture等实际证据确认。
 2. H-08 纹理 bank 在加载粒度与 draw segment 之间设预算：避免全量超级 atlas，也避免每角色一个资源。
-3. 合并相同 shader/material variant，减少不必要关键字和材质实例；保持 TextureArray 正常路径、OrderedPages 回退。
+3. 兼容key使用实际绑定身份：SourceTextureIdentity、AtlasPageIdentity、TextureArrayIdentity与独立slice，material/variant、shader/render state和binding mode；opaque key可还原tuple。仅排序后兼容且连续、不跨现有segment边界的复用可评估，不改变painter顺序。
 4. FootSelf/血条是否合批以真机 GPU/带宽证据决定，不牺牲排序和可见规则。
 
 ## 验收条件
@@ -38,3 +39,4 @@
 - 当前证据：`BattleDynamicMeshBackend.cs:131-343`、`BattleRenderFeature.cs:248-299`。
 - 保存命令/segment/chunk/draw 对照表、设备/API 和纹理常驻报告。
 - 2026-09-06：方案建立；没有设定“必须 1 draw”的错误验收门。
+- 2026-10-06：重扫`BattleDynamicMeshBackend.cs:213-224,429-440`、`BattleRenderFeature.cs:272-282,316`；GPU真实batch未测。EXT-1仍PROPOSED / MODIFY_REQUIRED，不预设draw减少、不跨chunk合并、不启动专项M0；活跃Q06排序内部仍待确认。

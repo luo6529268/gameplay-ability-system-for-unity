@@ -1,13 +1,14 @@
 # M-05 1000 实体 GameObject Shell 成本方案
 
 > 优先级：中  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / MEASUREMENT_REQUIRED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / LOGIC_ONLY_PATH_EXISTS / MEASUREMENT_REQUIRED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
 
-中央 Mesh 已接管主体像素，但 1000 active 场景仍可能保留 GameObject、Transform、Mono wrapper、mount 和池记录。不能把 1000 logic-only、1000 AI 和 1000 visible GameObject 的结果互相替代。
+当前有logic-only materialization路径，中央Mesh已接管主体像素；首发角色接线与池预热仍会使用GameObject/Renderer/mount。不能笼统说每个1000实体都必须一个shell，也不能因logic-only存在宣称shell成本归零。分别统计logic-only、实际active AI、visible及预热inactive shell。
 
 ## 解决方案
 
@@ -35,6 +36,6 @@
 
 ## 证据与留痕
 
-- 当前证据：ProductionEntityStressHarness 使用正式 factory/pool/world 创建真实角色对象。
+- 2026-10-06重扫：`Assets/NTSD/Scripts/App/AppManager.cs:320`调用SetLogicObject；`Animation/LF2Objects/LF2Character.cs:978-980`绑定Renderer；`Simulation/Host/SimulationTickDriver.cs`已有logic-only开关；`UI/LoadingPrewarmController.cs:243-252`调用池预热。实际数量、线程准入和成本待测。
 - 保存每档 hierarchy/component census、CPU/内存、command 数和生命周期报告。
 - 2026-09-06：方案建立；尚未决定可移除 shell 的具体对象类型。

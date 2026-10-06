@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "83b48335ff234ef29bd795e8b2b2abf6",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791280651271,
+      "finished_unix_ms": 1791280663016,
+      "last_update_unix_ms": 1791280663016,
+      "progress": {
+        "completed": 2,
+        "total": 9021,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791280660905,
+        "last_finished_test_full_name": "NTSD.Test.Editor.MenuFont3500MigrationEditorTests.WindowHasConfigurableFontFieldAndApplyIsDisabledWithoutTarget",
+        "last_finished_unix_ms": 1791280660948,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.MenuFont3500MigrationEditorTests.AssignOnlyMissingFontsInActiveSceneIncludingInactiveAndSupportsUndo",
+            "message": "System.InvalidOperationException : Cannot create a new scene additively with an untitled scene unsaved."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

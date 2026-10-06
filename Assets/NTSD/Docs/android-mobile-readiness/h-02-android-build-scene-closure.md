@@ -1,8 +1,9 @@
 # H-02 Android Build 与 Scene 闭包方案
 
 > 优先级：高  
-> 状态：`OPEN / FIRST_SCENE_CONFIRMED / UNITY_SCENE_LIST_AND_EDITOR_CALLBACK_PASS / ANDROID_BUILD_PENDING`
-> 最后更新：2026-09-23
+> 状态：`OPEN / UNITY_SCENE_LIST_AND_EDITOR_CALLBACK_PASS / ANDROID_BUILD_PENDING / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
@@ -11,7 +12,7 @@
 
 ## 解决方案
 
-1. 建立明确的 Android Build Profile，按 GUID 声明 Bootstrap、加载、战斗与必要 Additive Scene，禁止依赖当前打开的 Scene。
+1. 建立明确的 Android Build Profile，按 GUID 使用用户已确认的 Menu 首场景/Battle 第二场景及既有 Additive 接线，禁止依赖当前打开的 Scene；不凭本方案新增 Bootstrap/加载 Scene。
 2. 构建前验证 active URP Asset、RendererData、`BattleRenderFeature`、GameConfig、Input Actions、H-01 内容 Manifest 和 H-04 ABI 配置。
 3. 建立可重复的 Development APK 与 Release AAB 入口；构建参数和输出目录显式化。
 4. 构建后生成成品清单：BuildReport、APK/AAB SHA-256、Scene、ABI、图形 API、内容包与版本指纹。
@@ -46,3 +47,4 @@
 - 2026-09-23：用户确认 Menu 第一、Battle 第二。`NTSD28-Q07-PRODUCTION-SCENE-LIST-001` 仅修改原项目 `ProjectSettings/EditorBuildSettings.asset::m_Scenes`；原 Editor 的 `q07-menu-scene-closure-2.json` 记录 Menu 回调进入 Additive Battle、BattleRunning、有序退出返回 Menu 通过，两个 Scene 文件 SHA-256 未变。此证据不覆盖 Player 冷启动或 Android 构建/设备验收。
 - 实施时保存：Build Profile、完整命令、BuildReport、产物 SHA-256、包内 Scene/ABI/资源清单和安装日志。
 - 2026-09-06：方案文档建立；当时实现未开始。
+- 2026-10-06：重新读取 `ProjectSettings/EditorBuildSettings.asset:7-13`，Menu/Battle均启用；同步主表过时的“列表为空”。复用上述既有Editor证据，没有构建或运行新的Android成品。

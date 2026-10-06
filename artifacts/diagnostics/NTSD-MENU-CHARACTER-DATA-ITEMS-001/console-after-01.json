@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 12 log entries.",
+    "data": [
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\CharacterSelectionBoardEditorTests.cs(107,41): error CS0246: The type or namespace name 'MenuLoopCarousel' could not be found (are you missing a using directive or an assembly reference?)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#cc3333>MCP-FOR-UNITY</color></b>: [ExecuteCode] Execution failed: System.SystemException: Error running D:\\Unity\\HubEditor\\2022.3.62f3\\Editor\\Data\\MonoBleedingEdge\\bin\\mono.exe: \u6587\u4ef6\u540d\u6216\u6269\u5c55\u540d\u592a\u957f\u3002",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+    ]
+  }
+}

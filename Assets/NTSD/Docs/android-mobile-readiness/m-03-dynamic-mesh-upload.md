@@ -1,24 +1,25 @@
 # M-03 中央动态 Mesh 构建与上传优化方案
 
-> 优先级：中  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / DEVICE_PROFILING_REQUIRED`  
-> 最后更新：2026-09-06  
+> 优先级：高（2026-10-06由中调高，原ID/路径保留）
+> 状态：`OPEN / INTERPOLATION_EXISTS / PROFILING_REQUIRED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
 
-中央渲染消除了每实体 SpriteRenderer draw，但每个可见帧仍需解析命令、写 Quad、更新 submesh 并上传顶点。约 1000 主体可能对应约 3000 条表现命令，桌面 GPU 低耗时不能外推手机 driver 与带宽。
+CentralOnly主体由动态Mesh提交；当前已有显示插值，publication不变但alpha变化会重新物化，并上传活动顶点，不是“每publication最多一次”。命令数取决于actor/weapon/effect/shadow/foot/health，不把旧约3000条推演当当前固定数。UV采样边界已进入顶点payload（现有stride44），旧上传估算需重算；桌面耗时不能外推手机。
 
 ## 解决方案
 
-1. 为 BuildCommands、ResolveCommands、WriteQuads、MeshUploadChunks、SetSubMesh、Execute 和 GPU 分别计时。
-2. 保留持久、预分配 chunk；上传只覆盖有效范围，避免每帧扩容、LINQ、临时数组和整 buffer 清零。
+1. 按publication变化、alpha变化、完全重复显示三类统计物化次数/复用率，再拆Build/Resolve/WriteQuads/submesh/upload/Foot/health/录制提交/GPU；给出每显示帧与每publication两种口径。
+2. 配合H-11预热并seal全部缓存；当前只上传活动范围，但未证明跳过未变化chunk。A1作为待实施设计，拆不可变UV/绑定/拓扑与插值位置等显示脏区；不能以publication不变跳过位置更新。
 3. 对不可见、未变化或无有效 binding 的命令做有证据的早期过滤，同时保持 hit-stop、排序和 first-visible tick。
-4. 评估双/环形 buffer、Jobs 写顶点或更低层 API 前，先测主瓶颈并保持 canonical 路径 A/B。
+4. 先冻结A3取样/排序/first-visible/latency合同，再决定是否选择A4候选表示，最后定型A2 job输出；实例表示未批准时仍用现有顶点表示。保留canonical A/B，避免先MeshData再instancing重复设计。
 
 ## 验收条件
 
-- warmup 后命令构建与 Mesh 上传 `0 B/frame` 或所有残余分配均有明确许可。
+- seal/warmup后完整物化—上传—录制—提交热路径0B/frame、0动态扩容；不得用残余许可放宽既有0GC硬合同，诊断自身开销另记。
 - 1000 visible 下无 buffer resize、capacity reject、stale submission 和未知 submesh 重建。
 - CPU render stages 与 GPU P95 满足设备预算，优化前后像素/排序一致。
 - 关闭、重进和 chunk 缩放无旧数据 ghost 或 Native 资源泄漏。
@@ -38,3 +39,4 @@
 - 当前观察：有效帧仍执行命令解析、顶点写入、submesh 与 `SetVertexBufferData`。
 - 保存 Profiler marker、chunk/command 计数、上传字节、设备/API 和 A/B 报告。
 - 2026-09-06：方案建立；尚无 Android 热点结论。
+- 2026-10-06：本项由中调高，保留M-03 ID。重扫`BattleCentralRenderSystem.cs:397-406,624-629,668-682`及`BattleDynamicMeshBackend.cs:443-449,663-686`；补同publication插值重建、UV边界和H-11容量门。没有运行测量。

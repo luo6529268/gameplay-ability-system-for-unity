@@ -2,9 +2,14 @@
 
 > 计划标识：`BATTLE-ATLAS-MEMORY-LOWEND-ROADMAP-001`
 >
-> 创建日期：2026-09-13；本版：R1（2026-09-14，按外部综合评审修正）
+> 创建日期：2026-09-13；本版：R3（2026-10-06，当前资源链与预算基线整理）
 >
 > 当前状态：`DOCUMENTED / IMPLEMENTATION_NOT_STARTED / USER_HOLD`
+>
+> 该状态指本专项，现有SourceTexture2D回退等代码进展保留。本轮仅文档整理，
+> M0/烘焙/资源/实施仍WAITING_USER_APPROVAL。
+> [统一风险登记](android-mobile-readiness-priority-risk-register.md) /
+> [共同合同与启动门](battle-optimization-rebaseline-and-start-gates-20261006.md)。
 >
 > 性质：资源管线与内存治理方案。本文件不授权修改任何 C#、Scene、Prefab、
 > asmdef、资源、ProjectSettings 或运行行为；实施批次获批后按
@@ -59,20 +64,30 @@
 - **ASTC**：移动端压缩格式，4x4 = 8bpp（RGBA32 的 1/4），有损；**由设备
   `SystemInfo` 格式能力决定是否可用，不由档位标签决定**（见支柱三）。
 
-## 2. 当前事实基线
+### 1.4 当前账本范围（R3澄清，不改变既有双预算门）
+
+本计划SteadyResidentBudget/TransitionPeakBudget的视觉/目录/Lease/staging合同保持。
+H-10音频、H-11 renderer缓存和其他系统工作集另分steady/transition记账，再汇总整局峰值；
+共享对象防双计，旧新Lease、CPU/GPU在途、staging不漏计。实施选择扩展本账本或独立
+renderer账本时先明确归属/汇总并获批，不能将atlas预算当全局安全。本轮不冻结
+bank、格式、预算数字，不改变segment/fail-closed语义。
+
+## 2. 当前事实基线（R3，2026-10-06静态重扫）
 
 ### 2.1 已验证事实
 
 | 编号 | 事实 | 证据 |
 |---|---|---|
-| F1 | 现状为"全量一本"：Loading 流程加载 data.txt 全部角色配置，统一组装单一图集发布 | `[已验证-代码]` `Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs`（CharacterConfig 任务）→ `CharacterAnimtorManager.ParseCharacterFrameConfigs` / `ApplyLoadedCharacterConfigs` / `TryBuildUnifiedCentralAtlasPublication`（R1 修正路径笔误） |
+| F1 | Logan Loading仍全catalog/角色配置预热并统一发布，不是按局装载；可选Array/Pages/Source，不能将所有情况都称实际全量一本atlas | `[已验证-代码]` `Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:1473,2514,2582,2958-2965` |
 | F2 | 图集页 2048×2048、RGBA32、无 mipmap、Point 过滤；每页 16 MB；`EstimateAtlasBytes = 页数×16MB` | `[已验证-代码]` `BattleAtlasLayoutPlanner.PageSize`、`BattleAtlasDiagnosticInputs.EstimateAtlasBytes` |
 | F3 | 平台预算二分（Mobile 256 MB / Desktop 512 MB）；降级链 `AtlasTextureArray → AtlasPageTexture2D → SourceTexture2D`；`allocationGuard` 钩子存在但当前传 null | `[已验证-代码]` `BattleRenderingPlatformPolicy`、`BattleAtlasCapabilityPolicy`、`BattleRenderingPolicyResolver.ResolveAtlas` |
 | F4 | 超大图排除：>2046 px sheet 不进图集（SourceTexture2D 直绑）；超设备 `MaxTextureSize` 拒绝发布 | `[已验证-代码]` `TryClassifyCentralAtlasSources`、`IsPageEligible` |
-| F5 | 加载期 CPU 全量组装：解码源像素、全量页缓冲（页数×16 MB 托管）与 GPU 拷贝瞬态并存；上传后 `Apply(false, makeNoLongerReadable:true)` 释放 CPU 副本 | `[已验证-代码]` `BattleAtlasResourceBuilder.AssemblePages` / `TryBuild` |
+| F5 | atlas构建可有源像素/全量页缓冲/GPU瞬态；Source回退避开部分页分配，但源纹理/stagedAtlasSources仍在。Texture.Apply不可读不等于托管processed pixels已释放 | `[已验证-代码]` `BattleAtlasResourceBuilder`、`CharacterAnimtorManager.cs:2505-2523,2958起`；并发数不代表总像素峰值 |
 | F6 | 回收粒度为整本：仅内容集变更时重印并销毁旧册；运行中不增不减；无按时间回收（`LF2ObjectPool` 120 s 为对象池，与图集无关） | `[已验证-代码]` `TryCommitSpritePrewarmInvocation` / `DestroyStagedPresentation` |
-| F7 | `SourceTexture2D` / `AtlasPageTexture2D` 绑定模式全链路可用；中央渲染 segment 按纹理粒度切分 | `[已验证-代码]` `BattleSpriteCentralBindingMode`、`BattleDynamicMeshBackend.IsCompatible` |
+| F7 | Source/AtlasPage/Array可用；实际身份/slice/material/模式/命令连续性/StrictOrderedDraw/chunk共同决定物理segment，逻辑run≠segment≠GPU batch | `[已验证-代码]` `BattleDynamicMeshBackend.cs:213-224,429-440`；现有segment合同保持 |
 | F8 | 内容权威已切换 D-023：正式输入为 NTSD 2.8-Logan `resources/runtime` 的 DAT 与角色图片；当前正式迁移路径已涉及 PNG | `[已验证-文档]` AGENTS.md D-023 条款、CURRENT-AUTHORITY.md D-023 决定（2026-09-12） |
+| F9 | Auto在预估atlas超预算时保留SourceTexture2D，这不是整局内存门，也不证明低端G1/G2 | `[已验证-代码]` `CharacterAnimtorManager.cs:2958-2965` |
+| F10 | 音频PCM副本、插值缓存及新UV边界改变共享内存/上传基线 | `[已验证-代码/既有报告限定]` H-10/H-11/M-03；约210MiB仅已有payload估算，非本轮实测 |
 
 ### 2.2 推演与数据缺口（`[推演-待测]`，M0 输入）
 
@@ -95,7 +110,8 @@
   20 唯一角色最坏集合、页面碎片率、segment 影响、资源更新频率共同决定，
   **不强制"一角色一册"**（避免页面尾部浪费、小册泛滥、segment 与句柄数
   膨胀）；
-- **目录**：`VisualDataId + Pic → Bank + Page/Slice + UV + Pivot`；
+- **目录**：VisualDataId/pic→Bank、实际page/array/slice、UV、Pivot、Size、源hash、
+  texel-center采样边界及当前decoder/crop语义；源格式无关，承接已验红线修复；
 - **参战闭包 = 静态保守上界**（可多装、不可漏装），生产者全集（R1 补全）：
   双方选择角色 → 武器 → opoint 链递归（特效实体、召唤物）→ **Stage spawn、
   随机掉落武器、武器碎片、分身/transform/mimic、持有/拾取切换 visual
@@ -104,6 +120,9 @@
 - 每条依赖边记录来源（source oid/frame、producer kind、target oid、字段/
   内建规则、是否条件性、证据），并配运行时断言：**实际请求必须 ∈ 预计算
   闭包**，违例即 fail-closed 报错；
+- 当前公共资源含WORDS/KO图标及特殊裁切/缺图回退等可达路径，须重扫catalog；
+  项目背景/模式和音频不由D-023自动替换。保守闭包可多装，物理bank可含额外帧，
+  不要求加载字节恰等于最小依赖；H-10声音共用版本身份但另记账。
 - **装载语义（R1 关键修正）**：装载 = 解析闭包 → 选择已预印 bank → 异步
   加载 → 绑定中央目录。**装载路径不做任何像素解码排版、页面分配或图集
   组装**；
@@ -176,6 +195,12 @@ M0 测量统计（D-023 正式内容口径）──┬──> P1 设备能力+�
    解压回退行为确认；
 4. **ASTC 画质 A/B**：真机、正式 Point 过滤与放大倍率、覆盖角色/武器/特效/
    透明边缘/翻转/重叠场景，结论记录在案。
+5. **当前布局与峰值**：分别记录Source/Pages/Array、staging/源纹理/目录，
+   冷启动/稳定/旧新Lease/退出；旁列H-10音频/H-11 renderer账本并汇总总峰值。
+   当前布局与候选预印布局分开，现状Source回退不能当候选bank已选择。
+6. **启动边界**：D1历史方案批准保留，当前M0/Editor/烘焙待用户批准。
+   EXT-1-B兼容key/run专项schema仍属提案，不在本文提前升格；基础segment/CPU/GPU
+   按PERF分开记数，不由资源种类推真实batch或提前冻bank。
 
 ### 4.1 P1：能力判定 + 档位解析器
 
@@ -215,6 +240,8 @@ M0 测量统计（D-023 正式内容口径）──┬──> P1 设备能力+�
 - AGENTS.md 第 14 节（移动端，USER_HOLD）：本计划是其资源侧延长线细化，
   不启动该节其余内容；
 - 边界重构计划：无工程依赖；
+- H-08视觉、H-10音频、H-11 renderer容量、M-12背压/M-14校验/M-15指纹共享
+  内容/预算/生命周期边界，但分批批准，不合成一次大型代码/资源改造。
 - 排除项延续：运行时动态图集、按闲置时间逐张回收、运行时压缩、战斗中途
   换册/换档。
 
@@ -251,7 +278,7 @@ G1/G2 已通过**——全量运行时图集本身即低端机内存风险来源
 
 | 编号 | 决策 | 建议（源自 GPT6 评审，待用户批准） |
 |---|---|---|
-| D1 | 是否批准 M0 | **已批准（R2，2026-09-14）**；必须以 D-023 正式内容为最终口径（迁移期间可先完善工具，数字在正式内容上重跑）；旧内容结果标注 `TOOLING_BASELINE_ONLY`，正式内容迁移后结果标注 `FORMAL_ATLAS_M0`，只有后者可冻结 bank/预算/格式决策；只读设计工作（统计 schema、catalog 输入、依赖边分类、报告设计、M0 指标确认）可立即开展，Unity Editor 扫描/导入的实际启动与活跃 NTSD28-Q06 恢复任务协调 |
+| D1 | 是否批准M0 | 2026-09-14历史方案批准保留；当前启动WAITING_USER_APPROVAL。冻结实际Logan正式Manifest/例外/decoder，旧TOOLING_BASELINE_ONLY不作最终数字，FORMAL_ATLAS_M0才支持后续获批决策；按当时Editor协调，不照抄旧Q06/job，不启动EXT-1专项M0 |
 | D2 | 20 人最坏预算与准入策略 | **变体降档优先，仍超则拒绝**；预算按"唯一 visual dependency set"计；同时冻结 steady 与 transition peak 两数（M0 后定） |
 | D3 | ASTC/格式画质判定 | 美术/视觉负责人 + 客户端工程共同签字；目标 Android 真机 + 正式 Point 过滤/放大倍率 + 全场景对比；工程同步核对 GraphicsFormat/内存/加载时间/回退 |
 | D4 | 半分辨率/更高压缩档 | 首批不做，条件性后置（见 4.4） |
@@ -287,3 +314,4 @@ G1/G2 已通过**——全量运行时图集本身即低端机内存风险来源
 | R0 | 2026-09-13 | 初版 |
 | R1 | 2026-09-14 | 按 GPT6 综合评审修正：①内容权威 Direction B → D-023，输入含正式 PNG（阻断级 1）；②P3 预印先于 P2 装载，消除"运行时重印"与动态图集排除项的矛盾（阻断级 7）；③装载语义重定义：只装载不组装（阻断级 7）；④G2 峰值≈0 → 峰值受 bank/批次上限约束（高 13）；⑤新增 Steady/Transition 双预算与低内存切场模式（高 14）；⑥逻辑所有权与物理 bank 分离，bank 由 M0 数据决定（高 15）；⑦闭包生产者全集补全 + 依赖边溯源 + 运行时断言（高 16）；⑧ASTC 由格式能力决定，ETC2 候选，低档不默认 ASTC（高 12）；⑨构建确定性分级（高 17）；⑩资源 Lease/取消/epoch/缓存上限（高 13 附带）；⑪与 PERF 关系改"可独立实施+联合认证"（中 22）；⑫交付载体开放决策 D6、切场策略 D7（中 23）；⑬F1 证据路径修正（中 24）；⑭D1–D5 建议更新 |
 | R2 | 2026-09-14 | 按 GPT6 R1 复核修正（通过，附轻微修正）：①恢复顺序改为 D1→D3→D6→D7→D2→D5→D4，D7 前移至预算冻结前——切场策略/双 Lease/缓存上限直接决定 P2 Lease API 与 TransitionPeakBudget；②P2 回滚语义边界：回退≠低端认证，回退时该设备档位保持未认证或明确拒绝；③D1 标记已批准，区分 TOOLING_BASELINE_ONLY / FORMAL_ATLAS_M0，Editor 扫描启动与 NTSD28-Q06 协调 |
+| R3 | 2026-10-06 | 仅文档：全catalog/Source回退、staging/音频/renderer整局预算汇总、UV/crop/公共资源闭包；双预算/排除项/segment不变，bank/格式/数值未冻，M0/烘焙/实施待再批准，EXT-1不升格。 |

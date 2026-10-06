@@ -1,0 +1,64 @@
+{
+  "id": "NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001",
+  "time": "2026-10-06T09:51:55.961095+00:00",
+  "items": [
+    {
+      "relative": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\MenuFont3500MigrationEditor.cs",
+      "bytes": 12167,
+      "sha256": "f180695a0fc277dd55ff33714f107d4be4512b134bda42f5fe3e5ae4418b6a72",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\MenuFont3500MigrationEditor.cs",
+      "git_status": ""
+    },
+    {
+      "relative": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 629337,
+      "sha256": "2d0a66e2555455d89320b20aa5fde28a8c4e2858a028da158e17a0c90b6968db",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "git_status": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "relative": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1529340,
+      "sha256": "80650ac947955d57f79a4a8d965461f17d558aa05694c40abc8909c4ab78fd99",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001\\before\\docs\\ai\\STATE.md",
+      "git_status": "M docs/ai/STATE.md"
+    },
+    {
+      "relative": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1459489,
+      "sha256": "c3eea5c77208ba14b6677192cddf17b9974ba1e885627bae33ae9d87b9d457ec",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "git_status": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "relative": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 22112,
+      "sha256": "a0fbb3e7e49c931867bb66b4a3c2c8798840e0c97a95a3401696c27950a00c0d",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "git_status": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "protected": [
+    {
+      "relative": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "367e01e7c699dd9929ffe8319c5a9cca215109a066f2b5f12ef3559169584e01"
+    },
+    {
+      "relative": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010"
+    },
+    {
+      "relative": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "946edab6367a6c3bd118a0263b42922f3877e8330731bd43ba80ad3829922346"
+    },
+    {
+      "relative": "Assets/NTSD/Scripts/Test/Editor/MenuFont3500MigrationEditor.cs.meta",
+      "sha256": "ee1282b44c3902721e8c89de67ee1ae58cee61118548ef53d72b94e714432173"
+    }
+  ]
+}

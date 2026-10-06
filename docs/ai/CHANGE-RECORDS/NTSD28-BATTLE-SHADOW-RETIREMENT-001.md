@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-BATTLE-SHADOW-RETIREMENT-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28ShadowRetirementEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2ObjectRenderer.cs
@@ -22,3 +22,10 @@ Predeclared display-only fix: shared LF2ObjectRenderer viewport predicate; legac
 Exact RED322c8f4d3b884fe78e019e1c731afe32: legacy body below viewport retained shadow. Shared3-script fix written; original Editor focused69c037d8c9c94d1ea1800a41090aee06 PASS5/5 (RED regression plus native four shadow-field cases). Only rendering gate changed; managed simulation ShadowVisible and world positions/lifetimes unchanged. Added exact seven entity-type controls plus create-only original Battle Scene probe. Actual reported fullDriver Sage hit/stone break capture2/2 (50da393393df4206bc63ede2fb305616); Sage hit HP500->295, terminal bodies removed and surviving518/361 state3005 hidden; stone source removed,20 fragments retained,18 far below floor. Not physical key/GameView/formal fullworld parity. Current scene/runtime/GPU acceptance pending.
 
 Final exact focused e06390911ed040898259f666f5280ed0 PASS12/12: actual legacy RED->GREEN, all six noncharacter type families and character exemption, four unchanged native shadow-field cases. Current compile zero errors; original saved Battle clean/root11 confirmed via MCP, Scene probe01 started. Protected5087 SHA unchanged. No all-suite selection. Scene runtime still pending; source3 production diffs only declared rendering gate.
+
+Original Scene01 PASS300 directed ticks, actual central fragment shadows20->0, skill hit HP500->295 and removed/shadows0; seventeen below-screen live native fragments cull, no simulation deletion. Ordered11 shutdown objects/slots/borrowers0, Scene clean/SHA253B2E..F9010 unchanged, Editor idle/non-Play. GPU actual central mesh captures inspected, diagnostic flat backdrop (not full Game View). This is controlled Sage release phase and production rock birth/break, not physical-key/random-drop/native fullpixel parity. Production bytes unchanged since12/12. Adding only focused invocation of existing BattleRuntimeSelfCheck geometry function for final minimal self-check; no full suite. See REPORT.
+
+2026-10-06 scoped closure: shared downward noncharacter body-viewport shadow cull VERIFIED. Exact12/12 focused tests and existing BattleRuntimeSelfCheck geometry1/1 pass. Original Battle300 directed production ticks: actual central fragments20->0, Sage throw HP500->295 then skill/shadows0; ordered11 shutdown objects/slots/borrowers0, Scene clean/SHA unchanged. Controlled actual release/break entries, not physical key/random-drop or formal full-world/GPU parity. Formal LFR exploratory final-header failures retained, no full parity claim. No DAT/assets/Scene/nonbattle or simulation/lifecycle rewrite. Old user-accepted campaign closure unchanged.
+Final original Editor MCP self-check job39e323194f7d4baabedc31882bfc4151 PASS1/1, no all-suite; final idle/non-Play/clean root11. Adding self-check only changed diagnostic test, production3 unchanged. Before-final exact current-byte backups preserve another actor commit11069c9f; this task did not commit/restore/discard. Final protected/ledger results saved separately in REPORT; failures may downgrade only if actually found.
+
+Final evidence: validator-02.json PowerShell7 Tools/Validate-ChangeLedger.ps1 exit0 (historical declared-path-outside-current-diff warnings retained, no validation errors); protected-final-02.json checked5087, changed0, formal336B44 exact SHA unchanged; git-diff-check-final.json exit0. Current-byte final evidence additions also backed up. No additional production change or repeated runtime validation.

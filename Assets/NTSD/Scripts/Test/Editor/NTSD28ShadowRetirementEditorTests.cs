@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Newtonsoft.Json;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -17,6 +18,22 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28ShadowRetirementEditorTests
     {
         private const string OutputRoot = "artifacts/diagnostics/NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/";
+
+        [Test]
+        public void ExistingRuntimeBodyAndShadowGeometrySelfCheckPasses()
+        {
+            var check = typeof(BattleRuntimeSelfCheck).GetMethod("CheckEntityAndShadowRenderPositionFormula",
+                BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.That(check, Is.Not.Null);
+            try
+            {
+                check.Invoke(null, null);
+            }
+            catch (TargetInvocationException exception)
+            {
+                throw exception.InnerException ?? exception;
+            }
+        }
 
         [TestCase(0, true)]
         [TestCase(1, false)]

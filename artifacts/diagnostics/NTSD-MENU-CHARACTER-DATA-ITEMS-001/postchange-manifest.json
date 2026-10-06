@@ -1,0 +1,98 @@
+{
+  "id": "NTSD-MENU-CHARACTER-DATA-ITEMS-001",
+  "time": "2026-10-06T08:43:17.737743+00:00",
+  "existing": [
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs",
+      "before": "20e514b438f626dc8092c78219807af160aed6c34fe9b4e27d1570644c2e4937",
+      "after": "9f70c6cacd3c84bb1dcbab3b1053d656c5de811315e8f0848effe5a39b58fe52",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterSelectionBoard.cs",
+      "before": "a8bbda15d4c602d135b2e0bc42a02d934685b95aa62c97e09c6e93d3e295d448",
+      "after": "bb4e1006047d55043e297360efd9db6b9c8cad50e2c03b17e985e6d4b318b049",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+      "before": "e22f771c32b95e4b27166b435752009c2a95b14461fead3d7cb21e79b17649ff",
+      "after": "1ef76855e15d6f3bfba2853f8291ffcab35115751c37a6bbf459348249e63cd1",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "before": "6e4ef9f1f571754eb54dd534e5ee9784550bef52c999c81972a83ae261775a09",
+      "after": "6e4ef9f1f571754eb54dd534e5ee9784550bef52c999c81972a83ae261775a09",
+      "changed": false,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "before": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "after": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "changed": false,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "before": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+      "after": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+      "changed": false,
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "before": "841cb7ae57245e38f39b9ebc7ac4324611e0c4f054174d3e9a30cca7df553b78",
+      "after": "2d0a66e2555455d89320b20aa5fde28a8c4e2858a028da158e17a0c90b6968db",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "before": "5243cb0945ec71b06af2edcdda7ff819756e2543ec778ad37a46d4a8272f80c5",
+      "after": "80650ac947955d57f79a4a8d965461f17d558aa05694c40abc8909c4ab78fd99",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "before": "2dde92623633adc1fc3041583c462df06c0145ce32e27e05875e253ff92969c0",
+      "after": "c3eea5c77208ba14b6677192cddf17b9974ba1e885627bae33ae9d87b9d457ec",
+      "changed": true,
+      "backup_unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "before": "dd05fc01365e4ce72e013f6dc396b6b3c273cfbe6bb8221b37b02e71d2f902e8",
+      "after": "87501183e9c9ad0a28dd1e3b2290520f8e3a5dd2638451466adf05f9868478d1",
+      "changed": true,
+      "backup_unchanged": true
+    }
+  ],
+  "new": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterSelectionBoardEditorTests.cs",
+      "sha256": "3d55d068eb246d49ea829a363b815563b562be73a41fdde153b27d044673f2b5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterSelectionBoardEditorTests.cs.meta",
+      "sha256": "18ae57bd06e54190661abf5f2ce7ba23d1b1996a2c55985e2d0be136644c6ed1"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md",
+      "sha256": "7ecadf78a0e44fe31779a0c8aef9e3677c9f215c0fc97620abebad88f6a44499"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md",
+      "sha256": "7af6bc7e84003b05c70afce866f59cebdfb5ec83384de1267a40213cdcce93be"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-MENU-CHARACTER-DATA-ITEMS-001-PREPARE/RECORD.md",
+      "sha256": "19b633e246f41ddd1be8489cf32f5c2c0d5c714205ee6a4bd6cbd2394e3fdfce"
+    }
+  ]
+}

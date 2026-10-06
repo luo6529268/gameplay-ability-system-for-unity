@@ -1,0 +1,14 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 5 log entries.",
+    "data": [
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\CharacterSelectionBoardEditorTests.cs(107,41): error CS0246: The type or namespace name 'MenuLoopCarousel' could not be found (are you missing a using directive or an assembly reference?)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+    ]
+  }
+}

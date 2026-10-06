@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 4 log entries.",
+    "data": [
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 1)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 1)",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+    ]
+  }
+}

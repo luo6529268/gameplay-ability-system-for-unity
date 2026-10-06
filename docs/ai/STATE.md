@@ -1,3 +1,5 @@
+> **2026-10-06 阴影残留共用显示修复限定验收：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / SCOPED_SHADOW_DISPLAY_FIX_VERIFIED；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / VERIFIED。原 Editor 聚焦12/12＋既有几何self-check1/1通过；原saved Battle300tick，石头碎片central阴影20→0，仙法手里剑命中HP500→295、结束阴影0；有序关闭objects/slots/borrowers0，Scene clean/SHA不变。仅向下离开画面的非角色共用阴影显示门，不删仍活跃的native碎片，不改DAT/模拟/非战斗；受控释放/破碎入口，不称物理按键/随机掉落或正式EXE全World/GPU一致。旧总目标收尾保持，下方PLANNED为事前快照。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
+
 > **2026-10-06 阴影残留定向任务：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / IN_PROGRESS；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / PLANNED。用户报告武器破碎/投掷命中/技能消失残留阴影，只查共用生命周期和表现首差，先新聚焦测试；无生产结论，不改DAT/Scene/非战斗，旧总目标收尾及红线修复保持。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
 
 > **2026-10-06 用户变身/P2受击框新问题诊断：** 共用NTSDHitboxGizmos仍读旧SpriteX/Y/Z与Frame.D、未接D024投影；正式角色已不维护旧缓存，原Editor单项1/1证实battle缓存0，定位CONFIRMED_GIZMO_ADAPTER_GAP（仅调试绘制，尚未改生产，实际P2命中/现场待证）。正式336B44鸣人388→52、佐助342→38四tick各PASS；Unity当前Logan DAT两个完整Driver受控三tick目标ID/action/state/counter同，C25三项3/3。非自然按键或画面验收；用户具体角色/按键待回复USER_REPRO_PENDING。原Scene clean/非Play/errorCS0，无DAT/资源/脚本修改；旧音效工作保持，旧总目标不恢复。[诊断报告](../../artifacts/diagnostics/NTSD28-336B44-TRANSFORM-P2-HITBOX-DIAGNOSIS-20261006/REPORT.md)。
@@ -6251,3 +6253,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
 2026-10-06 red-line Task IN_PROGRESS; NTSD28-BATTLE-SPRITE-RED-LINE-001 FOCUSED_TEST_PASS. Shared shader lookup clamp at authored texel centers, no crop/geometry/source color change. Original Editor exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3), GPU105 placements zero gutter; original saved Battle targeted capture started. Old campaign closure retained; no full suite/roster. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md.
 
 2026-10-06 reported foot red-line fix SCOPED_CROP_SAMPLING_FIX_VERIFIED; NTSD28-BATTLE-SPRITE-RED-LINE-001 VERIFIED(scoped). GPU RED3 paths each118 gutter pixels at half-pixel placement; unchanged-source crop4 PASS. Shared mesh carries per-quad texel-center bounds, shaders clamp lookup; original UV/size/pivot/scale/RGBA unchanged. Current exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3). Original saved Battle01 PASS tick5 actual Naruto2/pic1/SourceTexture2D stride44, central submitted, GPU21 placements maxGutter0; ordered11-stage shutdown objects/slot/borrower0, Scene clean/SHA unchanged, original Editor idle/non-Play. Accepted actual mesh PNG; Editor ScreenCapture rejected as full Game View evidence. No DAT/PNG/importer/Scene/settings/nonbattle/delete/Git changes. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md. Old campaign scoped closure preserved; not full roster/camera/device parity.
+
+> 2026-10-06 NTSD-MENU-CHARACTER-DATA-ITEMS-001 / PLANNED：用户要求data.txt角色Item生成与默认随机，仅参考Logan名单构建；三UI脚本/聚焦测试精确范围先建Record、Task与文件操作SHA备份。当前默认可见50角色＋随机，保持项目选择/队伍/输入/战斗流程。[Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 角色Item生成进展：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / COMPILE_PASS。三UI脚本及三项定向测试已写；生成C#工程0error，原Menu Play定向job运行中。仅data.txt默认可见type0注册顺序、随机首项、现有模板/池及预热刷新；其他选择流程不变。[Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 角色Item生成限定完成：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / VERIFIED（仅菜单生成）。当前data.txt默认可见type0按注册顺序，随机首项共51；三个独立通过记录含原Menu Play默认随机/头像绑定/点击确认取消/重开51实例复用。compile-04 0error，Menu/Battle/GameConfig SHA不变、原Editor非Play/idle/Scene clean。桥重载回调缺失不当成功计数，使用测试全部断言后的直接通过记录；未测试完整多人/比赛流程。 [Record](CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / PLANNED：用户要求可配置当前Scene缺失TMP字体工具，原Editor脚本与聚焦测试限定；先建Record、精确备份，既有字体/Scene/其它dirty均保留。[Record](CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / VERIFIED（限定Editor工具）：原迁移脚本改为可选TMP FontAsset的当前活动Scene缺失字体窗口，含inactive/disabled，跳过已指定，Undo/Prefab覆盖，手动保存。原Editor两项直接断言通过，生成工程0error；未在真实Menu赋字体，当前dirty=true保持，Scene/font/meta磁盘SHA不变，旧测试前置失败原件保留。 [Record](CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。

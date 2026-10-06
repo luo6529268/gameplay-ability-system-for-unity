@@ -1,0 +1,96 @@
+{
+  "id": "NTSD-MENU-CHARACTER-DATA-ITEMS-001",
+  "time": "2026-10-06T08:07:50.281403+00:00",
+  "items": [
+    {
+      "relative": "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\UI\\CharacterSelectionController.cs",
+      "bytes": 19383,
+      "sha256": "20e514b438f626dc8092c78219807af160aed6c34fe9b4e27d1570644c2e4937",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Scripts\\UI\\CharacterSelectionController.cs",
+      "backup_sha256": "20e514b438f626dc8092c78219807af160aed6c34fe9b4e27d1570644c2e4937",
+      "git_status": ""
+    },
+    {
+      "relative": "Assets/NTSD/Scripts/UI/CharacterSelectionBoard.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\UI\\CharacterSelectionBoard.cs",
+      "bytes": 8889,
+      "sha256": "a8bbda15d4c602d135b2e0bc42a02d934685b95aa62c97e09c6e93d3e295d448",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Scripts\\UI\\CharacterSelectionBoard.cs",
+      "backup_sha256": "a8bbda15d4c602d135b2e0bc42a02d934685b95aa62c97e09c6e93d3e295d448",
+      "git_status": ""
+    },
+    {
+      "relative": "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\UI\\SelectRoleItem.cs",
+      "bytes": 21627,
+      "sha256": "e22f771c32b95e4b27166b435752009c2a95b14461fead3d7cb21e79b17649ff",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Scripts\\UI\\SelectRoleItem.cs",
+      "backup_sha256": "e22f771c32b95e4b27166b435752009c2a95b14461fead3d7cb21e79b17649ff",
+      "git_status": ""
+    },
+    {
+      "relative": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "bytes": 461519,
+      "sha256": "6e4ef9f1f571754eb54dd534e5ee9784550bef52c999c81972a83ae261775a09",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "backup_sha256": "6e4ef9f1f571754eb54dd534e5ee9784550bef52c999c81972a83ae261775a09",
+      "git_status": ""
+    },
+    {
+      "relative": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "bytes": 109282,
+      "sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "backup_sha256": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+      "git_status": ""
+    },
+    {
+      "relative": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "bytes": 3329,
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Config\\GameConfig\\GameConfig.asset",
+      "backup_sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+      "git_status": ""
+    },
+    {
+      "relative": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 628187,
+      "sha256": "841cb7ae57245e38f39b9ebc7ac4324611e0c4f054174d3e9a30cca7df553b78",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "backup_sha256": "841cb7ae57245e38f39b9ebc7ac4324611e0c4f054174d3e9a30cca7df553b78",
+      "git_status": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "relative": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1528008,
+      "sha256": "5243cb0945ec71b06af2edcdda7ff819756e2543ec778ad37a46d4a8272f80c5",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\docs\\ai\\STATE.md",
+      "backup_sha256": "5243cb0945ec71b06af2edcdda7ff819756e2543ec778ad37a46d4a8272f80c5",
+      "git_status": "M docs/ai/STATE.md"
+    },
+    {
+      "relative": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1458129,
+      "sha256": "2dde92623633adc1fc3041583c462df06c0145ce32e27e05875e253ff92969c0",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "backup_sha256": "2dde92623633adc1fc3041583c462df06c0145ce32e27e05875e253ff92969c0",
+      "git_status": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "relative": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 20900,
+      "sha256": "dd05fc01365e4ce72e013f6dc396b6b3c273cfbe6bb8221b37b02e71d2f902e8",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-MENU-CHARACTER-DATA-ITEMS-001\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "backup_sha256": "dd05fc01365e4ce72e013f6dc396b6b3c273cfbe6bb8221b37b02e71d2f902e8",
+      "git_status": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ]
+}

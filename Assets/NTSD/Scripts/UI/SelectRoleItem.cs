@@ -121,7 +121,6 @@ namespace NTSD.UI
             characterSelectionIndex = 0;
 
             RefreshAvailableCharacters();
-            UpdateDisplay();
 
             BindInput();
         }
@@ -299,25 +298,40 @@ namespace NTSD.UI
         /// </summary>
         /// <summary>
         /// 刷新可选角色列表
-        /// 从 CharacterAnimtorManager 获取所有已加载的角色
+        /// 使用 data.txt 注册顺序的默认可见角色，随机选项始终在首位。
         /// </summary>
         public void RefreshAvailableCharacters()
         {
-            availableCharacterIds = new List<int> { GameConfig.RandomCharacterId };  // 第一个选项始终是"随机"
-
-            if (CharacterAnimtorManager.Instance != null && CharacterAnimtorManager.Instance.IsPrewarmCompleted)
+            var manager = CharacterAnimtorManager.TryGetInstance();
+            var data = GameDataManager.TryGetInstance();
+            bool ready = manager != null && manager.IsPrewarmCompleted && data != null && data.IsLoaded();
+            availableCharacterIds = BuildCharacterChoices(ready ? data.GetAllObjects() : null,
+                id => manager.GetCharacterConfig(id)?.characterData);
+            characterSelectionIndex = availableCharacterIds.IndexOf(selectedCharacterId);
+            if (characterSelectionIndex < 0)
             {
-                var loadedIds = CharacterAnimtorManager.Instance.GetAllLoadedCharacterIds();
-                if (loadedIds != null)
-                {
-                    var resources = CharacterUIResourceManager.TryGetInstance();
-                    foreach (int id in loadedIds)
-                    {
-                        if (resources != null && resources.GetCharacterUISprites(id)?.HeadSprite != null)
-                            availableCharacterIds.Add(id);
-                    }
-                }
+                characterSelectionIndex = 0;
+                selectedCharacterId = GameConfig.RandomCharacterId;
             }
+            UpdateDisplay();
+        }
+
+        internal static List<int> BuildCharacterChoices(IReadOnlyList<ObjectDefinition> definitions,
+            System.Func<int, LF2CharacterData> resolveCharacter)
+        {
+            var result = new List<int> { GameConfig.RandomCharacterId };
+            if (definitions == null || resolveCharacter == null) return result;
+            var seen = new HashSet<int> { GameConfig.RandomCharacterId };
+            foreach (ObjectDefinition definition in definitions)
+            {
+                if (definition == null || definition.type != 0 || seen.Contains(definition.id)) continue;
+                LF2CharacterData character = resolveCharacter(definition.id);
+                if (character == null || (character.NativeMetadata?.Bmp.Int32OrDefault("hidden", 0) ?? 0) != 0)
+                    continue;
+                seen.Add(definition.id);
+                result.Add(definition.id);
+            }
+            return result;
         }
 
         /// <summary>
@@ -327,6 +341,8 @@ namespace NTSD.UI
         public void OnJoin()
         {
             if (state != SelectRoleState.Idle) return;
+
+            RefreshAvailableCharacters();
 
             state = SelectRoleState.SelectingCharacter;
             characterSelectionIndex = 0;

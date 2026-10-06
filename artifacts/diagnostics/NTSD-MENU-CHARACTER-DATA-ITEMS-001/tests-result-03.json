@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "08c88d5f80e549ae976e3a0fb309cf6e",
+      "status": "running",
+      "mode": "EditMode",
+      "started_unix_ms": 1791275729763,
+      "finished_unix_ms": null,
+      "last_update_unix_ms": 1791275742091,
+      "progress": {
+        "completed": 1,
+        "total": 9019,
+        "current_test_full_name": "NTSD.Test.CharacterSelectionBoardEditorTests.ChoicesUseRegistryOrderAndDefaultVisibilityWithoutPortraitFiltering",
+        "current_test_started_unix_ms": 1791275738350,
+        "last_finished_test_full_name": "NTSD.Test.CharacterSelectionBoardEditorTests.ChoicesUseRegistryOrderAndDefaultVisibilityWithoutPortraitFiltering",
+        "last_finished_unix_ms": 1791275742091,
+        "stuck_suspected": true,
+        "editor_is_focused": false,
+        "blocked_reason": "editor_unfocused",
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

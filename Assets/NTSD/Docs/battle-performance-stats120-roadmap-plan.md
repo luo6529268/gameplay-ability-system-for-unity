@@ -2,9 +2,14 @@
 
 > 计划标识：`BATTLE-PERF-STATS120-ROADMAP-001`
 >
-> 创建日期：2026-09-13；本版：R1（2026-09-14，按外部综合评审修正）
+> 创建日期：2026-09-13；本版：R3（2026-10-06，当前代码基线整理；保留R1/R2历史）
 >
 > 当前状态：`DOCUMENTED / IMPLEMENTATION_NOT_STARTED / USER_HOLD`
+>
+> 该状态指本专项实施批次，不能解读为相关代码从未变化；插值等已有其他任务实现。
+> 本轮仅文档整理，M0/代码优化仍 `WAITING_USER_APPROVAL`。
+> [统一优先级与启动门](battle-optimization-rebaseline-and-start-gates-20261006.md)；
+> [主登记表](android-mobile-readiness-priority-risk-register.md)。
 >
 > 性质：性能路线方案与未来实施框架。本文件不授权修改任何 C#、Scene、
 > Prefab、asmdef、资源、ProjectSettings 或运行行为；所有实施批次获批后须按
@@ -67,7 +72,7 @@
    "约每 4 渲染帧出现一次新 publication"仅是近似描述；长序列不得假设严格
    等间隔，验收以实测 publication 间隔为准。
 4. **插值 ≠ 提帧率。** 插值层解决"33 ms publication 在 120 Hz 显示上的运动
-   平滑"，属呈现正确性；Stats/帧时间由主线程每帧成本决定。
+   平滑"，属呈现正确性；实际presented帧时间受主线程/render thread/GPU/显示流水线共同影响。
 5. **垂直同步与显示环境是验收前置条件**，不是性能项，但必须按 D5 锁定，
    否则帧率数字无意义。
 
@@ -79,24 +84,24 @@
 - 移动端专项（AGENTS.md 第 14 节延长线）是否单列见 D3；
 - 网络、回滚 netcode、资源格式重构、UI 改版。
 
-## 2. 当前事实基线（R1 修订）
+## 2. 当前事实基线（R3，2026-10-06静态重扫）
 
 ### 2.1 已验证事实
 
 | 编号 | 事实 | 证据 |
 |---|---|---|
 | F1 | 正常 cadence 精确 33 ms；F5 快速 3 ms；debt 最多 2 个当前 cadence interval | `[已验证-文档]` AGENTS.md 第 6 节 |
-| F2 | **Host 拥有 cadence 与策略，worker 条件性执行**：cadence 累计、pause/F1、单步 F2、F5 切换、input gate、显式 nextTickIndex 选择均由 Unity Host Update 驱动；存在默认开启的 dedicated simulation worker（`useDedicatedSimulationWorker = true`）——资格满足时 Host 提交显式 tick → worker 执行 → 主线程消费 publication → acknowledgment → 才允许下一次提交（单飞）；资格不满足或不可用时回退当前线程同步执行 | `[已验证-代码]` `Simulation/Host/SimulationTickDriver.cs`：201（`useDedicatedSimulationWorker = true` 及 tooltip）、392/470（`CanAdvanceTick`）、1264（`ResolveDedicatedSimulationWorkerIneligibilityReason`） |
-| F2b | worker 资格拒绝条件包括：非 CentralOnly、非 LocalFreeRun、input-ready gate、full-frame snapshot、RuntimeDataCatalog 未准备、World 仍有 Unity presentation binding | `[已验证-代码]` `ResolveDedicatedSimulationWorkerIneligibilityReason`（SimulationTickDriver.cs:1264） |
+| F2 | Host拥有cadence/输入策略，默认存在条件性dedicated worker；显式tick/单飞/ack组织不等于实际active，更不等于1000 AI并行化 | `[已验证-代码]` `Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs:207`；实际资格/吞吐见F2c |
+| F2b | 资格拒绝包括非CentralOnly/LocalFreeRun、input-ready、full-frame snapshot、legacy stage refresh、catalog未就绪及Unity presentation bindings | `[已验证-代码]` `SimulationTickDriver.cs:1516-1537`，本轮重扫 |
 | F2c | **未知项**：目标生产场景中 worker 是否持续 active；每 tick 实际执行线程分布；主线程/worker 重叠量；publication/ack 等待成本；因资格或背压回退同步路径的比例 | `[推演-待测]`——M0 第一组测量项（4.0） |
-| F3 | 中央渲染系统对同一 publication 的重复显示帧去重：publication version 未变化时跳过重建，仅重复提交既有 submission | `[已验证-代码]` `BattleCentralRenderSystem.MaterializeLatestPublishedFrame` |
-| F4 | 渲染提交公式：draw = 底部覆盖层（可选）+ 脚印批（可选）+ **每个活动中央 segment 一次** + 血条批（可选）；`SegmentCount` 无代码上限 | `[已验证-代码]` `BattleRenderFeature.BattleRenderPass.Execute` 逐 segment `DrawMesh` 循环。"典型场景个位数"仅为特定场景推演，具体由资源 bank、page、材质、binding mode、chunk 与可见命令决定 → `[推演-待测]` |
-| F5 | 表现捕获按模式分工：**所有模式**扫描表现实体、维护 handle cache、捕获命中记录；**非 CentralOnly** 额外执行 legacy Z sort 及诊断；**CentralOnly 跳过该 legacy sort**，最终排序由 `MaterializePresentationOrder`（稳定槽位基数排序）承担，其成本单独计量 | `[已验证-代码]` `BattlePresentationShadowBuild.BeginFrameCore`（CentralOnly 分支跳过 `SortEntitiesByZPreservingSlotOrder`）、`MaterializePresentationOrder` |
+| F3 | 中央物化按Unity frame及publication+displayAlpha去重：无新publication但插值alpha变化仍可重建；仅相同取样复用submission | `[已验证-代码]` `Animation/Rendering/BattleCentralRenderSystem.cs:397-406,475`，本轮重扫 |
+| F4 | 中央CPU命令公式=可选overlay/foot+每个有效物理segment一次DrawMesh+可选health。逻辑run≠segment，chunk/StrictOrderedDraw/实际资源绑定会分段；CPU命令≠真实GPU batch | `[已验证-代码]` `BattleRenderFeature.cs:272-282,316`、`BattleDynamicMeshBackend.cs:213-224,429-440`；RenderPass/Execute/benchmark-local/Profiler/GPU分别记数，不预设典型个位数 |
+| F5 | 当前中央物化仍调用MaterializePresentationOrder；排序边界不改变。9月捕获/legacy sort内部描述仅为历史证据，当前排序内部、first-visible及透明重叠本轮未新读活跃Q06方法体，维持待确认 | `[已验证-调用点/内部待确认]` 当前CentralRenderSystem调用；不得把旧基数排序细节当最新全域合同 |
 | F6 | 表现侧 worker 发布缝已存在：`BattlePresentationCoordinator.BeginSimulationWorkerFrame` 支持由 simulation worker 在 CentralOnly 模式发布逻辑快照 | `[已验证-代码]` `BattlePresentationShadowBuild.cs` |
-| F7 | 中央物化对**每个新 publication 最多执行一次**（受 Unity frame、publication version、物化锁三重去重与相机/render pass 调用时机影响）；无新 publication 时复用现有 submission。实际物化次数可能低于 tick 次数 | `[已验证-代码]` `BattleCentralRenderSystem.PrepareFrameImmediate` 去重逻辑；实测计数列入 M0 |
-| F8 | 边界重构计划 `SIMULATION-MONO-BOUNDARY-REFACTOR-001` 存在（USER_HOLD）；其 B6（tick publication 与 Unity dispatch 分离）是 Step B 深化的前置；第 19 节含外部评审附录与待批正文修正清单（P-1…P-5） | `[已验证-文档]` 该计划文档 |
+| F7 | 显示插值代码已存在：同publication的不同alpha可多次物化，并调用DisplayMotion及backend Build；当前Upload仍上传活动顶点。A1 dirty-chunk跳过是待实施设计 | `[已验证-代码]` `BattleCentralRenderSystem.cs:624-629,668-682`、`BattleDynamicMeshBackend.cs:663-686`；每publication/显示帧计数都列M0 |
+| F8 | MONO代码仍USER_HOLD，B0-B6/worker准入按StepB前置；P-1…P-5文档正文已于9/14落地，不再是待落地清单，不能据此称代码已重构 | `[已验证-文档]` MONO §19.7.5及2026-10-06补充 |
 | F9 | Core/Runtime 仍存在线程相关 Unity 静态调用；`Time/Input/Random/Resources/Application/SystemInfo/Object.Instantiate/Destroy` 主线程限定，worker 准入前必须移除或隔离；`Debug` 不一定因线程调用立刻崩溃，但属于 Core→Unity 服务依赖并可能引入日志锁/字符串分配/不可控 IO——生产 worker 准入前必须改走预分配 diagnostics sink 或证明不可达（热路径 `Debug` = 0；L1 完成定义 = Core 对 `UnityEngine.Debug` 依赖为 0，与边界计划 7.5/9.9/13.6 一致） | `[已验证-代码]` `Simulation/Runtime/SimulationRegistryModule.cs` 656/669/737/752/773/787 行 |
-| F10 | 物化/装载的资源侧现状与治理见姊妹文档 `BATTLE-ATLAS-MEMORY-LOWEND-ROADMAP-001`；两计划共享 M0 指纹、资源 Manifest 与中央渲染计数（segment/draw/GPU/上传统计），最终设备认证联合执行 | `[已验证-文档]` ATLAS 计划 5.3 |
+| F10 | 物化/装载的资源侧现状与治理见姊妹文档 `BATTLE-ATLAS-MEMORY-LOWEND-ROADMAP-001`；两计划共享 M0 指纹、资源 Manifest 与中央渲染计数（segment/draw/GPU/上传统计），最终设备认证联合执行 | `[已验证-文档]` ATLAS 计划 1.4 与第 5 节 |
 
 ### 2.2 观察与模型（`[推演-待测]`）
 
@@ -114,6 +119,8 @@
 - 主线程非战斗底噪（URP+UI+引擎）在目标环境；
 - GC 分配 1000 实体口径现状；
 - `SegmentCount`/draw 的真实分布（与 ATLAS 计划共享统计）。
+- 加载/steady/transition总内存：源纹理、staging、音频原clip/PCM副本、双backend及读Lease；
+  H-10约210MiB仅已有静态估算。H-11插值/描述数组容量与热路径增长也需单独测。
 
 ## 3. 路线框架（R1：结论条件化）
 
@@ -121,7 +128,7 @@
 
 | 场景 | tick 帧主线程成本构成 | 推演结论 |
 |---|---|---|
-| (a) worker 持续 active | 消费 publication + 物化（每新 publication）+ 渲染 + 底噪 + ack/背压等待（量值未知） | 可行性取决于 (a1) 物化尖峰与 (a2) ack/背压延迟的实测值 |
+| (a) worker 持续 active | 消费publication + 每有效显示取样物化/插值/上传 + 渲染/声音/底噪 + ack/背压（量值未知） | 可行性取决于每显示帧成本与等待；不能用每publication仅一次低估 |
 | (b) worker 回退/不 active | 整个 tick 同步执行 + 捕获 + 物化 + 渲染 | 推演 ~30 ms ≫ 8.33 ms，数学上不可行 |
 
 ### 3.2 条件化结论（取代 R0 的"必选"表述）
@@ -133,8 +140,8 @@
    （含 5.1 准入级线程相关 API 清理），此时它是 120 目标的必经路径；
 3. **路线 C（tick ≤25 ms）在任何分支都是 worker cadence 稳定性的配套**：
    30 ms 级 tick 即使在 worker 上，利用率 >90% 也无抖动吸收空间；
-4. **路线 A 承担主线程残馀预算**：物化尖峰（每新 publication 一次，F7）与
-   插值缺失（120 Hz 上每 publication 重复约 4 次）仍是两处已知呈现问题。
+4. **路线A承担主线程残余预算**：现有插值下的物化/上传频率及轨迹/latency验收
+   需要重基线。A3不从零重写，A1须区分不可变资源数据与随alpha变化的位置等数据。
 
 ## 4. 路线图（四步；每步独立立项、独立验收、独立回滚）
 
@@ -157,12 +164,14 @@ Step 0 测量（M0）──┬──> Step A 表现侧优化（不改模拟 stat
 
 **第二组——成本分布**：
 
-- 单 tick 各阶段毫秒分布（模拟 pass 侧 + 表现捕获侧；CentralOnly 口径按
-  F5 的分工计量，不含已跳过的 legacy sort）；
-- 中央物化单次成本与物化/提交复用计数（F7）；
-- `SegmentCount`/draw 分布（与 ATLAS 计划共享）；
+- 单 tick 各阶段毫秒分布（模拟 pass 侧 + 表现捕获侧；CentralOnly 的捕获/排序
+  真实路径在获批启动时按 F5 确认，不把本轮未读的排序内部当成已闭合合同）；
+- 中央物化次数按publication变化/alpha变化/完全重复取样区分；单次与每显示帧成本并列；
+- 逻辑run、物理segment、中央DrawMesh、生产RenderPass/ExecuteCommandBuffer、
+  benchmark-local调用、全帧Profiler draw及GPU batch/SetPass分别统计；不由CPU命令推GPU；
 - 主线程底噪（URP+UI+引擎，目标环境实测）；
-- GC 分配现状。
+- 完整物化—上传—录制—提交GC/增长、声音聚合及加载/steady/transition内存；
+  新统计若现有计数无法推导，必须另批批准最小埋点，不在本文执行。
 
 **场景与口径**：`ProductionEntityStressHarness` 1000 实体配置 + 普通规模
 对照组；采集使用既有 `BattleTickDetailPhaseDiagnostics` 阶段枚举与
@@ -172,16 +181,14 @@ Step 0 测量（M0）──┬──> Step A 表现侧优化（不改模拟 stat
 **口径与执行约束（R2）**：
 
 - 每份 M0 结果必须标注 `ContentAuthorityState`：
-  `PRE_D023_MIGRATION_BASELINE` 或 `D023_FORMAL_CONTENT`。当前正式资源
-  迁移尚未完成，首轮结果属前者，**非最终性能证书**；D-023 迁移完成后必须
-  重跑全部口径（1000 实体构成、表现 command 数、atlas/segment、碰撞/
-  OPoint 路径、内存、渲染与加载）并升级标签；只有 `D023_FORMAL_CONTENT`
-  结果可用于冻结预算与验收阈值；
+  `PRE_D023_MIGRATION_BASELINE`或`D023_FORMAL_CONTENT`。当前已接入LoganRuntime，
+  必须冻结实际输入Manifest/项目模式/例外/decoder身份，不能照抄9月“迁移未完成”状态；
+  旧内容只作tooling参考，最终预算与证书仅用正式口径。代码/内容/Kernel/插值或音频
+  范围变化按受影响域重测，不自动重跑全部历史campaign；
 - 标注 `UnityTestJobConflict` 状态。PERF D1 已获方案批准，但**实际
-  Profiler/Unity 测量启动必须与当前活跃恢复任务协调**：`CURRENT-AUTHORITY.md`
-  记录的回归 job `aa6b0c9f033e4b8b83174826936e782c` 已有终态（FAILED，
-  58/24，XML 已归档），其后继活跃任务为 `NTSD28-Q06`（276 条真实首差待
-  处理）——测量排程不得干扰该任务的验证管线，启动时点由用户与该任务协调；
+  Profiler/Unity启动须用户本轮后续批准并协调当时共享Editor/活跃路径**。
+  9月Q06/job信息只为历史，不自动恢复旧任务。当前测量状态WAITING_USER_APPROVAL；
+  不启动EXT-1专项M0；
 - 若需补埋点，先建立最小独立 Change Record，不混入性能优化。
 
 **产出**：M0 报告——对 3.2 的分支 (a)/(b) 给出判定，并对每条条件化结论
@@ -195,9 +202,9 @@ first-visible tick、submission generation、stale lease、排序、shutdown 等
 
 | 子项 | 内容 | 验收 |
 |---|---|---|
-| A1 物化降本 | 未变化 chunk 跳过重传、quad 脏区更新、批量上传 | 1000 实体单次物化耗时较 M0 基线下降（目标值 M0 后定） |
-| A2 物化出主线程 | **独立 Presentation 侧 MeshData job**：主线程分配/调度 → job 只写 NativeArray/MeshData → 主线程 fence 后 ApplyAndDispose。不复用 dedicated simulation worker（避免所有权混合与 tick deadline 争用）；并实测 `AllocateWritableMeshData` 开销是否优于现有持久 Mesh + `SetVertexBufferData`，不优则不采用 | tick 帧主线程不再包含物化；提交正确性 focused test 不变 |
-| A3 插值层 | 按权威 `presentation_interpolation.cpp` 语义实现（上一 publication 与当前 publication 之间按显示时间插值）——对齐权威已有呈现机制。作为独立批次（见 D4） | 插值轨迹与权威语义对照一致；presentation latency/publication age 有定义且达标 |
+| A1物化降本（待实施） | 区分资源/UV/拓扑缓存与alpha位置脏区，评估chunk/字段更新；先补H-11容量，不把现状全活动顶点上传说成已dirty-skip | 同workload每显示帧/取样成本下降，0GC/UV/排序保持 |
+| A2输出/调度（待选择） | 保持独立Presentation job、不复用simulation worker；A3合同先冻结，再决定是否另批选择A4候选，最后定顶点或实例输出。未批A4仍比较MeshData与持久Mesh，收益不成立不采用 | 剩余主线程物化/调度/fence/Apply各自量化，不承诺主线程成本全消失 |
+| A3现有插值复核 | 复用现有DisplayMotion/alpha；按明确冻结的正式来源验插值取样、排序、first-visible、latency与publication age，未确认域另列 | checksum不变、轨迹/断点/年龄语义有证据，不能以代码存在宣称全域通过 |
 
 ### 4.2 Step B：完成现有 dedicated worker 的生产资格与流水线解耦（R1 重写）
 
@@ -211,7 +218,7 @@ first-visible tick、submission generation、stale lease、排序、shutdown 等
 
 **前置条件**：
 
-1. 边界重构 B0–B6 完成（含其第 19.7 节待批修正 P-1…P-5 落地）；
+1. 边界重构B0-B6达到对应退出门；P-1…P-5文档已落地，实际端口/epoch/guards等代码仍须逐批实现；
 2. **worker 准入级 API 清理完成（R2 与 F9 统一口径）**：`Time/Input/Random/
    Resources/Application/SystemInfo/Object.Instantiate/Destroy` 等主线程
    限定或进程环境型调用从 worker 路径移除或隔离；`Debug` 为**硬准入门**：
@@ -257,8 +264,8 @@ first-visible tick、submission generation、stale lease、排序、shutdown 等
 
 ### 5.1 边界重构计划（前置）
 
-Step B 前置 = B0–B6 完成 + 19.7 节 P-1…P-5 修正落地 + worker 准入级 API
-清理。解冻由用户单独批准（D2，建议分阶段：先 B0）。
+StepB深化前置=B0-B6对应代码退出门+worker准入API清理；§19.7的P正文已改，
+不能重复列为未完成文档。解冻由用户单批批准，先B0；不阻断其他范围独立的容量/资源取证。
 
 ### 5.2 不触碰
 
@@ -271,6 +278,13 @@ Step B 前置 = B0–B6 完成 + 19.7 节 P-1…P-5 修正落地 + worker 准入
 （F4），压缩格式影响 GPU 带宽，纹理上传影响主线程/render thread，切场缓存
 影响内存与帧尖峰。因此：共享 M0 指纹、资源 Manifest 与中央渲染计数；最终
 设备认证联合执行。
+
+### 5.4 本轮新增交点与候选边界
+
+H-10音频驻留/M-13聚合、H-11表现缓存0GC、M-12背压/M-14校验、
+M-15 Kernel指纹加入统一34项登记，各自方案/验收在独立文档。
+EXT-1保持PROPOSED / MODIFY_REQUIRED，不入正式StepA、不实施或专项M0；
+A3→选择是否A4→定型A2是表示设计顺序，不是A4已获批。
 
 ## 6. 风险与回滚
 
@@ -309,10 +323,10 @@ Step B 前置 = B0–B6 完成 + 19.7 节 P-1…P-5 修正落地 + worker 准入
 
 | 编号 | 决策 | 建议（源自 GPT6 评审，待用户批准） |
 |---|---|---|
-| D1 | 是否批准 M0 | **已批准（R2，2026-09-14）**；首选零代码测量，且**必须包含 worker 现状取证第一优先组**；结果标注 `ContentAuthorityState` 与 `UnityTestJobConflict`（见 4.0）；缺埋点另立最小 Change；实际测量启动与活跃 NTSD28-Q06 恢复任务协调 |
-| D2 | 是否解冻边界重构 | **分阶段批准**：先 B0（inventory/guards）；B1/B2 待本计划正文修正（19.7 P-1…P-5）落实后推进；B3–B6 每批独立；与活跃 NTSD 对齐工作共用文件时等稳定边界 |
+| D1 | 是否批准M0 | 2026-09-14历史方案批准保留；当前启动WAITING_USER_APPROVAL，含worker/插值/内存/0GC，缺埋点另批Change，协调当时Editor；不启动EXT-1专项M0 |
+| D2 | 是否解冻边界 | 建议先B0；P正文已落地，B1-B6代码仍逐批批准，重新inventory及共享路径窗口，不自动解冻 |
 | D3 | 平台口径 | **桌面参考 + Android 分档单列**：桌面 Player 保留 1000 实体 120 工程目标；Android 120 只对具名高刷新设备档认证；中低端门槛由 M0 数据单定，不从桌面自动继承 |
-| D4 | 插值层是否纳入 | 纳入，但作为独立批次：先做权威 trace 与 presentation latency 合同，再实施 A3 |
+| D4 | 插值层是否纳入 | 已有代码，纳入现状复核而非从零实施；先闭合冻结来源/取样/排序/first-visible/latency，再选择候选表示和A2输出 |
 | D5（新增） | 正式验收环境锁定：Player/设备/分辨率/render scale/VSync/API/热状态 | M0 前锁定；建议先桌面参考环境 |
 | D6（新增） | 允许的 input-to-visible latency、最大 publication age、worker queue 深度、ack 背压策略 | M0 实测后定阈值；决定 Step B 是否放宽单飞 |
 
@@ -343,3 +357,4 @@ Step B 前置 = B0–B6 完成 + 19.7 节 P-1…P-5 修正落地 + worker 准入
 | R0 | 2026-09-13 | 初版 |
 | R1 | 2026-09-14 | 按 GPT6 综合评审修正：①内容权威 Direction B → D-023（阻断级 1）；②cadence 统一精确 33 ms 表述，禁用 30 Hz 措辞（阻断级 2）；③F2 重写为"Host 调度 + 条件性 dedicated worker 执行"（阻断级 3，代码已默认启用 worker）；④Step B 重写为"完善现有 worker 生产资格"，Host 保留 cadence 所有权，删除 worker 自驱表述（阻断级 4）；⑤"路线 B 必选"降为 M0 后条件结论；⑥F4 draw 公式化、取消"个位数"代码声称；⑦F5 补 CentralOnly 跳过 legacy sort；⑧F8 改"每新 publication 最多一次"；⑨M0 新增 worker 现状取证第一优先组；⑩A2 改独立 Presentation job；⑪验收 Player 化 + 附加延迟指标；⑫新增 D5/D6；⑬与 ATLAS 关系改"可独立实施 + 联合认证"；⑭新增不变量"Host cadence 所有权不移入 worker" |
 | R2 | 2026-09-14 | 按 GPT6 R1 复核修正（有条件通过 → 条件补齐）：①1.1 最终硬门改为端到端 presented frame interval p99 ≤ 8.33 ms，主线程/render thread/GPU 降为归因指标（任一阶段不得持续超 8.33 ms），新增 missed present/最长连续超预算帧（高）；②Step C 新增 Burst 逐位一致性合同：单线程不自动获得确定性资格，逐 kernel 固定版本/FloatMode/FloatPrecision + x86_64/ARM64 双架构 shadow compare，first difference 即保持 managed（高）；③F9 与 Step B 的 Debug 口径统一为硬准入门（热路径 0 / L1 Core 依赖 0），与边界计划 7.5/9.9/13.6 对齐（中）；④M0 新增 ContentAuthorityState（PRE_D023_MIGRATION_BASELINE / D023_FORMAL_CONTENT）与 UnityTestJobConflict 标注，D-023 迁移后重跑（中）；⑤完成定义补 M0 标签重验项；⑥D1 标记已批准，实际测量启动与 NTSD28-Q06 协调 |
+| R3 | 2026-10-06 | 仅文档：F3/F7和A3按现有插值重基线，F4计数分离/F5内部待确认，补全热路径0GC与音频/内存/Kernel；P正文已落地状态同步，M0/实施仍待用户再批准，EXT-1不升格。 |

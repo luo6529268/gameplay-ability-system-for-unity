@@ -1,0 +1,13 @@
+# NTSD28-BATTLE-SHADOW-RETIREMENT-20261006
+Status: PLANNED
+Operation: audited scoped edits, no deletion or move
+Executor: /root
+Time: 2026-10-06T15:09:31.553520+08:00
+Authorization: latest user request to fix weapon/throw/skill leftover shadows
+User reports lingering shadows after weapon break, projectile hit and skill disappearance. Trace current336B44/common lifecycle and presentation; fix only confirmed shared difference. Initial diagnostic new Editor tests only; exact production paths added/backed up before editing. No DAT/PNG/Scene/InputActions/ProjectSettings/nonbattle edits, delete/move/Git discard, extra Editor, computer-use, full suite/roster or reopening old campaign. Preserve prior red-line dirty bytes. Distinguish intentional native body blink/hidden pic from removed entity shadow. Test owned temporary memory objects cleaned with existing shutdown; no new runtime service or shutdown stage. Acceptance: first difference, focused shared guards, original saved Battle directed visual/lifecycle witness, zero exit residue and scene hash/dirty unchanged. Rollback own hunks/backups only after separate authorization.
+Exact initial code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28ShadowRetirementEditorTests.cs (new); Unity auto generated .meta. Create-only artifacts under I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-BATTLE-SHADOW-RETIREMENT-20261006; six docs from before-manifest, new Task/Record.
+API: Python exact-path create/prepend; apply_patch for declared C#; original PID19040 MCP Refresh/exact tests/scene probe only. Existing docs bytes and protected assets saved before edits; current source reference not promoted to formal without executable proof.
+
+Predeclared display-only fix: shared LF2ObjectRenderer viewport predicate; legacy LF2Entity.UpdateShadow and central BuildCommands use it. Cull only non-character shadows when downward Y is positive and the entire authored body lies below current world-camera viewport. Above-screen airborne objects, characters, normal pic999/HitStop blink gates remain. Camera-dependent culling stays main-thread presentation, never managed worker state or simulation. Original formal traces show same999 downward behavior; this is user-requested Unity viewport cleanup, not native lifecycle first-difference or physical-rule rewrite. No entity deletion, runtime fields, manager, shutdown stage or DAT edits. New create-only original Scene probe planned, existing ordered shutdown.
+
+Exact3 production scripts backed up with current bytes; new Scene probe/.meta. Only these paths and initial new diagnostic test permitted.

@@ -5,29 +5,36 @@
 > 性质：导航索引。本文件不含独立方案内容，仅汇总当前会话产出的提案文档、
 > 各自范围、依赖关系与评审注意事项。所有提案均为
 > `DOCUMENTED / IMPLEMENTATION_NOT_STARTED / USER_HOLD`，未获实施授权。
+>
+> **2026-10-06当前说明：** 上述状态指三份正式专项代码批次，相关代码已有其他任务进展。
+> 用户本轮仅授权文档整理，M0/代码/资源实施均WAITING_USER_APPROVAL；第七节EXT-1
+> 独立保持PROPOSED / MODIFY_REQUIRED，不升格为PERF A4、不启动专项M0。
+> 全部优化入口：[34项高/中/低登记表](android-mobile-readiness-priority-risk-register.md)；
+> [当前事实/共同合同/启动门](battle-optimization-rebaseline-and-start-gates-20261006.md)。
 
 ## 一、提案文档清单
 
 | 文档 | 计划标识 | 治理对象 | 一句话方案 |
 |---|---|---|---|
-| `battle-performance-stats120-roadmap-plan.md` | `BATTLE-PERF-STATS120-ROADMAP-001` | 每帧时间（Stats 渲染帧率） | 1000 实体 Stats 120：测量 → 表现侧安全区 → 边界重构前置 → tick worker 化 → 热点优化 |
-| `battle-atlas-memory-lowend-roadmap-plan.md` | `BATTLE-ATLAS-MEMORY-LOWEND-ROADMAP-001` | 纹理内存与设备适配 | 全量一本图集改为"公共册+按角色分册"，构建期预印 + ASTC 变体 + 设备档位预算门禁 |
-| `simulation-mono-nonmono-boundary-refactor-plan.md` | `SIMULATION-MONO-BOUNDARY-REFACTOR-001` | Mono/非 Mono 架构边界 | 既有计划（非本次产出）；本次仅追加第 19 节外部评审附录 |
+| [PERF](battle-performance-stats120-roadmap-plan.md) | `BATTLE-PERF-STATS120-ROADMAP-001` | 端到端帧时间 | 当前worker/插值/物化/0GC重基线，再按实测推进表现/准入/热点；120仅具名环境认证 |
+| [ATLAS](battle-atlas-memory-lowend-roadmap-plan.md) | `BATTLE-ATLAS-MEMORY-LOWEND-ROADMAP-001` | 视觉资源与双预算 | 全catalog预热改构建期预印+保守按局bank装载；格式由能力/画质定，不强制按角色一册 |
+| [MONO](simulation-mono-nonmono-boundary-refactor-plan.md) | `SIMULATION-MONO-BOUNDARY-REFACTOR-001` | 层级/所有权/线程资格 | P正文已落地、代码仍B0-B9待批；本轮补§20现状恢复要求，不直接提高帧率 |
 
 ## 二、三份文档的关系
 
 ```text
-性能计划 (PERF) ──依赖──> 边界重构计划 (MONO) B0-B6 + L1
+PERF Step B ──依赖──> 边界重构计划 (MONO) B0-B6 + L1
      ▲                            ▲
-     │ 无依赖，正交并行            │ 其第 19 节评审附录
+     │ 可独立推进，有共享交点      │ §19历史/§20当前恢复
 资源计划 (ATLAS) ────────────────┘
-（资源计划与性能计划互为独立工程：一个治"每帧时间"，一个治"纹理内存"）
+（资源与性能可独立推进，但共享bank/segment/上传/内存/设备证据，不是零交点）
 ```
 
-- PERF 的 Step B（tick worker 化）以 MONO 计划完成为前置；
+- PERF 的 Step B（现有 worker 的生产资格完善）以前述 B0-B6 + L1 及 worker
+  准入清理为前置；不要求全部 B0-B9 完成后才做局部测量或表现侧优化；
 - ATLAS 无前置工程依赖，M0 测量可独立先行；
 - 三份文档共享同一套不变量：逻辑 33 ms 契约、NTSD 2.8-Logan 行为权威、
-  checksum 逐位一致、十一阶段关闭、Direction B 内容权威。
+  checksum逐位一致、十一阶段关闭、D-023非排除正式内容及项目背景/模式例外。
 
 ## 三、本次会话新增产出记录（2026-09-13）
 
@@ -98,7 +105,7 @@ SIMULATION-MONO-BOUNDARY-REFACTOR-001  DOCUMENTED / IMPLEMENTATION_NOT_STARTED /
 | 资源计划 | R1：D-023 输入口径，P3 预印先于 P2 装载，装载语义"只装载不组装"，双预算（steady/transition peak），逻辑所有权与物理 bank 分离，闭包生产者全集 + 运行时断言，ASTC 能力先行 + ETC2 候选，构建确定性分级，新增 D6/D7 |
 | 边界计划 | §19.7 追加 GPT6 裁定与正文修正清单 P-1…P-5（正文待批，未改动） |
 
-### 待办（下一轮）
+### R1当时待办（历史，已由下方R2与2026-10-06说明接替）
 
 1. 将三份 R1 文档提交 GPT6 复核；
 2. 复核通过后由用户批准：边界计划正文修正 P-1…P-5 落地、PERF D1（M0 启动）、
@@ -127,6 +134,16 @@ SIMULATION-MONO-BOUNDARY-REFACTOR-001  DOCUMENTED / IMPLEMENTATION_NOT_STARTED /
   状态：`aa6b0c9f…` 已终态归档，见 CURRENT-AUTHORITY.md 第 3 行）。
 - **代码实施**：仍未启动；边界计划保持 B0→B9 分批 + `USER_HOLD`，逐批
   单独批准（P-1 归 B1、P-2 归 B3/B4、P-3 归 B0–B6、P-4 归 B3、P-5 归 B0）。
+
+### 2026-10-06当前文档重基线（仅整理）
+
+- PERF/ATLAS更新为R3，MONO补§20；修正同publication插值物化、Source回退、
+  P正文完成状态和当前启动门，不擦除9月历史批准/证据。
+- 主表34项：12高/14中/8低；H-10/H-11/M-12～M-15六项新增，
+  M-03调高且ID不变。具体方案/验收/测试在独立文档。
+- GPU Instancing与EXT-1-B仍只在第七节提案；本轮没有改其A4操作合同/R6记录，
+  不预设GPU收益，不冻bank/预算/格式，不启动专项M0。
+- 本轮文档审查完成后由用户再决定启动；历史D1方案批准不代表当前实际测量获授权。
 
 ## 七、外部技术参考
 

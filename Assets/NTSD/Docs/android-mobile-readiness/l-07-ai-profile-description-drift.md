@@ -1,8 +1,9 @@
 # L-07 AI Profile 说明漂移修正方案
 
 > 优先级：低  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / SCRIPT_CHANGE_NOT_STARTED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / SCRIPT_CHANGE_NOT_STARTED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
@@ -12,7 +13,7 @@ GameConfig tooltip 描述空值使用 `LegacyCanonical`，resolver 当前空值�
 ## 解决方案
 
 1. 以 resolver 实际合同和当前生产配置为准，盘点 tooltip、文档、测试名和报告字段。
-2. 在独立脚本 Change 中更新说明或明确调整 resolver；不能把文案修复顺手变成 AI 行为变更。
+2. 独立脚本Change只同步tooltip/说明和报告，保持resolver实际默认不变；若要调整resolver另立行为合同并获批，不能把文案修复变成AI规则切换。
 3. 加入空值、合法值、未知值的 resolver focused test，并在报告中写 resolved profile。
 
 ## 验收条件

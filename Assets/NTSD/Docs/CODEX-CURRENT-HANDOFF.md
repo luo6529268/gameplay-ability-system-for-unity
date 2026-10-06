@@ -1,3 +1,5 @@
+> **2026-10-06 阴影残留共用显示修复限定验收：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / SCOPED_SHADOW_DISPLAY_FIX_VERIFIED；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / VERIFIED。原 Editor 聚焦12/12＋既有几何self-check1/1通过；原saved Battle300tick，石头碎片central阴影20→0，仙法手里剑命中HP500→295、结束阴影0；有序关闭objects/slots/borrowers0，Scene clean/SHA不变。仅向下离开画面的非角色共用阴影显示门，不删仍活跃的native碎片，不改DAT/模拟/非战斗；受控释放/破碎入口，不称物理按键/随机掉落或正式EXE全World/GPU一致。旧总目标收尾保持，下方PLANNED为事前快照。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
+
 > **2026-10-06 阴影残留定向任务：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / IN_PROGRESS；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / PLANNED。用户报告武器破碎/投掷命中/技能消失残留阴影，只查共用生命周期和表现首差，先新聚焦测试；无生产结论，不改DAT/Scene/非战斗，旧总目标收尾及红线修复保持。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
 
 > **2026-10-06 鸣人仙人/P2 最新结果：** 连续击飞撞墙的真实坐标不同步已修复，通用角色X边界和受击框绘制两个Change限定VERIFIED。原Battle run04 PASS555tick、三次真实受击/空中/落地/边界，源/项目坐标最大误差1.5916e-12px；关闭对象/slot/borrower0、Scene clean/SHA稳定，边界8/8与几何2/2。P1实际InputAction准备/召回191tick变仙人且中央可见99；P2在mode0同操作不变身，Unity六字段1146/1146与正式336B44相同，单项1/1。未改仙人生产规则，用户失败时P1/P2待确认；不能把P1未复现说成已修复/排除。681保护与EXE保持，未改DAT/Scene/InputAction/非战斗，旧总目标收尾状态保持。[报告](../../../artifacts/diagnostics/NTSD28-336B44-SAGE-P2-REGRESSION-20261006/REPORT.md)。
@@ -5415,3 +5417,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
 2026-10-06 red-line Task IN_PROGRESS; NTSD28-BATTLE-SPRITE-RED-LINE-001 FOCUSED_TEST_PASS. Shared shader lookup clamp at authored texel centers, no crop/geometry/source color change. Original Editor exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3), GPU105 placements zero gutter; original saved Battle targeted capture started. Old campaign closure retained; no full suite/roster. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md.
 
 2026-10-06 reported foot red-line fix SCOPED_CROP_SAMPLING_FIX_VERIFIED; NTSD28-BATTLE-SPRITE-RED-LINE-001 VERIFIED(scoped). GPU RED3 paths each118 gutter pixels at half-pixel placement; unchanged-source crop4 PASS. Shared mesh carries per-quad texel-center bounds, shaders clamp lookup; original UV/size/pivot/scale/RGBA unchanged. Current exact18/18 PASS (0e92e1e8a29643589f7b53458ace4bd3). Original saved Battle01 PASS tick5 actual Naruto2/pic1/SourceTexture2D stride44, central submitted, GPU21 placements maxGutter0; ordered11-stage shutdown objects/slot/borrower0, Scene clean/SHA unchanged, original Editor idle/non-Play. Accepted actual mesh PNG; Editor ScreenCapture rejected as full Game View evidence. No DAT/PNG/importer/Scene/settings/nonbattle/delete/Git changes. Report artifacts/diagnostics/NTSD28-BATTLE-SPRITE-RED-LINE-20261006/REPORT.md. Old campaign scoped closure preserved; not full roster/camera/device parity.
+
+> 2026-10-06 NTSD-MENU-CHARACTER-DATA-ITEMS-001 / PLANNED：data.txt角色Item生成、Random首项及预热/重进刷新，限定Controller/Board/SelectRoleItem与一聚焦测试；原Menu绑定和池复用，Scene/Prefab/DAT/输入不写。脚本前Record/Task/十文件备份已建。[Record](../../../docs/ai/CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 角色Item生成进展：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / COMPILE_PASS。三UI脚本及三项定向测试已写；生成C#工程0error，原Menu Play定向job运行中。仅data.txt默认可见type0注册顺序、随机首项、现有模板/池及预热刷新；其他选择流程不变。[Record](../../../docs/ai/CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 角色Item生成限定完成：NTSD-MENU-CHARACTER-DATA-ITEMS-001 / VERIFIED（仅菜单生成）。当前data.txt默认可见type0按注册顺序，随机首项共51；三个独立通过记录含原Menu Play默认随机/头像绑定/点击确认取消/重开51实例复用。compile-04 0error，Menu/Battle/GameConfig SHA不变、原Editor非Play/idle/Scene clean。桥重载回调缺失不当成功计数，使用测试全部断言后的直接通过记录；未测试完整多人/比赛流程。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-MENU-CHARACTER-DATA-ITEMS-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / PLANNED：用户要求可配置当前Scene缺失TMP字体工具，原Editor脚本与聚焦测试限定；先建Record、精确备份，既有字体/Scene/其它dirty均保留。[Record](../../../docs/ai/CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。
+
+
+> 2026-10-06 NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001 / VERIFIED（限定Editor工具）：原迁移脚本改为可选TMP FontAsset的当前活动Scene缺失字体窗口，含inactive/disabled，跳过已指定，Undo/Prefab覆盖，手动保存。原Editor两项直接断言通过，生成工程0error；未在真实Menu赋字体，当前dirty=true保持，Scene/font/meta磁盘SHA不变，旧测试前置失败原件保留。 [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-SCENE-MISSING-TMP-FONT-EDITOR-001.md)。

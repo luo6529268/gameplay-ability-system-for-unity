@@ -1,8 +1,9 @@
 # L-02 Android 签名与 Keystore 方案
 
 > 优先级：低  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / SECURE_CREDENTIAL_REQUIRED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / SECURE_CREDENTIAL_REQUIRED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)；本轮未运行本项测试/测量，实施待用户批准。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界

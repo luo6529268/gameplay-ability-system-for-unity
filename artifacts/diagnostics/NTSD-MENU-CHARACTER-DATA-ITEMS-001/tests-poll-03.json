@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "eb17907e7f3241e89dd11af5f9cdf612",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791274752884,
+      "finished_unix_ms": 1791274908846,
+      "last_update_unix_ms": 1791274908846,
+      "progress": {
+        "completed": 3,
+        "total": 9019,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791274895259,
+        "last_finished_test_full_name": "NTSD.Test.CharacterSelectionBoardEditorTests.PublishedDataIndexProvidesFiftyVisibleCharactersAfterRandom",
+        "last_finished_unix_ms": 1791274906141,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.CharacterSelectionBoardEditorTests.OriginalMenuGeneratesItemsSelectsRandomAndReusesItemsOnReopen",
+            "message": "  Menu character prewarm did not finish.\r\n  Expected: less than 130.537079f\r\n  But was:  130.567825f\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

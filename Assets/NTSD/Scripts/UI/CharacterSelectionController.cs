@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using NTSD.App;
+using NTSD.Animation;
 using BeatEmUpTemplate2D;
 
 namespace NTSD.UI
@@ -93,6 +94,7 @@ namespace NTSD.UI
         private InputActionMap player1ActionMap;                        // Player1的输入ActionMap
         private InputAction player1JumpAction;                          // Player1的Jump输入Action
         private bool countdownInputBound;                               // 倒计时输入是否已绑定
+        private CharacterAnimtorManager characterResources;
 
         #endregion
 
@@ -118,6 +120,9 @@ namespace NTSD.UI
 
         private void OnEnable()
         {
+            characterResources = CharacterAnimtorManager.TryGetInstance();
+            if (characterResources != null)
+                characterResources.PrewarmCompleted += RefreshCharacterChoices;
             InitializePlayerSlots();
             SubscribePopupEvents();
             HideAllPopups();
@@ -125,6 +130,9 @@ namespace NTSD.UI
 
         private void OnDisable()
         {
+            if (characterResources != null)
+                characterResources.PrewarmCompleted -= RefreshCharacterChoices;
+            characterResources = null;
             UnsubscribePopupEvents();
             UnbindCountdownInput();
         }
@@ -158,6 +166,12 @@ namespace NTSD.UI
                     playerSlots[i].Initialize(i);
                 }
             }
+        }
+
+        private void RefreshCharacterChoices()
+        {
+            foreach (SelectRoleItem slot in playerSlots)
+                if (slot != null) slot.RefreshAvailableCharacters();
         }
 
         /// <summary>
