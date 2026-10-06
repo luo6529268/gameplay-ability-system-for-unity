@@ -1,3 +1,5 @@
+> **2026-10-06 kind9 正式确认与修复：** 原336B44 EXE四组受控回放均通过，16tick实际返回声音向量只有DAT帧声音；已确认raw-kind9对象交互没有额外effect/broken音。Unity三个生产文件移除这些额外事件并同步ECS预测，四项raw检查通过；两项直接ordinary-kind0 DAT声音正例2/2通过。旧两项广义converted检查在HitStateCount45/0失败，原件和断言保留，不称完整转换验证通过。681保护SHA及正式EXE稳定，原Editor编译error-CS0；未新增Play/设备听感。kind9已由UNKNOWN更正为FORMAL_EVENT_CONFIRMED / FOCUSED_FIX_PASS；Event父Record仍RUNTIME_PENDING，保留其它正式逐事件与运行范围边界。原42/978证据复用，旧总目标USER_ACCEPTED_SCOPED_CLOSURE保持。详本批KIND9-FORMAL-CONFIRMATION.md与父REPORT最新记录。
+
 # 2026-10-06 战斗音效修复与定向验收
 
 本批已实施音效资源、统一解析/多声预热及共享声音分支修复，并通过原 Unity Battle Scene 的定向播放验证。资源/解析入口已验证；事件实现有 Unity 运行与当前 Core 对照证据，但不能宣称所有音效事件已与正式336B44逐项完全一致。kind9 的当前Core差异保持 UNKNOWN / SOURCE-INSUFFICIENT，本批未修改该候选。
@@ -48,3 +50,11 @@ kind9当前Core的type1目标拒绝/type3目标转移均audio_events=[]，Unity�
 - docs/ai/FILE-OPERATIONS/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE
 
 任何恢复仍须保护并发修改和记录操作；本批未执行git restore/reset/clean/删除/stage/commit/push。
+
+## kind9 正式补证与修复（2026-10-06后续）
+
+本节更正上文kind9 UNKNOWN/SOURCE-INSUFFICIENT，保留候选阶段旧事实。直接运行正式336B44，四组报告passed=true/completedTicks4，16个返回tick声音向量；实际type1拒绝、type3转移action30并在同tick30→11、state3005转action40，以及远距正声音控制。只有DAT frame005和实际spawn的frame020，无额外effect/broken。原件见KIND9-FORMAL-CONFIRMATION.md及formal-kind9-attempt-05。
+
+三个生产文件只删除rawkind9声音enqueue及匹配ECS声音投影，并将声音容量要求改0；帧DAT声音、kind0实现、状态/伤害/运动/关系/RNG写入未改。RED raw4都只声音0/1或0/2失败；GREEN01六完成中raw4通过，旧广义converted2停在counter45/0。最终ordinary-positive两项2/2通过，只验证直接普通kind0 writer保留实际攻击者DAT broken声；不能补称converted完整调用链通过，也不能称六项在一个全绿suite通过。
+
+前三轮新增声音夹具的失败/不支持观察原件保留；只修正自己新增的夹具，未调整旧计数预期或扩大生产改动。原Editor实际compile完成/error-CS0；681保护SHA0diff、根EXE保持336B44。Ledger/diff与审计原件回链在本Operation。未重跑旧42/978或全角色，没有新增Battle Play/设备听感。父Event保持RUNTIME_PENDING是整体正式事件覆盖限制，kind9本项已正式确认并修复，旧目标不恢复。

@@ -1,0 +1,84 @@
+## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 4]
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md
+ M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+ M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+ M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Weapon.cs
+ M Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterPreFrameBoundsPass.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs
+ M Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs
+ M artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/REPORT.md
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006.md
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs
+?? Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs.meta
+?? Tools/NTSD28Q10Diagnostics/battle_audio_formal_kind9.py
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/KIND9-FORMAL-CONFIRMATION.md
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-01/
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-02/
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-03/
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-04/
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-05/
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-audio-control-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-audio-control02-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-audio-control03-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-before-editor.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control02-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control02-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control02-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control03-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control03-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-control03-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-final-audit.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-final-compile-console.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-final-editor-state.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-final-error-console.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-final-protected-guard.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-formal-evidence-checked.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-green-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-green-pre-refresh-editor.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-green-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-green-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-green-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-ordinary-positive-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-ordinary-positive-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-ordinary-positive-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-ordinary-positive-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-red-dispatch.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-red-ready.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-red-refresh.json
+?? artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/kind9-red-result01.json
+?? artifacts/diagnostics/NTSD28-336B44-SAGE-FIRST-RECALL-20261006/
+?? artifacts/diagnostics/NTSD28-336B44-SAGE-P2-REGRESSION-20261006/
+?? artifacts/diagnostics/NTSD28-336B44-TRANSFORM-P2-HITBOX-DIAGNOSIS-20261006/
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-BODY-DEPTH-CANDIDATE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-SAGE-FIRST-RECALL-PROBE-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-SAGE-FIRST-RECALL-20261006/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-SAGE-P2-REGRESSION-EDIT-20261006/
+?? docs/ai/FILE-OPERATIONS/NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006/
+?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md
+?? docs/ai/TASKS/NTSD28-336B44-TRANSFORM-P2-HITBOX-DIAGNOSIS-20261006.md

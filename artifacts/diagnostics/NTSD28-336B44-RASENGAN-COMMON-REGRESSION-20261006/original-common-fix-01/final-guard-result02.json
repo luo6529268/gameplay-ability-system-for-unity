@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c14eb47875be4843961c5496405bc59f",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791267384572,
+      "finished_unix_ms": 1791267504602,
+      "last_update_unix_ms": 1791267504602,
+      "progress": {
+        "completed": 7,
+        "total": 8994,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791267467890,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28RasenganCommonRegressionEditorTests.HeldRasenganAttackAndTerminationMatchesSelectedReference(\"held-attack-body\",True)",
+        "last_finished_unix_ms": 1791267493229,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28RasenganCommonRegressionEditorTests.HeldRasenganAttackAndTerminationMatchesSelectedReference(\"held-attack-clone\",False)",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28RasenganCommonRegressionEditorTests.HeldRasenganAttackAndTerminationMatchesSelectedReference(\"held-attack-clone\",True)",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

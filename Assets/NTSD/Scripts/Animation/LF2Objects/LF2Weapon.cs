@@ -367,7 +367,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (itr.kind == 9)
             {
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
                 return true;
             }
 

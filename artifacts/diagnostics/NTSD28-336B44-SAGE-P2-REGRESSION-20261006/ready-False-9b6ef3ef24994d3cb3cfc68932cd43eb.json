@@ -1,0 +1,721 @@
+{
+  "projected": false,
+  "natural": false,
+  "transformed": true,
+  "cloneCreated": false,
+  "readyClone": false,
+  "scope": "Current approved DAT through complete Unity Driver; legacy scenario schema identity is a fixture token only. Formal EXE comparison is separate.",
+  "rows": [
+    {
+      "tick": 1,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 401,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 2,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 428,
+          "state": 190,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 3,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 4,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 5,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 6,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 7,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 2,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 300,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 8,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 3,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 9,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 4,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 10,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 5,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 11,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 12,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 13,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 14,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 3,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 15,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 4,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 16,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 403,
+          "state": 15,
+          "counter": 5,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 17,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 404,
+          "state": 8099,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 18,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 99,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "x": 0.0,
+          "y": -9.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    }
+  ]
+}

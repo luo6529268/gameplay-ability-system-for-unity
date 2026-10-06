@@ -1,0 +1,716 @@
+{
+  "exeSha256": "336b44e58bea637246b65204afc50fd8734c9aa38969b82836fa685497eb7bd3",
+  "cases": [
+    {
+      "case": "ready334",
+      "exit": 46,
+      "transitions": [
+        {
+          "tick": 0,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 401,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 2,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 2,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 3,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 4,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 226,
+              "state": 16,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 7,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 2,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 300,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 8,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 11,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 403,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 17,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 404,
+              "state": 8099,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 18,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 0,
+              "state": 0,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 24,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 1,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 31,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 2,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 38,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 3,
+              "state": 1,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        }
+      ],
+      "sage": true
+    },
+    {
+      "case": "mature326-owner0",
+      "exit": 46,
+      "transitions": [
+        {
+          "tick": 0,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 401,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 326,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 1,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 401,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 2,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 2,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 3,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 334,
+              "state": 15,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 4,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 226,
+              "state": 16,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 7,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 2,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 300,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 8,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 402,
+              "state": 190,
+              "frameCounter": 3,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 11,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 403,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 17,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 404,
+              "state": 8099,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 18,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 0,
+              "state": 0,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 24,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 1,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 31,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 2,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 38,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 99,
+              "action": 3,
+              "state": 1,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        }
+      ],
+      "sage": true
+    },
+    {
+      "case": "mature326-owner1",
+      "exit": 46,
+      "transitions": [
+        {
+          "tick": 0,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 401,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 326,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 1,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 1,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 401,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 327,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 1,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 2,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 327,
+              "state": 15,
+              "frameCounter": 1,
+              "owner": 1,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 3,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 226,
+              "state": 16,
+              "frameCounter": 1,
+              "owner": 1,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 6,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 1,
+              "owner": 0,
+              "team": 1
+            },
+            {
+              "slot": 1,
+              "oid": 96,
+              "action": 300,
+              "state": 15,
+              "frameCounter": 0,
+              "owner": 1,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 7,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 428,
+              "state": 190,
+              "frameCounter": 2,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 11,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 0,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 15,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 1,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 19,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 2,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 23,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 3,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 27,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 0,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 31,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 1,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 35,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 2,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        },
+        {
+          "tick": 39,
+          "actors": [
+            {
+              "slot": 0,
+              "oid": 2,
+              "action": 3,
+              "state": 0,
+              "frameCounter": 0,
+              "owner": 0,
+              "team": 1
+            }
+          ]
+        }
+      ],
+      "sage": false
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "scope": "191 ticks P1 declared identity/action/state/counter/owner/hp/mp only, passive actor count differs. Not a full-world or GPU assertion. Exit46 final-header fixture failure retained.",
+  "comparisons": 1337,
+  "differenceCount": 184,
+  "firstDifferences": [
+    {
+      "tick": 8,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 9,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 10,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 11,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 12,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 13,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 14,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 15,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 16,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 17,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 18,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    },
+    {
+      "tick": 19,
+      "field": "mp",
+      "unity": 500,
+      "formal": 400
+    }
+  ]
+}

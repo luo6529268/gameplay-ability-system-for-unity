@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      {
+        "type": "Error",
+        "message": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs(379,25): error CS1501: No overload for method 'Update' takes 1 arguments",
+        "file": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs",
+        "line": 379,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs(387,29): error CS1501: No overload for method 'Update' takes 1 arguments",
+        "file": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs",
+        "line": 387,
+        "stackTrace": null
+      }
+    ]
+  }
+}

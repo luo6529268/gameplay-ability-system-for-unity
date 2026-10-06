@@ -1,0 +1,413 @@
+[
+  {
+    "case": "formal-natural-input191",
+    "slot": 0,
+    "observations": [
+      {
+        "tick": 0,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 650,
+          "hp": 500
+        },
+        "clones": [],
+        "events": []
+      },
+      {
+        "tick": 9,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 416,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 339,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 576,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 167,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 326,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 174,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 401,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 334,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": [
+          {
+            "kind": "relation_hit",
+            "status": "applied",
+            "attacker": 50,
+            "target": 0,
+            "candidate": 0,
+            "itrKind": 8,
+            "attackerAction": 334,
+            "targetAction": -1
+          }
+        ]
+      },
+      {
+        "tick": 175,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 428,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 334,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 176,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 334,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": [
+          {
+            "kind": "relation_hit",
+            "status": "applied",
+            "attacker": 0,
+            "target": 50,
+            "candidate": 0,
+            "itrKind": 8,
+            "attackerAction": 402,
+            "targetAction": -1
+          }
+        ]
+      },
+      {
+        "tick": 180,
+        "naruto": {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 300,
+            "owner": 0,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 450
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 191,
+        "naruto": {
+          "slot": 0,
+          "oid": 99,
+          "action": 0,
+          "owner": 0,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [],
+        "events": []
+      }
+    ]
+  },
+  {
+    "case": "formal-natural-p2-input191",
+    "slot": 1,
+    "observations": [
+      {
+        "tick": 0,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 650,
+          "hp": 500
+        },
+        "clones": [],
+        "events": []
+      },
+      {
+        "tick": 9,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 416,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 339,
+            "owner": 1,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 576,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 167,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 2,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 326,
+            "owner": 1,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 174,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 401,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 328,
+            "owner": 1,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 175,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 428,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 328,
+            "owner": 1,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 500
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 176,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 428,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [
+          {
+            "slot": 50,
+            "oid": 96,
+            "action": 226,
+            "owner": 1,
+            "team": 1,
+            "preciseX": 561,
+            "preciseZ": 575,
+            "hp": 450
+          }
+        ],
+        "events": []
+      },
+      {
+        "tick": 180,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 428,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [],
+        "events": []
+      },
+      {
+        "tick": 191,
+        "naruto": {
+          "slot": 1,
+          "oid": 2,
+          "action": 1,
+          "owner": 1,
+          "team": 1,
+          "inputBattleModeGate": 0,
+          "preciseX": 500,
+          "preciseZ": 575,
+          "hp": 500
+        },
+        "clones": [],
+        "events": []
+      }
+    ]
+  }
+]

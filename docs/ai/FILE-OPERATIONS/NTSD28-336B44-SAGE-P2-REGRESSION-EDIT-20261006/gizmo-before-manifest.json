@@ -1,0 +1,28 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs",
+    "exists": true,
+    "git": "",
+    "sha256": "13fd6d96de7137357eb5774f1aee1c30b19362dc5562e2f81eeb2846191903a5",
+    "bytes": 7734
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "exists": true,
+    "git": "",
+    "sha256": "750a369e7fca7fada13ec480ef18f432ef85a32b5f98657c9515a352571d4640",
+    "bytes": 344478
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    "exists": true,
+    "git": "",
+    "sha256": "9eb25754712ebc31bca08437d965320de845d51ca39b698bfdd45f8f0e6b293f",
+    "bytes": 97191
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs",
+    "exists": false,
+    "git": ""
+  }
+]

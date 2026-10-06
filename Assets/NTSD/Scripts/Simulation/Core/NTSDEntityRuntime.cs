@@ -707,6 +707,40 @@ namespace NTSD.Simulation
             ClampSourceRuleZ(minimum, maximum);
         }
 
+        public void ClampProjectedCharacterStageX(
+            int slot,
+            int relationTeam,
+            int hitStop,
+            double baseStageWidth,
+            int xMaxOverride,
+            BattleSpatialProjection projection,
+            int selectedModeStageGate50 = 0)
+        {
+            double previousX = X;
+            X = ClampSelectedModeType0StageX(
+                X, slot, relationTeam, hitStop,
+                baseStageWidth, xMaxOverride, selectedModeStageGate50);
+            XInt = (int)X;
+
+            if (!SourceRulePositionInitialized)
+                return;
+
+            if (projection.HorizontalScale <= 1.0)
+            {
+                ClampSourceRuleCharacterX(
+                    slot, relationTeam, hitStop,
+                    baseStageWidth, xMaxOverride, selectedModeStageGate50);
+                return;
+            }
+
+            if (X != previousX)
+            {
+                // Alignment contract: NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001.
+                SourceRuleX = projection.ViewToSourceX(X);
+                SourceRuleXInt = (int)SourceRuleX;
+            }
+        }
+
         public void ClampSourceRuleCharacterX(
             int slot,
             int relationTeam,

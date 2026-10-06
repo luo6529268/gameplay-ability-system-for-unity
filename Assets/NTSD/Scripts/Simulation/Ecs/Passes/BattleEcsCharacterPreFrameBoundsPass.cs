@@ -178,15 +178,10 @@ namespace NTSD.Simulation.Ecs
 
             int selectedModeStageGate50 =
                 world.Runtime?.SelectedModeStageGate50 ?? 0;
-            double x = NTSDEntityRuntime.ClampSelectedModeType0StageX(
-                runtime.X, slot, runtime.RelationTeam, runtime.HitStop,
-                baseStageWidth, xMaxOverride, selectedModeStageGate50);
-            runtime.X = x;
-            runtime.XInt = (int)x;
-            // Alignment contract: NTSD28-USER-SOURCE-CHARACTER-STAGE-X-001.
-            runtime.ClampSourceRuleCharacterX(
+            runtime.ClampProjectedCharacterStageX(
                 slot, runtime.RelationTeam, runtime.HitStop,
-                baseStageWidth, xMaxOverride, selectedModeStageGate50);
+                baseStageWidth, xMaxOverride, world.SpatialProjection,
+                selectedModeStageGate50);
             return true;
         }
 

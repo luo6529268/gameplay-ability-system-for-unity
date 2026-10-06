@@ -1,0 +1,46 @@
+from pathlib import Path
+import json,struct,zlib,re,subprocess,hashlib,os
+art=Path('artifacts/diagnostics/NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006').resolve()
+release=Path(r'J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan')
+exe=release/'NTSD2.8-Logan.exe';assert hashlib.sha256(exe.read_bytes()).hexdigest().upper()=='336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3'
+base=Path('artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-05/type3-far-control/input.lfr')
+key=re.search(r'static constexpr char key\[\] =\s*"([0-9]+)"',(release/'source/ntsd28_playable/src/lfr_recorder.cpp').read_text(encoding='utf-8-sig')).group(1)
+payload=bytearray(base.read_bytes()[4:])
+for i,d in enumerate(key):payload[i]=(payload[i]-int(d))&255
+baseline=zlib.decompress(payload)
+observer=Path('artifacts/diagnostics/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006/formal-kind9-attempt-05/type3-far-control/observe.gdb').read_text()
+toolchain=Path(r'G:\GoggleDownload\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\mingw64')
+env=os.environ.copy();env['PATH']=str(toolchain/'bin')+';'+str(toolchain/'opt/bin')+';'+env['PATH'];env['PYTHONHOME']=str(toolchain/'opt');env['PYTHONDONTWRITEBYTECODE']='1'
+cases=[('prepared-hold-sound-far',2,241,1000,64,0),('prepared-clone-near',33,241,545,64,0),('prepared-body-near',2,241,545,64,0)]
+summaries=[]
+def new(p,b):
+ with p.open('xb') as f:f.write(b)
+def save(p,v):new(p,json.dumps(v,ensure_ascii=False,indent=2).encode())
+for name,oid,action,x,ticks,p2action in cases:
+ out=art/name;out.mkdir()
+ raw=bytearray(baseline);struct.pack_into('<i',raw,0x10,4);struct.pack_into('<i',raw,0x144,ticks-1)
+ actors=[[1,2,1,0,500,0,600,500,0,500,-1,0,0],[1,oid,2,0,x,0,600,500,1,500,-1,0,0],[1,9,1,0,1500,0,600,500,2,500,-1,0,0],[1,99,2,0,1800,0,600,500,3,500,-1,0,0]]
+ for col in range(13):
+  for slot in range(20):struct.pack_into('<i',raw,0x1a8+col*0x50+slot*4,actors[slot][col] if slot<4 else 0)
+ for slot in range(8):
+  for col in range(9):
+   value=(1 if slot<4 else -1) if col==0 else actors[slot][1] if col==1 and slot<4 else actors[slot][2] if col==2 and slot<4 else 0
+   struct.pack_into('<i',raw,0x14+col*0x20+slot*4,value)
+ for off in range(0x14b8,0x2b38,4):struct.pack_into('<i',raw,off,2000)
+ raw[0x2b38:0x2b38+ticks*10]=bytes(ticks*10)
+ comp=bytearray(zlib.compress(raw))
+ for i,d in enumerate(key):comp[i]=(comp[i]+int(d))&255
+ new(out/'input.lfr',struct.pack('<I',len(comp))+comp)
+ save(out/'fixture.json',{'actors':actors,'p1action':action,'p2action':p2action,'ticks':ticks,'input':'neutral','actualFormalExe':True,'DatEdited':False})
+ args=[str(exe),'--resource-root',str(release/'resources/runtime'),'--complete-vfs-root',str(release/'resources/runtime'),'--headless-playback-lfr',str(out/'input.lfr'),'--headless-playback-report',str(out/'root-report.json'),'--headless-playback-trace',str(out/'root-trace.jsonl'),'--lfr-slot0-action',str(action),'--lfr-slot1-action',str(p2action),'--lfr-slot0-facing','0','--lfr-slot1-facing','1','--lfr-slot0-mp','500','--lfr-slot1-mp','500']
+ new(out/'observe.gdb',observer.encode());save(out/'argv.json',args)
+ debugargs=[str(toolchain/'bin/gdborig.exe'),'-nx','-batch','-x',str(out/'observe.gdb'),'--args']+args;save(out/'debugger-argv.json',debugargs)
+ p=subprocess.run(debugargs,cwd=release,env=env,capture_output=True,timeout=60)
+ new(out/'stdout.log',p.stdout);new(out/'stderr.log',p.stderr)
+ txt=p.stdout.decode('utf-8','replace');events=[json.loads(l[10:]) for l in txt.splitlines() if l.startswith('AUDIO_OBS ')];errors=[l for l in txt.splitlines() if l.startswith('AUDIO_OBS_ERROR')]
+ rows=[json.loads(l) for l in (out/'root-trace.jsonl').read_text().splitlines()] if (out/'root-trace.jsonl').exists() else []
+ condensed=[{'tick':r.get('tick'),'entities':[{k:e.get(k) for k in ['slot','oid','action','state','counter','hp','owner','holder','link','x','z']} for e in r.get('entities',[]) if e.get('slot',100)<2 or e.get('oid') in [33,434,518]]} for r in rows]
+ summary={'case':name,'debuggerExit':p.returncode,'traceRows':len(rows),'audioRows':len(events),'errors':errors,'events':events,'transitions':condensed,'rootReport':json.loads((out/'root-report.json').read_text()) if (out/'root-report.json').exists() else None}
+ save(out/'summary.json',summary);summaries.append(summary)
+ print(json.dumps({'case':name,'exit':p.returncode,'ticks':len(rows),'audioRows':len(events),'errors':errors,'firstRows':condensed[:5],'053':sum(1 for v in events for e in v['events'] if e['path'].endswith('053.wav'))}),flush=True)
+save(art/'formal-prepared-summary.json',summaries)

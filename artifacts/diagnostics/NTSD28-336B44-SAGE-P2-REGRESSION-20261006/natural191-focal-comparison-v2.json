@@ -1,0 +1,18 @@
+{
+  "scope": "191 ticks P1 oid/action/state/counter/owner/hp only, passive actor count differs. Not a full-world or GPU assertion. Formal legacy final header failure retained.",
+  "correction": "v1 compared formal current_mp to unrelated Unity Runtime.MP; native current_mp maps to Unity PP. PP was not captured in this diagnostic, so cost parity is not asserted or retested. Existing mapping evidence at LF2Entity.cs1438 and current total-table G2/Q10. v1 preserved.",
+  "cases": [
+    {
+      "projected": false,
+      "comparisons": 1146,
+      "differenceCount": 0,
+      "firstDifferences": []
+    },
+    {
+      "projected": true,
+      "comparisons": 1146,
+      "differenceCount": 0,
+      "firstDifferences": []
+    }
+  ]
+}

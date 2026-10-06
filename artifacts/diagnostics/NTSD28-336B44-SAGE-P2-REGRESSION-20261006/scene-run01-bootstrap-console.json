@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 5 log entries.",
+    "data": [
+      {
+        "type": "Log",
+        "message": "[BattleTestBootstrap] No AppManager detected, running test bootstrap...",
+        "file": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+        "line": 77,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "[BattleTestBootstrap] AppManager created.",
+        "file": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+        "line": 511,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "[BattleTestBootstrap] TimeWheel created.",
+        "file": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+        "line": 99,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "[BattleTestBootstrap] GameConfig set from Resources: GameConfig",
+        "file": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+        "line": 108,
+        "stackTrace": null
+      },
+      {
+        "type": "Log",
+        "message": "[BattleTestBootstrap] Loading content: genma.png",
+        "file": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+        "line": 494,
+        "stackTrace": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "basePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\formal-kind9-attempt-05\\type3-far-control\\input.lfr",
+  "baseSha": "D3048AC8847C29207B5E041CE7F64EE62FFCF7BAC53427D792BFBB109746504C",
+  "inputSha": "1B8BCA8DD2705F55DEFEA9FE29CC98CE3E5921CFD170D3D39D6F5D4CF209117D",
+  "actors": [
+    [
+      1,
+      2,
+      1,
+      0,
+      500,
+      0,
+      600,
+      500,
+      0,
+      500,
+      -1,
+      0,
+      0
+    ],
+    [
+      1,
+      9,
+      2,
+      0,
+      1000,
+      0,
+      600,
+      500,
+      1,
+      500,
+      -1,
+      0,
+      0
+    ],
+    [
+      1,
+      2,
+      1,
+      0,
+      1500,
+      0,
+      600,
+      500,
+      2,
+      500,
+      -1,
+      0,
+      0
+    ],
+    [
+      1,
+      99,
+      2,
+      0,
+      1800,
+      0,
+      600,
+      500,
+      3,
+      500,
+      -1,
+      0,
+      0
+    ]
+  ],
+  "sourceAction": 388,
+  "expectedTarget": 52,
+  "ticks": 4,
+  "method": "new compressed LFR initial/final fixture headers only; unchanged production DAT/EXE"
+}

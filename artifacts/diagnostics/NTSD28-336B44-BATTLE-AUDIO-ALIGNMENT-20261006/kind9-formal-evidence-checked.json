@@ -1,0 +1,195 @@
+[
+  {
+    "case": "type1-near",
+    "passed": true,
+    "completedTicks": 4,
+    "formalExitObserved": [
+      "FORMAL_EXIT 0"
+    ],
+    "relations": [
+      {
+        "kind": "relation_hit",
+        "status": "rejected",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": -1
+      },
+      {
+        "kind": "relation_hit",
+        "status": "rejected",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": -1
+      },
+      {
+        "kind": "relation_hit",
+        "status": "rejected",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": -1
+      },
+      {
+        "kind": "relation_hit",
+        "status": "rejected",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": -1
+      }
+    ],
+    "events": [
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      }
+    ],
+    "captureErrors": [],
+    "formalShaAfter": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+  },
+  {
+    "case": "type3-near",
+    "passed": true,
+    "completedTicks": 4,
+    "formalExitObserved": [
+      "FORMAL_EXIT 0"
+    ],
+    "relations": [
+      {
+        "kind": "relation_hit",
+        "status": "applied",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": 30
+      }
+    ],
+    "events": [
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 503,
+        "nativeChannel": -1,
+        "path": "data\\020.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      }
+    ],
+    "captureErrors": [],
+    "formalShaAfter": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+  },
+  {
+    "case": "type3-flying-near",
+    "passed": true,
+    "completedTicks": 4,
+    "formalExitObserved": [
+      "FORMAL_EXIT 0"
+    ],
+    "relations": [
+      {
+        "kind": "relation_hit",
+        "status": "applied",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "itrKind": 9,
+        "attackerAction": -1,
+        "targetAction": 40
+      }
+    ],
+    "events": [
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      }
+    ],
+    "captureErrors": [],
+    "formalShaAfter": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+  },
+  {
+    "case": "type3-far-control",
+    "passed": true,
+    "completedTicks": 4,
+    "formalExitObserved": [
+      "FORMAL_EXIT 0"
+    ],
+    "relations": [],
+    "events": [
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      },
+      {
+        "source": 1,
+        "worldX": 500,
+        "nativeChannel": -1,
+        "path": "data\\005.wav"
+      }
+    ],
+    "captureErrors": [],
+    "formalShaAfter": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": false,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006\\held-attack-owned-ready-clone\\input.lfr",
+  "failureCode": 46,
+  "failureStage": "playback_tick_or_checksum",
+  "error": "LFR final header mismatch at logical slot 0 offset 180: expected 0, got 20",
+  "declaredTicks": 95,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 241, "slot1": 272},
+  "initialFacingOverrides": {"slot0": 0, "slot1": 1},
+  "initialMpOverrides": {"slot0": 500, "slot1": 500},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 96,
+  "scene": {"p1ObjectId": 2, "p2ObjectId": 2, "backgroundId": 1},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006\\held-attack-owned-ready-clone\\root-trace.jsonl", "rows": 97, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

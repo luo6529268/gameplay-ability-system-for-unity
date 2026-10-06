@@ -1,0 +1,138 @@
+{
+  "case": "sasuke342",
+  "exitCode": 0,
+  "report": {
+    "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+    "passed": true,
+    "nativeParityClaim": false,
+    "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-TRANSFORM-P2-HITBOX-DIAGNOSIS-20261006\\sasuke342\\input.lfr",
+    "failureCode": 0,
+    "failureStage": "",
+    "error": "",
+    "declaredTicks": 3,
+    "inputStartRow": 0,
+    "initialActionOverrides": {
+      "slot0": 342,
+      "slot1": 0
+    },
+    "initialFacingOverrides": {
+      "slot0": 1,
+      "slot1": 0
+    },
+    "initialMpOverrides": {
+      "slot0": 500,
+      "slot1": 500
+    },
+    "functionKeyUsage": {
+      "f6": 0,
+      "f7": 0,
+      "f8": 0,
+      "f9": 0
+    },
+    "completedTicks": 4,
+    "scene": {
+      "p1ObjectId": 11,
+      "p2ObjectId": 9,
+      "backgroundId": 1
+    },
+    "winnerGroup": -1,
+    "platformOperation30": {
+      "nonzeroEntityRows": 0,
+      "firstTick": null,
+      "lastTick": null,
+      "uniqueSlots": [],
+      "samples": []
+    },
+    "diagnosticTrace": {
+      "requested": true,
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-TRANSFORM-P2-HITBOX-DIAGNOSIS-20261006\\sasuke342\\root-trace.jsonl",
+      "rows": 5,
+      "startTick": 0,
+      "endTick": -1,
+      "writeOk": true
+    },
+    "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+  },
+  "samples": [
+    {
+      "tick": 0,
+      "entity": [
+        {
+          "oid": 11,
+          "action": 342,
+          "state": 8038,
+          "frameCounter": 0,
+          "x": 500,
+          "y": 0,
+          "z": 600,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 1,
+      "entity": [
+        {
+          "oid": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 1,
+          "x": 500,
+          "y": 0,
+          "z": 575,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 2,
+      "entity": [
+        {
+          "oid": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 2,
+          "x": 500,
+          "y": 0,
+          "z": 575,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 3,
+      "entity": [
+        {
+          "oid": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 3,
+          "x": 500,
+          "y": 0,
+          "z": 575,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 4,
+      "entity": [
+        {
+          "oid": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 4,
+          "x": 500,
+          "y": 0,
+          "z": 575,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    }
+  ]
+}

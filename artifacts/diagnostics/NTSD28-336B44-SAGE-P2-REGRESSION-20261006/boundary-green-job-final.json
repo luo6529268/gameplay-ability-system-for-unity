@@ -1,0 +1,114 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "7f65f872bd58421d92b36b338bc88175",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791259131678,
+      "finished_unix_ms": 1791259138833,
+      "last_update_unix_ms": 1791259138833,
+      "progress": {
+        "completed": 8,
+        "total": 8955,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791259138292,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.UnclampedProjectedMotion_PreservesSourceBits",
+        "last_finished_unix_ms": 1791259138293,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.7916041,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "MissingSourceCarrier_DoesNotStartOnStageClamp",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.MissingSourceCarrier_DoesNotStartOnStageClamp",
+            "state": "Passed",
+            "durationSeconds": 0.1116846,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(DataOriented,False)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(DataOriented,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0042479,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(Legacy,False)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(Legacy,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0039126,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(DataOriented,True)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(DataOriented,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0064667,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(Legacy,True)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(Legacy,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0044107,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(DataOriented)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(DataOriented)",
+            "state": "Passed",
+            "durationSeconds": 0.0051547,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(Legacy)",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(Legacy)",
+            "state": "Passed",
+            "durationSeconds": 0.0011707,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnclampedProjectedMotion_PreservesSourceBits",
+            "fullName": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.UnclampedProjectedMotion_PreservesSourceBits",
+            "state": "Passed",
+            "durationSeconds": 0.0015643,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

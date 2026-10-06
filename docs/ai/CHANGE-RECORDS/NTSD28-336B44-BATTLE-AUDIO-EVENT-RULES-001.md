@@ -4,11 +4,13 @@ status: RUNTIME_PENDING
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Weapon.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28BattleAudioAlignmentEditorTests.cs
 code-path: Tools/NTSD28Q10Diagnostics/battle_audio_20261006_probe.cpp
+code-path: Tools/NTSD28Q10Diagnostics/battle_audio_formal_kind9.py
 authority: user 2026-10-06 battle audio request; formal DAT/sound assets; current Core comparison limited; formal event correspondence pending
 evidence: docs/ai/TASKS/NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006.md
 -->
@@ -39,3 +41,14 @@ Unity 原状与预期：按已确认普通命中/防御/护甲/特攻命中与�
 
 2026-10-06 最终运行验收：Scene03 PASS/DONE，原Scene/Driver tick5→69，global39自然技能data078、global69实际命中HP500→480/SFX001；两受控p3/a7帧均实际voice。所有64样本五失败/拒绝/溢出计数0；World/slot/borrower清零并正常退出，退出后voice0/hashclean。资源978实际解码、42去重case、681保护/原12WAV与meta稳定；详本Task REPORT.md/scene03/final-content-guard。
 状态边界：cue/resource VERIFIED；Event RUNTIME_PENDING仅正式根逐事件对应不足，Unity运行已通过，不表示还未运行Play。当前Core25受控case非formal根见证，kind9候选来源不足未实施。旧记录中的两个早期音频hunk表述不作为kind9正式源身份证明，不扩大旧目标或自动重跑全角色。整体BattleRuntimeSelfCheck及设备听感未运行。
+
+2026-10-06 Before implementation: user asks to confirm remaining kind9. Add only the declared Python diagnostic: launch the unchanged formal EXE with a new LFR fixture under GDB, inspect returned tick audio vectors without process state writes, use formal frame-sound positive controls and exact root trace relation results. Header-only offsetof helper output is a diagnostic layout hypothesis, validated with actual positive event bytes. No production/DAT changes until actual formal evidence. Old 42 tests and 978 decode checks are reused. Operation NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006.
+
+2026-10-06 formal kind9 evidence closed before production change: attempt05 exact formal336B44 returned tick audio vectors; four actual DAT scenarios x4ticks, all root-report passed, actual relation kinds9/type1 rejection/type3 state3000 transfer30/type3 state3005 action40 plus far negative control. Audio only frame source1 data005, plus actual spawned OID211 frame data020 in transfer case; no builtin or weapon_broken source. Offset1816/event48/string16 current-header hypothesis validated by actual positive sounds/source/path/worldX, no process game-state edits. Only remove raw-kind9 effect/broken enqueue from writer, LF2Weapon fallback and matching ECS projections, and remove their sound-capacity prerequisites. Preserve converted-kind0 audio, frame DAT audio, state/HP/motion/RNG/relationship rules. Add LF2Weapon exact path before edit. Four production/test byte backups declared in this Operation. RED uses the three existing raw-kind9 cases plus one legacy fallback case, then GREEN plus two converted controls; no old suite.
+
+2026-10-05T20:33:47.285545+00:00 CODE_WRITTEN kind9: actual three production paths and one test path match production-before-manifest. Removed raw-kind9 effect/broken calls only; projection sound-capacity requests now0, no state-field diff. RED original Editor four cases failed solely queued sound0 vs1/2, saved kind9-red-result01. Original Editor Refresh sent; GREEN includes these four plus converted two controls. Formal-kind9-attempt05 4 root passes /16ticks retained. Full old suites not run.
+
+GREEN01 raw4 PASS; converted broad2 fail at existing HitStateCount expected45 got0 before sounds. Added planned narrow two converted sound controls in same declared test path, no changes to old counter assertion or unrelated production. This does not certify broad state-test behavior.
+
+2026-10-06 scoped kind9 follow-through complete: FORMAL_EVENT_CONFIRMED / FOCUSED_FIX_PASS. Formal attempt05 four reports passed/completed4,16 audio tick observations, positive frame005/020 source1, builtin and definition broken0, formal exit0/SHA336B44 stable. Three production diffs remain raw-kind9 sound-only; four raw checks pass in green01 (six completed, failures only old broad converted2). Final OrdinaryKind0PreservesAttackerDatSound succeeded2/2 with actual LF2SpecialAttack and declared broken cue; direct ordinary writer evidence, no converter/Shadow/full-Driver promotion. Earlier new control attempts had incorrect expectations or no supported writer observation; all original failures retained. Original broad converted HitStateCount45/0 remains a validation limitation; no pre-change execution proof, no confirmed baseline-failure claim. Original counter/SFX assertions and ordinary production rules untouched.
+Original Editor Refresh/compile completed; error-CS0. 681 protected SHA0diff, formal EXE stable, old42/978 reused. Independent read-only reviewer confirmed three production diffs and final direct fixture, no new blocker. No fresh Play/device audio. Parent remains RUNTIME_PENDING for overall event-correspondence/runtime boundaries; raw kind9 no longer UNKNOWN. Exact Operation NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006, Report and KIND9-FORMAL-CONFIRMATION.

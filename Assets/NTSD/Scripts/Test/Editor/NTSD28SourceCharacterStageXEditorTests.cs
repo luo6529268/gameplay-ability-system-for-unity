@@ -47,7 +47,7 @@ namespace NTSD.Test.Editor
 
         [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented)]
         [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy)]
-        public void StageEdge_ClampsPhysicalWhileKeepingRawSourceTravel(
+        public void StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(
             BattleEcsCharacterPreFrameBoundsPassMode mode)
         {
             var world = CreateWorld(2048);
@@ -68,8 +68,52 @@ namespace NTSD.Test.Editor
 
             Assert.That(character.Runtime.X, Is.EqualTo(2048));
             Assert.That(character.Runtime.XInt, Is.EqualTo(2048));
-            Assert.That(character.Runtime.SourceRuleX, Is.EqualTo(2040));
-            Assert.That(character.Runtime.SourceRuleXInt, Is.EqualTo(2040));
+            Assert.That(character.Runtime.SourceRuleX,
+                Is.EqualTo(world.SpatialProjection.ViewToSourceX(2048)).Within(1e-10));
+            Assert.That(character.Runtime.SourceRuleXInt, Is.EqualTo(1333));
+        }
+
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, false)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, false)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, true)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, true)]
+        public void RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(
+            BattleEcsCharacterPreFrameBoundsPassMode mode, bool left)
+        {
+            SimulationWorld world = CreateWorld(2048);
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.ConfigureBattleEcsCharacterPreFrameBoundsPassForDiagnostics(mode);
+            LF2Character character = RegisterCharacter(world, 1, left ? 5 : 1327);
+            NTSDEntityRuntime runtime = character.Runtime;
+            runtime.X = world.SpatialProjection.SourceToViewX(runtime.SourceRuleX);
+            runtime.SyncIntegerPosition();
+            for (int impact = 0; impact < 4; impact++)
+            {
+                double delta = left ? -40 : 40;
+                runtime.SourceRuleX += delta;
+                runtime.X += world.SpatialProjection.SourceDeltaToViewX(delta);
+                runtime.SyncIntegerPosition();
+                runtime.SyncSourceRuleIntegerPosition();
+                world.ApplyPreFrameBoundsAll();
+                Assert.That(runtime.X, Is.EqualTo(left ? 0 : 2048));
+                Assert.That(runtime.SourceRuleX, Is.EqualTo(left ? 0 : 1333).Within(1e-10));
+                Assert.That(runtime.SourceRuleXInt, Is.EqualTo(left ? 0 : 1333));
+                Assert.That(world.SpatialProjection.SourceToViewX(runtime.SourceRuleX),
+                    Is.EqualTo(runtime.X).Within(1e-10), "Collision source must not keep moving through the wall.");
+            }
+        }
+
+        [Test]
+        public void UnclampedProjectedMotion_PreservesSourceBits()
+        {
+            SimulationWorld world = CreateWorld(2048);
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2Character character = RegisterCharacter(world, 1, 123.987654321);
+            character.Runtime.X = world.SpatialProjection.SourceToViewX(character.Runtime.SourceRuleX);
+            character.Runtime.SyncIntegerPosition();
+            long before = System.BitConverter.DoubleToInt64Bits(character.Runtime.SourceRuleX);
+            world.ApplyPreFrameBoundsAll();
+            Assert.That(System.BitConverter.DoubleToInt64Bits(character.Runtime.SourceRuleX), Is.EqualTo(before));
         }
 
         [TestCase(5, 0, 0, -50.75, 0.0)]

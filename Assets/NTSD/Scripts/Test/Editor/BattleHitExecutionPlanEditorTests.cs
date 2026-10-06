@@ -3451,7 +3451,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ShadowCompare_NonConvertedKind9WeaponOnlyRecordsEffectSound()
+        public void ShadowCompare_NonConvertedKind9WeaponDoesNotQueueHitSound()
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
@@ -3530,8 +3530,44 @@ namespace NTSD.Test
             Assert.That(world.GetRawRestVrest(1, 0), Is.Zero);
             Assert.That(world.Rng.State, Is.EqualTo(0xAABBCCDDu));
             Assert.That(world.Rng.CallCount, Is.Zero);
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
-            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_004"));
+            Assert.That(world.PendingSounds.Count, Is.Zero);
+        }
+
+        [Test]
+        public void Legacy_NonConvertedKind9WeaponDoesNotQueueHitSound()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "Kind9LegacyAttacker",
+                7293,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            LF2Weapon target = CreateWeaponEntity(
+                world,
+                "Kind9LegacyTarget",
+                7294,
+                1,
+                LF2ObjectType.LightWeapon,
+                2,
+                10);
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 9;
+            itr.effect = 5;
+            int hpBefore = target.Health.HP;
+            int frameBefore = target.Frame.N;
+
+            Assert.That(target.Hit(itr, attacker), Is.True);
+
+            Assert.That(world.PendingSounds.Count, Is.Zero);
+            Assert.That(target.Health.HP, Is.EqualTo(hpBefore));
+            Assert.That(target.Frame.N, Is.EqualTo(frameBefore));
         }
 
         [Test]
@@ -4936,11 +4972,7 @@ namespace NTSD.Test
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(2));
-            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_010"));
-            Assert.That(
-                world.PendingSounds[1].Cue,
-                Is.EqualTo("CUSTOM_TYPE3_BROKEN"));
+            Assert.That(world.PendingSounds.Count, Is.Zero);
 
             if (expectRelationCopy)
             {
@@ -5071,6 +5103,63 @@ namespace NTSD.Test
             Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
             Assert.That(world.Rng.CallCount, Is.EqualTo(2));
             Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(expectedCue));
+        }
+
+        [TestCase(LF2States.WeaponThrowing, 20)]
+        [TestCase(LF2States.HeavyWeaponInSky, 4)]
+        public void OrdinaryKind0PreservesAttackerDatSound(
+            int targetState,
+            int effect)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "ConvertedKind9AudioAttacker",
+                7313,
+                0,
+                1,
+                0);
+            const string expectedCue = "ORDINARY_KIND0_ATTACKER_BROKEN";
+            attacker.FrameCache.Wrapper.characterData.weapon_broken_sound = expectedCue;
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "ConvertedKind9AudioTarget",
+                7314,
+                1,
+                2,
+                10);
+            CreateEntity(
+                world,
+                "ConvertedKind9AudioHolder",
+                7315,
+                2,
+                LF2ObjectType.Character,
+                1,
+                1000,
+                hasItr: false,
+                hasBody: false);
+            target.Frame.D.state = targetState;
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -30,
+                y = -10,
+                w = 60,
+                h = 20,
+                zwidth = 15,
+                injury = 10,
+                fall = 10,
+                effect = effect,
+            };
+            world.Rng.Seed(0x1234ABCDu);
+
+            Assert.That(world.DamageWriter.ApplySpecialAttackDamage(
+                world, attacker, target, itr), Is.True);
+
+            Assert.That(world.PendingSounds.Count, Is.EqualTo(1), "Ordinary kind0 sound count");
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(expectedCue));
         }
 

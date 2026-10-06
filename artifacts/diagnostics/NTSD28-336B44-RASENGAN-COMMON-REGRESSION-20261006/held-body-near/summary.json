@@ -1,0 +1,670 @@
+{
+  "case": "held-body-near",
+  "debuggerExit": 0,
+  "traceRows": 17,
+  "audioRows": 16,
+  "errors": [],
+  "events": [
+    {
+      "sequence": 1,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 2,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 3,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 4,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 5,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 6,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 7,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 8,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 9,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 10,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 11,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 12,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 13,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 14,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 15,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 16,
+      "count": 0,
+      "events": []
+    }
+  ],
+  "transitions": [
+    {
+      "tick": 0,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 254,
+          "state": 3,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 600
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 600
+        }
+      ]
+    },
+    {
+      "tick": 1,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 254,
+          "state": 3,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 2,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 3,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 4,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 5,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 6,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 7,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 8,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 9,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 10,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 11,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 12,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 13,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 14,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 15,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    },
+    {
+      "tick": 16,
+      "entities": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 0,
+          "holder": null,
+          "link": null,
+          "x": 500,
+          "z": 575
+        },
+        {
+          "slot": 1,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": null,
+          "hp": 500,
+          "owner": 1,
+          "holder": null,
+          "link": null,
+          "x": 545,
+          "z": 575
+        }
+      ]
+    }
+  ],
+  "rootReport": {
+    "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+    "passed": true,
+    "nativeParityClaim": false,
+    "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006\\held-body-near\\input.lfr",
+    "failureCode": 0,
+    "failureStage": "",
+    "error": "",
+    "declaredTicks": 15,
+    "inputStartRow": 0,
+    "initialActionOverrides": {
+      "slot0": 254,
+      "slot1": 0
+    },
+    "initialFacingOverrides": {
+      "slot0": 0,
+      "slot1": 1
+    },
+    "initialMpOverrides": {
+      "slot0": 500,
+      "slot1": 500
+    },
+    "functionKeyUsage": {
+      "f6": 0,
+      "f7": 0,
+      "f8": 0,
+      "f9": 0
+    },
+    "completedTicks": 16,
+    "scene": {
+      "p1ObjectId": 2,
+      "p2ObjectId": 2,
+      "backgroundId": 1
+    },
+    "winnerGroup": -1,
+    "platformOperation30": {
+      "nonzeroEntityRows": 0,
+      "firstTick": null,
+      "lastTick": null,
+      "uniqueSlots": [],
+      "samples": []
+    },
+    "diagnosticTrace": {
+      "requested": true,
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006\\held-body-near\\root-trace.jsonl",
+      "rows": 17,
+      "startTick": 0,
+      "endTick": -1,
+      "writeOk": true
+    },
+    "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+  }
+}

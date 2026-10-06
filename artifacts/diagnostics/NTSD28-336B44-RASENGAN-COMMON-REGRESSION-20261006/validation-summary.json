@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-06T05:32:09.216151+00:00",
+  "changeLedgerCommand": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "changeLedgerExit": 0,
+  "changeLedgerRecords": 1290,
+  "governedCodePaths": 16,
+  "changeLedgerOutput": "PASSED. Historical record not-in-currentdiff warnings; original full terminal output retained by host, no separate log copy.",
+  "diffCheckExit": 0
+}

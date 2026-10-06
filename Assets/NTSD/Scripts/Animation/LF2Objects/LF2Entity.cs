@@ -2714,13 +2714,11 @@ namespace NTSD.Animation.LF2Objects
                 int slotIndex = Runtime?.SlotIndex ?? StableId;
                 int selectedModeStageGate50 =
                     RegisteredWorldForSimulation?.Runtime?.SelectedModeStageGate50 ?? 0;
-                Runtime.X = NTSDEntityRuntime.ClampSelectedModeType0StageX(
-                    Runtime.X, slotIndex, RelationTeam, HitStun,
-                    baseStageWidth, xMaxOverride, selectedModeStageGate50);
-
-                Runtime.ClampSourceRuleCharacterX(
+                Runtime.ClampProjectedCharacterStageX(
                     slotIndex, RelationTeam, HitStun,
-                    baseStageWidth, xMaxOverride, selectedModeStageGate50);
+                    baseStageWidth, xMaxOverride,
+                    RegisteredWorldForSimulation?.SpatialProjection ?? BattleSpatialProjection.Identity,
+                    selectedModeStageGate50);
             }
             else if (currentDataType != (int)LF2ObjectType.SpecialAttack &&
                      (ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
@@ -5908,7 +5906,7 @@ namespace NTSD.Animation.LF2Objects
                 (contactFrame.state == LF2States.Falling ||
                  contactFrame.state == LF2States.Burning))
             {
-                QueueBattleSound(@"data\016.wav");
+                            QueueBattleSound("SFX_016");
             }
 
             ApplyCurrentDatType0State1218EnvironmentDamage(

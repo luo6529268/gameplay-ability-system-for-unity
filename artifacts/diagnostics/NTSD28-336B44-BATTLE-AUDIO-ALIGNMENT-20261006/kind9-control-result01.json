@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "a5c38a37335d47798421f7a1ed387061",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791232552788,
+      "finished_unix_ms": 1791232561366,
+      "last_update_unix_ms": 1791232561366,
+      "progress": {
+        "completed": 2,
+        "total": 8944,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791232560902,
+        "last_finished_test_full_name": "NTSD.Test.BattleHitExecutionPlanEditorTests.ShadowCompare_ConvertedKind9PreservesOrdinaryHitSound(2000,4,\"SFX_011\")",
+        "last_finished_unix_ms": 1791232560905,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleHitExecutionPlanEditorTests.ShadowCompare_ConvertedKind9PreservesOrdinaryHitSound(1002,20,\"SFX_001\")",
+            "message": "  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.BattleHitExecutionPlanEditorTests.ShadowCompare_ConvertedKind9PreservesOrdinaryHitSound(2000,4,\"SFX_011\")",
+            "message": "  Expected: 1\r\n  But was:  0\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

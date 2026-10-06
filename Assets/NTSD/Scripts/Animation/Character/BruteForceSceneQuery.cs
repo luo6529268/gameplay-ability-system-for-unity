@@ -3683,6 +3683,8 @@ namespace NTSD.Animation
                     continue;
 
                 releaseBodyCount++;
+                if (body.ZWidth > 0)
+                    fastProof = false;
                 if (body.X == int.MinValue ||
                     body.X == int.MaxValue ||
                     body.W <= 0 ||
@@ -4109,6 +4111,7 @@ namespace NTSD.Animation
                     _roleFormalExactBodyRects.Add(
                         new RoleAwareFormalExactBodyRectEntry(
                             body.X,
+                            body.ZWidth,
                             BodyWorldRect(
                                 participant.Entity,
                                 collisionFrame,
@@ -5587,11 +5590,8 @@ namespace NTSD.Animation
                 return;
             }
 
-            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = CollisionRuleZInt(target, targetCollisionFrame) -
-                         CollisionRuleZInt(attacker, attackerCollisionFrame);
-            if (zDelta >= zHalf || zDelta <= -zHalf)
-                return;
+            long zDelta = (long)CollisionRuleZInt(target, targetCollisionFrame) -
+                          CollisionRuleZInt(attacker, attackerCollisionFrame);
 
             WorldRect itrRect = ItrWorldRect(attacker, attackerCollisionFrame, itr);
             // Alignment contract: NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001.
@@ -5600,7 +5600,8 @@ namespace NTSD.Animation
             for (int bodyIndex = 0; bodyIndex < targetCollisionFrame.bodies.Count; bodyIndex++)
             {
                 BattleBodyBoxValue body = targetCollisionFrame.bodies[bodyIndex];
-                if (!IsReleaseBody(body))
+                if (!IsReleaseBody(body) ||
+                    !BodyDepthOverlaps(zDelta, itr.zwidth, body.ZWidth))
                     continue;
                 WorldRect bodyRect = BodyWorldRect(
                     target,
@@ -5649,10 +5650,7 @@ namespace NTSD.Animation
                 return;
             }
 
-            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = targetParticipant.CollisionZ - attackerParticipant.CollisionZ;
-            if (zDelta >= zHalf || zDelta <= -zHalf)
-                return;
+            long zDelta = (long)targetParticipant.CollisionZ - attackerParticipant.CollisionZ;
 
             int bodyRectEnd = targetParticipant.ExactBodyRectOffset +
                               targetParticipant.ExactBodyRectCount;
@@ -5663,7 +5661,8 @@ namespace NTSD.Animation
                 RoleAwareFormalExactBodyRectEntry bodyEntry =
                     _roleFormalExactBodyRects[bodyRectIndex];
                 _lastRoleAwareExactBodyOverlapCheckCount++;
-                if (!Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
+                if (!BodyDepthOverlaps(zDelta, itr.zwidth, bodyEntry.ZWidth) ||
+                    !Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
                     continue;
 
                 int bodyX = bodyEntry.BodyX;
@@ -5832,11 +5831,8 @@ namespace NTSD.Animation
                 return false;
             }
 
-            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = targetParticipant.CollisionZ -
-                         attackerParticipant.CollisionZ;
-            if (zDelta >= zHalf || zDelta <= -zHalf)
-                return false;
+            long zDelta = (long)targetParticipant.CollisionZ -
+                          attackerParticipant.CollisionZ;
 
             int bodyRectEnd = targetParticipant.ExactBodyRectOffset +
                               targetParticipant.ExactBodyRectCount;
@@ -5847,7 +5843,8 @@ namespace NTSD.Animation
                 RoleAwareFormalExactBodyRectEntry bodyEntry =
                     _roleFormalExactBodyRects[bodyRectIndex];
                 _lastRoleAwareExactBodyOverlapCheckCount++;
-                if (!Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
+                if (!BodyDepthOverlaps(zDelta, itr.zwidth, bodyEntry.ZWidth) ||
+                    !Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
                     continue;
 
                 bodyX = bodyEntry.BodyX;
@@ -6999,6 +6996,13 @@ namespace NTSD.Animation
             return attacker.ResolveReleaseNeutralHolderSlotOrImplicitZero();
         }
 
+        // Alignment contract: NTSD28-336B44-BODY-DEPTH-CANDIDATE-001.
+        private static bool BodyDepthOverlaps(long zDelta, int itrZWidth, int bodyZWidth)
+        {
+            long radius = (itrZWidth > 0 ? itrZWidth : 15L) + Math.Max(0, bodyZWidth);
+            return zDelta > -radius && zDelta < radius;
+        }
+
         private bool HitsTarget(
             LF2Entity attacker,
             LF2FrameData attackerCollisionFrame,
@@ -7017,17 +7021,15 @@ namespace NTSD.Animation
             if (!IsReleaseItrGeometry(itr))
                 return false;
 
-            int attackerZ = CollisionRuleZInt(attacker, attackerCollisionFrame);
-            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = CollisionRuleZInt(target, targetCollisionFrame) - attackerZ;
-            if (zDelta >= zHalf || zDelta <= -zHalf)
-                return false;
+            long zDelta = (long)CollisionRuleZInt(target, targetCollisionFrame) -
+                          CollisionRuleZInt(attacker, attackerCollisionFrame);
 
             WorldRect itrRect = ItrWorldRect(attacker, attackerCollisionFrame, itr);
             for (int b = 0; b < targetCollisionFrame.bodies.Count; b++)
             {
                 BattleBodyBoxValue body = targetCollisionFrame.bodies[b];
-                if (!IsReleaseBody(body)) continue;
+                if (!IsReleaseBody(body) ||
+                    !BodyDepthOverlaps(zDelta, itr.zwidth, body.ZWidth)) continue;
 
                 WorldRect bodyRect = BodyWorldRect(target, targetCollisionFrame, body, collectSemantics: true);
                 if (!Overlap(itrRect, bodyRect)) continue;
@@ -7388,11 +7390,12 @@ namespace NTSD.Animation
                         continue;
 
                     WorldRect rect = BodyWorldRect(entity, collisionFrame, body, collectSemantics: true);
+                    BodyCollisionDepthRange(entity, collisionFrame, body, out int bodyMinZ, out int bodyMaxZ);
                     AddBroadphaseRange(
                         rect.X1,
                         rect.X2,
-                        collisionZ,
-                        ClampRect((long)collisionZ + 1),
+                        bodyMinZ,
+                        bodyMaxZ,
                         ref found,
                         ref minX,
                         ref maxX,
@@ -7510,7 +7513,8 @@ namespace NTSD.Animation
                 return false;
 
             WorldRect rect = BodyWorldRect(target, frame, body, collectSemantics: true);
-            int zHalf = BodyIsReleaseFullHeight(body) ? 9999 : 15;
+            int zHalf = BodyIsReleaseFullHeight(body) ? Math.Max(9999, body.ZWidth) :
+                body.ZWidth > 0 ? body.ZWidth : 15;
             CollisionDepthRange(target, frame, zHalf, out int minZ, out int maxZ);
             bounds = new SpatialAabbXZ(
                 Math.Min(rect.X1, rect.X2),
@@ -7536,13 +7540,27 @@ namespace NTSD.Animation
                 rect.X2,
                 out int minX,
                 out int maxX);
-            int collisionZ = CollisionZInt(target, frame);
-            bounds = new SpatialAabbXZ(
-                minX,
-                collisionZ,
-                maxX,
-                ClampRect((long)collisionZ + 1));
+            BodyCollisionDepthRange(target, frame, body, out int minZ, out int maxZ);
+            bounds = new SpatialAabbXZ(minX, minZ, maxX, maxZ);
             return bounds.IsValid;
+        }
+
+        private static void BodyCollisionDepthRange(
+            LF2Entity entity,
+            LF2FrameData frame,
+            BattleBodyBoxValue body,
+            out int minZ,
+            out int maxZ)
+        {
+            if (body.ZWidth > 0)
+            {
+                CollisionDepthRange(entity, frame, body.ZWidth, out minZ, out maxZ);
+                maxZ = ClampRect((long)maxZ + 1);
+                return;
+            }
+
+            minZ = CollisionZInt(entity, frame);
+            maxZ = ClampRect((long)minZ + 1);
         }
 
         private static void BuildConservativeNonEmptyXRange(
@@ -7628,11 +7646,77 @@ namespace NTSD.Animation
                 return false;
 
             WorldRect rect = BodyWorldRect(entity, frame, body, collectSemantics: true);
+            int zHalf = BodyIsReleaseFullHeight(body) ? Math.Max(9999, body.ZWidth) :
+                body.ZWidth > 0 ? body.ZWidth : 15;
+            volume = BuildProjectedBattleVolume(entity, frame, rect, zHalf);
+            return true;
+        }
+
+        internal static bool TryBuildBodyVolumeForDiagnostics(
+            LF2Entity entity,
+            LF2FrameData frame,
+            BattleBodyBoxValue body,
+            out PhysicsState.BattleVolume volume)
+        {
+            return TryBuildBodyBattleVolume(entity, frame, body, out volume);
+        }
+
+        internal static bool TryBuildItrVolumeForDiagnostics(
+            LF2Entity entity,
+            LF2FrameData frame,
+            InteractionArea itr,
+            out PhysicsState.BattleVolume volume)
+        {
+            volume = default;
+            if (entity == null || frame == null || itr == null ||
+                !IsReleaseItrGeometry(itr))
+            {
+                return false;
+            }
+
+            WorldRect rect = ItrWorldRect(entity, frame, itr);
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            volume = BuildProjectedBattleVolume(entity, frame, rect, zHalf);
+            return true;
+        }
+
+        internal static bool TryBuildPickupVolumeForDiagnostics(
+            LF2Entity entity,
+            LF2FrameData frame,
+            WeaponPoint point,
+            out PhysicsState.BattleVolume volume)
+        {
+            volume = default;
+            if (entity == null || frame == null || point == null ||
+                (point.kind != 1 && point.kind != 2 && point.kind != 7) ||
+                point.w <= 0 || point.h <= 0)
+            {
+                return false;
+            }
+
+            WorldRect rect = LocalRectWorldRect(
+                entity,
+                frame,
+                new LocalRect(point.x, point.y, point.w, point.h),
+                fullHeight: false);
+            volume = BuildProjectedBattleVolume(
+                entity,
+                frame,
+                rect,
+                (int)NTSDGlobal.Default.Itr.ZWidth);
+            return true;
+        }
+
+        private static PhysicsState.BattleVolume BuildProjectedBattleVolume(
+            LF2Entity entity,
+            LF2FrameData frame,
+            WorldRect rect,
+            int sourceZHalf)
+        {
             int centerZ = CollisionZInt(entity, frame);
-            int zHalf = BodyIsReleaseFullHeight(body) ? 9999 : 15;
             float physicalZHalf = (float)CollisionProjection(entity)
-                .SourceDeltaToViewZ(zHalf);
-            volume = new PhysicsState.BattleVolume(
+                .SourceDeltaToViewZ(sourceZHalf);
+            return new PhysicsState.BattleVolume(
                 rect.X1,
                 rect.Y1,
                 centerZ,
@@ -7641,7 +7725,6 @@ namespace NTSD.Animation
                 rect.X2 - rect.X1,
                 rect.Y2 - rect.Y1,
                 physicalZHalf);
-            return true;
         }
 
         private static WorldRect LocalRectWorldRect(LF2Entity entity, LF2FrameData frame, LocalRect rect, bool fullHeight)
@@ -8077,13 +8160,16 @@ namespace NTSD.Animation
     {
         public RoleAwareFormalExactBodyRectEntry(
             int bodyX,
+            int zWidth,
             in WorldRect worldRect)
         {
             BodyX = bodyX;
+            ZWidth = zWidth;
             WorldRect = worldRect;
         }
 
         public int BodyX { get; }
+        public int ZWidth { get; }
         public WorldRect WorldRect { get; }
     }
 

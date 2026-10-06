@@ -1,0 +1,224 @@
+{
+  "files": [
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 620128,
+      "sha256": "14e9d7becca4a2cff2c65fe1eda9aada401ed57050c8bddac0f1b9922d8fc475"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "bytes": 1519365,
+      "sha256": "27f28554e38b34261e4f77f34cfd10d7f60a9132eef5f0f871c8c5d86a26a3f1"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "exists": true,
+      "bytes": 363276,
+      "sha256": "cbbdb808ffaa25b43209d9aa6c5b84b79e12d1d0d6cc41d836ec97e7524fca9b"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1449219,
+      "sha256": "ec9e65961bab313a6ee25d1c325d9e458fb97d67a1247f836dc49276486b0890"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "exists": true,
+      "bytes": 359458,
+      "sha256": "65c64ace2a841cdcfa156dcb173d7d351e0f605a7c6ca21558e34e67e316f7d3"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "bytes": 17779,
+      "sha256": "22f45de499b25978696fde51683962bff59eab2a9dc9f7bcb3292273dff4ca79"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs",
+      "exists": true,
+      "bytes": 10195,
+      "sha256": "1602852ae6de8a19ec57270cd58306eb973e5b1402a1840ea3195d092ee56663"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs",
+      "exists": true,
+      "bytes": 21589,
+      "sha256": "6f15769c6358b89b58cab8bad7e9f7777727b9d8cbb9baede173f95c889602a2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs",
+      "exists": true,
+      "bytes": 8449,
+      "sha256": "8f22989968e2ffaef9f7b000ce87372ab6d58cbe21494f888fbd4e79adfa76d6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "bytes": 346708,
+      "sha256": "cc6b79bcb8cb98aad0d5706e98de02a33fe2aaead97cf09681599c5aa5b93d40"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "exists": true,
+      "bytes": 97191,
+      "sha256": "9eb25754712ebc31bca08437d965320de845d51ca39b698bfdd45f8f0e6b293f"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs",
+      "exists": true,
+      "bytes": 11925,
+      "sha256": "6003769898f56a26504ac09f68be317097542525e4c6f5d96bbf8e6a34f56ee1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "exists": true,
+      "bytes": 54961,
+      "sha256": "d7c317830714c06209d1aa96c7c227c6969728e1a4f8c42e57c60be25d69f740"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "exists": true,
+      "bytes": 290434,
+      "sha256": "fd208af128f3c81a666a41970f5afddac272c5d8b48c808f31bf410289fc7189"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterPreFrameBoundsPass.cs",
+      "exists": true,
+      "bytes": 7017,
+      "sha256": "f53e46afb07062c81c04d94bf72c43b6897f7d16383e59e76a59ee36d3b000d9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs",
+      "exists": true,
+      "bytes": 9938,
+      "sha256": "cf07bd2a827bdfb72498128f9a27a44395a9175ae2c42462e4ef51bc661149f0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 243,
+      "sha256": "5683286958a21c6b2fd7b676b4b05a9d62fb81b904c537af7a14080f4f106a93"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs.meta",
+      "exists": true,
+      "bytes": 243,
+      "sha256": "c63baedc096e08f90438e0849ad3b57784ee7f2993ad96a6d9af6f409c593ef5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 243,
+      "sha256": "31391df2cccffdb7e2b0dc7f510cb5595adec70c1c65eba87e5d6ebf33f9860f"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001.md",
+      "exists": true,
+      "bytes": 9571,
+      "sha256": "84d979b93e4444821771e4166a8b736dcc04f32190c6a0f598ebac1f922f463b"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001.md",
+      "exists": true,
+      "bytes": 4733,
+      "sha256": "66cd6b0d3082b03e328a1bb2b639c99a3a251d94ef8070db06539f5143343f5c"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001.md",
+      "exists": true,
+      "bytes": 5609,
+      "sha256": "6c69cb6eedb7aaec1ad5d6b3e6cb39fc9acd73ac55be08aea0ed28504b566f9a"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "exists": true,
+      "bytes": 2982,
+      "sha256": "eaef76f12d94032ba6f1913ad4560ea73aa40aacdd0922c3fb8a857e90b7ad46"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-SAGE-P2-REGRESSION-20261006/REPORT.md",
+      "exists": true,
+      "bytes": 8120,
+      "sha256": "0ca61d426d4fb08484852f0ff207ef47fdcd2453fe2e285e550d9227c0268e41"
+    }
+  ],
+  "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs\n M Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs\n M Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs\n M Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterPreFrameBoundsPass.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs\n M Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/STATE.md\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs.meta\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs.meta\n?? Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs\n?? Assets/NTSD/Scripts/Test/Editor/NTSDHitboxGizmoProjectionEditorTests.cs.meta\n?? artifacts/diagnostics/NTSD28-336B44-SAGE-P2-REGRESSION-20261006/REPORT.md\n?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001.md\n?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001.md\n?? docs/ai/CHANGE-RECORDS/NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001.md\n?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md\n",
+  "backupChecks": [
+    {
+      "manifest": "before-manifest.json",
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "before-manifest.json",
+      "path": "docs/ai/STATE.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "before-manifest.json",
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "before-manifest.json",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "before-manifest.json",
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "before-manifest.json",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupValid": true
+    },
+    {
+      "manifest": "gizmo-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "gizmo-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "gizmo-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "boundary-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "boundary-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "boundary-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterPreFrameBoundsPass.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "boundary-before-manifest.json",
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs",
+      "backupValid": true
+    },
+    {
+      "manifest": "p2-diagnostic-before-manifest.json",
+      "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackRegressionEditorTests.cs",
+      "backupValid": true
+    }
+  ],
+  "cancelledCentralUnchanged": true,
+  "ownDeletionCount": 0,
+  "scope": "Owned precise writes only; unrelated existing audio and user work retained."
+}

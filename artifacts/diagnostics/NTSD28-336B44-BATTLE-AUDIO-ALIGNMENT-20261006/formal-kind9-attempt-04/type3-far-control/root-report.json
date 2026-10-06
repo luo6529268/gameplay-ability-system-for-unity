@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": false,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\formal-kind9-attempt-04\\type3-far-control\\input.lfr",
+  "failureCode": 46,
+  "failureStage": "playback_tick_or_checksum",
+  "error": "LFR final header mismatch at logical slot 0 offset 52: expected 206, got 810",
+  "declaredTicks": 3,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 107, "slot1": 0},
+  "initialFacingOverrides": {"slot0": 1, "slot1": 1},
+  "initialMpOverrides": {"slot0": 500, "slot1": 500},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 4,
+  "scene": {"p1ObjectId": 810, "p2ObjectId": 206, "backgroundId": 1},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006\\formal-kind9-attempt-04\\type3-far-control\\root-trace.jsonl", "rows": 5, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

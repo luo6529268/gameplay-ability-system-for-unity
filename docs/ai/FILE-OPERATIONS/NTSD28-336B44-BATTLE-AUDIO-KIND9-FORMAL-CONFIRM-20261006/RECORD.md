@@ -1,0 +1,28 @@
+# NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006
+
+PLANNED. User asks to continue formal kind9 audio confirmation. Parent Task/Change: NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006 / NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001. Executor /root. Exact existing document edits and byte backups: before-manifest.json. New diagnostic script Tools/NTSD28Q10Diagnostics/battle_audio_formal_kind9.py and create-only formal-kind9 artifact files. Read-only actual formal EXE execution under GDB; no DAT/Scene/source/binary edits, no old suite repetition. Record actual arguments/outputs and before/after formal SHA. Rollback only owned hunks from byte backups after separate approval, preserve concurrent work.
+
+Started UTC 2026-10-05T20:22:34.543219+00:00
+
+Diagnostic own-script correction before overwrite: SHA be9fda18528456ad20805a45c694e816c1d25dee1105bf38c7802836a3323337, backup script-before-fix01.py. Attempt01 stopped before formal process on LFR compressed-container size assertion; layout helper compiled. Decode the LFR container first, retain compressed manager size assertion, use absolute output paths.
+
+Attempt02: GDB could not place hard-address breakpoints because Windows relocates the image. No captured ticks; not acceptance. Before fix02 script SHA 544c2e9a9287bd16848f4d66e583147da7f1876fa3e3f56de0a8982fac09a59b, backup script-before-fix02.py. Replace addresses with the exact same symbolic function names so GDB applies relocation.
+
+Attempt03 reached Driver but GDB default symbolic breakpoint skipped its prologue, so caller-stack observation was invalid. Captured0 ticks; not acceptance. Before fix03 SHA f2250bf38f4ffe4bd38856192dc34581af40e84473d1c726f12cb2e0a911cb2d, backup script-before-fix03.py. Use symbolic address-expression breakpoints at exact function entry, retaining ASLR relocation.
+
+Attempt04 actual formal4tick per case observed. GDB temporary auto-continue return breakpoints repeated later returns: 10 log entries contain duplicates, first entry per sequence remains valid; fix one-shot capture guard. Root replay failed only final copied-header stale OID after completed4; update generated LFR final header to declared expected fixture state (no production data). Add target state3005 branch using actual OID906/frame53. Script-before-fix04.py SHA 4c92c400662c2d080a9564f55a1eded0ff2d10e2be84f3b3aa1caa4715812caa.
+
+PLANNED production follow-through now authorized by original user audio fix request and current confirmation request. Exact four paths and before bytes: production-before-manifest.json. Only raw-kind9 sound events/projection/capacity gates; no gameplay/DAT/Scene changes. Formal attempt05 four reports passed,16 captured ticks, error0; old attempt failures preserved.
+
+Before adding two audio-specific converted controls, current test SHA bd3291b0e185c0bbdab9f0f29742d4d3185fb34a3625897ad375aa0210ce7611, backup tests-before-audio-control.cs. GREEN01 raw4 passed; two pre-existing broader converted tests failed HitStateCount45 vs0 before their audio assertions. No baseline execution claim, no production counter edits or expected-counter weakening. Add focused audio controls only; retain old failures.
+
+Audio-control01 two failed0 vs expected1: fixture copied old type0-attacker SFX expectations, but ordinary type3-target tail emits only explicit type3-attacker DAT broken cue. Do not patch production to satisfy fixture. Correct new fixture to dataType3 attacker with declared broken cue, retain old fails and old general tests untouched. Before hash 8bcdcf7f0fdfc185802d9ef11b889c00901b684dae3aa1713e2546c93fd66982, backup tests-before-audio-control-fix01.cs.
+
+Audio-control02 still expected1 actual0; fixture used TypedCharacter claiming type3 rather than actual LF2SpecialAttack class. Correct only newly added fixture to actual type3 runtime and explicit attack box; assert messages distinguish candidate/writer/voice stages. No production changes. Backup tests-before-audio-control-fix02.cs SHA d4f69e956ebef20ce442e2f877c4122dbbc5c7cd04eeb653dbe08013744a6890.
+
+Audio-control03 candidate collected but ObservedWriterEffectCount0; synthetic type3 converted scenario not a supported full Shadow observation fixture. No sound result claimed. Replace only this new test with a direct ordinary kind0 writer positive control for declared type3-attacker DAT broken sound. Name states direct ordinary scope; no claim converter/full-Driver verified, original broader tests remain failed. Backup tests-before-ordinary-positive-control.cs SHA 5ee0f02cc840d8ce5237104c8701fd11263e739ec07a7b3c94c6b3e8939ecb44.
+
+RUNNING final documentation reconciliation: exact nine documents and four production/test paths plus diagnostic Python covered. Formal4reports/16ticks, raw4pass/directordinary2pass, old broadconverted2fail retained. No deletion/restoration/DAT/source/EXE changes. Independent final fixture/diff review passed with stated boundaries. Final manifest/validator follow.
+
+
+VERIFIED file-operation closure UTC 2026-10-05T20:46:38.812613+00:00. 13 original document/code byte backups plus 8 own-correction backups SHA-verified. Final manifest after-manifest.json records exact current bytes. Protected681 files unchanged, formal336B44 SHA unchanged. Original Editor TCP6401 idle/not Play/not compiling; final C# error Console0. Validate-ChangeLedger.ps1 exit0/PASSED and git diff --check exit0; raw4 and directordinary2 passed, old broaderconverted2 failed45/0 retained. File-operation VERIFIED describes recorded modifications/backups only, not overall audio acceptance; Event parent stays RUNTIME_PENDING. No files deleted/moved/restored; no DAT, WAV, Scene or binary changes. No new Play/device evidence.

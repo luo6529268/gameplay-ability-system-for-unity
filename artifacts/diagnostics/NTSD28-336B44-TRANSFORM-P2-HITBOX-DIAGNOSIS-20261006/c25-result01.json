@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "82d076367fa34c149da04fb0895b5d96",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791233529283,
+      "finished_unix_ms": 1791233537754,
+      "last_update_unix_ms": 1791233537754,
+      "progress": {
+        "completed": 3,
+        "total": 8944,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791233537039,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28C25DefinitionCloneEditorTests.C25a_SourceNextAtOrAbove999_ResetsTargetActionZero(1000)",
+        "last_finished_unix_ms": 1791233537041,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.7770643,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "C25a_AnyDataType_UsesSourceNextAndResetsNativeFrameFields",
+            "fullName": "NTSD.Test.Editor.NTSD28C25DefinitionCloneEditorTests.C25a_AnyDataType_UsesSourceNextAndResetsNativeFrameFields",
+            "state": "Passed",
+            "durationSeconds": 0.0233735,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "C25a_SourceNextAtOrAbove999_ResetsTargetActionZero(999)",
+            "fullName": "NTSD.Test.Editor.NTSD28C25DefinitionCloneEditorTests.C25a_SourceNextAtOrAbove999_ResetsTargetActionZero(999)",
+            "state": "Passed",
+            "durationSeconds": 0.0020646,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "C25a_SourceNextAtOrAbove999_ResetsTargetActionZero(1000)",
+            "fullName": "NTSD.Test.Editor.NTSD28C25DefinitionCloneEditorTests.C25a_SourceNextAtOrAbove999_ResetsTargetActionZero(1000)",
+            "state": "Passed",
+            "durationSeconds": 0.0018371,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "time": "2026-10-06T12:49:36.398224+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs",
+      "afterSHA256": "40F379C26D14F4C33BF3C6065BFCACCA5C0E641FE7C7D29C5EF8CF16944AD767",
+      "afterLength": 27938
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "afterSHA256": "6C25861BAF63AF60A866AC4884ACB3732371899D8CEBE03DECE702A97F305D0D",
+      "afterLength": 621889
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "afterSHA256": "2060A0D00885E25208D815E74928AAA368289D8338CAF28864E7F6738E543056",
+      "afterLength": 1521028
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "afterSHA256": "0BDAD4B0A7B05F4349C4C24532A7314C413EE5A4F7010C70DE45BD156E0E70DF",
+      "afterLength": 365414
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "afterSHA256": "618531DA58708D10529B10C465006C65392946F1A91629293F7762A2DA576068",
+      "afterLength": 1451115
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "afterSHA256": "FE70293114D2055C454D7231A765524E936FB945B67BEFD14B48F059CA5E9791",
+      "afterLength": 360768
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "afterSHA256": "6F38C22B2E7701AAE8ED49ED57CF04DEBE06ACF051558AA7302AF747789B4A44",
+      "afterLength": 3851
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "afterSHA256": "98883114DFF6266B20CA542B9B1CC6691C9C59351886956013129BAB74188CCD",
+      "afterLength": 18624
+    }
+  ],
+  "note": "Final snapshot after both operation index entries; earlier after-manifest preserves the pre-index closure snapshot."
+}

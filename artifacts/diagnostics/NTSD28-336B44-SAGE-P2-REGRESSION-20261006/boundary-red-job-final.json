@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1e9eb32d25944e46bdedf439535b8dd0",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791259058330,
+      "finished_unix_ms": 1791259064175,
+      "last_update_unix_ms": 1791259064175,
+      "progress": {
+        "completed": 8,
+        "total": 8955,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791259063489,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.UnclampedProjectedMotion_PreservesSourceBits",
+        "last_finished_unix_ms": 1791259063492,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(DataOriented,False)",
+            "message": "  Expected: 1333 +/- 1E-10.0d\r\n  But was:  1367.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.RepeatedProjectedWallImpact_LeavesCollisionAndViewAtSameBoundary(Legacy,False)",
+            "message": "  Expected: 1333 +/- 1E-10.0d\r\n  But was:  1367.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(DataOriented)",
+            "message": "  Expected: 1333.0d +/- 1E-10.0d\r\n  But was:  2040.0d\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28SourceCharacterStageXEditorTests.StageEdge_ClampsPhysicalAndSynchronizesProjectedSource(Legacy)",
+            "message": "  Expected: 1333.0d +/- 1E-10.0d\r\n  But was:  2040.0d\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

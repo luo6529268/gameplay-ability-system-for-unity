@@ -1,0 +1,45 @@
+{
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs",
+      "sha256": "6f15769c6358b89b58cab8bad7e9f7777727b9d8cbb9baede173f95c889602a2",
+      "bytes": 21589
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "14e9d7becca4a2cff2c65fe1eda9aada401ed57050c8bddac0f1b9922d8fc475",
+      "bytes": 620128
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "27f28554e38b34261e4f77f34cfd10d7f60a9132eef5f0f871c8c5d86a26a3f1",
+      "bytes": 1519365
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "cbbdb808ffaa25b43209d9aa6c5b84b79e12d1d0d6cc41d836ec97e7524fca9b",
+      "bytes": 363276
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "ec9e65961bab313a6ee25d1c325d9e458fb97d67a1247f836dc49276486b0890",
+      "bytes": 1449219
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "sha256": "65c64ace2a841cdcfa156dcb173d7d351e0f605a7c6ca21558e34e67e316f7d3",
+      "bytes": 359458
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "sha256": "eaef76f12d94032ba6f1913ad4560ea73aa40aacdd0922c3fb8a857e90b7ad46",
+      "bytes": 2982
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "22f45de499b25978696fde51683962bff59eab2a9dc9f7bcb3292273dff4ca79",
+      "bytes": 17779
+    }
+  ],
+  "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/FILE-OPERATIONS/INDEX.md\n M docs/ai/STATE.md\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs\n?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md\n"
+}

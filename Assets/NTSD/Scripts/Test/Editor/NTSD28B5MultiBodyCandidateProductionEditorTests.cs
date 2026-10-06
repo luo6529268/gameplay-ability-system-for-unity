@@ -10,6 +10,47 @@ namespace NTSD.Test.Editor
 {
     public sealed class NTSD28B5MultiBodyCandidateProductionEditorTests
     {
+        [TestCase(CollisionFormalCollectorMode.ForceBruteForce, false)]
+        [TestCase(CollisionFormalCollectorMode.ForceBruteForce, true)]
+        [TestCase(CollisionFormalCollectorMode.ForceLegacyUnionAabb, false)]
+        [TestCase(CollisionFormalCollectorMode.ForceLegacyUnionAabb, true)]
+        [TestCase(CollisionFormalCollectorMode.ForceRoleAware, false)]
+        [TestCase(CollisionFormalCollectorMode.ForceRoleAware, true)]
+        public void AuthoredBodyDepthIsAppliedPerOverlappingBody(
+            CollisionFormalCollectorMode mode,
+            bool configuredView)
+        {
+            for (int variant = 0; variant < 3; variant++)
+            {
+                CreateProjectedGeometryScenario(
+                    configuredView, 535, 650, 535, 698, false,
+                    out SimulationWorld world,
+                    out BruteForceSceneQuery query,
+                    out LF2Character attacker);
+                LF2Entity target = world.FindEntityByRuntimeSlotForQuery(1);
+                LF2FrameData targetFrame = target.GetCollisionFrameData();
+                targetFrame.bodies.Clear();
+                targetFrame.bodies.Add(new BattleBodyBoxValue(21, -10, 43, 20));
+                if (variant == 1)
+                    targetFrame.bodies.Add(new BattleBodyBoxValue(22, -10, 43, 20, 40));
+                if (variant == 2)
+                    targetFrame.bodies.Add(new BattleBodyBoxValue(1000, -10, 43, 20, 999));
+
+                List<SceneQueryHit> candidates = RunCollection(world, query, mode, attacker);
+                int expected = variant == 1 ? 1 : 0;
+                Assert.That(candidates.Count, Is.EqualTo(expected),
+                    $"mode={mode} configuredView={configuredView} variant={variant}");
+                if (expected != 0)
+                    Assert.That(candidates[0].BodyX, Is.EqualTo(22));
+
+                LF2FrameData attackerFrame = attacker.GetCollisionFrameData();
+                List<SceneQueryHit> direct = query.QueryBodyHits(
+                    attacker, attackerFrame, attackerFrame.itrs[0]);
+                Assert.That(direct.Count, Is.EqualTo(expected),
+                    "Direct query must apply depth to the same overlapping body.");
+            }
+        }
+
         [TestCase(CollisionFormalCollectorMode.ForceBruteForce)]
         [TestCase(CollisionFormalCollectorMode.ForceLegacyUnionAabb)]
         [TestCase(CollisionFormalCollectorMode.ForceRoleAware)]

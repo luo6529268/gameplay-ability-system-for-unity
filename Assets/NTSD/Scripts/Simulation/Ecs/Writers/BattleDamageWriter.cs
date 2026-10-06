@@ -965,7 +965,6 @@ namespace NTSD.Simulation.Ecs
 
             if (itr.kind == 9)
             {
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
                 return true;
             }
 
@@ -1484,12 +1483,7 @@ namespace NTSD.Simulation.Ecs
                 if (victimType != (int)LF2ObjectType.SpecialAttack)
                     return false;
 
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
-                LF2CharacterData victimData =
-                    victim.FrameCache?.Wrapper?.characterData;
-                if (!string.IsNullOrEmpty(victimData?.weapon_broken_sound))
-                    victim.QueueBattleSound(victimData.weapon_broken_sound);
-
+                // Alignment contract: NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001; raw kind-9 relations emit no hit audio.
                 attacker.FrameDelay = -3;
                 if (victim.GetState() == LF2States.ObjectFlying)
                 {

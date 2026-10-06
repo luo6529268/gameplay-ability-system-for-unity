@@ -1,0 +1,6 @@
+{
+  "projected": true,
+  "natural": true,
+  "playerSlot": 0,
+  "error": "System.IO.InvalidDataException: Combatant slot 0 is outside the frozen baseline contract.\r\n  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.ValidateScenario (NTSD.EditorTools.NTSD28UnityRawCaptureEditor+UnityRawScenario scenario) [0x00589] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28UnityRawCaptureEditor.cs:1016 \r\n  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests (System.String runtimeRoot, System.String scenarioPath, NTSD.Simulation.BattleRuntimeProfile profile, System.Int32 totalTicks, System.Action`3[T1,T2,T3] verify, System.Boolean useProjectMode) [0x00035] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28UnityRawCaptureEditor.cs:148 \r\n  at NTSD.Test.Editor.NTSD28SageKnockbackRegressionEditorTests.RunSage (System.Boolean projected, System.Boolean natural, System.Int32 playerSlot, System.Int32 recallDelay) [0x00098] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackRegressionEditorTests.cs:61 "
+}

@@ -1,0 +1,21 @@
+{
+  "case": "same191 P2 Naruto full Driver vs actual336B44 mode0",
+  "playerSlot": 1,
+  "unityTransformed": false,
+  "unityCloneCreated": true,
+  "unityClonePrepared": true,
+  "ticksUnity": 191,
+  "ticksFormal": 191,
+  "comparedFields": {
+    "oid": "oid",
+    "action": "action",
+    "state": "state",
+    "counter": "frameCounter",
+    "owner": "owner",
+    "hp": "hp"
+  },
+  "compared": 1146,
+  "differences": 0,
+  "firstDifferences": [],
+  "scope": "Focal Naruto six-field equality only; formal four actors/own background vs Unity two actors/project map and projection. No PP or full world or GPU claim."
+}

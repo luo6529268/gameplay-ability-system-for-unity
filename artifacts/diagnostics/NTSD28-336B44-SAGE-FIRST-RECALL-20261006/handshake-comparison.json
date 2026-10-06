@@ -1,0 +1,318 @@
+{
+  "scope": "P1 Naruto and OID96 action/state/frameCounter/owner/oid at234-251; absoluteZ offset and mode MP differ, world/rng/other actors not compared. Legacy LFR terminal expected2 meansexit46; success transition only.",
+  "formalExeSHA256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "preFixCloneFirstDifferenceTick": 234,
+  "formalSageTick": 251,
+  "green": {
+    "False": {
+      "file": "artifacts\\diagnostics\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006\\delayed-first-False-2d673726f8714ebda92177fccffd81ae.json",
+      "sageTick": 251,
+      "rows": 251
+    },
+    "True": {
+      "file": "artifacts\\diagnostics\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006\\delayed-first-True-e35b4b500b9f422bbc718f8ffc7a33df.json",
+      "sageTick": 251,
+      "rows": 251
+    }
+  },
+  "steps": [
+    {
+      "projected": "False",
+      "tick": 234,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 401,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 2,
+        "action": 401,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 234,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 235,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 428,
+        "state": 190,
+        "owner": 0,
+        "counter": 0
+      },
+      "unity": {
+        "oid": 2,
+        "action": 428,
+        "state": 190,
+        "owner": 0,
+        "counter": 0
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 235,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 2
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 2
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 236,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 402,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 2,
+        "action": 402,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 236,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 3
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 3
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 251,
+      "role": "owner",
+      "formal": {
+        "oid": 99,
+        "action": 0,
+        "state": 0,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 99,
+        "action": 0,
+        "state": 0,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "False",
+      "tick": 251,
+      "role": "clone",
+      "formal": null,
+      "unity": null,
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 234,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 401,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 2,
+        "action": 401,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 234,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 235,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 428,
+        "state": 190,
+        "owner": 0,
+        "counter": 0
+      },
+      "unity": {
+        "oid": 2,
+        "action": 428,
+        "state": 190,
+        "owner": 0,
+        "counter": 0
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 235,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 2
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 2
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 236,
+      "role": "owner",
+      "formal": {
+        "oid": 2,
+        "action": 402,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 2,
+        "action": 402,
+        "state": 190,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 236,
+      "role": "clone",
+      "formal": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 3
+      },
+      "unity": {
+        "oid": 96,
+        "action": 334,
+        "state": 15,
+        "owner": 0,
+        "counter": 3
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 251,
+      "role": "owner",
+      "formal": {
+        "oid": 99,
+        "action": 0,
+        "state": 0,
+        "owner": 0,
+        "counter": 1
+      },
+      "unity": {
+        "oid": 99,
+        "action": 0,
+        "state": 0,
+        "owner": 0,
+        "counter": 1
+      },
+      "equal": true
+    },
+    {
+      "projected": "True",
+      "tick": 251,
+      "role": "clone",
+      "formal": null,
+      "unity": null,
+      "equal": true
+    }
+  ],
+  "matched": 16,
+  "comparisons": 16
+}

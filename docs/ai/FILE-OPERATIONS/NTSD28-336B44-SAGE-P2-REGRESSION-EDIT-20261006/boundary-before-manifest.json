@@ -1,0 +1,30 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "exists": true,
+    "sha256": "899cf222428aacedc5874b6452a5ed074f0b4080781a5f1579a8cd5273b36c36",
+    "git": "",
+    "bytes": 53819
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "exists": true,
+    "sha256": "05b18c45a71016e31a75209958a382613fc2ea43156965df743fb720169deec1",
+    "git": "",
+    "bytes": 290519
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterPreFrameBoundsPass.cs",
+    "exists": true,
+    "sha256": "ab006717e30ffa2af5230bb82d559aa9c438e571b12f407ec922e0622aab0d01",
+    "git": "",
+    "bytes": 7323
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SourceCharacterStageXEditorTests.cs",
+    "exists": true,
+    "sha256": "b6dfc1496340258df85f507619a123ef883ff3596e18597b54c20f23711fd5fd",
+    "git": "",
+    "bytes": 7339
+  }
+]

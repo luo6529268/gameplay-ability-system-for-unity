@@ -1,0 +1,33 @@
+{
+  "runId": "fdc4c9fc7d934126a55c585d2f86441a",
+  "phase": "SAGE",
+  "status": "RUNNING",
+  "error": "System.InvalidOperationException: Sequence contains no matching element\r\n  at System.Linq.Enumerable.First[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`2[T,TResult] predicate) [0x00011] in <ea489521390f48908a7ce45cb17a6848>:0 \r\n  at NTSD.Test.Editor.NTSD28SageKnockbackSceneProbeEditor.QueuePhysical (NTSD.Simulation.SimulationInputButtons buttons) [0x000b3] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs:375 \r\n  at NTSD.Test.Editor.NTSD28SageKnockbackSceneProbeEditor.Update () [0x003c4] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs:187 ",
+  "sceneHash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "configHash": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+  "started": 116022.4596327,
+  "tick": 2,
+  "skillPhase": 0,
+  "skillPhaseTick": 0,
+  "sageTick": 0,
+  "battleMode": 0,
+  "knockbacks": 0,
+  "hitStartTick": 0,
+  "hpBeforeHit": 0,
+  "waitingHit": false,
+  "airborne": false,
+  "sageVisible": false,
+  "configured": true,
+  "cleanAfter": false,
+  "filesUnchanged": false,
+  "shutdownComplete": false,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "lastProgress": 116213.4152222,
+  "maxProjectionError": 0.0,
+  "rows": [
+    "sage t1 key16 oid2 a0 clone owner mode0",
+    "sage t2 key16 oid2 a110 clone owner mode0"
+  ]
+}

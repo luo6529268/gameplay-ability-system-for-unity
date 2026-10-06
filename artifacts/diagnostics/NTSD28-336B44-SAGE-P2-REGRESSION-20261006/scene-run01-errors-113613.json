@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 1 log entries.",
+    "data": [
+      {
+        "type": "Exception",
+        "message": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 1)",
+        "file": "I:/GitHub/Unity_GAS/unity-mcp/MCPForUnity/Editor/Helpers/McpLog.cs",
+        "line": 40,
+        "stackTrace": null
+      }
+    ]
+  }
+}

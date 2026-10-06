@@ -1,0 +1,120 @@
+{
+  "case": "type3-near",
+  "startedUtc": "2026-10-05T20:26:33.532057+00:00",
+  "debuggerExit": 0,
+  "ticks": [
+    {
+      "sequence": 1,
+      "count": 2,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        },
+        {
+          "source": 1,
+          "worldX": 503,
+          "nativeChannel": -1,
+          "path": "data\\020.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 3,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 3,
+      "count": 0,
+      "events": []
+    },
+    {
+      "sequence": 4,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 4,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 4,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    },
+    {
+      "sequence": 4,
+      "count": 1,
+      "events": [
+        {
+          "source": 1,
+          "worldX": 500,
+          "nativeChannel": -1,
+          "path": "data\\005.wav"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "relationCalls": [
+    {
+      "attackerSlot": 0,
+      "candidateIndex": 0
+    }
+  ],
+  "formalShaAfter": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+}

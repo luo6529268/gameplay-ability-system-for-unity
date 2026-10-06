@@ -1,0 +1,73 @@
+{
+  "cases": [
+    {
+      "case": "naruto388",
+      "unityResult": "PASS",
+      "samples": [
+        {
+          "tick": 1,
+          "objectId": 52,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 1
+        },
+        {
+          "tick": 2,
+          "objectId": 52,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 2
+        },
+        {
+          "tick": 3,
+          "objectId": 52,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 3
+        }
+      ],
+      "matchesSelectedFormalFields": true,
+      "staleExporterFormalShaIgnored": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+      "evidenceClass": "UNITY_CURRENT_RUNTIME_DIAGNOSTIC_ONLY",
+      "certificateEligible": false
+    },
+    {
+      "case": "sasuke342",
+      "unityResult": "PASS",
+      "samples": [
+        {
+          "tick": 1,
+          "objectId": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 1
+        },
+        {
+          "tick": 2,
+          "objectId": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 2
+        },
+        {
+          "tick": 3,
+          "objectId": 38,
+          "action": 0,
+          "state": 0,
+          "frameCounter": 3
+        }
+      ],
+      "matchesSelectedFormalFields": true,
+      "staleExporterFormalShaIgnored": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+      "evidenceClass": "UNITY_CURRENT_RUNTIME_DIAGNOSTIC_ONLY",
+      "certificateEligible": false
+    }
+  ],
+  "comparedFields": [
+    "objectId",
+    "action",
+    "state",
+    "frameCounter"
+  ],
+  "boundary": "current-DAT controlled mechanism only. Different World/seed/initial Z/native manager; not full trace parity, physical input, sprite pixels, or reported user sequence."
+}

@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 1 log entries.",
+    "data": [
+      {
+        "type": "Error",
+        "message": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs(145,34): error CS1061: 'LF2Entity' does not contain a definition for 'Controller' and no accessible extension method 'Controller' accepting a first argument of type 'LF2Entity' could be found (are you missing a using directive or an assembly reference?)",
+        "file": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackSceneProbeEditor.cs",
+        "line": 145,
+        "stackTrace": null
+      }
+    ]
+  }
+}

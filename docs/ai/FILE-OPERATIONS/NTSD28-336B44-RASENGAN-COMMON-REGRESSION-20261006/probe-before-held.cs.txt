@@ -1,0 +1,126 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NTSD.Animation.LF2Objects;
+using NTSD.EditorTools;
+using NTSD.Simulation;
+using NUnit.Framework;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class NTSD28RasenganCommonRegressionEditorTests
+    {
+        private const string OutputRoot =
+            "artifacts/diagnostics/NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006/";
+
+        [TestCase("charge-clone-near", 16)]
+        [TestCase("charge-body-near", 16)]
+        [TestCase("prepared-hold-sound-far", 64)]
+        public void AuthoredRasenganCommonConsumerMatchesFormalWitness(string scenario, int ticks)
+        {
+            var rows = new List<JObject>();
+            string tracePath = OutputRoot + scenario + "/root-trace.jsonl";
+            JObject[] formal = File.ReadLines(tracePath).Select(JObject.Parse).ToArray();
+            JObject observation = JObject.Parse(File.ReadAllText(OutputRoot + scenario + "/summary.json"));
+            JArray audio = (JArray)observation["events"];
+            try
+            {
+                NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                    "Assets/NTSD/Content/LoganRuntime", OutputRoot + scenario + "-unity-scenario.json",
+                    BattleRuntimeProfile.Authority400, ticks, (driver, unused, identity) =>
+                    {
+                        SimulationWorld world = driver.World;
+                        world.Runtime.FunctionKeys.ResetForBattle(true);
+                        world.Runtime.Flow.FrameToggle = 0;
+                        world.Runtime.Flow.InputPhase = 0;
+                        var entities = new List<LF2Entity>();
+                        for (int tick = 1; tick <= ticks; tick++)
+                        {
+                            Assert.That(driver.StepOneTick(new FrameInputSet(tick,
+                                new[]
+                                {
+                                    new SimulationPlayerInput(0, SimulationInputButtons.None),
+                                    new SimulationPlayerInput(1, SimulationInputButtons.None)
+                                }), ignorePaused: true, buildPresentation: false), Is.True);
+                            world.GetAllEntities(entities);
+                            rows.Add(JObject.FromObject(new
+                            {
+                                tick,
+                                actors = entities.Select(value => new
+                                {
+                                    slot = value.Runtime.SlotIndex,
+                                    oid = value.ObjectId,
+                                    action = value.Frame.N,
+                                    state = value.Frame.D?.state ?? -1,
+                                    counter = value.Runtime.AttackingCounter,
+                                    owner = value.Runtime.OwnerSlotIndex,
+                                    parent = value.Runtime.LinkState,
+                                    catchTarget = value.Runtime.TargetSlotIndex,
+                                    catchSource = value.Runtime.CatchSourceSlot90,
+                                    x = value.Runtime.SourceRuleX,
+                                    z = value.Runtime.SourceRuleZ,
+                                    hp = value.Runtime.HP
+                                }).ToArray(),
+                                sounds = world.PendingSounds.Select(value => new
+                                {
+                                    path = value.Cue,
+                                    worldX = value.WorldX
+                                }).ToArray()
+                            }));
+                        }
+                    }, useProjectMode: true);
+            }
+            finally
+            {
+                WriteNew(scenario, new { scenario, ticks, rows });
+            }
+
+            Assert.That(rows, Has.Count.EqualTo(ticks));
+            for (int tick = 1; tick <= ticks; tick++)
+            {
+                JObject expected = formal.Single(value => (int)value["tick"] == tick);
+                JObject actual = rows[tick - 1];
+                foreach (int slot in new[] { 0, 1 })
+                {
+                    JToken expectedActor = expected["entities"].FirstOrDefault(value => (int)value["slot"] == slot);
+                    JToken actualActor = actual["actors"].FirstOrDefault(value => (int)value["slot"] == slot);
+                    Assert.That(actualActor != null, Is.EqualTo(expectedActor != null), "actor existence tick" + tick + " slot" + slot);
+                    if (expectedActor == null)
+                        continue;
+                    foreach (string field in new[] { "oid", "action", "state", "hp" })
+                        Assert.That((int)actualActor[field], Is.EqualTo((int)expectedActor[field]),
+                            "formal tick" + tick + " slot" + slot + " " + field);
+                }
+                if (scenario == "prepared-hold-sound-far" && tick > 1)
+                {
+                    JToken expectedAudio = audio.Single(value => (int)value["sequence"] == tick);
+                    string[] expected053 = expectedAudio["events"].Where(value =>
+                        NormalizePath((string)value["path"]) == "data/053.wav")
+                        .Select(value => NormalizePath((string)value["path"])).ToArray();
+                    string[] actual053 = actual["sounds"].Where(value =>
+                        NormalizePath((string)value["path"]) == "data/053.wav")
+                        .Select(value => NormalizePath((string)value["path"])).ToArray();
+                    Assert.That(actual053, Is.EqualTo(expected053), "formal053 event cadence tick" + tick);
+                }
+            }
+        }
+
+        private static string NormalizePath(string path)
+        {
+            return (path ?? string.Empty).Replace('\\', '/').ToLowerInvariant();
+        }
+
+        private static void WriteNew(string label, object value)
+        {
+            string path = OutputRoot + label + "-unity-" + Guid.NewGuid().ToString("N") + ".json";
+            using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+            using (var writer = new StreamWriter(stream))
+                writer.Write(JsonConvert.SerializeObject(value, Formatting.Indented));
+        }
+    }
+}
+#endif

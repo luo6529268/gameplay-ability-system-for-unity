@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ee8daabb8a45440cb042afbf6c9b4c13",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791257646287,
+      "finished_unix_ms": 1791257659268,
+      "last_update_unix_ms": 1791257659268,
+      "progress": {
+        "completed": 2,
+        "total": 8950,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791257653997,
+        "last_finished_test_full_name": "NTSD.Test.NTSDHitboxGizmoProjectionEditorTests.DiagnosticsVolumes_ReuseProjectedRects_ForBodyItrAndPickup",
+        "last_finished_unix_ms": 1791257654002,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.5640486,
+          "resultState": "Passed"
+        },
+        "results": null
+      }
+    }
+  }
+}

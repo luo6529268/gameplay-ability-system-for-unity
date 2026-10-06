@@ -1,0 +1,74 @@
+{
+  "time": "2026-10-06T12:48:59.336510+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs",
+      "beforeBackupSHA256": "6F15769C6358B89B58CAB8BAD7E9F7777727B9D8CBB9BAEDE173F95C889602A2",
+      "backupVerified": true,
+      "afterLength": 27938,
+      "afterSHA256": "40F379C26D14F4C33BF3C6065BFCACCA5C0E641FE7C7D29C5EF8CF16944AD767",
+      "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs\n"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeBackupSHA256": "14E9D7BECCA4A2CFF2C65FE1EDA9AADA401ED57050C8BDDAC0F1B9922D8FC475",
+      "backupVerified": true,
+      "afterLength": 621889,
+      "afterSHA256": "6C25861BAF63AF60A866AC4884ACB3732371899D8CEBE03DECE702A97F305D0D",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeBackupSHA256": "27F28554E38B34261E4F77F34CFD10D7F60A9132EEF5F0F871C8C5D86A26A3F1",
+      "backupVerified": true,
+      "afterLength": 1521028,
+      "afterSHA256": "2060A0D00885E25208D815E74928AAA368289D8338CAF28864E7F6738E543056",
+      "gitStatus": " M docs/ai/STATE.md\n"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeBackupSHA256": "CBBDB808FFAA25B43209D9AA6C5B84B79E12D1D0D6CC41D836EC97E7524FCA9B",
+      "backupVerified": true,
+      "afterLength": 365414,
+      "afterSHA256": "0BDAD4B0A7B05F4349C4C24532A7314C413EE5A4F7010C70DE45BD156E0E70DF",
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeBackupSHA256": "EC9E65961BAB313A6EE25D1C325D9E458FB97D67A1247F836DC49276486B0890",
+      "backupVerified": true,
+      "afterLength": 1451115,
+      "afterSHA256": "618531DA58708D10529B10C465006C65392946F1A91629293F7762A2DA576068",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeBackupSHA256": "65C64ACE2A841CDCFA156DCB173D7D351E0F605A7C6CA21558E34E67E316F7D3",
+      "backupVerified": true,
+      "afterLength": 360768,
+      "afterSHA256": "FE70293114D2055C454D7231A765524E936FB945B67BEFD14B48F059CA5E9791",
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "beforeBackupSHA256": "EAEF76F12D94032BA6F1913AD4560EA73AA40AACDD0922C3FB8A857E90B7AD46",
+      "backupVerified": true,
+      "afterLength": 3851,
+      "afterSHA256": "6F38C22B2E7701AAE8ED49ED57CF04DEBE06ACF051558AA7302AF747789B4A44",
+      "gitStatus": "?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md\n"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeBackupSHA256": "22F45DE499B25978696FDE51683962BFF59EAB2A9DC9F7BCB3292273DFF4CA79",
+      "backupVerified": true,
+      "afterLength": 18198,
+      "afterSHA256": "ACF3C0C0D66C8C8718EDEE3F7F8F6857D56BFCE8EEAE382BA62E923C7C27CB60",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+    }
+  ],
+  "protectedCount": 681,
+  "protectedChanged": [],
+  "actualEditorPID": 19040,
+  "port": 6402,
+  "noDeleteMoveRestore": true
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "exists": true,
+    "git": "M docs/ai/CHANGE-LEDGER.md",
+    "bytes": 616501,
+    "sha256": "f20e6e4d07b9ce57430f3a6917e245d2c5b160c0bcd62e1785abb25a627d955b"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "exists": true,
+    "git": "M docs/ai/STATE.md",
+    "bytes": 1515738,
+    "sha256": "b0e8cbf3bcef81b6aef2a45da5db178da8e2c0de92c5ced8b0f377fe7a11fc0e"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "exists": true,
+    "git": "M docs/ai/CURRENT-AUTHORITY.md",
+    "bytes": 363370,
+    "sha256": "614ae20b361957a287fe024444647018bc130a5397270110089277b1419b43dd"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "exists": true,
+    "git": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "bytes": 1450149,
+    "sha256": "b8d010e3e04be5fcd541dfefb93eaca0911ee98346f8068c2c0a7ae4f9eb681f"
+  },
+  {
+    "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "exists": true,
+    "git": "M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "bytes": 357965,
+    "sha256": "686417edb87b4df7e2127aba527b6e2316e2cd4cb7643ad486f286806a2f3e5d"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "exists": true,
+    "git": "M docs/ai/FILE-OPERATIONS/INDEX.md",
+    "bytes": 17594,
+    "sha256": "cb8021887be71ab58897838cd4dcbb1469f913c35dc10407ba984cb9e2ae52aa"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs",
+    "exists": false,
+    "git": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackSceneProbeEditor.cs",
+    "exists": false,
+    "git": ""
+  }
+]

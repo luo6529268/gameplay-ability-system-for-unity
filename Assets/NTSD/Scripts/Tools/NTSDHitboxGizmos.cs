@@ -74,46 +74,61 @@ namespace NTSD.Tools
         {
             if (entity == null) return;
 
-            LF2FrameData frameD = entity.Frame?.D;
+            LF2FrameData frameD = entity.GetCollisionFrameData();
             if (frameD == null) return;
 
-            float spriteW = entity.GetSpriteWidthPxForCollision();
-            if (spriteW <= 0f) return;
-
             if (showBdy)
-                DrawBdyBoxes(entity, frameD, spriteW);
+                DrawBdyBoxes(entity, frameD);
 
             if (!showItr) return;
 
-            DrawItrBoxes(entity, frameD, spriteW);
+            DrawItrBoxes(entity, frameD);
 
             if (entity is LF2WeaponBase weaponBase)
-                DrawWeaponPickupBoxes(weaponBase, frameD, spriteW);
+                DrawWeaponPickupBoxes(weaponBase, frameD);
         }
 
-        private void DrawBdyBoxes(LF2Entity entity, LF2FrameData frameD, float spriteW)
+        private void DrawBdyBoxes(LF2Entity entity, LF2FrameData frameD)
         {
             if (frameD.bodies == null || frameD.bodies.Count == 0) return;
 
-            var vols = entity.PS.GetBodyVolumes(frameD.bodies, frameD.centerx, frameD.centery, spriteW);
             Color fill = new Color(BdyColor.r, BdyColor.g, BdyColor.b, bdyAlpha);
             Color wire = new Color(BdyColor.r, BdyColor.g, BdyColor.b, 1f);
 
-            foreach (var vol in vols)
-                DrawVolume(vol, fill, wire);
+            foreach (BattleBodyBoxValue body in frameD.bodies)
+            {
+                if (TryBuildBodyVolumeForDiagnostics(
+                        entity,
+                        frameD,
+                        body,
+                        out PhysicsState.BattleVolume volume))
+                {
+                    DrawVolume(entity, volume, fill, wire);
+                }
+            }
         }
 
-        private void DrawItrBoxes(LF2Entity entity, LF2FrameData frameD, float spriteW)
+        internal static bool TryBuildBodyVolumeForDiagnostics(
+            LF2Entity entity,
+            LF2FrameData frame,
+            BattleBodyBoxValue body,
+            out PhysicsState.BattleVolume volume)
+        {
+            return BruteForceSceneQuery.TryBuildBodyVolumeForDiagnostics(
+                entity,
+                frame,
+                body,
+                out volume);
+        }
+
+        private void DrawItrBoxes(LF2Entity entity, LF2FrameData frameD)
         {
             if (frameD.itrs == null || frameD.itrs.Count == 0) return;
 
-            var vols = entity.PS.GetItrVolumes(frameD.itrs, frameD.centerx, frameD.centery, spriteW);
-            int count = Mathf.Min(frameD.itrs.Count, vols.Count);
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < frameD.itrs.Count; i++)
             {
                 InteractionArea itr = frameD.itrs[i];
-                if (ShouldHideReleaseState18Itr(entity, frameD, itr)) continue;
+                if (itr == null || ShouldHideReleaseState18Itr(entity, frameD, itr)) continue;
 
                 int kind = frameD.itrs[i].kind;
                 Color baseColor = kind == 0 || kind == 4 || kind == 5
@@ -124,7 +139,14 @@ namespace NTSD.Tools
 
                 Color fill = new Color(baseColor.r, baseColor.g, baseColor.b, itrAlpha);
                 Color wire = new Color(baseColor.r, baseColor.g, baseColor.b, 1f);
-                DrawVolume(vols[i], fill, wire);
+                if (BruteForceSceneQuery.TryBuildItrVolumeForDiagnostics(
+                        entity,
+                        frameD,
+                        itr,
+                        out PhysicsState.BattleVolume volume))
+                {
+                    DrawVolume(entity, volume, fill, wire);
+                }
             }
         }
 
@@ -136,12 +158,10 @@ namespace NTSD.Tools
             return entity is LF2Character || entity is LF2WeaponBase || entity is LF2SpecialAttack;
         }
 
-        private void DrawWeaponPickupBoxes(LF2WeaponBase weapon, LF2FrameData frameD, float spriteW)
+        private void DrawWeaponPickupBoxes(LF2WeaponBase weapon, LF2FrameData frameD)
         {
             if (frameD.wpoints == null || frameD.wpoints.Count == 0) return;
-            if (weapon.PS == null) return;
 
-            bool facingLeft = weapon.PS.dir == "left";
             Color fill = new Color(WPointColor.r, WPointColor.g, WPointColor.b, itrAlpha);
             Color wire = new Color(WPointColor.r, WPointColor.g, WPointColor.b, 1f);
 
@@ -149,37 +169,45 @@ namespace NTSD.Tools
             {
                 var wp = frameD.wpoints[i];
                 if (wp == null) continue;
-                if (wp.kind != 1 && wp.kind != 2 && wp.kind != 7) continue;
-                if (wp.w <= 0 || wp.h <= 0) continue;
-
-                float localX = facingLeft ? spriteW - wp.x - wp.w : wp.x;
-                var vol = new PhysicsState.BattleVolume(
-                    weapon.PS.sx,
-                    weapon.PS.sy,
-                    weapon.PS.sz,
-                    localX,
-                    wp.y,
-                    wp.w,
-                    wp.h,
-                    NTSDGlobal.Default.Itr.ZWidth
-                );
-
-                DrawVolume(vol, fill, wire);
+                if (BruteForceSceneQuery.TryBuildPickupVolumeForDiagnostics(
+                        weapon,
+                        frameD,
+                        wp,
+                        out PhysicsState.BattleVolume volume))
+                {
+                    DrawVolume(weapon, volume, fill, wire);
+                }
             }
+        }
+
+        internal static Rect GetScreenRectForDiagnostics(
+            LF2Entity entity,
+            PhysicsState.BattleVolume volume)
+        {
+            return new Rect(
+                volume.x + volume.vx,
+                volume.y + volume.z + volume.vy,
+                volume.w,
+                volume.h);
         }
 
         /// <summary>
         /// 将 NTSD 像素坐标的碰撞体积绘制到 Unity 世界坐标。
-        /// BattleVolume.y 已经是屏幕 Y 原点；屏幕 Y 向下为正，Unity Y 向上为正。
+        /// BattleVolume.y + z 是屏幕 Y 原点；屏幕 Y 向下为正，Unity Y 向上为正。
         /// </summary>
-        private static void DrawVolume(PhysicsState.BattleVolume vol, Color fill, Color wire)
+        private static void DrawVolume(
+            LF2Entity entity,
+            PhysicsState.BattleVolume vol,
+            Color fill,
+            Color wire)
         {
-            float screenLeft = vol.x + vol.vx;
-            float worldWidth = NTSDRenderSpace.PixelWidthToWorld(vol.w);
-
-            float screenTop = vol.y + vol.vy;
-            Vector3 worldTopLeft = NTSDRenderSpace.ScreenPixelToWorld(screenLeft, screenTop, 0f);
-            float worldHeight = NTSDRenderSpace.PixelHeightToWorld(vol.h);
+            Rect screenRect = GetScreenRectForDiagnostics(entity, vol);
+            float worldWidth = NTSDRenderSpace.PixelWidthToWorld(screenRect.width);
+            Vector3 worldTopLeft = NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                screenRect.x,
+                screenRect.y,
+                0f);
+            float worldHeight = NTSDRenderSpace.PixelHeightToWorld(screenRect.height);
 
             float cx = worldTopLeft.x + worldWidth * 0.5f;
             float cy = worldTopLeft.y - worldHeight * 0.5f;

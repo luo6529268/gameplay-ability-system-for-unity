@@ -3225,7 +3225,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             return target.Match?.BattleBuffersForServices
-                .CanQueueSoundsWithoutRejection(1) == true;
+                .CanQueueSoundsWithoutRejection(0) == true;
         }
 
         private static bool CanProjectStandardType3DamageWriterEffect(
@@ -3345,11 +3345,8 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            int requiredSounds = string.IsNullOrWhiteSpace(targetData.weapon_broken_sound)
-                ? 1
-                : 2;
             return target.Match?.BattleBuffersForServices
-                .CanQueueSoundsWithoutRejection(requiredSounds) == true;
+                .CanQueueSoundsWithoutRejection(0) == true;
         }
 
         private static bool CanProjectType3StateSyncDamageWriterEffect(
@@ -3780,13 +3777,6 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            SimulationWorld targetWorld = target.Match ?? attacker.Match;
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker,
-                attacker.Runtime.XInt,
-                ref projection);
             return true;
         }
 
@@ -4004,24 +3994,6 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            SimulationWorld targetWorld = target.Match ?? attacker.Match;
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker,
-                attacker.Runtime.XInt,
-                ref projection);
-            LF2CharacterData targetData =
-                LF2HitResolveRuntimeData.ResolveCharacterData(target);
-            if (!string.IsNullOrWhiteSpace(targetData?.weapon_broken_sound))
-            {
-                ProjectQueuedSound(
-                    targetWorld,
-                    targetData.weapon_broken_sound,
-                    target,
-                    target.Runtime.XInt,
-                    ref projection);
-            }
             projection.AttackerFrameDelay = -3;
             projection.TargetSpecialHitLatch0EB = true;
 

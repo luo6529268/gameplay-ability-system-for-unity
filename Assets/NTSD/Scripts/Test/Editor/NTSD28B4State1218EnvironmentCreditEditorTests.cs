@@ -35,7 +35,7 @@ namespace NTSD.Test.Editor
             Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(10));
             Assert.That(credit.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(world.PendingSounds, Has.Count.EqualTo(1));
-            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(@"data\016.wav"));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_016"));
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace NTSD.Test.Editor
                 Assert.That(world.PendingSounds.Count, Is.EqualTo(expectedSounds));
                 if (expectedSounds != 0)
                     Assert.That(world.PendingSounds[0].Cue,
-                        Is.EqualTo(@"data\016.wav"));
+                        Is.EqualTo("SFX_016"));
             }
             finally
             {

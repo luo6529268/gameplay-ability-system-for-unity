@@ -1,0 +1,402 @@
+{
+  "exit": 46,
+  "exeSha256": "336b44e58bea637246b65204afc50fd8734c9aa38969b82836fa685497eb7bd3",
+  "traceRows": 192,
+  "transitions": [
+    {
+      "tick": 0,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": null
+    },
+    {
+      "tick": 2,
+      "oid": 2,
+      "action": 110,
+      "cloneAction": null
+    },
+    {
+      "tick": 6,
+      "oid": 2,
+      "action": 400,
+      "cloneAction": null
+    },
+    {
+      "tick": 7,
+      "oid": 2,
+      "action": 414,
+      "cloneAction": null
+    },
+    {
+      "tick": 8,
+      "oid": 2,
+      "action": 415,
+      "cloneAction": null
+    },
+    {
+      "tick": 9,
+      "oid": 2,
+      "action": 416,
+      "cloneAction": 339
+    },
+    {
+      "tick": 11,
+      "oid": 2,
+      "action": 416,
+      "cloneAction": 338
+    },
+    {
+      "tick": 15,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 321
+    },
+    {
+      "tick": 16,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 19,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 23,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 27,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 31,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 35,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 39,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 43,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 47,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 51,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 55,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 59,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 63,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 67,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 71,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 75,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 79,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 83,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 87,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 91,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 95,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 99,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 103,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 107,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 111,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 115,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 119,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 123,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 127,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 131,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 135,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 139,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 143,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 147,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 151,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 325
+    },
+    {
+      "tick": 155,
+      "oid": 2,
+      "action": 3,
+      "cloneAction": 325
+    },
+    {
+      "tick": 159,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": 325
+    },
+    {
+      "tick": 163,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": 325
+    },
+    {
+      "tick": 167,
+      "oid": 2,
+      "action": 2,
+      "cloneAction": 326
+    },
+    {
+      "tick": 168,
+      "oid": 2,
+      "action": 110,
+      "cloneAction": 327
+    },
+    {
+      "tick": 172,
+      "oid": 2,
+      "action": 400,
+      "cloneAction": 327
+    },
+    {
+      "tick": 173,
+      "oid": 2,
+      "action": 414,
+      "cloneAction": 327
+    },
+    {
+      "tick": 174,
+      "oid": 2,
+      "action": 401,
+      "cloneAction": 328
+    },
+    {
+      "tick": 175,
+      "oid": 2,
+      "action": 428,
+      "cloneAction": 328
+    },
+    {
+      "tick": 176,
+      "oid": 2,
+      "action": 428,
+      "cloneAction": 226
+    },
+    {
+      "tick": 179,
+      "oid": 2,
+      "action": 428,
+      "cloneAction": 300
+    },
+    {
+      "tick": 180,
+      "oid": 2,
+      "action": 428,
+      "cloneAction": null
+    },
+    {
+      "tick": 184,
+      "oid": 2,
+      "action": 0,
+      "cloneAction": null
+    },
+    {
+      "tick": 188,
+      "oid": 2,
+      "action": 1,
+      "cloneAction": null
+    }
+  ],
+  "formalReport": {
+    "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+    "passed": false,
+    "nativeParityClaim": false,
+    "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006\\formal-natural-p2-input191\\input.lfr",
+    "failureCode": 46,
+    "failureStage": "playback_tick_or_checksum",
+    "error": "LFR final header mismatch at logical slot 0 offset 52: expected 2, got 9",
+    "declaredTicks": 190,
+    "inputStartRow": 0,
+    "initialActionOverrides": {
+      "slot0": 0,
+      "slot1": 0
+    },
+    "initialFacingOverrides": {
+      "slot0": 1,
+      "slot1": 0
+    },
+    "initialMpOverrides": {
+      "slot0": 500,
+      "slot1": 500
+    },
+    "functionKeyUsage": {
+      "f6": 0,
+      "f7": 0,
+      "f8": 0,
+      "f9": 0
+    },
+    "completedTicks": 191,
+    "scene": {
+      "p1ObjectId": 9,
+      "p2ObjectId": 2,
+      "backgroundId": 1
+    },
+    "winnerGroup": -1,
+    "platformOperation30": {
+      "nonzeroEntityRows": 0,
+      "firstTick": null,
+      "lastTick": null,
+      "uniqueSlots": [],
+      "samples": []
+    },
+    "diagnosticTrace": {
+      "requested": true,
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006\\formal-natural-p2-input191\\root-trace.jsonl",
+      "rows": 192,
+      "startTick": 0,
+      "endTick": -1,
+      "writeOk": true
+    },
+    "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+  },
+  "scope": "Actual336B44, same191 physical actions replayed on P2 slot1 with Naruto and owner1; two focal roster slots swapped against P1 control and passive others preserved. Tests player/owner eligibility only; no Unity P2 natural trace yet."
+}

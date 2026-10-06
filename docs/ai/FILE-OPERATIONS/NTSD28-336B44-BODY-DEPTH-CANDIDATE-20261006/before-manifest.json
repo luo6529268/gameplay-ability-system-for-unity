@@ -1,0 +1,85 @@
+{
+  "time": "2026-10-06T12:39:07.879184+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "length": 346708,
+      "sha256": "CC6B79BCB8CB98AAD0D5706E98DE02A33FE2AAEAD97CF09681599C5AA5B93D40",
+      "gitStatus": " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+      "length": 18446,
+      "sha256": "EAB4970B4E91DEDA11FBBFA711C9EC95353A0557E1CFC1C5D1FBE09698DBA221",
+      "gitStatus": "",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B5MultiBodyCandidateProductionEditorTests.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackRegressionEditorTests.cs",
+      "length": 11526,
+      "sha256": "A0E50DA6BB312003F001F93D2DA5F92BA4A5E0CA8712863BE8A4A0882D6CD908",
+      "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28SageKnockbackRegressionEditorTests.cs"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "length": 621083,
+      "sha256": "C850C044B7AD43165EE98F20DA8112041068891422E6FD396A433681A5DDF63E",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\docs\\ai\\CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "length": 1520320,
+      "sha256": "293F2EC9A1A8BA47034AB2A119D2E04255940482EC9C3F8DBACE411841E6A370",
+      "gitStatus": " M docs/ai/STATE.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\docs\\ai\\STATE.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "length": 363809,
+      "sha256": "0C94154FBEAD847EAE3AA42FBA33E6C47735B2F380E6388C0A9F081C1B54F590",
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\docs\\ai\\CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "length": 1450174,
+      "sha256": "3E4D9CD3CF98F3E6384FBAD34E05DC85254E5684E843788415F256748508CC7C",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "length": 359929,
+      "sha256": "414AD351ABF75A1CDE9A1B4E869B0FE45D42977D21DE84FD0D2D8FF5125C6321",
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "length": 3453,
+      "sha256": "9211E664ECB007153660A68B8DE90D041D158F0DBD49B4A7B3AD052396505521",
+      "gitStatus": "?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\docs\\ai\\TASKS\\NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "length": 18017,
+      "sha256": "795A4FC52B67ADCE7519AB0FD39BD83A9746D424AEF2047EB967DE5FAA62A80C",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md"
+    }
+  ]
+}

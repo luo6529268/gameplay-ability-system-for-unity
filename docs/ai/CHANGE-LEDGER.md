@@ -1743,3 +1743,48 @@ NTSD-WORDS-PREWARM-DEPENDENCY-001 / VERIFIED (scoped): original Unity Menu forma
 | NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001 | RUNTIME_PENDING | 共享命中/防御/对象落地声音与预测 | [Record](CHANGE-RECORDS/NTSD28-336B44-BATTLE-AUDIO-EVENT-RULES-001.md) |
 
 2026-10-06 新音效任务进度：CUE-RESOLVER-001 / EVENT-RULES-001 = CODE_WRITTEN；cue两项预期RED，966个缺失正式WAV已接入、12既有保留。原Editor正在导入，ECS预测/聚焦声音/代表Play仍待，不恢复旧对齐目标。
+
+2026-10-06 EVENT-RULES-001 correction: parent RUNTIME_PENDING retained; kind9 formal event confirmed and sound-only focused fix passed (raw4/directordinary2). Declared LF2Weapon/observer paths covered. Old broadconverted2 failed at counter45/0, no baseline/complete-event promotion. Same Record / KIND9-FORMAL-CONFIRMATION.
+
+
+2026-10-06 clarified regression Task: NTSD28-336B44-SAGE-P2-REGRESSION-20261006 / IN_PROGRESS; diagnostic Change NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001 / PLANNED, [Record](CHANGE-RECORDS/NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001.md). Naruto Sage preparation and repeated P2 knockback only; current formal336B44/approved DAT, no DAT/Scene/nonbattle changes, old scoped campaign stays closed. No new runtime claim yet.
+
+
+2026-10-06 NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001 / PLANNED; pre-change diagnostic-only box correction, [Record](CHANGE-RECORDS/NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001.md), Task NTSD28-336B44-SAGE-P2-REGRESSION-20261006. No actual hit/motion rule change.
+
+2026-10-06 correction: NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001 / CODE_WRITTEN, natural two-case original Editor job2/2 passed at191tick; original saved Battle actual keyboard/visual/three-knockback run01 is warming under MCP. NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001 / FOCUSED_TEST_PASS, two imported geometry cases2/2; only debug drawing and readonly adapters, central plan cancelled and unmodified. User confirmed direct Battle Play. No Sage production bug reproduced yet, no DAT/Scene/input/framework changes. Old scoped campaign stays closed.
+
+2026-10-06 original Scene run03: actual P1 Sage at191tick/visible OID99; P2 third actual uppercut then tick448 source/view first difference1.854463615904pixels at projected X edge. New pre-script Record NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001 / PLANNED, exact four backed-up clean paths, common projected character clamp only; preserve project map/physical boundary/no unclamped precision churn, exact+legacy same entry. Task NTSD28-336B44-SAGE-P2-REGRESSION-20261006 remains IN_PROGRESS, old campaign closed. Scene run03 FAIL preserved,11-stage shutdown/zero residual/clean hashes passed; Sage success is not a claimed production Sage repair.
+
+
+2026-10-06 projected character boundary correction: NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001 / FOCUSED_TEST_PASS. Original Editor exact8 RED4fail/4pass, same8 GREEN8/8; scripts compile errorCS0, independent readonly review clean. Shared NTSDEntityRuntime.ClampProjectedCharacterStageX connects exact+legacy and only inverse-syncs source on actual projected X clamps. Original saved clean Battle run04 started under MCP, Scene result pending; Sage P1 previously passed191tick, no Sage production fix claimed. No DAT/Scene/InputAction/nonbattle edits, old campaign closed.
+
+
+2026-10-06 SAGE/P2 latest scoped handoff: Task NTSD28-336B44-SAGE-P2-REGRESSION-20261006 = P2_REPAIR_VERIFIED / SAGE_PLAYER_CONFIRMATION_PENDING. NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001 and NTSD28-336B44-PROJECTED-CHARACTER-BOUNDARY-SYNC-001 VERIFIED: original Battle run04 PASS555ticks/three actual uppercuts and wall/landings, max source-view error1.5916157281026244e-12,11-stage zero residual/Scene clean/files unchanged, geometry2/2 and boundary8/8. NTSD28-336B44-SAGE-KNOCKBACK-PROBE-001 VERIFIED scoped diagnostics: P1 actual keyboard Sage191/visible99; Unity P2 mode0 ready-clone/recall rejection matches actual formal336B44 P2 Naruto six fields1146/1146, single test1/1. No Sage production rule changed; user failing P1/P2 remains pending, and P1 failure is NOT ruled out for unreported conditions. Protected681/EXE stable; no DAT/Scene/InputAction/nonbattle edits; old campaign USER_ACCEPTED_SCOPED_CLOSURE stays closed. Full evidence artifacts/diagnostics/NTSD28-336B44-SAGE-P2-REGRESSION-20261006/REPORT.md. Earlier pending/ordinary-motion entries retained as snapshots; projected wall branch superseded by fresh run03/run04 evidence.
+
+
+2026-10-06 user confirms P1 first ready-clone recall fails, second summon/recall succeeds: previous P2 explanation does not close report. Task NTSD28-336B44-SAGE-P2-REGRESSION-20261006 resumed IN_PROGRESS for Sage only; new NTSD28-336B44-SAGE-FIRST-RECALL-PROBE-001 / PLANNED before probe edits. Original Scene default actor/world state and first/second cycles; P2 verified repairs and closed old campaign preserved. Operation NTSD28-336B44-SAGE-FIRST-RECALL-20261006.
+
+
+2026-10-06 NTSD28-336B44-SAGE-FIRST-RECALL-PROBE-001 / COMPILE_PASS; original Editor new menu warming saved Battle default actor/world state, first prepared clone24Down+36wait/recall and only-if-failed second natural attempt; user P1/moved-or-waited confirmed. No production Sage edit yet; P2 verified changes remain. Old success reset positions/frames/PP cannot close this user condition; ResetForBattle(true) is normal resource gate, not unlimited. Task Sage remains IN_PROGRESS.
+
+| NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 | PLANNED | [record](CHANGE-RECORDS/NTSD28-336B44-BODY-DEPTH-CANDIDATE-001.md) | user P1 first delayed recall; common authored body depth |
+
+NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/errorCS0,17/17 exact GREEN; delayed P1 first99 at251, generic6 RED→GREEN. Original Scene physical-input/visible acceptance pending.
+
+| NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 | VERIFIED | [record](CHANGE-RECORDS/NTSD28-336B44-BODY-DEPTH-CANDIDATE-001.md) | scoped first-recall/common-body-depth;17/17 and originalScene03PASS |
+| NTSD28-336B44-SAGE-FIRST-RECALL-PROBE-001 | VERIFIED | [record](CHANGE-RECORDS/NTSD28-336B44-SAGE-FIRST-RECALL-PROBE-001.md) | actual first attempt, original actors/world preserved, shutdown/protection PASS |
+
+- NTSD28-336B44-RASENGAN-COMMON-PROBE-001 / PLANNED: [Record](CHANGE-RECORDS/NTSD28-336B44-RASENGAN-COMMON-PROBE-001.md); only declared diagnostic; task NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006.
+
+| NTSD28-336B44-RASENGAN-COMMON-PROBE-001 | FOCUSED_TEST_PASS / REFERENCE_VERSION_PENDING | diagnostic only; exact8/8; PCM0error, formal declared parity, real ownedclone formal retains434; no production fix | [Record](CHANGE-RECORDS/NTSD28-336B44-RASENGAN-COMMON-PROBE-001.md) |
+
+| NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001 | PLANNED | original user confirmed; common replay/identity/aggregation and generic tests | [Record](CHANGE-RECORDS/NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001.md) |
+
+2026-10-06 NTSD28-ORIGINAL-CATCH-SKILL-COMPLETION-001 / PLANNED: bounded data-authored common held-skill completion on lost catch; preserves ordinary weapons/catches, no exact native removal branch proof, latest user restoration acceptance. [Change](docs/ai/CHANGE-RECORDS/NTSD28-ORIGINAL-CATCH-SKILL-COMPLETION-001.md).
+
+2026-10-06 current code checkpoint: NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001 / CODE_WRITTEN; NTSD28-ORIGINAL-CATCH-SKILL-COMPLETION-001 / CODE_WRITTEN, Task NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006 IN_PROGRESS; focused corrected run and original Battle target runtime pending. No old Q campaign reopening.
+
+2026-10-06 current focused checkpoint: NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001 / FOCUSED_TEST_PASS; NTSD28-ORIGINAL-CATCH-SKILL-COMPLETION-001 / FOCUSED_TEST_PASS. Original Editor selected 32/32 PASS, job7420cacebc784cf6982d8643dd111c24 (8993 is discovery total only); catch11+audio10+environment10+PCM1. Original saved Battle Scene01 running; runtime/output waveform not yet accepted. No DAT/Scene/resource/nonbattle edits or old campaign reopening.
+
+2026-10-06 scoped common restoration VERIFIED: NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001 / VERIFIED; NTSD28-ORIGINAL-CATCH-SKILL-COMPLETION-001 / VERIFIED. Original Editor32/32 PASS (7420cacebc784cf6982d8643dd111c24), final affected7/7 PASS (2469f52667044d4f979530394ea10d2e); original saved Battle Scene01 PASS87: actual P1 DFJ, enemy owned33 caught77, 434 consumed/invisible87, 05344events one actual voice; no rejected/dropped. Ordered11-stage shutdown objects/slot/borrower0, audio copies/voices0, Scene clean/SHA unchanged. Proposed negative-CaughtSlot guard rejected by prior7 run(twofail), removed; final Cpoint bytes equal Scene/32 version. All evidence retained. Other-role audio sink common; five held-skill candidate DAT families audited, only Naruto actual chain qualifies; not full roster/runtime/GPU/native exact tick or final device waveform parity. PCM stereo payload estimate210MiB, not measured RSS. Protected681/WAV978/backup18/formal336/original5EDA stable. Task NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006 / SCOPED_COMMON_FIX_VERIFIED. No DAT/Scene/resource/InputAction/nonbattle edits, file deletion/move, Git discard/commit/push, extra Editor or old goal reopening. Report: artifacts/diagnostics/NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006/original-common-fix-01/REPORT.md.

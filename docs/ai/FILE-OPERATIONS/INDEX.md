@@ -122,3 +122,31 @@ NTSD-WORDS-PREWARM-DEPENDENCY-001 / PLANNED / scoped prewarm source edit / FILE-
 | NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-PREPARE | RUNNING | 授权战斗音效代码与治理最小编辑，14项原字节备份；不删资源 | [NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-PREPARE](NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-PREPARE/RECORD.md) |
 
 | NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE | RUNNING | 978战斗音效引用只新增缺失，保留既有12；不含BGM/未引用菜单音 | [NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE](NTSD28-336B44-BATTLE-AUDIO-ALIGNMENT-20261006-WAV-STAGE/RECORD.md) |
+
+- `NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006` — `PLANNED`: formal kind9 read-only runtime confirmation; exact document backups and create-only diagnostics. [Record](NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006/RECORD.md).
+
+- `NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006` — `RUNNING`: formal4 reports passed/16 actual audio ticks; raw4pass + directordinary2pass; original broad2fail and diagnostic failures retained. Exact backups in same Record.
+
+- 2026-10-05T20:46:38.812613+00:00 NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006: VERIFIED file-operation closure; exact final manifest and 21 verified backup hashes in [RECORD](NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006/RECORD.md). Protected681/SHA336B44 unchanged; ledger/diff exit0; audio acceptance boundaries unchanged.
+
+- 2026-10-05T20:54:11.712179+00:00 NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006: PLANNED, two original-Editor controlled DAT transformation captures; own request consumption recorded in [NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006](NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006/RECORD.md).
+
+- 2026-10-05T20:59:50.490438+00:00 NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006: VERIFIED own request consumption and documentation updates; before/after/backups in [RECORD](NTSD28-336B44-TRANSFORM-HITBOX-DIAGNOSIS-REQUEST-20261006/RECORD.md). One schema failure retained, two v2 PASS, no production edits; USER_REPRO_PENDING.
+
+| NTSD28-336B44-SAGE-P2-REGRESSION-EDIT-20261006 | Precise diagnostic/doc edits, create-only results | PLANNED | [Record](NTSD28-336B44-SAGE-P2-REGRESSION-EDIT-20261006/RECORD.md) |
+
+- NTSD28-336B44-SAGE-FIRST-RECALL-20261006: user P1 first/second Sage diagnosis; exact probe/docs before backups, no destructive operations; [NTSD28-336B44-SAGE-FIRST-RECALL-20261006](NTSD28-336B44-SAGE-FIRST-RECALL-20261006/RECORD.md).
+
+| NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006 | PLANNED | [record](NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006/RECORD.md) | ten exact before paths; common body depth own hunks |
+
+| NTSD28-336B44-SAGE-FIRST-RECALL-20261006 | VERIFIED | [record](NTSD28-336B44-SAGE-FIRST-RECALL-20261006/RECORD.md) | exact before backup hashes/after manifest and681protection verified; no deletion/move |
+
+| NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006 | VERIFIED | [record](NTSD28-336B44-BODY-DEPTH-CANDIDATE-20261006/RECORD.md) | exact before backup hashes/after manifest and681protection verified; no deletion/move |
+
+- NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006 / PLANNED: [NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006](NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006/RECORD.md), Rasengan two shared defects only, exact before SHA/backups, no delete/move.
+
+Checkpoint NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006: backed-up owned probe additions and current documents only; eight targetedtests passed, production unchanged. Operation updates actualstatus after final manifest/validator; no deletion/move/Gitdiscard.
+
+| NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006 | PLANNED | original common audio/catch bounded fixes; exact before bytes; nodelete/move | [Record](NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006/RECORD.md) |
+
+- NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006 / VERIFIED: 18 backup hashes stable, final exact after-manifest, 681 protected/978WAV unchanged; no delete/move/Gitdiscard. [Record](NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006/RECORD.md).

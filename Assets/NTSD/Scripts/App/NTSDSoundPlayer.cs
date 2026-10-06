@@ -25,6 +25,7 @@ namespace NTSD.App
             "SFX_004",
             "SFX_006",
             @"data\016.wav",
+            "SFX_016",
             "SFX_010",
             "SFX_011",
             "SFX_017",
@@ -50,6 +51,7 @@ namespace NTSD.App
             public bool IsLoading;
             public bool IsFormalBattleFile;
             public AudioClip[] Clips;
+            public AudioClip[] BattlePlaybackClips;
         }
 
         private readonly Dictionary<string, PreparedSoundCue> preparedCues =
@@ -57,12 +59,16 @@ namespace NTSD.App
         private readonly Dictionary<string, PreparedSoundCue> preparedFormalBattleCues =
             new Dictionary<string, PreparedSoundCue>(StringComparer.OrdinalIgnoreCase);
         private AudioController preparedAudioController;
+        private int preparedCatalogGeneration;
+        private readonly List<AudioClip> ownedBattlePlaybackClips = new List<AudioClip>();
         private long preparedCueBuildCount;
         private AudioSource[] oneShotVoices = Array.Empty<AudioSource>();
         private MMFollowTarget[] oneShotVoiceFollowers = Array.Empty<MMFollowTarget>();
         private double[] oneShotVoiceAvailableDspTimes = Array.Empty<double>();
         private float[] oneShotVoiceBaseVolumes = Array.Empty<float>();
         private long[] oneShotVoiceStartSequences = Array.Empty<long>();
+        private string[] battleVoiceIdentities = Array.Empty<string>();
+        private int[] battleVoicePanHundredthDb = Array.Empty<int>();
         private long nextOneShotVoiceStartSequence;
         private int nativeBattleVolumePercent = 100;
         private float nativeBattleSfxGain = 1f;
@@ -138,6 +144,26 @@ namespace NTSD.App
             EnsureOneShotVoicePool();
         }
 
+        private void OnDestroy()
+        {
+            ReleaseBattlePlaybackClips();
+        }
+
+        private void ReleaseBattlePlaybackClips()
+        {
+            preparedCatalogGeneration++;
+            foreach (AudioClip clip in ownedBattlePlaybackClips)
+            {
+                if (clip == null)
+                    continue;
+                if (Application.isPlaying)
+                    Destroy(clip);
+                else
+                    DestroyImmediate(clip);
+            }
+            ownedBattlePlaybackClips.Clear();
+        }
+
         internal void PrepareBattlePresentationHotPath()
         {
             EnsureOneShotVoicePool();
@@ -160,10 +186,13 @@ namespace NTSD.App
             AudioController controller = AudioController.Instance;
             if (!ReferenceEquals(controller, preparedAudioController))
             {
+                ReleaseBattlePlaybackClips();
                 preparedCues.Clear();
                 preparedFormalBattleCues.Clear();
                 preparedAudioController = controller;
             }
+
+            int generation = preparedCatalogGeneration;
 
             var soundIds = new HashSet<string>(StringComparer.Ordinal);
             characterManager?.CollectBattleSoundIds(soundIds);
@@ -175,6 +204,9 @@ namespace NTSD.App
             {
                 PreparedSoundCue battleCue = GetOrPrepareCue(soundId, true);
                 await EnsurePreparedCueLoadedAsync(battleCue);
+                if (this == null || generation != preparedCatalogGeneration)
+                    return;
+                PrepareBattlePlaybackClips(battleCue);
                 if (battleCue != null && battleCue.IsFormalBattleFile)
                 {
                     PreparedSoundCue genericCue = GetOrPrepareCue(soundId);
@@ -183,6 +215,8 @@ namespace NTSD.App
                         : Directory.Exists(genericCue.SourcePath)))
                     {
                         await EnsurePreparedCueLoadedAsync(genericCue);
+                        if (this == null || generation != preparedCatalogGeneration)
+                            return;
                     }
                 }
             }
@@ -209,7 +243,8 @@ namespace NTSD.App
             Transform parent,
             Transform listenerTransform,
             bool isBattleEvent,
-            int battleSourceWorldX)
+            int battleSourceWorldX,
+            Vector2Int? battleMix = null)
         {
             PreparedSoundCue preparedCue = GetOrPrepareCue(soundId, isBattleEvent);
             if (preparedCue == null)
@@ -218,7 +253,7 @@ namespace NTSD.App
             if (preparedCue.IsLoaded)
             {
                 PlayPreparedCue(preparedCue, position, parent, listenerTransform,
-                    isBattleEvent, battleSourceWorldX);
+                    isBattleEvent, battleSourceWorldX, soundId, battleMix);
                 return;
             }
 
@@ -235,7 +270,9 @@ namespace NTSD.App
                 parent,
                 listenerTransform,
                 isBattleEvent,
-                battleSourceWorldX).Forget();
+                battleSourceWorldX,
+                soundId,
+                battleMix).Forget();
         }
 
         public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
@@ -244,8 +281,36 @@ namespace NTSD.App
                 return;
 
             Transform listenerTransform = ResolveListenerTransform();
-            for (int i = 0; i < sounds.Count; i++)
-                PresentSound(sounds[i], listenerTransform);
+            // Alignment contract: NTSD28-ORIGINAL-COMMON-CUE-RETRIGGER-001.
+            for (int start = 0; start < sounds.Count;)
+            {
+                int end = start + 1;
+                while (end < sounds.Count && sounds[end].Tick == sounds[start].Tick)
+                    end++;
+                for (int index = start; index < end; index++)
+                {
+                    PendingSoundEvent sound = sounds[index];
+                    bool alreadyConsumed = false;
+                    for (int previous = start; previous < index; previous++)
+                    {
+                        if (!string.Equals(sounds[previous].Cue, sound.Cue, StringComparison.Ordinal))
+                            continue;
+                        alreadyConsumed = true;
+                        break;
+                    }
+                    if (alreadyConsumed)
+                        continue;
+
+                    Vector2Int mix = Vector2Int.zero;
+                    for (int contribution = index; contribution < end; contribution++)
+                    {
+                        if (string.Equals(sounds[contribution].Cue, sound.Cue, StringComparison.Ordinal))
+                            mix += ComputeNativeBattleStereoPercentages(sounds[contribution].WorldX, 0);
+                    }
+                    PresentSound(sound, listenerTransform, mix);
+                }
+                start = end;
+            }
         }
 
         public void PresentSound(PendingSoundEvent sound)
@@ -253,7 +318,8 @@ namespace NTSD.App
             PresentSound(sound, ResolveListenerTransform());
         }
 
-        private void PresentSound(PendingSoundEvent sound, Transform listenerTransform)
+        private void PresentSound(PendingSoundEvent sound, Transform listenerTransform,
+            Vector2Int? battleMix = null)
         {
             Vector2 groundPoint = NTSDRenderSpace.GroundPixelToWorld(sound.WorldX, 0f);
             PlaySfx(
@@ -262,7 +328,8 @@ namespace NTSD.App
                 null,
                 listenerTransform,
                 true,
-                sound.WorldX);
+                sound.WorldX,
+                battleMix);
         }
 
         public bool TryGetPreparedSingleFileWrapperForDiagnostics(
@@ -294,6 +361,7 @@ namespace NTSD.App
                     rejectedUnpreparedCueCount++;
                     return null;
                 }
+                ReleaseBattlePlaybackClips();
                 preparedCues.Clear();
                 preparedFormalBattleCues.Clear();
                 preparedAudioController = controller;
@@ -419,13 +487,18 @@ namespace NTSD.App
             Transform parent,
             Transform listenerTransform,
             bool isBattleEvent,
-            int battleSourceWorldX)
+            int battleSourceWorldX,
+            string battleIdentity,
+            Vector2Int? battleMix)
         {
+            int generation = preparedCatalogGeneration;
             try
             {
                 await LoadPreparedClipsAsync(preparedCue);
+                if (this == null || generation != preparedCatalogGeneration)
+                    return;
                 PlayPreparedCue(preparedCue, position, parent, listenerTransform,
-                    isBattleEvent, battleSourceWorldX);
+                    isBattleEvent, battleSourceWorldX, battleIdentity, battleMix);
             }
             finally
             {
@@ -439,11 +512,24 @@ namespace NTSD.App
             Transform parent,
             Transform listenerTransform,
             bool isBattleEvent,
-            int battleSourceWorldX)
+            int battleSourceWorldX,
+            string battleIdentity,
+            Vector2Int? battleMix)
         {
+            if (this == null)
+                return;
             AudioItem audioItem = preparedCue.AudioItem;
 
-            AudioClip clip = PickClip(preparedCue.Clips);
+            if (isBattleEvent && preparedCue.BattlePlaybackClips == null)
+            {
+                if (battleCatalogSealed)
+                {
+                    rejectedUnpreparedCueCount++;
+                    return;
+                }
+                PrepareBattlePlaybackClips(preparedCue);
+            }
+            AudioClip clip = PickClip(isBattleEvent ? preparedCue.BattlePlaybackClips : preparedCue.Clips);
             if (clip == null)
             {
                 return;
@@ -477,15 +563,26 @@ namespace NTSD.App
 
             float matrixPan = 0f;
             float matrixGain = 1f;
+            Vector2Int mix = battleMix ?? ComputeNativeBattleStereoPercentages(battleSourceWorldX, 0);
+            if (isBattleEvent && mix.x + mix.y <= 0)
+                return;
+
+            AudioSource voice = AcquireOneShotVoice(out int voiceIndex, isBattleEvent, battleIdentity);
+            if (voice == null)
+            {
+                oneShotVoiceLimitDropCount++;
+                return;
+            }
             if (isBattleEvent)
             {
-                // Alignment contract: NTSD28-336B44-Q10-BATTLE-STEREO-MATRIX-OUTLET-001.
-                // D-024 keeps the complete view fixed, so source-rule X is localized
-                // against the fixed view origin without altering queued battle state.
-                Vector2Int mix = ComputeNativeBattleStereoPercentages(
-                    battleSourceWorldX, 0);
-                float left = mix.x * 0.01f;
-                float right = mix.y * 0.01f;
+                // Original DirectSound keeps the previous pan if SetPan is out of range.
+                long pan = ((long)mix.y - mix.x) * 15;
+                if (pan >= -10000 && pan <= 10000)
+                    battleVoicePanHundredthDb[voiceIndex] = (int)pan;
+                int appliedPan = battleVoicePanHundredthDb[voiceIndex];
+                float spatialGain = Mathf.Pow(10f, (Math.Min((long)mix.x + mix.y, 100) - 100) * 0.01f);
+                float left = spatialGain * Mathf.Pow(10f, -Math.Max(0, appliedPan) / 2000f);
+                float right = spatialGain * Mathf.Pow(10f, Math.Min(0, appliedPan) / 2000f);
                 if (clip.channels == 1)
                 {
                     float leftPower = left * left;
@@ -507,13 +604,6 @@ namespace NTSD.App
                 }
             }
 
-            AudioSource voice = AcquireOneShotVoice(out int voiceIndex, isBattleEvent);
-            if (voice == null)
-            {
-                oneShotVoiceLimitDropCount++;
-                return;
-            }
-
             MMFollowTarget follower = oneShotVoiceFollowers[voiceIndex];
             voice.Stop();
             voice.transform.position = playbackPosition;
@@ -527,7 +617,7 @@ namespace NTSD.App
                 ? audioItem.range - 3f
                 : 0f;
             voice.maxDistance = audioItem.range > 0f ? audioItem.range : 500f;
-            voice.loop = audioItem.loop;
+            voice.loop = !isBattleEvent && audioItem.loop;
             voice.panStereo = matrixPan;
             voice.bypassEffects = false;
             voice.bypassListenerEffects = false;
@@ -551,10 +641,10 @@ namespace NTSD.App
                 ++nextOneShotVoiceStartSequence;
             float absolutePitch = Mathf.Max(0.01f, Mathf.Abs(pitch));
             oneShotVoiceAvailableDspTimes[voiceIndex] =
-                audioItem.loop
+                voice.loop
                     ? double.PositiveInfinity
                     : AudioSettings.dspTime + clip.length / absolutePitch;
-            if (audioItem.loop)
+            if (voice.loop)
                 loopFallbackPlayCount++;
             else
                 pooledOneShotPlayCount++;
@@ -588,14 +678,72 @@ namespace NTSD.App
                 : Vector2Int.zero;
         }
 
+        private void PrepareBattlePlaybackClips(PreparedSoundCue cue)
+        {
+            if (this == null || cue == null || !cue.IsLoaded || cue.BattlePlaybackClips != null)
+                return;
+            AudioClip[] sourceClips = cue.Clips ?? Array.Empty<AudioClip>();
+            var playbackClips = new AudioClip[sourceClips.Length];
+            int firstOwned = ownedBattlePlaybackClips.Count;
+            try
+            {
+                for (int index = 0; index < sourceClips.Length; index++)
+                {
+                    AudioClip source = sourceClips[index];
+                    if (source == null || source.channels != 1)
+                    {
+                        playbackClips[index] = source;
+                        continue;
+                    }
+
+                    // Unity's mono pan law attenuates the center and caps volume at1.
+                    // Duplicate PCM into stereo to preserve native per-channel gain.
+                    var mono = new float[source.samples];
+                    if (!source.GetData(mono, 0))
+                        throw new InvalidOperationException("Cannot prepare battle PCM: " + source.name);
+                    var stereo = new float[checked(source.samples * 2)];
+                    for (int sample = 0; sample < mono.Length; sample++)
+                        stereo[sample * 2] = stereo[sample * 2 + 1] = mono[sample];
+                    AudioClip playback = AudioClip.Create(source.name, source.samples, 2, source.frequency, false);
+                    ownedBattlePlaybackClips.Add(playback);
+                    if (!playback.SetData(stereo, 0))
+                        throw new InvalidOperationException("Cannot initialize battle PCM: " + source.name);
+                    playbackClips[index] = playback;
+                }
+                cue.BattlePlaybackClips = playbackClips;
+            }
+            catch
+            {
+                for (int index = ownedBattlePlaybackClips.Count - 1; index >= firstOwned; index--)
+                {
+                    AudioClip clip = ownedBattlePlaybackClips[index];
+                    if (Application.isPlaying)
+                        Destroy(clip);
+                    else
+                        DestroyImmediate(clip);
+                    ownedBattlePlaybackClips.RemoveAt(index);
+                }
+                throw;
+            }
+        }
+
         private AudioSource AcquireOneShotVoice(
-            out int voiceIndex, bool isBattleEvent)
+            out int voiceIndex, bool isBattleEvent, string battleIdentity)
         {
             int voiceLimit = isBattleEvent
                 ? NativeBattleVoiceLimit
                 : ResolveOneShotVoiceLimit();
             EnsureOneShotVoiceCapacity(voiceLimit);
             voiceIndex = -1;
+            if (isBattleEvent)
+            {
+                for (int index = 0; index < voiceLimit; index++)
+                {
+                    if (oneShotVoices[index] != null &&
+                        string.Equals(battleVoiceIdentities[index], battleIdentity, StringComparison.Ordinal))
+                        return PrepareOneShotVoice(index, voiceLimit, out voiceIndex);
+                }
+            }
             double currentDspTime = AudioSettings.dspTime;
             for (int offset = 0; offset < voiceLimit; offset++)
             {
@@ -605,6 +753,7 @@ namespace NTSD.App
                 {
                     continue;
                 }
+                BindBattleVoice(index, isBattleEvent ? battleIdentity : null);
                 return PrepareOneShotVoice(index, voiceLimit, out voiceIndex);
             }
 
@@ -626,7 +775,14 @@ namespace NTSD.App
 
             // Alignment contract: NTSD28-Q10-BATTLE-VOICE-CAP-001.
             oneShotVoiceLimitDropCount++;
+            BindBattleVoice(oldestIndex, battleIdentity);
             return PrepareOneShotVoice(oldestIndex, voiceLimit, out voiceIndex);
+        }
+
+        private void BindBattleVoice(int index, string identity)
+        {
+            battleVoiceIdentities[index] = identity;
+            battleVoicePanHundredthDb[index] = 0;
         }
 
         private AudioSource PrepareOneShotVoice(
@@ -662,6 +818,8 @@ namespace NTSD.App
             Array.Resize(ref oneShotVoiceAvailableDspTimes, voiceLimit);
             Array.Resize(ref oneShotVoiceBaseVolumes, voiceLimit);
             Array.Resize(ref oneShotVoiceStartSequences, voiceLimit);
+            Array.Resize(ref battleVoiceIdentities, voiceLimit);
+            Array.Resize(ref battleVoicePanHundredthDb, voiceLimit);
             for (int i = previousCount; i < voiceLimit; i++)
             {
                 var voiceHost = new GameObject($"NTSD SFX Voice {i}");

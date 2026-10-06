@@ -1,0 +1,208 @@
+{
+  "projected": false,
+  "natural": false,
+  "transformed": false,
+  "cloneCreated": false,
+  "readyClone": false,
+  "scope": "Current approved DAT through complete Unity Driver; legacy scenario schema identity is a fixture token only. Formal EXE comparison is separate.",
+  "rows": [
+    {
+      "tick": 1,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 401,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 2,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 428,
+          "state": 190,
+          "counter": 0,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 3,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 334,
+          "state": 15,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 4,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 5,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    },
+    {
+      "tick": 6,
+      "phase": 0,
+      "buttons": 0,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 402,
+          "state": 190,
+          "counter": 1,
+          "owner": 0,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 500,
+          "mp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 96,
+          "action": 226,
+          "state": 16,
+          "counter": 3,
+          "owner": 1,
+          "x": 0.0,
+          "y": 0.0,
+          "z": 0.0,
+          "hp": 450,
+          "mp": 500
+        }
+      ]
+    }
+  ]
+}

@@ -18,3 +18,9 @@ Change：NTSD28-336B44-BATTLE-AUDIO-CUE-RESOLVER-001；NTSD28-336B44-BATTLE-AUDI
 状态边界：cue/resource VERIFIED；Event RUNTIME_PENDING仅正式根逐事件对应不足，Unity运行已通过，不表示还未运行Play。当前Core25受控case非formal根见证，kind9候选来源不足未实施。旧记录中的两个早期音频hunk表述不作为kind9正式源身份证明，不扩大旧目标或自动重跑全角色。整体BattleRuntimeSelfCheck及设备听感未运行。
 
 本批已实施修复可交付。正式kind9来源不足只留条件候选，不加入自动执行队列；原目标已收尾，不恢复Q01-Q12旧批次。
+
+2026-10-06 kind9 formal confirmation IN_PROGRESS in existing audio Task / EVENT-RULES-001. Unchanged formal336B44 direct runtime audio observation only; existing 42/978 evidence reused. Operation NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006; no old goal reopening.
+
+> **2026-10-06 kind9 正式确认与修复：** 原336B44 EXE四组受控回放均通过，16tick实际返回声音向量只有DAT帧声音；已确认raw-kind9对象交互没有额外effect/broken音。Unity三个生产文件移除这些额外事件并同步ECS预测，四项raw检查通过；两项直接ordinary-kind0 DAT声音正例2/2通过。旧两项广义converted检查在HitStateCount45/0失败，原件和断言保留，不称完整转换验证通过。681保护SHA及正式EXE稳定，原Editor编译error-CS0；未新增Play/设备听感。kind9已由UNKNOWN更正为FORMAL_EVENT_CONFIRMED / FOCUSED_FIX_PASS；Event父Record仍RUNTIME_PENDING，保留其它正式逐事件与运行范围边界。原42/978证据复用，旧总目标USER_ACCEPTED_SCOPED_CLOSURE保持。详本批KIND9-FORMAL-CONFIRMATION.md与父REPORT最新记录。
+
+This supersedes earlier kind9 source-insufficient wording only. Raw4 and directordinary2 are separate narrow passes; old broadconverted2 failures remain, not a new required counter campaign. Exact production scope/backups: NTSD28-336B44-BATTLE-AUDIO-KIND9-FORMAL-CONFIRM-20261006.

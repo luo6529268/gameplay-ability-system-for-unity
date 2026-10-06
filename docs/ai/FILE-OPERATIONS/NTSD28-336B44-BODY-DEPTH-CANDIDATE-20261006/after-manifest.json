@@ -1,0 +1,90 @@
+{
+  "time": "2026-10-06T12:49:11.903343+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "beforeBackupSHA256": "CC6B79BCB8CB98AAD0D5706E98DE02A33FE2AAEAD97CF09681599C5AA5B93D40",
+      "backupVerified": true,
+      "afterLength": 339599,
+      "afterSHA256": "4424DCF8655AA502CD637B80846E588888B179973195A783CE124D1FF8A4A16E",
+      "gitStatus": " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs\n"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+      "beforeBackupSHA256": "EAB4970B4E91DEDA11FBBFA711C9EC95353A0557E1CFC1C5D1FBE09698DBA221",
+      "backupVerified": true,
+      "afterLength": 20692,
+      "afterSHA256": "7B69E66425FF6166915B958418307D4E7F63C1D8456C6642A6A5D5C52C1753D2",
+      "gitStatus": " M Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs\n"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs",
+      "beforeBackupSHA256": "A0E50DA6BB312003F001F93D2DA5F92BA4A5E0CA8712863BE8A4A0882D6CD908",
+      "backupVerified": true,
+      "afterLength": 11581,
+      "afterSHA256": "021BE9E8848DCF25F5A7F309F6250D25B7AE2FF36DFE5C560BCEBE627951BEA7",
+      "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/NTSD28SageKnockbackRegressionEditorTests.cs\n"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeBackupSHA256": "C850C044B7AD43165EE98F20DA8112041068891422E6FD396A433681A5DDF63E",
+      "backupVerified": true,
+      "afterLength": 621889,
+      "afterSHA256": "6C25861BAF63AF60A866AC4884ACB3732371899D8CEBE03DECE702A97F305D0D",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeBackupSHA256": "293F2EC9A1A8BA47034AB2A119D2E04255940482EC9C3F8DBACE411841E6A370",
+      "backupVerified": true,
+      "afterLength": 1521028,
+      "afterSHA256": "2060A0D00885E25208D815E74928AAA368289D8338CAF28864E7F6738E543056",
+      "gitStatus": " M docs/ai/STATE.md\n"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeBackupSHA256": "0C94154FBEAD847EAE3AA42FBA33E6C47735B2F380E6388C0A9F081C1B54F590",
+      "backupVerified": true,
+      "afterLength": 365414,
+      "afterSHA256": "0BDAD4B0A7B05F4349C4C24532A7314C413EE5A4F7010C70DE45BD156E0E70DF",
+      "gitStatus": " M docs/ai/CURRENT-AUTHORITY.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeBackupSHA256": "3E4D9CD3CF98F3E6384FBAD34E05DC85254E5684E843788415F256748508CC7C",
+      "backupVerified": true,
+      "afterLength": 1451115,
+      "afterSHA256": "618531DA58708D10529B10C465006C65392946F1A91629293F7762A2DA576068",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+      "beforeBackupSHA256": "414AD351ABF75A1CDE9A1B4E869B0FE45D42977D21DE84FD0D2D8FF5125C6321",
+      "backupVerified": true,
+      "afterLength": 360768,
+      "afterSHA256": "FE70293114D2055C454D7231A765524E936FB945B67BEFD14B48F059CA5E9791",
+      "gitStatus": " M Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md\n"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md",
+      "beforeBackupSHA256": "9211E664ECB007153660A68B8DE90D041D158F0DBD49B4A7B3AD052396505521",
+      "backupVerified": true,
+      "afterLength": 3851,
+      "afterSHA256": "6F38C22B2E7701AAE8ED49ED57CF04DEBE06ACF051558AA7302AF747789B4A44",
+      "gitStatus": "?? docs/ai/TASKS/NTSD28-336B44-SAGE-P2-REGRESSION-20261006.md\n"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeBackupSHA256": "795A4FC52B67ADCE7519AB0FD39BD83A9746D424AEF2047EB967DE5FAA62A80C",
+      "backupVerified": true,
+      "afterLength": 18408,
+      "afterSHA256": "FEF244EE919597B69CF944E02623B3A9C0E878F2352DF47B4470DE6A3B299539",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md\n"
+    }
+  ],
+  "protectedCount": 681,
+  "protectedChanged": [],
+  "actualEditorPID": 19040,
+  "port": 6402,
+  "noDeleteMoveRestore": true
+}

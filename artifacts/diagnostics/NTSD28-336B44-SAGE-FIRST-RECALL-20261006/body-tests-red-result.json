@@ -1,0 +1,55 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "43549b8b2e574036aacb0679ba285205",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791261616698,
+      "finished_unix_ms": 1791261623902,
+      "last_update_unix_ms": 1791261623902,
+      "progress": {
+        "completed": 6,
+        "total": 8964,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791261623393,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceRoleAware,True)",
+        "last_finished_unix_ms": 1791261623397,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceBruteForce,False)",
+            "message": "  mode=ForceBruteForce configuredView=False variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceBruteForce,True)",
+            "message": "  mode=ForceBruteForce configuredView=True variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceLegacyUnionAabb,False)",
+            "message": "  mode=ForceLegacyUnionAabb configuredView=False variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceLegacyUnionAabb,True)",
+            "message": "  mode=ForceLegacyUnionAabb configuredView=True variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceRoleAware,False)",
+            "message": "  mode=ForceRoleAware configuredView=False variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5MultiBodyCandidateProductionEditorTests.AuthoredBodyDepthIsAppliedPerOverlappingBody(ForceRoleAware,True)",
+            "message": "  mode=ForceRoleAware configuredView=True variant=1\r\n  Expected: 1\r\n  But was:  0\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

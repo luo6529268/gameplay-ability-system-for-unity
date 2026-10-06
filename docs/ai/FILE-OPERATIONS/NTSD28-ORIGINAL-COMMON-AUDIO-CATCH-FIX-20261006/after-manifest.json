@@ -1,0 +1,134 @@
+[
+  {
+    "path": "Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+    "exists": true,
+    "bytes": 1455178,
+    "sha256": "1bbf9a813d45842db25a0904180641cd8002624ca22f7f3cda9364a94495ca85"
+  },
+  {
+    "path": "Assets\\NTSD\\Docs\\ntsd28-logan-336b44-vs-unity-battle-alignment.md",
+    "exists": true,
+    "bytes": 364571,
+    "sha256": "fe4e01a5de2f10692600ae93ec31a1e5423e6395c3dd5f2931e730eb503f0703"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+    "exists": true,
+    "bytes": 290440,
+    "sha256": "4800b6ef0a8dab213497615885fb50de9e51b938685fe652320ae7468f7e060e"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\App\\NTSDSoundPlayer.cs",
+    "exists": true,
+    "bytes": 40329,
+    "sha256": "4ace07654e247a64fda417402c1086ed5a61dce798d7e7a3d01b7c15de2d6b32"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCpointWriter.cs",
+    "exists": true,
+    "bytes": 26557,
+    "sha256": "e08c4c8b9054dd93aa803c416618ff7110779da0e9a9749d4dcf36c7d0d1533a"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B4State1218EnvironmentCreditEditorTests.cs",
+    "exists": true,
+    "bytes": 14002,
+    "sha256": "feec71ea61f0e37284e7693d139eb94ea33b70f8787c07d10fe2b336deac57df"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCatchSkillCompletionEditorTests.cs",
+    "exists": true,
+    "bytes": 11670,
+    "sha256": "a03c6a4b435740e1f50b878cd2868b5e2fd6452fa3e9dd448e7d80d4aedc8888"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCatchSkillCompletionEditorTests.cs.meta",
+    "exists": true,
+    "bytes": 243,
+    "sha256": "ff133fb979c4ea0dca738aa078c18c88758b21ccdd9351d275d165f49c1505e0"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCommonAudioEditorTests.cs",
+    "exists": true,
+    "bytes": 8912,
+    "sha256": "50cf710624d1637ae234795e5856c780c8a5111ca7a8e5727775ca98b648edd8"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCommonAudioEditorTests.cs.meta",
+    "exists": true,
+    "bytes": 243,
+    "sha256": "e4eaf61c62ce095af6861a7010676b1fd6717403b944a79ef809cb7739cc6710"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCommonBattleSceneProbeEditor.cs",
+    "exists": true,
+    "bytes": 20487,
+    "sha256": "a4ff2633f7c2c73615ddf6a7a945581f26adb90d5103ec85f6150bd429079697"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28OriginalCommonBattleSceneProbeEditor.cs.meta",
+    "exists": true,
+    "bytes": 243,
+    "sha256": "7b7404945befc2b96a301f1a336b4ffbc86638f6b0cc216d0e8aa3fa4a206304"
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28RasenganCommonRegressionEditorTests.cs",
+    "exists": true,
+    "bytes": 16793,
+    "sha256": "c8992e406cf64a16cddd8ada8f8722bc89dd0b47a72437cef888d0e4594694b8"
+  },
+  {
+    "path": "artifacts\\diagnostics\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006\\REPORT.md",
+    "exists": true,
+    "bytes": 7076,
+    "sha256": "a43e73e6cbf9b9062c3c0ff327f4e6b98970e7f74c875e253a6c8b5fe3f0801f"
+  },
+  {
+    "path": "docs\\ai\\CHANGE-LEDGER.md",
+    "exists": true,
+    "bytes": 624995,
+    "sha256": "00e9feefabd458db815f783d0291bd2abdefa44d35eac41d17536a2e0d5c9e29"
+  },
+  {
+    "path": "docs\\ai\\CHANGE-RECORDS\\NTSD28-336B44-RASENGAN-COMMON-PROBE-001.md",
+    "exists": true,
+    "bytes": 4472,
+    "sha256": "09253cd17d10271c9098776a81c7425508d9250eace7e95a1ef4842f8164275e"
+  },
+  {
+    "path": "docs\\ai\\CURRENT-AUTHORITY.md",
+    "exists": true,
+    "bytes": 368574,
+    "sha256": "a7fcc4285182a15862a08ef55993cd7e9755a7f1af1f50e65bf5bfdc0b8d7c40"
+  },
+  {
+    "path": "docs\\ai\\DECISIONS.md",
+    "exists": true,
+    "bytes": 45565,
+    "sha256": "cbbeb9f03b372af020c87eacdc3f83b3a9b7a6d05505199287d39efe5f709ffb"
+  },
+  {
+    "path": "docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+    "exists": true,
+    "bytes": 19607,
+    "sha256": "e573af37d8909dd5cc9e41771071aa3339d9445e42836ab123a2143a12003d81"
+  },
+  {
+    "path": "docs\\ai\\STATE.md",
+    "exists": true,
+    "bytes": 1525091,
+    "sha256": "409b75b19514e02a34767e7aaa90953c1190c24892c83207efb23132cd787198"
+  },
+  {
+    "path": "docs\\ai\\TASKS\\NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006.md",
+    "exists": true,
+    "bytes": 4665,
+    "sha256": "6558c7b67ef81d4ad79a5ab380a1ed8f1f729375f54c1a63fbfb99eba81cd65c"
+  },
+  {
+    "path": "docs\\ai\\FILE-OPERATIONS\\NTSD28-ORIGINAL-COMMON-AUDIO-CATCH-FIX-20261006\\RECORD.md",
+    "exists": true,
+    "bytes": 4734,
+    "sha256": "bcb7e74949177ac2036e80ce9118580e8dbe50550146aa243e4c0c25b6269a2f"
+  }
+]

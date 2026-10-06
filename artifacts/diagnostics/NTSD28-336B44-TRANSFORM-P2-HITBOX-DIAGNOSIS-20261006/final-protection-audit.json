@@ -1,0 +1,19 @@
+{
+  "observedAtUtc": "2026-10-05T20:59:50.490438+00:00",
+  "resourceProtectedCount": 681,
+  "resourceDiffs": [],
+  "localProtectedPaths": {
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "6e4ef9f1f571754eb54dd534e5ee9784550bef52c999c81972a83ae261775a09",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs": "05b18c45a71016e31a75209958a382613fc2ea43156965df743fb720169deec1",
+    "Assets/NTSD/Scripts/Tools/NTSDHitboxGizmos.cs": "13fd6d96de7137357eb5774f1aee1c30b19362dc5562e2f81eeb2846191903a5"
+  },
+  "audioCodeProtectedCount": 5,
+  "audioCodeDiffs": [],
+  "formalSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "sceneClean": true,
+  "editorIdle": true,
+  "newProductionCodeChanges": false,
+  "taskStatus": "CONFIRMED_GIZMO_ADAPTER_GAP / USER_REPRO_PENDING"
+}

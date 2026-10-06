@@ -1,0 +1,4504 @@
+{
+  "scenario": "held-attack-clone",
+  "ticks": 64,
+  "projected": false,
+  "rows": [
+    {
+      "tick": 1,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 241,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "c\\nar\\w\\j6.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 2,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 242,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 3,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 242,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 4,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 243,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 5,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 243,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 6,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 244,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 7,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 244,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 8,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 245,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 9,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 245,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 10,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 246,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 11,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 246,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 12,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 247,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 13,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 247,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 14,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 248,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 15,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 248,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 16,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 249,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 17,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 249,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 18,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 250,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 19,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 250,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 20,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 251,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        }
+      ]
+    },
+    {
+      "tick": 21,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 251,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 22,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 252,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 23,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 252,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 1,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 24,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 253,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 500
+        },
+        {
+          "path": "data\\061.wav",
+          "worldX": 471
+        }
+      ]
+    },
+    {
+      "tick": 25,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 253,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 26,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 254,
+          "state": 3,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 503.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 508.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 508
+        }
+      ]
+    },
+    {
+      "tick": 27,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 254,
+          "state": 3,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 2,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 501.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 508.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 506.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 506
+        }
+      ]
+    },
+    {
+      "tick": 28,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 501.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 506.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 506.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 506
+        }
+      ]
+    },
+    {
+      "tick": 29,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 501.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 496.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 506.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 496
+        }
+      ]
+    },
+    {
+      "tick": 30,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 25,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 100,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 531.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 496.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 434,
+          "action": 396,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 507.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 31,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 255,
+          "state": 301,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 3,
+          "state": 0,
+          "counter": 3,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 470.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 434,
+          "action": 397,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 507.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 475.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "c\\nar\\w\\j8.wav",
+          "worldX": 500
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 475
+        }
+      ]
+    },
+    {
+      "tick": 32,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 354,
+          "state": 301,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 500.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 470.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 475.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 434,
+          "action": 397,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 507.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 475.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 475
+        }
+      ]
+    },
+    {
+      "tick": 33,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 257,
+          "state": 301,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 555.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 525.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 475.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 530.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 530
+        }
+      ]
+    },
+    {
+      "tick": 34,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 258,
+          "state": 301,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 610.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 0,
+          "state": 0,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 700.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 588.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 593.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 530.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 593
+        }
+      ]
+    },
+    {
+      "tick": 35,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 122,
+          "state": 9,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": 1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 1,
+          "oid": 33,
+          "action": 300,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": -1,
+          "catchSource": 0,
+          "caught": -1,
+          "x": 685.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 35,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 672.0,
+          "z": 649.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 593.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\061.wav",
+          "worldX": 680
+        },
+        {
+          "path": "data\\061.wav",
+          "worldX": 686
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 36,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 60,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 650.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 37,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 38,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 39,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 1,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 61,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 55,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 40,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 2,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 471.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 41,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 42,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 62,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 43,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 44,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 45,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 63,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 46,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 47,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 48,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 64,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 49,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 0,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 50,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 1,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 51,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 204,
+          "action": 65,
+          "state": 15,
+          "counter": 2,
+          "owner": 1,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 686.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 52,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 54,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 53,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 54,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 0,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 55,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 681.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 676
+        }
+      ]
+    },
+    {
+      "tick": 56,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 676.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 57,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 58,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 1,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        }
+      ]
+    },
+    {
+      "tick": 59,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 682.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 60,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 677
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 61,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 2,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 677.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 62,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 2,
+          "state": 0,
+          "counter": 3,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 155,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": []
+    },
+    {
+      "tick": 63,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 0,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        },
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    },
+    {
+      "tick": 64,
+      "actors": [
+        {
+          "slot": 0,
+          "oid": 2,
+          "action": 3,
+          "state": 0,
+          "counter": 1,
+          "owner": 0,
+          "parent": 1,
+          "catchTarget": 51,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 680.0,
+          "z": 650.0,
+          "hp": 500
+        },
+        {
+          "slot": 50,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 51,
+          "oid": 434,
+          "action": 21,
+          "state": 1001,
+          "counter": 0,
+          "owner": 0,
+          "parent": -1,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 679.0,
+          "z": 651.0,
+          "hp": 500
+        },
+        {
+          "slot": 52,
+          "oid": 518,
+          "action": 157,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        },
+        {
+          "slot": 53,
+          "oid": 518,
+          "action": 156,
+          "state": 3005,
+          "counter": 0,
+          "owner": 0,
+          "parent": 0,
+          "catchTarget": 0,
+          "catchSource": -1,
+          "caught": -1,
+          "x": 674.0,
+          "z": 652.0,
+          "hp": 500
+        }
+      ],
+      "sounds": [
+        {
+          "path": "data\\053.wav",
+          "worldX": 674
+        }
+      ]
+    }
+  ]
+}

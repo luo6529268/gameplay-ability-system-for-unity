@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "3c7a35c6c2c140498fd8d4d63894698b",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791265596029,
+      "finished_unix_ms": 1791265604283,
+      "last_update_unix_ms": 1791265604283,
+      "progress": {
+        "completed": 9,
+        "total": 8981,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791265603731,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.VoiceReplacementDoesNotRetainStaleBattleIdentity",
+        "last_finished_unix_ms": 1791265603765,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.DifferentDynamicCuesAndBuiltinIdentityRemainIndependent",
+            "message": "  Expected: property Length equal to 4\r\n  But was:  5\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.MonoPlaybackAcceptsDirectSoundCenterGain",
+            "message": "  Expected: 1.41421354f +/- 1.0000000000000001E-05d\r\n  But was:  0.707106769f\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SameTickSharedCueAggregatesOnceWithoutMergingNextTick",
+            "message": "  Expected: 1\r\n  But was:  2\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"data\\\\053.wav\")",
+            "message": "  Expected: property Length equal to 1\r\n  But was:  2\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"c\\\\nar\\\\w\\\\a7.wav\")",
+            "message": "  Expected: property Length equal to 1\r\n  But was:  2\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"c\\\\saku\\\\w\\\\tra.wav\")",
+            "message": "  Expected: property Length equal to 1\r\n  But was:  2\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.UnityVoiceRetainsRequiredMonoGainAboveOne",
+            "message": "System.IndexOutOfRangeException : Index was outside the bounds of the array."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}
