@@ -1,0 +1,228 @@
+{
+  "OperationId": "NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007",
+  "StartedAt": "2026-10-07T03:16:50.9304073+08:00",
+  "Head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "Manifest": [
+    {
+      "Path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "Bytes": 110478,
+      "SHA256": "1B9DF54C2DEACE50A808ABEAAC6C0C4090F552EA36A30E812703DF6E81CD7499",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\BattleCentralRenderSystem.cs",
+      "GitStatus": "",
+      "FirstLine": "using System;"
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "Bytes": 18022,
+      "SHA256": "CCBC1C22D217335FF9197D2CEB86E219D489B09491755EDDCA53B1F8A5BCACB1",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "GitStatus": "",
+      "FirstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "Bytes": 65615,
+      "SHA256": "EC6BDA0AF37F80FE19D079F32D08198F42C622012F493D41F5F5BC472BA96702",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "GitStatus": "",
+      "FirstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "Bytes": 15481,
+      "SHA256": "48579472D10BC06C140A3CEEB5365C0F69777F74FCBFF4EB984510008B748A9A",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "GitStatus": "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "FirstLine": "# NTSD 有界自动优化目标合同（首阶段范围已确认）"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "Bytes": 43406,
+      "SHA256": "C4F2F17B29615E8C461743B3B25E71171EC3862D5E01B48BAC20A3C28EF6EC47",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\battle-optimization-progress-tracker.md",
+      "GitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "Bytes": 38692,
+      "SHA256": "D644B8FA25533A2937B4B18D39E07EE6BD34E865D3FFFD5936DD01779494A4BD",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\m-03-dynamic-mesh-upload.md",
+      "GitStatus": " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "Bytes": 30229,
+      "SHA256": "73ED8A094FF959E5E7B5C68160397F864B5CA664B2AA3D777EBC0822E986F9A4",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\android-mobile-readiness-priority-risk-register.md",
+      "GitStatus": " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "docs/ai/CHANGE-LEDGER.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "Bytes": 651892,
+      "SHA256": "50402E6CFC6D0504E8B18AF425C7C340B1A15C675C7AB15C8946D1A7AA2B3804",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\CHANGE-LEDGER.md",
+      "GitStatus": " M docs/ai/CHANGE-LEDGER.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "docs/ai/STATE.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "Bytes": 1552259,
+      "SHA256": "DF1CB686766705468CFA5D27E920DCE39476FD057F9B4898698DDC923BD69A7B",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\STATE.md",
+      "GitStatus": " M docs/ai/STATE.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "Bytes": 1483518,
+      "SHA256": "541BCA247805460274222C9CC660554793FC454EB5F0C789121B0E7760D01BB7",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\CODEX-CURRENT-HANDOFF.md",
+      "GitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "AbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "Bytes": 40402,
+      "SHA256": "F39E657C4EC89FDB7101C2EFC3424AA0A6255593ECEC8C16588BDD66A32F3260",
+      "Backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\before\\INDEX.md",
+      "GitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "FirstLine": "> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。"
+    }
+  ],
+  "Protected": [
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/change-ledger-validation.json",
+      "SHA256": "671B6214EDDF5582C575D324DFB54014F4F08055B2E4F857250B06D4F96EC93E"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/concurrent-git-state.json",
+      "SHA256": "7B2250C770EC041C704A71F0F8435ABB98C637879F2EC65012730FB760F42732"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/final-validation.json",
+      "SHA256": "BC1013E356BCDEEB65DEA61BED764590A3E97F1F083AB5B534646A38DA206F41"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/observation-summary.json",
+      "SHA256": "85ECE50860306978A05DA53D05FC9DBA5981D88165FF4F12C2864A73592D9252"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-dispatch.json",
+      "SHA256": "A934CD15838D96F760A05002A8BA1DE48B1D166010A5F422B851BDA8E719EBBC"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-exit-state.json",
+      "SHA256": "5EB92D2B1F7A3055B3BAF854A05EAA75E1D4098912BD27F69263628988490076"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md",
+      "SHA256": "6521B9AF94F60F902DDC9223C6706F318097E9365EB7CA52722E0D184FCC236C"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/materialization-window-01.json",
+      "SHA256": "D637C6C0FB9AF1612B43E32DC0BEB1FF9E72CC797B1971713B091DD17976BD3C"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/production-window-01.json",
+      "SHA256": "5CB2531776B312E8EEDBFF33DF3C910C0833EE45A4B58E7AC9223B90E9BF6887"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-load.json",
+      "SHA256": "1C2014056858803A11822199FF58DABB760DA37A59D0A663D6794E321CA8A514"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-restoration.json",
+      "SHA256": "78253C6ADF8518F9D48E7DBFE0341FD28BEFE1D5D31D95B477C09EE243F485D1"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/static-bindings.json",
+      "SHA256": "2FEF736ED9D153511DE64DF0503BB1F1347C874BEE904B7E8ED7BC3DA4E88C34"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+      "SHA256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F"
+    },
+    {
+      "Path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+      "SHA256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F"
+    },
+    {
+      "Path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "SHA256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "Path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "SHA256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "Path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "SHA256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "SHA256": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A"
+    },
+    {
+      "Path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md",
+      "SHA256": "F70C110406E7F5A4C718F219F9FB57A0013FB488B65BB962D3FC360EC0775061"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/after.json",
+      "SHA256": "3F726D6BFBDEE735A2202D53C1A3169C16D5F9681AA9079920B6B3A9AE6E229E"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md",
+      "SHA256": "6575C3918D87C4CDA8D935CB7F30E65FA85BDE350FDFFDB9BF36F3A9494F6BC8"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/battle-optimization-progress-tracker.md",
+      "SHA256": "E3231BF35E2F3792670B648008D4C6427DF7FEBF0882EC2D95BB3B07555DD62C"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/INDEX.md",
+      "SHA256": "CE8BC2F738084170AB85D8B29DA5D0E73F85B7D15B778613AB2B724969AA7C53"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "SHA256": "EEE1CABBCBAE7FC225800F04C00FDD11825B62D3C85A1F994D16B892FE37C387"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/RECORD.md",
+      "SHA256": "4587261671682F1FE6FAF88A2EE29A30C552BE7FC7BCDAB329F7D7593995D6B0"
+    },
+    {
+      "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md",
+      "SHA256": "06EA919A3BA05B05EA0EBB3CC6154E5871E5263345FA3604DA18CE73B50A515E"
+    },
+    {
+      "Path": "Packages/manifest.json",
+      "SHA256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "Path": "ProjectSettings/GraphicsSettings.asset",
+      "SHA256": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D"
+    },
+    {
+      "Path": "ProjectSettings/ProjectVersion.txt",
+      "SHA256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "Path": "ProjectSettings/QualitySettings.asset",
+      "SHA256": "D91D8F5E2FE7519A42D4DC79DB6CB4F2C54296AD4BB69B79FD0FB6E8982150FB"
+    }
+  ]
+}

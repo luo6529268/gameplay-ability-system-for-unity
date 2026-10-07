@@ -1,0 +1,25 @@
+{
+  "observed": "2026-10-07T06:53:38.4477356+08:00",
+  "priorReadonlyComparisonProcesses": [
+    {
+      "ProcessId": 92392,
+      "CreationDate": "2026-10-07T06:52:23.904597+08:00"
+    }
+  ],
+  "results": [
+    {
+      "workload": "00-dispersed1000-smoke",
+      "rawShaSame": true,
+      "normalizedJsonExactSame": true,
+      "oldNormalizedLength": 4209056,
+      "newNormalizedLength": 4209056
+    },
+    {
+      "workload": "01-combat1000-smoke",
+      "rawShaSame": true,
+      "normalizedJsonExactSame": true,
+      "oldNormalizedLength": 4207490,
+      "newNormalizedLength": 4207490
+    }
+  ]
+}

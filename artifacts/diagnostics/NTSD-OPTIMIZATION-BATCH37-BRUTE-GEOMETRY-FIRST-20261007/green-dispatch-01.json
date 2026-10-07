@@ -1,0 +1,40 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_FarPairWithVrestKeepsStateAndRejectsGeometry",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_Kind5OutsideOrdinaryUnionIsNotDropped",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_1000ParticipantsLocalCostAndFullSequence",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteGeometryFirstRequest_OnlyChangesOutputFromExactCacheSmoke",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteGeometryFirstRequest_RejectsOutsideFixedTwoSmokeMatrix"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "803a3479aae04c749ef156e398ccf587",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "refresh": {
+    "chunk_id": "a21454",
+    "wall_time_seconds": 1.3338759,
+    "exit_code": 0,
+    "original_token_count": 68,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Refresh requested.\",\"data\":{\"refresh_triggered\":true,\"compile_requested\":true,\"resulting_state\":\"compiling\",\"hint\":\"If Unity enters compilation/domain reload, poll editor_state until ready_for_tools is true.\"}}}\r\n"
+  }
+}

@@ -1,0 +1,284 @@
+{
+  "command": "$taskManifest=Get-Content -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007/before.json' -Raw|ConvertFrom-Json;[pscustomobject]@{observed=(Get-Date).ToString('o');operationId='NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007';scope='File audit only; not H07 performance/native/0GC admission';existingPaths=@($taskManifest.before|ForEach-Object{[pscustomobject]@{path=$_.path;beforeSha=$_.sha256;backup=$_.backup;backupSha=(Get-FileHash -LiteralPath $_.backup -Algorithm SHA256).Hash;afterSha=(Get-FileHash -LiteralPath $_.path -Algorithm SHA256).Hash}});newArtifacts=@(Get-ChildItem -LiteralPath 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007' -File -Recurse|ForEach-Object{[pscustomobject]@{path=$_.FullName;bytes=$_.Length;sha256=(Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash}});head=(git rev-parse HEAD);protectedCount=$taskManifest.protected.Count;protectedMismatchCount=@($taskManifest.protected|Where-Object{!(Test-Path -LiteralPath $_.path) -or (Get-FileHash -LiteralPath $_.path -Algorithm SHA256).Hash -ne $_.sha256}).Count;sharedRequestAbsent=!(Test-Path -LiteralPath Temp/NTSD_ProductionEntityStress.request.json);editorPid=(Get-Process -Id 19040).Id}|ConvertTo-Json -Depth 6",
+  "exitCode": 0,
+  "finalExistingPaths": {
+      "observed": "2026-10-07T10:35:57.6227908+08:00",
+      "paths": [
+        {
+          "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+          "sha256": "5011E8E9D5B92B21F3A8E66AE33DDC24C3DE91486380669F139529922E943378"
+        },
+        {
+          "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+          "sha256": "700F52D3EACDB5A05B1EA7CA65DD3874DB33153D8EB7F7AED9609D9947DECDC0"
+        },
+        {
+          "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+          "sha256": "853D57CFDF0D767EE5E8CE279978CD6FF2DB2D5A159F157BA20A5B9BE08717DA"
+        },
+        {
+          "path": "docs/ai/CHANGE-LEDGER.md",
+          "sha256": "79797A8B37E7EEFED23BC49DC232F41D286B0FBCDC9FC729DAF2EEA4F835AEAA"
+        },
+        {
+          "path": "docs/ai/STATE.md",
+          "sha256": "060CA2BB80A473C275BF32263391F362F6989B22C58E25A9E9C9ED37D84DB931"
+        },
+        {
+          "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+          "sha256": "A2558DF00B9CA9DD968D99ACABE6ECFC77019BD931007DA88DA00B3562D8C2AE"
+        },
+        {
+          "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+          "sha256": "ED8179DAA46BBD56B79DE5DE7C8FCE0F962BB57A38696E917B1F08677B62D7D4"
+        },
+        {
+          "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+          "sha256": "D02DAEFC532E9BA8BAFD65395B121D0122AC7041BDCC5D3E075676D0659AF7B7"
+        },
+        {
+          "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+          "sha256": "15F8FD661DC67CE1B5CDEB972C8CDF1DD37D1FE4691C26EDDB09E24B3F552EFB"
+        },
+        {
+          "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+          "sha256": "13D8133E1631B32D01EAAD310EB3727187E2650631ECBA4426F703BD54520945"
+        },
+        {
+          "path": "Temp/NTSD_ProductionEntityStress.result",
+          "sha256": "7198ADCFCF9F0591295C74B7C5B7305B8EFD6F79207CE02663800C9ED51305C8"
+        }
+      ]
+    },
+  "audit": {
+    "observed": "2026-10-07T10:35:04.6382196+08:00",
+    "operationId": "NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007",
+    "scope": "File audit only; not H07 performance/native/0GC admission",
+    "existingPaths": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+        "beforeSha": "EFBCC8C3B1022511CA504A81662A7ED5BFBBDDEDD9503DE3030585608D385FF8",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs",
+        "backupSha": "EFBCC8C3B1022511CA504A81662A7ED5BFBBDDEDD9503DE3030585608D385FF8",
+        "afterSha": "5011E8E9D5B92B21F3A8E66AE33DDC24C3DE91486380669F139529922E943378"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+        "beforeSha": "B48F58331F705174413F8C38ECB02B42CB662C96EDF0DD042CC0AC6F40BBBC7B",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs",
+        "backupSha": "B48F58331F705174413F8C38ECB02B42CB662C96EDF0DD042CC0AC6F40BBBC7B",
+        "afterSha": "700F52D3EACDB5A05B1EA7CA65DD3874DB33153D8EB7F7AED9609D9947DECDC0"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+        "beforeSha": "25E4EC2C83DE08F40D5103C0900242A4F1B801AE62A17520469DCD78FC63941A",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+        "backupSha": "25E4EC2C83DE08F40D5103C0900242A4F1B801AE62A17520469DCD78FC63941A",
+        "afterSha": "853D57CFDF0D767EE5E8CE279978CD6FF2DB2D5A159F157BA20A5B9BE08717DA"
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "beforeSha": "3F505CA7B28E5CC3FC05D79CA95A1A95E253CBC62A12073F6E8DED05261A17BB",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\docs__ai__CHANGE-LEDGER.md",
+        "backupSha": "3F505CA7B28E5CC3FC05D79CA95A1A95E253CBC62A12073F6E8DED05261A17BB",
+        "afterSha": "78329BA68163B3F24D9E518036D7669C22541EB3598B3ABF3B853C9823738537"
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "beforeSha": "C7B68ED6DFE6699A3D3643E432744F72B6A5D1DE42B35548C0DBE87E57DDD073",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\docs__ai__STATE.md",
+        "backupSha": "C7B68ED6DFE6699A3D3643E432744F72B6A5D1DE42B35548C0DBE87E57DDD073",
+        "afterSha": "97130E06724960DB932A807BAABB0A64B79C085A848BB447A9F84D3D04303754"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "beforeSha": "7B6703B229F08BFCE56B3C0E6F939FD3D50C0445545B3E27DA8245889C7929D5",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\docs__ai__FILE-OPERATIONS__INDEX.md",
+        "backupSha": "7B6703B229F08BFCE56B3C0E6F939FD3D50C0445545B3E27DA8245889C7929D5",
+        "afterSha": "8E5E9D8B0AEB9D9FA8B08718E72EA36CC3BCDAE0E05AE796EAC3741F68483F5D"
+      },
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "beforeSha": "52CE7FEBB3626140EDF4BA16D5F2B956D20211F978ADF535EDDFFAD179789898",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+        "backupSha": "52CE7FEBB3626140EDF4BA16D5F2B956D20211F978ADF535EDDFFAD179789898",
+        "afterSha": "65C4BD9C7F365FB624AF08F936F1A011C3236B160FD010DA944DBABF38AEADEA"
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "beforeSha": "8B7B67752224C4DAD109D01EBBCD6AE2DC69A0C3A05A6879506F0C440C40D16F",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+        "backupSha": "8B7B67752224C4DAD109D01EBBCD6AE2DC69A0C3A05A6879506F0C440C40D16F",
+        "afterSha": "6224D3D8CEEF6CA787980319F2E6313D2ED737D4DD008C58A6E5E57A1301CB28"
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "beforeSha": "961E3840433FA70125CF5F90EB0AC618FC37105178175FB2F0F56F07DE21CF4C",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "backupSha": "961E3840433FA70125CF5F90EB0AC618FC37105178175FB2F0F56F07DE21CF4C",
+        "afterSha": "287FC678944D4E6B42C9EBD56A81FD7CA07477A0F1E73511F42AAEA23A56E3C6"
+      },
+      {
+        "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+        "beforeSha": "8183751D7E68AF9B1B18948DA7FD289E36EEDACC341C5D4C20F83FF80A2146EB",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Assets__NTSD__Docs__android-mobile-readiness__h-07-fresh-1000-ai-certificate.md",
+        "backupSha": "8183751D7E68AF9B1B18948DA7FD289E36EEDACC341C5D4C20F83FF80A2146EB",
+        "afterSha": "5EED0C594D43F87D4B67D0C53C7BB21D302EC9127DC44CD4343ACB888DCCB6A7"
+      },
+      {
+        "path": "Temp/NTSD_ProductionEntityStress.result",
+        "beforeSha": "5F6494AF6B6B10875B99DB8A55994344AAC9E3946296AB63E69D2E8D777F4310",
+        "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\before\\Temp__NTSD_ProductionEntityStress.result",
+        "backupSha": "5F6494AF6B6B10875B99DB8A55994344AAC9E3946296AB63E69D2E8D777F4310",
+        "afterSha": "7198ADCFCF9F0591295C74B7C5B7305B8EFD6F79207CE02663800C9ED51305C8"
+      }
+    ],
+    "newArtifacts": [
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\commands-preparation-01.json",
+        "bytes": 11056,
+        "sha256": "F0B64557AD10FF85A8DA45984AD9767E6E34F95A24DE83608F487CC926B1831F"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\focused-01.json",
+        "bytes": 6658,
+        "sha256": "1EEB28F51A12CA046E5CB10D293A023453290FB4E60E722CD75FA968CFC36F5B"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\green-01.json",
+        "bytes": 70223,
+        "sha256": "8CCCD76EDCCD57547795B63F8C3C1AD69294AA695EB428B9C4342D23B1A22038"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\green-attempt-01.json",
+        "bytes": 1664,
+        "sha256": "95F44ECECBCF1323B2670A8A9263D18F9B97A4F679B623BA5708561452C4C170"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\post-run-audit-01.json",
+        "bytes": 7600,
+        "sha256": "44ADD2EB912A8D79ECE00B86695CFA776867BA5731DF32B5611DD3CEC5942B31"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\post-run-editor-01.json",
+        "bytes": 4659,
+        "sha256": "34FB8C7A20D7ED07CDE8F8E98B3483F5260CB6C8BE89219F84EBC6FEBB5C8F19"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\pre-run-audit-01.json",
+        "bytes": 5322,
+        "sha256": "BB583EBA61BA881D022AD91600BF41A2F32DED64FE72314E2B75F9DFD01452E4"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\pre-run-audit-attempt-01.json",
+        "bytes": 5390,
+        "sha256": "D0056CEE71A1D87C8884952241B8EEDF23DFAB5B19DAF9BA3856302B3D1D9857"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\pre-run-editor-01.json",
+        "bytes": 2178,
+        "sha256": "B965E672BAF227703D7E961E47A2B69B434DDFA7AFF861F5994E9F643C42936E"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\red-01.json",
+        "bytes": 4794,
+        "sha256": "4D7DD8B21E466309B3778578808F18BBE53FFEBD079BE652751C10734750ED34"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\REPORT.md",
+        "bytes": 4345,
+        "sha256": "2D1A9A1651ACD360BE8FA8E604A3D739C7DD8F3CDAAB38427388D3C127EA91AE"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\window-comparison-01.json",
+        "bytes": 35775,
+        "sha256": "2113EF69CC2023962505FA504BF2983E14DDFE1310E40A31AEA521FAD80357C1"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\window-dispatch-01.json",
+        "bytes": 1120,
+        "sha256": "606E69BD581DE5A83BA671C831AACC81DC63CD8749CC77891C5A6502A2EA4302"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\progress-0000.json",
+        "bytes": 1646,
+        "sha256": "AEA56FEEE2B675C95B5CBC85798A0F0D72CAB8E14736470685D4F155281684B9"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\progress-0001.json",
+        "bytes": 1656,
+        "sha256": "15DFE67E12FF8EA005C5A229512039B71D1F79E5A83515645C054130F70A6CB2"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\progress-0002.json",
+        "bytes": 1640,
+        "sha256": "961CE9C897686630B5CCA564BA61CF9C6E5581962A90701C90B88D3AA68FD5D4"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\progress-0003.json",
+        "bytes": 1650,
+        "sha256": "30CEAFEFDE2C93D286B4F64584303DF8488D29DD309E5076C9A9DA23CE65B4BA"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\suite-result.json",
+        "bytes": 5077,
+        "sha256": "832744306DAF06497F43406D7724DC0FFD75D585A47FB2E12B263A6427C3326B"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\00-dispersed1000-smoke\\report.json",
+        "bytes": 141565,
+        "sha256": "84CA88C768C35168C4F7F195E1EF4D36E509AE6E9B1A3D28534821B67367C57C"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\00-dispersed1000-smoke\\report.json.final-checksum.json",
+        "bytes": 4210038,
+        "sha256": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\00-dispersed1000-smoke\\report.json.observation.json",
+        "bytes": 1668,
+        "sha256": "A6819EBFA8F941D9CE735996E1D891719FC9F423BC50CE8B3616CD17C10143E0"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\00-dispersed1000-smoke\\report.json.request.json",
+        "bytes": 2738,
+        "sha256": "D18EB38C677DC72569916394AED4D261926F1B48E746759797C11CC963BF910B"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\00-dispersed1000-smoke\\report.json.terminal.txt",
+        "bytes": 523,
+        "sha256": "C7726A5C35A3BF9A391F349C5BA08B17150BED3F086D98265701BD175AEB53C1"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\01-combat1000-smoke\\report.json",
+        "bytes": 141710,
+        "sha256": "33D543A0395BE55B590DF093DFF19B7D545EE7FD77C25C81DF30CCCA2F75F09E"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\01-combat1000-smoke\\report.json.final-checksum.json",
+        "bytes": 4208480,
+        "sha256": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\01-combat1000-smoke\\report.json.observation.json",
+        "bytes": 1662,
+        "sha256": "A6C38E0EFACDBED41CD4BEF09A24BBDC6D4E0A4FC1EC05C5D11F8AD74C0EFB4B"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\01-combat1000-smoke\\report.json.request.json",
+        "bytes": 2732,
+        "sha256": "059D5620544277B79586443515FB893FBD437859CC20CA3EAC46386151A3D753"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007\\windows-01\\01-combat1000-smoke\\report.json.terminal.txt",
+        "bytes": 519,
+        "sha256": "7198ADCFCF9F0591295C74B7C5B7305B8EFD6F79207CE02663800C9ED51305C8"
+      }
+    ],
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "protectedCount": 334,
+    "protectedMismatchCount": 0,
+    "sharedRequestAbsent": true,
+    "editorPid": 19040
+  }
+}

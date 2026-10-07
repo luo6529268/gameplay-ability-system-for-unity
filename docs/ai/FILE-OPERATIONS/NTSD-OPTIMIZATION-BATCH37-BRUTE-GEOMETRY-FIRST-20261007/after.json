@@ -1,0 +1,73 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007",
+  "status": "VERIFIED_FILE_AUDIT_ONLY",
+  "beforeManifest": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007/before.json",
+  "finalExistingPaths": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "FFBC1A8A4725FA04CB0150E8743EA14C56D6749D168D44382A8CE4320CC68A92",
+      "bytes": 354649
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "003B58517BFCD373A8C2156B75CB285DCF4EDAE24AE500D29291BCA98AD2F620",
+      "bytes": 265815
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "893E7F3624D244AB1CA195D087DC7BB825AFC7EF640E09A289BD8E4879F7167D",
+      "bytes": 65200
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "F14A721A194E00419D7F74030EB768AF3F40F76A8CC6356E0C7E12DB19864FD8",
+      "bytes": 673061
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "1D611C074172FE693007DBE5771FB1B344F99A43FFCA62DE5E1EB88B56AED81E",
+      "bytes": 1572833
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "95C69CE9C7B3D0BEA913012920CB7D21799FEFD79EBCEC0FFFB583C6FDD3B04F",
+      "bytes": 57139
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "EC350B0B98BFC187CAA09E18BAE10F133EDFE56D0050EB372936BEE48270424E",
+      "bytes": 1505548
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "E3D2EC7C2835E39809D617535FF2EAB359DF64AEFBBF108FB89BC504C416EDF4",
+      "bytes": 76083
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "8F467CEB9004C4DEE975CE2E6E926C051E14ACB9D47E9BE19ACBF9F4ED71FD48",
+      "bytes": 35492
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "sha256": "16D4C7120BF37FDFE395A87CB65C3156343529A266643927961207071A98D3A7",
+      "bytes": 14631
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha256": "94E23E0D95315DDA8DD47D1C4EF4C97F1C4FF1598D20F23B634062862D78E606",
+      "bytes": 522
+    }
+  ],
+  "protectedAudit": {
+    "protectedCount": 379,
+    "protectedDifferences": [],
+    "backupCount": 11,
+    "backupDifferences": [],
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "observed": "2026-10-07T03:01:04.1171991Z"
+  },
+  "validation": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007/final-validation-01.json",
+  "report": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007/REPORT.md",
+  "note": "Exact dirty backups retained; no deletion/move/destructive Git; no new writes outside declared paths except this batch's fresh task/record/audit/diagnostics. Existing result overwritten only by owned suite terminal. Candidate admission remains pending."
+}

@@ -1,0 +1,79 @@
+{
+  "validator": {
+    "command": "Tools/Validate-ChangeLedger.ps1",
+    "exitCode": 0,
+    "messageCount": 4262,
+    "head": [
+      "Change ledger validation PASSED.",
+      "  Records: 1333",
+      "  Governed code files in diff: 12"
+    ],
+    "warningCount": 4247,
+    "errorLines": [],
+    "tail": [
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+    ]
+  },
+  "diffCheck": {
+    "command": "git diff --check -- declared tracked write paths",
+    "exitCode": 0,
+    "output": "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it\n",
+    "scope": "tracked diff; untracked suite was compiled and tested, not claimed covered by git diff whitespace scan"
+  },
+  "fileAudit": {
+    "protectedCount": 379,
+    "protectedDifferences": [],
+    "backupCount": 11,
+    "backupDifferences": [],
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "observed": "2026-10-07T03:01:04.1171991Z"
+  },
+  "sourceFrozen": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "FFBC1A8A4725FA04CB0150E8743EA14C56D6749D168D44382A8CE4320CC68A92"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "003B58517BFCD373A8C2156B75CB285DCF4EDAE24AE500D29291BCA98AD2F620"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "893E7F3624D244AB1CA195D087DC7BB825AFC7EF640E09A289BD8E4879F7167D"
+    }
+  ],
+  "actualSource": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "FFBC1A8A4725FA04CB0150E8743EA14C56D6749D168D44382A8CE4320CC68A92"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "003B58517BFCD373A8C2156B75CB285DCF4EDAE24AE500D29291BCA98AD2F620"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "893E7F3624D244AB1CA195D087DC7BB825AFC7EF640E09A289BD8E4879F7167D"
+    }
+  ],
+  "scene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Menu",
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "buildIndex": 0,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 8
+      }
+    }
+  },
+  "notes": [
+    "4247 warnings are existing historical records declaring paths outside current diff, not zero warnings",
+    "No production default/native/per-tick/zeroGC/device certification; H07/H11 remain open"
+  ]
+}

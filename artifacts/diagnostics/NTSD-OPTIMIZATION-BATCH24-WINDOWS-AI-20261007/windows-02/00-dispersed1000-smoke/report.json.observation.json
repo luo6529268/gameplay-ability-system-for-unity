@@ -1,0 +1,16 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 180,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json",
+    "terminalStatus": "Failed",
+    "sampledTicks": 0,
+    "warmupTicks": 0,
+    "minimumObservedActiveAi": 2147483647,
+    "minimumObservedBaseRoster": 2147483647,
+    "observedSampleWindows": 0,
+    "lastObservedSampleTick": 0,
+    "workloadValid": false,
+    "zeroGcPassed": false,
+    "teardownRestored": true,
+    "failure": "System.InvalidOperationException: Peak population validation failed; see structured count fields in the report.\r\n  at NTSD.Animation.Rendering.Editor.ProductionEntityStressRunner.ValidatePeakPopulation () [0x0012d] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs:9377 \r\n  at NTSD.Animation.Rendering.Editor.ProductionEntityStressRunner.Update () [0x00184] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs:5736 "
+}

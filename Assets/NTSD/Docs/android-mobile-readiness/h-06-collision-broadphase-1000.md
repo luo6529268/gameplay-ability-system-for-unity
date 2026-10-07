@@ -1,3 +1,5 @@
+> 2026-10-07 首阶段限定准入评估完成 / NO_DEFAULT_PROMOTION：第25批四1000-participant collector形状候选序列/handle/hit/RNG同，实际18/18；Direct/Sweep/tree在分散有局部收益，但集中261150pair仍1.1–1.5秒。实际OPoint/完整tick/checksum/native336和可靠GC未闭合，不默认推广，不重写索引。详[第25批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH25-BOUNDED-ASSESSMENTS-20261007/REPORT.md)。原下方方案未来正式准入不变。
+
 # H-06 1000 实体碰撞 Broadphase 方案
 
 > 优先级：高  

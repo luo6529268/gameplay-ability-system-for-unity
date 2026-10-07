@@ -1,0 +1,123 @@
+{
+  "observedAt": "2026-10-07T02:49:26.6640514+08:00",
+  "protectedCount": 733,
+  "protectedMismatches": [],
+  "backupCount": 8,
+  "backupMismatches": [],
+  "linksChecked": 38,
+  "badLinks": [],
+  "sourceIssues": [],
+  "sources": [
+    {
+      "bytes": 65615,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "EC6BDA0AF37F80FE19D079F32D08198F42C622012F493D41F5F5BC472BA96702"
+    },
+    {
+      "bytes": 1566,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs",
+      "sha256": "8912F97010AD846693DEB2A983D8113E71A7B83F9AE76043E092DFA1C6459E57"
+    }
+  ],
+  "diffCheckExit": 0,
+  "diffAdvisories": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "staged": [],
+  "runtimeDllSha": "A49C69CE527D7E0268661F96F6A5A28B0C79E6204872BDA6EAF1A1930270AE8D",
+  "editorDllSha": "7BB73B4E1754C8A75F17B832815AE87054DCCCBEB7D1341BD00530A65064D051",
+  "menuSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+  "battleSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "status": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 2]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md",
+    " M docs/ai/STATE.md",
+    " M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/concurrent-git-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/observation-summary.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-dispatch.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-exit-state.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-load.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-restoration.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/static-bindings.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl"
+  ],
+  "ledger": [
+    {
+      "path": null,
+      "validation": {
+        "exitCode": 0,
+        "header": [
+          "Change ledger validation PASSED.",
+          "  Records: 1317",
+          "  Governed code files in diff: 0",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs, which is not in the current code diff."
+        ],
+        "errors": [],
+        "warningCount": 4309
+      }
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "validation": {
+        "exitCode": 0,
+        "header": [
+          "Change ledger validation PASSED.",
+          "  Records: 1317",
+          "  Governed code files in diff: 1",
+          "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs -> NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-DISPLAY-SAMPLE-TIMING-018, NTSD-OPT-M03-DYNAMIC-DISPLAY-016, NTSD-OPT-M03-FOOT-AUTHORING-021, NTSD-OPT-M03-PRODUCTION-CATALOG-020, NTSD-OPT-M03-PRODUCTION-WINDOW-014",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff."
+        ],
+        "errors": [],
+        "warningCount": 4303
+      }
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs",
+      "validation": {
+        "exitCode": 0,
+        "header": [
+          "Change ledger validation PASSED.",
+          "  Records: 1317",
+          "  Governed code files in diff: 1",
+          "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs -> NTSD-OPT-M03-FOOT-AUTHORING-021",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+          "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff."
+        ],
+        "errors": [],
+        "warningCount": 4308
+      }
+    }
+  ],
+  "scope": "Diagnostic-only; no production fix or parent acceptance. External HEAD commit preserved."
+}

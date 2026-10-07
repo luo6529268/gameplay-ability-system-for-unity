@@ -1,0 +1,9 @@
+{
+  "command": "Tools/Validate-ChangeLedger.ps1",
+  "observedAt": "2026-10-07T05:34:12.6941877+08:00",
+  "exitCode": 0,
+  "passed": true,
+  "records": 1322,
+  "governedCodeFiles": 8,
+  "limitations": "Write-Host emitted historical warnings outside the success-output capture. Raw tool output was truncated; this artifact stores only observed summary facts and does not claim a warning-free repository. No C# changed in the current documentation-only preparation."
+}

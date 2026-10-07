@@ -1,0 +1,15 @@
+{
+  "observed": "2026-10-07T07:13:31.6146513+08:00",
+  "protected": 232,
+  "protectedChanged": [],
+  "backups": 9,
+  "backupChanged": [],
+  "headSame": true,
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1326",
+    "  Governed code files in diff: 9"
+  ],
+  "warningCountStatus": "Not counted: initial anchored regex omitted indented WARNING lines; validator PASS is confirmed, no zero-warning claim."
+}

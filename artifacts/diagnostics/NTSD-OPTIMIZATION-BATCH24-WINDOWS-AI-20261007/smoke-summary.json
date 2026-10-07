@@ -1,0 +1,51 @@
+{
+  "logic": {
+    "available": true,
+    "unit": "ms",
+    "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+    "unavailableReason": "",
+    "sampleCount": 180,
+    "average": 443.8275166666672,
+    "maximum": 874.9262,
+    "p95": 659.9792499999994,
+    "p99": 804.8627530000007
+  },
+  "frame": {
+    "available": true,
+    "unit": "ms",
+    "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+    "unavailableReason": "",
+    "sampleCount": 150,
+    "average": 983.8952203591665,
+    "maximum": 2447.8507041931152,
+    "p95": 1620.7065701484669,
+    "p99": 2060.0310564041133
+  },
+  "gc": {
+    "available": true,
+    "unit": "bytes",
+    "source": "GC.GetAllocatedBytesForCurrentThread around production logic tick",
+    "unavailableReason": "",
+    "sampleCount": 180,
+    "average": 0,
+    "maximum": 0,
+    "p95": 0,
+    "p99": 0
+  },
+  "aiControlledTicks": 300000,
+  "aiCanonicalEligible": 300000,
+  "aiCanonicalCommitted": 300000,
+  "aiCanonicalFallback": 0,
+  "backlogDrop": 4099,
+  "maximumCatchUp": 2,
+  "soundDispatch": 0,
+  "soundSuppress": 0,
+  "presentation": "CentralOnly",
+  "initialLogicOnly": false,
+  "frameTiming": null,
+  "frameTimingUnavailable": "",
+  "checksum": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64",
+  "harness": false,
+  "zeroGc": true,
+  "teardown": true
+}

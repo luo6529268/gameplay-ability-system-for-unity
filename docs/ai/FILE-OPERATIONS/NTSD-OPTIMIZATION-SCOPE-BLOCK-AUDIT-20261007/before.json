@@ -1,0 +1,100 @@
+{
+  "operation": "NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007",
+  "observed": "2026-10-07T11:49:10.6519511+08:00",
+  "backupDirectoryCreated": "2026-10-07T11:48:49.8520750+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "writes": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 77373,
+      "sha256": "9B949AFD82D6D850BFE561183C42FD7E5EDA62401851EAE18AFB5BCC98BC7EAC",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007\\before\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md.before",
+      "backupSha256": "9B949AFD82D6D850BFE561183C42FD7E5EDA62401851EAE18AFB5BCC98BC7EAC",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 57906,
+      "sha256": "880945AFF74A163263DF333FEE529BE8C287F8DA4A0175E8E993E905F8997406",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007\\before\\docs__ai__FILE-OPERATIONS__INDEX.md.before",
+      "backupSha256": "880945AFF74A163263DF333FEE529BE8C287F8DA4A0175E8E993E905F8997406",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    }
+  ],
+  "protected": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "8F804BB8F460CF8C30355515BCCBB3782EA611D517DEAE477AA33E5B3CE0FA01"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "FFBC1A8A4725FA04CB0150E8743EA14C56D6749D168D44382A8CE4320CC68A92"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha256": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "2FEF406CAB0A4B80316EB8F58E62EA3C8EDE710DFD4773EE5074A2AEB4B7BF80"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs",
+      "sha256": "A53A7F07FA23BA0E470CD20AD8054681A6C4C11209B3A40B68A1B17322D06808"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "893E7F3624D244AB1CA195D087DC7BB825AFC7EF640E09A289BD8E4879F7167D"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01/production-window-01.json",
+      "sha256": "19CC8538BA8A25E35FD216DCADF82153B492A385FB6A80F4276D483C5F2E61A5"
+    }
+  ],
+  "trackedStatus": [
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md",
+    " M Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md",
+    " M docs/ai/STATE.md",
+    " M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md"
+  ],
+  "currentTrackerHeader": "> 2026-10-07 第35批原1800camera验收已完成：PROVENANCE_PASS / OBSERVER_ZERO_EVENTS / FULL_CAMERA_ZERO_GC_FAIL。完整1800/1800，双recorder前后校准PASS；observer3600scope/六子块0event，相机仍2（ordinal1/5、logic9/11、同slot1），调用点UNKNOWN，不豁免首帧。两slot/Foot与Health至少2、11592 CPU DrawMesh录制=执行/growth0/CPUlease0、11阶段三残留0/双Scene同/原Menu8roots clean idle恢复；本轮无C#修改、复跑测试或1000AI窗口，非FPS收益。H11/H07未达、5of6有限交付/父关闭0/Goal active；已执行16批＋第38批仅PLANNED（累计17，不归零），NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038尚无实现或收益，先不堆新微候选；生产默认和专项门未解冻。 [35报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md) / [38未实施Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md)。",
+  "currentIndexHeader": "> 第35批原1800camera验收恢复 / VERIFIED（文件操作与恢复限定，运行严格0GC仍FAIL）：10当前dirty文本副本/440规范化保护/HEAD与源码/双Scene保持，observer3600scope0event、camera2event/关闭三残留0，原Menu8roots clean idle恢复；无C#修改或新增候选，不计FPS收益。validator1334/12与声明diff检查PASS，4247历史warnings保留；首次patch/审计观察失败及Index末尾空行修正有留痕。[Operation](NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007/RECORD.md)。"
+}

@@ -1,5 +1,5 @@
 # NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007
-状态 IN_PROGRESS；Change NTSD-OPT-M03-FOOT-AUTHORING-021 / PLANNED。
+状态 SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；Change NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅Editor诊断，不是生产修复或父项关闭）。以下事前范围保留，实际结果追加。
 用户要求开始下一批；依总表第20批指定下一步，只定位生产Foot覆盖前置，不擅自修复配置或降低门槛。
 
 ## 原状、范围和不变量
@@ -23,3 +23,9 @@ Editor诊断启动Resources/反射/AssetDatabase会分配，置于观察前；�
 
 ## 回滚
 仅用户批准后恢复本Operation准确8份before；新增文件另行具名审计。不reset/clean/restore/删除其它用户工作。
+
+## 实际结果
+新测试实际9 RED失败；首次未导入调度0 selected不算PASS。完整刷新后新9＋旧61=70/70，原Editor CS错误0。原savedBattle64 distinct camera/tick8→63、每帧Self2/Foot0/Health2、loadedPreview0、authoring false、runtimeEnabled false/Sprite空/frames0；GameConfig实际六帧Sprite/texture有效、80ms。因配置读取链未接通而无Foot输出，不是资源丢失或Self标志未观察到；只读诊断范围闭合，不读取Q06 body解释其生成/排序。
+64 entityBuild/45056 entity vertex bytes、320实际CPU DrawMesh，两slot/CPUlease0。camera/observer各0B，但startup/end诊断会分配、Editor两fullGC硬门false，仅2实体短窗，不能推为fullchain0GC/性能收益。11阶段关闭objects/slots/borrowers0，Scene clean/SHA同，原PID19040/6401/Menu8roots idle已恢复。
+无生产fallback/配置开关/Scene组件修复，第20批原严格FAIL和NOT_RUN保持；下一须独立明确生产authoring入口/开关/样式归属，不为测试通过自动补组件。
+执行期HEAD2cccd597→8107196b发生外部提交（含本批中间文件）；本任务没有执行add/commit/push。733保护SHA和8备份均保持，staged空；不把HEAD写成未变，不归因特定执行者、不回退并发工作。最终冻结详见REPORT及Operation after。

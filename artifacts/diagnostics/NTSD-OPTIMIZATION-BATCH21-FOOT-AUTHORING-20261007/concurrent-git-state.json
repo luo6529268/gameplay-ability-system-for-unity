@@ -1,0 +1,21 @@
+{
+  "observedAt": "2026-10-07T02:46:38.6147017+08:00",
+  "beforeHead": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "observedHead": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "commitSubject": "111",
+  "changedPathCount": 472,
+  "ownedPathsInCommit": [
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs.meta",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "docs/ai/STATE.md"
+  ],
+  "staged": [],
+  "note": "This task issued no git add/commit/push or destructive Git operation; working bytes of 733 protected paths matched the before manifest. External commit is preserved, not attributed to a specific actor."
+}

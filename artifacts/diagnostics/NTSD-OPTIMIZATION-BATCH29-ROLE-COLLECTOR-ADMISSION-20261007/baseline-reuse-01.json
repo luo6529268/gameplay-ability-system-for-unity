@@ -1,0 +1,288 @@
+{
+  "observed": "2026-10-07T06:46:59.5228765+08:00",
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "before": "4424DCF8655AA502CD637B80846E588888B179973195A783CE124D1FF8A4A16E",
+      "current": "4424DCF8655AA502CD637B80846E588888B179973195A783CE124D1FF8A4A16E",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+      "before": "3B6BF9C565D22231B202A312708AF25F0D95BF8A63BD4F8BC11909ABC5C606B6",
+      "current": "3B6BF9C565D22231B202A312708AF25F0D95BF8A63BD4F8BC11909ABC5C606B6",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "before": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F",
+      "current": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "before": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "current": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "before": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "current": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+      "before": "4ACE07654E247A64FDA417402C1086ED5A61DCE798D7E7A3D01B7C15DE2D6B32",
+      "current": "4ACE07654E247A64FDA417402C1086ED5A61DCE798D7E7A3D01B7C15DE2D6B32",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "before": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA",
+      "current": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "before": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "current": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "before": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "current": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeAllocationGate.cs",
+      "before": "4E8BC3417F2DF884B81947520830F247846774F98D96EE17D9DCFEF8FF6235F3",
+      "current": "4E8BC3417F2DF884B81947520830F247846774F98D96EE17D9DCFEF8FF6235F3",
+      "unchanged": true
+    }
+  ],
+  "baseline": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/00-dispersed1000-smoke/report.json",
+      "status": "StoppedCleanly",
+      "harnessValidity": true,
+      "tick": 300,
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        }
+      ],
+      "requestSha": "B4A484904FCB8576FF7DCEA56FA4CD7AAE750509EB0BE98379D11C4DE2CDFD79",
+      "reportSha": "9C7DB74D62565FB954288D388B932A9DFFDCD1540B7FB49DB8DA5B1BBF4BEBA9",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "timingFields": [
+        {
+          "name": "logicTickMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 467.52408666666656,
+            "maximum": 880.5105,
+            "p95": 706.7582599999997,
+            "p99": 804.8779960000004
+          }
+        },
+        {
+          "name": "logicTickWithPresentationMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick; buildPresentation=true",
+            "unavailableReason": "",
+            "sampleCount": 90,
+            "average": 473.71814777777786,
+            "maximum": 795.9514,
+            "p95": 690.371605,
+            "p99": 787.6079169999999
+          }
+        },
+        {
+          "name": "logicTickWithoutPresentationMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick; buildPresentation=false",
+            "unavailableReason": "",
+            "sampleCount": 90,
+            "average": 461.33002555555544,
+            "maximum": 880.5105,
+            "p95": 715.90486,
+            "p99": 843.084665
+          }
+        }
+      ],
+      "candidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 429.1871661111112,
+          "maximum": 826.6020000000001,
+          "p95": 646.9009149999994,
+          "p99": 752.3845000000003
+        }
+      }
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/01-combat1000-smoke/report.json",
+      "status": "StoppedCleanly",
+      "harnessValidity": true,
+      "tick": 300,
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        }
+      ],
+      "requestSha": "F9C57522B2E9F971A7789874E2383D0B3E4B713086AE54564DF33BE7D20053AA",
+      "reportSha": "B70C7193796C66C50CD04F29997007B25660A84302FBB26507C261D857B48046",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "timingFields": [
+        {
+          "name": "logicTickMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 431.00028833333295,
+            "maximum": 775.4073,
+            "p95": 691.9199499999997,
+            "p99": 747.8904170000002
+          }
+        },
+        {
+          "name": "logicTickWithPresentationMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick; buildPresentation=true",
+            "unavailableReason": "",
+            "sampleCount": 90,
+            "average": 437.78716666666685,
+            "maximum": 768.5708,
+            "p95": 698.77845,
+            "p99": 745.272647
+          }
+        },
+        {
+          "name": "logicTickWithoutPresentationMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick; buildPresentation=false",
+            "unavailableReason": "",
+            "sampleCount": 90,
+            "average": 424.2134100000001,
+            "maximum": 775.4073,
+            "p95": 635.0218299999999,
+            "p99": 740.263781
+          }
+        }
+      ],
+      "candidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 398.07425500000005,
+          "maximum": 717.5443,
+          "p95": 645.1388349999999,
+          "p99": 694.2966130000001
+        }
+      }
+    }
+  ],
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "productionDefaultChanged": false,
+  "nativeParity": "NOT_PROVEN"
+}

@@ -1,0 +1,20 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 1800,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/01-dispersed1000-formal-02/report.json",
+    "terminalStatus": "StoppedWithResidue",
+    "sampledTicks": 1800,
+    "warmupTicks": 120,
+    "minimumObservedActiveAi": 1000,
+    "minimumObservedBaseRoster": 1000,
+    "observedSampleWindows": 137,
+    "lastObservedSampleTick": 1798,
+    "workloadValid": false,
+    "retainedFailedGcMeasurement": true,
+    "zeroGcPassed": false,
+    "zeroGcRawGatePassed": false,
+    "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+    "harnessValidity": false,
+    "teardownRestored": true,
+    "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0."
+}

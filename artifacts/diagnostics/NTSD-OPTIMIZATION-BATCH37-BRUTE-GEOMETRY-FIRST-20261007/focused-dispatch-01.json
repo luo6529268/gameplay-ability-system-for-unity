@@ -1,0 +1,28 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d8fa5b77de6d4c94a924bf81df1a5650",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

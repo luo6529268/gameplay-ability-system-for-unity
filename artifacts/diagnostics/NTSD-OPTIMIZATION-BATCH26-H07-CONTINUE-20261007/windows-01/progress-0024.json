@@ -1,0 +1,19 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 1800,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/02-dispersed1000-formal-01/report.json",
+    "terminalStatus": "",
+    "sampledTicks": 0,
+    "warmupTicks": 112,
+    "minimumObservedActiveAi": 2147483647,
+    "minimumObservedBaseRoster": 2147483647,
+    "observedSampleWindows": 0,
+    "lastObservedSampleTick": 0,
+    "workloadValid": false,
+    "zeroGcPassed": false,
+    "zeroGcRawGatePassed": false,
+    "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+    "harnessValidity": false,
+    "teardownRestored": false,
+    "failure": ""
+}

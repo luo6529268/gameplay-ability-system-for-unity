@@ -1,0 +1,98 @@
+{
+  "observed": "2026-10-07T11:21:18.3761854+08:00",
+  "command": "$ErrorActionPreference='Stop';$taskWritePaths=@(\"docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md\",\"docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007.md\",\"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md\",\"docs/ai/CHANGE-LEDGER.md\",\"docs/ai/STATE.md\",\"Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\",\"Assets/NTSD/Docs/battle-optimization-progress-tracker.md\",\"docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md\",\"Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md\",\"docs/ai/FILE-OPERATIONS/INDEX.md\");$taskPrev=Get-Content -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007/before.json' -Raw|ConvertFrom-Json;$taskBackupRoot=Join-Path (Get-Location) 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007/before';if(Test-Path -LiteralPath $taskBackupRoot){throw 'Fresh backup directory already exists'};New-Item -ItemType Directory -Path $taskBackupRoot|Out-Null;$taskBefore=@(foreach($p in $taskWritePaths){$info=Get-Item -LiteralPath $p;$sha=(Get-FileHash -LiteralPath $p -Algorithm SHA256).Hash;$dest=Join-Path $taskBackupRoot ($p.Replace('/','__'));Copy-Item -LiteralPath $p -Destination $dest;$bsha=(Get-FileHash -LiteralPath $dest -Algorithm SHA256).Hash;if($bsha -ne $sha){throw 'Backup mismatch'};[pscustomobject]@{path=$p;absolute=$info.FullName;bytes=$info.Length;sha256=$sha;backup=$dest;backupSha256=$bsha;gitStatus=@(git status --short -- $p)}});$taskWriteAbsolute=@($taskWritePaths|ForEach-Object{(Get-Item -LiteralPath $_).FullName});$taskExtra=@('docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007.md','docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037.md','docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007.md','docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md','Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs','Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs','Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs','Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md','Temp/NTSD_ProductionEntityStress.result');$taskExtra+=@(Get-ChildItem -LiteralPath 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007','docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007','artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007','docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007' -File -Recurse|ForEach-Object{$_.FullName});$taskProtectAbsolute=@((@($taskPrev.protected.path)+$taskExtra)|ForEach-Object{(Get-Item -LiteralPath $_).FullName}|Sort-Object -Unique|Where-Object{$_ -notin $taskWriteAbsolute});$taskProtected=@($taskProtectAbsolute|ForEach-Object{[pscustomobject]@{path=$_;sha256=(Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash}});$taskSource=@(Get-FileHash -LiteralPath 'Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs','Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs' -Algorithm SHA256|Select-Object Path,Hash);$taskScene=@(Get-FileHash -LiteralPath 'Assets/NTSD/Scene/NTSD_Menu.unity','Assets/NTSD/Scene/NTSD_Battle.unity' -Algorithm SHA256|Select-Object Path,Hash);[pscustomobject]@{operationId='NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007';observed=(Get-Date).ToString('o');head=(git rev-parse HEAD);before=$taskBefore;protected=$taskProtected;source=$taskSource;scenes=$taskScene;cameraEvidenceAbsent=(-not(Test-Path -LiteralPath 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01'));sharedRequestAbsent=(-not(Test-Path -LiteralPath 'Temp/NTSD_ProductionEntityStress.request'));note='Backup includes own operation index prefix; old body preserved. No source edits.'}|ConvertTo-Json -Depth 7 -Compress",
+  "exit_code": 0,
+  "backupCount": 10,
+  "protectedCount": 440,
+  "editorState": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791343110633,
+        "sequence": 8,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791341827464,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791341630289
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "sceneState": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Menu",
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "buildIndex": 0,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 8
+      }
+    }
+  },
+  "sourceMatchesOriginal35Audit": true,
+  "note": "Two source hashes match original35 pre-run-audit-01; no new code or test rerun, existing25/25 evidence reused."
+}

@@ -1,0 +1,43 @@
+{
+  "observed": "2026-10-07T09:34:37.8498630+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headSame": true,
+  "protectedCount": 270,
+  "protectedMismatches": [],
+  "backupCount": 11,
+  "backupMismatches": [],
+  "sourceHashes": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "EFBCC8C3B1022511CA504A81662A7ED5BFBBDDEDD9503DE3030585608D385FF8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "B48F58331F705174413F8C38ECB02B42CB662C96EDF0DD042CC0AC6F40BBBC7B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "25E4EC2C83DE08F40D5103C0900242A4F1B801AE62A17520469DCD78FC63941A"
+    }
+  ],
+  "validationExit": 0,
+  "validationSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1330",
+    "  Governed code files in diff: 11"
+  ],
+  "warningCount": 4248,
+  "diffExit": 0,
+  "diffIssues": [],
+  "menuSceneSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+  "battleSceneSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sharedRequestAbsent": true,
+  "sharedTerminalSha": "FF13D1E880E84B235DE8E59113ED7BEB8BF2FABF2CF56F22297AE26E582D6D20",
+  "terminalOwner": [
+    "PASS",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007\\windows-01\\01-combat1000-smoke\\report.json"
+  ],
+  "newWindowAbsent": true,
+  "editorPid": 19040,
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+}

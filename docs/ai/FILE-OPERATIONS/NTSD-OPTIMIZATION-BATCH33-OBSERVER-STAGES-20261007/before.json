@@ -1,0 +1,1135 @@
+{
+  "observed": "2026-10-07T08:59:33.4714495+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 76461,
+      "sha256": "D494E78B8CF67C1D727B1138391ABC3E6B56B379D6D70FF071A9D6433E98169B",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\Assets__NTSD__Scripts__Test__Editor__BattleCentralProductionWindowSceneProbeEditor.cs",
+      "backupSha256": "D494E78B8CF67C1D727B1138391ABC3E6B56B379D6D70FF071A9D6433E98169B",
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 665533,
+      "sha256": "5FE7A597F86D496292AD2643B0B862906EC085FFEBD700BA0C875FA3632D1366",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\docs__ai__CHANGE-LEDGER.md",
+      "backupSha256": "5FE7A597F86D496292AD2643B0B862906EC085FFEBD700BA0C875FA3632D1366",
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1565305,
+      "sha256": "9E775DBB8BD8D3552C2A914E50ED0E28F13C2840461E3EFBEEEBB99F5DF3DD14",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\docs__ai__STATE.md",
+      "backupSha256": "9E775DBB8BD8D3552C2A914E50ED0E28F13C2840461E3EFBEEEBB99F5DF3DD14",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 50281,
+      "sha256": "E5510CF67EEC0EB32EF3F1BAF0DBF7A2D73452962A095FB7FB4EAEEE81B6FB77",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\docs__ai__FILE-OPERATIONS__INDEX.md",
+      "backupSha256": "E5510CF67EEC0EB32EF3F1BAF0DBF7A2D73452962A095FB7FB4EAEEE81B6FB77",
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1497799,
+      "sha256": "85FDB6D04B2A3954E3384F58F1A4FD59E9C35E5AB38694081E7ED9F5A7CD12A6",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "85FDB6D04B2A3954E3384F58F1A4FD59E9C35E5AB38694081E7ED9F5A7CD12A6",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 66685,
+      "sha256": "5768332AE20300F2952B2B76B23F5B2333950670B43D7E5BD4E1AC819FD28C95",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "backupSha256": "5768332AE20300F2952B2B76B23F5B2333950670B43D7E5BD4E1AC819FD28C95",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "bytes": 27839,
+      "sha256": "1FB58E3A9EB2ABCD702D5B27373CC210E8C38F595B52F6EA80F251F6923CC33D",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "backupSha256": "1FB58E3A9EB2ABCD702D5B27373CC210E8C38F595B52F6EA80F251F6923CC33D",
+      "gitStatus": [
+        "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md",
+      "bytes": 12828,
+      "sha256": "B29BD0763CF1838EB78F57D3850D2D37A64AD86825A877098FC8036C9751EDEF",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007\\before\\Assets__NTSD__Docs__android-mobile-readiness__h-11-presentation-capacity-zero-gc.md",
+      "backupSha256": "B29BD0763CF1838EB78F57D3850D2D37A64AD86825A877098FC8036C9751EDEF",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md"
+      ]
+    }
+  ],
+  "previousProtectedVerified": true,
+  "previousProtectedMismatches": [],
+  "extraProtected": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "99D7682AC1B04F8937620FD4D291A58882AD1D76774FC67A87E820BED5E4CAF1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "F7E3FFE1557DF883CF4EDCF6324A353D508FD927EE394DB050F89B6F8318C308"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "05933D3DBC91D5B81D3ADE07A1B3914D93DE9DE2078AAD03BC55C89EF5CAA49B"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "sha256": "14F31D5CD28150CD2D39C28F072DB2E0EA97B878701E2D64E26208EC8656C8AB"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha256": "FF13D1E880E84B235DE8E59113ED7BEB8BF2FABF2CF56F22297AE26E582D6D20"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/REPORT.md",
+      "sha256": "5D78442835482B5303DE7F79F0548E5680F7A5F3E76504DF41270AD61CB4F658"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/final-audit-01.json",
+      "sha256": "D31586BBDABE46E9D5870943594E345F5E91B668FCA1EDFA1D1FB582C4BFDB3F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/comparison-01.json",
+      "sha256": "13870021E8D5D0ED0B526224120A7B07A1F6607534C1B2259BE6735197302E5A"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032.md",
+      "sha256": "A927DE613C709CDE5FFDB6ED8A82491FFB86FDD09A026EAF539A2604B21756E5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/after.json",
+      "sha256": "F395E060FE4948B795395DE6443F16C45D23F8D2F8AFBA65E3AA1C3508CC14A6"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007.md",
+      "sha256": "66A3B1A7A7DE459DAC3267131CDA4F56DD58C516C57B63510C0D86E029A3F3A5"
+    }
+  ],
+  "editorPid": 19040,
+  "editorPort": 6401,
+  "protected": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/change-ledger-validation.json",
+      "sha256": "671B6214EDDF5582C575D324DFB54014F4F08055B2E4F857250B06D4F96EC93E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/concurrent-git-state.json",
+      "sha256": "7B2250C770EC041C704A71F0F8435ABB98C637879F2EC65012730FB760F42732"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/final-validation.json",
+      "sha256": "BC1013E356BCDEEB65DEA61BED764590A3E97F1F083AB5B534646A38DA206F41"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/observation-summary.json",
+      "sha256": "85ECE50860306978A05DA53D05FC9DBA5981D88165FF4F12C2864A73592D9252"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-dispatch.json",
+      "sha256": "A934CD15838D96F760A05002A8BA1DE48B1D166010A5F422B851BDA8E719EBBC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-exit-state.json",
+      "sha256": "5EB92D2B1F7A3055B3BAF854A05EAA75E1D4098912BD27F69263628988490076"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md",
+      "sha256": "6521B9AF94F60F902DDC9223C6706F318097E9365EB7CA52722E0D184FCC236C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/materialization-window-01.json",
+      "sha256": "D637C6C0FB9AF1612B43E32DC0BEB1FF9E72CC797B1971713B091DD17976BD3C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/production-window-01.json",
+      "sha256": "5CB2531776B312E8EEDBFF33DF3C910C0833EE45A4B58E7AC9223B90E9BF6887"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-load.json",
+      "sha256": "1C2014056858803A11822199FF58DABB760DA37A59D0A663D6794E321CA8A514"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-restoration.json",
+      "sha256": "78253C6ADF8518F9D48E7DBFE0341FD28BEFE1D5D31D95B477C09EE243F485D1"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/static-bindings.json",
+      "sha256": "2FEF736ED9D153511DE64DF0503BB1F1347C874BEE904B7E8ED7BC3DA4E88C34"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/compile-preflight.json",
+      "sha256": "41649334FABECDF854559EE284A12D03436D3A2BDBCE967D9F8633328AABA503"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/final-validation.json",
+      "sha256": "6D360AF00E82B5FEB87B40AEEA893A3FBCEAC094C69635969D2B5F20D173ACA3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/green-results.json",
+      "sha256": "DB8911673F98A9FEB2678B35C3DFC0D75A164FD2B2F3B98C66B4767240576BFA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/observation-summary.json",
+      "sha256": "C36222DEA342A64FBD48451B315D1561ACE59275F700D2ECE21CDB3C87CFE55E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/protection-check.json",
+      "sha256": "97C04C963D0C58706A911544FA8F453210A8F14CBA6AF253857BE03ABB6F70D6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/red-results.json",
+      "sha256": "9F550D019F8E2579E896B5A752E44AFAC86C3DB1705204723F41D068990F6036"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/REPORT.md",
+      "sha256": "A57778229F1A31CFA36FCC2A11446FAF30C2794D53F376B53A264E258DC7CD54"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/run-01/catalog-replay.json",
+      "sha256": "2620E3C37595E62F2384B6A181B5146D0B68D97CC9998B7EDAF7AA5F52174E67"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/run-01/materialization-window-01.json",
+      "sha256": "A127ED050D27EF02874E3A4AAB6C1C61C2759AD227515FF9895D7C67536C086A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/run-01/production-window-01.json",
+      "sha256": "9AEA10D30FE2CA7B90A182EC6679A693B7AC83C3E857821F58DDD15689688D8D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/scene-lifecycle.json",
+      "sha256": "2DE7F8A4BD11C70EAFA527D14A884D2A7BFC348F43298590FCBEC7E64859C543"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/test-requests.json",
+      "sha256": "CBC3C72E94ABDEFF29C62F627886AFF5BF29F28803BA92B5577504D2A7D3E8E3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/change-ledger-validation.json",
+      "sha256": "D1876891D2C8698514E266C17AA3EF2F6C0DD674E5A7322F715D1615CA10AEF4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/final-validation.json",
+      "sha256": "58AF52A07C6DC648194167922B4053C55AE2A49C59C6DD1BC9321643EA0D6B20"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/first-fixture-failure.json",
+      "sha256": "2922EF0C3BC05B45172C071C24B97F9271AC0F9B3BC1733A2A78795A52A5F344"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/focused-results.json",
+      "sha256": "4A5D843DDED6E70AD86AD211568E2B48B5EDF26DC9EE418AE708085D74213122"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/menu-restoration.json",
+      "sha256": "9036ADF58E21CC3EFDC72436C8FF0D623838F48F156B08FC71652FB74EE49F08"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/reentry-01/materialization-window-01.json",
+      "sha256": "5AB116A5F2D14C6002073B0ECD9CC015C452E94361C4FD79DA039D49174E8055"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/reentry-01/production-window-01.json",
+      "sha256": "93A7B8D9AE21AFA71C4568F37B00E69F6B06FF59A68B31C828F24A1CB5A7FAE9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/REPORT.md",
+      "sha256": "451F3A85D2BCE0E33782322B69008F3FD1A71440B2728F13164B83E440247BD1"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/reuse-fingerprints.json",
+      "sha256": "A42C2D770B0326C5BD6BC6C2F950A1A8A07BC6EE9B12F9F0674FB512274564BD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/run-3be6896a17754ff281a19beab306aaa2/result.json",
+      "sha256": "173A304EC6B2D7473F5F9C5DFCC8815FB6F1CADA83E0B66AE9EEB4DF6FA84FDC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/run-4bf6fccd9e8c4706ac5bf5cc06729a5e/result.json",
+      "sha256": "3A2BBCB74E810548C4ABF1E426679D1DBF7843D4A94394B6AE790012186C87B2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/run-8209d1013135431c95c041516bc89e36/result.json",
+      "sha256": "9DA34556AB60D3077AC28D00F9FBB484843C9014B7ADE83558CF26175F0006CC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/run-aa954809f68446399577e24502e6a951/result.json",
+      "sha256": "B5D070FA293C7176AA067ED0EDB35C8EB052DB508B388F2A695E6B85EEF8A991"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/window-summary.json",
+      "sha256": "1E912E4286DAF8FEB2EB2AD7620B1FD6F596A03E9F3B5584930CC57B33DCEF30"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/compile-initial-failure.txt",
+      "sha256": "AE97A8518095298C02E3F99F710E5506BBA270F036C88C7E34BCA42CBD586C87"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/editor-final.json",
+      "sha256": "6598E9C15A3E7A0E2D8785AAF4071CB08F130AB2AF060E7A2600120BF726171C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/final-focused-tests.json",
+      "sha256": "D026E80D9F45263DF4AEAD0DC101F655C2918F28BB8AC6BBDE024D959E85A768"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/final-validation.json",
+      "sha256": "352EC5EA5EEC23B8E94EA00D0C9B17E70F423CB085147E2D16813D102A4E3753"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/fixed-focused-tests.json",
+      "sha256": "1AB9D88B4B1102519AE8BE4766D5EC978123F65211BFABD55141CE4FFBEF54F9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/REPORT.md",
+      "sha256": "39843FDE7E7D1FE94F33B8D9EB045980EE06DA0078C30C55120F2E66D2BE4FE3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/request-tests.json",
+      "sha256": "C49EE32C9976D03E398BD5116FC9AC3D5CD7759DD190D056906FE298D43BEB13"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/smoke-summary.json",
+      "sha256": "5FA5363ECB7EEE255371F9B4D1274C6DEC82BBB440BFE6BEAA7218FD9C026873"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/00-dispersed1000-smoke/report.json",
+      "sha256": "0A2D90EABE4F4356CF1E53A75478B8D27AC8400C10A9A98F5DBDEC39DB51759B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/00-dispersed1000-smoke/report.json.final-checksum.json",
+      "sha256": "D2DAF9741035B28D83A44B439B96D71A6D978F38A08BB6B519E75094C4563281"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/00-dispersed1000-smoke/report.json.observation.json",
+      "sha256": "E6B5E977F093E2DDBDA4C9A31C237DA093E7D5651BECF9AD992903F5361C0953"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/00-dispersed1000-smoke/report.json.request.json",
+      "sha256": "8BDC9706AEC4DCC76E49EF0AAA0D3F402A0A648B6E28A7EF8A38659CBB9809B3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/00-dispersed1000-smoke/report.json.terminal.txt",
+      "sha256": "2674ECECFF287BD33811D7425CB065B28ACD8C9471C81179B265DAF022FA5DBB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/01-combat1000-smoke/report.json.request.json",
+      "sha256": "02E5E8035D6B1B22EE4220C2D6A0ACB15AAD049C6EA62B2B4CF87897927F8726"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/02-dispersed1000-formal-01/report.json.request.json",
+      "sha256": "F2DE8B580C8B9281186B3A1C9741515A61A0B2DF42247948F8014C0B699E2780"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/03-dispersed1000-formal-02/report.json.request.json",
+      "sha256": "E24FEE7D66D30A8AE1B3BBC2ADB31AF722FDDA9344C2DDB2D19EE396F9E288F7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/04-combat1000-formal-01/report.json.request.json",
+      "sha256": "E7AE87B31625867D18E894A1A9E3139F98ACF2030BDC497FA16B06ACDC5A0AC5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/05-combat1000-formal-02/report.json.request.json",
+      "sha256": "5F2398A6A640DCC392421A828C59735235FD117B14DE0D37A43B34E66CDB137E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-01/suite-result.json",
+      "sha256": "49E1184BD80E6AD00ECA3BABDC070438EF87F2F4C375A6E86C174EABE3E18F88"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json",
+      "sha256": "9D32915BB745EDE93479B5B83FFEC91FFD274AEF9469389D6B194414C2EBBFBF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json.final-checksum.json",
+      "sha256": "2B93264E1C00BF3E08DCFB125616C9F97F26C32CDD8BE2E9A32E51D2BDF433C9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json.observation.json",
+      "sha256": "21F2040091E5495A49E89062404023A5F0312AEB86E8337F99A6F95E23C7CEC4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json.request.json",
+      "sha256": "DB39C5FF44E43BDAA95AE708D298ED6E042EAC34408C3E4B7F2F00DF0688B841"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/00-dispersed1000-smoke/report.json.terminal.txt",
+      "sha256": "28CCB74DB229D63377020C7D1439C70BD31771D806A8352E1A8291AED173E474"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/01-combat1000-smoke/report.json.request.json",
+      "sha256": "7995EEFFA43FAD1327A72863620568D45A2121C0DBEC09820BE7647B940EE1CC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/02-dispersed1000-formal-01/report.json.request.json",
+      "sha256": "80E737FA84CC85EAC79B7350A8FD7B358B79420E883E41DA4E9A17F7CBF4555B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/03-dispersed1000-formal-02/report.json.request.json",
+      "sha256": "D809F215AA74FD8A855DDD79CBCEB1840831837D203329BFE2757F50FC7C9224"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/04-combat1000-formal-01/report.json.request.json",
+      "sha256": "486216725006F9A51282C8771C54B6944ADFE0C9676F3D1B2C2DF06599C78773"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/05-combat1000-formal-02/report.json.request.json",
+      "sha256": "4E829E214398F3D85664CB94C5AD268D680A0453A529D217BB478317B35BEE07"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-02/suite-result.json",
+      "sha256": "21C43F193964D04D6C664773F2BF77A259774C62F4AE67179635899878773009"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json",
+      "sha256": "D86FCDA1CA9668D8944EE685C75CAF0137A51212E0375A91DAE5BAC842EEEBA0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json.final-checksum.json",
+      "sha256": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json.observation.json",
+      "sha256": "65002748D87AFD3D87D8CA3701414CB93580D11FA4EBEA0F2D3344B91C05E608"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json.request.json",
+      "sha256": "690A987A9ADE967DADFA1986DC091B92206A584FBE6A4979A259177B3148DF14"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json.terminal.txt",
+      "sha256": "CBBE9367CD46DB1CECC2D414D31F0EDC037D2081FCECF2CEBB96ABF586BB18C8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/01-combat1000-smoke/report.json",
+      "sha256": "35C4618AF604C97C13872E27D605D4F1C55749DE5A0944D9229668913A688A26"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/01-combat1000-smoke/report.json.final-checksum.json",
+      "sha256": "D2DAF9741035B28D83A44B439B96D71A6D978F38A08BB6B519E75094C4563281"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/01-combat1000-smoke/report.json.request.json",
+      "sha256": "FC83C64E01118E6DEA4640E37E3D58AAC72731C15BC3F3D1F67D7FCBCB5562EF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/02-dispersed1000-formal-01/report.json.request.json",
+      "sha256": "4053877A482D855E33120036FE6D7046F7A72C8D9A7F9D4C0DDFA996BAE383ED"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/03-dispersed1000-formal-02/report.json.request.json",
+      "sha256": "BB981F9AC7851E7C2338B1F5A5FC2FBBC32EF6AAA930C7198CEB52E0C3879A00"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/04-combat1000-formal-01/report.json.request.json",
+      "sha256": "5C7BB13D78556F39CEDEACEAF1A973C21F04E4A1C7C991C3C080E981C3FC094B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/05-combat1000-formal-02/report.json.request.json",
+      "sha256": "C7DAA6467C07109986352C4981D502AD93B7599122C3E95275556F22DE07144C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0000.json",
+      "sha256": "B81148C4261BEFB33EB459F126CBEE7EA623E608C65EFB018150C8E16AD11FEE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0001.json",
+      "sha256": "A2536A37C4073D079F9CA07168E7A541001852EA8FB049226C8128AC3EF3EA68"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0002.json",
+      "sha256": "A480E5841F8FD444EFCB936F8FE6B03BF274A30BBCB676C1F18B92041302D398"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0003.json",
+      "sha256": "F3CCB0553CB693D6A5285F257E531082B1A611568197AAF9E977C1C73C851FCE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0004.json",
+      "sha256": "3B1A946C7457C03F5E3D96D1890235CA5DE56602C7A8246B83C00D04F9DC6182"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0005.json",
+      "sha256": "179DD237A2C31E2958A51F53D182AB84FCD9512747312D99836887EE9C2CCBBB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0006.json",
+      "sha256": "508D2BD37E2FAC054BBC3F8E71BD7D53A964CCF61023BEDAEB86E55A2D10F689"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0007.json",
+      "sha256": "648D02C41383F03A58291A781891EF43F9BB013CF34F194D1D1383147D857496"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/progress-0008.json",
+      "sha256": "050E00EC84C5C3AAD0C9D5665696DFB41D04722EA16286EE5AE99FEBBC35CBCE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/suite-result.json",
+      "sha256": "9968DD9C6270B45F259C8B6C2443F9E6B4EC47AD80E55248ED76EEE6F4672837"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/camera-01/materialization-window-01.json",
+      "sha256": "F0915A3B9349BDE92ACEA00B6F6AC6832CFFF2E6FF9939E99482746903B96D96"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/camera-01/production-window-01.json",
+      "sha256": "97FB9C2B894696210C905DC8879066677D7A80CF90B4963169D05B85D9F8316B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/final-validation-01.json",
+      "sha256": "68EA7C2A7B6C3872337F15F138BD9CA764F9647135C981C4A14A0072076FAA4A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/provenance-summary-01.json",
+      "sha256": "B260E84FCB8177AC73807921466A6A500107C0A5FF3F9F2372FEC8D93244832D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/REPORT.md",
+      "sha256": "B8BCD404FE97B573A1C79F0DDA65E7D7D849A0703F8378A84D4C95EFD54B771C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/baseline-reuse-01.json",
+      "sha256": "CD710C13FF34279CE23CB1E8EA02DE4268652FCD6859245680E0B7C50C4769CB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/candidate-dispatch-01.json",
+      "sha256": "1BA86A0EF8F24FC1CF1F3DF58D4F931D949F16F41F79DE6F80317A1E11914038"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/candidate-result-summary-01.json",
+      "sha256": "7C75AB9E198BE99271124811055D266AA8D02A023A447E08D0AB7C289DB96CCC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/final-validation-01.json",
+      "sha256": "EEA2FEA8D6B67F9E6CA062BE8A0E770B953E1660548725073970FA7882157767"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/frozen-request-check-01.json",
+      "sha256": "463CD92EB8C7F93480071D1C0262338230D7AD807D53EF75F39C3085FAA3036D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/REPORT.md",
+      "sha256": "5EBE556A259354CFBE3E45A47031F632B74382479FCA4B9BE7B532B21B308ADA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/request-tests-green-01.json",
+      "sha256": "8740155E2A483011B03A46B000D61EAB03F04713235404234EC654A60377C2E9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/request-tests-red-01.json",
+      "sha256": "94ED9110DA51E2E2D8659DFFCE7B520BAE7EAFD9D775D56A861DBF947DF40154"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/snapshot-equality-01.json",
+      "sha256": "9B56690CA2D1EEAFA4E36D1A35F3ED379A30389C63D442CF1D18E2C60E09FF99"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json",
+      "sha256": "A73C6DE0BDEB45BDB6EAAB1052E5B7F1F392A2EF06B3CECFA48A0FD6C06057C0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json.final-checksum.json",
+      "sha256": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json.observation.json",
+      "sha256": "0575E384AA5465893251528EF48BE94CF63F6CCDC0F0A9A3D7C2D7F09A267E90"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json.request.json",
+      "sha256": "C7B4D6FDD759B4C7E70F01BF4EA24CCB5E2890D1EA14B417B846DF0212DD9FFF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json.terminal.txt",
+      "sha256": "273A4E5F1CBEE2DB3E8057D9B8516A6979898596B12D42499DCE6D0399218208"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json",
+      "sha256": "F4E23CCBA950E38B85FCAC6D9E84C68B67572ABAC778BE6DF73A36AE6E446F97"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json.final-checksum.json",
+      "sha256": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json.observation.json",
+      "sha256": "926B3454DC58CCD29C84279B4ADA1A17A8F04CE97DB7E05EABFEF141A66A3993"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json.request.json",
+      "sha256": "484AD2AE2B6B4D25C54E0E3A90F52D55A111883F2325513764E4F859F2C16C9B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json.terminal.txt",
+      "sha256": "1AE28A712C41DA5DA0FB24125680AFE08B6625FA057ADE4990B183C3EC51ECFB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/progress-0000.json",
+      "sha256": "AEA985738A1454CC7735EF7C01FB317FBB4571AA8CC66D89D7B75B726C251837"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/progress-0001.json",
+      "sha256": "7E089D2537E5783CBB8303474D9C1FECCACE1B76532B5D43AD404C89BDCE9821"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/suite-result.json",
+      "sha256": "136576101952964AA163CEF4CB5E0EF1B5B7C77179EDA248702A9FD85CAECF9C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+      "sha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "sha256": "FE076ECF614F0EE1DC644268AA4BEB68F288EDD910235D50E202887762BFDF77"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "sha256": "1394084E41320D3BA2A153F94B644D3CFC8FA3F873E5C2CADA513005FA5C6CAB"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+      "sha256": "3B6BF9C565D22231B202A312708AF25F0D95BF8A63BD4F8BC11909ABC5C606B6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha256": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha256": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "sha256": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "sha256": "854833578447E858425100E7ED60B81136EBBF4FAF7E09737D7FFB0F5C0846C4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "2DE1CDC78A3490A4B8CB5D1EDE2983832976B7FC60F5F96C7D34514A34491A82"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+      "sha256": "4ACE07654E247A64FDA417402C1086ED5A61DCE798D7E7A3D01B7C15DE2D6B32"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha256": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha256": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "sha256": "591911ACDEE23817678FFC7071AAE8CB240416E6E4B374D7FE30F7DE2231A200"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "sha256": "AF8050EDA5A9473BA4B4266D47AA0A28172449AEDE5C066E90E2C88BBA681BA0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeAllocationGate.cs",
+      "sha256": "4E8BC3417F2DF884B81947520830F247846774F98D96EE17D9DCFEF8FF6235F3"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs.meta",
+      "sha256": "B4FAB4CEA9943B6E1641049BD3DB1C2F0A794DA0E6E00F4C44952B441A5F9066"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs",
+      "sha256": "4C23D8197F849AAA19D5219F84D07515FF172017D62E3A80CC908101E8CDC40D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs.meta",
+      "sha256": "A5A26F286A82CACEA79C6BE19218FE4E836BBD42F13F345B23D1CDC88A11EB47"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+      "sha256": "5D53AEE14BAEFDD7AF8E9971DE5182E8C2B860A00EE8C9258229CD9A08B82336"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs.meta",
+      "sha256": "1E1BC50157290FC55B46880375BF409645361C47E7C6472A09944DA71C1E3F00"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28OriginalCommonAudioEditorTests.cs",
+      "sha256": "50CF710624D1637AE234795E5856C780C8A5111CA7A8E5727775CA98B648EDD8"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H06-M13-M14-ADMISSION-PROBE-025.md",
+      "sha256": "7235C9008EE85F0F1C8BAEDC7811A57B1D1B78531B9266B20125D54EEE9E9C92"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-HARNESS-RECOVERY-026.md",
+      "sha256": "0F167AE3C7868140D47B9FFD135DE017F0789347217F84495C10BA9056DF9053"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029.md",
+      "sha256": "1CC169D3765EAFA6CCA891ABFC45200616084B15249ACDCCB2016C14ADB255CE"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-WINDOWS-AI-SUITE-024.md",
+      "sha256": "49ADE1F500329F2074159C4EBD1E8FAC5FEA1F2667525AEC571F3C592AE5B50E"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-ALLOCATION-PROVENANCE-028.md",
+      "sha256": "215EC44645F3D2491D44ED7944526A433F70445A8867B69BC92448F669544A93"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CALIBRATED-SCOPE-027.md",
+      "sha256": "1D4F946F1054FBBB9C6F16E8EBB27D705083169DD6A3A99302CEA2FC19ADAC11"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023.md",
+      "sha256": "0ADABDB0E6FDEB4F163045F37BD563745FDDB4F4503738E567181DAF3D549D0F"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md",
+      "sha256": "F70C110406E7F5A4C718F219F9FB57A0013FB488B65BB962D3FC360EC0775061"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022.md",
+      "sha256": "7AD8A7CD0F5249D3C0F06E1998A2B9FEC86E7526A4B1D59DF24FE166C90AE17D"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/after.json",
+      "sha256": "3F726D6BFBDEE735A2202D53C1A3169C16D5F9681AA9079920B6B3A9AE6E229E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md",
+      "sha256": "6575C3918D87C4CDA8D935CB7F30E65FA85BDE350FDFFDB9BF36F3A9494F6BC8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/after.json",
+      "sha256": "0B97A926EE8743216335C319F2CFF6BC02A3377D8B41F24645CFF637ABA21166"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before.json",
+      "sha256": "4F2117187849BB0D324E18134FDB00BCEC7CB7BFF9C6A3B80B51EB1DC30D82CC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/android-mobile-readiness-priority-risk-register.md",
+      "sha256": "73ED8A094FF959E5E7B5C68160397F864B5CA664B2AA3D777EBC0822E986F9A4"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/battle-optimization-progress-tracker.md",
+      "sha256": "C4F2F17B29615E8C461743B3B25E71171EC3862D5E01B48BAC20A3C28EF6EC47"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "EC6BDA0AF37F80FE19D079F32D08198F42C622012F493D41F5F5BC472BA96702"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/BattleCentralRenderSystem.cs",
+      "sha256": "1B9DF54C2DEACE50A808ABEAAC6C0C4090F552EA36A30E812703DF6E81CD7499"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "sha256": "CCBC1C22D217335FF9197D2CEB86E219D489B09491755EDDCA53B1F8A5BCACB1"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/CHANGE-LEDGER.md",
+      "sha256": "50402E6CFC6D0504E8B18AF425C7C340B1A15C675C7AB15C8946D1A7AA2B3804"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "541BCA247805460274222C9CC660554793FC454EB5F0C789121B0E7760D01BB7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/INDEX.md",
+      "sha256": "F39E657C4EC89FDB7101C2EFC3424AA0A6255593ECEC8C16588BDD66A32F3260"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/m-03-dynamic-mesh-upload.md",
+      "sha256": "D644B8FA25533A2937B4B18D39E07EE6BD34E865D3FFFD5936DD01779494A4BD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "48579472D10BC06C140A3CEEB5365C0F69777F74FCBFF4EB984510008B748A9A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before/STATE.md",
+      "sha256": "DF1CB686766705468CFA5D27E920DCE39476FD057F9B4898698DDC923BD69A7B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/RECORD.md",
+      "sha256": "D171F22ECAE23D6287B85E0B331286133A4D83137F5D1B29DDBA8186D40084E6"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/after.json",
+      "sha256": "4FDFCC67C69C007E488724A8F90BE61C77EE61305671F05223067FE03F999E71"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before.json",
+      "sha256": "DAAEF65D5BAB03E3D65FEF3022D39CC8B70A489146413D03A1BCEE724F9C0FE8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Docs__android-mobile-readiness__h-11-presentation-capacity-zero-gc.md",
+      "sha256": "422E7BF79C0D5534062F6A606C5353368D13E11DEFDC50796313CEDBA16FC446"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Docs__android-mobile-readiness__m-03-dynamic-mesh-upload.md",
+      "sha256": "609CA3322252086759C6751DFF7BE7305DDB88F17BD0D0895C1704F86DC2B8ED"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "sha256": "AA16C4BCE417A2A5365BDDC1324EA330C868D1054D1DDA99C4B4654BEB615A1F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "sha256": "F8CEB46BA35D59754DEEFBC7F32EE516E9B6FFDF2275B51947D78D32A3F391D6"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Scripts__Test__Editor__BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "66B25F96B55BADEFFF7150A6DB9F612A28D792261EE9DD173FEECDB1FF5770E1"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/Assets__NTSD__Scripts__Test__Editor__BattleRealTextureSubmissionEditorTests.cs",
+      "sha256": "06CCF6376BA6A9E36B06B179F7921A82644234563089580C21E59C7137F1DB60"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/docs__ai__CHANGE-LEDGER.md",
+      "sha256": "C45A20D15160746A7401071D61867CF8B0E6FF231DF0EC1B5EA19A13C1771BD5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "sha256": "A5E835105D86B0601346F4917EA4B5E7DAAE4EFFD3147ED3714323D1DACDC15A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/docs__ai__STATE.md",
+      "sha256": "5193FDC37B105100F84131A761C517E34B476B97B39533958B1A7A9E16324C47"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/before/docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "5C0E1B35EC6709B727407831FA9B1D37FFE4FF9468FDDFBD1622189F2A4B23AC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/protected.json",
+      "sha256": "3A5ABC42A54AC624249C982917454A82AE6C338412281932DA5D46670381AAF5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/RECORD.md",
+      "sha256": "F224E6BA4A9DF1FB82906B537EBF40EF39799E7B1E3FB6FC203B270F9073B261"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before.json",
+      "sha256": "143074DEB560BD6F59984F547D0C0D71C3EDB7D5E671C6E700CF3A59D562B4F7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/Assets__NTSD__Docs__android-mobile-readiness__h-07-fresh-1000-ai-certificate.md",
+      "sha256": "31F42359AA7432DF3EC7CA450A9BFDAC38E7FCA14AE1124E7B0268D7E8521BDF"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "sha256": "C329F6DAB792C30807CAEAD4CBB34AE00879D8A0BEF574339F84F93E4875079B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "sha256": "879B10C7E35A8BE24AC19814859F1662F9F2DC642D822C780024922C1539A9DA"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/Assets__NTSD__Scripts__Animation__Rendering__ProductionEntityStressHarness.cs.scope-extension",
+      "sha256": "2BC7CE9604FB4F4C67677E36CF12071F18612750D73EBF223837D8A45604E8F1"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs.scope-extension",
+      "sha256": "681C48BD42833A7B58A6EFBF9F3EB650CFEA51BE12A33ED1471441820ECBC788"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/docs__ai__CHANGE-LEDGER.md",
+      "sha256": "CFC76944200F0F0DAB507D0DD942588FF5B24FA219E0191755BBF8275BC97E9D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "sha256": "151A4BDE5C1149445BA471B0326AE6A6DDB369D59CF8CD17F1602C27844A107F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/docs__ai__STATE.md",
+      "sha256": "4A53E2EEC790DBD7143CDAFF9BBBDC6CC39AB97AD70FDE4EA0F3549248044392"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/before/docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "2B3536EA55174A3FB1A132E4DF39AE9F053F34888EA4FABAF6DE4152FC9A7A76"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/RECORD.md",
+      "sha256": "DE2AB9C78BF70C0E086B06BD2127F86BF32187282BC0132CBCE9E28C36413E79"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/scope-extension.json",
+      "sha256": "A258389A345266375ABCB273372F64C89ABD4F3AF80B905B5F6B208BE14DAEC7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/RECORD.md",
+      "sha256": "548D257AA13294725285BB23CE5CA176939B9B1BF0479F49B09C4ED0139A728E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/RECORD.md",
+      "sha256": "C756508A62E4214F8E472CA2537611537B58E43EAA3C51EA06C40CD954779713"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/RECORD.md",
+      "sha256": "4F5AC4F6F77DAB8CE65715775C083599450B35CC80BC6F1A87CD82C9EC75B34D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before.json",
+      "sha256": "956F0B2CF61CDD5D458BA3BB71CDBE5F1AFE13219F3CF89F154D78C3B217F615"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/Assets__NTSD__Docs__android-mobile-readiness__h-07-fresh-1000-ai-certificate.md",
+      "sha256": "2DFD34F02DB7509C74E17A673BFC6E015E5C40D4F1AEE025B8EC8813CA361D2D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "sha256": "6E7F89F3D762F7A2D939DA378F37CE08CB0F41703E928829F88115287315F9CA"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "sha256": "2129BFEAD9AC2EC9EC9D28CD775DE17EF0BFE8D1F69CFB913B747776FD061555"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "E8EDDF85837A3BB154EA2CA0DCA0537C46BA5B306840676B58E1F0ACC199CE5E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__CHANGE-LEDGER.md",
+      "sha256": "CDAE3FD78994285FF7E08EBBAFAC881A4F5583350C11570A41297D28069F47C2"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "sha256": "81D55F226ED24646352861562C73094B8240A4025593BED5EDB589253330600F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__FILE-OPERATIONS__NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007__RECORD.md",
+      "sha256": "E386555EF2CB6E2684DFCB7CB96AE6FE7F4FE1D52F74F4262DFF5F8927353C5F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__STATE.md",
+      "sha256": "2AAD5BF0E9761109BFE15371B609CC4424C0B05F23DA71918B950B1878197A46"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__TASKS__NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007.md",
+      "sha256": "F1C8D80FA6CB077E53946101EB29027FD6AC9A8D63AD20A673348E431D1A921F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "A455B64AD313F57167D27D8618676D65825B5AB9CB71B7864FE209A3AF50B5BE"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/before/Temp__NTSD_ProductionEntityStress.result",
+      "sha256": "EC7BF100BD6ECEB327F46063A1B3A3181DBC9DF9CFC252F5248509E1F8599CC2"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/RECORD.md",
+      "sha256": "9493C9E9DD9CAFC061FB52449BA1745A21A90AC2065090041C111D151543288E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/battle-optimization-progress-tracker.md",
+      "sha256": "E3231BF35E2F3792670B648008D4C6427DF7FEBF0882EC2D95BB3B07555DD62C"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/INDEX.md",
+      "sha256": "CE8BC2F738084170AB85D8B29DA5D0E73F85B7D15B778613AB2B724969AA7C53"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/before/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "EEE1CABBCBAE7FC225800F04C00FDD11825B62D3C85A1F994D16B892FE37C387"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/RECORD.md",
+      "sha256": "4587261671682F1FE6FAF88A2EE29A30C552BE7FC7BCDAB329F7D7593995D6B0"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md",
+      "sha256": "06EA919A3BA05B05EA0EBB3CC6154E5871E5263345FA3604DA18CE73B50A515E"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007.md",
+      "sha256": "029DB8182453D8F93A5CA6C8A8E859E476E4972F39F9C1ED8FF17F540B5F55AC"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007.md",
+      "sha256": "EE523D79D1AA7E3F47AC3517E96EEB302A78299E19FDE8C512D9ADDC063F132D"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007.md",
+      "sha256": "8C52E2E1227D544A36CE0B51FB9F811E17E690BEE9BBB2506CF6ECC1F97318F7"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007.md",
+      "sha256": "E15361C8ED1C977FA796BFFFF99D27C175BF318DB0E52731116DDECB1031FA02"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007.md",
+      "sha256": "A7D6E572E2A1EC9B18BD9AC1F5B23FC40DA49597773C229C2B56846492673283"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007.md",
+      "sha256": "F6EF53CE01925E3BDE87BB8B849DDA08600651B00644B03772ACA4B1B39DCEB6"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/REPORT.md",
+      "sha256": "64FB85A2F9BF9E9C867CA6C19EDF11910619DC0B3BE1E86A8380AA84157F0D9C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/final-audit-01.json",
+      "sha256": "F31B231D5BF97E64E0C79DD12553D59E93DC9064DB03F6EFBF5148F43DBBC57F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/comparison-01.json",
+      "sha256": "50423349A0058C82F09322340D98158EA560616DDA03DB0D57300858DB5D495A"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.md",
+      "sha256": "C6E07C72F9A23E8412E9D69FD37F30D728ADE2AB17CB6B5C721BFE8DF007EA57"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/after.json",
+      "sha256": "B1D12979FA9701F67AAF7C472A86195915E2BEAAEB5B5A1F4186D6EA9A877611"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007.md",
+      "sha256": "7878F4BFF07F88CE50A87801A75D642905A3B0FE1229262166DA3EFED28E2AA5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "99D7682AC1B04F8937620FD4D291A58882AD1D76774FC67A87E820BED5E4CAF1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "F7E3FFE1557DF883CF4EDCF6324A353D508FD927EE394DB050F89B6F8318C308"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "05933D3DBC91D5B81D3ADE07A1B3914D93DE9DE2078AAD03BC55C89EF5CAA49B"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "sha256": "14F31D5CD28150CD2D39C28F072DB2E0EA97B878701E2D64E26208EC8656C8AB"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha256": "FF13D1E880E84B235DE8E59113ED7BEB8BF2FABF2CF56F22297AE26E582D6D20"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/REPORT.md",
+      "sha256": "5D78442835482B5303DE7F79F0548E5680F7A5F3E76504DF41270AD61CB4F658"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/final-audit-01.json",
+      "sha256": "D31586BBDABE46E9D5870943594E345F5E91B668FCA1EDFA1D1FB582C4BFDB3F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/comparison-01.json",
+      "sha256": "13870021E8D5D0ED0B526224120A7B07A1F6607534C1B2259BE6735197302E5A"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032.md",
+      "sha256": "A927DE613C709CDE5FFDB6ED8A82491FFB86FDD09A026EAF539A2604B21756E5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/after.json",
+      "sha256": "F395E060FE4948B795395DE6443F16C45D23F8D2F8AFBA65E3AA1C3508CC14A6"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007.md",
+      "sha256": "66A3B1A7A7DE459DAC3267131CDA4F56DD58C516C57B63510C0D86E029A3F3A5"
+    }
+  ],
+  "plannedCommand": "$ErrorActionPreference='Stop'\n$taskRepo=(Resolve-Path -LiteralPath '.').Path\n$taskWrite='[\"Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs\",\"docs/ai/CHANGE-LEDGER.md\",\"docs/ai/STATE.md\",\"docs/ai/FILE-OPERATIONS/INDEX.md\",\"Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\",\"Assets/NTSD/Docs/battle-optimization-progress-tracker.md\",\"docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md\",\"Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md\"]'|ConvertFrom-Json\n$taskOld=Get-Content -Raw -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/before.json'|ConvertFrom-Json\n$taskMismatch=@(foreach($taskEntry in $taskOld.protected){if(-not(Test-Path -LiteralPath $taskEntry.path) -or (Get-FileHash -Algorithm SHA256 -LiteralPath $taskEntry.path).Hash -ne $taskEntry.sha256){$taskEntry.path}})\nif($taskMismatch.Count -gt 0){throw ($taskMismatch -join ',')}\n$taskBackupRoot=Join-Path $taskRepo 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007/before'\nif(Test-Path -LiteralPath $taskBackupRoot){throw 'Refuses existing backup directory'}\nNew-Item -ItemType Directory -Path $taskBackupRoot | Out-Null\n$taskRows=@(foreach($taskPath in $taskWrite){\n$taskAbs=(Resolve-Path -LiteralPath $taskPath).Path\nif(-not $taskAbs.StartsWith($taskRepo+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)){throw 'Outside repository'}\n$taskBackup=Join-Path $taskBackupRoot ($taskPath.Replace('/','__'))\nif(Test-Path -LiteralPath $taskBackup){throw 'Refuses existing backup'}\nCopy-Item -LiteralPath $taskAbs -Destination $taskBackup\n[pscustomobject]@{path=$taskPath;absolute=$taskAbs;bytes=(Get-Item -LiteralPath $taskAbs).Length;sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $taskAbs).Hash;backup=$taskBackup;backupSha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $taskBackup).Hash;gitStatus=@(git -c core.quotePath=false status --short -- $taskPath)}\n})\n$taskExtra=@('artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/REPORT.md','artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/final-audit-01.json','artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/comparison-01.json','docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032.md','docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/after.json','docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007.md')\n$taskAudit=Get-Content -Raw -LiteralPath 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/final-audit-01.json'|ConvertFrom-Json\n$taskNewProtected=@(foreach($taskEntry in $taskAudit.writes){if($taskEntry.path -notin $taskWrite){[pscustomobject]@{path=$taskEntry.path;sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $taskEntry.path).Hash}}};foreach($taskPath in $taskExtra){[pscustomobject]@{path=$taskPath;sha256=(Get-FileHash -Algorithm SHA256 -LiteralPath $taskPath).Hash}})\n[pscustomobject]@{observed=[DateTimeOffset]::Now.ToString('o');head=(git rev-parse HEAD);before=$taskRows;previousProtectedVerified=$true;previousProtectedMismatches=$taskMismatch;extraProtected=$taskNewProtected;editorPid=19040;editorPort=6401}|ConvertTo-Json -Depth 7"
+}

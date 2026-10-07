@@ -2178,10 +2178,16 @@ namespace NTSD.Animation.Rendering
             }
             else
             {
-                enabled = false;
-                runtimeFootMarkerAnimationFrames = Array.Empty<Sprite>();
+                GameConfig config = GameConfig.Instance;
+                runtimeFootMarkerAnimationFrames =
+                    config?.FootMarkerAnimationFrames ?? Array.Empty<Sprite>();
+                sprite = BattleFootMarkerAnimation.ResolveReferenceSprite(
+                    config?.FootMarkerSprite,
+                    runtimeFootMarkerAnimationFrames);
                 runtimeFootMarkerAnimationFrameDurationSeconds =
-                    BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
+                    config != null && config.FootMarkerAnimationFrameDurationSeconds > 0f
+                        ? config.FootMarkerAnimationFrameDurationSeconds
+                        : BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
             }
 
             runtimeFootMarkersEnabled = enabled && sprite != null;

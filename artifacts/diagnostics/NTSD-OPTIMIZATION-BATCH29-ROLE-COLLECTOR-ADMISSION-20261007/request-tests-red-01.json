@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "8e2aac4aa37942bb93b9f8c54c292320",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791326605512,
+      "finished_unix_ms": 1791326616015,
+      "last_update_unix_ms": 1791326616015,
+      "progress": {
+        "completed": 3,
+        "total": 9337,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791326614688,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_RejectsOutsideFixedMatrix",
+        "last_finished_unix_ms": 1791326614877,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(0)",
+            "message": "System.NotImplementedException : Role candidate request is not implemented yet."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(1)",
+            "message": "System.NotImplementedException : Role candidate request is not implemented yet."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_RejectsOutsideFixedMatrix",
+            "message": "  Expected: <System.ArgumentOutOfRangeException>\r\n  But was:  <System.NotImplementedException: Role candidate request is not implemented yet.\r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteEditor.BuildRoleCandidateRequest (System.Int32 index) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:175 \r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests+<>c.<RoleCandidateRequest_RejectsOutsideFixedMatrix>b__6_0 () [0x00000] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:547 \r\n  at NUnit.Framework.Assert.Throws (NUnit.Framework.Constraints.IResolveConstraint expression, NUnit.Framework.TestDelegate code, System.String message, System.Object[] args) [0x00004] in <10b6135e63434fdba4fc6c109928ab3b>:0 >\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

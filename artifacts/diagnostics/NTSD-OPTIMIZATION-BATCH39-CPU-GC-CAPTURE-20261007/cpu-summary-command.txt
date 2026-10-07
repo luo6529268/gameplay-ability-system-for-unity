@@ -1,0 +1,2 @@
+jq: threadIndex<2, inclusive marker sums grouped only by the same marker name per frame; parent/child phases are NOT summed together. Full retained data: windows-01/cpu-gc-samples-recovered.json.
+Original command read 8 frame indices 1..8, valid Main Thread and Render Thread; thread scan hit 128 limit so other-thread completeness is UNKNOWN.

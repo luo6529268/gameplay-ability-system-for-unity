@@ -1,0 +1,39 @@
+{
+    "item": "M-14",
+    "workload": "CurrentMutableInputs",
+    "backend": "AssertInputsCurrent",
+    "scope": "Current Editor/cache state; not cold startup or physical IO",
+    "replicate": 2,
+    "participants": 0,
+    "events": 0,
+    "uniqueCues": 0,
+    "warmup": 0,
+    "samples": 1,
+    "elapsedMs": [
+        3656.4045
+    ],
+    "allocatedBytes": [
+        0
+    ],
+    "candidateSequenceParity": false,
+    "pairCount": 0,
+    "fallbackParticipants": 0,
+    "aborted": false,
+    "directTicks": 0,
+    "nestedTicks": 0,
+    "sweepTicks": 0,
+    "treeTicks": 0,
+    "directComparisons": 0,
+    "sweepChecks": 0,
+    "ordinalComparisons": 0,
+    "playCountDelta": 0,
+    "rejectedCueDelta": 0,
+    "voiceDropDelta": 0,
+    "voiceCapacity": 0,
+    "imageCount": 906,
+    "existingImages": 906,
+    "missingImages": 0,
+    "imageBytesLowerBoundPerAssert": 29939600,
+    "visualFingerprint": "1FFEBDFF06DEDA45423B0D2F2BDD30DF972E68280D9948D0764BD2A872557930",
+    "admission": "DEPENDENCY_NOT_READY / KEEP_ALL_FRESHNESS_GUARDS"
+}

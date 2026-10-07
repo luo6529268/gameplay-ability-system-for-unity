@@ -1,3 +1,5 @@
+> 2026-10-07 首阶段评估完成 / DEPENDENCY_NOT_READY：第25批当前真实906图、图片hash读取29,939,600B下界，Capture（含Assert）12.001s，两Assert3.830/3.656s；包含catalog解析/转换日志等，不是纯IO或cold启动。可变源文件、HashFile stream关闭、generation不等于read lease，immutable/Manifest前置未闭合，不缓存/删守卫。详[报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH25-BOUNDED-ASSESSMENTS-20261007/REPORT.md)，父项开放。
+
 # M-14 启动内容完整性校验 I/O 去重方案
 
 > 优先级：中

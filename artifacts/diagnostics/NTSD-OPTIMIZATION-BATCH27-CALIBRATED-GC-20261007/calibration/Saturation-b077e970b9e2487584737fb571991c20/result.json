@@ -1,0 +1,62 @@
+{
+    "item": "Saturation",
+    "unityVersion": "2022.3.62f3",
+    "marker": "GC.Alloc",
+    "category": "Internal",
+    "unit": "TimeNanoseconds",
+    "capacity": 2,
+    "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 300
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "scope": {
+        "valid": false,
+        "calibratedBefore": true,
+        "saturated": true,
+        "wrapped": false,
+        "sampleCount": 12,
+        "allocationEvents": 2,
+        "rawValueTotal": 100
+    },
+    "status": "SATURATION_REJECTED"
+}

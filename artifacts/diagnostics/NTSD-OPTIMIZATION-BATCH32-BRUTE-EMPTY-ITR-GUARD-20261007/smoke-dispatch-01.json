@@ -1,0 +1,49 @@
+{
+  "dispatch": {
+    "chunk_id": "706e95",
+    "wall_time_seconds": 1.1359588,
+    "exit_code": 0,
+    "original_token_count": 50,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch32 Brute Empty Itr Guard'. Check Unity logs for confirmation or errors.\"}}\r\n"
+  },
+  "originalScene": {
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "rootCount": 8,
+    "isDirty": false
+  },
+  "preAudit": {
+    "observed": "2026-10-07T08:40:36.6971188+08:00",
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "headSame": true,
+    "protectedCount": 238,
+    "protectedMismatches": [],
+    "backupCount": 11,
+    "backupMismatches": [],
+    "validationExit": 0,
+    "validationSummary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1328",
+      "  Governed code files in diff: 11"
+    ],
+    "warningCount": 4248,
+    "diffExit": 0,
+    "diffIssues": [],
+    "sharedRequestAbsent": true,
+    "newOutputAbsent": true,
+    "terminalSha": "B2D986749C4913790F0BB605E29E8E1A2AA637E9FA003582C22A70D2F9EE8CD1",
+    "sourceHashes": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+        "sha256": "99D7682AC1B04F8937620FD4D291A58882AD1D76774FC67A87E820BED5E4CAF1"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+        "sha256": "F7E3FFE1557DF883CF4EDCF6324A353D508FD927EE394DB050F89B6F8318C308"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+        "sha256": "05933D3DBC91D5B81D3ADE07A1B3914D93DE9DE2078AAD03BC55C89EF5CAA49B"
+      }
+    ]
+  }
+}

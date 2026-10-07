@@ -1,0 +1,29 @@
+{
+  "observedAt": "2026-10-07T05:28:27.7386006+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007",
+  "phase": "documentation-only",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "296D8CAA7FD3199C3F418EEB0ECE3F7D8899E95C0CCCEE81D07F2985287630D1",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007\\before-planning\\docs__ai__FILE-OPERATIONS__INDEX.md",
+      "backupSha256": "296D8CAA7FD3199C3F418EEB0ECE3F7D8899E95C0CCCEE81D07F2985287630D1",
+      "bytes": 43525
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "F30C545258D844D7440CC832573F4EDA6DF1BC20BBC12AD3A67B46774B1651E0",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007\\before-planning\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "backupSha256": "F30C545258D844D7440CC832573F4EDA6DF1BC20BBC12AD3A67B46774B1651E0",
+      "bytes": 52774
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "BE8A3D3FAEA637144B32B937D8E27FC1F0313FA553CCC79C551899FC2F2F38BE",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007\\before-planning\\docs__ai__TASKS__NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "backupSha256": "BE8A3D3FAEA637144B32B937D8E27FC1F0313FA553CCC79C551899FC2F2F38BE",
+      "bytes": 22855
+    }
+  ]
+}

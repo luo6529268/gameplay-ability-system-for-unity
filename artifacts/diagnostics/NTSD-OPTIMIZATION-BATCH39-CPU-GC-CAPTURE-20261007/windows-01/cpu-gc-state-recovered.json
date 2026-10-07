@@ -1,0 +1,52 @@
+{
+    "outputRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007\\windows-01",
+    "status": "PARTIAL",
+    "stopReason": "retained-binary-parse-only-no-recapture",
+    "error": "",
+    "recording": false,
+    "finishPending": false,
+    "settingsRestored": true,
+    "startLastFrame": 0,
+    "connectionId": -1,
+    "capturedFrames": 8,
+    "frameIndices": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+    ],
+    "warmupTicks": 0,
+    "sampleTickAtStart": 0,
+    "activeAiAtStart": 0,
+    "baseRosterAtStart": 0,
+    "deadline": 0.0,
+    "before": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0
+    },
+    "after": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0
+    },
+    "validMainThreadFrames": 8,
+    "exportedThreadFrames": 1024,
+    "threadScanLimitReached": true
+}

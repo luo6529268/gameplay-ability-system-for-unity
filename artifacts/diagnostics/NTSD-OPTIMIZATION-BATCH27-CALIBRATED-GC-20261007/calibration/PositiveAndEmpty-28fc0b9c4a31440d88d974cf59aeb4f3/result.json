@@ -1,0 +1,62 @@
+{
+    "item": "PositiveAndEmpty",
+    "unityVersion": "2022.3.62f3",
+    "marker": "GC.Alloc",
+    "category": "Internal",
+    "unit": "TimeNanoseconds",
+    "capacity": 256,
+    "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 0
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "scope": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+    },
+    "status": "CALIBRATED_SCOPE_PASS"
+}

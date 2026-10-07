@@ -1,0 +1,132 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "9518b84e9ad04094818e623daad4b46a",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791335020677,
+      "finished_unix_ms": 1791335028032,
+      "last_update_unix_ms": 1791335028032,
+      "progress": {
+        "completed": 10,
+        "total": 9391,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791335027578,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)",
+        "last_finished_unix_ms": 1791335027579,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.3274319,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)",
+            "state": "Passed",
+            "durationSeconds": 0.3351017,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)",
+            "state": "Passed",
+            "durationSeconds": 0.001789,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"invalid\")",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"invalid\")",
+            "state": "Passed",
+            "durationSeconds": 0.0008024,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"wrapped\")",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"wrapped\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000787,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"saturated\")",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"saturated\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000562,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"negative\")",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"negative\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000535,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"exceeds-root\")",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"exceeds-root\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000503,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)",
+            "state": "Passed",
+            "durationSeconds": 0.0003953,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)",
+            "state": "Passed",
+            "durationSeconds": 0.0000747,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)",
+            "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)",
+            "state": "Passed",
+            "durationSeconds": 0.0000573,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

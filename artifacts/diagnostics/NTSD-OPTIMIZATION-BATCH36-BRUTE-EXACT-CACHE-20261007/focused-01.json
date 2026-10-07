@@ -1,0 +1,150 @@
+{
+  "dispatch": {
+    "chunk_id": "8b241c",
+    "wall_time_seconds": 1.104945,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"f65727a7efea443b8ebbdadf7fc8a340\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":true}}}\r\n"
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "f65727a7efea443b8ebbdadf7fc8a340",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791339457350,
+        "finished_unix_ms": 1791339466975,
+        "last_update_unix_ms": 1791339466975,
+        "progress": {
+          "completed": 11,
+          "total": 9422,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791339466461,
+          "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded",
+          "last_finished_unix_ms": 1791339466467,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 11,
+            "passed": 11,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 3.124002,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(0)",
+              "state": "Passed",
+              "durationSeconds": 0.4879689,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0002184,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCacheRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.1635166,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_1000ParticipantsLocalCostAndFullSequence",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_1000ParticipantsLocalCostAndFullSequence",
+              "state": "Passed",
+              "durationSeconds": 1.6811192,
+              "message": null,
+              "stackTrace": null,
+              "output": "BRUTE_EXACT_CACHE_COST participants=1000 warmup=4 sample=8 rosterMeanMs=54.214187499999994 cachedMeanMs=22.499525000000002 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+            },
+            {
+              "name": "BruteExactCache_AllActiveKeepsBothDirectionsAndSequence",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_AllActiveKeepsBothDirectionsAndSequence",
+              "state": "Passed",
+              "durationSeconds": 0.0049041,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_LaterCollectionRebuildsAfterPositionAndItrChange",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_LaterCollectionRebuildsAfterPositionAndItrChange",
+              "state": "Passed",
+              "durationSeconds": 0.0031269,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0030385,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0020096,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0024124,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_RectCapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_RectCapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "state": "Passed",
+              "durationSeconds": 0.0022393,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded",
+              "state": "Passed",
+              "durationSeconds": 0.0057433,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

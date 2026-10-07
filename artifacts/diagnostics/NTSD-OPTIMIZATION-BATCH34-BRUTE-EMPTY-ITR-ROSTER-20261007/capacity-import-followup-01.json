@@ -1,0 +1,174 @@
+{
+  "refresh": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Refresh requested.",
+      "data": {
+        "refresh_triggered": true,
+        "compile_requested": true,
+        "resulting_state": "compiling",
+        "hint": "If Unity enters compilation/domain reload, poll editor_state until ready_for_tools is true."
+      }
+    }
+  },
+  "ready": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791337452209,
+        "sequence": 3,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": true,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791337452209,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791337450016
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "69e73ac1d0564272a04045e3b3788e31",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "69e73ac1d0564272a04045e3b3788e31",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791337456456,
+        "finished_unix_ms": 1791337465667,
+        "last_update_unix_ms": 1791337465667,
+        "progress": {
+          "completed": 3,
+          "total": 9403,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791337465058,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_RejectsOutsideFixedTwoSmokeMatrix",
+          "last_finished_unix_ms": 1791337465210,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 1.3508155,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "state": "Passed",
+              "durationSeconds": 0.4719787,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0002041,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRosterRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.1518688,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "postImportAssemblyOutput": "{\r\n  \"path\": \"Library/ScriptAssemblies/Assembly-CSharp-Editor.dll\",\r\n  \"lastWriteUtc\": \"2026-10-07T01:43:49.2083466Z\",\r\n  \"sha256\": \"A4FECA558DB91AE478632604EFB843DE8AF93A039239DD32A30BE68468009FEF\",\r\n  \"hasCapacityObservationField\": true,\r\n  \"hasPayloadObservationField\": true,\r\n  \"hasCapacityGetter\": true\r\n}\r\n35:        private int[] _bruteEmptyItrNextAttackerOrdinals = Array.Empty<int>();\n228:        public bool EnableBruteEmptyItrRosterForDiagnostics { get; set; }\n234:        public int BruteEmptyItrRosterCapacityForDiagnostics =>\n235:            Math.Max(0, _bruteEmptyItrNextAttackerOrdinals.Length - 1);\n918:            if (_bruteEmptyItrNextAttackerOrdinals.Length < bruteRosterCapacity)\n920:                Array.Resize(ref _bruteEmptyItrNextAttackerOrdinals, bruteRosterCapacity);\n1728:                    CollectCollisionCandidatesBruteForce(currentTick);\n1733:                CollectCollisionCandidatesBruteForce(currentTick);\n2261:        private void CollectCollisionCandidatesBruteForce(int currentTick)\n2273:                bool useEmptyItrRoster = EnableBruteEmptyItrRosterForDiagnostics &&\n2276:                    TryBuildBruteEmptyItrRoster(currentTick);\n2286:                        _bruteEmptyItrNextAttackerOrdinals[i] != i;\n2287:                    for (int j = skipInertTargets ? _bruteEmptyItrNextAttackerOrdinals[i + 1] : i + 1;\n2289:                         j = skipInertTargets ? _bruteEmptyItrNextAttackerOrdinals[j + 1] : j + 1)\n2314:        private bool TryBuildBruteEmptyItrRoster(int currentTick)\n2317:            if (count >= _bruteEmptyItrNextAttackerOrdinals.Length)\n2327:            _bruteEmptyItrNextAttackerOrdinals[count] = count;\n2342:                _bruteEmptyItrNextAttackerOrdinals[i] = nextAttacker;\n",
+  "scope": "No source edits, no performance window rerun, old runtime capacity remains UNKNOWN"
+}

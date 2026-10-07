@@ -1,0 +1,13 @@
+# 第23批：H-11/M-03 有界完整 CPU 表现链收口
+状态：SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；首阶段新子批2/8完成。用户六项首阶段及“开始执行吧”授权；不新增优化候选、不重查 Foot。
+目的：只补完整 capture/motion/build/upload/record/execute/CPU lease 与活动辅助在同一采样中的缺口、当前Foot修复后的真实退出重进。旧证据按依赖复用，达标即停。
+准确脚本：BattleRealTextureSubmissionEditorTests 的现有 Run/Execute/Slot 与结果输出；BattleCentralProductionWindowSceneProbeEditor 新独立 Batch23 重进菜单。二者均 Editor 验收，不改生产默认、规则、资源。
+冻结新增测试：1000 command StrictOrderedDraw / 1000 eligible Foot+Health；4097 command OrderedChunks / 17 eligible Foot+Health；各64warm+1800sample、两slot、真实原 Naruto/Sasuke Texture2D、alpha循环0/0.25/0.5/0.75/1、源publication只读。测试Foot Sprite仅借现有源纹理的临时fixture，不冒充生产GameConfig。全部采样完整Execute含capture、motion、body/aux build/upload、CPU录制、Graphics.ExecuteCommandBuffer、lease acquire/release与retire；0B/growth0，实际body+aux draw数、容量及mesh身份稳定。已有slot overflow/held lease原测试复用。
+复用准确证据：Batch01–05容量/晚slot/empty/overflow/mesh恢复；Batch13当前仍存在的stable metadata A/B（依赖改变则标旧版限定）；Batch15 warm消费2→1及两次原Scene退出重进；Batch16动态publication；Batch17同显示时刻GPU像素；Batch18 interpolation/camera CPU timing；Batch19 body完整桥；Batch22 GameConfig入口、1800真实camera及catalog aux。不给旧HEAD变化全域失效。
+新生产重进窗：已完成Batch22有序退出后，同原Editor/未改saved Battle 再进入一次，1800 distinct camera严格每帧Foot/Health>0、两slot、录制=执行、0growth、catalog bound、CPU lease回收；退出11阶段objects/slots/borrowers0、Scene dirty/SHA不变，最后恢复原Menu。不重做catalog replay（有效Batch22复用）。
+必须保持：正式336、33ms/3ms/max2、checksum/RNG/order、publicationreadonly、segment/failclosed/11阶段关闭；CPU lease0和Execute返回不证明GPUdone；不读活跃Q06方法体；不改Scene/Prefab/assets/importer/settings/Input/Gen/Plugins/Server，不启动EXT1 M0/Mono/ATLAS门。
+报告范围：当前线程选定CPU热路径0GC，不是global PlayerLoop/native/GPU/Android证书；真实camera低roster不是1000AI。未来设备/全域验收留父项，不能因此增加本阶段必需组合。限定H11/M03交付必须真实通过，不以DEFERRED替代。
+验证：原Editor实际compile/具名新增两case+slot负例与受影响aux/mesh focused；真实重进窗；Validate-ChangeLedger -WorkingTreeOnly、git diff --check、before保护hash。只改记录路径，旧结果保留。
+风险/回滚：Editor同步fixture有短时主线程工作，测试runner结束前不进入Play；启动600s/总900s，原干净单Scene先核实，不启动第二Editor。失败保留原件，修复累计上限3；要恢复只按本次before副本准确hunk且先获得恢复批准，不reset/restore。新fixture资源仅由自身finally回收，借用资产不销毁。
+
+最终交付：原Editor24/24；两full CPU bridge各1800samples/活动aux/0B/growth0/CPUlease0；原Battle严格重进1800camera每帧Foot2/Health2、1800Build、11504录制=执行，11阶段三残留0、Scene同、Menu恢复。当前13 A-B五文件身份全同，15消费域源同，按固定范围复用旧显示/容量证据。Report与final-validation列明global/native/GPU/Android未认证、失败fixture原件及1/3复验。H11/M03首阶段限定交付通过（2/6），34父OPEN/Goal active；下一其余4项，不追加本项可选“再确认”。

@@ -415,6 +415,202 @@ namespace NTSD.Animation.Rendering.Editor
                 footMarkerScale: footMarkerScale);
         }
 
+        [Test]
+        public void RuntimeConfig_UsesGameConfigWhenNoAuthoring()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.True);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.SameAs(fixture.FirstSprite));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFramesForSelfCheck,
+                    Is.SameAs(fixture.Config.FootMarkerAnimationFrames));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFrameDurationSecondsForSelfCheck,
+                    Is.EqualTo(0.125f));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerStyleForSelfCheck.SizePixels,
+                    Is.EqualTo(BattleFootMarkerStyle.Default.SizePixels));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0d), Is.SameAs(fixture.FirstTexture));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.126d), Is.SameAs(fixture.SecondTexture));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.251d), Is.SameAs(fixture.FirstTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_FramesOnlyResolvesReference()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.Config.FootMarkerSprite = null;
+                fixture.Config.FootMarkerAnimationFrames = new[] { null, fixture.SecondSprite };
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.True);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.SameAs(fixture.SecondSprite));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0d), Is.SameAs(fixture.SecondTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_MissingConfigDisables()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.BindConfig(null);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.False);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.Null);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFramesForSelfCheck, Is.Empty);
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_EmptyConfigDisables()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.Config.FootMarkerSprite = null;
+                fixture.Config.FootMarkerAnimationFrames = null;
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.False);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.Null);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFramesForSelfCheck, Is.Empty);
+            }
+        }
+
+        [TestCase(0f)]
+        [TestCase(-0.1f)]
+        public void RuntimeConfig_InvalidDurationUsesDefault(float duration)
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.Config.FootMarkerAnimationFrameDurationSeconds = duration;
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.True);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFrameDurationSecondsForSelfCheck,
+                    Is.EqualTo(BattleFootMarkerAnimation.DefaultFrameDurationSeconds));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ExplicitDisabledAuthoringWins()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.SetExplicitAuthoring(null, BattleFootMarkerStyle.Default);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.False);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.SameAs(fixture.FirstSprite));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ExplicitAuthoringWins()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                var style = new BattleFootMarkerStyle(64f, 24f, new Vector2(3f, -4f), new Color32(11, 22, 33, 44));
+                fixture.SetExplicitAuthoring(fixture.SecondSprite, style);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.True);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck, Is.SameAs(fixture.SecondSprite));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerAnimationFramesForSelfCheck, Is.Empty);
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerStyleForSelfCheck.SizePixels, Is.EqualTo(style.SizePixels));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerStyleForSelfCheck.OffsetPixels, Is.EqualTo(style.OffsetPixels));
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkerStyleForSelfCheck.Tint, Is.EqualTo(style.Tint));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0d), Is.SameAs(fixture.SecondTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_TextureSamplingAllocatesZeroAfterWarmup()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(BattleCentralRenderSystem.RuntimeFootMarkersEnabledForSelfCheck, Is.True);
+                for (int index = 0; index < 64; index++)
+                    BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(index * 0.033d);
+                long beforeBytes = System.GC.GetAllocatedBytesForCurrentThread();
+                Texture sampled = null;
+                for (int index = 0; index < 4096; index++)
+                    sampled = BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(index * 0.033d);
+                long allocatedBytes = System.GC.GetAllocatedBytesForCurrentThread() - beforeBytes;
+                Assert.That(sampled, Is.Not.Null);
+                Assert.That(allocatedBytes, Is.Zero, "Texture selection only; not a complete render-path 0GC certificate.");
+            }
+        }
+
+        private sealed class RuntimeConfigFixture : System.IDisposable
+        {
+            private readonly System.Reflection.FieldInfo instanceField;
+            private readonly GameConfig originalConfig;
+            private readonly Material material;
+            private readonly BattleRenderFeature feature;
+            private GameObject previewObject;
+            private System.IDisposable validationScope;
+
+            internal readonly GameConfig Config;
+            internal readonly Texture2D FirstTexture;
+            internal readonly Texture2D SecondTexture;
+            internal readonly Sprite FirstSprite;
+            internal readonly Sprite SecondSprite;
+
+            internal RuntimeConfigFixture()
+            {
+                Assert.That(BattleCentralEditorPreview.TryGetRuntimeFootMarkerAuthoringSettings(
+                    out _, out _, out _, out _, out _), Is.False,
+                    "This production-config test requires no loaded authoring; never remove scene objects to satisfy it.");
+                instanceField = typeof(GameConfig).GetField("_instance",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+                Assert.That(instanceField, Is.Not.Null);
+                originalConfig = (GameConfig)instanceField.GetValue(null);
+                FirstTexture = NewTexture(128, 48);
+                SecondTexture = NewTexture(128, 48);
+                FirstSprite = NewSprite(FirstTexture);
+                SecondSprite = NewSprite(SecondTexture);
+                Config = ScriptableObject.CreateInstance<GameConfig>();
+                Config.hideFlags = HideFlags.HideAndDontSave;
+                Config.FootMarkerSprite = FirstSprite;
+                Config.FootMarkerAnimationFrames = new[] { FirstSprite, SecondSprite };
+                Config.FootMarkerAnimationFrameDurationSeconds = 0.125f;
+                BindConfig(Config);
+                material = NewCentralMaterial();
+                feature = ScriptableObject.CreateInstance<BattleRenderFeature>();
+                feature.hideFlags = HideFlags.HideAndDontSave;
+                feature.Configure(material, BattleCentralDrawMode.OrderedChunks);
+            }
+
+            internal void BindConfig(GameConfig config)
+            {
+                instanceField.SetValue(null, config);
+            }
+
+            internal void SetExplicitAuthoring(Sprite sprite, in BattleFootMarkerStyle style)
+            {
+                previewObject = new GameObject("RuntimeConfigAuthoringOverride") { hideFlags = HideFlags.HideAndDontSave };
+                var preview = previewObject.AddComponent<BattleCentralEditorPreview>();
+                preview.ConfigureForSelfCheck(material, new BattleCentralEditorPreviewActor(), BattleHealthBarStyle.Default);
+                preview.ConfigureFootMarkerForSelfCheck(sprite, style);
+                validationScope = BattleCentralEditorPreview.BeginExclusiveValidationForSelfCheck(preview);
+            }
+
+            public void Dispose()
+            {
+                validationScope?.Dispose();
+                if (previewObject != null)
+                    Object.DestroyImmediate(previewObject);
+                BindConfig(originalConfig);
+                BattleCentralRenderSystem.UnregisterFeature(feature);
+                Object.DestroyImmediate(feature);
+                Object.DestroyImmediate(Config);
+                Object.DestroyImmediate(FirstSprite);
+                Object.DestroyImmediate(SecondSprite);
+                Object.DestroyImmediate(FirstTexture);
+                Object.DestroyImmediate(SecondTexture);
+                Object.DestroyImmediate(material);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+            }
+        }
+
         private static Texture2D NewTexture(int width, int height)
         {
             return new Texture2D(width, height, TextureFormat.RGBA32, false)

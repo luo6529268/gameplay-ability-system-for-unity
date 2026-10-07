@@ -1,0 +1,53 @@
+{
+  "observed": "2026-10-07T11:50:45.7476409+08:00",
+  "backupFailures": [],
+  "protectedFailures": [],
+  "protectedCount": 10,
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headUnchanged": true,
+  "trackedStatusDifference": [],
+  "diffCheckExit": 0,
+  "diffCheckOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "sourceEditedThisOperation": false,
+  "unityOrTestsOrMeasurementStarted": false,
+  "newOptimizationBatch": false,
+  "goalComplete": false,
+  "operation": "NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007",
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 78492,
+      "sha256": "CA3DC79752A5659D2784E00F2E346E85C539DD995C33236E20B87C865C9B592A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 58322,
+      "sha256": "8158C49E5F597D42AC6E4EDA457AA401BEC4CD664E7C73E77F8BF1D316BA8159"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/RECORD.md",
+      "bytes": 4584,
+      "sha256": "ECD580604C12EC4C5B04559B548DFE62A9321CC43C0D033A2E95A8161D78239F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/before.json",
+      "bytes": 6797,
+      "sha256": "CE4BAA3C54AF7E6CAB883056F860D78E235C0EEF7373B3ECE69E6EEA08E01AC0"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/planned-patch.txt",
+      "bytes": 7600,
+      "sha256": "349BCC2B3CA94DBEDBE77BF2A56F78B99749557B58065B59CE5C039CF1E5F9DC"
+    }
+  ],
+  "trackerTop": "> 2026-10-07 自动目标范围阻塞审计：NEEDS_USER_DECISION / NOT_COMPLETE。相同授权缺口已连续至少三轮核验；本轮没有新的优化进展。H11完整camera仍2次分配、调用点UNKNOWN；H07已有候选仅专项开启，实际千人性能未达、生产默认未接入。四项既有有限交付不重开，第38批保留PLANNED；不以追加微候选或同版观察代替实际FPS改善。下一步需要用户明确允许一次当前千人现场的受控CPU/GC调用栈采集，以及已有Brute候选的必要生产准入/接入；不换后端、不改33ms/顺序/checksum，EXT1/ATLAS/Mono/M0等专项门继续冻结。这是等待范围确认，不是次数到限、优化完成或用户请求暂停；本轮只更新原总表停点，不新增优化批次。 [审计](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/RECORD.md)。",
+  "recordStatus": [
+    "状态：VERIFIED（仅文档文件操作；H11/H07及Goal未完成）"
+  ],
+  "auditClassification": "Repeated authorization blocker at least3 consecutive goal turns; no remaining approved action closes required full-scope H11 or ordinary-production H07. Do not add optional microcandidate38 or repeat unchanged windows as substitute.",
+  "platformStatus": "blocked call follows successful file audit; not complete or paused",
+  "validationCommand": "$taskManifest=Get-Content -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/before.json' -Raw | ConvertFrom-Json; $taskBackupFailures=@(); foreach($taskEntry in $taskManifest.writes){if((Get-FileHash -Algorithm SHA256 -LiteralPath $taskEntry.backup).Hash -ne $taskEntry.backupSha256){$taskBackupFailures += $taskEntry.path}}; $taskProtectedFailures=@(); foreach($taskEntry in $taskManifest.protected){if((Get-FileHash -Algorithm SHA256 -LiteralPath $taskEntry.path).Hash -ne $taskEntry.sha256){$taskProtectedFailures += $taskEntry.path}}; $taskHead=(& git rev-parse HEAD); $taskCurrentStatus=@(& git status --porcelain=v1 --untracked-files=no); $taskStatusDiff=@(Compare-Object -ReferenceObject @($taskManifest.trackedStatus) -DifferenceObject $taskCurrentStatus); $taskDiffOutput=@(& git diff --check -- Assets/NTSD/Docs/battle-optimization-progress-tracker.md docs/ai/FILE-OPERATIONS/INDEX.md 2>&1 | ForEach-Object {$_.ToString()}); $taskDiffExit=$LASTEXITCODE; [pscustomobject]@{observed=[DateTimeOffset]::Now.ToString('o');backupFailures=$taskBackupFailures;protectedFailures=$taskProtectedFailures;protectedCount=$taskManifest.protected.Count;head=$taskHead;headUnchanged=($taskHead -eq $taskManifest.head);trackedStatusDifference=$taskStatusDiff;diffCheckExit=$taskDiffExit;diffCheckOutput=$taskDiffOutput;sourceEditedThisOperation=$false;unityOrTestsOrMeasurementStarted=$false;newOptimizationBatch=$false;goalComplete=$false} | ConvertTo-Json -Depth 6 -Compress"
+}

@@ -1,0 +1,39 @@
+{
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "backupCount": 10,
+  "backupDrift": [],
+  "protectedCount": 57,
+  "protectedDrift": [],
+  "validatorExit": 0,
+  "validatorHeader": [
+    "Change ledger validation PASSED.",
+    "  Records: 1319",
+    "  Governed code files in diff: 4"
+  ],
+  "validatorErrors": [],
+  "historicalWarnings": 4283,
+  "diffCheckExit": 0,
+  "diffCheckMessages": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "productionSourceHash": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+  "editorDllHash": "B0DBCA7F91C8690F808868CB619CDEA826D272DFDC8E67D88510C9CDDB53FA6C",
+  "sourceHashes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleRealTextureSubmissionEditorTests.cs",
+      "sha256": "2F2F6CE70F93E631B338D049088A28D6B33534AAAB172C4AE543D0610CF08DAB"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "FBB7953EA6BE05516B41137CED728D5D8DC5578C2E9EBA54B4832A678764B194"
+    }
+  ]
+}

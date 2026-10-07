@@ -1,0 +1,339 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "27d3ccccccdf4762b9363b1f4633cf99",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791328417112,
+      "finished_unix_ms": 1791328429661,
+      "last_update_unix_ms": 1791328429661,
+      "progress": {
+        "completed": 33,
+        "total": 9361,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791328428623,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_RejectsOutsideFixedMatrix",
+        "last_finished_unix_ms": 1791328428623,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.9334243,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+            "state": "Passed",
+            "durationSeconds": 0.4181822,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+            "state": "Passed",
+            "durationSeconds": 0.0005049,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0002926,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0002424,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0002446,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0002418,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(0,True)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(0,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0025869,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(1,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(1,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0002113,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(2,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(2,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001048,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(3,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(3,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000946,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(4,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(4,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000888,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(5,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(5,False)",
+            "state": "Passed",
+            "durationSeconds": 0.000102,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(6,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(6,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000873,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(7,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(7,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000998,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(8,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(8,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000944,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(9,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(9,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000797,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(10,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(10,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000839,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(11,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(11,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000896,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(12,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(12,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000945,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(13,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(13,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001027,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(14,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(14,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000839,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(15,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(15,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000849,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(16,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(16,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000809,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(17,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(17,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000876,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(18,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(18,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000906,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleCandidateRequest_ChangesOnlyCollectorAndOutput(0)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0044575,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleCandidateRequest_ChangesOnlyCollectorAndOutput(1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0010532,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleCandidateRequest_RejectsOutsideFixedMatrix",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_RejectsOutsideFixedMatrix",
+            "state": "Passed",
+            "durationSeconds": 0.213701,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(0)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0021594,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0004345,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(2)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(2)",
+            "state": "Passed",
+            "durationSeconds": 0.000323,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(3)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0002952,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleFormalRequest_RejectsOutsideFixedMatrix",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_RejectsOutsideFixedMatrix",
+            "state": "Passed",
+            "durationSeconds": 0.0007612,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

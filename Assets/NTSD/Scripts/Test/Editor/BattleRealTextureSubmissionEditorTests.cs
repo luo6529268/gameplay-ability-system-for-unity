@@ -8,6 +8,7 @@ using NTSD.Animation;
 using NTSD.Animation.Rendering;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
+using NTSD.Test.Editor;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -43,12 +44,20 @@ namespace NTSD.Test
             public string drawMode;
             public bool alternatingTextures;
             public int commandCount;
+            public int activeAuxiliariesPerSample;
+            public string outputRoot = OutputRoot;
             public int warmupSamples = WarmupSamples;
             public int sampleCount = SampleCount;
             public int physicalSegmentsPerSample;
             public int activeChunksPerSample;
             public int vertexStride;
             public long managedAllocatedBytes;
+            public string allocationCounter = "GC.GetAllocatedBytesForCurrentThread / RAW_UNCALIBRATED";
+            public string gcAllocUnit;
+            public int gcAllocCapacity;
+            public BattleScopedGcAllocationRecorder.CalibrationResult gcAllocBefore;
+            public BattleScopedGcAllocationRecorder.CalibrationResult gcAllocAfter;
+            public BattleScopedGcAllocationRecorder.ScopeResult gcAllocScope;
             public long capacityGrowth;
             public long vertexUploadCalls;
             public long uploadedVertexBytes;
@@ -89,6 +98,20 @@ namespace NTSD.Test
         public void RealTextures_PreparedCaptureMotionUploadRecordExecuteLease_ZeroGc(
             int commandCount, BattleCentralDrawMode mode, bool alternatingTextures)
         {
+            Run(commandCount, mode, alternatingTextures, 0);
+        }
+
+        [TestCase(1000, BattleCentralDrawMode.StrictOrderedDraw, 1000)]
+        [TestCase(4097, BattleCentralDrawMode.OrderedChunks, 17)]
+        public void ActiveAuxiliaries_FullPreparedCpuChain_TwoSlotsZeroGc(
+            int commandCount, BattleCentralDrawMode mode, int auxiliaryCount)
+        {
+            Run(commandCount, mode, false, auxiliaryCount);
+        }
+
+        private static void Run(int commandCount, BattleCentralDrawMode mode,
+            bool alternatingTextures, int auxiliaryCount)
+        {
             Scene scene = SceneManager.GetActiveScene();
             string scenePath = scene.path;
             bool sceneDirty = scene.isDirty;
@@ -105,14 +128,17 @@ namespace NTSD.Test
                 drawMode = mode.ToString(),
                 alternatingTextures = alternatingTextures,
                 commandCount = commandCount,
+                activeAuxiliariesPerSample = auxiliaryCount,
                 firstTextureSha256 = Sha256(FirstTexturePath),
                 secondTextureSha256 = Sha256(SecondTexturePath),
                 firstTextureMetaSha256 = Sha256(FirstTexturePath + ".meta"),
                 secondTextureMetaSha256 = Sha256(SecondTexturePath + ".meta"),
             };
             Slot[] slots = null;
+            Sprite auxiliarySprite = null;
             Material material = null;
             RenderTexture target = null;
+            BattleScopedGcAllocationRecorder allocationRecorder = null;
             try
             {
                 Texture2D firstTexture = AssetDatabase.LoadAssetAtPath<Texture2D>(FirstTexturePath);
@@ -132,7 +158,14 @@ namespace NTSD.Test
                     antiAliasing = 1,
                 };
                 target.Create();
-                var source = MakePublication(commandCount);
+                if (auxiliaryCount > 0)
+                {
+                    result.outputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/cpu-bridge";
+                    result.limitations = result.limitations.Replace("active Foot/Health, ", "") +
+                        " Active auxiliaries use a temporary sprite from the borrowed source texture, not production GameConfig authoring.";
+                    auxiliarySprite = Sprite.Create(firstTexture, new Rect(0, 0, 4, 4), new Vector2(0.5f, 0.5f), 1f);
+                }
+                var source = MakePublication(commandCount, auxiliaryCount);
                 var resolver = new RealTextureResolver(firstTexture, secondTexture, material,
                     alternatingTextures, commandCount);
                 var motion = new BattlePresentationDisplayMotion();
@@ -148,7 +181,7 @@ namespace NTSD.Test
                 long executeTicks = 0;
                 for (int index = 0; index < WarmupSamples; index++)
                     Execute(slots[index & 1], source, motion, resolver, mode, target, block,
-                        index, out _, out _, out _, out _);
+                        index, out _, out _, out _, out _, auxiliarySprite, material);
                 Mesh firstMesh = slots[0].Backend.GetChunkMesh(0);
                 Mesh secondMesh = slots[1].Backend.GetChunkMesh(0);
                 int expectedChunks = (commandCount + BattleDynamicMeshBackend.QuadsPerChunk - 1) /
@@ -161,25 +194,49 @@ namespace NTSD.Test
                 Assert.That(stride, Is.EqualTo(secondMesh.GetVertexBufferStride(0)));
                 Vector3 originalPosition = source.GetCommand(0).Position;
                 double originalX = source.GetMotionState(0).PreciseX;
-                long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
-                for (int index = 0; index < SampleCount; index++)
+                if (auxiliaryCount > 0)
                 {
-                    Slot slot = slots[index & 1];
-                    long started = Stopwatch.GetTimestamp();
-                    int draws = Execute(slot, source, motion, resolver, mode, target, block,
-                        WarmupSamples + index, out long capture, out long build, out long record, out long execute);
-                    sampleTicks[index] = Stopwatch.GetTimestamp() - started;
-                    captureTicks += capture;
-                    buildTicks += build;
-                    recordTicks += record;
-                    executeTicks += execute;
-                    result.cpuDrawMeshCommands += draws;
-                    result.graphicsExecuteCalls++;
-                    result.capacityGrowth += slot.Backend.Diagnostics.CapacityGrowthCount;
-                    result.vertexUploadCalls += slot.Backend.Diagnostics.VertexUploadCallCount;
-                    result.uploadedVertexBytes += slot.Backend.Diagnostics.UploadedVertexBytes;
+                    allocationRecorder = new BattleScopedGcAllocationRecorder();
+                    result.allocationCounter = "Current-thread GC.Alloc events; legacy byte count raw/uncalibrated";
+                    result.gcAllocUnit = allocationRecorder.Unit;
+                    result.gcAllocCapacity = allocationRecorder.Capacity;
+                    result.gcAllocBefore = allocationRecorder.Calibrate();
+                    Assert.That(result.gcAllocBefore.passed, Is.True, "Pre-scope positive/negative calibration failed.");
+                    if (!allocationRecorder.Begin())
+                        throw new InvalidOperationException("The calibrated GC.Alloc recorder could not start.");
                 }
-                result.managedAllocatedBytes = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+                long allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+                try
+                {
+                    for (int index = 0; index < SampleCount; index++)
+                    {
+                        Slot slot = slots[index & 1];
+                        long started = Stopwatch.GetTimestamp();
+                        int draws = Execute(slot, source, motion, resolver, mode, target, block,
+                            WarmupSamples + index, out long capture, out long build, out long record, out long execute,
+                            auxiliarySprite, material);
+                        sampleTicks[index] = Stopwatch.GetTimestamp() - started;
+                        captureTicks += capture;
+                        buildTicks += build;
+                        recordTicks += record;
+                        executeTicks += execute;
+                        result.cpuDrawMeshCommands += draws;
+                        result.graphicsExecuteCalls++;
+                        result.capacityGrowth += slot.Backend.Diagnostics.CapacityGrowthCount;
+                        result.vertexUploadCalls += slot.Backend.Diagnostics.VertexUploadCallCount;
+                        result.uploadedVertexBytes += slot.Backend.Diagnostics.UploadedVertexBytes;
+                    }
+                    result.managedAllocatedBytes = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+                }
+                finally
+                {
+                    if (allocationRecorder != null)
+                        result.gcAllocScope = allocationRecorder.End();
+                }
+                if (allocationRecorder != null)
+                {
+                    result.gcAllocAfter = allocationRecorder.Calibrate();
+                }
                 result.slotsObserved = 2;
                 result.remainingCpuLeases = slots[0].Submission.ReadLeaseCount + slots[1].Submission.ReadLeaseCount;
                 result.sourceUnchanged = source.GetCommand(0).Position == originalPosition &&
@@ -197,9 +254,19 @@ namespace NTSD.Test
                 result.buildAndUploadMsMean = MeanMs(buildTicks);
                 result.recordingMsMean = MeanMs(recordTicks);
                 result.executeApiMsMean = MeanMs(executeTicks);
-                Assert.That(result.managedAllocatedBytes, Is.Zero, "All prepared CPU bridge operations and scalar sampling are included.");
+                if (allocationRecorder != null)
+                {
+                    Assert.That(BattleScopedGcAllocationRecorder.HasZeroEvents(result.gcAllocScope,
+                        result.gcAllocBefore, result.gcAllocAfter), Is.True,
+                        "The full prepared CPU bridge, timing and scalar sampling must have calibrated zero GC.Alloc events.");
+                }
+                else
+                {
+                    Assert.That(result.managedAllocatedBytes, Is.Zero, "Legacy raw byte-count regression, not a calibrated certificate.");
+                }
                 Assert.That(result.capacityGrowth, Is.Zero);
-                Assert.That(result.cpuDrawMeshCommands, Is.EqualTo((long)SampleCount * expectedSegments));
+                Assert.That(result.cpuDrawMeshCommands,
+                    Is.EqualTo((long)SampleCount * (expectedSegments + (auxiliaryCount > 0 ? 2 : 0))));
                 Assert.That(result.graphicsExecuteCalls, Is.EqualTo(SampleCount));
                 Assert.That(result.vertexUploadCalls, Is.EqualTo((long)SampleCount * expectedChunks));
                 Assert.That(result.uploadedVertexBytes, Is.EqualTo((long)SampleCount * commandCount * 4 * stride));
@@ -210,6 +277,8 @@ namespace NTSD.Test
                 Assert.That(slots[1].Backend.GetChunkMesh(0), Is.SameAs(secondMesh));
                 foreach (Slot slot in slots)
                 {
+                    Assert.That(slot.Foot.ActiveMarkerCount, Is.EqualTo(auxiliaryCount));
+                    Assert.That(slot.Health.ActiveBarCount, Is.EqualTo(auxiliaryCount));
                     Assert.That(slot.Backend.SegmentCount, Is.EqualTo(expectedSegments));
                     Assert.That(slot.Backend.ActiveChunkCount, Is.EqualTo(expectedChunks));
                     Assert.That(slot.Backend.Diagnostics.UnresolvedCommandCount, Is.Zero);
@@ -234,12 +303,15 @@ namespace NTSD.Test
             }
             finally
             {
+                allocationRecorder?.Dispose();
                 RenderTexture.active = previousTarget;
                 if (slots != null)
                     foreach (Slot slot in slots)
                         slot.Dispose();
                 if (material != null)
                     UnityEngine.Object.DestroyImmediate(material);
+                if (auxiliarySprite != null)
+                    UnityEngine.Object.DestroyImmediate(auxiliarySprite);
                 if (target != null)
                 {
                     target.Release();
@@ -283,7 +355,7 @@ namespace NTSD.Test
         private static int Execute(Slot slot, BattlePresentationFrame source, BattlePresentationDisplayMotion motion,
             RealTextureResolver resolver, BattleCentralDrawMode mode, RenderTexture target,
             MaterialPropertyBlock block, int sampleId, out long captureTicks, out long buildTicks,
-            out long recordTicks, out long executeTicks)
+            out long recordTicks, out long executeTicks, Sprite auxiliarySprite = null, Material auxiliaryMaterial = null)
         {
             long started = Stopwatch.GetTimestamp();
             BattlePresentationFrame captured = slot.Capture(source);
@@ -292,8 +364,8 @@ namespace NTSD.Test
             captureTicks = Stopwatch.GetTimestamp() - started;
             started = Stopwatch.GetTimestamp();
             slot.Backend.Build(captured, resolver, mode);
-            slot.Foot.BuildFromFrame(captured, null, BattleFootMarkerStyle.Default, false);
-            slot.Health.BuildFromFrame(captured, BattleHealthBarStyle.Default, false);
+            slot.Foot.BuildFromFrame(captured, auxiliarySprite, BattleFootMarkerStyle.Default, auxiliarySprite != null);
+            slot.Health.BuildFromFrame(captured, BattleHealthBarStyle.Default, auxiliarySprite != null);
             buildTicks = Stopwatch.GetTimestamp() - started;
             slot.LastCapture = captured;
             slot.Publish(captured, sampleId + 1);
@@ -308,6 +380,13 @@ namespace NTSD.Test
                 buffer.ClearRenderTarget(false, true, Color.clear);
                 buffer.SetViewProjectionMatrices(Matrix4x4.identity, Projection);
                 int draws = 0;
+                if (auxiliarySprite != null)
+                {
+                    block.Clear();
+                    block.SetTexture(MainTexId, slot.Foot.Texture);
+                    buffer.DrawMesh(slot.Foot.Mesh, Matrix4x4.identity, auxiliaryMaterial, 0, 0, block);
+                    draws++;
+                }
                 for (int index = 0; index < slot.Backend.SegmentCount; index++)
                 {
                     BattleCentralRenderSegment segment = slot.Backend.GetSegment(index);
@@ -317,6 +396,13 @@ namespace NTSD.Test
                     block.SetTexture(MainTexId, segment.Texture);
                     buffer.DrawMesh(slot.Backend.GetChunkMesh(segment.ChunkIndex), Matrix4x4.identity,
                         segment.Material, segment.SubMeshIndex, 0, block);
+                    draws++;
+                }
+                if (auxiliarySprite != null)
+                {
+                    block.Clear();
+                    block.SetTexture(MainTexId, Texture2D.whiteTexture);
+                    buffer.DrawMesh(slot.Health.Mesh, Matrix4x4.identity, auxiliaryMaterial, 0, 0, block);
                     draws++;
                 }
                 recordTicks = Stopwatch.GetTimestamp() - started;
@@ -336,7 +422,7 @@ namespace NTSD.Test
             }
         }
 
-        private static BattlePresentationFrame MakePublication(int count)
+        private static BattlePresentationFrame MakePublication(int count, int auxiliaryCount = 0)
         {
             var prior = new BattlePresentationFrame { TickIndex = 100 };
             var frame = new BattlePresentationFrame { TickIndex = 101 };
@@ -350,7 +436,11 @@ namespace NTSD.Test
                     new Vector2(64, 64), new Vector2(0.5f, 0.5f), new Rect(0f, 0f, 1f, 1f),
                     new BattleSpriteRenderState(new Color32(255, 220, 200, 200), (index & 1) != 0, false,
                         SpriteMaskInteraction.None, BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha),
-                    default, motionAnchor: BattlePresentationMotionAnchor.Body));
+                    default, showOverheadHealthBar: index < auxiliaryCount,
+                    currentHealth: 40, recoverableHealth: 80, maximumHealth: 100,
+                    stableHealthAnchorWorld: new Vector2(0, 1), hasStableHealthAnchor: true,
+                    stableFootAnchorWorld: Vector2.zero, hasStableFootAnchor: true,
+                    showSelfFootMarker: index < auxiliaryCount, motionAnchor: BattlePresentationMotionAnchor.Body));
             }
             frame.CopyPreviousMotionStatesFrom(prior);
             return frame;
@@ -400,7 +490,7 @@ namespace NTSD.Test
         private static void Save(Result result)
         {
             string run = Guid.NewGuid().ToString("N");
-            string path = Path.Combine(OutputRoot, "run-" + run);
+            string path = Path.Combine(result.outputRoot, "run-" + run);
             Directory.CreateDirectory(path);
             using (var stream = new FileStream(Path.Combine(path, "result.json"), FileMode.CreateNew, FileAccess.Write))
             using (var writer = new StreamWriter(stream))

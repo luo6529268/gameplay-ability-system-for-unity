@@ -1,0 +1,61 @@
+{
+  "observed": "2026-10-07T11:34:20.8716616+08:00",
+  "goalState": "active; NOT_COMPLETE",
+  "previousGoalTurnClassification": "progress: repository inspection established diagnostic-only production gap; this turn completes previously unexecuted35 frozen runtime check",
+  "scope": {
+    "selected": [
+      "H-11",
+      "M-03",
+      "H-06",
+      "H-07",
+      "M-13",
+      "M-14"
+    ],
+    "noAutomaticProductionBackendPromotion": "Goal contract selected stage H06 explicitly excludes automatic production default change",
+    "noSpecialGateLift": [
+      "EXT-1",
+      "Mono boundary",
+      "ATLAS banks/budgets/resource formats"
+    ]
+  },
+  "completedThisTurn": {
+    "original35CameraTarget": 1800,
+    "observerEvents": 0,
+    "cameraEvents": 2,
+    "calibration": "both recorders before/after passed",
+    "callsite": "UNKNOWN",
+    "runtimeVerdict": "FULL_CAMERA_ZERO_GC_FAIL"
+  },
+  "remaining": [
+    {
+      "item": "H-11",
+      "required": "Zero GC events in full selected camera envelope",
+      "evidence": "Original35 whole1800 camera2 events at samples1/5 remains; counters provide event timing, not allocation stack",
+      "status": "NOT_ACHIEVED",
+      "avoid": "No rerun same version, no first-frame exemption or narrowed scope"
+    },
+    {
+      "item": "H-07",
+      "required": "Actual workload improvement under current invariants and authorization",
+      "evidence": "37 logic79.67/80.61ms, collector48.31/50.12ms, visible249.77/235.68ms, SetPass1994/1995; candidate flags default false",
+      "status": "NOT_ACHIEVED",
+      "avoid": "No tiny candidate counted as production FPS benefit"
+    },
+    {
+      "item": "production adoption",
+      "required": "Explicit production integration scope and applicable authority/per-tick admission evidence",
+      "evidence": "Goal selected stage H06 evaluation only;29/37 terminal checksums are not every-tick native proof",
+      "status": "NEW_DIRECTION_REQUIRED_FOR_DEFAULT_PROMOTION",
+      "avoid": "No widening full native campaign or silently toggling backend"
+    },
+    {
+      "item": "render submission",
+      "required": "Causally attributable high SetPass/submission bottleneck analysis within approved scope",
+      "evidence": "Current RenderPass one DrawMesh per valid segment; current normal35 small-roster frames source-texture segments only; does not certify actual1000AI GPU batching",
+      "status": "EVIDENCE_PENDING; special pipelines unchanged",
+      "avoid": "No instancing/MeshData/bank/format changes"
+    }
+  ],
+  "batch38": "PLANNED / NOT_STARTED, cumulative17 includes planned batch; no code or benefits",
+  "completionAudit": "H11 contradicts zero-GC gate; H07 performance gate unachieved; do not complete goal."
+}

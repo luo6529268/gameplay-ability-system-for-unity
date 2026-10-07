@@ -1,0 +1,234 @@
+{
+  "observed": "2026-10-07T06:33:42.9317911+08:00",
+  "status": "FAIL",
+  "phase": "DONE",
+  "frames": 1800,
+  "gcBefore": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 500
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "gcAfter": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 600
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "cameraEvents": 2,
+  "observerEvents": 13,
+  "cameraInvalid": 0,
+  "observerInvalid": 0,
+  "minFoot": 2,
+  "minHealth": 2,
+  "maxGrowth": 0,
+  "maxLease": 0,
+  "drawRecorded": 11484,
+  "drawExecuted": 11484,
+  "slots": 2,
+  "logicStart": 8,
+  "logicEnd": 1439,
+  "orderedShutdown": true,
+  "objects": 0,
+  "worldSlots": 0,
+  "borrowers": 0,
+  "sceneClean": true,
+  "sceneBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sceneAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "events": [
+    {
+      "ordinal": 0,
+      "unityFrame": 3234,
+      "logicTick": 9,
+      "publicationTick": 9,
+      "displayTick": 9,
+      "generation": 11,
+      "submissionSlot": 1,
+      "commands": 4,
+      "entities": 2,
+      "camera": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "beginObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "endObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 13,
+        "allocationEvents": 13,
+        "rawValueTotal": 600
+      }
+    },
+    {
+      "ordinal": 2,
+      "unityFrame": 3236,
+      "logicTick": 11,
+      "publicationTick": 11,
+      "displayTick": 11,
+      "generation": 13,
+      "submissionSlot": 1,
+      "commands": 4,
+      "entities": 2,
+      "camera": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 100
+      },
+      "beginObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "endObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    {
+      "ordinal": 7,
+      "unityFrame": 3241,
+      "logicTick": 16,
+      "publicationTick": 16,
+      "displayTick": 16,
+      "generation": 18,
+      "submissionSlot": 0,
+      "commands": 4,
+      "entities": 2,
+      "camera": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 200
+      },
+      "beginObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      },
+      "endObserver": {
+        "valid": true,
+        "calibratedBefore": true,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    }
+  ],
+  "protectedCount": 187,
+  "protectedChanged": [],
+  "backupCount": 10,
+  "backupChanged": [],
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headAfter": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "currentAfter": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "D494E78B8CF67C1D727B1138391ABC3E6B56B379D6D70FF071A9D6433E98169B"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "BADB06415DFD0F0FE5561E97EDF4FC8C452DFE0EDB8DF88F866684F8B0959D69"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "65E6385A0BFF1E1DAEF53EE449D2E7F6566C1C7A3BDBF461A7CA7CA3101972C7"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "6498583B068336C7F7ADEAE056419A5F8CDFBE4A7BDF54BAB920C7B34B6F1E38"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "C88C43EF36500E04BB704260871F4FA7D1A8E82AD04E3054A83313B6556E6062"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "sha256": "BC3645FBA82E1AABC4771AA0E2462CD8A8915D06BB2DF206521B2BA32EFE09EB"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "764B77BCB8E03450BA90CE4D86A439986B725676A3E89BDCC91616AE17C42E8D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "8AD6B3F84E77FAEB6466E3146CC554A6F733521C8A858D2A85E4CD9D13584063"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007.md",
+      "sha256": "4367122CD91DDC8B6523639AC2AB0044FCE2AFF6FF1E4FF31EC9A20289922A94"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/RECORD.md",
+      "sha256": "5952455530095A4592AC7C32052BA9F7C439D916E28528D1CE26606D77EBB10B"
+    }
+  ]
+}

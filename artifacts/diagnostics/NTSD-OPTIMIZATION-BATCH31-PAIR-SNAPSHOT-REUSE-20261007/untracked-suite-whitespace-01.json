@@ -1,0 +1,7 @@
+{
+  "command": "git diff --no-index --check -- operation-before-suite.cs Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+  "exit": 1,
+  "issues": [],
+  "interpretation": "Before/current files differ as expected. No whitespace diagnostics. Exit 1 is not presented as exit-zero test success. Tracked diff check separately returned exit 0.",
+  "codeChangesAfterFinalAudit": false
+}

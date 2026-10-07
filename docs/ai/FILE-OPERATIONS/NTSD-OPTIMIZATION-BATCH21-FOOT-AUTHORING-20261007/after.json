@@ -1,0 +1,230 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007",
+  "frozenAt": "2026-10-07T02:50:09.1194470+08:00",
+  "status": "VERIFIED_DIAGNOSTIC_ONLY",
+  "selfExcluded": true,
+  "files": [
+    {
+      "bytes": 3986,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/change-ledger-validation.json",
+      "sha256": "671B6214EDDF5582C575D324DFB54014F4F08055B2E4F857250B06D4F96EC93E"
+    },
+    {
+      "bytes": 2460,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/compile-state.json",
+      "sha256": "8D7AAC34428BD43522E86723B496653042E1C7DAB34674FA0C3FB7AE70495917"
+    },
+    {
+      "bytes": 1110,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/concurrent-git-state.json",
+      "sha256": "7B2250C770EC041C704A71F0F8435ABB98C637879F2EC65012730FB760F42732"
+    },
+    {
+      "bytes": 8737,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/final-validation.json",
+      "sha256": "BC1013E356BCDEEB65DEA61BED764590A3E97F1F083AB5B534646A38DA206F41"
+    },
+    {
+      "bytes": 5130,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/observation-summary.json",
+      "sha256": "85ECE50860306978A05DA53D05FC9DBA5981D88165FF4F12C2864A73592D9252"
+    },
+    {
+      "bytes": 203,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-dispatch.json",
+      "sha256": "A934CD15838D96F760A05002A8BA1DE48B1D166010A5F422B851BDA8E719EBBC"
+    },
+    {
+      "bytes": 2469,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-exit-state.json",
+      "sha256": "5EB92D2B1F7A3055B3BAF854A05EAA75E1D4098912BD27F69263628988490076"
+    },
+    {
+      "bytes": 2577,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/play-preflight.json",
+      "sha256": "82931F0AB7345520E7C1C18215132D72B4DCA79C6D0B0046B304FBE91AF14732"
+    },
+    {
+      "bytes": 262,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/red-dispatch-ready.json",
+      "sha256": "57A2DBA3B707BDED1B197230B107EFAAE106E24BAA7D638B39E8FE70BFDD0639"
+    },
+    {
+      "bytes": 420,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/red-dispatch.json",
+      "sha256": "55C4B27AC7F4E7661AD97A4FC8C95AA3085B98385DA7CFEDD2D6A3390166329C"
+    },
+    {
+      "bytes": 2276,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/red-imported-dispatch.json",
+      "sha256": "877A632A8571D8E8F4ED05DBA4EB457483E0F645B06975FA28C6CF133D406AC5"
+    },
+    {
+      "bytes": 4393,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/red-results.json",
+      "sha256": "934F1B2014AB59F048FE7537CD3542D1D6D38558CBAD3A2914B68E791019E885"
+    },
+    {
+      "bytes": 1310,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/red-zero-selected.json",
+      "sha256": "DFF4FF2E6DEC0B883686D490560DB56AE4873AA96AE1DE5F325775E06BFF77E8"
+    },
+    {
+      "bytes": 7872,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md",
+      "sha256": "6521B9AF94F60F902DDC9223C6706F318097E9365EB7CA52722E0D184FCC236C"
+    },
+    {
+      "bytes": 4327,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/materialization-window-01.json",
+      "sha256": "D637C6C0FB9AF1612B43E32DC0BEB1FF9E72CC797B1971713B091DD17976BD3C"
+    },
+    {
+      "bytes": 119100,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/run-01/production-window-01.json",
+      "sha256": "5CB2531776B312E8EEDBFF33DF3C910C0833EE45A4B58E7AC9223B90E9BF6887"
+    },
+    {
+      "bytes": 217,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-load.json",
+      "sha256": "1C2014056858803A11822199FF58DABB760DA37A59D0A663D6794E321CA8A514"
+    },
+    {
+      "bytes": 2669,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/scene-restoration.json",
+      "sha256": "78253C6ADF8518F9D48E7DBFE0341FD28BEFE1D5D31D95B477C09EE243F485D1"
+    },
+    {
+      "bytes": 11231,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/static-bindings.json",
+      "sha256": "2FEF736ED9D153511DE64DF0503BB1F1347C874BEE904B7E8ED7BC3DA4E88C34"
+    },
+    {
+      "bytes": 1348,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/test-dispatch.json",
+      "sha256": "F014513E7E13C8A3A7CAAA3B6B205B663B71DC0AA8F1D56890858E718B45CC02"
+    },
+    {
+      "bytes": 30749,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/test-results.json",
+      "sha256": "EC769C7FC0EBCA422707BC5FDEC8E1D0AB7450613241D248C3A0629AF7B1F891"
+    },
+    {
+      "bytes": 30229,
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "sha256": "73ED8A094FF959E5E7B5C68160397F864B5CA664B2AA3D777EBC0822E986F9A4"
+    },
+    {
+      "bytes": 38692,
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "sha256": "D644B8FA25533A2937B4B18D39E07EE6BD34E865D3FFFD5936DD01779494A4BD"
+    },
+    {
+      "bytes": 42767,
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "E3231BF35E2F3792670B648008D4C6427DF7FEBF0882EC2D95BB3B07555DD62C"
+    },
+    {
+      "bytes": 1483518,
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "541BCA247805460274222C9CC660554793FC454EB5F0C789121B0E7760D01BB7"
+    },
+    {
+      "bytes": 65615,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "EC6BDA0AF37F80FE19D079F32D08198F42C622012F493D41F5F5BC472BA96702"
+    },
+    {
+      "bytes": 1566,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs",
+      "sha256": "8912F97010AD846693DEB2A983D8113E71A7B83F9AE76043E092DFA1C6459E57"
+    },
+    {
+      "bytes": 60,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs.meta",
+      "sha256": "A5821A323BA14770FB6DADDDF7EE672F10C93AE8616AC6588CF81BF941A4708A"
+    },
+    {
+      "bytes": 651892,
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "50402E6CFC6D0504E8B18AF425C7C340B1A15C675C7AB15C8946D1A7AA2B3804"
+    },
+    {
+      "bytes": 2820,
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md",
+      "sha256": "F70C110406E7F5A4C718F219F9FB57A0013FB488B65BB962D3FC360EC0775061"
+    },
+    {
+      "bytes": 39933,
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "CE8BC2F738084170AB85D8B29DA5D0E73F85B7D15B778613AB2B724969AA7C53"
+    },
+    {
+      "bytes": 28778,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "sha256": "0D367E6735AA5751C6A0349C45EC43863CF2A5888D2EC8AFBD7B7430F5B17160"
+    },
+    {
+      "bytes": 36415,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "sha256": "8CBB7278C6E1E516A882C745648A175F97DA520FFE188C76A510E825D708C6B8"
+    },
+    {
+      "bytes": 40587,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "99414E369411C3C63F193150AF34802F07BF6776A7A32AAC56F935E4BABC378A"
+    },
+    {
+      "bytes": 1482109,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "C59D31FFFE12A6B6D799B8B9791F12D7D06F088B2834174B4C76E2442BD74268"
+    },
+    {
+      "bytes": 56396,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "D27FD15576AE7718474D8574F9EFB4880568E3B61FB792DB7F65D1C427E0D260"
+    },
+    {
+      "bytes": 650520,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/docs/ai/CHANGE-LEDGER.md",
+      "sha256": "E18F31FA57966B347648CF8C07C1F7DC976931DD1F54706174F617D76583D26D"
+    },
+    {
+      "bytes": 38552,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "3D1D94477F1CC53E02F472A38536C7B496153DE94A62F070ED80ED3EBA9ED74B"
+    },
+    {
+      "bytes": 1550887,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/backups/docs/ai/STATE.md",
+      "sha256": "24B08B3EB809E4C0F953EA29321875BBA62EC567573680AF735A68D71E422F16"
+    },
+    {
+      "bytes": 166778,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/before.json",
+      "sha256": "62031AE6C78F344B6957EB673D1B30C74BD2C77EB84C7B452AA6ACD6978171C8"
+    },
+    {
+      "bytes": 2456,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/RECORD.md",
+      "sha256": "6575C3918D87C4CDA8D935CB7F30E65FA85BDE350FDFFDB9BF36F3A9494F6BC8"
+    },
+    {
+      "bytes": 1552259,
+      "path": "docs/ai/STATE.md",
+      "sha256": "DF1CB686766705468CFA5D27E920DCE39476FD057F9B4898698DDC923BD69A7B"
+    },
+    {
+      "bytes": 4727,
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007.md",
+      "sha256": "06EA919A3BA05B05EA0EBB3CC6154E5871E5263345FA3604DA18CE73B50A515E"
+    }
+  ],
+  "protectedCount": 733,
+  "backupCount": 8,
+  "initialHead": "2cccd597dbf6cb32826eb0b6e98d7462c1eac48d",
+  "observedFinalHead": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "staged": [],
+  "externalHeadChangePreserved": true,
+  "taskIssuedGitCommit": false
+}

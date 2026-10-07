@@ -1,0 +1,91 @@
+{
+  "observed": "2026-10-07T07:15:43.9285593+08:00",
+  "checks": [
+    {
+      "index": 0,
+      "fieldCount": 65,
+      "oldPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007\\windows-01\\02-dispersed1000-formal-01",
+      "newPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007\\windows-01\\00-dispersed1000-formal-01",
+      "changes": [
+        {
+          "field": "formalCollectorMode",
+          "old": "brute",
+          "new": "role"
+        },
+        {
+          "field": "outputPath",
+          "old": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/02-dispersed1000-formal-01/report.json",
+          "new": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/00-dispersed1000-formal-01/report.json"
+        }
+      ],
+      "sampleTicks": 1800,
+      "warmupTicks": 120,
+      "requireZeroGcAfterWarmup": true
+    },
+    {
+      "index": 1,
+      "fieldCount": 65,
+      "oldPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007\\windows-01\\03-dispersed1000-formal-02",
+      "newPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007\\windows-01\\01-dispersed1000-formal-02",
+      "changes": [
+        {
+          "field": "formalCollectorMode",
+          "old": "brute",
+          "new": "role"
+        },
+        {
+          "field": "outputPath",
+          "old": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/03-dispersed1000-formal-02/report.json",
+          "new": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/01-dispersed1000-formal-02/report.json"
+        }
+      ],
+      "sampleTicks": 1800,
+      "warmupTicks": 120,
+      "requireZeroGcAfterWarmup": true
+    },
+    {
+      "index": 2,
+      "fieldCount": 65,
+      "oldPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007\\windows-01\\04-combat1000-formal-01",
+      "newPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007\\windows-01\\02-combat1000-formal-01",
+      "changes": [
+        {
+          "field": "formalCollectorMode",
+          "old": "brute",
+          "new": "role"
+        },
+        {
+          "field": "outputPath",
+          "old": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/04-combat1000-formal-01/report.json",
+          "new": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/02-combat1000-formal-01/report.json"
+        }
+      ],
+      "sampleTicks": 1800,
+      "warmupTicks": 120,
+      "requireZeroGcAfterWarmup": true
+    },
+    {
+      "index": 3,
+      "fieldCount": 65,
+      "oldPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007\\windows-01\\05-combat1000-formal-02",
+      "newPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007\\windows-01\\03-combat1000-formal-02",
+      "changes": [
+        {
+          "field": "formalCollectorMode",
+          "old": "brute",
+          "new": "role"
+        },
+        {
+          "field": "outputPath",
+          "old": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/05-combat1000-formal-02/report.json",
+          "new": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/03-combat1000-formal-02/report.json"
+        }
+      ],
+      "sampleTicks": 1800,
+      "warmupTicks": 120,
+      "requireZeroGcAfterWarmup": true
+    }
+  ],
+  "progress": [],
+  "originalEditorLive": true
+}

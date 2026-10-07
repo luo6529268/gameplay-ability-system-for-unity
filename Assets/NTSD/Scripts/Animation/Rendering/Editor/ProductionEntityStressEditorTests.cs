@@ -3362,7 +3362,7 @@ namespace NTSD.Animation.Rendering.Editor
 
             Assert.That(
                 ProductionEntityStressRunner.ResolveExpectedUnifiedAiSnapshotObservedPassCount(60),
-                Is.EqualTo(59));
+                Is.EqualTo(60));
             Assert.That(
                 ProductionEntityStressRunner.EvaluateAiDecisionShadowValidityForReport(
                     report,
@@ -3439,7 +3439,7 @@ namespace NTSD.Animation.Rendering.Editor
 
             string json = JsonUtility.ToJson(report);
             Assert.That(json, Does.Contain(
-                "\"unifiedAiSnapshotShadowMutationWitnessComparedCount\":118000"));
+                "\"unifiedAiSnapshotShadowMutationWitnessComparedCount\":120000"));
             Assert.That(json, Does.Contain(
                 "\"unifiedAiSnapshotShadowRefreshDerivedFullLoopEntryVisitCount\":0"));
             Assert.That(json, Does.Contain(
@@ -3555,15 +3555,15 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionRequestedMode\":\"UnifiedAuthority\""));
             Assert.That(json, Does.Contain(
-                "\"aiUnifiedSnapshotExecutionBuildCount\":59"));
+                "\"aiUnifiedSnapshotExecutionBuildCount\":60"));
             Assert.That(json, Does.Contain(
-                "\"aiUnifiedSnapshotExecutionSlotVisitCount\":61950"));
+                "\"aiUnifiedSnapshotExecutionSlotVisitCount\":63000"));
             Assert.That(json, Does.Contain(
-                "\"aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount\":59000"));
+                "\"aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount\":60000"));
             Assert.That(json, Does.Contain(
-                "\"aiUnifiedSnapshotExecutionRefreshCount\":59000"));
+                "\"aiUnifiedSnapshotExecutionRefreshCount\":120000"));
             Assert.That(json, Does.Contain(
-                "\"aiUnifiedSnapshotExecutionReadCount\":59000"));
+                "\"aiUnifiedSnapshotExecutionReadCount\":60000"));
             Assert.That(json, Does.Contain(
                 "\"aiUnifiedSnapshotExecutionPostCommitHardBreachCount\":0"));
             Assert.That(json, Does.Contain(
@@ -3586,7 +3586,7 @@ namespace NTSD.Animation.Rendering.Editor
             ProductionEntityStressReport report =
                 CreateValidAiUnifiedSnapshotAuthorityReport();
             report.forceFullAiUnifiedSnapshotRebuildApplied = false;
-            report.aiUnifiedSnapshotExecutionRollForwardCount = 58;
+            report.aiUnifiedSnapshotExecutionRollForwardCount = 59;
             report.aiUnifiedSnapshotExecutionRollForwardDirtySlotCount = 38000;
             report.aiUnifiedSnapshotExecutionSlotVisitCount = 1050;
             report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount = 1000;
@@ -3970,12 +3970,12 @@ namespace NTSD.Animation.Rendering.Editor
         {
             ProductionEntityStressReport report =
                 CreateValidAiUnifiedSnapshotAuthorityReport();
-            report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
-            report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCommittedPassCount = 59;
+            report.aiUnifiedSnapshotExecutionSlotVisitCount = 59L * 1050L;
             report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
-                58L * 1000L;
-            report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
-            report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
+                59L * 1000L;
+            report.aiUnifiedSnapshotExecutionRefreshCount = 2L * 59L * 1000L;
+            report.aiUnifiedSnapshotExecutionReadCount = 59L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
             report.aiUnifiedSnapshotExecutionPreCommitFallbackCount = 1;
             report.aiUnifiedSnapshotExecutionLegacyFusedSensingBuildCount = 1;
@@ -4025,12 +4025,12 @@ namespace NTSD.Animation.Rendering.Editor
         {
             ProductionEntityStressReport report =
                 CreateValidAiUnifiedSnapshotAuthorityReport();
-            report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
-            report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCommittedPassCount = 59;
+            report.aiUnifiedSnapshotExecutionSlotVisitCount = 59L * 1050L;
             report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
-                58L * 1000L;
-            report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
-            report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
+                59L * 1000L;
+            report.aiUnifiedSnapshotExecutionRefreshCount = 2L * 59L * 1000L;
+            report.aiUnifiedSnapshotExecutionReadCount = 59L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
             report.aiUnifiedSnapshotExecutionPreCommitFallbackCount = 1;
 
@@ -4049,12 +4049,12 @@ namespace NTSD.Animation.Rendering.Editor
         {
             ProductionEntityStressReport report =
                 CreateValidAiUnifiedSnapshotAuthorityReport();
-            report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
-            report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCommittedPassCount = 59;
+            report.aiUnifiedSnapshotExecutionSlotVisitCount = 59L * 1050L;
             report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
-                58L * 1000L;
-            report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
-            report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
+                59L * 1000L;
+            report.aiUnifiedSnapshotExecutionRefreshCount = 2L * 59L * 1000L;
+            report.aiUnifiedSnapshotExecutionReadCount = 59L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
             report.aiUnifiedSnapshotExecutionPreCommitFallbackCount = 1;
             report.aiUnifiedSnapshotExecutionPostCommitHardBreachCount = 1;
@@ -4123,12 +4123,12 @@ namespace NTSD.Animation.Rendering.Editor
             ProductionEntityStressReport report =
                 CreateValidAiUnifiedSnapshotAuthorityReport();
             report.aiUnifiedSnapshotExecutionRestored = false;
-            report.aiUnifiedSnapshotExecutionCommittedPassCount = 58;
-            report.aiUnifiedSnapshotExecutionSlotVisitCount = 58L * 1050L;
+            report.aiUnifiedSnapshotExecutionCommittedPassCount = 59;
+            report.aiUnifiedSnapshotExecutionSlotVisitCount = 59L * 1050L;
             report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
-                58L * 1000L;
-            report.aiUnifiedSnapshotExecutionRefreshCount = 58L * 1000L;
-            report.aiUnifiedSnapshotExecutionReadCount = 58L * 1000L;
+                59L * 1000L;
+            report.aiUnifiedSnapshotExecutionRefreshCount = 2L * 59L * 1000L;
+            report.aiUnifiedSnapshotExecutionReadCount = 59L * 1000L;
             report.aiUnifiedSnapshotExecutionPreCommitFailureCount = 1;
             report.aiUnifiedSnapshotExecutionPreCommitFallbackCount = 1;
             report.aiUnifiedSnapshotExecutionFirstFailureStage =
@@ -4492,7 +4492,7 @@ namespace NTSD.Animation.Rendering.Editor
         private static ProductionEntityStressReport
             CreateValidAiUnifiedSnapshotAuthorityReport()
         {
-            const long observedPasses = 59;
+            const long observedPasses = 60;
             const long refreshAndReadCount = observedPasses * 1000;
             return new ProductionEntityStressReport
             {
@@ -4509,7 +4509,7 @@ namespace NTSD.Animation.Rendering.Editor
                 aiUnifiedSnapshotExecutionSlotVisitCount = observedPasses * 1050,
                 aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount =
                     refreshAndReadCount,
-                aiUnifiedSnapshotExecutionRefreshCount = refreshAndReadCount,
+                aiUnifiedSnapshotExecutionRefreshCount = 2L * refreshAndReadCount,
                 aiUnifiedSnapshotExecutionReadCount = refreshAndReadCount,
                 aiUnifiedSnapshotExecutionCommittedPassCount = observedPasses,
                 aiUnifiedSnapshotExecutionFirstFailureStage =
@@ -4520,7 +4520,7 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static ProductionEntityStressReport CreateValidUnifiedCanonicalPressureReport()
         {
-            const long observedPasses = 59;
+            const long observedPasses = 60;
             const long refreshCount = observedPasses * 1000;
             return new ProductionEntityStressReport
             {

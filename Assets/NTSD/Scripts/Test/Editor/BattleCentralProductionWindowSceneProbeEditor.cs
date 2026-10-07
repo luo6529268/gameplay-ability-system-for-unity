@@ -30,6 +30,19 @@ namespace NTSD.Test.Editor
         private const string SessionKey = "NTSD.Optimization.ProductionWindow.14";
         private const int WindowTicks = 96;
         private const int MaximumSamples = 2048;
+        // Immutable diagnostic operands are bound before the first measured camera.
+        private static readonly string SampleCapacityFailure = "Diagnostic sample capacity exceeded; no truncation.";
+        private static readonly string CurrentPlanFailure = "Natural camera did not have a current central plan.";
+        private static readonly string PublicationIsolationFailure = "Publication isolation/materialization contract failed.";
+        private static readonly string PublicationTickFailure = "Publication and display tick mismatch.";
+        private static readonly string BackendCapacityFailure = "Production backend grew or failed resource resolution.";
+        private static readonly string SegmentBindingFailure = "Physical segment range/order/binding invalid.";
+        private static readonly string VertexLayoutFailure = "Production vertex layout changed.";
+        private static readonly string FiniteBoundsFailure = "Non-finite production bounds.";
+        private static readonly string SubmissionSlotFailure = "Unexpected third submission slot.";
+        private static readonly string SubmissionDrawFailure = "Production RenderPass recorded no central draws.";
+        private static readonly string PhaseComplete = "COMPLETE";
+        private static readonly string PhaseFailure = "FAIL";
         private static Report report;
         private static SimulationTickDriver driver;
         private static FrameSample[] samples;
@@ -38,6 +51,12 @@ namespace NTSD.Test.Editor
         private static readonly BattleCentralSubmission[] observedSlots = new BattleCentralSubmission[2];
         private static bool cameraObservationOpen;
         private static long cameraAllocationStart;
+        private static BattleScopedGcAllocationRecorder allocationRecorder;
+        private static BattleScopedGcAllocationRecorder observerStageRecorder;
+        private static ObserverStageBreakdown currentObserverStages;
+        private static int observerStageIndex = -1;
+        private static BattleScopedGcAllocationRecorder.ScopeResult beginObserverAllocationScope;
+        private static BattleScopedGcAllocationRecorder.ScopeResult cameraAllocationScope;
         private static int beginPlanGeneration;
         private static int beginPlanSlot;
         private static int beginMeshIdentity;
@@ -77,6 +96,28 @@ namespace NTSD.Test.Editor
             public bool sampleTiming;
             public int targetCameraFrames;
             public bool replayProductionCatalog;
+            public bool requireActiveAuxiliaryCoverage;
+            public bool calibratedAllocationSampling;
+            public bool allocationFrameProvenance;
+            public bool allocationObserverStages;
+            public bool prepareObserverLiterals;
+            public bool observerLiteralReadinessPrepared;
+            public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcBefore;
+            public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcAfter;
+            public int observerStageInvalidFrames;
+            public long observerStageUnattributedEvents;
+            public string gcAllocUnit;
+            public int gcAllocCapacity;
+            public BattleScopedGcAllocationRecorder.CalibrationResult gcAllocBefore;
+            public BattleScopedGcAllocationRecorder.CalibrationResult gcAllocAfter;
+            public int cameraGcAllocScopes;
+            public int cameraGcAllocInvalidScopes;
+            public long cameraGcAllocEvents;
+            public int observerGcAllocScopes;
+            public int observerGcAllocInvalidScopes;
+            public long observerGcAllocEvents;
+            public string allocationScope = "Legacy byte counts are raw and uncalibrated";
+            public string renderPipeline;
             public string catalogReplayResult;
             public bool diagnoseFootCoverage;
             public string footCoverage;
@@ -117,6 +158,66 @@ namespace NTSD.Test.Editor
             public MemorySnapshot memoryBefore;
             public MemorySnapshot memoryAfter;
             public FrameSample[] frames;
+        }
+
+        [Serializable]
+        internal struct ObserverStageBreakdown
+        {
+            public BattleScopedGcAllocationRecorder.ScopeResult snapshotGates;
+            public BattleScopedGcAllocationRecorder.ScopeResult segmentBindings;
+            public BattleScopedGcAllocationRecorder.ScopeResult commandsAndDraws;
+            public BattleScopedGcAllocationRecorder.ScopeResult alphaAndTiming;
+            public BattleScopedGcAllocationRecorder.ScopeResult sampleWrite;
+            public BattleScopedGcAllocationRecorder.ScopeResult completion;
+
+            internal BattleScopedGcAllocationRecorder.ScopeResult Get(int index)
+            {
+                switch (index)
+                {
+                    case 0: return snapshotGates;
+                    case 1: return segmentBindings;
+                    case 2: return commandsAndDraws;
+                    case 3: return alphaAndTiming;
+                    case 4: return sampleWrite;
+                    case 5: return completion;
+                    default: throw new ArgumentOutOfRangeException(nameof(index));
+                }
+            }
+
+            internal void Set(int index, BattleScopedGcAllocationRecorder.ScopeResult value)
+            {
+                switch (index)
+                {
+                    case 0: snapshotGates = value; break;
+                    case 1: segmentBindings = value; break;
+                    case 2: commandsAndDraws = value; break;
+                    case 3: alphaAndTiming = value; break;
+                    case 4: sampleWrite = value; break;
+                    case 5: completion = value; break;
+                    default: throw new ArgumentOutOfRangeException(nameof(index));
+                }
+            }
+        }
+
+        internal static bool TryValidateObserverStages(ObserverStageBreakdown stages,
+            long rootEvents, out long unattributedEvents)
+        {
+            unattributedEvents = -1;
+            if (rootEvents < 0)
+                return false;
+            long childEvents = 0;
+            for (int index = 0; index < 6; index++)
+            {
+                BattleScopedGcAllocationRecorder.ScopeResult scope = stages.Get(index);
+                if (!scope.valid || !scope.calibratedBefore || scope.wrapped || scope.saturated ||
+                    scope.allocationEvents < 0 || scope.allocationEvents > long.MaxValue - childEvents)
+                    return false;
+                childEvents += scope.allocationEvents;
+            }
+            if (childEvents > rootEvents)
+                return false;
+            unattributedEvents = rootEvents - childEvents;
+            return true;
         }
 
         [Serializable]
@@ -196,6 +297,11 @@ namespace NTSD.Test.Editor
             public int meshIdentity;
             public int leaseCountAfterCamera;
             public long cameraRenderEnvelopeAllocatedBytes;
+            public BattleScopedGcAllocationRecorder.ScopeResult cameraGcAllocScope;
+            public BattleScopedGcAllocationRecorder.ScopeResult beginObserverGcAllocScope;
+            public BattleScopedGcAllocationRecorder.ScopeResult endObserverGcAllocScope;
+            public ObserverStageBreakdown endObserverStages;
+            public long endObserverUnattributedEvents;
             public Vector3 firstEntityPosition;
             public int actorAction;
             public double actorSourceX;
@@ -226,6 +332,7 @@ namespace NTSD.Test.Editor
             EditorApplication.playModeStateChanged += OnPlay;
             RenderPipelineManager.beginCameraRendering += BeginCamera;
             RenderPipelineManager.endCameraRendering += EndCamera;
+            AssemblyReloadEvents.beforeAssemblyReload += DisposeAllocationRecorder;
         }
 
         [MenuItem("NTSD/Validation/Optimization/Production Window Two Cycles")]
@@ -322,6 +429,105 @@ namespace NTSD.Test.Editor
                 cycle = 1, outputRoot = root, runNextCycle = false, targetCameraFrames = 64,
                 diagnoseFootCoverage = true, startedUtc = DateTime.UtcNow.ToString("O"),
                 sceneHashBefore = HashScene(),
+            };
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch22 Production Foot Config 1800 Cameras")]
+        private static void StartBatch22FootConfig()
+        {
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            const string root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/run-01/";
+            Require(!Directory.Exists(root), "Refuses to reuse batch22 evidence directory.");
+            Directory.CreateDirectory(root);
+            report = new Report
+            {
+                cycle = 1, outputRoot = root, runNextCycle = false, targetCameraFrames = 1800,
+                replayProductionCatalog = true, renderPipeline = DetectPipeline(),
+                startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
+            };
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch23 Production Reentry 1800 Cameras")]
+        private static void StartBatch23Reentry()
+        {
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            const string root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/reentry-01/";
+            Require(!Directory.Exists(root), "Refuses to reuse batch23 evidence directory.");
+            Directory.CreateDirectory(root);
+            report = new Report
+            {
+                cycle = 1, outputRoot = root, runNextCycle = false, targetCameraFrames = 1800,
+                renderPipeline = DetectPipeline(), requireActiveAuxiliaryCoverage = true,
+                startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
+            };
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        private static string DetectPipeline()
+        {
+            RenderPipelineAsset pipeline = GraphicsSettings.currentRenderPipeline;
+            if (pipeline == null)
+                return "BuiltIn";
+            string typeName = pipeline.GetType().FullName ?? string.Empty;
+            if (typeName.Contains("Universal"))
+                return "URP";
+            if (typeName.Contains("HighDefinition"))
+                return "HDRP";
+            return "Custom:" + typeName;
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch27 Calibrated GC 1800 Cameras")]
+        private static void StartBatch27CalibratedGc()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/camera-01/", false);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch28 Allocation Provenance 1800 Cameras")]
+        private static void StartBatch28AllocationProvenance()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/camera-01/", true);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch33 Observer Stages 1800 Cameras")]
+        private static void StartBatch33ObserverStages()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007/camera-01/", true, true);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch35 Observer Literal Readiness 1800 Cameras")]
+        private static void StartBatch35ObserverLiteralReadiness()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01/", true, true, true);
+        }
+
+        private static void StartCalibratedGc(string root, bool frameProvenance,
+            bool observerStages = false, bool prepareLiterals = false)
+        {
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            Require(!Directory.Exists(root), "Refuses to reuse calibrated camera evidence directory.");
+            Directory.CreateDirectory(root);
+            report = new Report
+            {
+                cycle = 1, outputRoot = root, runNextCycle = false, targetCameraFrames = 1800,
+                renderPipeline = DetectPipeline(), requireActiveAuxiliaryCoverage = true,
+                calibratedAllocationSampling = true,
+                allocationFrameProvenance = frameProvenance,
+                allocationObserverStages = observerStages,
+                prepareObserverLiterals = prepareLiterals,
+                allocationScope = "Calibrated current-thread GC.Alloc events, full camera Begin/End envelope and separate observer scopes; " +
+                    "not allocation bytes, other threads, full PlayerLoop, native/GPU allocation or GPU completion",
+                startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
             };
             SaveSession();
             EditorApplication.EnterPlaymode();
@@ -440,6 +646,28 @@ namespace NTSD.Test.Editor
                     readFootEnabled = BindFieldReader<bool>("runtimeFootMarkersEnabled");
                     readFootSprite = BindFieldReader<Sprite>("runtimeFootMarkerSprite");
                 }
+                if (report.calibratedAllocationSampling)
+                {
+                    if (report.prepareObserverLiterals)
+                    {
+                        report.observerLiteralReadinessPrepared =
+                            BattleProductionCatalogReplayEditor.PrepareCameraWindowValidation();
+                        Require(report.observerLiteralReadinessPrepared,
+                            "Diagnostic window messages were not prepared before observation.");
+                    }
+                    allocationRecorder = new BattleScopedGcAllocationRecorder();
+                    report.gcAllocUnit = allocationRecorder.Unit;
+                    report.gcAllocCapacity = allocationRecorder.Capacity;
+                    report.gcAllocBefore = allocationRecorder.Calibrate();
+                    Require(report.gcAllocBefore.passed, "Camera pre-scope GC.Alloc calibration failed; UNKNOWN, not zero-GC.");
+                    if (report.allocationObserverStages)
+                    {
+                        observerStageRecorder = new BattleScopedGcAllocationRecorder();
+                        report.observerStageGcBefore = observerStageRecorder.Calibrate();
+                        Require(report.observerStageGcBefore.passed,
+                            "Observer stage recorder calibration failed; UNKNOWN, not zero-GC.");
+                    }
+                }
                 report.phase = "OBSERVING";
                 SaveSession();
             }
@@ -454,6 +682,7 @@ namespace NTSD.Test.Editor
             if (report == null || report.phase != "OBSERVING" || driver?.World == null ||
                 camera != NTSDRenderSpace.WorldCamera)
                 return;
+            allocationRecorder?.Begin();
             long observerStart = GC.GetAllocatedBytesForCurrentThread();
             BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
             beginPlanGeneration = plan.Generation;
@@ -462,6 +691,12 @@ namespace NTSD.Test.Editor
             beginMeshIdentity = plan.Submission?.Backend.ActiveChunkCount > 0
                 ? plan.Submission.Backend.GetChunkMesh(0).GetInstanceID() : 0;
             report.observerAllocatedBytes += Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - observerStart);
+            if (allocationRecorder != null)
+            {
+                beginObserverAllocationScope = allocationRecorder.End();
+                RecordObserverScope(beginObserverAllocationScope);
+            }
+            allocationRecorder?.Begin();
             cameraObservationOpen = true;
             if (report.sampleTiming)
                 cameraBeginTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
@@ -473,21 +708,100 @@ namespace NTSD.Test.Editor
             if (!cameraObservationOpen || camera != NTSDRenderSpace.WorldCamera)
                 return;
             long envelopeBytes = Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - cameraAllocationStart);
+            if (allocationRecorder != null)
+            {
+                cameraAllocationScope = allocationRecorder.End();
+                report.cameraGcAllocScopes++;
+                report.cameraGcAllocEvents += cameraAllocationScope.allocationEvents;
+                if (!cameraAllocationScope.valid || !cameraAllocationScope.calibratedBefore)
+                    report.cameraGcAllocInvalidScopes++;
+            }
             cameraObservationOpen = false;
+            allocationRecorder?.Begin();
             long observerStart = GC.GetAllocatedBytesForCurrentThread();
+            int sampleIndex = report.sampleCount;
             try
             {
                 // Alignment contract: NTSD-OPT-M03-PRODUCTION-WINDOW-014.
                 // Read-only after the real camera; never force Build or treat CPU lease release as GPU completion.
+                BeginObserverStages();
                 CaptureSample(envelopeBytes);
                 report.observerAllocatedBytes += Math.Max(0, GC.GetAllocatedBytesForCurrentThread() - observerStart);
             }
             catch (Exception exception)
             {
-                report.status = "FAIL";
+                report.status = PhaseFailure;
                 report.error = exception.ToString();
-                report.phase = "COMPLETE";
+                report.phase = PhaseComplete;
             }
+            finally
+            {
+                EndObserverStage();
+                if (allocationRecorder != null)
+                {
+                    BattleScopedGcAllocationRecorder.ScopeResult result = allocationRecorder.End();
+                    RecordObserverScope(result);
+                    if (report.allocationFrameProvenance && report.sampleCount == sampleIndex + 1)
+                    {
+                        samples[sampleIndex].endObserverGcAllocScope = result;
+                        if (report.allocationObserverStages)
+                        {
+                            samples[sampleIndex].endObserverStages = currentObserverStages;
+                            bool valid = TryValidateObserverStages(currentObserverStages,
+                                result.allocationEvents, out long unattributed);
+                            samples[sampleIndex].endObserverUnattributedEvents = unattributed;
+                            if (valid)
+                                report.observerStageUnattributedEvents += unattributed;
+                            else
+                                report.observerStageInvalidFrames++;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void RecordObserverScope(BattleScopedGcAllocationRecorder.ScopeResult result)
+        {
+            report.observerGcAllocScopes++;
+            report.observerGcAllocEvents += result.allocationEvents;
+            if (!result.valid || !result.calibratedBefore)
+                report.observerGcAllocInvalidScopes++;
+        }
+
+        private static void DisposeAllocationRecorder()
+        {
+            observerStageRecorder?.Dispose();
+            observerStageRecorder = null;
+            observerStageIndex = -1;
+            allocationRecorder?.Dispose();
+            allocationRecorder = null;
+        }
+
+        private static void BeginObserverStages()
+        {
+            if (observerStageRecorder == null)
+                return;
+            // Alignment contract: NTSD-OPT-H11-OBSERVER-STAGES-033; full root remains active and authoritative.
+            currentObserverStages = default;
+            observerStageIndex = 0;
+            observerStageRecorder.Begin();
+        }
+
+        private static void NextObserverStage(int index)
+        {
+            if (observerStageRecorder == null)
+                return;
+            EndObserverStage();
+            observerStageIndex = index;
+            observerStageRecorder.Begin();
+        }
+
+        private static void EndObserverStage()
+        {
+            if (observerStageRecorder == null || observerStageIndex < 0)
+                return;
+            currentObserverStages.Set(observerStageIndex, observerStageRecorder.End());
+            observerStageIndex = -1;
         }
 
         private static void CaptureSample(long envelopeBytes)
@@ -495,23 +809,24 @@ namespace NTSD.Test.Editor
             if (report.targetCameraFrames > 0 && report.sampleCount > 0 &&
                 !BattleProductionCatalogReplayEditor.IsNextCameraFrame(samples[report.sampleCount - 1].unityFrame, Time.frameCount))
                 return;
-            Require(report.sampleCount < MaximumSamples, "Diagnostic sample capacity exceeded; no truncation.");
+            Require(report.sampleCount < MaximumSamples, SampleCapacityFailure);
             SimulationWorld world = driver.World;
             BattlePixelFramePlan plan = BattleCentralRenderSystem.CurrentPixelFramePlan;
             BattlePresentationFrame publication = world.BattlePresentation.PublishedFrame;
             BattlePresentationFrame captured = plan.CapturedFrame;
             Require(plan.UsesCentralPixels && !plan.IsStale && ReferenceEquals(plan.World, world),
-                "Natural camera did not have a current central plan.");
+                CurrentPlanFailure);
             Require(publication != null && captured != null && !ReferenceEquals(publication, captured) &&
                 !publication.CommandsMaterialized && !publication.PresentationOrderMaterialized &&
                 captured.CommandsMaterialized && captured.PresentationOrderMaterialized,
-                "Publication isolation/materialization contract failed.");
+                PublicationIsolationFailure);
             Require(plan.SimulationTick == publication.TickIndex && plan.DisplayTick == captured.TickIndex,
-                "Publication and display tick mismatch.");
+                PublicationTickFailure);
             BattleDynamicMeshBackend backend = plan.Submission.Backend;
             BattleCentralBuildDiagnostics diagnostics = backend.Diagnostics;
             Require(diagnostics.CapacityGrowthCount == 0 && diagnostics.UnresolvedCommandCount == 0,
-                "Production backend grew or failed resource resolution.");
+                BackendCapacityFailure);
+            NextObserverStage(1);
             int priorEnd = 0;
             int sourceSegments = 0, atlasSegments = 0, arraySegments = 0;
             for (int index = 0; index < backend.SegmentCount; index++)
@@ -520,18 +835,19 @@ namespace NTSD.Test.Editor
                 Require(segment.FirstCommandIndex >= priorEnd && segment.CommandCount > 0 &&
                     segment.FirstCommandIndex + segment.CommandCount <= captured.CommandCount &&
                     segment.Texture != null && segment.Material != null,
-                    "Physical segment range/order/binding invalid.");
+                    SegmentBindingFailure);
                 priorEnd = segment.FirstCommandIndex + segment.CommandCount;
                 if (segment.BindingMode == BattleSpriteCentralBindingMode.SourceTexture2D) sourceSegments++;
                 if (segment.BindingMode == BattleSpriteCentralBindingMode.AtlasPageTexture2D) atlasSegments++;
                 if (segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray) arraySegments++;
                 Mesh mesh = backend.GetChunkMesh(segment.ChunkIndex);
-                Require(mesh != null && mesh.GetVertexBufferStride(0) == 44, "Production vertex layout changed.");
+                Require(mesh != null && mesh.GetVertexBufferStride(0) == 44, VertexLayoutFailure);
                 Bounds bounds = mesh.GetSubMesh(segment.SubMeshIndex).bounds;
-                Require(IsFinite(bounds.center) && IsFinite(bounds.extents), "Non-finite production bounds.");
+                Require(IsFinite(bounds.center) && IsFinite(bounds.extents), FiniteBoundsFailure);
             }
             int slot = ObserveSlot(plan.Submission);
-            Require(slot >= 0, "Unexpected third submission slot.");
+            Require(slot >= 0, SubmissionSlotFailure);
+            NextObserverStage(2);
             Vector3 firstEntityPosition = default;
             int selfFootCommands = 0;
             bool firstEntityFound = false;
@@ -553,7 +869,8 @@ namespace NTSD.Test.Editor
             }
             int draws = BattleCentralRenderSystem.Diagnostics.LastSubmissionDrawCount;
             Require(draws > 0 && BattleCentralRenderSystem.Diagnostics.SubmittedPixelsLastFrame,
-                "Production RenderPass recorded no central draws.");
+                SubmissionDrawFailure);
+            NextObserverStage(3);
             int comparedEntities = report.dynamicInput ? CaptureDynamicContract(publication, captured) : 0;
             double builtAlpha = report.sampleTiming ? readBuiltAlpha() : readAlpha(world);
             long cameraEndTimestamp = report.sampleTiming ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
@@ -568,6 +885,7 @@ namespace NTSD.Test.Editor
                 (dynamicActor.Runtime.SourceRuleX != samples[report.sampleCount - 1].actorSourceX ||
                  dynamicActor.Runtime.SourceRuleZ != samples[report.sampleCount - 1].actorSourceZ))
                 report.movingCameraSamples++;
+            NextObserverStage(4);
             samples[report.sampleCount++] = new FrameSample
             {
                 unityFrame = Time.frameCount, logicTick = driver.CurrentTickIndex,
@@ -594,19 +912,22 @@ namespace NTSD.Test.Editor
                 meshIdentity = backend.ActiveChunkCount > 0 ? backend.GetChunkMesh(0).GetInstanceID() : 0,
                 leaseCountAfterCamera = plan.Submission.ReadLeaseCount,
                 cameraRenderEnvelopeAllocatedBytes = envelopeBytes, firstEntityPosition = firstEntityPosition,
+                cameraGcAllocScope = report.allocationFrameProvenance ? cameraAllocationScope : default,
+                beginObserverGcAllocScope = report.allocationFrameProvenance ? beginObserverAllocationScope : default,
                 actorAction = dynamicActor?.Frame.N ?? -1,
                 actorSourceX = dynamicActor?.Runtime.SourceRuleX ?? 0,
                 actorSourceZ = dynamicActor?.Runtime.SourceRuleZ ?? 0,
                 actorInputButtons = report.dynamicInput ? ReadPlayerButtons() : 0,
                 comparedEntities = comparedEntities,
             };
+            NextObserverStage(5);
             report.cameraRenderEnvelopeAllocatedBytes += envelopeBytes;
             if (envelopeBytes > 0)
                 report.cameraRenderEnvelopeNonzeroFrames++;
             report.endTick = driver.CurrentTickIndex;
             if (BattleProductionCatalogReplayEditor.IsWindowComplete(report.targetCameraFrames, report.sampleCount,
                 report.startTick, report.endTick, report.windowTicks, MaximumSamples))
-                report.phase = "COMPLETE";
+                report.phase = PhaseComplete;
         }
 
         private static int ReadPlayerButtons()
@@ -943,11 +1264,47 @@ namespace NTSD.Test.Editor
 
         private static void CompleteWindow()
         {
+            if (report.calibratedAllocationSampling && allocationRecorder != null)
+                report.gcAllocAfter = allocationRecorder.Calibrate();
+            if (report.allocationObserverStages && observerStageRecorder != null)
+                report.observerStageGcAfter = observerStageRecorder.Calibrate();
             report.frames = new FrameSample[report.sampleCount];
             if (samples != null)
                 Array.Copy(samples, report.frames, report.sampleCount);
             if (report.status == "FAIL")
                 return;
+            if (report.allocationObserverStages)
+            {
+                Require(report.observerStageGcBefore.passed && report.observerStageGcAfter.passed &&
+                    report.observerStageInvalidFrames == 0, "Observer stage evidence is invalid; no zero-GC claim.");
+                long unattributedSum = 0;
+                foreach (FrameSample frame in report.frames)
+                {
+                    Require(TryValidateObserverStages(frame.endObserverStages,
+                        frame.endObserverGcAllocScope.allocationEvents, out long remaining) &&
+                        remaining == frame.endObserverUnattributedEvents,
+                        "Observer children plus unattributed events differ from the full root.");
+                    unattributedSum += remaining;
+                }
+                Require(unattributedSum == report.observerStageUnattributedEvents,
+                    "Observer unattributed frame/window totals differ.");
+            }
+            if (report.allocationFrameProvenance)
+            {
+                long cameraEvents = 0;
+                long observerEvents = 0;
+                foreach (FrameSample frame in report.frames)
+                {
+                    Require(frame.cameraGcAllocScope.valid && frame.cameraGcAllocScope.calibratedBefore &&
+                        frame.beginObserverGcAllocScope.valid && frame.beginObserverGcAllocScope.calibratedBefore &&
+                        frame.endObserverGcAllocScope.valid && frame.endObserverGcAllocScope.calibratedBefore,
+                        "A frame is missing valid calibrated allocation provenance.");
+                    cameraEvents += frame.cameraGcAllocScope.allocationEvents;
+                    observerEvents += frame.beginObserverGcAllocScope.allocationEvents + frame.endObserverGcAllocScope.allocationEvents;
+                }
+                Require(cameraEvents == report.cameraGcAllocEvents && observerEvents == report.observerGcAllocEvents,
+                    "Frame-level allocation provenance does not match the full-scope totals; no partial evidence accepted.");
+            }
             BattleCentralMaterializationReport end = BattleCentralRenderSystem.Diagnostics.CaptureMaterializationReport();
             Require(end.TryCreateWindow(baseline, out BattleCentralMaterializationReport window, out string reason), reason);
             report.memoryAfter = CaptureMemory(driver.ManagedMemoryBoundary);
@@ -970,7 +1327,7 @@ namespace NTSD.Test.Editor
                 window.ToJson());
             Require(report.observedSubmissionSlots >= 1 && report.observedSubmissionSlots <= 2 && report.sampleCount > 1,
                 "No valid submission-slot observation window.");
-            if (report.replayProductionCatalog)
+            if (report.replayProductionCatalog || report.requireActiveAuxiliaryCoverage)
             {
                 Require(report.sampleCount == report.targetCameraFrames, "Distinct camera target not met.");
                 for (int index = 0; index < report.frames.Length; index++)
@@ -981,11 +1338,26 @@ namespace NTSD.Test.Editor
                         sample.hasBoundCatalog && sample.leaseCountAfterCamera == 0,
                         "Production camera/catalog/auxiliary/CPU-lease coverage failed.");
                 }
-                report.catalogReplayResult = OutputRoot + "catalog-replay.json";
-                BattleProductionCatalogReplayEditor.Run(BattleCentralRenderSystem.CurrentPixelFramePlan,
-                    report.catalogReplayResult);
-                Require(report.cameraRenderEnvelopeAllocatedBytes == 0 && report.observerAllocatedBytes == 0,
-                    "Production camera/observer current-thread allocation was nonzero; evidence retained.");
+                if (report.replayProductionCatalog)
+                {
+                    report.catalogReplayResult = OutputRoot + "catalog-replay.json";
+                    BattleProductionCatalogReplayEditor.Run(BattleCentralRenderSystem.CurrentPixelFramePlan,
+                        report.catalogReplayResult);
+                }
+                if (report.calibratedAllocationSampling)
+                {
+                    Require(report.gcAllocBefore.passed && report.gcAllocAfter.passed &&
+                        report.cameraGcAllocScopes >= report.targetCameraFrames &&
+                        report.observerGcAllocScopes >= report.targetCameraFrames * 2 &&
+                        report.cameraGcAllocInvalidScopes == 0 && report.observerGcAllocInvalidScopes == 0 &&
+                        report.cameraGcAllocEvents == 0 && report.observerGcAllocEvents == 0,
+                        "The full camera/observer scope did not prove calibrated zero GC.Alloc events; evidence retained.");
+                }
+                else
+                {
+                    Require(report.cameraRenderEnvelopeAllocatedBytes == 0 && report.observerAllocatedBytes == 0,
+                        "Legacy raw allocation regression failed; this is not a calibrated certificate.");
+                }
             }
             if (report.diagnoseFootCoverage)
             {
@@ -1050,6 +1422,7 @@ namespace NTSD.Test.Editor
 
         private static void Exit()
         {
+            DisposeAllocationRecorder();
             cameraObservationOpen = false;
             if (report.dynamicInput && dynamicKeyboard != null)
             {
@@ -1097,6 +1470,8 @@ namespace NTSD.Test.Editor
 
         private static void OnPlay(PlayModeStateChange state)
         {
+            if (state == PlayModeStateChange.ExitingPlayMode)
+                DisposeAllocationRecorder();
             RestoreSession();
             if (report == null)
                 return;
@@ -1113,6 +1488,7 @@ namespace NTSD.Test.Editor
 
         private static void Finish()
         {
+            DisposeAllocationRecorder();
             Scene scene = SceneManager.GetActiveScene();
             report.sceneHashAfter = HashScene();
             report.sceneClean = scene.path == ScenePath && !scene.isDirty && SceneManager.sceneCount == 1 &&
@@ -1146,6 +1522,10 @@ namespace NTSD.Test.Editor
             readFootSprite = null;
             cameraObservationOpen = false;
             Array.Clear(observedSlots, 0, observedSlots.Length);
+            beginObserverAllocationScope = default;
+            cameraAllocationScope = default;
+            currentObserverStages = default;
+            observerStageIndex = -1;
             if (nextCycle)
                 EditorApplication.delayCall += StartSecondCycle;
         }
@@ -1227,5 +1607,264 @@ namespace NTSD.Test.Editor
             }
         }
     }
+#if UNITY_INCLUDE_TESTS
+    public sealed class BattleObserverLiteralReadinessEditorTests
+    {
+        private static readonly System.Reflection.Emit.OpCode[] SingleByteOpcodes = new System.Reflection.Emit.OpCode[256];
+        private static readonly System.Reflection.Emit.OpCode[] DoubleByteOpcodes = new System.Reflection.Emit.OpCode[256];
+
+        static BattleObserverLiteralReadinessEditorTests()
+        {
+            foreach (FieldInfo field in typeof(System.Reflection.Emit.OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (field.FieldType != typeof(System.Reflection.Emit.OpCode))
+                    continue;
+                var opcode = (System.Reflection.Emit.OpCode)field.GetValue(null);
+                ushort value = unchecked((ushort)opcode.Value);
+                if (value < 256)
+                    SingleByteOpcodes[value] = opcode;
+                else if ((value & 0xff00) == 0xfe00)
+                    DoubleByteOpcodes[value & 0xff] = opcode;
+            }
+        }
+
+        [NUnit.Framework.TestCase("CaptureSample")]
+        [NUnit.Framework.TestCase("EndCamera")]
+        [NUnit.Framework.TestCase("IsWindowComplete")]
+        public void HotObserverMethod_HasNoLazyStringLiteralOperands(string methodName)
+        {
+            Type owner = methodName == "IsWindowComplete"
+                ? typeof(BattleProductionCatalogReplayEditor)
+                : typeof(BattleCentralProductionWindowSceneProbeEditor);
+            MethodInfo method = owner.GetMethod(methodName, BindingFlags.Static | BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(method, NUnit.Framework.Is.Not.Null);
+            string[] strings = ReadLiteralOperands(method);
+            NUnit.Framework.TestContext.WriteLine("OBSERVER_LITERAL_IL method=" + methodName +
+                " literals=" + strings.Length);
+            NUnit.Framework.Assert.That(strings, NUnit.Framework.Is.Empty,
+                "Bind immutable diagnostic messages before observing; keep every hot-path check.");
+        }
+
+        [NUnit.Framework.Test]
+        public void BoundObserverMessages_KeepExactTextAndReadonlyOwnership()
+        {
+            string[] names =
+            {
+                "SampleCapacityFailure", "CurrentPlanFailure", "PublicationIsolationFailure",
+                "PublicationTickFailure", "BackendCapacityFailure", "SegmentBindingFailure",
+                "VertexLayoutFailure", "FiniteBoundsFailure", "SubmissionSlotFailure",
+                "SubmissionDrawFailure", "PhaseComplete", "PhaseFailure"
+            };
+            string[] expected =
+            {
+                "Diagnostic sample capacity exceeded; no truncation.",
+                "Natural camera did not have a current central plan.",
+                "Publication isolation/materialization contract failed.",
+                "Publication and display tick mismatch.",
+                "Production backend grew or failed resource resolution.",
+                "Physical segment range/order/binding invalid.",
+                "Production vertex layout changed.",
+                "Non-finite production bounds.",
+                "Unexpected third submission slot.",
+                "Production RenderPass recorded no central draws.",
+                "COMPLETE", "FAIL"
+            };
+            for (int index = 0; index < names.Length; index++)
+            {
+                FieldInfo field = typeof(BattleCentralProductionWindowSceneProbeEditor)
+                    .GetField(names[index], BindingFlags.Static | BindingFlags.NonPublic);
+                NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null, names[index]);
+                NUnit.Framework.Assert.That(field.IsInitOnly, NUnit.Framework.Is.True, names[index]);
+                NUnit.Framework.Assert.That(field.GetValue(null), NUnit.Framework.Is.EqualTo(expected[index]));
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void InvalidWindow_RetainsOriginalParameterAndMessage()
+        {
+            var exception = NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() =>
+                BattleProductionCatalogReplayEditor.IsWindowComplete(2049, 1, 0, 1, 96, 2048));
+            NUnit.Framework.Assert.That(exception.ParamName, NUnit.Framework.Is.EqualTo("targetCameras"));
+            NUnit.Framework.Assert.That(exception.Message,
+                NUnit.Framework.Does.StartWith("Invalid bounded camera window."));
+        }
+
+        [NUnit.Framework.Test]
+        public void MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences()
+        {
+            Type probe = typeof(BattleCentralProductionWindowSceneProbeEditor);
+            string[] names = { "report", "driver", "samples" };
+            var before = new object[names.Length];
+            for (int index = 0; index < names.Length; index++)
+                before[index] = probe.GetField(names[index], BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            PrepareMessages();
+            for (int index = 0; index < names.Length; index++)
+                NUnit.Framework.Assert.That(probe.GetField(names[index],
+                    BindingFlags.Static | BindingFlags.NonPublic).GetValue(null),
+                    NUnit.Framework.Is.SameAs(before[index]));
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(bool allocate)
+        {
+            PrepareMessages();
+            using var recorder = new BattleScopedGcAllocationRecorder();
+            var before = recorder.Calibrate();
+            NUnit.Framework.Assert.That(before.passed, NUnit.Framework.Is.True);
+            recorder.Begin();
+            bool complete = BattleProductionCatalogReplayEditor.IsWindowComplete(1800, 1800, 0, 1, 96, 2048);
+            byte[] live = allocate ? new byte[1024 * 1024] : null;
+            if (live != null)
+            {
+                live[0] = 1;
+                live[live.Length - 1] = 2;
+            }
+            var scope = recorder.End();
+            var after = recorder.Calibrate();
+            NUnit.Framework.Assert.That(complete, NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(scope.valid && scope.calibratedBefore && after.passed,
+                NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(scope.allocationEvents, allocate
+                ? NUnit.Framework.Is.GreaterThan(0)
+                : NUnit.Framework.Is.Zero);
+            GC.KeepAlive(live);
+        }
+
+        private static void PrepareMessages()
+        {
+            MethodInfo method = typeof(BattleProductionCatalogReplayEditor)
+                .GetMethod("PrepareCameraWindowValidation", BindingFlags.Static | BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(method, NUnit.Framework.Is.Not.Null,
+                "Requires explicit pre-observation message readiness, not a skipped first camera.");
+            NUnit.Framework.Assert.That(method.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+        }
+
+        private static string[] ReadLiteralOperands(MethodInfo method)
+        {
+            byte[] bytes = method.GetMethodBody().GetILAsByteArray();
+            var strings = new System.Collections.Generic.List<string>();
+            int offset = 0;
+            while (offset < bytes.Length)
+            {
+                byte first = bytes[offset++];
+                var opcode = first == 0xfe ? DoubleByteOpcodes[bytes[offset++]] : SingleByteOpcodes[first];
+                NUnit.Framework.Assert.That(opcode.Size, NUnit.Framework.Is.GreaterThan(0));
+                switch (opcode.OperandType)
+                {
+                    case System.Reflection.Emit.OperandType.InlineNone:
+                        break;
+                    case System.Reflection.Emit.OperandType.ShortInlineBrTarget:
+                    case System.Reflection.Emit.OperandType.ShortInlineI:
+                    case System.Reflection.Emit.OperandType.ShortInlineVar:
+                        offset += 1;
+                        break;
+                    case System.Reflection.Emit.OperandType.InlineVar:
+                        offset += 2;
+                        break;
+                    case System.Reflection.Emit.OperandType.InlineI8:
+                    case System.Reflection.Emit.OperandType.InlineR:
+                        offset += 8;
+                        break;
+                    case System.Reflection.Emit.OperandType.InlineSwitch:
+                        int count = BitConverter.ToInt32(bytes, offset);
+                        offset += 4 + checked(count * 4);
+                        break;
+                    case System.Reflection.Emit.OperandType.InlineString:
+                        strings.Add(method.Module.ResolveString(BitConverter.ToInt32(bytes, offset)));
+                        offset += 4;
+                        break;
+                    default:
+                        offset += 4;
+                        break;
+                }
+            }
+            NUnit.Framework.Assert.That(offset, NUnit.Framework.Is.EqualTo(bytes.Length));
+            return strings.ToArray();
+        }
+    }
+    public sealed class BattleObserverStageBreakdownEditorTests
+    {
+        [NUnit.Framework.TestCase(0L, 0L)]
+        [NUnit.Framework.TestCase(13L, 13L)]
+        [NUnit.Framework.TestCase(13L, 4L)]
+        public void ObserverStageTotals_ValidRootKeepsUnattributed(long root, long children)
+        {
+            var stages = ValidStages(children);
+            NUnit.Framework.Assert.That(
+                BattleCentralProductionWindowSceneProbeEditor.TryValidateObserverStages(stages, root, out long remaining),
+                NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(remaining, NUnit.Framework.Is.EqualTo(root - children));
+        }
+
+        [NUnit.Framework.TestCase("invalid")]
+        [NUnit.Framework.TestCase("wrapped")]
+        [NUnit.Framework.TestCase("saturated")]
+        [NUnit.Framework.TestCase("negative")]
+        [NUnit.Framework.TestCase("exceeds-root")]
+        public void ObserverStageTotals_InvalidDoesNotBecomeZero(string reason)
+        {
+            var stages = ValidStages(1);
+            var scope = stages.Get(0);
+            if (reason == "invalid") scope.valid = false;
+            if (reason == "wrapped") scope.wrapped = true;
+            if (reason == "saturated") scope.saturated = true;
+            if (reason == "negative") scope.allocationEvents = -1;
+            if (reason == "exceeds-root") scope.allocationEvents = 2;
+            stages.Set(0, scope);
+            NUnit.Framework.Assert.That(
+                BattleCentralProductionWindowSceneProbeEditor.TryValidateObserverStages(stages, 1, out long remaining),
+                NUnit.Framework.Is.False);
+            NUnit.Framework.Assert.That(remaining, NUnit.Framework.Is.EqualTo(-1));
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(bool allocate)
+        {
+            using var root = new BattleScopedGcAllocationRecorder();
+            using var child = new BattleScopedGcAllocationRecorder();
+            var rootBefore = root.Calibrate();
+            var childBefore = child.Calibrate();
+            NUnit.Framework.Assert.That(rootBefore.passed && childBefore.passed, NUnit.Framework.Is.True);
+            root.Begin();
+            child.Begin();
+            byte[] live = allocate ? new byte[1024 * 1024] : null;
+            if (live != null)
+            {
+                live[0] = 1;
+                live[live.Length - 1] = 2;
+            }
+            var childResult = child.End();
+            var rootResult = root.End();
+            var rootAfter = root.Calibrate();
+            var childAfter = child.Calibrate();
+            NUnit.Framework.Assert.That(rootResult.valid && childResult.valid &&
+                rootResult.calibratedBefore && childResult.calibratedBefore &&
+                rootAfter.passed && childAfter.passed, NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(rootResult.allocationEvents,
+                NUnit.Framework.Is.GreaterThanOrEqualTo(childResult.allocationEvents));
+            if (allocate)
+                NUnit.Framework.Assert.That(childResult.allocationEvents, NUnit.Framework.Is.GreaterThan(0));
+            else
+                NUnit.Framework.Assert.That(rootResult.allocationEvents + childResult.allocationEvents,
+                    NUnit.Framework.Is.Zero);
+            GC.KeepAlive(live);
+        }
+
+        private static BattleCentralProductionWindowSceneProbeEditor.ObserverStageBreakdown ValidStages(long events)
+        {
+            var stages = new BattleCentralProductionWindowSceneProbeEditor.ObserverStageBreakdown();
+            for (int index = 0; index < 6; index++)
+            {
+                stages.Set(index, new BattleScopedGcAllocationRecorder.ScopeResult
+                {
+                    valid = true, calibratedBefore = true, allocationEvents = index == 0 ? events : 0
+                });
+            }
+            return stages;
+        }
+    }
+#endif
 }
 #endif

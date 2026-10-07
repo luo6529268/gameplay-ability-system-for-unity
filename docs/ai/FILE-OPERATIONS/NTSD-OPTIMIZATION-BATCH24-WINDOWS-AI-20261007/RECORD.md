@@ -1,0 +1,8 @@
+# 第24批Windows活动AI报告文件操作
+本批操作结束：两准确代码路径/已声明文档增量，三个窗口原件和共有terminal保留，无删除/移动/旧文件覆盖；98保护/7原备份+2追加副本/HEAD及双Scene检查见final-validation。H07任务PARTIAL/3of3到限，不因操作保护通过称优化交付完成。
+同批最后具名修正3/3：现有harness增加只读initialRosterLogicOnlyMaterialization报告/私有出生布局快照，population据此严格判断；不强制更改World mode，windows-03新输出，前两个failed目录/终态原件保留。原scope-extension准确backup覆盖改动，原birth模式/规则/source外路径不动。
+同批具名失败范围追加（脚本前）：首轮OID0普通OPoint拒绝且旧Renderer/双对象计数不适配CentralOnly。只允许现有Development/Editor压力harness TrySelectLoadedCharacter、SpawnCharacter、IsActive、PopulationPolicy/ValidatePeakPopulation 增量适配；不改Factory/World/规则。两个当前字节追加backup见scope-extension.json。原99保护中的该harness转本次精确写域，其余98保护不变；原失败/六请求保持，重试用windows-02，不删除本批已有terminal文件，仅在路径可证明归本批时允许既有Runner更新。原“生产源不改”限定为原事前计划，本追加只改诊断harness，不改生产battle规则链。
+状态：PLANNED。用户六项有限首阶段及开始执行授权。七个现有治理/进度文件的准确路径、改前SHA、Git状态和当前字节backup见before.json；其它99文件保护，不以HEAD替代dirty字节。
+仅新增 Editor-only BattleOptimizationWindowsAiSuiteEditor.cs 及Unity meta、同名Task/Change及独立证据；七文档仅增量进度。不改生产runtime、Scene/资源/设置、Q06活跃body，不执行删除/移动/Git弃改。
+现有压力Runner直接调用，不写共享request。Temp/NTSD_ProductionEntityStress.result事前不存在，允许既有Runner新建/更新本批拥有的终态信号，逐run保存到独立目录后仍保留，不删除。run报告使用唯一新目录，允许自身持续更新，不覆盖旧产物或用户内容。
+恢复只能按before准确hunk并另获批准，不reset/checkout/clean/stash。仅既有有序生命周期回收本批临时Runtime对象，非删除文件。

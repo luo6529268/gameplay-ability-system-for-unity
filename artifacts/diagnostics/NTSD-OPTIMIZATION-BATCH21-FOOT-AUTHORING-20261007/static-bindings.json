@@ -1,0 +1,410 @@
+{
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "firstLine": 2157,
+      "lastLine": 2188,
+      "lines": [
+        {
+          "line": 2157,
+          "text": "        internal static void RefreshRuntimeFootMarkerAuthoringSettings()"
+        },
+        {
+          "line": 2158,
+          "text": "        {"
+        },
+        {
+          "line": 2159,
+          "text": "            bool enabled = featureOwner != null;"
+        },
+        {
+          "line": 2160,
+          "text": "            Sprite sprite = null;"
+        },
+        {
+          "line": 2161,
+          "text": "            BattleFootMarkerStyle style = BattleFootMarkerStyle.Default;"
+        },
+        {
+          "line": 2162,
+          "text": "            if (BattleCentralEditorPreview.TryGetRuntimeFootMarkerAuthoringSettings("
+        },
+        {
+          "line": 2163,
+          "text": "                    out bool authoredEnabled,"
+        },
+        {
+          "line": 2164,
+          "text": "                    out Sprite authoredSprite,"
+        },
+        {
+          "line": 2165,
+          "text": "                    out Sprite[] authoredAnimationFrames,"
+        },
+        {
+          "line": 2166,
+          "text": "                    out float authoredAnimationFrameDurationSeconds,"
+        },
+        {
+          "line": 2167,
+          "text": "                    out BattleFootMarkerStyle authoredStyle))"
+        },
+        {
+          "line": 2168,
+          "text": "            {"
+        },
+        {
+          "line": 2169,
+          "text": "                enabled &= authoredEnabled;"
+        },
+        {
+          "line": 2170,
+          "text": "                sprite = authoredSprite;"
+        },
+        {
+          "line": 2171,
+          "text": "                runtimeFootMarkerAnimationFrames ="
+        },
+        {
+          "line": 2172,
+          "text": "                    authoredAnimationFrames ?? Array.Empty<Sprite>();"
+        },
+        {
+          "line": 2173,
+          "text": "                runtimeFootMarkerAnimationFrameDurationSeconds ="
+        },
+        {
+          "line": 2174,
+          "text": "                    authoredAnimationFrameDurationSeconds > 0f"
+        },
+        {
+          "line": 2175,
+          "text": "                        ? authoredAnimationFrameDurationSeconds"
+        },
+        {
+          "line": 2176,
+          "text": "                        : BattleFootMarkerAnimation.DefaultFrameDurationSeconds;"
+        },
+        {
+          "line": 2177,
+          "text": "                style = authoredStyle;"
+        },
+        {
+          "line": 2178,
+          "text": "            }"
+        },
+        {
+          "line": 2179,
+          "text": "            else"
+        },
+        {
+          "line": 2180,
+          "text": "            {"
+        },
+        {
+          "line": 2181,
+          "text": "                enabled = false;"
+        },
+        {
+          "line": 2182,
+          "text": "                runtimeFootMarkerAnimationFrames = Array.Empty<Sprite>();"
+        },
+        {
+          "line": 2183,
+          "text": "                runtimeFootMarkerAnimationFrameDurationSeconds ="
+        },
+        {
+          "line": 2184,
+          "text": "                    BattleFootMarkerAnimation.DefaultFrameDurationSeconds;"
+        },
+        {
+          "line": 2185,
+          "text": "            }"
+        },
+        {
+          "line": 2186,
+          "text": ""
+        },
+        {
+          "line": 2187,
+          "text": "            runtimeFootMarkersEnabled = enabled && sprite != null;"
+        },
+        {
+          "line": 2188,
+          "text": "            runtimeFootMarkerSprite = sprite;"
+        }
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "firstLine": 183,
+      "lastLine": 230,
+      "lines": [
+        {
+          "line": 183,
+          "text": "        public void BuildFromFrame("
+        },
+        {
+          "line": 184,
+          "text": "            BattlePresentationFrame frame,"
+        },
+        {
+          "line": 185,
+          "text": "            Sprite sprite,"
+        },
+        {
+          "line": 186,
+          "text": "            in BattleFootMarkerStyle configuredStyle,"
+        },
+        {
+          "line": 187,
+          "text": "            bool enabled)"
+        },
+        {
+          "line": 188,
+          "text": "        {"
+        },
+        {
+          "line": 189,
+          "text": "            if (disposed)"
+        },
+        {
+          "line": 190,
+          "text": "                throw new ObjectDisposedException(nameof(BattleFootMarkerBatchBackend));"
+        },
+        {
+          "line": 191,
+          "text": "            if (frame == null)"
+        },
+        {
+          "line": 192,
+          "text": "                throw new ArgumentNullException(nameof(frame));"
+        },
+        {
+          "line": 193,
+          "text": "            if (!CanBuildFrame(frame, sprite, enabled))"
+        },
+        {
+          "line": 194,
+          "text": "                throw new InvalidOperationException(\"Foot marker capacity exceeded; whole frame rejected.\");"
+        },
+        {
+          "line": 195,
+          "text": ""
+        },
+        {
+          "line": 196,
+          "text": "            MutationVersion++;"
+        },
+        {
+          "line": 197,
+          "text": "            BuiltFrame = frame;"
+        },
+        {
+          "line": 198,
+          "text": "            bool canDraw = enabled && sprite != null && sprite.texture != null;"
+        },
+        {
+          "line": 199,
+          "text": "            Texture = canDraw ? sprite.texture : null;"
+        },
+        {
+          "line": 200,
+          "text": "            if (!canDraw)"
+        },
+        {
+          "line": 201,
+          "text": "            {"
+        },
+        {
+          "line": 202,
+          "text": "                ClearActiveMesh();"
+        },
+        {
+          "line": 203,
+          "text": "                return;"
+        },
+        {
+          "line": 204,
+          "text": "            }"
+        },
+        {
+          "line": 205,
+          "text": ""
+        },
+        {
+          "line": 206,
+          "text": "            int maximumCandidateCount = Mathf.Min("
+        },
+        {
+          "line": 207,
+          "text": "                frame.EntityCount > 0 ? frame.EntityCount : frame.CommandCount,"
+        },
+        {
+          "line": 208,
+          "text": "                MaximumMarkersPerBatch);"
+        },
+        {
+          "line": 209,
+          "text": "            if (!capacitySealed)"
+        },
+        {
+          "line": 210,
+          "text": "                PrepareCapacity(maximumCandidateCount);"
+        },
+        {
+          "line": 211,
+          "text": "            BattleFootMarkerStyle style = configuredStyle.Normalized();"
+        },
+        {
+          "line": 212,
+          "text": "            Rect uv = ResolveNormalizedUv(sprite);"
+        },
+        {
+          "line": 213,
+          "text": "            float offsetX = style.OffsetPixels.x * NTSDRenderSpace.UnitsPerPixelX;"
+        },
+        {
+          "line": 214,
+          "text": "            float offsetY = style.OffsetPixels.y * NTSDRenderSpace.UnitsPerPixelY;"
+        },
+        {
+          "line": 215,
+          "text": "            int writtenMarkers = 0;"
+        },
+        {
+          "line": 216,
+          "text": "            bool hasBounds = false;"
+        },
+        {
+          "line": 217,
+          "text": "            Vector3 minimum = default;"
+        },
+        {
+          "line": 218,
+          "text": "            Vector3 maximum = default;"
+        },
+        {
+          "line": 219,
+          "text": ""
+        },
+        {
+          "line": 220,
+          "text": "            for (int commandIndex = 0; commandIndex < frame.CommandCount; commandIndex++)"
+        },
+        {
+          "line": 221,
+          "text": "            {"
+        },
+        {
+          "line": 222,
+          "text": "                BattleRenderCommand command = frame.GetCommand(commandIndex);"
+        },
+        {
+          "line": 223,
+          "text": "                if (command.Type != BattleRenderCommandType.Entity ||"
+        },
+        {
+          "line": 224,
+          "text": "                    !command.ShowSelfFootMarker)"
+        },
+        {
+          "line": 225,
+          "text": "                {"
+        },
+        {
+          "line": 226,
+          "text": "                    continue;"
+        },
+        {
+          "line": 227,
+          "text": "                }"
+        },
+        {
+          "line": 228,
+          "text": "                if (writtenMarkers >= MaximumMarkersPerBatch)"
+        },
+        {
+          "line": 229,
+          "text": "                {"
+        },
+        {
+          "line": 230,
+          "text": "                    throw new InvalidOperationException("
+        }
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+      "firstLine": 96,
+      "lastLine": 110,
+      "lines": [
+        {
+          "line": 96,
+          "text": ""
+        },
+        {
+          "line": 97,
+          "text": "            // 1. 初始化 TimeWheel"
+        },
+        {
+          "line": 98,
+          "text": "            TimeWheel.TimeWheel.CreateSharedInstance();"
+        },
+        {
+          "line": 99,
+          "text": "            Debug.Log(\"[BattleTestBootstrap] TimeWheel created.\");"
+        },
+        {
+          "line": 100,
+          "text": ""
+        },
+        {
+          "line": 101,
+          "text": "            // 2. 初始化 GameConfig"
+        },
+        {
+          "line": 102,
+          "text": "            if (App.GameConfig.Instance == null)"
+        },
+        {
+          "line": 103,
+          "text": "            {"
+        },
+        {
+          "line": 104,
+          "text": "                var configs = Resources.FindObjectsOfTypeAll<App.GameConfig>();"
+        },
+        {
+          "line": 105,
+          "text": "                if (configs.Length > 0)"
+        },
+        {
+          "line": 106,
+          "text": "                {"
+        },
+        {
+          "line": 107,
+          "text": "                    App.GameConfig.Instance = configs[0];"
+        },
+        {
+          "line": 108,
+          "text": "                    Debug.Log($\"[BattleTestBootstrap] GameConfig set from Resources: {configs[0].name}\");"
+        },
+        {
+          "line": 109,
+          "text": "                }"
+        },
+        {
+          "line": 110,
+          "text": "                else"
+        }
+      ]
+    }
+  ],
+  "scenePreviewGuid": "8e90577df3435a946ad722ee4a8ef41b",
+  "scenePreviewGuidMatchCount": 0,
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "runtimeDllSha": "A49C69CE527D7E0268661F96F6A5A28B0C79E6204872BDA6EAF1A1930270AE8D",
+  "editorDllSha": "7BB73B4E1754C8A75F17B832815AE87054DCCCBEB7D1341BD00530A65064D051"
+}

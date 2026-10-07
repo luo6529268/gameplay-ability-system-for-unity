@@ -22,6 +22,8 @@ namespace NTSD.Test.Editor
         private const BindingFlags PrivateInstance = BindingFlags.Instance | BindingFlags.NonPublic;
         private static readonly int MainTex = Shader.PropertyToID("_MainTex");
         private static readonly int MainTexArray = Shader.PropertyToID("_MainTexArray");
+        private static readonly string InvalidWindowParameter = "targetCameras";
+        private static readonly string InvalidWindowMessage = "Invalid bounded camera window.";
 
         [Serializable]
         private sealed class Result
@@ -103,12 +105,17 @@ namespace NTSD.Test.Editor
 
         internal static bool IsNextCameraFrame(int previous, int current) => current > previous;
 
+        internal static bool PrepareCameraWindowValidation()
+        {
+            return !string.IsNullOrEmpty(InvalidWindowParameter) && !string.IsNullOrEmpty(InvalidWindowMessage);
+        }
+
         internal static bool IsWindowComplete(int targetCameras, int count, int startTick, int endTick,
             int requiredTicks, int capacity)
         {
             if (capacity <= 0 || targetCameras < 0 || targetCameras > capacity || count < 0 || count > capacity ||
                 endTick < startTick || requiredTicks < 0)
-                throw new ArgumentOutOfRangeException(nameof(targetCameras), "Invalid bounded camera window.");
+                throw new ArgumentOutOfRangeException(InvalidWindowParameter, InvalidWindowMessage);
             return targetCameras > 0 ? count >= targetCameras : endTick - startTick >= requiredTicks;
         }
 

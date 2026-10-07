@@ -1,0 +1,231 @@
+{
+  "schema": "NTSD_OPT_BATCH30_FINAL_VALIDATION_V1",
+  "observed": "2026-10-07T07:30:08.5075051+08:00",
+  "red": {
+    "job": "f01b3a9aea0641f089ba33a81f3a5c87",
+    "count": 24,
+    "status": "EXPECTED_NOT_IMPLEMENTED_FAILURES"
+  },
+  "green": {
+    "job": "27d3ccccccdf4762b9363b1f4633cf99",
+    "total": 33,
+    "passed": 33
+  },
+  "formal": {
+    "status": "MEASUREMENTS_COMPLETED_WITH_FAILURES",
+    "count": 4,
+    "retainedFailures": 4,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0
+  },
+  "editor": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791329325114,
+        "sequence": 9,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791329289337,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791328532524
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "scene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Menu",
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "buildIndex": 0,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 8
+      }
+    }
+  },
+  "audit": {
+    "observed": "2026-10-07T07:30:08.5075051+08:00",
+    "protectedCount": 232,
+    "protectedChanged": [],
+    "backupCount": 9,
+    "backupChanged": [],
+    "headSame": true,
+    "validatorExit": 0,
+    "validatorSummary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1326",
+      "  Governed code files in diff: 9"
+    ],
+    "historicalWarnings": 4277,
+    "trackedDiffCheckExit": 0,
+    "trackedDiffIssues": [],
+    "ownCodeDiffCheckExit": 1,
+    "ownCodeDiffIssues": [],
+    "menuSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+    "battleSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "suiteSourceSha": "C18203AC1960DDC6C19B3D1A5F1392CEEFBD5FCFB379DD572B0C6BDAD369E4A3",
+    "terminalLines": [
+      "FAIL",
+      "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007\\windows-01\\03-combat1000-formal-02\\report.json",
+      "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+    ],
+    "terminalSha": "B65B604094ABF5F57D8ECB549E3734C1C4B250ABD00248D240388905023C0614",
+    "sharedRequestAbsent": true
+  },
+  "performancePassed": false,
+  "zeroGcCertified": false,
+  "productionDefaultChanged": false,
+  "postCloseAudit": {
+    "observed": "2026-10-07T07:33:12.7372635+08:00",
+    "protectedCount": 232,
+    "protectedChanged": [],
+    "backupCount": 9,
+    "backupChanged": [],
+    "headSame": true,
+    "validatorExit": 0,
+    "validatorSummary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1326",
+      "  Governed code files in diff: 9"
+    ],
+    "historicalWarnings": 4277,
+    "actualWrites": [
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+        "beforeSha": "648D2119A251E0B973EEC6D8B42D1AF2A00A7AF7C1EE7DF28A8C9130DA47C834",
+        "afterSha": "C18203AC1960DDC6C19B3D1A5F1392CEEFBD5FCFB379DD572B0C6BDAD369E4A3",
+        "gitStatus": [
+          "?? Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+        ]
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "beforeSha": "F78102C24E116186C030DACF538B379F9E004BB52C5B8B331F830FE3B938EECA",
+        "afterSha": "41922C6C73A63C174516A681DE0154F9E948AC6B0CDAA497D89D7B1C92F5F495",
+        "gitStatus": [
+          " M docs/ai/CHANGE-LEDGER.md"
+        ]
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "beforeSha": "EF8EFB02A3F31B8D967B7E2963564BE0EE5DADC3E839E2F81E6BD36FFB4FF509",
+        "afterSha": "D5D40274D8FD29C03244C58B6FD152946C0FB06E44C3B6B9C544AF0D557559BE",
+        "gitStatus": [
+          " M docs/ai/STATE.md"
+        ]
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "beforeSha": "4C47A296492D15B10E5439B17770D6DA1B0FDE7DE151014E418743812320BDCD",
+        "afterSha": "A89F2D492392AD44050006E910B5FE6B1D5C9BC4C9EA8065D470163FFE4DA5A3",
+        "gitStatus": [
+          " M docs/ai/FILE-OPERATIONS/INDEX.md"
+        ]
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "beforeSha": "0468A3E40550EFF788C7FEFF382872E0CCD96FD2DCB366C2B836A7822B37D973",
+        "afterSha": "A3AA53AF13E8A0FBF87CF9924A70E4371FA6B7D5311EE9E0DF98EFF8618D74C8",
+        "gitStatus": [
+          "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "beforeSha": "96F7499070E490C7E3E6A968E873CAA665D8E4E13500EE166EB6B19436DEA7B5",
+        "afterSha": "A7315809DD20F9F9B8433E4EB70A8B144B4511EBC59B42206F97CBF6B0C098A6",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "beforeSha": "4ADA763644DBA5AC6BBBF55A9DCE064ABA6122F42E0A3A5ED452B8B67CFCCD23",
+        "afterSha": "B17AA4B813D892A520B765B697E9F71CF9A2C23B6236D6A05637ADD1E35DD9DA",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+        "beforeSha": "AFB3AAE4C01CEF0486B29ED0CF5023158574E28BF5CD528C2695F290D576500E",
+        "afterSha": "C42C360240D9D64EFE1840CD24A8ED4DCD38DDB1E8F732586256B0AC7B5AD695",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+        ]
+      },
+      {
+        "path": "Temp/NTSD_ProductionEntityStress.result",
+        "beforeSha": "1AE28A712C41DA5DA0FB24125680AFE08B6625FA057ADE4990B183C3EC51ECFB",
+        "afterSha": "B65B604094ABF5F57D8ECB549E3734C1C4B250ABD00248D240388905023C0614",
+        "gitStatus": []
+      }
+    ]
+  }
+}

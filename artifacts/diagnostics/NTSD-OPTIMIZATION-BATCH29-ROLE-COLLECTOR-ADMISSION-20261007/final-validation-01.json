@@ -1,0 +1,133 @@
+{
+  "observed": "2026-10-07T06:59:16.9657041+08:00",
+  "validatorExit": 0,
+  "validatorHead": [
+    "Change ledger validation PASSED.",
+    "  Records: 1325",
+    "  Governed code files in diff: 9"
+  ],
+  "historicalWarnings": 4277,
+  "diffExit": 0,
+  "diffNonCrLf": [],
+  "postCloseAudit": {
+    "observed": "2026-10-07T07:00:39.2733825+08:00",
+    "actualWriteAfter": [
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+        "before": "E8EDDF85837A3BB154EA2CA0DCA0537C46BA5B306840676B58E1F0ACC199CE5E",
+        "after": "648D2119A251E0B973EEC6D8B42D1AF2A00A7AF7C1EE7DF28A8C9130DA47C834",
+        "gitStatus": [
+          "?? Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+        ]
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "before": "CDAE3FD78994285FF7E08EBBAFAC881A4F5583350C11570A41297D28069F47C2",
+        "after": "F78102C24E116186C030DACF538B379F9E004BB52C5B8B331F830FE3B938EECA",
+        "gitStatus": [
+          " M docs/ai/CHANGE-LEDGER.md"
+        ]
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "before": "2AAD5BF0E9761109BFE15371B609CC4424C0B05F23DA71918B950B1878197A46",
+        "after": "EF8EFB02A3F31B8D967B7E2963564BE0EE5DADC3E839E2F81E6BD36FFB4FF509",
+        "gitStatus": [
+          " M docs/ai/STATE.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "before": "2129BFEAD9AC2EC9EC9D28CD775DE17EF0BFE8D1F69CFB913B747776FD061555",
+        "after": "96F7499070E490C7E3E6A968E873CAA665D8E4E13500EE166EB6B19436DEA7B5",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "before": "6E7F89F3D762F7A2D939DA378F37CE08CB0F41703E928829F88115287315F9CA",
+        "after": "4ADA763644DBA5AC6BBBF55A9DCE064ABA6122F42E0A3A5ED452B8B67CFCCD23",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+        "before": "2DFD34F02DB7509C74E17A673BFC6E015E5C40D4F1AEE025B8EC8813CA361D2D",
+        "after": "AFB3AAE4C01CEF0486B29ED0CF5023158574E28BF5CD528C2695F290D576500E",
+        "gitStatus": [
+          " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+        ]
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "before": "A455B64AD313F57167D27D8618676D65825B5AB9CB71B7864FE209A3AF50B5BE",
+        "after": "0468A3E40550EFF788C7FEFF382872E0CCD96FD2DCB366C2B836A7822B37D973",
+        "gitStatus": [
+          "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+        ]
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "before": "81D55F226ED24646352861562C73094B8240A4025593BED5EDB589253330600F",
+        "after": "4C47A296492D15B10E5439B17770D6DA1B0FDE7DE151014E418743812320BDCD",
+        "gitStatus": [
+          " M docs/ai/FILE-OPERATIONS/INDEX.md"
+        ]
+      },
+      {
+        "path": "Temp/NTSD_ProductionEntityStress.result",
+        "before": "EC7BF100BD6ECEB327F46063A1B3A3181DBC9DF9CFC252F5248509E1F8599CC2",
+        "after": "1AE28A712C41DA5DA0FB24125680AFE08B6625FA057ADE4990B183C3EC51ECFB",
+        "gitStatus": []
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007.md",
+        "before": "F1C8D80FA6CB077E53946101EB29027FD6AC9A8D63AD20A673348E431D1A921F",
+        "after": "F6EF53CE01925E3BDE87BB8B849DDA08600651B00644B03772ACA4B1B39DCEB6",
+        "gitStatus": [
+          "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007.md"
+        ]
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/RECORD.md",
+        "before": "E386555EF2CB6E2684DFCB7CB96AE6FE7F4FE1D52F74F4262DFF5F8927353C5F",
+        "after": "9493C9E9DD9CAFC061FB52449BA1745A21A90AC2065090041C111D151543288E",
+        "gitStatus": [
+          "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/RECORD.md"
+        ]
+      }
+    ],
+    "protectedCount": 195,
+    "protectedChanged": [],
+    "backupCount": 11,
+    "backupChanged": [],
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c"
+  },
+  "terminalAudit": {
+    "observed": "2026-10-07T06:54:52.4280674+08:00",
+    "protectedCount": 195,
+    "protectedChanged": [],
+    "backupCount": 11,
+    "backupChanged": [],
+    "headBefore": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "headAfter": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "sharedTerminalBefore": "EC7BF100BD6ECEB327F46063A1B3A3181DBC9DF9CFC252F5248509E1F8599CC2",
+    "sharedTerminalAfter": "1AE28A712C41DA5DA0FB24125680AFE08B6625FA057ADE4990B183C3EC51ECFB",
+    "sharedTerminalOwner": [
+      "PASS",
+      "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007\\windows-01\\01-combat1000-smoke\\report.json"
+    ],
+    "suiteStatus": "MEASUREMENTS_COMPLETED",
+    "completedRuns": 2,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "sceneRestored": true,
+    "battleUnchanged": true,
+    "menuSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+    "battleSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+  }
+}

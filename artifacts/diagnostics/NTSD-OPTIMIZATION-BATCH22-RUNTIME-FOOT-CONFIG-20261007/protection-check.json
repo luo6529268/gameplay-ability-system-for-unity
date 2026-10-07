@@ -1,0 +1,18 @@
+{
+  "ObservedAt": "2026-10-07T03:28:09.3779620+08:00",
+  "Head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "ProtectedCount": 30,
+  "ProtectedFailures": [],
+  "BackupCount": 11,
+  "BackupFailures": [],
+  "Assemblies": [
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "Hash": "1B80F9829E5365C98359D10D9719FF722CAFAE67FB4A5582BE2FA797F93B967A"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "Hash": "964C9EE6D7E3F0131421B42026D05C0B1FAB68C0362B9EA6AB831EDCECE5EB66"
+    }
+  ]
+}

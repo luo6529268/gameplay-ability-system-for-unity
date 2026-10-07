@@ -1,0 +1,16 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 180,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/windows-03/00-dispersed1000-smoke/report.json",
+    "terminalStatus": "StoppedWithResidue",
+    "sampledTicks": 180,
+    "warmupTicks": 120,
+    "minimumObservedActiveAi": 1000,
+    "minimumObservedBaseRoster": 1000,
+    "observedSampleWindows": 52,
+    "lastObservedSampleTick": 178,
+    "workloadValid": true,
+    "zeroGcPassed": true,
+    "teardownRestored": true,
+    "failure": ""
+}

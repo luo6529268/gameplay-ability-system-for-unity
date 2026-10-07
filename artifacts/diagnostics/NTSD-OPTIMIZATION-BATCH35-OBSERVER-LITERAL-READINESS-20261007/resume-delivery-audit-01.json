@@ -1,0 +1,17 @@
+{
+  "command": "$taskAfter=Get-Content -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007/after.json' -Raw|ConvertFrom-Json;$taskM=@(foreach($p in $taskAfter.after){if((Get-FileHash -LiteralPath $p.path -Algorithm SHA256).Hash -ne $p.sha256){$p.path}});$taskDiff=@(git diff --check -- 'docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md' 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007.md' 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md' 'docs/ai/CHANGE-LEDGER.md' 'docs/ai/STATE.md' 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md' 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md' 'docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md' 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md' 'docs/ai/FILE-OPERATIONS/INDEX.md' 2>&1|ForEach-Object{$_.ToString()});$taskCode=$LASTEXITCODE;[pscustomobject]@{afterCount=$taskAfter.after.Count;afterMismatches=$taskM;diffExit=$taskCode;diffOutput=$taskDiff;goal='active; H11 strict FAIL and H07 performance FAIL not achieved'}|ConvertTo-Json -Depth 4 -Compress",
+  "result": {
+    "afterCount": 10,
+    "afterMismatches": [],
+    "diffExit": 0,
+    "diffOutput": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "goal": "active; H11 strict FAIL and H07 performance FAIL not achieved"
+  }
+}

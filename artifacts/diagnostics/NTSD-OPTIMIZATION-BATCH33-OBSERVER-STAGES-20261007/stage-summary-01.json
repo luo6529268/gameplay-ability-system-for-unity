@@ -1,0 +1,261 @@
+{
+  "status": "FAIL",
+  "phase": "DONE",
+  "sampleCount": 1800,
+  "startTick": 8,
+  "endTick": 1256,
+  "unit": "TimeNanoseconds",
+  "rootBeforePassed": true,
+  "rootAfterPassed": true,
+  "childBeforePassed": true,
+  "childAfterPassed": true,
+  "invalidStages": 0,
+  "unattributedEvents": 0,
+  "cameraEvents": 2,
+  "observerEvents": 13,
+  "stageTotals": [
+    {
+      "stage": "snapshotGates",
+      "events": 11,
+      "nonzeroFrameCount": 1
+    },
+    {
+      "stage": "segmentBindings",
+      "events": 0,
+      "nonzeroFrameCount": 0
+    },
+    {
+      "stage": "commandsAndDraws",
+      "events": 0,
+      "nonzeroFrameCount": 0
+    },
+    {
+      "stage": "alphaAndTiming",
+      "events": 0,
+      "nonzeroFrameCount": 0
+    },
+    {
+      "stage": "sampleWrite",
+      "events": 0,
+      "nonzeroFrameCount": 0
+    },
+    {
+      "stage": "completion",
+      "events": 2,
+      "nonzeroFrameCount": 1
+    }
+  ],
+  "nonzeroFrames": [
+    {
+      "ordinal": 0,
+      "unityFrame": 3281,
+      "tick": 9,
+      "slot": 1,
+      "cameraEvents": 0,
+      "rootObserverEvents": 13,
+      "stages": {
+        "snapshotGates": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 11,
+          "allocationEvents": 11,
+          "rawValueTotal": 800
+        },
+        "segmentBindings": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "commandsAndDraws": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "alphaAndTiming": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "sampleWrite": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "completion": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 2,
+          "allocationEvents": 2,
+          "rawValueTotal": 400
+        }
+      },
+      "unattributed": 0
+    },
+    {
+      "ordinal": 1,
+      "unityFrame": 3282,
+      "tick": 9,
+      "slot": 0,
+      "cameraEvents": 1,
+      "rootObserverEvents": 0,
+      "stages": {
+        "snapshotGates": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "segmentBindings": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "commandsAndDraws": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "alphaAndTiming": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "sampleWrite": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "completion": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "unattributed": 0
+    },
+    {
+      "ordinal": 5,
+      "unityFrame": 3286,
+      "tick": 12,
+      "slot": 0,
+      "cameraEvents": 1,
+      "rootObserverEvents": 0,
+      "stages": {
+        "snapshotGates": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "segmentBindings": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "commandsAndDraws": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "alphaAndTiming": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "sampleWrite": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "completion": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "unattributed": 0
+    }
+  ],
+  "orderedShutdown": true,
+  "sceneClean": true,
+  "sceneShaBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sceneShaAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "remaining": [
+    0,
+    0,
+    0
+  ],
+  "minimumFoot": 2,
+  "minimumHealth": 2,
+  "slots": 2,
+  "drawRecorded": 11560,
+  "drawExecuted": 11560,
+  "maxGrowth": 0,
+  "maxLease": 0
+}

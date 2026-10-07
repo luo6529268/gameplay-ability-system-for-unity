@@ -1,0 +1,27 @@
+{
+  "observed": "2026-10-07T09:04:50.6902922+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headSame": true,
+  "protectedCount": 247,
+  "protectedMismatches": [],
+  "backupCount": 8,
+  "backupMismatches": [],
+  "validationExit": 0,
+  "validationSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1329",
+    "  Governed code files in diff: 11"
+  ],
+  "warningCount": 4248,
+  "diffExit": 0,
+  "diffIssues": [],
+  "newOutputAbsent": true,
+  "sourceHashes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "95692A5EB0493A59251D3B795DE8C90ABF306D0B1C9B851BF5DD95691291440D"
+    }
+  ],
+  "menuSceneSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+  "battleSceneSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+}

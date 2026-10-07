@@ -1,0 +1,41 @@
+{
+    "item": "EVIDENCE_CONTROL",
+    "workload": "KnownLiveManagedAllocation",
+    "backend": "",
+    "scope": "Positive control for current Editor GC.GetAllocatedBytesForCurrentThread only",
+    "replicate": 0,
+    "participants": 0,
+    "events": 0,
+    "uniqueCues": 0,
+    "warmup": 0,
+    "samples": 1,
+    "elapsedMs": [
+        0.1936
+    ],
+    "allocatedBytes": [
+        0
+    ],
+    "candidateSequenceParity": false,
+    "pairCount": 0,
+    "fallbackParticipants": 0,
+    "aborted": false,
+    "directTicks": 0,
+    "nestedTicks": 0,
+    "sweepTicks": 0,
+    "treeTicks": 0,
+    "directComparisons": 0,
+    "sweepChecks": 0,
+    "ordinalComparisons": 0,
+    "playCountDelta": 0,
+    "rejectedCueDelta": 0,
+    "voiceDropDelta": 0,
+    "voiceCapacity": 0,
+    "imageCount": 0,
+    "existingImages": 0,
+    "missingImages": 0,
+    "imageBytesLowerBoundPerAssert": 0,
+    "visualFingerprint": "",
+    "admission": "COUNTER_NOT_VALIDATED_FOR_ZERO_GC_CERTIFICATION",
+    "knownLiveAllocationBytes": 1048576,
+    "allocationCounterResponded": false
+}

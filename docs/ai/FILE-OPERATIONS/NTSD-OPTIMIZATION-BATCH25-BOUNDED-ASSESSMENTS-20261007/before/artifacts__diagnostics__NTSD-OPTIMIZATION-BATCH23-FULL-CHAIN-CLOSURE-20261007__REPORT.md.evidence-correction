@@ -1,0 +1,25 @@
+# 第23批：完整选定 CPU 表现链与生产重进
+状态：SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；本Task VERIFIED。H11/M03首阶段选定交付通过，不等于父项或六项Goal完成。
+## 固定测试结果
+原2022.3.62f3 Editor新DLL B0DBCA7F91C8690F808868CB619CDEA826D272DFDC8E67D88510C9CDDB53FA6C，errorCS过滤0。
+作业77b89de1c7d1446e81b443ef722b3fd2实际24/24 Passed、0fail/skipped，37.1473s；9296仅discovery，不是执行数。原件[focused](focused-results.json)。
+| command / 模式 | 活动Foot/Health各 | warm/sample | CPU桥当前线程allocated | growth / lease | CPU DrawMesh合计 | CPU mean/p95 ms |
+|---|---:|---|---:|---|---:|---|
+| 1000 / StrictOrderedDraw | 1000 | 64/1800 | 0B | 0/0 | 1803600 | 6.2653/7.6768 |
+| 4097 / OrderedChunks | 17 | 64/1800 | 0B | 0/0 | 9000 | 12.2735/15.1520 |
+两slot；body分别1000segment/1chunk、3segment/2chunk，aux另2draw。原slot overflow/held lease负例及aux/submesh回归在同24中通过。完整选定Execute包含copy capture→motion→body与活动aux构建/上传→publish/acquire→录制→Graphics.ExecuteCommandBuffer→CPUlease释放/retire；标量统计也在allocation窗中。加载、reflection、fixture Sprite、assert/export在窗外。两PASS原件保留独立run目录，两个先前FAIL原件不可删除。
+Foot临时fixture仅从借用的真实源Texture2D建立，不称生产GameConfig/1000AI/完整World。预排序受控publication，不验证Q06内部。CPU API耗时不是frame/GPU/FPS，CPUlease0或Execute返回不是GPU完成证明。0B不覆盖otherthread/global/native/GPU域。
+## 原Scene退出重进
+Batch22原Battle实际退出且三残留0后，本批再进入未改saved Battle一次；新独立1800camera严格窗，requireActiveAuxiliaryCoverage=true但不重复catalog replay。
+结果：PASS/DONE；原件[window](reentry-01/production-window-01.json)及[汇总](window-summary.json)。1800实际camera/tick8→1313，每帧Foot2/Health2、两slot、DrawMesh11504录制=执行、badFrames0、growth0、CPUlease0，catalog每帧绑定。1800Build=1297publication+503alpha，失败/拒绝0，仍一camera一Build。camera/observer各0B；collection control/full PlayerLoop硬门均false，全局三代collection各3，不宣称全局0GC。十一阶段objects/slots/borrowers0，Scene clean/SHA253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010前后相同。原Menu clean8roots/idle/nonPlay恢复、errorCS0。默认Editor进入/退出模式，不额外认证其它reload配置；不执行重复catalog replay。
+## 有效证据复用
+第13批stable metadata A/B生产backend F5519E8F5AD9634244C5D1DC1E67A6B3415054FAF8F9EAFAC9C694E096E52292、fixture C435FAFAFECDE6A994AAE65368C7A0FC48FBB418165B522F34EC782D496E0C63、SubMesh fixture与两个meta共5项当前hash全部相同，因此保留该版本受控A/B：1000段mean降46.33–47.48%，非整场/GPU收益。详[原报告](../NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/REPORT.md)，不重复测量。
+第15批warm host消费证据的SimulationStageRenderModule当前hash97C034A7D79E57F19E7AF83CF49DFECEF21FD747BB7D510C2D9FF65ABB89D6FE与原采样相同；中央后续Foot fallback仅启动接线，当前window再观察Build/camera。旧2→1与body bytes1408→704/camera仅该固定布局成本，不称所有动态负载50%。
+第01–05容量、empty/highslot/overflow/native预热，第16动态publication、第17同样本GPU像素、第18 interpolation/CPUcamera timing、第19 body完整CPU桥、第22实际GameConfig配置/活动Foot/Health/catalog重放各按原声明范围复用；不借本批重开全项目/正式Q06排序。
+## 失败与有界复验
+首次698c6d3ebcbd4bd696f7cbabb28eaea6 completed24/status failed，两新case过早seal导致既有submission准备拒绝；result null，不猜补通过数。修复仅删除fixture重复prepare/seal，原Slot负责辅助owner；生产代码无改。首次两FAIL以及[first failure](first-fixture-failure.json)保留；一个累计修复复验轮1/3，没有新增同构诊断或优化候选。
+## 命令、边界与留痕
+refresh_unity force/all/compile=request；get_editor_state、read_console errorCS、run_tests固定四个具名入口、get_test_job；manage_scene get_active/load只原clean场景；execute_menu_item Batch23 Production Reentry 1800 Cameras。最终JSON才是实际验收，不以menu attempted成功代替。
+准确Task/Change/Operation均先于脚本编辑，10当前字节备份；原Editor而非第二实例，CLI无Pipeline不安装。当前只两Editor文件，不改production、Scene/Prefab/resources/importer/settings/Input/Gen/Plugins/Server；不以Q06活跃内部作为验收证据，不解除EXT1/Mono/ATLAS门。
+最终validator/diff/保护见[final validation](final-validation.json)；初检PASSED1319Record/4当前diff脚本覆盖/0error，4283旧非本diff warnings保留不清理。10before与57保护逐文件复核；无删除/移动/弃改/提交/push。首阶段新子批2/8、限定交付2/6，34父项关闭0；平台Goal仍active，转H06/H07及M13/M14限定交付，不增加本项可选验证。
+

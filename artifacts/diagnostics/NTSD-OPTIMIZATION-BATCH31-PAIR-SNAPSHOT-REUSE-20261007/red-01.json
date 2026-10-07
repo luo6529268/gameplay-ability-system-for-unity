@@ -1,0 +1,87 @@
+{
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "a5bc6e737a074db5b91582e5b978b649",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "a5bc6e737a074db5b91582e5b978b649",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791331006122,
+        "finished_unix_ms": 1791331015238,
+        "last_update_unix_ms": 1791331015238,
+        "progress": {
+          "completed": 10,
+          "total": 9371,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791331014718,
+          "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_NoOverlap_DoesNotCapture",
+          "last_finished_unix_ms": 1791331014720,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_ChangesOnlyOutput(0)",
+              "message": "System.NotImplementedException : Test-first pair snapshot request contract."
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_ChangesOnlyOutput(1)",
+              "message": "System.NotImplementedException : Test-first pair snapshot request contract."
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_RejectsOutsideFixedMatrix",
+              "message": "  Expected: <System.ArgumentOutOfRangeException>\r\n  But was:  <System.NotImplementedException: Test-first pair snapshot request contract.\r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteEditor.BuildRolePairSnapshotReuseRequest (System.Int32 index) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:223 \r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests+<>c.<PairSnapshotReuseRequest_RejectsOutsideFixedMatrix>b__1_0 () [0x00000] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:517 \r\n  at NUnit.Framework.Assert.Throws (NUnit.Framework.Constraints.IResolveConstraint expression, NUnit.Framework.TestDelegate code, System.String message, System.Object[] args) [0x00004] in <10b6135e63434fdba4fc6c109928ab3b>:0 >\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_1000Participants_LocalCostAndCaptureCounts",
+              "message": "  Expected: 400\r\n  But was:  -1\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_DifferentTargets_DoNotSharePayload",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_LaterCollection_RecapturesChangedTeamsAndFacing",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(0)",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(4)",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(7)",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_NoOverlap_DoesNotCapture",
+              "message": "  The per-body capture control must exist for scoped A/B.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  }
+}

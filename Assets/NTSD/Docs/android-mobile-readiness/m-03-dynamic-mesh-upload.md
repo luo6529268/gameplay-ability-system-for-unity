@@ -1,3 +1,11 @@
+> 2026-10-07 第25批必要证据更正：当前Editor已知存活1MiB数组仍由GC.GetAllocatedBytesForCurrentThread读0，positive control未响应。第23批未有校准，原0B读数/断言事实保留，但不再作为完整热路径0GC验收；H11更正为EVIDENCE_PENDING，容量/显示/成本/lease/关闭保持。M03显示/成本/GameConfig Foot限定通过不撤回，不称0GC。原父项均OPEN，不重跑历史或改production。详第25批REPORT。
+
+> 2026-10-07 第23批限定收口：NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023 / VERIFIED（本Task）。原Editor24/24；两活动aux完整CPU桥各1800sample当前线程0B/growth0/CPUlease0；原Battle重进1800camera每帧Foot2/Health2，两slot、DrawMesh11504录制=执行、1800Build，11阶段三残留0/Scene同/Menu恢复。第13批A-B五指纹同、第15批消费域及动态/像素等限定证据复用；不称global/native/GPU/1000AI/Android。新子批2/8完成，六项首阶段H11/M03限定交付2/6，34父项关闭0；下一H06/H07与M13/M14，不加本条目可选验收，专项门保持。
+
+> 2026-10-07 第22批限定通过：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / SCOPED_RUNTIME_FOOT_CONFIG_PASS；NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / VERIFIED（本批）。GameConfig fallback接线，显式authoring/禁用保持；原Editor32/32，Battle1800实际camera每帧Foot2/Health2、两slot、CPU DrawMesh11815录制=执行、growth0；三档100/500/1000真实catalog重复命令重放均局部0B/growth0，非1000AI。11阶段关闭三残留0/Scene同/Menu恢复，30保护/11备份保持。有限首阶段1/8新子批完成，34项父项关闭仍0；完整选定链与后续5项继续，EXT-1/Mono/ATLAS门不解冻。下方旧快照按时间阅读。
+
+> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
+
 > 2026-10-07 第21批事前：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / IN_PROGRESS；NTSD-OPT-M03-FOOT-AUTHORING-021 / PLANNED。仅原savedBattle 64实际camera只读Foot配置/Self前置诊断，不改production/Scene/Q06 body，不降第20批严格门；8准确备份/733保护完成。34项高12中14低8、父M03/H11 OPEN，专项门保持，尚未实施或测试。 [Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
 
 > 2026-10-07 第20批PARTIAL / FOOT_COVERAGE_UNMET：NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007；NTSD-OPT-M03-PRODUCTION-CATALOG-020 / RUNTIME_PENDING。7新＋54相关=61/61 Passed；原Battle1800 distinct camera/tick8→1563、1800Build/0growth、9700实际CPU DrawMesh、catalog/Health活动、camera/observer各0B、两slot/CPUlease0；Foot每帧0导致严格window FAIL，原件保留，三档replay NOT_RUN。Editor两fullGC硬门false/global三代collection各3，非全链0GC/1000AI/Android。关闭三残留0、Scene同/原Menu恢复，8备份/708保护；34项高12中14低8关闭0，父OPEN/专项门保持。下一先只读定位Foot接线，不改Scene/降门槛；下方事前历史保留。 [报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/REPORT.md) / [留痕](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-PRODUCTION-CATALOG-020.md)。
@@ -30,6 +38,9 @@
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
+
+历史前置（第21批）：原savedBattle无Preview、authoring false/Foot0，GameConfig六帧和两条Self有效；该批仅诊断，第20批严格FAIL/replay NOT_RUN原件保持。
+当前修正（第22批）：用户确认GameConfig方向并启动有界Goal后，生产无显式authoring时读取既有配置；显式覆盖/禁用及样式保持，无Scene组件。32/32及严格1800camera每帧Foot2/Health2通过，100/500/1000生产catalog重复body/shadow和辅助重放局部0B/growth0。下一只按有限合同收口选定链/A-B/关闭重进，不再Foot诊断；真实1000AI/GPU/全域0GC/设备仍开放，详REPORT/主进度。
 
 CentralOnly主体由动态Mesh提交；当前已有显示插值，publication不变但alpha变化会重新物化，并上传活动顶点，不是“每publication最多一次”。命令数取决于actor/weapon/effect/shadow/foot/health，不把旧约3000条推演当当前固定数。UV采样边界已进入顶点payload（现有stride44），旧上传估算需重算；桌面耗时不能外推手机。
 

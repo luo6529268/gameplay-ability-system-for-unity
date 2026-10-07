@@ -1,0 +1,69 @@
+{
+  "observedAt": "2026-10-07T05:39:43.0110135+08:00",
+  "suiteStatus": "PARTIAL",
+  "suitePhase": "DONE",
+  "completedRuns": 3,
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "originalSceneRestored": true,
+  "battleSceneUnchanged": true,
+  "formalWindow": {
+    "harnessValidity": false,
+    "boundaryCollectionViolation": true,
+    "boundaryCollections": [
+      1,
+      1,
+      1
+    ],
+    "teardownRestored": true,
+    "status": "StoppedWithResidue",
+    "warmup": 120,
+    "candidateSharePercent": 92.75054619157791,
+    "samples": 1800,
+    "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+    "candidateCollect": {
+      "available": true,
+      "unit": "ms",
+      "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+      "unavailableReason": "",
+      "sampleCount": 1800,
+      "average": 426.54986838888925,
+      "maximum": 1229.3251,
+      "p95": 644.21317,
+      "p99": 789.541377
+    },
+    "logic": {
+      "available": true,
+      "unit": "ms",
+      "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+      "unavailableReason": "",
+      "sampleCount": 1800,
+      "average": 459.88933316666714,
+      "maximum": 1297.5154,
+      "p95": 696.6068749999998,
+      "p99": 853.6990589999999
+    }
+  },
+  "completedRunActions": [
+    {
+      "action": "dispersed1000",
+      "sampled": 180,
+      "workloadValid": true,
+      "status": "StoppedCleanly"
+    },
+    {
+      "action": "combat1000",
+      "sampled": 180,
+      "workloadValid": true,
+      "status": "StoppedCleanly"
+    },
+    {
+      "action": "dispersed1000",
+      "sampled": 1800,
+      "workloadValid": false,
+      "status": "StoppedWithResidue"
+    }
+  ]
+}

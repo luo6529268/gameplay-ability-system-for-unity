@@ -1,0 +1,169 @@
+{
+  "OperationId": "NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007",
+  "Status": "VERIFIED_SCOPED_FILE_OPERATION",
+  "Validation": {
+    "ObservedAt": "2026-10-07T03:32:55.0441636+08:00",
+    "Head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "DiffCheckExit": 0,
+    "DiffCheckOutput": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "LedgerExit": 0,
+    "LedgerHeader": [
+      "Change ledger validation PASSED.",
+      "  Records: 1318",
+      "  Governed code files in diff: 3"
+    ],
+    "WarningCount": 4284,
+    "ProtectedCount": 30,
+    "ProtectedFailures": [],
+    "BackupCount": 11,
+    "BackupFailures": [],
+    "Targets": [
+      {
+        "Path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+        "SHA256": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+        "Bytes": 110904
+      },
+      {
+        "Path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+        "SHA256": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B",
+        "Bytes": 29046
+      },
+      {
+        "Path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+        "SHA256": "66B25F96B55BADEFFF7150A6DB9F612A28D792261EE9DD173FEECDB1FF5770E1",
+        "Bytes": 67199
+      },
+      {
+        "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "SHA256": "5C0E1B35EC6709B727407831FA9B1D37FFE4FF9468FDDFBD1622189F2A4B23AC",
+        "Bytes": 17058
+      },
+      {
+        "Path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "SHA256": "AA16C4BCE417A2A5365BDDC1324EA330C868D1054D1DDA99C4B4654BEB615A1F",
+        "Bytes": 45835
+      },
+      {
+        "Path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+        "SHA256": "609CA3322252086759C6751DFF7BE7305DDB88F17BD0D0895C1704F86DC2B8ED",
+        "Bytes": 39154
+      },
+      {
+        "Path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+        "SHA256": "FE076ECF614F0EE1DC644268AA4BEB68F288EDD910235D50E202887762BFDF77",
+        "Bytes": 30899
+      },
+      {
+        "Path": "docs/ai/CHANGE-LEDGER.md",
+        "SHA256": "C45A20D15160746A7401071D61867CF8B0E6FF231DF0EC1B5EA19A13C1771BD5",
+        "Bytes": 652575
+      },
+      {
+        "Path": "docs/ai/STATE.md",
+        "SHA256": "5193FDC37B105100F84131A761C517E34B476B97B39533958B1A7A9E16324C47",
+        "Bytes": 1552942
+      },
+      {
+        "Path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "SHA256": "F8CEB46BA35D59754DEEFBC7F32EE516E9B6FFDF2275B51947D78D32A3F391D6",
+        "Bytes": 1484201
+      },
+      {
+        "Path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "SHA256": "A5E835105D86B0601346F4917EA4B5E7DAAE4EFFD3147ED3714323D1DACDC15A",
+        "Bytes": 41460
+      }
+    ],
+    "Artifacts": [
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\compile-preflight.json",
+        "SHA256": "41649334FABECDF854559EE284A12D03436D3A2BDBCE967D9F8633328AABA503",
+        "Bytes": 2397
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\green-results.json",
+        "SHA256": "DB8911673F98A9FEB2678B35C3DFC0D75A164FD2B2F3B98C66B4767240576BFA",
+        "Bytes": 14848
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\observation-summary.json",
+        "SHA256": "C36222DEA342A64FBD48451B315D1561ACE59275F700D2ECE21CDB3C87CFE55E",
+        "Bytes": 3940
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\protection-check.json",
+        "SHA256": "97C04C963D0C58706A911544FA8F453210A8F14CBA6AF253857BE03ABB6F70D6",
+        "Bytes": 667
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\red-results.json",
+        "SHA256": "9F550D019F8E2579E896B5A752E44AFAC86C3DB1705204723F41D068990F6036",
+        "Bytes": 2417
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\REPORT.md",
+        "SHA256": "A57778229F1A31CFA36FCC2A11446FAF30C2794D53F376B53A264E258DC7CD54",
+        "Bytes": 4244
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\scene-lifecycle.json",
+        "SHA256": "2DE7F8A4BD11C70EAFA527D14A884D2A7BFC348F43298590FCBEC7E64859C543",
+        "Bytes": 3652
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\test-requests.json",
+        "SHA256": "CBC3C72E94ABDEFF29C62F627886AFF5BF29F28803BA92B5577504D2A7D3E8E3",
+        "Bytes": 707
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\run-01\\catalog-replay.json",
+        "SHA256": "2620E3C37595E62F2384B6A181B5146D0B68D97CC9998B7EDAF7AA5F52174E67",
+        "Bytes": 269326
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\run-01\\materialization-window-01.json",
+        "SHA256": "A127ED050D27EF02874E3A4AAB6C1C61C2759AD227515FF9895D7C67536C086A",
+        "Bytes": 4407
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007\\run-01\\production-window-01.json",
+        "SHA256": "9AEA10D30FE2CA7B90A182EC6679A693B7AC83C3E857821F58DDD15689688D8D",
+        "Bytes": 3226852
+      }
+    ]
+  },
+  "NewGovernance": [
+    {
+      "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007.md",
+      "SHA256": "029DB8182453D8F93A5CA6C8A8E859E476E4972F39F9C1ED8FF17F540B5F55AC",
+      "Bytes": 4652
+    },
+    {
+      "Path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022.md",
+      "SHA256": "7AD8A7CD0F5249D3C0F06E1998A2B9FEC86E7526A4B1D59DF24FE166C90AE17D",
+      "Bytes": 3607
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/RECORD.md",
+      "SHA256": "D171F22ECAE23D6287B85E0B331286133A4D83137F5D1B29DDBA8186D40084E6",
+      "Bytes": 1279
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/before.json",
+      "SHA256": "4F2117187849BB0D324E18134FDB00BCEC7CB7BFF9C6A3B80B51EB1DC30D82CC",
+      "Bytes": 18732
+    }
+  ],
+  "Limits": "Hashes exclude this self-referential after.json and final-validation.json generated from the frozen validation snapshot; all original backups and protected paths verified. No deletion/move/Git discard/commit/push."
+}

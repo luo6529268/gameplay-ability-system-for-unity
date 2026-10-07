@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1a5857c5436e41e4abc1cdcdf7d944f2",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791323964239,
+      "finished_unix_ms": 1791323973117,
+      "last_update_unix_ms": 1791323973117,
+      "progress": {
+        "completed": 4,
+        "total": 9334,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791323972408,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleScopedGcAllocationRecorderEditorTests.MissingCalibrationOrInactiveScope_CannotCertifyZeroEvents",
+        "last_finished_unix_ms": 1791323972409,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.8941249,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "ActiveScope_ExceptionCleanupAndDispose_AreIdempotent",
+            "fullName": "NTSD.Test.Editor.BattleScopedGcAllocationRecorderEditorTests.ActiveScope_ExceptionCleanupAndDispose_AreIdempotent",
+            "state": "Passed",
+            "durationSeconds": 0.2629242,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedCapacitySaturation_IsInvalidAndCannotCertifyZeroEvents",
+            "fullName": "NTSD.Test.Editor.BattleScopedGcAllocationRecorderEditorTests.FixedCapacitySaturation_IsInvalidAndCannotCertifyZeroEvents",
+            "state": "Passed",
+            "durationSeconds": 0.0052358,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "KnownLiveAllocationAndPreparedEmptyScope_CalibrateBeforeAndAfter",
+            "fullName": "NTSD.Test.Editor.BattleScopedGcAllocationRecorderEditorTests.KnownLiveAllocationAndPreparedEmptyScope_CalibrateBeforeAndAfter",
+            "state": "Passed",
+            "durationSeconds": 0.0032715,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MissingCalibrationOrInactiveScope_CannotCertifyZeroEvents",
+            "fullName": "NTSD.Test.Editor.BattleScopedGcAllocationRecorderEditorTests.MissingCalibrationOrInactiveScope_CannotCertifyZeroEvents",
+            "state": "Passed",
+            "durationSeconds": 0.0008785,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

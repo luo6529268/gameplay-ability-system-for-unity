@@ -1,0 +1,158 @@
+{
+  "status": "SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS",
+  "windowStatus": "PASS",
+  "phase": "DONE",
+  "footCoverage": "NO_LOADED_AUTHORING",
+  "sampleCount": 64,
+  "distinctUnityFrames": 64,
+  "unexpectedFrames": 0,
+  "startTick": 8,
+  "endTick": 63,
+  "selfCommands": [
+    2
+  ],
+  "activeMarkers": [
+    0
+  ],
+  "activeHealth": [
+    2
+  ],
+  "entityCounts": [
+    2
+  ],
+  "physicalSegments": [
+    4
+  ],
+  "slots": [
+    0,
+    1
+  ],
+  "cpuDrawMeshCount": 320,
+  "footAuthoringBefore": {
+    "pipelineType": "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset",
+    "loadedPreviewCount": 0,
+    "eligiblePreviewCount": 0,
+    "activeEligiblePreviewCount": 0,
+    "authoringAvailable": false,
+    "authoredEnabled": false,
+    "authoredSpritePath": "",
+    "registeredMaterialAvailable": true,
+    "runtimeEnabled": false,
+    "runtimeSpriteAvailable": false,
+    "runtimeSpritePath": "",
+    "runtimeAnimationFrameCount": 0,
+    "runtimeFrameDurationSeconds": 0.07999999821186066,
+    "gameConfigPath": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "gameConfigSpriteAvailable": true,
+    "gameConfigSpritePath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_01.png",
+    "gameConfigValidFrameCount": 6,
+    "gameConfigAnimationFramePaths": [
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_01.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_02.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_03.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_04.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_05.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_06.png"
+    ],
+    "gameConfigFrameDurationSeconds": 0.07999999821186066
+  },
+  "footAuthoringAfter": {
+    "pipelineType": "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset",
+    "loadedPreviewCount": 0,
+    "eligiblePreviewCount": 0,
+    "activeEligiblePreviewCount": 0,
+    "authoringAvailable": false,
+    "authoredEnabled": false,
+    "authoredSpritePath": "",
+    "registeredMaterialAvailable": true,
+    "runtimeEnabled": false,
+    "runtimeSpriteAvailable": false,
+    "runtimeSpritePath": "",
+    "runtimeAnimationFrameCount": 0,
+    "runtimeFrameDurationSeconds": 0.07999999821186066,
+    "gameConfigPath": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "gameConfigSpriteAvailable": true,
+    "gameConfigSpritePath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_01.png",
+    "gameConfigValidFrameCount": 6,
+    "gameConfigAnimationFramePaths": [
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_01.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_02.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_03.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_04.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_05.png",
+      "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_06.png"
+    ],
+    "gameConfigFrameDurationSeconds": 0.07999999821186066
+  },
+  "builds": {
+    "alphaChanged": {
+      "admittedBuildCount": 11,
+      "buildInvocationCount": 11,
+      "completedBuildCount": 11,
+      "failedBuildCount": 0,
+      "rejectedBeforeBuildCount": 0,
+      "uploadedVertexBytes": 7744,
+      "uploadedVertexCount": 176,
+      "vertexUploadCallCount": 11
+    },
+    "publicationChanged": {
+      "admittedBuildCount": 53,
+      "buildInvocationCount": 53,
+      "completedBuildCount": 53,
+      "failedBuildCount": 0,
+      "rejectedBeforeBuildCount": 0,
+      "uploadedVertexBytes": 37312,
+      "uploadedVertexCount": 848,
+      "vertexUploadCallCount": 53
+    },
+    "repeated": {
+      "admittedBuildCount": 0,
+      "buildInvocationCount": 0,
+      "completedBuildCount": 0,
+      "failedBuildCount": 0,
+      "rejectedBeforeBuildCount": 0,
+      "uploadedVertexBytes": 0,
+      "uploadedVertexCount": 0,
+      "vertexUploadCallCount": 0
+    },
+    "total": {
+      "admittedBuildCount": 64,
+      "buildInvocationCount": 64,
+      "completedBuildCount": 64,
+      "failedBuildCount": 0,
+      "rejectedBeforeBuildCount": 0,
+      "uploadedVertexBytes": 45056,
+      "uploadedVertexCount": 1024,
+      "vertexUploadCallCount": 64
+    }
+  },
+  "cameraEnvelopeBytes": 0,
+  "observerBytes": 0,
+  "collectionControlSupported": false,
+  "playerLoopHardGateSupported": false,
+  "memoryBefore": {
+    "tickBytes": 0,
+    "driverUpdateBytes": 0,
+    "latePresentationBytes": 0,
+    "playerLoopBytes": 0,
+    "gen0Collections": 0,
+    "gen1Collections": 0,
+    "gen2Collections": 0
+  },
+  "memoryAfter": {
+    "tickBytes": 0,
+    "driverUpdateBytes": 0,
+    "latePresentationBytes": 0,
+    "playerLoopBytes": 0,
+    "gen0Collections": 0,
+    "gen1Collections": 0,
+    "gen2Collections": 0
+  },
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "sceneClean": true,
+  "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+}

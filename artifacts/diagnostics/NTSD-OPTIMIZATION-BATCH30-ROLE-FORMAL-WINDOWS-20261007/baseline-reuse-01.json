@@ -1,0 +1,72 @@
+{
+  "observed": "2026-10-07T07:24:22.0134909+08:00",
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "batch29": "4424DCF8655AA502CD637B80846E588888B179973195A783CE124D1FF8A4A16E",
+      "current": "4424DCF8655AA502CD637B80846E588888B179973195A783CE124D1FF8A4A16E",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+      "batch29": "3B6BF9C565D22231B202A312708AF25F0D95BF8A63BD4F8BC11909ABC5C606B6",
+      "current": "3B6BF9C565D22231B202A312708AF25F0D95BF8A63BD4F8BC11909ABC5C606B6",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "batch29": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F",
+      "current": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "batch29": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "current": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "batch29": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "current": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+      "batch29": "4ACE07654E247A64FDA417402C1086ED5A61DCE798D7E7A3D01B7C15DE2D6B32",
+      "current": "4ACE07654E247A64FDA417402C1086ED5A61DCE798D7E7A3D01B7C15DE2D6B32",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "batch29": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA",
+      "current": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "batch29": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "current": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "batch29": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "current": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeAllocationGate.cs",
+      "batch29": "4E8BC3417F2DF884B81947520830F247846774F98D96EE17D9DCFEF8FF6235F3",
+      "current": "4E8BC3417F2DF884B81947520830F247846774F98D96EE17D9DCFEF8FF6235F3",
+      "unchanged": true
+    }
+  ],
+  "suiteSourceSha": "C18203AC1960DDC6C19B3D1A5F1392CEEFBD5FCFB379DD572B0C6BDAD369E4A3",
+  "formalExeSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "baselineReport": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/02-dispersed1000-formal-01/report.json",
+  "baselineStrictVerdict": "GC FAIL/harnessValidity=false retained; diagnostic comparison, not admitted benchmark",
+  "productionDefaultChanged": false,
+  "nativeParity": false,
+  "scope": "Ten declared production-source identities only, not a whole-repository or native trace certificate"
+}

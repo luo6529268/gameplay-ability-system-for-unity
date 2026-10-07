@@ -1,0 +1,1428 @@
+{
+  "dispatch": {
+    "chunk_id": "65ec7b",
+    "wall_time_seconds": 1.0869492,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"e087e52bbeda492ca218f90e747aad91\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":true}}}\r\n"
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "e087e52bbeda492ca218f90e747aad91",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791339586884,
+        "finished_unix_ms": 1791339609008,
+        "last_update_unix_ms": 1791339609008,
+        "progress": {
+          "completed": 153,
+          "total": 9422,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791339608225,
+          "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_NoOverlap_DoesNotCapture",
+          "last_finished_unix_ms": 1791339608227,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 153,
+            "passed": 153,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 15.2827821,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "state": "Passed",
+              "durationSeconds": 0.4852424,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0002107,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuardRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.0019907,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0020187,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_OnlyChangesOutputFromBruteSmoke(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0001726,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRosterRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrRosterRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.1704587,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0006287,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_OnlyChangesOutputFromRosterSmoke(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0001616,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCacheRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteExactCacheRequest_RejectsOutsideFixedTwoSmokeMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.0004092,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+              "state": "Passed",
+              "durationSeconds": 0.0048556,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+              "state": "Passed",
+              "durationSeconds": 0.0002107,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+              "state": "Passed",
+              "durationSeconds": 0.0001452,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+              "state": "Passed",
+              "durationSeconds": 0.0001382,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+              "state": "Passed",
+              "durationSeconds": 0.0001354,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+              "state": "Passed",
+              "durationSeconds": 0.000142,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(-1,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(-1,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0016465,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(0,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0001319,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(1,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(1,True)",
+              "state": "Passed",
+              "durationSeconds": 0.00008,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuseRequest_ChangesOnlyOutput(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_ChangesOnlyOutput(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0006264,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuseRequest_ChangesOnlyOutput(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_ChangesOnlyOutput(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0001479,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuseRequest_RejectsOutsideFixedMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PairSnapshotReuseRequest_RejectsOutsideFixedMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.0003269,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,1000,1000,2000,1000,1000,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,1000,1000,2000,1000,1000,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0008965,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,0,0,1000,1000,1000,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,0,0,1000,1000,1000,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0001262,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,1000,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,1000,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0000781,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,999,1000,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,999,1000,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000716,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,999,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,999,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000667,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,999,1000,1000,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,999,1000,1000,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000645,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,1,0,1000,1000,1000,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,1,0,1000,1000,1000,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000692,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,1,1000,1000,1000,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,1,1000,1000,1000,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000665,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(0,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.001034,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(1,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(1,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0001181,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(2,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(2,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000831,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(3,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(3,False)",
+              "state": "Passed",
+              "durationSeconds": 0.000079,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(4,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000772,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(5,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(5,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000791,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(6,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(6,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000739,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(7,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(7,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000743,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(8,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(8,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000766,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(9,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(9,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000739,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(10,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(10,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000734,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(11,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(11,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000759,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(12,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(12,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000724,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(13,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(13,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000815,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(14,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(14,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000781,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(15,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(15,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000723,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(16,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(16,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000708,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(17,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(17,False)",
+              "state": "Passed",
+              "durationSeconds": 0.000083,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(18,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RetainedGcFailure_NeverPromotesOrContinuesUnsafeMeasurement(18,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000735,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleCandidateRequest_ChangesOnlyCollectorAndOutput(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0005988,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleCandidateRequest_ChangesOnlyCollectorAndOutput(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_ChangesOnlyCollectorAndOutput(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0001995,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleCandidateRequest_RejectsOutsideFixedMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleCandidateRequest_RejectsOutsideFixedMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.0002949,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(0)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0007415,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(1)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0002228,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(2)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(2)",
+              "state": "Passed",
+              "durationSeconds": 0.0001805,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleFormalRequest_ChangesOnlyCollectorAndOutput(3)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_ChangesOnlyCollectorAndOutput(3)",
+              "state": "Passed",
+              "durationSeconds": 0.000169,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "RoleFormalRequest_RejectsOutsideFixedMatrix",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleFormalRequest_RejectsOutsideFixedMatrix",
+              "state": "Passed",
+              "durationSeconds": 0.0002826,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Preparing,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Preparing,True)",
+              "state": "Passed",
+              "durationSeconds": 0.3460804,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Running,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Running,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0011368,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopping,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopping,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0009116,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopped,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopped,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0008131,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(0L,True)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(0L,True)",
+              "state": "Passed",
+              "durationSeconds": 0.00136,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-1L,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-1L,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0001499,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(1L,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(1L,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000997,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-60000L,False)",
+              "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-60000L,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0000924,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_1000ParticipantsLocalCostAndGateCounts",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_1000ParticipantsLocalCostAndGateCounts",
+              "state": "Passed",
+              "durationSeconds": 5.9611656,
+              "message": null,
+              "stackTrace": null,
+              "output": "BRUTE_EMPTY_ITR_GUARD_COST participants=1000 warmup=4 sample=8 legacyMeanMs=299.0118375 guardedMeanMs=120.65375 gateCalls=999000_to_39960 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+            },
+            {
+              "name": "BruteEmptyItrGuard_ActiveAttackExemptStillRejects",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_ActiveAttackExemptStillRejects",
+              "state": "Passed",
+              "durationSeconds": 0.002,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_AllInertSkipsPairGateWithoutRng",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_AllInertSkipsPairGateWithoutRng",
+              "state": "Passed",
+              "durationSeconds": 0.0021931,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_LaterCollectionRechecksNewItr",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_LaterCollectionRechecksNewItr",
+              "state": "Passed",
+              "durationSeconds": 0.002156,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0032702,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0019886,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0020206,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_1000ParticipantsLocalCostAndPairCounts",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_1000ParticipantsLocalCostAndPairCounts",
+              "state": "Passed",
+              "durationSeconds": 2.4750246,
+              "message": null,
+              "stackTrace": null,
+              "output": "BRUTE_EMPTY_ITR_ROSTER_COST participants=1000 warmup=4 sample=8 guardMeanMs=118.59309999999999 rosterMeanMs=55.1373125 visitedPairs=499500_to_39180 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+            },
+            {
+              "name": "BruteEmptyItrRoster_AllActiveKeepsEveryPairInOriginalOrder",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_AllActiveKeepsEveryPairInOriginalOrder",
+              "state": "Passed",
+              "durationSeconds": 0.0020017,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_AllInertSkipsPairsAndKeepsRejectAccounting",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_AllInertSkipsPairsAndKeepsRejectAccounting",
+              "state": "Passed",
+              "durationSeconds": 0.0017885,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_CapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_CapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "state": "Passed",
+              "durationSeconds": 0.0027194,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_LaterCollectionRebuildsAfterNewItr",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_LaterCollectionRebuildsAfterNewItr",
+              "state": "Passed",
+              "durationSeconds": 0.0021972,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0025327,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0019813,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0015323,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteEmptyItrRoster_SuppressedAndPendingParticipantsRemainExcluded",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrRoster_SuppressedAndPendingParticipantsRemainExcluded",
+              "state": "Passed",
+              "durationSeconds": 0.0058394,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_1000ParticipantsLocalCostAndFullSequence",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_1000ParticipantsLocalCostAndFullSequence",
+              "state": "Passed",
+              "durationSeconds": 1.2818592,
+              "message": null,
+              "stackTrace": null,
+              "output": "BRUTE_EXACT_CACHE_COST participants=1000 warmup=4 sample=8 rosterMeanMs=53.944600000000008 cachedMeanMs=22.4193 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+            },
+            {
+              "name": "BruteExactCache_AllActiveKeepsBothDirectionsAndSequence",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_AllActiveKeepsBothDirectionsAndSequence",
+              "state": "Passed",
+              "durationSeconds": 0.0046093,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_LaterCollectionRebuildsAfterPositionAndItrChange",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_LaterCollectionRebuildsAfterPositionAndItrChange",
+              "state": "Passed",
+              "durationSeconds": 0.0021579,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.002947,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0019452,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.001599,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_RectCapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_RectCapacityMissFallsBackWithoutGrowthOrLostCandidates",
+              "state": "Passed",
+              "durationSeconds": 0.0027852,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded",
+              "state": "Passed",
+              "durationSeconds": 0.0021917,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CandidateStore_CapOrderFieldsEndAndZeroAllocation",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStore_CapOrderFieldsEndAndZeroAllocation",
+              "state": "Passed",
+              "durationSeconds": 0.0278503,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CandidateStore_GenerationTargetReuseFaultIsolationAndGrow",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStore_GenerationTargetReuseFaultIsolationAndGrow",
+              "state": "Passed",
+              "durationSeconds": 0.0131975,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CandidateStoreAuthority_StoreOnlyProducerFaultFailsClosedWithoutCollectorRerun",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStoreAuthority_StoreOnlyProducerFaultFailsClosedWithoutCollectorRerun",
+              "state": "Passed",
+              "durationSeconds": 0.0061647,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CandidateStoreAuthority_StrictListRuntimeStoreCountLocksWholeTickToLegacy",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.CandidateStoreAuthority_StrictListRuntimeStoreCountLocksWholeTickToLegacy",
+              "state": "Passed",
+              "durationSeconds": 0.0019936,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_AdaptiveDirectUsesNestedBelowAndSweepAtCrossover",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_AdaptiveDirectUsesNestedBelowAndSweepAtCrossover",
+              "state": "Passed",
+              "durationSeconds": 0.0100193,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(False,False,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(False,False,0)",
+              "state": "Passed",
+              "durationSeconds": 0.002895,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(False,True,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(False,True,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0014616,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(True,False,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(True,False,0)",
+              "state": "Passed",
+              "durationSeconds": 0.0013649,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(True,True,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(True,True,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0013977,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CachedExactMatchesLegacyForKind5MixedAndFullHeightClamp",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CachedExactMatchesLegacyForKind5MixedAndFullHeightClamp",
+              "state": "Passed",
+              "durationSeconds": 0.002814,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_CollisionGeometryUsesRuntimeFacingWhenPhysicsMirrorIsStale",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_CollisionGeometryUsesRuntimeFacingWhenPhysicsMirrorIsStale",
+              "state": "Passed",
+              "durationSeconds": 0.0020287,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ConfiguredLooseReusesStationaryRoleAwareIndexAndMatchesBrute",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ConfiguredLooseReusesStationaryRoleAwareIndexAndMatchesBrute",
+              "state": "Passed",
+              "durationSeconds": 0.002329,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ConservativeDegenerateRolesLeaveFallbackListsEmptyAndStayWarm",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ConservativeDegenerateRolesLeaveFallbackListsEmptyAndStayWarm",
+              "state": "Passed",
+              "durationSeconds": 0.0039741,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_DefaultConfiguredBruteForceBackendRemainsBrute",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_DefaultConfiguredBruteForceBackendRemainsBrute",
+              "state": "Passed",
+              "durationSeconds": 0.0013317,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_DegenerateRoleBoundsUseConservativeIndexAndMatchLegacy",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_DegenerateRoleBoundsUseConservativeIndexAndMatchLegacy",
+              "state": "Passed",
+              "durationSeconds": 0.0019493,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_DegenerateTemplateUsesConservativeIndexAndClampFallsBackWithParity",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_DegenerateTemplateUsesConservativeIndexAndClampFallsBackWithParity",
+              "state": "Passed",
+              "durationSeconds": 0.0032567,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_DirectCostThresholdIsInclusive(1024,256,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_DirectCostThresholdIsInclusive(1024,256,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0190808,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_DirectCostThresholdIsInclusive(1417,185,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_DirectCostThresholdIsInclusive(1417,185,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0137326,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,0)",
+              "state": "Passed",
+              "durationSeconds": 0.0022148,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,0)",
+              "state": "Passed",
+              "durationSeconds": 0.0014822,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0015896,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0014877,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,2)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,2)",
+              "state": "Passed",
+              "durationSeconds": 0.0015292,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,2)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,2)",
+              "state": "Passed",
+              "durationSeconds": 0.004722,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,3)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(False,3)",
+              "state": "Passed",
+              "durationSeconds": 0.0088628,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,3)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(True,3)",
+              "state": "Passed",
+              "durationSeconds": 0.0203052,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedExactLoopMatchesLegacyPerPairValidationWithRng(False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedExactLoopMatchesLegacyPerPairValidationWithRng(False)",
+              "state": "Passed",
+              "durationSeconds": 0.030356,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EpochGuardedExactLoopMatchesLegacyPerPairValidationWithRng(True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EpochGuardedExactLoopMatchesLegacyPerPairValidationWithRng(True)",
+              "state": "Passed",
+              "durationSeconds": 0.0015453,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EqualDistanceKind1TieMatchesLegacyRngAndReplacement(1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EqualDistanceKind1TieMatchesLegacyRngAndReplacement(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0031879,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_EqualDistanceKind1TieMatchesLegacyRngAndReplacement(2)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_EqualDistanceKind1TieMatchesLegacyRngAndReplacement(2)",
+              "state": "Passed",
+              "durationSeconds": 0.0017399,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ExactItrWorldRectReuseMatchesLegacyBuildOrderAndCandidates",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ExactItrWorldRectReuseMatchesLegacyBuildOrderAndCandidates",
+              "state": "Passed",
+              "durationSeconds": 0.0020712,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ExceptionRestoresRngAndCandidatesThenRunsFullBruteFallback",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ExceptionRestoresRngAndCandidatesThenRunsFullBruteFallback",
+              "state": "Passed",
+              "durationSeconds": 0.0019187,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(0)",
+              "state": "Passed",
+              "durationSeconds": 0.0020697,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(1)",
+              "state": "Passed",
+              "durationSeconds": 0.0017275,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(3)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(3)",
+              "state": "Passed",
+              "durationSeconds": 0.0016439,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ForcedSweepIndexesDegenerateRolesConservatively",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ForcedSweepIndexesDegenerateRolesConservatively",
+              "state": "Passed",
+              "durationSeconds": 0.0020781,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_InputValidationRoutesPreserveCandidatesRngAndWarmedAllocations",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_InputValidationRoutesPreserveCandidatesRngAndWarmedAllocations",
+              "state": "Passed",
+              "durationSeconds": 0.0039149,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_LazyExactCacheBuildsOnlyRolesRequiredByActualPairs",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_LazyExactCacheBuildsOnlyRolesRequiredByActualPairs",
+              "state": "Passed",
+              "durationSeconds": 0.0026359,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(15,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(15,0)",
+              "state": "Passed",
+              "durationSeconds": 0.0020434,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(-15,0)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(-15,0)",
+              "state": "Passed",
+              "durationSeconds": 0.0015341,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(14,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(14,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0014255,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(-14,1)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(-14,1)",
+              "state": "Passed",
+              "durationSeconds": 0.0013995,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_MixedIndexableAndDegenerateRolesMatchBruteWhereLegacyMisses",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_MixedIndexableAndDegenerateRolesMatchBruteWhereLegacyMisses",
+              "state": "Passed",
+              "durationSeconds": 0.0053615,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_NoFrameInertAtNonZeroLeftPositionDoesNotAbortRoleAware",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_NoFrameInertAtNonZeroLeftPositionDoesNotAbortRoleAware",
+              "state": "Passed",
+              "durationSeconds": 0.0017969,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_OccupancyEpochMutationAbortsAndRestoresBruteRngAndCandidates",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_OccupancyEpochMutationAbortsAndRestoresBruteRngAndCandidates",
+              "state": "Passed",
+              "durationSeconds": 0.0020773,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_PreLoopExactCacheInvalidationFallsBackAndRestoresRng",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_PreLoopExactCacheInvalidationFallsBackAndRestoresRng",
+              "state": "Passed",
+              "durationSeconds": 0.0016827,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(17)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(17)",
+              "state": "Passed",
+              "durationSeconds": 0.007628,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(911)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(911)",
+              "state": "Passed",
+              "durationSeconds": 0.0063513,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(20260725)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(20260725)",
+              "state": "Passed",
+              "durationSeconds": 0.0063661,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_RoleAwareMatchesLegacyExactSequenceCountAndRng_WithAuthorityOrder",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_RoleAwareMatchesLegacyExactSequenceCountAndRng_WithAuthorityOrder",
+              "state": "Passed",
+              "durationSeconds": 0.0033876,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_RoleAwareParticipantFlagsMatchLegacyBuildForAllBodyPaths",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_RoleAwareParticipantFlagsMatchLegacyBuildForAllBodyPaths",
+              "state": "Passed",
+              "durationSeconds": 0.0025235,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_SharedFrameBodyTemplateMatchesForcedLegacyAfterMovementDirectionAndType3Z",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_SharedFrameBodyTemplateMatchesForcedLegacyAfterMovementDirectionAndType3Z",
+              "state": "Passed",
+              "durationSeconds": 0.0037449,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_SweepMatchesNestedForDeterministicRandomFixtures(19)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_SweepMatchesNestedForDeterministicRandomFixtures(19)",
+              "state": "Passed",
+              "durationSeconds": 0.0187813,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_SweepMatchesNestedForDeterministicRandomFixtures(733)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_SweepMatchesNestedForDeterministicRandomFixtures(733)",
+              "state": "Passed",
+              "durationSeconds": 0.0173963,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_SweepMatchesNestedForDeterministicRandomFixtures(20260801)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_SweepMatchesNestedForDeterministicRandomFixtures(20260801)",
+              "state": "Passed",
+              "durationSeconds": 0.0170962,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_SweepMatchesNestedForStrictXEdgeCases",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_SweepMatchesNestedForStrictXEdgeCases",
+              "state": "Passed",
+              "durationSeconds": 0.0040611,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_ThousandSyntheticConfiguredLooseDropsPairsAndMatchesBrute",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_ThousandSyntheticConfiguredLooseDropsPairsAndMatchesBrute",
+              "state": "Passed",
+              "durationSeconds": 1.0698544,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "Formal_WarmedRoleAwareCollectDoesNotAllocateParticipantObjects",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.Formal_WarmedRoleAwareCollectDoesNotAllocateParticipantObjects",
+              "state": "Passed",
+              "durationSeconds": 0.0152911,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_1000Participants_LocalCostAndCaptureCounts",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_1000Participants_LocalCostAndCaptureCounts",
+              "state": "Passed",
+              "durationSeconds": 0.8212918,
+              "message": null,
+              "stackTrace": null,
+              "output": "PAIR_SNAPSHOT_REUSE_COST participants=1000 warmup=8 sample=16 legacyMeanMs=13.9599875 reusedMeanMs=11.035462500000001 legacyCaptures=92160 reusedCaptures=15360 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+            },
+            {
+              "name": "PairSnapshotReuse_DifferentTargets_DoNotSharePayload",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_DifferentTargets_DoNotSharePayload",
+              "state": "Passed",
+              "durationSeconds": 0.0030235,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_LaterCollection_RecapturesChangedTeamsAndFacing",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_LaterCollection_RecapturesChangedTeamsAndFacing",
+              "state": "Passed",
+              "durationSeconds": 0.0025245,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(0,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(0,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0025235,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(4,False)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(4,False)",
+              "state": "Passed",
+              "durationSeconds": 0.0020052,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(0,True)",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(0,True)",
+              "state": "Passed",
+              "durationSeconds": 0.0016037,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PairSnapshotReuse_NoOverlap_DoesNotCapture",
+              "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.PairSnapshotReuse_NoOverlap_DoesNotCapture",
+              "state": "Passed",
+              "durationSeconds": 0.0014972,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

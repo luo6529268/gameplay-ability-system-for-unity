@@ -1,0 +1,29 @@
+{
+  "observedUtc": "2026-10-06T20:32:38.2879218Z",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "protectedCount": 98,
+  "protectedMismatchCount": 0,
+  "backupCount": 9,
+  "backupMismatchCount": 0,
+  "changeLedgerExitCode": 0,
+  "ledgerSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1320",
+    "  Governed code files in diff: 6"
+  ],
+  "historicalWarnings": 4281,
+  "diffCheckExitCode": 0,
+  "scenes": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+    }
+  ],
+  "status": "PARTIAL / H07_RETRY_LIMIT_REACHED",
+  "editorEvidence": "editor-final.json",
+  "noFourthRepair": true
+}

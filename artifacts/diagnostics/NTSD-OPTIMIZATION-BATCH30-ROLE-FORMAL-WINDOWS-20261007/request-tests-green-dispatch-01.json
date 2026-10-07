@@ -1,0 +1,7 @@
+{
+  "chunk_id": "19525f",
+  "wall_time_seconds": 2.0451472,
+  "exit_code": 0,
+  "original_token_count": 55,
+  "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"27d3ccccccdf4762b9363b1f4633cf99\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":true}}}\r\n"
+}

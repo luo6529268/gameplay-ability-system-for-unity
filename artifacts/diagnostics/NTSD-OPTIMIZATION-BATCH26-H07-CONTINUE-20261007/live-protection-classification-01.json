@@ -1,0 +1,16 @@
+{
+  "observedUtc": "2026-10-06T21:20:39.4460030Z",
+  "stage": "LIVE_SUITE / EXPECTED_SHARED_TERMINAL_UPDATE / NOT_FINAL_ACCEPTANCE",
+  "protectedManifestCount": 178,
+  "unchangedDomainCount": 177,
+  "unexpectedMismatches": [],
+  "authorizedOutput": "Temp/NTSD_ProductionEntityStress.result",
+  "authorizedOutputReason": "Task/Operation explicitly allow owned Runner terminal writes after current-byte backup; original raw mismatch checkpoint retained",
+  "terminalLines": [
+    "PASS",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007\\windows-01\\01-combat1000-smoke\\report.json"
+  ],
+  "terminalIsBatch26Owned": true,
+  "originalTerminalBackupUnchanged": true,
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c"
+}

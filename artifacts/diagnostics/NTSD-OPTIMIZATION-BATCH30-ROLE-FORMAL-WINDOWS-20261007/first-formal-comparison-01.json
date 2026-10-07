@@ -1,0 +1,91 @@
+{
+  "observed": "2026-10-07T07:21:24.7200500+08:00",
+  "oldReport": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01/02-dispersed1000-formal-01/report.json",
+  "newReport": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/00-dispersed1000-formal-01/report.json",
+  "oldSnapshotSha": "549ABAD14251E1E4D25135B8E7DF0938D63FEFB2BE3921F898010AAEE1C0064F",
+  "newSnapshotSha": "549ABAD14251E1E4D25135B8E7DF0938D63FEFB2BE3921F898010AAEE1C0064F",
+  "rawSnapshotExactEqual": true,
+  "snapshotTick": 1920,
+  "snapshotSchema": "ntsd-unity-extended-battle-checksum-v5",
+  "snapshotHashes": {
+    "aRest": "0044c5415fb61299d4f5bf8a11205b8cbd180c1d98dd5f480ba8c897aa56718c",
+    "events": "e34252de810db5f69305a9aae85e6c264e4a4cc080f42bccdced0f477cfea090",
+    "input": "a1595946f704cd22175ca6d523c828f05b9bad3357045b261ead442ccefdfae3",
+    "metadata": "0d14aedac6df7e54618e659c57e7f7338f2d31befeac0e09483641436008ec31",
+    "overall": "0ea38df2527a558cee67aca099bca2d56c397f64169be754b3a5bce0e67cc12b",
+    "rng": "441b77e39f8b600b6affbda3bae0b1776f899333961bfac808c977bead84685a",
+    "slots": "f7ab5cefb7a7e8d808d6b4ef9d515a1e063a926863eb5817f40d76f0e812a9a7",
+    "stats": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+    "vRest": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+    "world": "3d284352106636f7c54bfd92eb459738f1a7540e529d618ca98c4f37c29d3f81"
+  },
+  "baselineLogic": {
+    "available": true,
+    "unit": "ms",
+    "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+    "unavailableReason": "",
+    "sampleCount": 1800,
+    "average": 459.88933316666714,
+    "maximum": 1297.5154,
+    "p95": 696.6068749999998,
+    "p99": 853.6990589999999
+  },
+  "candidateLogic": {
+    "available": true,
+    "unit": "ms",
+    "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+    "unavailableReason": "",
+    "sampleCount": 1800,
+    "average": 52.40351772222221,
+    "maximum": 340.5332,
+    "p95": 82.60607999999998,
+    "p99": 113.54546399999997
+  },
+  "baselineCollector": [
+    {
+      "phase": "CandidateCollect",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 426.54986838888925,
+        "maximum": 1229.3251,
+        "p95": 644.21317,
+        "p99": 789.541377
+      }
+    }
+  ],
+  "candidateCollector": [
+    {
+      "phase": "CandidateCollect",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 18.182936722222212,
+        "maximum": 155.5242,
+        "p95": 28.05697,
+        "p99": 43.838608
+      }
+    }
+  ],
+  "candidateFailure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+  "candidateHarnessValid": false,
+  "teardownRestored": true,
+  "capacityPassed": true,
+  "extendedChecksumFields": [
+    {
+      "field": "finalParitySnapshotTick",
+      "value": 1920
+    },
+    {
+      "field": "finalLockstepTick",
+      "value": 1920
+    }
+  ],
+  "scope": "One final tick1920 snapshot only, not per-tick/native parity; both reports retain strict memory FAIL, no default promotion"
+}

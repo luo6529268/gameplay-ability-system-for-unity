@@ -1,0 +1,22 @@
+{
+  "observedUtc": "2026-10-06T21:19:41.2376976Z",
+  "stage": "LIVE_SUITE / NOT_FINAL_ACCEPTANCE",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "protectedCount": 178,
+  "protectedMismatches": [
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha256": "CBBE9367CD46DB1CECC2D414D31F0EDC037D2081FCECF2CEBB96ABF586BB18C8"
+    }
+  ],
+  "backupCount": 10,
+  "backupMismatches": [],
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1322",
+    "  Governed code files in diff: 8"
+  ],
+  "historicalWarnings": 4277,
+  "diffCheckExit": 0
+}

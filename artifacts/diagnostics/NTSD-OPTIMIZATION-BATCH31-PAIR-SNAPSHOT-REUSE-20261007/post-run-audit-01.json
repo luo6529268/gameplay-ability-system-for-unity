@@ -1,0 +1,35 @@
+{
+  "observed": "2026-10-07T08:17:05.3702699+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headSame": true,
+  "protectedCount": 232,
+  "protectedMismatches": [],
+  "backupCount": 11,
+  "backupMismatches": [],
+  "validationExit": 0,
+  "validationSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1327",
+    "  Governed code files in diff: 11"
+  ],
+  "warningCount": 4248,
+  "diffExit": 0,
+  "diffIssues": [],
+  "sharedRequestAbsent": true,
+  "suitePresent": true,
+  "terminalSha": "B2D986749C4913790F0BB605E29E8E1A2AA637E9FA003582C22A70D2F9EE8CD1",
+  "sourceHashes": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "7BEEC58CD6C7CAE113FA5A5A4E00F855315CD2A10F67D75E225A6B9CE30D651E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "8A02A275D90F542BADF6341253E392D1A4E9F43781C63433DB49028AE6118674"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "54EB4392FBF08803FBF231536F231CE9D8BDF3F496B13F48D4105FCDC52EEC89"
+    }
+  ]
+}

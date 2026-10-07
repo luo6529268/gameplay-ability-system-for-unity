@@ -1598,6 +1598,7 @@ namespace NTSD.Animation.Rendering.Editor
         public bool harnessValidity;
         public string performanceVerdict = "EvidenceOnlyNoThreshold";
         public int requestedEntityCount;
+        public bool initialRosterLogicOnlyMaterialization;
         public int selectedCharacterOid;
         public int totalEntitiesCreated;
         public int lifecycleReplacements;
@@ -3913,12 +3914,13 @@ namespace NTSD.Animation.Rendering.Editor
             int rootChildCount,
             int worldObjectCount,
             int worldEntityCount,
-            int claimedRuntimeSlotCount)
+            int claimedRuntimeSlotCount,
+            bool logicOnly = false)
         {
             return requestedEntityCount > 0 &&
-                   activeGameObjectCount == requestedEntityCount &&
-                   rootChildCount == requestedEntityCount &&
-                   worldObjectCount == requestedEntityCount * 2 &&
+                   activeGameObjectCount == (logicOnly ? 0 : requestedEntityCount) &&
+                   rootChildCount == (logicOnly ? 0 : requestedEntityCount) &&
+                   worldObjectCount == requestedEntityCount * (logicOnly ? 1 : 2) &&
                    worldEntityCount == requestedEntityCount &&
                    claimedRuntimeSlotCount == requestedEntityCount;
         }
@@ -4859,6 +4861,7 @@ namespace NTSD.Animation.Rendering.Editor
         private int objectPoolAvailableBaseline;
         private int referencePoolActiveBaseline;
         private int selectedCharacterOid;
+        private bool initialRosterLogicOnlyMaterialization;
         private int frameCounter;
         private float accumulator;
         private bool initialPopulationComplete;
@@ -5417,6 +5420,9 @@ namespace NTSD.Animation.Rendering.Editor
                 throw new InvalidOperationException(failureReason);
 
             world = driver.World;
+            PrepareStressWorldServices(driver);
+            initialRosterLogicOnlyMaterialization = world.UsesLogicOnlyEntityMaterialization;
+            report.initialRosterLogicOnlyMaterialization = initialRosterLogicOnlyMaterialization;
             if (world.RuntimeProfileForDiagnostics != BattleRuntimeProfile.MobileExtended ||
                 world.RuntimeSlotCapacityForDiagnostics != BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity ||
                 world.CollisionBroadphaseForDiagnostics != CollisionBroadphaseBackend.LooseQuadtree)
@@ -8576,12 +8582,19 @@ namespace NTSD.Animation.Rendering.Editor
                        StringComparison.OrdinalIgnoreCase);
         }
 
+        internal static void PrepareStressWorldServices(SimulationTickDriver targetDriver)
+        {
+            if (targetDriver == null)
+                throw new ArgumentNullException(nameof(targetDriver));
+            // A recreated World owns preparation; the preceding shutdown left its pools quiesced.
+            targetDriver.PrepareBattleRuntimeServices();
+        }
+
         internal static long ResolveExpectedUnifiedAiSnapshotObservedPassCount(
             int logicTicksExecuted)
         {
-            // Stress logicTicksExecuted includes warmup and sampled ticks. Character input skips
-            // the first completed driver step, so every later observed step owns one build.
-            return Math.Max(0L, (long)logicTicksExecuted - 1L);
+            // Driver steps start at tick 1; the current input pass skips only tick <= 0.
+            return Math.Max(0L, (long)logicTicksExecuted);
         }
 
         internal static bool ShouldEvaluateAiDecisionShadowAsTerminalForReport(
@@ -8725,7 +8738,9 @@ namespace NTSD.Animation.Rendering.Editor
                     !TryMultiplyNonNegative(
                         expectedBuild,
                         targetReport.requestedEntityCount,
-                        out long expectedRefreshAndRead))
+                        out long expectedRefreshAndRead) ||
+                    !TryMultiplyNonNegative(expectedRefreshAndRead, 2L,
+                        out long expectedRefresh))
                 {
                     valid = false;
                 }
@@ -8780,7 +8795,7 @@ namespace NTSD.Animation.Rendering.Editor
                                 .aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount <=
                             maximumInitialCapture &&
                             targetReport.aiUnifiedSnapshotExecutionRefreshCount ==
-                            expectedRefreshAndRead &&
+                            expectedRefresh &&
                             targetReport.aiUnifiedSnapshotExecutionReadCount ==
                             expectedRefreshAndRead &&
                             AreReplacedAiSnapshotPipelinesClean(targetReport);
@@ -8841,6 +8856,8 @@ namespace NTSD.Animation.Rendering.Editor
                              committedPassCount,
                              targetReport.requestedEntityCount,
                              out long expectedRefreshAndRead) &&
+                         TryMultiplyNonNegative(expectedRefreshAndRead, 2L,
+                             out long expectedRefresh) &&
                          targetReport.aiUnifiedSnapshotExecutionSlotVisitCount >= 0 &&
                          targetReport.aiUnifiedSnapshotExecutionSlotVisitCount <=
                          maximumSlotVisits &&
@@ -8848,7 +8865,7 @@ namespace NTSD.Animation.Rendering.Editor
                              .aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount ==
                          expectedRefreshAndRead &&
                          targetReport.aiUnifiedSnapshotExecutionRefreshCount ==
-                         expectedRefreshAndRead &&
+                         expectedRefresh &&
                          targetReport.aiUnifiedSnapshotExecutionReadCount ==
                          expectedRefreshAndRead;
             if (terminal)
@@ -9127,6 +9144,7 @@ namespace NTSD.Animation.Rendering.Editor
             Vector3 position = BuildSpawnPosition(config.Mode, placementIndex, config.EntityCount);
             int team = (placementIndex & 1) + 1;
             OPointCreateTask task = referencePool.Fetch<OPointCreateTask>();
+            task.targetWorld = world;
             task.opoint = new ObjectPoint
             {
                 kind = 1,
@@ -9170,20 +9188,23 @@ namespace NTSD.Animation.Rendering.Editor
                 return null;
             }
             GameObject entityRoot = character.Renderer?.transform.parent?.gameObject;
-            if (entityRoot == null)
+            if (entityRoot == null && !world.UsesLogicOnlyEntityMaterialization)
             {
                 character.OnTransitDestroy();
                 return null;
             }
-            entityRoot.name = string.Format(
-                CultureInfo.InvariantCulture,
-                "StressEntity_{0:D4}_Slot_{1:D4}_Team_{2}",
-                report.totalEntitiesCreated,
-                character.Runtime.SlotIndex,
-                team);
-            entityRoot.transform.SetParent(transform, true);
+            if (entityRoot != null)
+            {
+                entityRoot.name = string.Format(
+                    CultureInfo.InvariantCulture,
+                    "StressEntity_{0:D4}_Slot_{1:D4}_Team_{2}",
+                    report.totalEntitiesCreated,
+                    character.Runtime.SlotIndex,
+                    team);
+                entityRoot.transform.SetParent(transform, true);
+            }
             character.AiControlled = config.InputMode == ProductionEntityStressInputMode.Ai;
-            character.Renderer.ForceRefreshPresentation();
+            character.Renderer?.ForceRefreshPresentation();
             if (world.TryGetCurrentRuntimeHandleForDiagnostics(
                     character.Runtime.SlotIndex,
                     character,
@@ -9330,7 +9351,8 @@ namespace NTSD.Animation.Rendering.Editor
                     report.stressRootChildCount,
                     report.worldObjectCount,
                     report.worldEntityCount,
-                    report.claimedRuntimeSlotCount) &&
+                    report.claimedRuntimeSlotCount,
+                    initialRosterLogicOnlyMaterialization) &&
                 world.RuntimeProfileForDiagnostics == BattleRuntimeProfile.MobileExtended &&
                 world.RuntimeSlotCapacityForDiagnostics == BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity &&
                 world.CollisionBroadphaseForDiagnostics == CollisionBroadphaseBackend.LooseQuadtree;
@@ -10412,7 +10434,7 @@ namespace NTSD.Animation.Rendering.Editor
                 int candidate = ids[i];
                 ObjectDefinition definition = dataManager.GetObjectById(candidate);
                 LF2CharacterDataWrapper config = manager.GetCharacterConfig(candidate);
-                if (definition == null || definition.type != (int)LF2ObjectType.Character ||
+                if (!IsStressSpawnOidAdmitted(candidate) || definition == null || definition.type != (int)LF2ObjectType.Character ||
                     config?.characterData?.frames == null || config.characterData.frames.Count == 0 ||
                     !manager.TryGetSprites(candidate, out List<Sprite> sprites) || sprites == null ||
                     sprites.Count == 0)
@@ -10446,9 +10468,13 @@ namespace NTSD.Animation.Rendering.Editor
 
         private static bool IsActive(LF2Character entity)
         {
-            return entity != null && entity.Renderer != null && entity.Runtime != null &&
-                   entity.Runtime.SlotIndex >= 0;
+            SimulationWorld registeredWorld = entity?.RegisteredWorldForSimulation;
+            return registeredWorld != null && entity.Runtime != null && entity.Runtime.SlotIndex >= 0 &&
+                   (registeredWorld.UsesLogicOnlyEntityMaterialization || entity.Renderer != null) &&
+                   registeredWorld.TryGetCurrentRuntimeHandleForDiagnostics(entity.Runtime.SlotIndex, entity, out _);
         }
+
+        internal static bool IsStressSpawnOidAdmitted(int oid) => oid > 0;
 
         private static int Sum(int[] values)
         {

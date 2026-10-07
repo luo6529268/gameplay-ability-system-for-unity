@@ -1,0 +1,7 @@
+{
+  "chunk_id": "958a50",
+  "wall_time_seconds": 4.5201109,
+  "exit_code": 0,
+  "original_token_count": 48,
+  "output": "{\r\n  \"exitCode\": 0,\r\n  \"header\": [\r\n    \"Change ledger validation PASSED.\",\r\n    \"  Records: 1319\",\r\n    \"  Governed code files in diff: 4\"\r\n  ],\r\n  \"errors\": [],\r\n  \"warningCount\": 4283\r\n}\r\n"
+}

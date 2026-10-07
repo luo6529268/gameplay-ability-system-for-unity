@@ -1,0 +1,267 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "469009f20e544011aff5e196bc539230",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791318042073,
+      "finished_unix_ms": 1791318051969,
+      "last_update_unix_ms": 1791318051969,
+      "progress": {
+        "completed": 25,
+        "total": 9313,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791318051434,
+        "last_finished_test_full_name": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.StableCounters_RecordWithoutAllocatingOrFailingGate",
+        "last_finished_unix_ms": 1791318051435,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 25,
+          "passed": 25,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.7359402,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "PopulationPolicy_AccountsForRendererAndCharacterRegistrations",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.PopulationPolicy_AccountsForRendererAndCharacterRegistrations",
+            "state": "Passed",
+            "durationSeconds": 0.1181204,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+            "state": "Passed",
+            "durationSeconds": 0.1183035,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+            "state": "Passed",
+            "durationSeconds": 0.0002116,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0001477,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0001362,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.0001338,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+            "state": "Passed",
+            "durationSeconds": 0.000134,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(-1,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(-1,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0017201,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(0,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001745,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryStressSpawnOid_PreservesFactoryAdmission(1,True)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(1,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000858,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,1000,1000,2000,1000,1000,True)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,1000,1000,2000,1000,1000,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0008672,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,0,0,1000,1000,1000,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,0,0,1000,1000,1000,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0002107,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,1000,True)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,1000,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0001428,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,999,1000,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,999,1000,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001424,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,999,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,999,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001282,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,999,1000,1000,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,999,1000,1000,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001285,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,1,0,1000,1000,1000,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,1,0,1000,1000,1000,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000855,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,1,1000,1000,1000,False)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,1,1000,1000,1000,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000744,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CounterReset_IsRebasedAndLaterIncrementIsStillDetected",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.CounterReset_IsRebasedAndLaterIncrementIsStillDetected",
+            "state": "Passed",
+            "durationSeconds": 0.0018318,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CriticalDeltaFailsGate_WhilePresentationThrottleIsReportedSeparately",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.CriticalDeltaFailsGate_WhilePresentationThrottleIsReportedSeparately",
+            "state": "Passed",
+            "durationSeconds": 0.0028819,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LogicPoolBattleCapacity_ReservesEveryConcreteEntityFamily",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolBattleCapacity_ReservesEveryConcreteEntityFamily",
+            "state": "Passed",
+            "durationSeconds": 0.1377393,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LogicPoolPerTypeDiagnostics_DoNotDoubleCountCapacityFailure",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolPerTypeDiagnostics_DoNotDoubleCountCapacityFailure",
+            "state": "Passed",
+            "durationSeconds": 0.0004583,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LogicPoolWeaponFamily_ReusesOneSharedShellBudgetAndRetagsOnFetch",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolWeaponFamily_ReusesOneSharedShellBudgetAndRetagsOnFetch",
+            "state": "Passed",
+            "durationSeconds": 0.0015105,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PresentationThrottleAlone_DoesNotFailMemoryCapacityGate",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.PresentationThrottleAlone_DoesNotFailMemoryCapacityGate",
+            "state": "Passed",
+            "durationSeconds": 0.0005901,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StableCounters_RecordWithoutAllocatingOrFailingGate",
+            "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.StableCounters_RecordWithoutAllocatingOrFailingGate",
+            "state": "Passed",
+            "durationSeconds": 0.0006768,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

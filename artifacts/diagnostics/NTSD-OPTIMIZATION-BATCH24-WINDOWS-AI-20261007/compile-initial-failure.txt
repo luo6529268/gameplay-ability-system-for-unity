@@ -1,0 +1,4 @@
+Observed original Editor.log, 2026-10-07 03:59 Asia/Shanghai:
+Assets\NTSD\Scripts\Test\Editor\BattleOptimizationWindowsAiSuiteEditor.cs(151,38): error CS0664: Literal of type double cannot be implicitly converted to type float; use an F suffix.
+Original read_console filter returned zero entries; that response was not compile proof.
+Fix: request catchUpCpuBudgetMs = 0f. Original log retained, no clear/delete. Recompile pending at record creation.

@@ -1,0 +1,56 @@
+[
+  {
+    "path": null,
+    "validation": {
+      "exitCode": 0,
+      "header": [
+        "Change ledger validation PASSED.",
+        "  Records: 1317",
+        "  Governed code files in diff: 0",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs, which is not in the current code diff."
+      ],
+      "errors": [],
+      "warningCount": 4309
+    }
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "validation": {
+      "exitCode": 0,
+      "header": [
+        "Change ledger validation PASSED.",
+        "  Records: 1317",
+        "  Governed code files in diff: 1",
+        "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs -> NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-DISPLAY-SAMPLE-TIMING-018, NTSD-OPT-M03-DYNAMIC-DISPLAY-016, NTSD-OPT-M03-FOOT-AUTHORING-021, NTSD-OPT-M03-PRODUCTION-CATALOG-020, NTSD-OPT-M03-PRODUCTION-WINDOW-014",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff."
+      ],
+      "errors": [],
+      "warningCount": 4303
+    }
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs",
+    "validation": {
+      "exitCode": 0,
+      "header": [
+        "Change ledger validation PASSED.",
+        "  Records: 1317",
+        "  Governed code files in diff: 1",
+        "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleFootCoverageDiagnosticEditorTests.cs -> NTSD-OPT-M03-FOOT-AUTHORING-021",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+        "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff."
+      ],
+      "errors": [],
+      "warningCount": 4308
+    }
+  }
+]

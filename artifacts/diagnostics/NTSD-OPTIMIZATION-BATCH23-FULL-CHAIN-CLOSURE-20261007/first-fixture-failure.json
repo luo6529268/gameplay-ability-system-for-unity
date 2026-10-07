@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "698c6d3ebcbd4bd696f7cbabb28eaea6",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791315696044,
+      "finished_unix_ms": 1791315706081,
+      "last_update_unix_ms": 1791315706081,
+      "progress": {
+        "completed": 24,
+        "total": 9296,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791315705378,
+        "last_finished_test_full_name": "NTSD.Test.BattleRealTextureSubmissionEditorTests.PreparedSlot_OverflowAndHeldLeaseRejectWholeCapture",
+        "last_finished_unix_ms": 1791315705479,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleRealTextureSubmissionEditorTests.ActiveAuxiliaries_FullPreparedCpuChain_TwoSlotsZeroGc(1000,StrictOrderedDraw,1000)",
+            "message": "System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\r\n  ----> System.InvalidOperationException : Cannot resize sealed foot marker storage."
+          },
+          {
+            "full_name": "NTSD.Test.BattleRealTextureSubmissionEditorTests.ActiveAuxiliaries_FullPreparedCpuChain_TwoSlotsZeroGc(4097,OrderedChunks,17)",
+            "message": "System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\r\n  ----> System.InvalidOperationException : Cannot resize sealed foot marker storage."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

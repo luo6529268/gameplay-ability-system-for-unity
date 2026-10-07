@@ -1,0 +1,54 @@
+{
+  "observed": "2026-10-07T06:38:14.3614690+08:00",
+  "validatorExit": 0,
+  "validatorHead": [
+    "Change ledger validation PASSED.",
+    "  Records: 1324",
+    "  Governed code files in diff: 9",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION-009, NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008, NTSD-OPT-M03-MATERIALIZATION-REPORT-010, NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001"
+  ],
+  "validatorWarnings": 4277,
+  "diffExit": 0,
+  "diffNonCrLf": [],
+  "menuSha256": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+  "battleSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "protectedCount": 187,
+  "protectedChanged": [],
+  "backupCount": 10,
+  "backupChanged": [],
+  "editorScene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Menu",
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "buildIndex": 0,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 8
+      }
+    }
+  },
+  "firstRestoreRejected": {
+    "status": "success",
+    "result": {
+      "success": false,
+      "code": "Scene file not found at 'Assets/NTSD/Scene/Menu.unity'.",
+      "error": "Scene file not found at 'Assets/NTSD/Scene/Menu.unity'."
+    }
+  },
+  "correctRestore": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Scene 'Assets/NTSD/Scene/NTSD_Menu.unity' loaded successfully.",
+      "data": {
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "name": "NTSD_Menu"
+      }
+    }
+  }
+}

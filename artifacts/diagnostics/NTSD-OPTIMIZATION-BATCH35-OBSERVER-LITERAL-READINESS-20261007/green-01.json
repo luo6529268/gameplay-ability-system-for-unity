@@ -1,0 +1,290 @@
+{
+  "dispatch": {
+    "chunk_id": "77c47d",
+    "wall_time_seconds": 3.6625822,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"f48e74c052b34740b4dc62bb957b8894\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":true}}}\r\n"
+  },
+  "response": {
+    "chunk_id": "91c2e3",
+    "wall_time_seconds": 0.3111123,
+    "exit_code": 0,
+    "original_token_count": 2038,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job status retrieved.\",\"data\":{\"job_id\":\"f48e74c052b34740b4dc62bb957b8894\",\"status\":\"succeeded\",\"mode\":\"EditMode\",\"started_unix_ms\":1791338448109,\"finished_unix_ms\":1791338456324,\"last_update_unix_ms\":1791338456324,\"progress\":{\"completed\":25,\"total\":9411,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791338455824,\"last_finished_test_full_name\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.LegacyWindow_RetainsTickCompletion\",\"last_finished_unix_ms\":1791338455824,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"EditMode\",\"summary\":{\"total\":25,\"passed\":25,\"failed\":0,\"skipped\":0,\"durationSeconds\":1.7635508,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"BoundObserverMessages_KeepExactTextAndReadonlyOwnership\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.BoundObserverMessages_KeepExactTextAndReadonlyOwnership\",\"state\":\"Passed\",\"durationSeconds\":0.469887,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"CaptureSample\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"CaptureSample\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0065947,\"message\":null,\"stackTrace\":null,\"output\":\"OBSERVER_LITERAL_IL method=CaptureSample literals=0\\r\\n\"},{\"name\":\"HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"EndCamera\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"EndCamera\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0006276,\"message\":null,\"stackTrace\":null,\"output\":\"OBSERVER_LITERAL_IL method=EndCamera literals=0\\r\\n\"},{\"name\":\"HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"IsWindowComplete\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\\\"IsWindowComplete\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0002242,\"message\":null,\"stackTrace\":null,\"output\":\"OBSERVER_LITERAL_IL method=IsWindowComplete literals=0\\r\\n\"},{\"name\":\"InvalidWindow_RetainsOriginalParameterAndMessage\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.InvalidWindow_RetainsOriginalParameterAndMessage\",\"state\":\"Passed\",\"durationSeconds\":0.0014342,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences\",\"state\":\"Passed\",\"durationSeconds\":0.0014637,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(False)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(False)\",\"state\":\"Passed\",\"durationSeconds\":0.0040983,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)\",\"state\":\"Passed\",\"durationSeconds\":0.000977,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)\",\"state\":\"Passed\",\"durationSeconds\":0.0026934,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)\",\"state\":\"Passed\",\"durationSeconds\":0.0016192,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"invalid\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"invalid\\\")\",\"state\":\"Passed\",\"durationSeconds\":0.0009556,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"wrapped\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"wrapped\\\")\",\"state\":\"Passed\",\"durationSeconds\":9.29E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"saturated\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"saturated\\\")\",\"state\":\"Passed\",\"durationSeconds\":6.81E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"negative\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"negative\\\")\",\"state\":\"Passed\",\"durationSeconds\":6.42E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"exceeds-root\\\")\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\\\"exceeds-root\\\")\",\"state\":\"Passed\",\"durationSeconds\":6.28E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)\",\"state\":\"Passed\",\"durationSeconds\":0.0004328,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)\",\"state\":\"Passed\",\"durationSeconds\":8.45E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)\",\"fullName\":\"NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)\",\"state\":\"Passed\",\"durationSeconds\":6.96E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CameraIdentity_RejectsDuplicateAndBackwardFrames\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.CameraIdentity_RejectsDuplicateAndBackwardFrames\",\"state\":\"Passed\",\"durationSeconds\":0.0004381,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"CameraTarget_IgnoresTickCompletionUntil1800Samples\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.CameraTarget_IgnoresTickCompletionUntil1800Samples\",\"state\":\"Passed\",\"durationSeconds\":0.000158,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"InvalidWindow_FailsClosed(2049,1,0,1,96,2048)\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(2049,1,0,1,96,2048)\",\"state\":\"Passed\",\"durationSeconds\":0.0005092,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"InvalidWindow_FailsClosed(1800,2049,0,1,96,2048)\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(1800,2049,0,1,96,2048)\",\"state\":\"Passed\",\"durationSeconds\":9.67E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"InvalidWindow_FailsClosed(1800,1,8,7,96,2048)\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(1800,1,8,7,96,2048)\",\"state\":\"Passed\",\"durationSeconds\":7.18E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"InvalidWindow_FailsClosed(-1,1,0,1,96,2048)\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(-1,1,0,1,96,2048)\",\"state\":\"Passed\",\"durationSeconds\":6.76E-05,\"message\":null,\"stackTrace\":null,\"output\":\"\"},{\"name\":\"LegacyWindow_RetainsTickCompletion\",\"fullName\":\"NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.LegacyWindow_RetainsTickCompletion\",\"state\":\"Passed\",\"durationSeconds\":0.000161,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}}}}\r\n"
+  },
+  "parsed": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "f48e74c052b34740b4dc62bb957b8894",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791338448109,
+        "finished_unix_ms": 1791338456324,
+        "last_update_unix_ms": 1791338456324,
+        "progress": {
+          "completed": 25,
+          "total": 9411,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791338455824,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.LegacyWindow_RetainsTickCompletion",
+          "last_finished_unix_ms": 1791338455824,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 25,
+            "passed": 25,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 1.7635508,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "BoundObserverMessages_KeepExactTextAndReadonlyOwnership",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.BoundObserverMessages_KeepExactTextAndReadonlyOwnership",
+              "state": "Passed",
+              "durationSeconds": 0.469887,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "HotObserverMethod_HasNoLazyStringLiteralOperands(\"CaptureSample\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"CaptureSample\")",
+              "state": "Passed",
+              "durationSeconds": 0.0065947,
+              "message": null,
+              "stackTrace": null,
+              "output": "OBSERVER_LITERAL_IL method=CaptureSample literals=0\r\n"
+            },
+            {
+              "name": "HotObserverMethod_HasNoLazyStringLiteralOperands(\"EndCamera\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"EndCamera\")",
+              "state": "Passed",
+              "durationSeconds": 0.0006276,
+              "message": null,
+              "stackTrace": null,
+              "output": "OBSERVER_LITERAL_IL method=EndCamera literals=0\r\n"
+            },
+            {
+              "name": "HotObserverMethod_HasNoLazyStringLiteralOperands(\"IsWindowComplete\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"IsWindowComplete\")",
+              "state": "Passed",
+              "durationSeconds": 0.0002242,
+              "message": null,
+              "stackTrace": null,
+              "output": "OBSERVER_LITERAL_IL method=IsWindowComplete literals=0\r\n"
+            },
+            {
+              "name": "InvalidWindow_RetainsOriginalParameterAndMessage",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.InvalidWindow_RetainsOriginalParameterAndMessage",
+              "state": "Passed",
+              "durationSeconds": 0.0014342,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences",
+              "state": "Passed",
+              "durationSeconds": 0.0014637,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(False)",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(False)",
+              "state": "Passed",
+              "durationSeconds": 0.0040983,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)",
+              "fullName": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)",
+              "state": "Passed",
+              "durationSeconds": 0.000977,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(False)",
+              "state": "Passed",
+              "durationSeconds": 0.0026934,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.NestedRecorder_EmptyAndKnownAllocationKeepFullRoot(True)",
+              "state": "Passed",
+              "durationSeconds": 0.0016192,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"invalid\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"invalid\")",
+              "state": "Passed",
+              "durationSeconds": 0.0009556,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"wrapped\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"wrapped\")",
+              "state": "Passed",
+              "durationSeconds": 0.0000929,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"saturated\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"saturated\")",
+              "state": "Passed",
+              "durationSeconds": 0.0000681,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"negative\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"negative\")",
+              "state": "Passed",
+              "durationSeconds": 0.0000642,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_InvalidDoesNotBecomeZero(\"exceeds-root\")",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_InvalidDoesNotBecomeZero(\"exceeds-root\")",
+              "state": "Passed",
+              "durationSeconds": 0.0000628,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(0L,0L)",
+              "state": "Passed",
+              "durationSeconds": 0.0004328,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,13L)",
+              "state": "Passed",
+              "durationSeconds": 0.0000845,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)",
+              "fullName": "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests.ObserverStageTotals_ValidRootKeepsUnattributed(13L,4L)",
+              "state": "Passed",
+              "durationSeconds": 0.0000696,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CameraIdentity_RejectsDuplicateAndBackwardFrames",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.CameraIdentity_RejectsDuplicateAndBackwardFrames",
+              "state": "Passed",
+              "durationSeconds": 0.0004381,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "CameraTarget_IgnoresTickCompletionUntil1800Samples",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.CameraTarget_IgnoresTickCompletionUntil1800Samples",
+              "state": "Passed",
+              "durationSeconds": 0.000158,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "InvalidWindow_FailsClosed(2049,1,0,1,96,2048)",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(2049,1,0,1,96,2048)",
+              "state": "Passed",
+              "durationSeconds": 0.0005092,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "InvalidWindow_FailsClosed(1800,2049,0,1,96,2048)",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(1800,2049,0,1,96,2048)",
+              "state": "Passed",
+              "durationSeconds": 0.0000967,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "InvalidWindow_FailsClosed(1800,1,8,7,96,2048)",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(1800,1,8,7,96,2048)",
+              "state": "Passed",
+              "durationSeconds": 0.0000718,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "InvalidWindow_FailsClosed(-1,1,0,1,96,2048)",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.InvalidWindow_FailsClosed(-1,1,0,1,96,2048)",
+              "state": "Passed",
+              "durationSeconds": 0.0000676,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "LegacyWindow_RetainsTickCompletion",
+              "fullName": "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests.LegacyWindow_RetainsTickCompletion",
+              "state": "Passed",
+              "durationSeconds": 0.000161,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "testNames": [
+    "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests",
+    "NTSD.Test.Editor.BattleObserverStageBreakdownEditorTests",
+    "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests"
+  ],
+  "actualExecuted": 25,
+  "notCatalogCount": 9411
+}

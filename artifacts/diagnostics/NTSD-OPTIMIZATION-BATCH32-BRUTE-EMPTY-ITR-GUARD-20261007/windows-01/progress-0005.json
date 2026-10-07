@@ -1,0 +1,22 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 180,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/windows-01/00-dispersed1000-smoke/report.json",
+    "terminalStatus": "",
+    "sampledTicks": 168,
+    "warmupTicks": 120,
+    "minimumObservedActiveAi": 1000,
+    "minimumObservedBaseRoster": 1000,
+    "observedSampleWindows": 33,
+    "lastObservedSampleTick": 168,
+    "workloadValid": false,
+    "retainedFailedGcMeasurement": false,
+    "zeroGcPassed": false,
+    "zeroGcRawGatePassed": false,
+    "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+    "harnessValidity": false,
+    "teardownRestored": false,
+    "failure": "",
+    "emptyItrGuardApplied": true,
+    "emptyItrGuardRestored": false
+}

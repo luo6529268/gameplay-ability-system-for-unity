@@ -1,0 +1,279 @@
+{
+  "scope": "Windows two short candidate windows; final-tick parity only; performance mixed; no default promotion or zero-GC certificate",
+  "results": [
+    {
+      "run": "00-dispersed1000-smoke",
+      "requestFieldCount": 65,
+      "requestDifferences": [
+        "outputPath"
+      ],
+      "hashDifferences": [],
+      "oldSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "newSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "oldMean": 48.42327277777778,
+      "newMean": 44.16312444444442,
+      "oldP95": 73.49947999999996,
+      "newP95": 51.66756499999986,
+      "oldCollector": 15.650854444444452,
+      "newCollector": 14.602250000000007,
+      "oldFrameFields": [
+        {
+          "name": "droppedBacklogTicks",
+          "value": 364
+        },
+        {
+          "name": "unityFrameMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+            "unavailableReason": "",
+            "sampleCount": 150,
+            "average": 165.06813098986945,
+            "maximum": 1305.7745695114136,
+            "p95": 281.4878121018404,
+            "p99": 411.9797107577312
+          }
+        },
+        {
+          "name": "completedFrameCpuMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+            "unavailableReason": "",
+            "sampleCount": 89,
+            "average": 142.43992247191017,
+            "maximum": 263.9858,
+            "p95": 194.37329999999997,
+            "p99": 238.50584000000012
+          }
+        }
+      ],
+      "newFrameFields": [
+        {
+          "name": "droppedBacklogTicks",
+          "value": 352
+        },
+        {
+          "name": "unityFrameMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+            "unavailableReason": "",
+            "sampleCount": 150,
+            "average": 161.82754849394163,
+            "maximum": 1733.1143617630005,
+            "p95": 297.9373246431349,
+            "p99": 466.2018153071381
+          }
+        },
+        {
+          "name": "completedFrameCpuMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+            "unavailableReason": "",
+            "sampleCount": 89,
+            "average": 135.39358314606744,
+            "maximum": 322.2641,
+            "p95": 232.0226799999999,
+            "p99": 300.2767720000001
+          }
+        }
+      ],
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "canonicalMismatch": 0,
+      "compatFallback": 0,
+      "preCommitFallback": 0,
+      "postCommitBreach": 0
+    },
+    {
+      "run": "01-combat1000-smoke",
+      "requestFieldCount": 65,
+      "requestDifferences": [
+        "outputPath"
+      ],
+      "hashDifferences": [],
+      "oldSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "newSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "oldMean": 45.7206338888889,
+      "newMean": 46.90363833333334,
+      "oldP95": 54.92077499999999,
+      "newP95": 81.27609999999997,
+      "oldCollector": 15.258996111111108,
+      "newCollector": 15.790068888888888,
+      "oldFrameFields": [
+        {
+          "name": "droppedBacklogTicks",
+          "value": 331
+        },
+        {
+          "name": "unityFrameMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+            "unavailableReason": "",
+            "sampleCount": 150,
+            "average": 157.49690840641657,
+            "maximum": 863.2373213768005,
+            "p95": 274.2647871375083,
+            "p99": 364.3261575698849
+          }
+        },
+        {
+          "name": "completedFrameCpuMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+            "unavailableReason": "",
+            "sampleCount": 89,
+            "average": 134.32013258426966,
+            "maximum": 220.657,
+            "p95": 158.63025999999996,
+            "p99": 219.948512
+          }
+        }
+      ],
+      "newFrameFields": [
+        {
+          "name": "droppedBacklogTicks",
+          "value": 324
+        },
+        {
+          "name": "unityFrameMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+            "unavailableReason": "",
+            "sampleCount": 150,
+            "average": 157.52037405967712,
+            "maximum": 773.317277431488,
+            "p95": 278.9424240589141,
+            "p99": 371.3695511221885
+          }
+        },
+        {
+          "name": "completedFrameCpuMilliseconds",
+          "value": {
+            "available": true,
+            "unit": "ms",
+            "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+            "unavailableReason": "",
+            "sampleCount": 89,
+            "average": 138.13516067415733,
+            "maximum": 275.5502,
+            "p95": 226.24071999999984,
+            "p99": 265.4535200000001
+          }
+        }
+      ],
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "canonicalMismatch": 0,
+      "compatFallback": 0,
+      "preCommitFallback": 0,
+      "postCommitBreach": 0
+    }
+  ]
+}

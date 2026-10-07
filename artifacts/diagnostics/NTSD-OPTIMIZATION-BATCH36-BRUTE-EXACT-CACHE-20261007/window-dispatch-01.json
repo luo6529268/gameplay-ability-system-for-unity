@@ -1,0 +1,30 @@
+{
+  "request": {
+    "type": "execute_menu_item",
+    "params": {
+      "menu_path": "NTSD/Validation/Optimization/Batch36 Brute Exact Cache"
+    }
+  },
+  "response": {
+    "chunk_id": "89334a",
+    "wall_time_seconds": 1.3769725,
+    "exit_code": 0,
+    "original_token_count": 49,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch36 Brute Exact Cache'. Check Unity logs for confirmation or errors.\"}}\r\n"
+  },
+  "originalEditorPid": 19040,
+  "sourceFrozen": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "5011E8E9D5B92B21F3A8E66AE33DDC24C3DE91486380669F139529922E943378"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "700F52D3EACDB5A05B1EA7CA65DD3874DB33153D8EB7F7AED9609D9947DECDC0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "853D57CFDF0D767EE5E8CE279978CD6FF2DB2D5A159F157BA20A5B9BE08717DA"
+    }
+  ]
+}

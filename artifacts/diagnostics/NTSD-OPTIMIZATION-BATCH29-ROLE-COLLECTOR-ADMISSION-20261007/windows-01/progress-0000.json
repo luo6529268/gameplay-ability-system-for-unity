@@ -1,0 +1,19 @@
+{
+    "action": "dispersed1000",
+    "targetSamples": 180,
+    "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json",
+    "terminalStatus": "",
+    "sampledTicks": 8,
+    "warmupTicks": 120,
+    "minimumObservedActiveAi": 1000,
+    "minimumObservedBaseRoster": 1000,
+    "observedSampleWindows": 1,
+    "lastObservedSampleTick": 8,
+    "workloadValid": false,
+    "zeroGcPassed": false,
+    "zeroGcRawGatePassed": false,
+    "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+    "harnessValidity": false,
+    "teardownRestored": false,
+    "failure": ""
+}

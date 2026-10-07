@@ -1,0 +1,7 @@
+{
+  "reason": "Initial enumeration included this batch's own newly created PLANNED Change Record. It is explicitly in the pre-change Task write scope, not user work. Preserve original before.json and classify its increment as owned progress history.",
+  "ownedNewRecord": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H06-M13-M14-ADMISSION-PROBE-025.md",
+  "originalManifestProtectedEntries": 170,
+  "nonWriteProtectedEntries": 169,
+  "existingDocumentBackups": 9
+}

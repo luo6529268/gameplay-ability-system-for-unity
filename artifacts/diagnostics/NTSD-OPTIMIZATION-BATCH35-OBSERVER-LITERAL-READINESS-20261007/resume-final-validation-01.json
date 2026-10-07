@@ -1,0 +1,52 @@
+{
+  "command": "$ErrorActionPreference='Stop';$taskBefore=Get-Content -LiteralPath 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007/before.json' -Raw|ConvertFrom-Json;$taskMismatch=@(foreach($p in $taskBefore.protected){if(-not(Test-Path -LiteralPath $p.path)){[pscustomobject]@{path=$p.path;reason='MISSING'}}elseif((Get-FileHash -LiteralPath $p.path -Algorithm SHA256).Hash -ne $p.sha256){[pscustomobject]@{path=$p.path;reason='SHA_CHANGED'}}});$taskBackups=@(foreach($p in $taskBefore.before){if((Get-FileHash -LiteralPath $p.backup -Algorithm SHA256).Hash -ne $p.backupSha256){[pscustomobject]@{path=$p.path;reason='BACKUP_CHANGED'}}});$taskValidator=@(& 'Tools/Validate-ChangeLedger.ps1' *>&1|ForEach-Object{$_.ToString()});$taskValidatorCode=$LASTEXITCODE;$taskDiff=@(git diff --check -- 'docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md' 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007.md' 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md' 'docs/ai/CHANGE-LEDGER.md' 'docs/ai/STATE.md' 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md' 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md' 'docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md' 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md' 'docs/ai/FILE-OPERATIONS/INDEX.md' 2>&1|ForEach-Object{$_.ToString()});$taskDiffCode=$LASTEXITCODE;[pscustomobject]@{observed=(Get-Date).ToString('o');head=(git rev-parse HEAD);headSame=((git rev-parse HEAD) -eq $taskBefore.head);protectedCount=$taskBefore.protected.Count;protectedMismatches=$taskMismatch;backupCount=$taskBefore.before.Count;backupMismatches=$taskBackups;source=@(Get-FileHash -LiteralPath 'Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs','Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs' -Algorithm SHA256|Select-Object Path,Hash);scenes=@(Get-FileHash -LiteralPath 'Assets/NTSD/Scene/NTSD_Menu.unity','Assets/NTSD/Scene/NTSD_Battle.unity' -Algorithm SHA256|Select-Object Path,Hash);validationExit=$taskValidatorCode;validationSummary=@($taskValidator|Where-Object{$_ -match 'validation (PASSED|FAILED)|Records:|Governed code'});validationErrors=@($taskValidator|Where-Object{$_ -match '^ERROR|\\[ERROR\\]'});warningCount=@($taskValidator|Where-Object{$_ -match 'WARNING|WARN '}).Count;diffExit=$taskDiffCode;diffOutput=$taskDiff;sharedRequestAbsent=(-not(Test-Path -LiteralPath 'Temp/NTSD_ProductionEntityStress.request'))}|ConvertTo-Json -Depth 6 -Compress",
+  "exit_code": 0,
+  "result": {
+    "observed": "2026-10-07T11:34:20.8716616+08:00",
+    "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+    "headSame": true,
+    "protectedCount": 440,
+    "protectedMismatches": [],
+    "backupCount": 10,
+    "backupMismatches": [],
+    "source": [
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+        "Hash": "2FEF406CAB0A4B80316EB8F58E62EA3C8EDE710DFD4773EE5074A2AEB4B7BF80"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleProductionCatalogReplayEditor.cs",
+        "Hash": "A53A7F07FA23BA0E470CD20AD8054681A6C4C11209B3A40B68A1B17322D06808"
+      }
+    ],
+    "scenes": [
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+        "Hash": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+      },
+      {
+        "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+        "Hash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+      }
+    ],
+    "validationExit": 0,
+    "validationSummary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1334",
+      "  Governed code files in diff: 12"
+    ],
+    "validationErrors": [],
+    "warningCount": 4247,
+    "diffExit": 0,
+    "diffOutput": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "sharedRequestAbsent": true
+  },
+  "limitations": "Validator/whitespace/protection proof, not runtime acceptance; camera strict FAIL retained."
+}

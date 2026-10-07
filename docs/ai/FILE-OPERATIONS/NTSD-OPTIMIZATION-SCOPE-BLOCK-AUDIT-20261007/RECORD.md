@@ -1,0 +1,38 @@
+# 自动目标范围阻塞审计（非优化新批）
+
+Operation ID：NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007
+状态：VERIFIED（仅文档文件操作；H11/H07及Goal未完成）
+Task：NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007
+Change ID：不适用；本次只更新文档停点，不修改脚本或运行行为。
+执行者：当前 /root 主代理；thread 01a0721a-c27c-7823-b5c8-06b5a29ed3cf。
+开始时间：2026-10-07T11:48:49.8520750+08:00；事前目标快照核验：2026-10-07T11:49:10.6519511+08:00。
+工作目录：I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity。
+
+## 原因与授权
+
+沿用用户“用单独进度总表更新所有优化点进度”及已启动六项有限首阶段的文档维护授权，仅在原总表说明真实未完成停点。用户关于继续优化的更正取消机械次数停点，不取消“不自动切生产默认”及专项门。最新人类问题是当前优化内容与0.7FPS诊断，不授权新的Profiler/调用栈采集、生产默认接入、资源布局或GPU Instancing实施。自动Goal继续消息不代替新范围确认。
+
+连续目标轮次对同一授权缺口已重复核验至少三轮，上一轮只读状态说明没有改变目标验收状态，也没有可供等待的本轮已派发运行任务。完整camera2事件调用点未知；H07候选未推广且性能未达。M03/H06/M13/M14已完成限定交付不重开。第38批保留PLANNED，不将未实施候选或新诊断标题当优化完成。
+
+## 精确范围与恢复
+
+现有文件修改仅：
+- Assets/NTSD/Docs/battle-optimization-progress-tracker.md：追加当前等待方向停点，并将当前阶段标题标为等待确认；旧事实原文保留。
+- docs/ai/FILE-OPERATIONS/INDEX.md：登记本Operation及执行后结果。
+
+新增文件仅本Operation目录内的Record、before/after manifest与patch evidence；不是新增优化总表或优化子批。现有两文件准确绝对路径、字节数、SHA、Git状态和fresh dirty备份见before.json，两个备份SHA均与修改前现有内容一致。HEAD不能代替这些备份。需要恢复时须另获准确逐文件授权，不在本轮执行恢复、删除或覆盖其它内容。
+
+拟执行：apply_patch按planned-patch.txt修改以上两现有文档并新增本Record；之后Get-FileHash逐文件核对备份/十声明保护文件、git diff --check检查两现有文档、git status --porcelain=v1 --untracked-files=no比较跟踪路径状态、git rev-parse HEAD核对提交身份。全部文本用apply_patch；不运行脚本编译、测试、Unity、Profiler或性能测量。
+
+备份操作实际命令链：New-Item -ItemType Directory -Path ($taskOpRoot+'\before') -ErrorAction Stop；对before.json的writes逐项执行Copy-Item -LiteralPath $taskFile.FullName -Destination $taskBackup -ErrorAction Stop、Get-FileHash -Algorithm SHA256核同。$taskOpRoot为本Operation解析的绝对目录，创建前Test-Path为不存在；备份是新目的地，不覆盖任何旧内容。
+
+## 已发生观察失败
+
+首次目录/两fresh副本创建成功；随后全量untracked Git状态的JSON输出被截断，JavaScript JSON.parse报Unexpected token 'W'。该调用未执行apply_patch，没有修改任何现有文档或源码。保留本会话工具错误，不伪造首次完整manifest。第二次仅读取已经创建的两副本，确认仍与现有两文件SHA相等，再记录新的准确事前时间/十保护SHA和24跟踪状态；没有重建或覆盖副本。before.json已在现有文件编辑前保存。
+
+## 后置条件与限制
+
+只有声明两现有文档的状态说明和本Operation新增审计输出可改变；十项声明保护SHA、原dirty备份与HEAD保持。范围外只能声称本轮检查覆盖到的十项字节及跟踪状态，不称整个磁盘无外部改动，也不重新读取活跃Q06方法体。
+文档文件操作成功不表示优化/0GC/性能验收成功，Goal不可complete；平台blocked表达等待用户确认，不表示用户请求paused。平台状态调用放在文件审计后，返回blocked即停止Goal工作。
+后置结果：2026-10-07T11:50:27.6350896+08:00核验两dirty备份SHA一致、十项声明保护文件SHA无差异、HEAD不变、24跟踪状态行集合无差异。git diff --check仅以上两现有文档exit0；LF/CRLF警告保留，不运行Change Ledger validator，因为本Operation没有脚本改动。最终文件身份见after.json；Record/INDEX最终状态修订后再次核对以上条件。平台blocked调用仍须成功返回才视为平台状态已改变。
+

@@ -1,0 +1,626 @@
+{
+  "terminal": {
+    "report": {
+      "status": "FAIL",
+      "error": "System.InvalidOperationException: The full camera/observer scope did not prove calibrated zero GC.Alloc events; evidence retained.\r\n  at NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor.Require (System.Boolean condition, System.String reason) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs:1573 \r\n  at NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor.CompleteWindow () [0x0053b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs:1349 \r\n  at NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor.Poll () [0x00143] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs:585 ",
+      "phase": "DONE",
+      "startedUtc": "2026-10-07T03:22:42.7741574Z",
+      "finishedUtc": null,
+      "startTick": 8,
+      "endTick": 1233,
+      "targetCameraFrames": 1800,
+      "sampleCount": 1800,
+      "observedSubmissionSlots": 2,
+      "observerLiteralReadinessPrepared": true,
+      "gcAllocUnit": "TimeNanoseconds",
+      "gcAllocCapacity": 256,
+      "gcAllocBefore": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "gcAllocAfter": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 200
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "observerStageGcBefore": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "observerStageGcAfter": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "empty": {
+          "valid": true,
+          "calibratedBefore": false,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        }
+      },
+      "cameraGcAllocScopes": 1800,
+      "cameraGcAllocEvents": 2,
+      "cameraGcAllocInvalidScopes": 0,
+      "observerGcAllocScopes": 3600,
+      "observerGcAllocEvents": 0,
+      "observerGcAllocInvalidScopes": 0,
+      "observerStageInvalidFrames": 0,
+      "observerStageUnattributedEvents": 0,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingBorrowers": 0,
+      "orderedShutdown": true,
+      "sceneClean": true,
+      "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    "framesCount": 1800,
+    "nonzeroFrames": [
+      {
+        "cameraOrdinal": null,
+        "tick": null,
+        "cameraGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "beginObserverGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "endObserverGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "endObserverStages": {
+          "snapshotGates": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "segmentBindings": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "commandsAndDraws": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "alphaAndTiming": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "sampleWrite": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "completion": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "endObserverUnattributedEvents": 0
+      },
+      {
+        "cameraOrdinal": null,
+        "tick": null,
+        "cameraGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 1,
+          "allocationEvents": 1,
+          "rawValueTotal": 100
+        },
+        "beginObserverGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "endObserverGcAllocScope": {
+          "valid": true,
+          "calibratedBefore": true,
+          "saturated": false,
+          "wrapped": false,
+          "sampleCount": 0,
+          "allocationEvents": 0,
+          "rawValueTotal": 0
+        },
+        "endObserverStages": {
+          "snapshotGates": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "segmentBindings": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "commandsAndDraws": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "alphaAndTiming": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "sampleWrite": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          },
+          "completion": {
+            "valid": true,
+            "calibratedBefore": true,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "endObserverUnattributedEvents": 0
+      }
+    ],
+    "firstFramePropertyNames": [
+      "unityFrame",
+      "logicTick",
+      "publicationTick",
+      "displayTick",
+      "generation",
+      "beginPlanGeneration",
+      "beginPlanSlot",
+      "beginMeshIdentity",
+      "alpha",
+      "builtAlpha",
+      "publicationAgeAtCameraBeginMs",
+      "publicationAgeAtCameraEndMs",
+      "queuePublicationVersion",
+      "materializedPublicationVersion",
+      "timingCommandComparisons",
+      "entities",
+      "commands",
+      "resolvedCommands",
+      "segments",
+      "chunks",
+      "capacityGrowth",
+      "vertexUploadCalls",
+      "uploadedVertexBytes",
+      "renderPassRecordedDraws",
+      "cameraExecutedDraws",
+      "activeFootMarkers",
+      "selfFootCommandCount",
+      "runtimeFootEnabled",
+      "runtimeFootSpriteAvailable",
+      "activeHealthBars",
+      "sourceTextureSegments",
+      "atlasPageSegments",
+      "textureArraySegments",
+      "hasBoundCatalog",
+      "submissionSlot",
+      "meshIdentity",
+      "leaseCountAfterCamera",
+      "cameraRenderEnvelopeAllocatedBytes",
+      "cameraGcAllocScope",
+      "beginObserverGcAllocScope",
+      "endObserverGcAllocScope",
+      "endObserverStages",
+      "endObserverUnattributedEvents",
+      "firstEntityPosition",
+      "actorAction",
+      "actorSourceX",
+      "actorSourceZ",
+      "actorInputButtons",
+      "comparedEntities"
+    ],
+    "materialization": {
+      "collectionContext": "explicit-main-thread-snapshot-of-production-queued-materialization-counters",
+      "counterEpoch": 1,
+      "counts": {
+        "builds": {
+          "alphaChanged": {
+            "admittedBuildCount": 577,
+            "buildInvocationCount": 577,
+            "completedBuildCount": 577,
+            "failedBuildCount": 0,
+            "rejectedBeforeBuildCount": 0,
+            "uploadedVertexBytes": 455136,
+            "uploadedVertexCount": 10344,
+            "vertexUploadCallCount": 577
+          },
+          "publicationChanged": {
+            "admittedBuildCount": 1223,
+            "buildInvocationCount": 1223,
+            "completedBuildCount": 1223,
+            "failedBuildCount": 0,
+            "rejectedBeforeBuildCount": 0,
+            "uploadedVertexBytes": 963424,
+            "uploadedVertexCount": 21896,
+            "vertexUploadCallCount": 1223
+          },
+          "repeated": {
+            "admittedBuildCount": 0,
+            "buildInvocationCount": 0,
+            "completedBuildCount": 0,
+            "failedBuildCount": 0,
+            "rejectedBeforeBuildCount": 0,
+            "uploadedVertexBytes": 0,
+            "uploadedVertexCount": 0,
+            "vertexUploadCallCount": 0
+          },
+          "total": {
+            "admittedBuildCount": 1800,
+            "buildInvocationCount": 1800,
+            "completedBuildCount": 1800,
+            "failedBuildCount": 0,
+            "rejectedBeforeBuildCount": 0,
+            "uploadedVertexBytes": 1418560,
+            "uploadedVertexCount": 32240,
+            "vertexUploadCallCount": 1800
+          }
+        },
+        "prepareAttempts": {
+          "alphaChanged": 577,
+          "publicationChanged": 1223,
+          "repeated": 0,
+          "total": 1800
+        },
+        "requests": {
+          "alphaChanged": 577,
+          "publicationChanged": 1223,
+          "repeated": 0,
+          "total": 1800
+        },
+        "returnGates": {
+          "reentrant": 0,
+          "sameSample": 0,
+          "sameUnityFrame": 0
+        }
+      },
+      "limitations": "Counters only; not GPU traffic, GPU batch, successful pixels, frame-time or device certification. Request/Prepare/return-gate counts are not successful rendering. Completed Build may have zero payload; failed Build includes only completed vertex-upload APIs, never permission for partial submission. Entity Mesh vertex payload only; excludes Foot/Health, index/submesh, RenderPass and benchmark-local. Snapshot/JSON export allocates outside the hot path; caller must exclude writer concurrency. Scope is a reset epoch or counter delta, not a measured frame/tick/time denominator or complete M0.",
+      "schemaVersion": "ntsd-central-materialization-counters-v1",
+      "scope": "window-delta",
+      "units": {
+        "requestAttemptGateAndBuildCounts": "count",
+        "uploadedVertexBytes": "bytes",
+        "uploadedVertexCount": "vertices",
+        "vertexUploadCallCount": "count"
+      },
+      "window": {
+        "end": {
+          "builds": {
+            "alphaChanged": {
+              "admittedBuildCount": 580,
+              "buildInvocationCount": 580,
+              "completedBuildCount": 580,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 457248,
+              "uploadedVertexCount": 10392,
+              "vertexUploadCallCount": 580
+            },
+            "publicationChanged": {
+              "admittedBuildCount": 1229,
+              "buildInvocationCount": 1229,
+              "completedBuildCount": 1229,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 967648,
+              "uploadedVertexCount": 21992,
+              "vertexUploadCallCount": 1229
+            },
+            "repeated": {
+              "admittedBuildCount": 0,
+              "buildInvocationCount": 0,
+              "completedBuildCount": 0,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 0,
+              "uploadedVertexCount": 0,
+              "vertexUploadCallCount": 0
+            },
+            "total": {
+              "admittedBuildCount": 1809,
+              "buildInvocationCount": 1809,
+              "completedBuildCount": 1809,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 1424896,
+              "uploadedVertexCount": 32384,
+              "vertexUploadCallCount": 1809
+            }
+          },
+          "prepareAttempts": {
+            "alphaChanged": 580,
+            "publicationChanged": 1230,
+            "repeated": 1,
+            "total": 1811
+          },
+          "requests": {
+            "alphaChanged": 580,
+            "publicationChanged": 1230,
+            "repeated": 1,
+            "total": 1811
+          },
+          "returnGates": {
+            "reentrant": 0,
+            "sameSample": 0,
+            "sameUnityFrame": 0
+          }
+        },
+        "start": {
+          "builds": {
+            "alphaChanged": {
+              "admittedBuildCount": 3,
+              "buildInvocationCount": 3,
+              "completedBuildCount": 3,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 2112,
+              "uploadedVertexCount": 48,
+              "vertexUploadCallCount": 3
+            },
+            "publicationChanged": {
+              "admittedBuildCount": 6,
+              "buildInvocationCount": 6,
+              "completedBuildCount": 6,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 4224,
+              "uploadedVertexCount": 96,
+              "vertexUploadCallCount": 6
+            },
+            "repeated": {
+              "admittedBuildCount": 0,
+              "buildInvocationCount": 0,
+              "completedBuildCount": 0,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 0,
+              "uploadedVertexCount": 0,
+              "vertexUploadCallCount": 0
+            },
+            "total": {
+              "admittedBuildCount": 9,
+              "buildInvocationCount": 9,
+              "completedBuildCount": 9,
+              "failedBuildCount": 0,
+              "rejectedBeforeBuildCount": 0,
+              "uploadedVertexBytes": 6336,
+              "uploadedVertexCount": 144,
+              "vertexUploadCallCount": 9
+            }
+          },
+          "prepareAttempts": {
+            "alphaChanged": 3,
+            "publicationChanged": 7,
+            "repeated": 1,
+            "total": 11
+          },
+          "requests": {
+            "alphaChanged": 3,
+            "publicationChanged": 7,
+            "repeated": 1,
+            "total": 11
+          },
+          "returnGates": {
+            "reentrant": 0,
+            "sameSample": 0,
+            "sameUnityFrame": 0
+          }
+        }
+      }
+    },
+    "resultSha": "19CC8538BA8A25E35FD216DCADF82153B492A385FB6A80F4276D483C5F2E61A5"
+  },
+  "coverage": {
+    "nonzero": [
+      {
+        "sampleOrdinal": 1,
+        "unityFrame": 3322,
+        "logicTick": 9,
+        "publicationTick": 9,
+        "generation": 12,
+        "submissionSlot": 1,
+        "segments": 4,
+        "sourceTextureSegments": 4,
+        "atlasPageSegments": 0,
+        "textureArraySegments": 0,
+        "allocationEvents": 1,
+        "unit": "TimeNanoseconds",
+        "rawValue": 100
+      },
+      {
+        "sampleOrdinal": 5,
+        "unityFrame": 3326,
+        "logicTick": 11,
+        "publicationTick": 11,
+        "generation": 16,
+        "submissionSlot": 1,
+        "segments": 4,
+        "sourceTextureSegments": 4,
+        "atlasPageSegments": 0,
+        "textureArraySegments": 0,
+        "allocationEvents": 1,
+        "unit": "TimeNanoseconds",
+        "rawValue": 100
+      }
+    ],
+    "coverage": {
+      "drawRecorded": 11592,
+      "drawExecuted": 11592,
+      "minFoot": 2,
+      "minHealth": 2,
+      "minSelf": 0,
+      "capacityGrowthMax": 0,
+      "cpuLeaseMax": 0,
+      "maxSegments": 8,
+      "sourceSegmentMax": 8,
+      "atlasPageSegmentMax": 0,
+      "textureArraySegmentMax": 0,
+      "boundCatalogFrames": 1800,
+      "observerNonzeroFrames": 0
+    },
+    "observationScope": "single current-thread camera Begin/End envelope with separately calibrated observer; raw time unit not bytes; not FPS/1000AI",
+    "sourceComparedTo33": "non-contemporaneous observer13 to0; camera2 remains, callsite unknown"
+  },
+  "menuRestore": {
+    "chunk_id": "35b485",
+    "wall_time_seconds": 1.0352659,
+    "exit_code": 0,
+    "original_token_count": 49,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Scene 'Assets/NTSD/Scene/NTSD_Menu.unity' loaded successfully.\",\"data\":{\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"name\":\"NTSD_Menu\"}}}\r\n"
+  },
+  "menuState": {
+    "chunk_id": "2b129e",
+    "wall_time_seconds": 0.1467413,
+    "exit_code": 0,
+    "original_token_count": 350,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Retrieved editor state.\",\"data\":{\"schema_version\":\"unity-mcp/editor_state@2\",\"observed_at_unix_ms\":1791343693815,\"sequence\":9,\"unity\":{\"instance_id\":null,\"unity_version\":\"2022.3.62f3\",\"project_id\":null,\"platform\":\"WindowsEditor\",\"is_batch_mode\":false},\"editor\":{\"is_focused\":false,\"play_mode\":{\"is_playing\":false,\"is_paused\":false,\"is_changing\":false},\"active_scene\":{\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"guid\":\"132c934aff207b048833ab33c1961278\",\"name\":\"NTSD_Menu\"}},\"activity\":{\"phase\":\"idle\",\"since_unix_ms\":1791343618649,\"reasons\":[\"tick\"]},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_started_unix_ms\":null,\"last_compile_finished_unix_ms\":null,\"last_domain_reload_before_unix_ms\":null,\"last_domain_reload_after_unix_ms\":1791343384516},\"assets\":{\"is_updating\":false,\"external_changes_dirty\":false,\"external_changes_last_seen_unix_ms\":null,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":null,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_requested_unix_ms\":null,\"last_refresh_finished_unix_ms\":null}},\"tests\":{\"is_running\":false,\"mode\":null,\"current_job_id\":null,\"started_unix_ms\":null,\"started_by\":\"unknown\",\"last_run\":null},\"transport\":{\"unity_bridge_connected\":null,\"last_message_unix_ms\":null},\"settings\":{\"batch_execute_max_commands\":25}}}}\r\n"
+  },
+  "menuScene": {
+    "chunk_id": "7a95a1",
+    "wall_time_seconds": 0.1651259,
+    "exit_code": 0,
+    "original_token_count": 57,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Retrieved active scene information.\",\"data\":{\"name\":\"NTSD_Menu\",\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"buildIndex\":0,\"isDirty\":false,\"isLoaded\":true,\"rootCount\":8}}}\r\n"
+  },
+  "resultCommand": "$taskRoot='artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01';$taskResult=Get-Content -LiteralPath ($taskRoot+'/production-window-01.json') -Raw|ConvertFrom-Json;$taskFrames=@($taskResult.frames);[pscustomobject]@{report=$taskResult|Select-Object status,error,phase,startedUtc,finishedUtc,startTick,endTick,targetCameraFrames,sampleCount,observedSubmissionSlots,observerLiteralReadinessPrepared,gcAllocUnit,gcAllocCapacity,gcAllocBefore,gcAllocAfter,observerStageGcBefore,observerStageGcAfter,cameraGcAllocScopes,cameraGcAllocEvents,cameraGcAllocInvalidScopes,observerGcAllocScopes,observerGcAllocEvents,observerGcAllocInvalidScopes,observerStageInvalidFrames,observerStageUnattributedEvents,remainingObjects,remainingSlots,remainingBorrowers,orderedShutdown,sceneClean,sceneHashBefore,sceneHashAfter;framesCount=$taskFrames.Count;nonzeroFrames=@($taskFrames|Where-Object{$_.cameraGcAllocScope.allocationEvents -gt 0 -or $_.beginObserverGcAllocScope.allocationEvents -gt 0 -or $_.endObserverGcAllocScope.allocationEvents -gt 0}|Select-Object cameraOrdinal,tick,cameraGcAllocScope,beginObserverGcAllocScope,endObserverGcAllocScope,endObserverStages,endObserverUnattributedEvents);firstFramePropertyNames=@($taskFrames[0].psobject.Properties.Name);materialization=Get-Content -LiteralPath ($taskRoot+'/materialization-window-01.json') -Raw|ConvertFrom-Json;resultSha=(Get-FileHash -LiteralPath ($taskRoot+'/production-window-01.json') -Algorithm SHA256).Hash}|ConvertTo-Json -Depth 9",
+  "coverageCommand": "$taskPath='artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01/production-window-01.json';$taskReport=Get-Content -LiteralPath $taskPath -Raw|ConvertFrom-Json;$taskFrames=@($taskReport.frames);$taskNonzero=@(for($n=0;$n -lt $taskFrames.Count;$n++){ $f=$taskFrames[$n];if($f.cameraGcAllocScope.allocationEvents -gt 0){[pscustomobject]@{sampleOrdinal=$n+1;unityFrame=$f.unityFrame;logicTick=$f.logicTick;publicationTick=$f.publicationTick;generation=$f.generation;submissionSlot=$f.submissionSlot;segments=$f.segments;sourceTextureSegments=$f.sourceTextureSegments;atlasPageSegments=$f.atlasPageSegments;textureArraySegments=$f.textureArraySegments;allocationEvents=$f.cameraGcAllocScope.allocationEvents;unit=$taskReport.gcAllocUnit;rawValue=$f.cameraGcAllocScope.rawValueTotal}}});$taskCoverage=[pscustomobject]@{drawRecorded=($taskFrames|Measure-Object renderPassRecordedDraws -Sum).Sum;drawExecuted=($taskFrames|Measure-Object cameraExecutedDraws -Sum).Sum;minFoot=($taskFrames|Measure-Object activeFootMarkers -Minimum).Minimum;minHealth=($taskFrames|Measure-Object activeHealthBars -Minimum).Minimum;minSelf=($taskFrames|Measure-Object selfFootCommandCount -Minimum).Minimum;capacityGrowthMax=($taskFrames|Measure-Object capacityGrowth -Maximum).Maximum;cpuLeaseMax=($taskFrames|Measure-Object leaseCountAfterCamera -Maximum).Maximum;maxSegments=($taskFrames|Measure-Object segments -Maximum).Maximum;sourceSegmentMax=($taskFrames|Measure-Object sourceTextureSegments -Maximum).Maximum;atlasPageSegmentMax=($taskFrames|Measure-Object atlasPageSegments -Maximum).Maximum;textureArraySegmentMax=($taskFrames|Measure-Object textureArraySegments -Maximum).Maximum;boundCatalogFrames=@($taskFrames|Where-Object{$_.hasBoundCatalog}).Count;observerNonzeroFrames=@($taskFrames|Where-Object{$_.beginObserverGcAllocScope.allocationEvents -gt 0 -or $_.endObserverGcAllocScope.allocationEvents -gt 0}).Count};[pscustomobject]@{nonzero=$taskNonzero;coverage=$taskCoverage;observationScope='single current-thread camera Begin/End envelope with separately calibrated observer; raw time unit not bytes; not FPS/1000AI';sourceComparedTo33='non-contemporaneous observer13 to0; camera2 remains, callsite unknown'}|ConvertTo-Json -Depth 5",
+  "classification": "PROVENANCE_PASS / OBSERVER_ZERO_EVENTS / FULL_CAMERA_ZERO_GC_FAIL; original35 candidate validation only, not FPS improvement"
+}

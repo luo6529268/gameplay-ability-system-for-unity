@@ -1,0 +1,70 @@
+
+{
+  "observedUtc": "2026-10-06T21:14:54.5461689Z",
+  "stage": "FOCUSED_TEST_PASS / WINDOWS_SUITE_PREPARING / NOT_FINAL_RUNTIME_ACCEPTANCE",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "protectedCount": 178,
+  "protectedMismatches": [],
+  "backupCount": 10,
+  "backupErrors": [],
+  "validatorExitCode": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1322",
+    "  Governed code files in diff: 8"
+  ],
+  "historicalWarnings": 4277,
+  "diffCheckExitCode": 0,
+  "sceneHashes": [
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "Hash": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "Hash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ],
+  "currentWriteFiles": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "2DE1CDC78A3490A4B8CB5D1EDE2983832976B7FC60F5F96C7D34514A34491A82"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "sha256": "854833578447E858425100E7ED60B81136EBBF4FAF7E09737D7FFB0F5C0846C4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "E8EDDF85837A3BB154EA2CA0DCA0537C46BA5B306840676B58E1F0ACC199CE5E"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "BE8A3D3FAEA637144B32B937D8E27FC1F0313FA553CCC79C551899FC2F2F38BE"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "sha256": "0D00E7E6785D4D30D5BEEDE05F4DF985EA5EDA610D8CD5862FC286347650A633"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "A9B47EB08DCEFD7804679F7E0B42C096696EDDC852B3FF6F1219FAD60BB8F992"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "16C8B994E9D1DF40B39E4FD470089E1B23E29211B9484E5E0CCB62D7B3C39587"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "8F3DFFD0FB4B90D0C4F56F2D8FE22403D7F2072E7DC39901609677462ECBD0E4"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "ACF9282A0DD8341A6810412EB4D12ECB96A8B68A80816643E943E131BCAF757D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "296D8CAA7FD3199C3F418EEB0ECE3F7D8899E95C0CCCEE81D07F2985287630D1"
+    }
+  ]
+}

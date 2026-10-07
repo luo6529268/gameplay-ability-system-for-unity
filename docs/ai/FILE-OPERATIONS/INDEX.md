@@ -1,3 +1,79 @@
+> 第39批CPU/GC采集 / 已执行：唯一Combat1000窗口完成，原回调0/45秒失败与raw保留，从同一raw恢复8主/render帧，不再测；全部ProfilerSettings恢复、Scene/关闭保护。8dirty副本/15保护和raw SHA保持，默认仍false，文件审计见[Operation](NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/RECORD.md)；不是FPS或全线程/自动截止PASS。
+
+> 自动目标范围阻塞审计 / VERIFIED（文档文件操作限定，优化未完成）：原总表已记录NEEDS_USER_DECISION；两dirty副本/十项保护SHA/HEAD/跟踪状态保持，声明文档diff检查exit0。没有新增优化批次、源码修改、Unity/测试/测量或专项门解冻；首次大清单观察截断已留痕。[Operation](NTSD-OPTIMIZATION-SCOPE-BLOCK-AUDIT-20261007/RECORD.md)。
+
+> 第35批原1800camera验收恢复 / VERIFIED（文件操作与恢复限定，运行严格0GC仍FAIL）：10当前dirty文本副本/440规范化保护/HEAD与源码/双Scene保持，observer3600scope0event、camera2event/关闭三残留0，原Menu8roots clean idle恢复；无C#修改或新增候选，不计FPS收益。validator1334/12与声明diff检查PASS，4247历史warnings保留；首次patch/审计观察失败及Index末尾空行修正有留痕。[Operation](NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007/RECORD.md)。
+
+> 第37批限定文件审计完成：11当前dirty副本SHA/379非写域/HEAD/source保持；164/164、两真实1000AI短窗及原Menu恢复，三源/声明文档/既有suite终态范围，未删除/回退用户改动。H07性能仍FAIL/default false，完整清单及原件见 [Operation](NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007/RECORD.md)。
+
+> 2026-10-07 第36批两1000AI短窗已完成 / SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING：153/153；各120+180且cache全部300应用/0回退、三flag恢复。对34同请求非同期logic187.13→84.25 / 183.18→86.22ms、collector154.75→52.60 / 152.60→54.10ms，显示帧527→259 / 483→249ms；仍远未达标、SetPass约1994/1995未降。末tick300各20hash/完整JSON同；capacity snapshot采于准备前为0，真实capacity/bytes UNKNOWN不补造。11阶段零残留/双Scene同；原PID19040已按当前6400核实Menu8roots clean/idle。334保护/11副本/HEAD/source全同，validator1332/12与diff检查PASS（4247历史warning）；H07/H11未达、5of6有限交付/父关闭0/新批15/Goal active，默认false/专项门不变。[Operation](NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007/RECORD.md)。
+
+> 历史事前快照：2026-10-07 第36批 RUNTIME_PENDING / WINDOWS_READY：11有效RED后153/153 PASS，固定1000逻辑实体roster53.94→cache22.42ms仅局部；334保护/11副本/HEAD/双Scene/validator保持，首次Index EOF已修。三源冻结，下一一次两实际1000AI120+180短窗；未有本批实景FPS/0GC/native结果，默认与专项门不变，H07/H11未达、父关闭0/新批15/Goal active。[Operation](NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007/RECORD.md)。
+
+> 2026-10-07 第36批PLANNED：普通Brute每次收集精确缓存候选；11当前字节备份与保护先于代码，不切默认。[Operation](NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007/RECORD.md)。
+
+> 2026-10-07 第35批 RUNTIME_PENDING / FOCUSED_TEST_PASS：新8有效RED为7FAIL/1控制PASS；原Editor job f48e74c052b34740b4dc62bb957b8894 实际25/25 PASS（1.7635508s），三热方法literal数0/0/0、原文本/错误合同与正反校准保持。仅Editor工具整改，尚无新相机/0GC/FPS结果；按用户0.7FPS反馈，先转H07已测PairExactLoop热点，不追加本批长窗。H11严格FAIL/H07性能未达、5of6有限交付/父关闭0/新批14/Goal active，默认及专项门不变。[Operation](NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/RECORD.md)
+
+> 历史事前快照：2026-10-07 第35批PLANNED：仅两个Editor诊断脚本，11/2字面量绑定与33事件对应是待测假设；immutable错误文本绑定前移、热检查/首帧/完整scope不缩小，8 test-first/一次原1800camera冻结。9当前副本/319保护/HEAD已核；尚无新代码或因果/0GC结果。H11严格FAIL/H07性能未达保持，5of6有限交付/父关闭0/新批14/Goal active，默认与专项门不解冻。[Operation](NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/RECORD.md)
+
+> 历史快照：2026-10-07 第34批限定检查完成 / SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING：142/142、两actual1000AI各120+180有效；旧32同请求非同期logic231.62→187.13 / 236.77→183.18ms、collector201.00→154.75 / 206.56→152.60ms，仍占83%/可见帧527/483ms，未达标。末tick300各20hash/完整JSON同、capacityCritical0/roster applied且无fallback/两flag恢复；11阶段三残留0/双Scene同/Menu8roots clean。Play缺两个新capacity观察字段，实际scratch bytes UNKNOWN；退出补导入3/3，不重复窗口。270保护/11副本/HEAD/source保持，rawGC UNKNOWN/H11严格FAIL不变。5of6有限交付/父关闭0/新批13/Goal active，默认false/专项门不解冻。[Operation](NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007/RECORD.md)。
+
+> 历史事前快照：2026-10-07 第34批 RUNTIME_PENDING / WINDOWS_READY：具名12有效RED→原两类142/142 GREEN（13.4186s）；固定1000实体夹具collector114.46→53.73ms、pair499500→39180，仅局部证据非FPS/1000AI。3源SHA冻结、270保护/11副本/HEAD与Scene保持、validator1330/11 PASS（4248历史warning）。下一仅一次两真实1000AI 120+180短窗，默认false/容量不足回旧；H07实际性能与H11完整0GC仍未达、5of6有限交付/父关闭0/新批13/Goal active，不解冻专项门。[Operation](NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007/RECORD.md)。
+
+> 历史事前快照：2026-10-07 第34批PLANNED：普通Brute双方空ITR pair有界跳过，原有效pair/方向顺序不变；3脚本/11当前字节备份/270保护已冻结，12 test-first＋一次两1000AI短窗，尚无新代码或收益。默认false/容量不足回旧，不解冻专项门；可变C++源不作formal336新证书。有限交付5of6/父关闭0/新批13/Goal active。[Operation](NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007/RECORD.md)。
+
+> 2026-10-07 第33批终态 PARTIAL / PROVENANCE_PASS / ZERO_GC_FAIL：10/10＋一次1800实际camera完成；observer13事件归入首帧snapshot/gates11、completion2，其他四块0、invalid/unattributed均0；camera另2事件（ordinal1/5）实际调用点仍未知。两recorder前后校准有效，严格完整0GC仍FAIL，不跳帧或当FPS收益。11560 CPU draw录制=执行/growth0/CPUlease0，两slot/Foot与Health各2；11阶段三残留0/双Scene SHA同/原Menu8roots clean恢复。247保护/8备份/HEAD/source保持、validator1329/11 PASS（4248历史warning）。有限交付5of6/父关闭0/新批12/Goal active；不切默认、不重复此诊断或解冻专项门。[Record](NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007/RECORD.md)。
+
+> 历史事前快照：2026-10-07 第33批FOCUSED_TEST_PASS / CAMERA_READY：原10/10、nested空/已知1MiB正反通过，247保护/8备份/HEAD、validator1329/11 PASS（4248历史warning）。仅Editor六scope诊断，原完整camera/observer root不缩小；下一一次原1800camera，真实归属/0GC未有结果。阶段5of6/父关闭0/新批12/Goal active，不切默认或解冻专项门。[Record](NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007/RECORD.md)。
+
+> 2026-10-07 第33批PLANNED：NTSD-OPT-H11-OBSERVER-STAGES-033；只现有Editor observer六固定子范围/第二预先校准recorder，原完整root和严格FAIL不变、不跳早期帧。准确8当前备份/247非写域/HEAD核同；10 test-first和一次原1800camera冻结，尚无代码/新归属/0GC收益。阶段5of6/父关闭0/新批12/Goal active，不切默认、重跑32或解冻专项门。[Record](NTSD-OPTIMIZATION-BATCH33-OBSERVER-STAGES-20261007/RECORD.md)。
+
+> 2026-10-07 第32批限定检查完成 / SCOPED_GAIN_NOT_ADMITTED：130/130、两真实1000AI各120+180有效/StoppedCleanly；旧26同请求非同期基线logic467.52→231.62 / 431.00→236.77ms、collector429.19→201.00 / 398.07→206.56ms，但可见帧614/583ms、collector仍占约87%，远未达标。末tick300十hash/完整JSON同、容量拒绝0、guard已恢复、11阶段零残留/Menu8roots clean；238保护/11备份/HEAD与双Scene保持。raw GC PASS仍UNKNOWN、不撤销H11FAIL；Change RUNTIME_PENDING指整体准入/native/逐tick/全链0GC待，不是短窗未跑。有限交付5of6/父关闭0/新批11/Goal active，不切默认、不重复此版窗口或解冻专项门。[证据](NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/RECORD.md)。
+
+> 2026-10-07 第32批PLANNED：NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032；原默认Brute空itr方向前置纯guard候选，默认false、不换collector/索引；3脚本、7＋3 test-first与一次两1000AI120+180冻结，11当前备份/238保护/HEAD已核。尚无代码/新收益；H07/H11/Goal仍开放，5of6有限交付/新批11，不切默认或解冻专项门。[Record](NTSD-OPTIMIZATION-BATCH32-BRUTE-EMPTY-ITR-GUARD-20261007/RECORD.md)。
+
+> 2026-10-07 第31批限定检查完成 / PERFORMANCE_INCONCLUSIVE：120/120；两真实1000AI短窗已跑，整tick48.42→44.16 / 45.72→46.90ms、可见帧仍158–162ms，末tick300完整JSON同/关闭零残留。局部capture六分之一不是稳定FPS收益，raw GC PASS仍UNCALIBRATED/UNKNOWN，H11完整FAIL不撤回。232保护/11备份/HEAD保持；Change RUNTIME_PENDING为整体准入待，不再称短窗未跑。5of6有限交付/34父项关闭0/Goal active/新批10，不切默认、不追加同构长窗刷PASS。[证据](NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/RECORD.md)。
+
+> 2026-10-07 第31批PLANNED：NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031；3准确脚本/11当前备份/232保护，现有Role同方向快照复用，7 collector＋3 request先RED、两真实1000AI短窗冻结。新批10/交付5of6，H11/H07/Goal仍开放，不切默认或解冻专项门。[Record](NTSD-OPTIMIZATION-BATCH31-PAIR-SNAPSHOT-REUSE-20261007/RECORD.md)。
+
+> 2026-10-07 第30批固定正式报告收集限定VERIFIED：四120+1800完成/observed1000AI，logic mean52.404/56.969/49.973/49.149ms、P9582.606/95.590/76.336/64.358仍>33，四GC FAIL/harnessValidity=false原件保留，WITH_FAILURES非有效证书。Dispersed末tick1920完整SHA同原brute，Combat重复同/无其brute长窗，非逐tick/native，不切默认。33/33、11阶段零残留/双Scene同/Menu恢复、232保护/9备份/HEAD保持。有限报告交付5of6，不等于优化完成；H11完整0GC及第13节H07实际热点优化仍未达、父OPEN/Goal active/新批9。 [证据](NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/RECORD.md)。
+
+> 2026-10-07 第30批RUNTIME_PENDING / FORMAL_WINDOWS_RUNNING：NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030；24 RED→33/33 GREEN，原30菜单一次/四65字段request仅collector/output异于26，120+1800各两Dispersed/Combat。原Editor Battle Play已启动，终态/末tick/耗时待；GC FAIL保留而非豁免，生产默认不切。232保护/9备份/HEAD与事前双Scene同，validator1326/9 PASS；H07/H11 OPEN、4of6/新批9/Goal active，运行中不改C#/刷新/重启。 [Record](NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/RECORD.md)。
+
+> 2026-10-07 第30批PLANNED：NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030，复用29有效短窗与既有role候选，只原四120+1800formal request的collector/output变化；唯一Suite Editor路径，完整GC FAIL如实保留/安全后继续独立测量，不修改Harness gate或默认。9dirty副本/232非写域/原29terminal owner已先核，原Menu clean/idle。尚未有新测试或正式窗结果；父H07/H11 OPEN、4of6/新批9/Goal active，次数只复盘。 [Record](NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/RECORD.md)。
+
+> 2026-10-07 第29批操作保护VERIFIED：195非写域/11dirty备份/HEAD与双Scene保持，原Editor两role候选有效窗完成、11阶段零残留/Menu clean恢复。共享terminal已授权26→29终态替换，原字节留存；唯一Suite Editor小复用/准确文档写域，无旧report覆盖/删除/移动/弃改/默认或资源修改。候选有收益不代表H07达标/默认推广。[Record](NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/RECORD.md)。
+
+> 2026-10-07 第29批 PLANNED：NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029，仅现有role候选/两旧1000AI smoke同字段对比，唯一Suite Editor路径；11当前dirty副本/195保护/共享terminal Batch26 owner先核。三新增request测试先RED、原六回归复用；不切生产默认/新索引/专项门，末tick300全部hash只限定证据，H11严格FAIL/H07性能FAIL保持，Goal active。 [Record](NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/RECORD.md)。
+
+> 2026-10-07 第28批操作保护VERIFIED：187非写域/10当前备份SHA与HEAD保持，原1800frames归属通过/严格0GC FAIL原件保留，11阶段零残留/Scene同/原Menu clean恢复。唯一probe和准确文档写域，无删除/移动/弃改/未知覆盖；本保护结果不代表性能或H11通过。[Record](NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/RECORD.md)。
+
+> 历史第28批 PLANNED：10当前副本/187非写域SHA与HEAD已保存，唯一原probe值字段诊断，不覆写旧证据、Scene/资源/settings/其它C#。 [Record](NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/RECORD.md)。
+
+> 2026-10-07 第27批操作保护VERIFIED：11准确脏字节副本/180非写域SHA保持、HEAD/双Scene同，新helper.meta正常导入cc2854617。校准4/4、两CPU桥2/2；原1800camera严格FAIL（camera2/observer13event），十一阶段零残留/原Menu恢复，完整0GC/性能未通过。无删除/移动/弃改/未知覆盖。 [Record](NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/RECORD.md)。
+
+> 2026-10-07 第27批脚本前扩展：PLANNED，script-before.json实际记录11当前脏字节副本及180非写域SHA、HEAD8107196b；第26批已终态/原Editor idle，只三个声明Editor诊断路径，先校准。无删除/移动/弃改/未知覆盖。[Record](NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/RECORD.md)。
+
+> 2026-10-07 第27批仅事前文档准备：可靠GC采样Task已冻结，三个现有文档当前字节副本及SHA已保存；C#尚未编辑、未校准、未启动新窗口。必须等第26批终态及原Editor恢复空闲后再补脚本前Record/manifest并实施，不打断活跃H07长窗。无删除/移动/Git弃改。 [Record](NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/RECORD.md)。
+
+> 2026-10-07 第26批 PLANNED：用户批准H07到限仍继续，10当前脏字节副本＋178非写域保护已冻结，原terminal副本保留；无删除/Git弃改/资源变化。 [Record](NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/RECORD.md)。
+
+> 2026-10-07 第25批操作VERIFIED：164非写域保护、15准确副本/双Scene/HEAD保持，原Menu8roots clean；18＋1实际case通过，但counter控制未响应，H11证据更正待补。三个评估完成/Goal4of6，未实现新算法/未续H07第四轮；无删除/移动/弃改。 [Record](NTSD-OPTIMIZATION-BATCH25-BOUNDED-ASSESSMENTS-20261007/RECORD.md)。
+
+> 2026-10-07 第25批事前：NTSD-OPT-H06-M13-M14-ADMISSION-PROBE-025 / PLANNED；新批4/8，三个有限Editor准入评估，不改生产/Scene或H07第四轮。四collector形状、三声音分布、一次Capture两Assert固定矩阵，未测量/测试；原Goal2/6保持。
+
+> 2026-10-07 第24批操作保护通过：98保护/9准确备份/双Scene/HEAD不变，validator1320/6路径/0错误、diffcheck0。H07执行PARTIAL/3of3到限，非性能验收通过；原三窗和terminal保留，无删除/移动/弃改。 [Record](NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007/RECORD.md)。
+
+> 2026-10-07 第24批事前：NTSD-OPTIMIZATION-BATCH24-WINDOWS-AI-20261007 / IN_PROGRESS；NTSD-OPT-H07-WINDOWS-AI-SUITE-024 / PLANNED。七before/99保护，新增Editor入口；两个真实1000AI smoke＋各两formal、BruteForce基线，原生产源不改；新批3/8启动、首阶段仍2/6，尚无测量/通过。共享request不写/删，新建终态信号保留，专项门不变。
+
+> 2026-10-07 NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / VERIFIED（本批操作）：10准确before备份、57保护，只有两Editor与已声明进度文档；旧FAIL/旧证据保留，无删除/移动/弃改/提交/push。
+
+> 2026-10-07 NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / PLANNED：10当前字节before备份完成；仅准确Editor验收/进度路径，保护现有改动；无删除/移动/弃改。
+
+> 2026-10-07 第22批限定通过：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / SCOPED_RUNTIME_FOOT_CONFIG_PASS；NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / VERIFIED（本批）。GameConfig fallback接线，显式authoring/禁用保持；原Editor32/32，Battle1800实际camera每帧Foot2/Health2、两slot、CPU DrawMesh11815录制=执行、growth0；三档100/500/1000真实catalog重复命令重放均局部0B/growth0，非1000AI。11阶段关闭三残留0/Scene同/Menu恢复，30保护/11备份保持。有限首阶段1/8新子批完成，34项父项关闭仍0；完整选定链与后续5项继续，EXT-1/Mono/ATLAS门不解冻。下方旧快照按时间阅读。
+
+> 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
+
 > 2026-10-07 第21批事前：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / IN_PROGRESS；NTSD-OPT-M03-FOOT-AUTHORING-021 / PLANNED。仅原savedBattle 64实际camera只读Foot配置/Self前置诊断，不改production/Scene/Q06 body，不降第20批严格门；8准确备份/733保护完成。34项高12中14低8、父M03/H11 OPEN，专项门保持，尚未实施或测试。 [Record](../CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
 
 > 2026-10-07 第20批PARTIAL / FOOT_COVERAGE_UNMET：NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007；NTSD-OPT-M03-PRODUCTION-CATALOG-020 / RUNTIME_PENDING。7新＋54相关=61/61 Passed；原Battle1800 distinct camera/tick8→1563、1800Build/0growth、9700实际CPU DrawMesh、catalog/Health活动、camera/observer各0B、两slot/CPUlease0；Foot每帧0导致严格window FAIL，原件保留，三档replay NOT_RUN。Editor两fullGC硬门false/global三代collection各3，非全链0GC/1000AI/Android。关闭三残留0、Scene同/原Menu恢复，8备份/708保护；34项高12中14低8关闭0，父OPEN/专项门保持。下一先只读定位Foot接线，不改Scene/降门槛；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/REPORT.md) / [留痕](NTSD-OPTIMIZATION-BATCH20-PRODUCTION-CATALOG-20261007/RECORD.md)。
@@ -43,6 +119,10 @@
 > NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / PLANNED / scoped edits only; [Record](NTSD28-BATTLE-SHADOW-RETIREMENT-20261006/RECORD.md); six exact doc backups before edits, diagnostic new test, no delete/move.
 
 # 文件操作与未计划缺失索引
+
+2026-10-07：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / VERIFIED（文件范围），[Record](NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007/RECORD.md)；11准确工作树before副本、30保护保持；只3声明脚本/8治理文档增量、新证据，不删除/move/弃改或覆盖旧批证据。六项有限Goal1/8新子批通过，父项OPEN。
+
+> 2026-10-07 首阶段确认登记 / VERIFIED（仅文档）：只修订有界目标合同、优化总表和本索引，登记用户接受六项首阶段与 Foot 方向；三份当前工作区备份 SHA 相符，范围外23个原dirty/untracked文件 SHA 未变，5个合同链接有效、diff check通过。代码/Scene/资源/Unity/测量/Goal 均未执行，父项状态不晋升。[操作记录](NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/RECORD.md)。
 
 - NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006 / PLANNED；[Record](NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/RECORD.md)。八dirty备份/250保护，M-03三类Build/API归属test-first；无算法/删除/移动/专项M0。
 - NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006 / VERIFIED（限定文件修订/留痕）；[Record](NTSD-OPTIMIZATION-BATCH09-BUILD-UPLOAD-ATTRIBUTION-20261006/RECORD.md)。新23/23+旧202/202，实际Build/API三类归属；八dirty备份/250保护保持，无删除/移动/Git写入。Task/Change及父M-03 RUNTIME_PENDING，完整链/真实基线/收益/Android开放；上条PLANNED为事前记录。
@@ -252,3 +332,5 @@ Checkpoint NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006: backed-up owned pr
 - NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006 / PLANNED；[Record](NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md)。八before备份/286保护，生产计数report显式非热路径，原算法/专项门不变。
 - NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006 / VERIFIED（限定文件修订/留痕）；[Record](NTSD-OPTIMIZATION-BATCH10-MATERIALIZATION-REPORT-20261006/RECORD.md)。新58/58+旧225/225，生产快照/JSON与窗口；八before/286保护保持，无删除/移动/Git写入。Task/Change和父M-03 RUNTIME_PENDING，真实基线/完整链/收益/设备开放；上条PLANNED为事前记录。
 > NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006 / PLANNED；[Record](NTSD-OPTIMIZATION-BATCH13-SUBMESH-BATCH-UPLOAD-20261006/RECORD.md)。九个准确before备份/393保护；只稳定多submesh metadata调用策略及test-first，无删除/移动/Git丢弃。
+> 2026-10-07 第36批PLANNED：普通Brute精确缓存复用、11当前字节备份先于代码，默认不改；[Operation](NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007/RECORD.md)。
+> 第38批PLANNED：11当前dirty字节副本/原37非写域保护先于脚本；仅ordinary Brute现有缓存派生kind5存在性，defaultfalse。[Operation](NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007/RECORD.md)。

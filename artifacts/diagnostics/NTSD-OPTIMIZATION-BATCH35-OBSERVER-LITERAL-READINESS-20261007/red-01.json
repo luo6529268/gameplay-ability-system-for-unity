@@ -1,0 +1,79 @@
+{
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "9baf8037d66f43c3976cd865af4c15b8",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "9baf8037d66f43c3976cd865af4c15b8",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791338354157,
+        "finished_unix_ms": 1791338362905,
+        "last_update_unix_ms": 1791338362905,
+        "progress": {
+          "completed": 8,
+          "total": 9411,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791338362442,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)",
+          "last_finished_unix_ms": 1791338362442,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.BoundObserverMessages_KeepExactTextAndReadonlyOwnership",
+              "message": "  SampleCapacityFailure\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"CaptureSample\")",
+              "message": "  Bind immutable diagnostic messages before observing; keep every hot-path check.\r\n  Expected: <empty>\r\n  But was:  < \"Diagnostic sample capacity exceeded; no truncation.\", \"Natural camera did not have a current central plan.\", \"Publication isolation/materialization contract failed.\", \"Publication and display tick mismatch.\", \"Production backend grew or failed resource resolution.\", \"Physical segment range/order/binding invalid.\", \"Production vertex layout changed.\", \"Non-finite production bounds.\", \"Unexpected third submission slot.\", \"Production RenderPass recorded no central draws.\", \"COMPLETE\" >\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"EndCamera\")",
+              "message": "  Bind immutable diagnostic messages before observing; keep every hot-path check.\r\n  Expected: <empty>\r\n  But was:  < \"FAIL\", \"COMPLETE\" >\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.HotObserverMethod_HasNoLazyStringLiteralOperands(\"IsWindowComplete\")",
+              "message": "  Bind immutable diagnostic messages before observing; keep every hot-path check.\r\n  Expected: <empty>\r\n  But was:  < \"targetCameras\", \"Invalid bounded camera window.\" >\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.MessagePreparation_DoesNotExecuteCameraOrMutateProbeReferences",
+              "message": "  Requires explicit pre-observation message readiness, not a skipped first camera.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(False)",
+              "message": "  Requires explicit pre-observation message readiness, not a skipped first camera.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleObserverLiteralReadinessEditorTests.PreparedPolicy_KeepsCalibratedEmptyAndKnownAllocationEvidence(True)",
+              "message": "  Requires explicit pre-observation message readiness, not a skipped first camera.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  },
+  "actualCompleted": 8,
+  "expectedFailures": 7,
+  "controlPass": 1,
+  "catalogNotActualCount": 9411
+}

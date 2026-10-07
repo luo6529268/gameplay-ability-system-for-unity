@@ -1,0 +1,638 @@
+{
+  "job_id": "c8f10c9591b94e47aa97cacff008e30c",
+  "status": "succeeded",
+  "started_unix_ms": 1791321080126,
+  "finished_unix_ms": 1791321089089,
+  "progress": {
+    "completed": 87,
+    "total": 9330,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1791321088369,
+    "last_finished_test_full_name": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.PreparingBeforeBirth_CapturesBothOwners_WithoutSealing_AndIsIdempotent",
+    "last_finished_unix_ms": 1791321088372,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [],
+    "failures_capped": false
+  },
+  "summary": {
+    "total": 87,
+    "passed": 87,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 2.5966177,
+    "resultState": "Passed"
+  },
+  "executed": [
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_AnyFailureEvidencePreventsAuthoritySuccess(\"precommit-failure\")",
+      "state": "Passed",
+      "durationSeconds": 0.1233755,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_AnyFailureEvidencePreventsAuthoritySuccess(\"precommit-fallback\")",
+      "state": "Passed",
+      "durationSeconds": 0.0001211,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_AnyFailureEvidencePreventsAuthoritySuccess(\"postcommit-breach\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000878,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_AnyFailureEvidencePreventsAuthoritySuccess(\"first-failure\")",
+      "state": "Passed",
+      "durationSeconds": 0.000279,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_DefaultLegacyModeDoesNotRequireGateBEvidence",
+      "state": "Passed",
+      "durationSeconds": 0.000334,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ExactTerminalClosureAndReportFieldsPass",
+      "state": "Passed",
+      "durationSeconds": 0.11711,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_FullBuildAllowsTransientActiveRows",
+      "state": "Passed",
+      "durationSeconds": 0.0002821,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_InitialCaptureAboveRuntimeCapacityFails",
+      "state": "Passed",
+      "durationSeconds": 0.0001673,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"build\")",
+      "state": "Passed",
+      "durationSeconds": 0.0003214,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"slot\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000819,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"initial-capture\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000675,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"refresh\")",
+      "state": "Passed",
+      "durationSeconds": 0.000062,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"read\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000641,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_MissingExactClosureEvidenceFails(\"commit\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000609,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_PostCommitBreachForbidsMixedFallback",
+      "state": "Passed",
+      "durationSeconds": 0.0008783,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_PreCommitFallbackRequiresFirstFailure",
+      "state": "Passed",
+      "durationSeconds": 0.0002667,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_PreCommitRollbackContractIsValidWithoutAuthoritySuccess",
+      "state": "Passed",
+      "durationSeconds": 0.0009462,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RejectsGateAShadowCombination",
+      "state": "Passed",
+      "durationSeconds": 0.0039484,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RejectsMissingPrerequisite(\"legacy\",\"indexed-canonical\")",
+      "state": "Passed",
+      "durationSeconds": 0.0005503,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RejectsMissingPrerequisite(\"candidate\",\"legacy\")",
+      "state": "Passed",
+      "durationSeconds": 0.0001285,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"sensing\")",
+      "state": "Passed",
+      "durationSeconds": 0.0005584,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"decision\")",
+      "state": "Passed",
+      "durationSeconds": 0.000097,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"shadow\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000677,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"nearest\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000633,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"index\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000608,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"quadtree\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000555,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"decision-refresh\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000678,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"shadow-refresh\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000592,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"legacy-mutation\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000601,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_ReplacedLegacyPipelineActivityFailsClosure(\"candidate-refresh\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000561,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RequestSelectsOptInGateBExecution",
+      "state": "Passed",
+      "durationSeconds": 0.1176948,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RollbackTerminalRestoreFailureInvalidatesContract",
+      "state": "Passed",
+      "durationSeconds": 0.0003043,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_RollingTerminalClosurePasses",
+      "state": "Passed",
+      "durationSeconds": 0.0001737,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotAuthority_TerminalRestoreFailureIsInvalid",
+      "state": "Passed",
+      "durationSeconds": 0.0005747,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_AnyMissingExactEvidenceFails(\"build\")",
+      "state": "Passed",
+      "durationSeconds": 0.0013611,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_AnyMissingExactEvidenceFails(\"refresh\")",
+      "state": "Passed",
+      "durationSeconds": 0.0001238,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_AnyMissingExactEvidenceFails(\"compare\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000825,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_AnyMissingExactEvidenceFails(\"slot-visit\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000751,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_AnyMissingExactEvidenceFails(\"exception\")",
+      "state": "Passed",
+      "durationSeconds": 0.0000805,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_CaptureBeforeDoesNotPoisonThenRestoredTerminalPasses",
+      "state": "Passed",
+      "durationSeconds": 0.0003877,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_ExactTerminalClosurePasses",
+      "state": "Passed",
+      "durationSeconds": 0.0008456,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_InitialDerivedVisitsAboveConservativeBoundFail",
+      "state": "Passed",
+      "durationSeconds": 0.0002428,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_MissingMutationWitnessFailsTerminalClosure",
+      "state": "Passed",
+      "durationSeconds": 0.0001558,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_MutationWitnessAndDerivedVisitClosurePasses",
+      "state": "Passed",
+      "durationSeconds": 0.0006966,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_RefreshDerivedFullLoopFailsTerminalClosure",
+      "state": "Passed",
+      "durationSeconds": 0.0002163,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_RequestSelectsOptInGateAObserver",
+      "state": "Passed",
+      "durationSeconds": 0.0004664,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.UnifiedAiSnapshotShadow_TerminalMissingRestoreFails",
+      "state": "Passed",
+      "durationSeconds": 0.0002002,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(0,\"dispersed1000\",180)",
+      "state": "Passed",
+      "durationSeconds": 0.0021926,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(1,\"combat1000\",180)",
+      "state": "Passed",
+      "durationSeconds": 0.0001806,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(2,\"dispersed1000\",1800)",
+      "state": "Passed",
+      "durationSeconds": 0.000156,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(3,\"dispersed1000\",1800)",
+      "state": "Passed",
+      "durationSeconds": 0.0001397,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(4,\"combat1000\",1800)",
+      "state": "Passed",
+      "durationSeconds": 0.0001379,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.FixedRequest_PreservesAiCadenceAndBaseline(5,\"combat1000\",1800)",
+      "state": "Passed",
+      "durationSeconds": 0.0001467,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(-1,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0009126,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(0,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0001116,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.OrdinaryStressSpawnOid_PreservesFactoryAdmission(1,True)",
+      "state": "Passed",
+      "durationSeconds": 0.0000805,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,1000,1000,2000,1000,1000,True)",
+      "state": "Passed",
+      "durationSeconds": 0.0006825,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(False,0,0,1000,1000,1000,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0001161,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,1000,True)",
+      "state": "Passed",
+      "durationSeconds": 0.0000784,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,999,1000,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000702,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,1000,1000,999,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000677,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,0,999,1000,1000,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000664,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,1,0,1000,1000,1000,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000653,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.PopulationAdmission_DistinguishesLogicOnlyWithoutRelaxingCounts(True,0,1,1000,1000,1000,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000608,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Preparing,True)",
+      "state": "Passed",
+      "durationSeconds": 0.258913,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Running,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0012383,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopping,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0013005,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.StressPreparation_ReopensOnlyEmptyPreparingServiceOwners(Stopped,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0009321,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(0L,True)",
+      "state": "Passed",
+      "durationSeconds": 0.0004744,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-1L,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0001299,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(1L,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0000987,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.UnifiedAuthorityClosure_RequiresProducerAndInputTailRefresh(-60000L,False)",
+      "state": "Passed",
+      "durationSeconds": 0.0001705,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.CounterReset_IsRebasedAndLaterIncrementIsStillDetected",
+      "state": "Passed",
+      "durationSeconds": 0.0012336,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.CriticalDeltaFailsGate_WhilePresentationThrottleIsReportedSeparately",
+      "state": "Passed",
+      "durationSeconds": 0.001256,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolBattleCapacity_ReservesEveryConcreteEntityFamily",
+      "state": "Passed",
+      "durationSeconds": 0.0164742,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolPerTypeDiagnostics_DoNotDoubleCountCapacityFailure",
+      "state": "Passed",
+      "durationSeconds": 0.0002751,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.LogicPoolWeaponFamily_ReusesOneSharedShellBudgetAndRetagsOnFetch",
+      "state": "Passed",
+      "durationSeconds": 0.0006449,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.PresentationThrottleAlone_DoesNotFailMemoryCapacityGate",
+      "state": "Passed",
+      "durationSeconds": 0.0002437,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.Editor.ProductionEntityStressCapacityPressureEditorTests.StableCounters_RecordWithoutAllocatingOrFailingGate",
+      "state": "Passed",
+      "durationSeconds": 0.000393,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.ContinuationGuard_RejectsStoppedReenteredAndDifferentWorld",
+      "state": "Passed",
+      "durationSeconds": 0.0035014,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.ExistingFactoryQueue_RejectsWithoutDiscardingForeignWork",
+      "state": "Passed",
+      "durationSeconds": 0.0014799,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.ExistingForeignPoolBorrower_RejectsBeforeTakingOwnership",
+      "state": "Passed",
+      "durationSeconds": 0.0019322,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.InactivePreparation_RejectsWithoutCreatingServices(Running)",
+      "state": "Passed",
+      "durationSeconds": 0.0015744,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.InactivePreparation_RejectsWithoutCreatingServices(Stopping)",
+      "state": "Passed",
+      "durationSeconds": 0.0010079,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.InactivePreparation_RejectsWithoutCreatingServices(Stopped)",
+      "state": "Passed",
+      "durationSeconds": 0.000923,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.PreparedOwnerReplacement_RejectsBeforeChangingCapturedOwner",
+      "state": "Passed",
+      "durationSeconds": 0.0029581,
+      "message": null,
+      "stackTrace": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.PreparingBeforeBirth_CapturesBothOwners_WithoutSealing_AndIsIdempotent",
+      "state": "Passed",
+      "durationSeconds": 0.0027272,
+      "message": null,
+      "stackTrace": null
+    }
+  ]
+}

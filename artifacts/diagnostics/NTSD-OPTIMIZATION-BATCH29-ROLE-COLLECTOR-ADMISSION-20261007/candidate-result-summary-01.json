@@ -1,0 +1,320 @@
+{
+  "observed": "2026-10-07T06:50:59.1317910+08:00",
+  "runs": [
+    {
+      "workload": "00-dispersed1000-smoke",
+      "status": "StoppedCleanly",
+      "harnessValidity": true,
+      "warm": 120,
+      "samples": 180,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 48.42327277777778,
+        "maximum": 97.8159,
+        "p95": 73.49947999999996,
+        "p99": 91.723965
+      },
+      "baselineLogic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 467.52408666666656,
+        "maximum": 880.5105,
+        "p95": 706.7582599999997,
+        "p99": 804.8779960000004
+      },
+      "candidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 15.650854444444452,
+          "maximum": 36.5799,
+          "p95": 25.219164999999983,
+          "p99": 33.216149
+        }
+      },
+      "baselineCandidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 429.1871661111112,
+          "maximum": 826.6020000000001,
+          "p95": 646.9009149999994,
+          "p99": 752.3845000000003
+        }
+      },
+      "collector": "role",
+      "roleDirect": 259,
+      "roleTree": 41,
+      "failure": "",
+      "finalTick": 300,
+      "hashCompare": [
+        {
+          "field": "finalParityInputHash",
+          "before": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+          "after": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+          "same": true
+        },
+        {
+          "field": "finalParityRngHash",
+          "before": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+          "after": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+          "same": true
+        },
+        {
+          "field": "finalParityMetadataHash",
+          "before": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+          "after": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+          "same": true
+        },
+        {
+          "field": "finalParityWorldHash",
+          "before": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+          "after": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+          "same": true
+        },
+        {
+          "field": "finalParitySlotsHash",
+          "before": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2",
+          "after": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2",
+          "same": true
+        },
+        {
+          "field": "finalParityARestHash",
+          "before": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+          "after": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+          "same": true
+        },
+        {
+          "field": "finalParityVRestHash",
+          "before": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+          "after": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+          "same": true
+        },
+        {
+          "field": "finalParityStatsHash",
+          "before": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+          "after": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+          "same": true
+        },
+        {
+          "field": "finalParityEventsHash",
+          "before": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+          "after": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+          "same": true
+        },
+        {
+          "field": "finalParityOverallHash",
+          "before": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64",
+          "after": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64",
+          "same": true
+        }
+      ],
+      "observation": {
+        "action": "dispersed1000",
+        "targetSamples": 180,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/00-dispersed1000-smoke/report.json",
+        "terminalStatus": "StoppedCleanly",
+        "sampledTicks": 180,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 12,
+        "lastObservedSampleTick": 176,
+        "workloadValid": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": true,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": true,
+        "teardownRestored": true,
+        "failure": ""
+      },
+      "logicMeanReductionPercent": 89.64261432538717,
+      "collectorMeanReductionPercent": 96.35337314807018,
+      "p95Under33": false
+    },
+    {
+      "workload": "01-combat1000-smoke",
+      "status": "StoppedCleanly",
+      "harnessValidity": true,
+      "warm": 120,
+      "samples": 180,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 45.7206338888889,
+        "maximum": 88.5638,
+        "p95": 54.92077499999999,
+        "p99": 78.76429600000003
+      },
+      "baselineLogic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 431.00028833333295,
+        "maximum": 775.4073,
+        "p95": 691.9199499999997,
+        "p99": 747.8904170000002
+      },
+      "candidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 15.258996111111108,
+          "maximum": 38.746700000000004,
+          "p95": 23.037455,
+          "p99": 27.49008100000001
+        }
+      },
+      "baselineCandidate": {
+        "phase": "CandidateCollect",
+        "timing": {
+          "available": true,
+          "unit": "ms",
+          "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+          "unavailableReason": "",
+          "sampleCount": 180,
+          "average": 398.07425500000005,
+          "maximum": 717.5443,
+          "p95": 645.1388349999999,
+          "p99": 694.2966130000001
+        }
+      },
+      "collector": "role",
+      "roleDirect": 268,
+      "roleTree": 32,
+      "failure": "",
+      "finalTick": 300,
+      "hashCompare": [
+        {
+          "field": "finalParityInputHash",
+          "before": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+          "after": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+          "same": true
+        },
+        {
+          "field": "finalParityRngHash",
+          "before": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+          "after": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+          "same": true
+        },
+        {
+          "field": "finalParityMetadataHash",
+          "before": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+          "after": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+          "same": true
+        },
+        {
+          "field": "finalParityWorldHash",
+          "before": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+          "after": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+          "same": true
+        },
+        {
+          "field": "finalParitySlotsHash",
+          "before": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd",
+          "after": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd",
+          "same": true
+        },
+        {
+          "field": "finalParityARestHash",
+          "before": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+          "after": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+          "same": true
+        },
+        {
+          "field": "finalParityVRestHash",
+          "before": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+          "after": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+          "same": true
+        },
+        {
+          "field": "finalParityStatsHash",
+          "before": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+          "after": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+          "same": true
+        },
+        {
+          "field": "finalParityEventsHash",
+          "before": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+          "after": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+          "same": true
+        },
+        {
+          "field": "finalParityOverallHash",
+          "before": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c",
+          "after": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c",
+          "same": true
+        }
+      ],
+      "observation": {
+        "action": "combat1000",
+        "targetSamples": 180,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH29-ROLE-COLLECTOR-ADMISSION-20261007/windows-01/01-combat1000-smoke/report.json",
+        "terminalStatus": "StoppedCleanly",
+        "sampledTicks": 180,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 12,
+        "lastObservedSampleTick": 174,
+        "workloadValid": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": true,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": true,
+        "teardownRestored": true,
+        "failure": ""
+      },
+      "logicMeanReductionPercent": 89.39197139155303,
+      "collectorMeanReductionPercent": 96.16679654123547,
+      "p95Under33": false
+    }
+  ],
+  "suiteResultExists": true,
+  "phase": "DONE",
+  "verdict": "POSITIVE_EXISTING_CANDIDATE / NO_DEFAULT_PROMOTION / PERFORMANCE_STILL_FAIL",
+  "snapshotEquality": [
+    {
+      "workload": "00-dispersed1000-smoke",
+      "rawShaSame": true,
+      "normalizedJsonExactSame": true,
+      "oldNormalizedLength": 4209056,
+      "newNormalizedLength": 4209056
+    },
+    {
+      "workload": "01-combat1000-smoke",
+      "rawShaSame": true,
+      "normalizedJsonExactSame": true,
+      "oldNormalizedLength": 4207490,
+      "newNormalizedLength": 4207490
+    }
+  ],
+  "fullPerTickNativeParity": "NOT_PROVEN",
+  "zeroGc": "UNKNOWN / NOT_CERTIFIED",
+  "parentGoalCompleted": false,
+  "productionDefaultChanged": false
+}

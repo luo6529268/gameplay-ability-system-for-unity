@@ -1,0 +1,870 @@
+{
+  "observed": "2026-10-07T07:28:44.5106241+08:00",
+  "suite": {
+    "phase": "DONE",
+    "status": "MEASUREMENTS_COMPLETED_WITH_FAILURES",
+    "error": "",
+    "outputRoot": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01",
+    "roleCandidate": true,
+    "roleFormalCandidate": true,
+    "originalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "originalSceneHash": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+    "battleSceneHash": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "originalSuppression": false,
+    "deadline": 1791336341.384051,
+    "runIndex": 4,
+    "completedRuns": 4,
+    "retainedFailedGcMeasurements": 4,
+    "runs": [
+      {
+        "action": "dispersed1000",
+        "targetSamples": 1800,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/00-dispersed1000-formal-01/report.json",
+        "terminalStatus": "StoppedWithResidue",
+        "sampledTicks": 1800,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 127,
+        "lastObservedSampleTick": 1798,
+        "workloadValid": false,
+        "retainedFailedGcMeasurement": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": false,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": false,
+        "teardownRestored": true,
+        "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0."
+      },
+      {
+        "action": "dispersed1000",
+        "targetSamples": 1800,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/01-dispersed1000-formal-02/report.json",
+        "terminalStatus": "StoppedWithResidue",
+        "sampledTicks": 1800,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 137,
+        "lastObservedSampleTick": 1798,
+        "workloadValid": false,
+        "retainedFailedGcMeasurement": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": false,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": false,
+        "teardownRestored": true,
+        "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0."
+      },
+      {
+        "action": "combat1000",
+        "targetSamples": 1800,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/02-combat1000-formal-01/report.json",
+        "terminalStatus": "StoppedWithResidue",
+        "sampledTicks": 1800,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 120,
+        "lastObservedSampleTick": 1784,
+        "workloadValid": false,
+        "retainedFailedGcMeasurement": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": false,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": false,
+        "teardownRestored": true,
+        "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0."
+      },
+      {
+        "action": "combat1000",
+        "targetSamples": 1800,
+        "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/03-combat1000-formal-02/report.json",
+        "terminalStatus": "StoppedWithResidue",
+        "sampledTicks": 1800,
+        "warmupTicks": 120,
+        "minimumObservedActiveAi": 1000,
+        "minimumObservedBaseRoster": 1000,
+        "observedSampleWindows": 118,
+        "lastObservedSampleTick": 1786,
+        "workloadValid": false,
+        "retainedFailedGcMeasurement": true,
+        "zeroGcPassed": false,
+        "zeroGcRawGatePassed": false,
+        "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+        "harnessValidity": false,
+        "teardownRestored": true,
+        "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0."
+      }
+    ],
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "battleSceneUnchanged": true,
+    "originalSceneRestored": true,
+    "updatedUtc": "2026-10-06T23:28:09.3010006Z"
+  },
+  "runs": [
+    {
+      "action": "dispersed1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/00-dispersed1000-formal-01/report.json",
+      "reportSha": "DBC0E847A9DA14BB78C5B9D72C434F67745A830FA256256A24BE22BDF1351EFA",
+      "sampledTicks": 1800,
+      "warmupTicks": 120,
+      "minimumObservedActiveAi": 1000,
+      "minimumObservedBaseRoster": 1000,
+      "observedSampleWindows": 127,
+      "status": "StoppedWithResidue",
+      "harnessValidity": false,
+      "retainedFailedGcMeasurement": true,
+      "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+      "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 52.40351772222221,
+        "maximum": 340.5332,
+        "p95": 82.60607999999998,
+        "p99": 113.54546399999997
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 18.182936722222212,
+        "maximum": 155.5242,
+        "p95": 28.05697,
+        "p99": 43.838608
+      },
+      "visible": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 960,
+        "average": 157.63571478116015,
+        "maximum": 1491.1754131317139,
+        "p95": 265.8676773309704,
+        "p99": 362.80733406543726
+      },
+      "cpuFrame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 152.43629755283652,
+        "maximum": 746.397,
+        "p95": 239.20445999999916,
+        "p99": 325.7318039999999
+      },
+      "mainThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuMainThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 126.37879599555059,
+        "maximum": 584.8347,
+        "p95": 194.44933999999964,
+        "p99": 258.540916
+      },
+      "renderThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuRenderThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 0.7637989988876526,
+        "maximum": 8.4392,
+        "p95": 1.1470299999999998,
+        "p99": 1.374444
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 793,
+        "average": 0.7249326002522075,
+        "maximum": 11.9296,
+        "p95": 2.6771456,
+        "p99": 6.3207014400000014
+      },
+      "droppedBacklogTicks": 2219,
+      "capacityPassed": true,
+      "capacityCriticalDelta": 0,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "finalTick": 1920,
+      "finalSnapshotSha": "549ABAD14251E1E4D25135B8E7DF0938D63FEFB2BE3921F898010AAEE1C0064F",
+      "finalHashes": {
+        "aRest": "0044c5415fb61299d4f5bf8a11205b8cbd180c1d98dd5f480ba8c897aa56718c",
+        "events": "e34252de810db5f69305a9aae85e6c264e4a4cc080f42bccdced0f477cfea090",
+        "input": "a1595946f704cd22175ca6d523c828f05b9bad3357045b261ead442ccefdfae3",
+        "metadata": "0d14aedac6df7e54618e659c57e7f7338f2d31befeac0e09483641436008ec31",
+        "overall": "0ea38df2527a558cee67aca099bca2d56c397f64169be754b3a5bce0e67cc12b",
+        "rng": "441b77e39f8b600b6affbda3bae0b1776f899333961bfac808c977bead84685a",
+        "slots": "f7ab5cefb7a7e8d808d6b4ef9d515a1e063a926863eb5817f40d76f0e812a9a7",
+        "stats": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "vRest": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "world": "3d284352106636f7c54bfd92eb459738f1a7540e529d618ca98c4f37c29d3f81"
+      },
+      "rosterFingerprint": "83d341e426f8783daa741560488e900637860b0f5c194484468ab4163b7ffb69",
+      "workloadFingerprint": "392878571d98a5c8e20e11cc5daac1100616606efde00010c97abea741a6991e",
+      "implementationConfigFingerprint": "9d4631dfb19f72b29f52af9db8b1e2d74bd39351d19b094d33b9fd47d89ea9d9",
+      "unityVersion": "2022.3.62f3",
+      "platform": "WindowsEditor",
+      "centralSegment": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1988.7385984427142,
+        "maximum": 2037,
+        "p95": 2015,
+        "p99": 2025
+      },
+      "centralDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1989.7385984427142,
+        "maximum": 2038,
+        "p95": 2016,
+        "p99": 2026
+      },
+      "topPhases": [
+        {
+          "phase": "CandidateCollect",
+          "average": 18.182936722222212,
+          "p95": 28.05697
+        },
+        {
+          "phase": "CharacterInput",
+          "average": 12.42179522222224,
+          "p95": 18.744924999999995
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "average": 6.701719944444436,
+          "p95": 11.68169
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "average": 2.3782204999999985,
+          "p95": 3.9118899999999996
+        },
+        {
+          "phase": "NestedPhysics",
+          "average": 1.9610520000000022,
+          "p95": 3.225105
+        }
+      ],
+      "topRender": [
+        {
+          "phase": "Render/PrepareFrame/LegacyCapacityGuard",
+          "average": 5.174895055555554,
+          "p95": 13.0373
+        },
+        {
+          "phase": "Render/BeginFrame/BuildCommands",
+          "average": 1.6851910555555534,
+          "p95": 4.190325
+        },
+        {
+          "phase": "Render/BeginFrame",
+          "average": 1.2657071111111116,
+          "p95": 3.280465
+        },
+        {
+          "phase": "Render/BeginFrame/CaptureEntities",
+          "average": 1.0878212777777778,
+          "p95": 2.8444249999999998
+        }
+      ]
+    },
+    {
+      "action": "dispersed1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/01-dispersed1000-formal-02/report.json",
+      "reportSha": "BE439A6EC0AA94446ED7EA781EE274A24C559AAD3D5B0D887EDF7155CEFC6B6A",
+      "sampledTicks": 1800,
+      "warmupTicks": 120,
+      "minimumObservedActiveAi": 1000,
+      "minimumObservedBaseRoster": 1000,
+      "observedSampleWindows": 137,
+      "status": "StoppedWithResidue",
+      "harnessValidity": false,
+      "retainedFailedGcMeasurement": true,
+      "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+      "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 56.968929499999895,
+        "maximum": 220.8893,
+        "p95": 95.58988,
+        "p99": 116.85249599999997
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 19.27117388888887,
+        "maximum": 74.84490000000001,
+        "p95": 33.87922499999999,
+        "p99": 46.68300699999999
+      },
+      "visible": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 960,
+        "average": 169.68920570798218,
+        "maximum": 1092.4148559570312,
+        "p95": 277.4827674031257,
+        "p99": 343.1145846843718
+      },
+      "cpuFrame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 164.19458720800895,
+        "maximum": 447.597,
+        "p95": 257.0196199999999,
+        "p99": 319.29086
+      },
+      "mainThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuMainThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 136.5165893214683,
+        "maximum": 393.5983,
+        "p95": 214.08009999999976,
+        "p99": 270.41854199999995
+      },
+      "renderThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuRenderThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 0.7918092324805339,
+        "maximum": 4.3285,
+        "p95": 1.22583,
+        "p99": 1.76022
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 791,
+        "average": 1.0576625436156755,
+        "maximum": 12.440576,
+        "p95": 3.907072,
+        "p99": 7.834419200000003
+      },
+      "droppedBacklogTicks": 2511,
+      "capacityPassed": true,
+      "capacityCriticalDelta": 0,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "finalTick": 1920,
+      "finalSnapshotSha": "549ABAD14251E1E4D25135B8E7DF0938D63FEFB2BE3921F898010AAEE1C0064F",
+      "finalHashes": {
+        "aRest": "0044c5415fb61299d4f5bf8a11205b8cbd180c1d98dd5f480ba8c897aa56718c",
+        "events": "e34252de810db5f69305a9aae85e6c264e4a4cc080f42bccdced0f477cfea090",
+        "input": "a1595946f704cd22175ca6d523c828f05b9bad3357045b261ead442ccefdfae3",
+        "metadata": "0d14aedac6df7e54618e659c57e7f7338f2d31befeac0e09483641436008ec31",
+        "overall": "0ea38df2527a558cee67aca099bca2d56c397f64169be754b3a5bce0e67cc12b",
+        "rng": "441b77e39f8b600b6affbda3bae0b1776f899333961bfac808c977bead84685a",
+        "slots": "f7ab5cefb7a7e8d808d6b4ef9d515a1e063a926863eb5817f40d76f0e812a9a7",
+        "stats": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "vRest": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "world": "3d284352106636f7c54bfd92eb459738f1a7540e529d618ca98c4f37c29d3f81"
+      },
+      "rosterFingerprint": "83d341e426f8783daa741560488e900637860b0f5c194484468ab4163b7ffb69",
+      "workloadFingerprint": "392878571d98a5c8e20e11cc5daac1100616606efde00010c97abea741a6991e",
+      "implementationConfigFingerprint": "9d4631dfb19f72b29f52af9db8b1e2d74bd39351d19b094d33b9fd47d89ea9d9",
+      "unityVersion": "2022.3.62f3",
+      "platform": "WindowsEditor",
+      "centralSegment": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1988.7385984427142,
+        "maximum": 2037,
+        "p95": 2015,
+        "p99": 2025
+      },
+      "centralDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1989.7385984427142,
+        "maximum": 2038,
+        "p95": 2016,
+        "p99": 2026
+      },
+      "topPhases": [
+        {
+          "phase": "CandidateCollect",
+          "average": 19.27117388888887,
+          "p95": 33.87922499999999
+        },
+        {
+          "phase": "CharacterInput",
+          "average": 13.499193000000007,
+          "p95": 25.36465
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "average": 7.249527944444443,
+          "p95": 15.238875000000002
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "average": 2.7688667222222203,
+          "p95": 5.64916
+        },
+        {
+          "phase": "NestedPhysics",
+          "average": 2.1824968333333317,
+          "p95": 4.085139999999999
+        }
+      ],
+      "topRender": [
+        {
+          "phase": "Render/PrepareFrame/LegacyCapacityGuard",
+          "average": 5.219826055555561,
+          "p95": 13.00316
+        },
+        {
+          "phase": "Render/BeginFrame/BuildCommands",
+          "average": 1.7157209999999996,
+          "p95": 4.253175
+        },
+        {
+          "phase": "Render/BeginFrame",
+          "average": 1.3932164999999999,
+          "p95": 3.635419999999996
+        },
+        {
+          "phase": "Render/BeginFrame/CaptureEntities",
+          "average": 1.1953537222222217,
+          "p95": 3.1043049999999996
+        }
+      ]
+    },
+    {
+      "action": "combat1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/02-combat1000-formal-01/report.json",
+      "reportSha": "7A794A312933AD54D70D96C18AFE6756FAA56B3E3DFD60B6C221FCCA252CECA7",
+      "sampledTicks": 1800,
+      "warmupTicks": 120,
+      "minimumObservedActiveAi": 1000,
+      "minimumObservedBaseRoster": 1000,
+      "observedSampleWindows": 120,
+      "status": "StoppedWithResidue",
+      "harnessValidity": false,
+      "retainedFailedGcMeasurement": true,
+      "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+      "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 49.97290311111105,
+        "maximum": 150.5865,
+        "p95": 76.33589999999997,
+        "p99": 110.57638499999999
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 18.85243244444445,
+        "maximum": 69.9247,
+        "p95": 31.323999999999995,
+        "p99": 47.046828
+      },
+      "visible": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 960,
+        "average": 145.84408539813012,
+        "maximum": 920.3696250915527,
+        "p95": 242.3730432987212,
+        "p99": 308.3613353967666
+      },
+      "cpuFrame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 143.2503474972193,
+        "maximum": 356.777,
+        "p95": 214.89719999999997,
+        "p99": 303.025264
+      },
+      "mainThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuMainThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 120.23170011123482,
+        "maximum": 298.038,
+        "p95": 183.27074999999982,
+        "p99": 253.42280999999994
+      },
+      "renderThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuRenderThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 0.6173251390433817,
+        "maximum": 1.7657,
+        "p95": 0.8944799999999996,
+        "p99": 1.1637179999999996
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 765,
+        "average": 0.8545407163398697,
+        "maximum": 11.316224,
+        "p95": 3.2126975999999994,
+        "p99": 6.933422080000003
+      },
+      "droppedBacklogTicks": 1811,
+      "capacityPassed": true,
+      "capacityCriticalDelta": 0,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "finalTick": 1920,
+      "finalSnapshotSha": "BD1FFF378622B69BDAA70CE20A30B942529C08B1B466D5EAC7BB0BEEFF3AFA10",
+      "finalHashes": {
+        "aRest": "c887d9ee2ef2cdd35d92801f03bfeb998fd96e7d0fe298f4f91b85f750fa4c50",
+        "events": "30b3dab7dec7cdba816099284fe8e5c00619826f377e9b7475a2221624701970",
+        "input": "a1595946f704cd22175ca6d523c828f05b9bad3357045b261ead442ccefdfae3",
+        "metadata": "0d14aedac6df7e54618e659c57e7f7338f2d31befeac0e09483641436008ec31",
+        "overall": "92d95f37b422b4b649569e91cee484ef5ef1d447dab2f81938213110f13c3c17",
+        "rng": "26e5908986ea4b89249b25443ba6a48335c999c21d9bb19a14d812c1b88387dc",
+        "slots": "b4931b02d6a62a733d9bf6cb86b67d0b566ce0cf83b8fbd5b4a29d8b6b510c54",
+        "stats": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "vRest": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "world": "3d284352106636f7c54bfd92eb459738f1a7540e529d618ca98c4f37c29d3f81"
+      },
+      "rosterFingerprint": "a905f121d96e1cb90a7e8e40788d8ce5ebdbf8c88ea602bfb196f693bed58a49",
+      "workloadFingerprint": "814ca19641dbf73496c1d8da0f52c2f95950b0749d67228cade633afe750422f",
+      "implementationConfigFingerprint": "9d4631dfb19f72b29f52af9db8b1e2d74bd39351d19b094d33b9fd47d89ea9d9",
+      "unityVersion": "2022.3.62f3",
+      "platform": "WindowsEditor",
+      "centralSegment": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1987.9488320355952,
+        "maximum": 2043,
+        "p95": 2018,
+        "p99": 2030
+      },
+      "centralDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1988.9488320355952,
+        "maximum": 2044,
+        "p95": 2019,
+        "p99": 2031
+      },
+      "topPhases": [
+        {
+          "phase": "CandidateCollect",
+          "average": 18.85243244444445,
+          "p95": 31.323999999999995
+        },
+        {
+          "phase": "CharacterInput",
+          "average": 11.331556166666678,
+          "p95": 15.364689999999998
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "average": 6.122406055555555,
+          "p95": 8.869804999999998
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "average": 2.1737529444444474,
+          "p95": 3.183364999999999
+        },
+        {
+          "phase": "NestedPhysics",
+          "average": 1.7672661111111134,
+          "p95": 2.463839999999999
+        }
+      ],
+      "topRender": [
+        {
+          "phase": "Render/PrepareFrame/LegacyCapacityGuard",
+          "average": 4.898672888888896,
+          "p95": 10.335779999999998
+        },
+        {
+          "phase": "Render/BeginFrame/BuildCommands",
+          "average": 1.6045845,
+          "p95": 3.34236
+        },
+        {
+          "phase": "Render/BeginFrame",
+          "average": 1.1603551666666647,
+          "p95": 2.42837
+        },
+        {
+          "phase": "Render/BeginFrame/CaptureEntities",
+          "average": 0.9986825555555565,
+          "p95": 2.1098149999999998
+        }
+      ]
+    },
+    {
+      "action": "combat1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH30-ROLE-FORMAL-WINDOWS-20261007/windows-01/03-combat1000-formal-02/report.json",
+      "reportSha": "D57D11D95E9AF9C15F633DC926BA0F00459275947F4E3C55E3CB42EF2900D2B0",
+      "sampledTicks": 1800,
+      "warmupTicks": 120,
+      "minimumObservedActiveAi": 1000,
+      "minimumObservedBaseRoster": 1000,
+      "observedSampleWindows": 118,
+      "status": "StoppedWithResidue",
+      "harnessValidity": false,
+      "retainedFailedGcMeasurement": true,
+      "failure": "ZeroGcGateFailed: stable production ticks allocated managed memory or observed a managed collection; observed=1800, violating=0, firstTick=0, totalBytes=0, maxBytesPerTick=0, collectionViolating=0, firstCollectionTick=0, collections=[0,0,0], boundaryTickBytes=0, boundaryUpdateBytes=0, boundaryPresentationBytes=0, boundaryPlayerLoopBytes=0, boundaryPlayerLoopHardGateSupported=False, boundaryCollectionViolation=True, capacityCriticalDelta=0.",
+      "zeroGcEvidenceStatus": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 49.14862799999982,
+        "maximum": 141.1337,
+        "p95": 64.358365,
+        "p99": 107.21604199999999
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 1800,
+        "average": 18.542269444444457,
+        "maximum": 61.8459,
+        "p95": 29.74045,
+        "p99": 43.476436
+      },
+      "visible": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 960,
+        "average": 145.5021628489097,
+        "maximum": 1190.0250911712646,
+        "p95": 227.966760098934,
+        "p99": 313.9426171779632
+      },
+      "cpuFrame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 142.11477508342594,
+        "maximum": 1200.5567,
+        "p95": 179.33810999999992,
+        "p99": 295.504268
+      },
+      "mainThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuMainThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 118.42371323692977,
+        "maximum": 294.0306,
+        "p95": 148.80963999999966,
+        "p99": 238.81878399999994
+      },
+      "renderThread": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuRenderThreadFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 0.6012494994438264,
+        "maximum": 4.507,
+        "p95": 0.8242299999999999,
+        "p99": 1.099422
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 769,
+        "average": 0.9159713289986992,
+        "maximum": 12.417024,
+        "p95": 3.4506751999999987,
+        "p99": 7.05978367999999
+      },
+      "droppedBacklogTicks": 1813,
+      "capacityPassed": true,
+      "capacityCriticalDelta": 0,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "finalTick": 1920,
+      "finalSnapshotSha": "BD1FFF378622B69BDAA70CE20A30B942529C08B1B466D5EAC7BB0BEEFF3AFA10",
+      "finalHashes": {
+        "aRest": "c887d9ee2ef2cdd35d92801f03bfeb998fd96e7d0fe298f4f91b85f750fa4c50",
+        "events": "30b3dab7dec7cdba816099284fe8e5c00619826f377e9b7475a2221624701970",
+        "input": "a1595946f704cd22175ca6d523c828f05b9bad3357045b261ead442ccefdfae3",
+        "metadata": "0d14aedac6df7e54618e659c57e7f7338f2d31befeac0e09483641436008ec31",
+        "overall": "92d95f37b422b4b649569e91cee484ef5ef1d447dab2f81938213110f13c3c17",
+        "rng": "26e5908986ea4b89249b25443ba6a48335c999c21d9bb19a14d812c1b88387dc",
+        "slots": "b4931b02d6a62a733d9bf6cb86b67d0b566ce0cf83b8fbd5b4a29d8b6b510c54",
+        "stats": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "vRest": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "world": "3d284352106636f7c54bfd92eb459738f1a7540e529d618ca98c4f37c29d3f81"
+      },
+      "rosterFingerprint": "a905f121d96e1cb90a7e8e40788d8ce5ebdbf8c88ea602bfb196f693bed58a49",
+      "workloadFingerprint": "814ca19641dbf73496c1d8da0f52c2f95950b0749d67228cade633afe750422f",
+      "implementationConfigFingerprint": "9d4631dfb19f72b29f52af9db8b1e2d74bd39351d19b094d33b9fd47d89ea9d9",
+      "unityVersion": "2022.3.62f3",
+      "platform": "WindowsEditor",
+      "centralSegment": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1987.9488320355952,
+        "maximum": 2043,
+        "p95": 2018,
+        "p99": 2030
+      },
+      "centralDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 899,
+        "average": 1988.9488320355952,
+        "maximum": 2044,
+        "p95": 2019,
+        "p99": 2031
+      },
+      "topPhases": [
+        {
+          "phase": "CandidateCollect",
+          "average": 18.542269444444457,
+          "p95": 29.74045
+        },
+        {
+          "phase": "CharacterInput",
+          "average": 11.14664566666666,
+          "p95": 13.876279999999987
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "average": 6.0009049999999995,
+          "p95": 7.7269549999999985
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "average": 2.118242611111111,
+          "p95": 3.074485
+        },
+        {
+          "phase": "NestedPhysics",
+          "average": 1.7401840000000022,
+          "p95": 2.31186
+        }
+      ],
+      "topRender": [
+        {
+          "phase": "Render/PrepareFrame/LegacyCapacityGuard",
+          "average": 4.882021222222216,
+          "p95": 10.068415
+        },
+        {
+          "phase": "Render/BeginFrame/BuildCommands",
+          "average": 1.5948863333333338,
+          "p95": 3.28994
+        },
+        {
+          "phase": "Render/BeginFrame",
+          "average": 1.1454075555555558,
+          "p95": 2.370625
+        },
+        {
+          "phase": "Render/BeginFrame/CaptureEntities",
+          "average": 0.9851433333333333,
+          "p95": 2.0367200000000003
+        }
+      ]
+    }
+  ],
+  "comparisons": {
+    "dispersedVsBruteRawExact": true,
+    "dispersedRepeatRawExact": true,
+    "combatRepeatRawExact": true,
+    "combatBruteFormalBaselineAvailable": false,
+    "perTickParityProven": false,
+    "nativeParityProven": false
+  },
+  "productionDefaultChanged": false,
+  "performancePassed": false,
+  "zeroGcCertified": false,
+  "scope": "Fixed Windows diagnostic reports completed with strict memory failures; not admitted benchmark or Android/120FPS certification"
+}

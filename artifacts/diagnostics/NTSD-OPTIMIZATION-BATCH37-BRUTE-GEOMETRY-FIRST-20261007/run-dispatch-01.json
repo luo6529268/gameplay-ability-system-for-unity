@@ -1,0 +1,121 @@
+{
+  "menuRequest": {
+    "type": "execute_menu_item",
+    "params": {
+      "menu_path": "NTSD/Validation/Optimization/Batch37 Brute Geometry First"
+    }
+  },
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch37 Brute Geometry First'. Check Unity logs for confirmation or errors."
+    }
+  },
+  "sceneDuringEntry": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791341737636,
+        "sequence": 4,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": true,
+            "is_paused": false,
+            "is_changing": true
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "guid": "9a044b4462e171548a6466aaa64f92e5",
+            "name": "NTSD_Battle"
+          }
+        },
+        "activity": {
+          "phase": "playmode_transition",
+          "since_unix_ms": 1791341640255,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791341630289
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "requestComparison": {
+    "command": "$base='artifacts/diagnostics';$old='NTSD-OPTIMIZATION-BATCH36-BRUTE-EXACT-CACHE-20261007';$new='NTSD-OPTIMIZATION-BATCH37-BRUTE-GEOMETRY-FIRST-20261007';$rows=@(foreach($n in @('00-dispersed1000-smoke','01-combat1000-smoke')){$a=Get-Content -LiteralPath \"$base/$old/windows-01/$n/report.json.request.json\" -Raw | ConvertFrom-Json;$b=Get-Content -LiteralPath \"$base/$new/windows-01/$n/report.json.request.json\" -Raw | ConvertFrom-Json;$keys=@($a.PSObject.Properties.Name);[ordered]@{run=$n;oldKeyCount=$keys.Count;newKeyCount=@($b.PSObject.Properties.Name).Count;differenceFields=@($keys|Where-Object{($a.$_|ConvertTo-Json -Depth 15 -Compress) -cne ($b.$_|ConvertTo-Json -Depth 15 -Compress)});action=$b.action;seed=$b.seed;warmupTicks=$b.warmupTicks;sampleTicks=$b.sampleTicks;formalCollectorMode=$b.formalCollectorMode}});$rows|ConvertTo-Json -Depth 5",
+    "exitCode": 0,
+    "result": [
+      {
+        "run": "00-dispersed1000-smoke",
+        "oldKeyCount": 65,
+        "newKeyCount": 65,
+        "differenceFields": [
+          "outputPath"
+        ],
+        "action": "dispersed1000",
+        "seed": 1314149188,
+        "warmupTicks": 120,
+        "sampleTicks": 180,
+        "formalCollectorMode": "brute"
+      },
+      {
+        "run": "01-combat1000-smoke",
+        "oldKeyCount": 65,
+        "newKeyCount": 65,
+        "differenceFields": [
+          "outputPath"
+        ],
+        "action": "combat1000",
+        "seed": 1314149188,
+        "warmupTicks": 120,
+        "sampleTicks": 180,
+        "formalCollectorMode": "brute"
+      }
+    ]
+  }
+}

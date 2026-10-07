@@ -1,0 +1,24 @@
+[
+  {
+    "run": "00-dispersed1000-smoke",
+    "fields": 65,
+    "differences": [
+      "outputPath"
+    ],
+    "collector": "brute",
+    "warmup": 120,
+    "samples": 180,
+    "guardOwnedBySuiteStateNotRequest": null
+  },
+  {
+    "run": "01-combat1000-smoke",
+    "fields": 65,
+    "differences": [
+      "outputPath"
+    ],
+    "collector": "brute",
+    "warmup": 120,
+    "samples": 180,
+    "guardOwnedBySuiteStateNotRequest": null
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "8d35c25fd5f340419b755cf1cece3087",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791333351365,
+      "finished_unix_ms": 1791333360758,
+      "last_update_unix_ms": 1791333360758,
+      "progress": {
+        "completed": 10,
+        "total": 9381,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791333360236,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+        "last_finished_unix_ms": 1791333360238,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(0)",
+            "message": "System.NotImplementedException : Test-first candidate request."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_OnlyChangesOutputFromBruteSmoke(1)",
+            "message": "System.NotImplementedException : Test-first candidate request."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEmptyItrGuardRequest_RejectsOutsideFixedTwoSmokeMatrix",
+            "message": "  Expected: <System.ArgumentOutOfRangeException>\r\n  But was:  <System.NotImplementedException: Test-first candidate request.\r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteEditor.BuildBruteEmptyItrGuardRequest (System.Int32 index) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:242 \r\n  at NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests+<>c.<BruteEmptyItrGuardRequest_RejectsOutsideFixedTwoSmokeMatrix>b__1_0 () [0x00000] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs:538 \r\n  at NUnit.Framework.Assert.Throws (NUnit.Framework.Constraints.IResolveConstraint expression, NUnit.Framework.TestDelegate code, System.String message, System.Object[] args) [0x00004] in <10b6135e63434fdba4fc6c109928ab3b>:0 >\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_1000ParticipantsLocalCostAndGateCounts",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_ActiveAttackExemptStillRejects",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_AllInertSkipsPairGateWithoutRng",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_LaterCollectionRechecksNewItr",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+            "message": "  The candidate must remain opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

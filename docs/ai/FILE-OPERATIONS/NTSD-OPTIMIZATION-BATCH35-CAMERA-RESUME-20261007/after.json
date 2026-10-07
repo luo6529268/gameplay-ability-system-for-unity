@@ -1,0 +1,67 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH35-CAMERA-RESUME-20261007",
+  "observed": "2026-10-07T11:35:48.4045009+08:00",
+  "after": [
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md",
+      "bytes": 5434,
+      "sha256": "9F60CDE85A9119035B6DB9F13354265C6C96CA70C8BECC432B02AA2BF11C6D14"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007.md",
+      "bytes": 4993,
+      "sha256": "F3875B09C5099FE8C44EA7D501AFB57486278021833F6DF2CF7434E3F87BD2EC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007\\REPORT.md",
+      "bytes": 2737,
+      "sha256": "3DE8FC4112EFCBA28AD1ED6CB4ABFA30A8407157C284828BE1D3E5AA031FA161"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 674007,
+      "sha256": "ACC659A4624716D24AAA400B01E4BD0D514E9929FF22526D857D0EF421C60C82"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1573779,
+      "sha256": "7CD98ED28AF5B0452CEECE111D4527875D4B99F4D29811CFE82ADD81F4834ABC"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1506514,
+      "sha256": "CB0C95A15D5D999F9BB67C8E8BAB0906D308B212B7C9E285BA251AF9936AD315"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 77373,
+      "sha256": "9B949AFD82D6D850BFE561183C42FD7E5EDA62401851EAE18AFB5BCC98BC7EAC"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "bytes": 36442,
+      "sha256": "8F804BB8F460CF8C30355515BCCBB3782EA611D517DEAE477AA33E5B3CE0FA01"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md",
+      "bytes": 16695,
+      "sha256": "C8BFD3D429BA3819BDEC8F2D4015226B43CF66B9B7C11529C57684C2FCE28102"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 57906,
+      "sha256": "880945AFF74A163263DF333FEE529BE8C287F8DA4A0175E8E993E905F8997406"
+    }
+  ],
+  "note": "Captured after terminal record/index edits; original dirty backups remain. File operation verified is not full0GC acceptance."
+}

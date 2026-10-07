@@ -1,0 +1,112 @@
+{
+  "production": {
+    "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007/reentry-01/production-window-01.json",
+    "status": "PASS",
+    "phase": "DONE",
+    "error": "",
+    "renderPipeline": "URP",
+    "requireActiveAuxiliaryCoverage": true,
+    "replayProductionCatalog": false,
+    "sampleCount": 1800,
+    "startTick": 8,
+    "endTick": 1313,
+    "observedSubmissionSlots": 2,
+    "cameraBytes": 0,
+    "observerBytes": 0,
+    "collectionControlSupported": false,
+    "playerLoopHardGateSupported": false,
+    "memoryBefore": {
+      "tickBytes": 0,
+      "driverUpdateBytes": 0,
+      "latePresentationBytes": 0,
+      "playerLoopBytes": 0,
+      "gen0Collections": 0,
+      "gen1Collections": 0,
+      "gen2Collections": 0
+    },
+    "memoryAfter": {
+      "tickBytes": 0,
+      "driverUpdateBytes": 0,
+      "latePresentationBytes": 0,
+      "playerLoopBytes": 0,
+      "gen0Collections": 3,
+      "gen1Collections": 3,
+      "gen2Collections": 3
+    },
+    "footMin": 2,
+    "footMax": 2,
+    "healthMin": 2,
+    "healthMax": 2,
+    "recordedDrawSum": 11504,
+    "executedDrawSum": 11504,
+    "badFrames": 0,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneClean": true
+  },
+  "materialization": {
+    "builds": {
+      "alphaChanged": {
+        "admittedBuildCount": 503,
+        "buildInvocationCount": 503,
+        "completedBuildCount": 503,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 387376,
+        "uploadedVertexCount": 8804,
+        "vertexUploadCallCount": 503
+      },
+      "publicationChanged": {
+        "admittedBuildCount": 1297,
+        "buildInvocationCount": 1297,
+        "completedBuildCount": 1297,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 1014288,
+        "uploadedVertexCount": 23052,
+        "vertexUploadCallCount": 1297
+      },
+      "repeated": {
+        "admittedBuildCount": 0,
+        "buildInvocationCount": 0,
+        "completedBuildCount": 0,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 0,
+        "uploadedVertexCount": 0,
+        "vertexUploadCallCount": 0
+      },
+      "total": {
+        "admittedBuildCount": 1800,
+        "buildInvocationCount": 1800,
+        "completedBuildCount": 1800,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 1401664,
+        "uploadedVertexCount": 31856,
+        "vertexUploadCallCount": 1800
+      }
+    },
+    "prepareAttempts": {
+      "alphaChanged": 503,
+      "publicationChanged": 1297,
+      "repeated": 0,
+      "total": 1800
+    },
+    "requests": {
+      "alphaChanged": 503,
+      "publicationChanged": 1297,
+      "repeated": 0,
+      "total": 1800
+    },
+    "returnGates": {
+      "reentrant": 0,
+      "sameSample": 0,
+      "sameUnityFrame": 0
+    }
+  }
+}

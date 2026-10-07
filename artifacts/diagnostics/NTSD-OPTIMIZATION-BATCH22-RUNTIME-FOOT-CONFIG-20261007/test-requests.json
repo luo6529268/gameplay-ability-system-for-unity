@@ -1,0 +1,26 @@
+{
+  "red": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Animation\\.Rendering\\.Editor\\.BattleCentralRuntimeFootMarkerEditorTests\\.RuntimeConfig_"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "green": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests",
+        "NTSD.Test.Editor.BattleFootCoverageDiagnosticEditorTests",
+        "NTSD.Test.Editor.BattleProductionCatalogReplayPolicyEditorTests"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "updated": "2026-10-07T15:30:57.2367420+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "headUnchanged": true,
+  "protected": [
+    {
+      "path": "AGENTS.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "unchanged": true
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "unchanged": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleProductionCatalogReplayEditor.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007.md",
+      "unchanged": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backupUnchanged": true,
+      "currentSha": "F5A26F5A78EBF78C98800B877DCA769E06D6B5FD2FC22EA9D53A0D361303A3A0"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backupUnchanged": true,
+      "currentSha": "170A73A04C93CF4BB4FDB1C15467FF77ED30BC72B4219CA00653D6BEA517BFAE"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backupUnchanged": true,
+      "currentSha": "E5E974D78F4FB5B8492F3745E64F6B2A6A386D4948F797055550EC9285FCCAD2"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupUnchanged": true,
+      "currentSha": "96527DE369C8DD6E054FE32AAD98D43A4C2EE4B8AAB9C4CC376141D885C4088E"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "backupUnchanged": true,
+      "currentSha": "FAE00887AD940FEF36FBA2ADF57ABACC83A4B3CFE91353909E831E2A95200EAC"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupUnchanged": true,
+      "currentSha": "75ABA521FA2355698F6033C21FC1A60849CF096DB3712C8BC34B976478880C87"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupUnchanged": true,
+      "currentSha": "3F974CA0F62CCF79135DB066E12EDD9F092B4E2DC9DA2B91C03C5B177AA51BBD"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "backupUnchanged": true,
+      "currentSha": "28EDECF7A336E7D5CD68EE615CDEFB1D1C480FA7688F55F4EFF2A96B95EEB8D3"
+    }
+  ],
+  "source": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "F5A26F5A78EBF78C98800B877DCA769E06D6B5FD2FC22EA9D53A0D361303A3A0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "8911EF301DC17A83F0BBF8446D28A6611C5D3E8E6E1599D5D4992513FCF7B1EF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditorTests.cs",
+      "sha256": "B1085086CCE3942369AF3B7A70FD35613EFEDBC835D91B269F84BB1139C8B3B3"
+    }
+  ],
+  "binarySha": "8DE275686D399C23595D95155D73547182026B19CC596DBA99E40BBF815B09F5",
+  "terminalComparison": {
+    "scope": "terminal only; not per-tick/native",
+    "currentSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+    "mismatches": [],
+    "currentTick": 300,
+    "fieldCount": 20,
+    "priorTick": 300,
+    "priorSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+  },
+  "sourceChangedOutsideBatch": 0
+}

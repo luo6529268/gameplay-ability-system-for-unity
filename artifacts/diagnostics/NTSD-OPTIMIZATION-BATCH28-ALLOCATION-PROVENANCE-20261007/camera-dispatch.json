@@ -1,0 +1,20 @@
+{
+  "sceneLoad": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Scene 'Assets/NTSD/Scene/NTSD_Battle.unity' loaded successfully.",
+      "data": {
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "name": "NTSD_Battle"
+      }
+    }
+  },
+  "dispatch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch28 Allocation Provenance 1800 Cameras'. Check Unity logs for confirmation or errors."
+    }
+  }
+}

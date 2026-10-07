@@ -1,0 +1,204 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007",
+  "observed": "2026-10-07T09:48:45.3547018+08:00",
+  "head": "8107196b1f17ee0f7ce9e7fcbb7ffb9fc260956c",
+  "after": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "beforeSha": "99D7682AC1B04F8937620FD4D291A58882AD1D76774FC67A87E820BED5E4CAF1",
+      "afterSha": "EFBCC8C3B1022511CA504A81662A7ED5BFBBDDEDD9503DE3030585608D385FF8",
+      "backupSha": "99D7682AC1B04F8937620FD4D291A58882AD1D76774FC67A87E820BED5E4CAF1",
+      "bytes": 347050
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "beforeSha": "F7E3FFE1557DF883CF4EDCF6324A353D508FD927EE394DB050F89B6F8318C308",
+      "afterSha": "B48F58331F705174413F8C38ECB02B42CB662C96EDF0DD042CC0AC6F40BBBC7B",
+      "backupSha": "F7E3FFE1557DF883CF4EDCF6324A353D508FD927EE394DB050F89B6F8318C308",
+      "bytes": 245051
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "beforeSha": "05933D3DBC91D5B81D3ADE07A1B3914D93DE9DE2078AAD03BC55C89EF5CAA49B",
+      "afterSha": "25E4EC2C83DE08F40D5103C0900242A4F1B801AE62A17520469DCD78FC63941A",
+      "backupSha": "05933D3DBC91D5B81D3ADE07A1B3914D93DE9DE2078AAD03BC55C89EF5CAA49B",
+      "bytes": 52585
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha": "074C53986382F5232448BF235DEEB333346DB3DD940DFC76A7E9BBBB832C5FD9",
+      "afterSha": "98D4581D074C3D4686E6EB2BCCE7CA565AA03883CCA0EA7A7EDB73F987B87A90",
+      "backupSha": "074C53986382F5232448BF235DEEB333346DB3DD940DFC76A7E9BBBB832C5FD9",
+      "bytes": 669075
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha": "CD41D97D1120113900D6232EC79FC49A2052B6925611B0413F6715EE56563597",
+      "afterSha": "CFC8030231EC16D61866B109E71B7BE2200AE90CB5E07DB65D6C0E870FD92AD8",
+      "backupSha": "CD41D97D1120113900D6232EC79FC49A2052B6925611B0413F6715EE56563597",
+      "bytes": 1568847
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeSha": "8D7530C9F844E7B42DF361A615DF1C1FCCC360FE28AD4204F733746D3E80BD6A",
+      "afterSha": "3C5C62342CC18606C4ABEBCF646D50A9046D0390BD1FA2F68F928CF29976790A",
+      "backupSha": "8D7530C9F844E7B42DF361A615DF1C1FCCC360FE28AD4204F733746D3E80BD6A",
+      "bytes": 53892
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha": "BB94E134699F6A8EE31F1B820CE32A64AE5FB84863A2546E62515661BA0D8A59",
+      "afterSha": "7C1ABC0AFB8302FC8E5FED1AB71A81240085FC08F13DD2C300514B4E1A2DC7BB",
+      "backupSha": "BB94E134699F6A8EE31F1B820CE32A64AE5FB84863A2546E62515661BA0D8A59",
+      "bytes": 1501443
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha": "9DA796294CBAE8E7E69A597152D2C98EA09623ADB8F7354492996618DA78FBE3",
+      "afterSha": "3935A868B7245F579D5BBE796D5A56FEB5059C9977FA3B0D579F15CC9CA08B33",
+      "backupSha": "9DA796294CBAE8E7E69A597152D2C98EA09623ADB8F7354492996618DA78FBE3",
+      "bytes": 72009
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "beforeSha": "08E927BEB614834691A731F979808D496187F9570CC76F93F5FADA4E421B73E3",
+      "afterSha": "1F772C29751ECF2597B7FDBD29E3334E972C606129EEBDC560D097782D56C730",
+      "backupSha": "08E927BEB614834691A731F979808D496187F9570CC76F93F5FADA4E421B73E3",
+      "bytes": 31499
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "beforeSha": "14F31D5CD28150CD2D39C28F072DB2E0EA97B878701E2D64E26208EC8656C8AB",
+      "afterSha": "8183751D7E68AF9B1B18948DA7FD289E36EEDACC341C5D4C20F83FF80A2146EB",
+      "backupSha": "14F31D5CD28150CD2D39C28F072DB2E0EA97B878701E2D64E26208EC8656C8AB",
+      "bytes": 11630
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "beforeSha": "FF13D1E880E84B235DE8E59113ED7BEB8BF2FABF2CF56F22297AE26E582D6D20",
+      "afterSha": "5F6494AF6B6B10875B99DB8A55994344AAC9E3946296AB63E69D2E8D777F4310",
+      "backupSha": "FF13D1E880E84B235DE8E59113ED7BEB8BF2FABF2CF56F22297AE26E582D6D20",
+      "bytes": 524
+    }
+  ],
+  "protectedCount": 270,
+  "protectedMismatch": [],
+  "backupCount": 11,
+  "backupMismatch": [],
+  "source": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "EFBCC8C3B1022511CA504A81662A7ED5BFBBDDEDD9503DE3030585608D385FF8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "B48F58331F705174413F8C38ECB02B42CB662C96EDF0DD042CC0AC6F40BBBC7B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "25E4EC2C83DE08F40D5103C0900242A4F1B801AE62A17520469DCD78FC63941A"
+    }
+  ],
+  "menuSceneSha": "6B5BAD6DB12E2C5FA3324F275FE87E788C27B0F0B562E2637B92BDDD6DD204AE",
+  "battleSceneSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "terminal": [
+    "PASS",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007\\windows-01\\01-combat1000-smoke\\report.json"
+  ],
+  "editor": {
+    "get_editor_state": {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Retrieved editor state.",
+        "data": {
+          "schema_version": "unity-mcp/editor_state@2",
+          "observed_at_unix_ms": 1791337758701,
+          "sequence": 6,
+          "unity": {
+            "instance_id": null,
+            "unity_version": "2022.3.62f3",
+            "project_id": null,
+            "platform": "WindowsEditor",
+            "is_batch_mode": false
+          },
+          "editor": {
+            "is_focused": false,
+            "play_mode": {
+              "is_playing": false,
+              "is_paused": false,
+              "is_changing": false
+            },
+            "active_scene": {
+              "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+              "guid": "132c934aff207b048833ab33c1961278",
+              "name": "NTSD_Menu"
+            }
+          },
+          "activity": {
+            "phase": "idle",
+            "since_unix_ms": 1791337465704,
+            "reasons": [
+              "tick"
+            ]
+          },
+          "compilation": {
+            "is_compiling": false,
+            "is_domain_reload_pending": false,
+            "last_compile_started_unix_ms": null,
+            "last_compile_finished_unix_ms": null,
+            "last_domain_reload_before_unix_ms": null,
+            "last_domain_reload_after_unix_ms": 1791337450016
+          },
+          "assets": {
+            "is_updating": false,
+            "external_changes_dirty": false,
+            "external_changes_last_seen_unix_ms": null,
+            "external_changes_dirty_since_unix_ms": null,
+            "external_changes_last_cleared_unix_ms": null,
+            "refresh": {
+              "is_refresh_in_progress": false,
+              "last_refresh_requested_unix_ms": null,
+              "last_refresh_finished_unix_ms": null
+            }
+          },
+          "tests": {
+            "is_running": false,
+            "mode": null,
+            "current_job_id": null,
+            "started_unix_ms": 1791337456467,
+            "started_by": "unknown",
+            "last_run": {
+              "finished_unix_ms": 1791337465666,
+              "result": "unknown",
+              "counts": null
+            }
+          },
+          "transport": {
+            "unity_bridge_connected": null,
+            "last_message_unix_ms": null
+          },
+          "settings": {
+            "batch_execute_max_commands": 25
+          }
+        }
+      }
+    },
+    "manage_scene": {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Retrieved active scene information.",
+        "data": {
+          "name": "NTSD_Menu",
+          "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+          "buildIndex": 0,
+          "isDirty": false,
+          "isLoaded": true,
+          "rootCount": 8
+        }
+      }
+    }
+  },
+  "evidence": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH34-BRUTE-EMPTY-ITR-ROSTER-20261007/final-audit-01.json"
+}

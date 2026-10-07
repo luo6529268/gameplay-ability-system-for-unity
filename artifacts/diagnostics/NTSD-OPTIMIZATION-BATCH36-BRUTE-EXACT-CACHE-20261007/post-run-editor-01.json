@@ -1,0 +1,131 @@
+{
+  "editorPid": 19040,
+  "verifiedListeningPort": 6400,
+  "editorState": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791340279976,
+        "sequence": 8,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791339940738,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791339745727
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "activeScene": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved active scene information.",
+      "data": {
+        "name": "NTSD_Menu",
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "buildIndex": 0,
+        "isDirty": false,
+        "isLoaded": true,
+        "rootCount": 8
+      }
+    }
+  },
+  "oldPortReadOnlyTimeouts": [
+    {
+      "chunk_id": "31e8d0",
+      "wall_time_seconds": 10.007288,
+      "session_id": 14952,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "chunk_id": "239815",
+      "wall_time_seconds": 10.0136345,
+      "session_id": 56258,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "chunk_id": "6ef1e9",
+      "wall_time_seconds": 10.0061622,
+      "session_id": 39841,
+      "original_token_count": 0,
+      "output": ""
+    },
+    {
+      "chunk_id": "8ba3c6",
+      "wall_time_seconds": 0.0000068,
+      "exit_code": 1,
+      "original_token_count": 108,
+      "output": "ParentContainsErrorRecordException: \r\nLine |\r\n   5 |  … askCount) { $taskRead = $taskStream.Read($taskBuffer,$taskOffset,$tas …\r\n     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Exception calling \"Read\" with \"3\" argument(s): \"Unable to read data from the transport connection: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。.\"\r\n"
+    },
+    {
+      "chunk_id": "30bcda",
+      "wall_time_seconds": 3.9224416,
+      "exit_code": 1,
+      "original_token_count": 108,
+      "output": "ParentContainsErrorRecordException: \r\nLine |\r\n   5 |  … askCount) { $taskRead = $taskStream.Read($taskBuffer,$taskOffset,$tas …\r\n     |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Exception calling \"Read\" with \"3\" argument(s): \"Unable to read data from the transport connection: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。.\"\r\n"
+    }
+  ],
+  "note": "After the Play/domain lifecycle, port ownership was rescanned: PID 19040 is now listening at 6400. Only read-only state/scene checks were sent there. Port 6401 currently belongs to a different pre-existing Unity PID; no restart/new Editor/redispatch. Do not assume a fixed bridge port identifies an Editor."
+}
