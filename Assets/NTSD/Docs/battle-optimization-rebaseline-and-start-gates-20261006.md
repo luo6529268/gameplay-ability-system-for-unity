@@ -3,12 +3,18 @@
 > 标识：`NTSD-OPTIMIZATION-DOC-REBASELINE-20261006`
 > 文档状态：`DOCUMENTS_REBASELINED / IMPLEMENTATION_STARTED`
 > 文档整理阶段仅授权说明保留为历史。用户后续已批准按文档开始优化；
-> 当前H-11最小预热及聚焦验证，统一状态见[独立进度总表](battle-optimization-progress-tracker.md)。
+> 当前运行结果以[独立进度总表](battle-optimization-progress-tracker.md)为准；H07/H11阶段条件仍未过，不将本页2026-10-06静态基线当当前验收。
 > EXT-1、MONO、资源/Scene/配置专项门不因总体授权自动取消，完整M0未完成。
 >
 > 主表：[34项优化风险登记表](android-mobile-readiness-priority-risk-register.md)。
 > 主表只管理说明/进度/留痕，本文件管理共同合同与启动门，各项方案管理具体解决方案和验收。
 > 静态重扫证据时间为2026-10-06；下列矩阵为验收条件，实际首批结果仅在进度总表/具名报告中记录。
+
+## 0. 当前阶段完成与继续执行口径（2026-10-07更正）
+
+[有限首阶段执行合同第0—8节](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)定义当前六项范围和完成条件；次数/批次/修复阈值只用于复盘，不是停止目标的边界。候选无效停止推广该候选，工具失效修工具、技术未知继续必要定位；不得降低验收或重复无信息量观察。已通过项立即收口，不重开历史campaign；单项新权限不阻塞其他独立READY工作。
+
+本页其余条目为全34项共同方案与未来阶段排程，不自动扩大当前六项。Role-aware生产切换、资源/Scene/配置、MONO及EXT1专项门保持。下表“完成条件”不是执行次数上限；当前get_goal实返active，历史blocked不是停工依据，文档对账不等于性能达标或Goal状态变更。结束子批不要求用户重新批准同范围必要动作；未完成则按有效证据继续。原[边界修订](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PHASE-COMPLETION-BOUNDARY-CORRECTION-20261007/RECORD.md)和当前[状态对账](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-COMPLETION-STATE-RECONCILIATION-20261007/RECORD.md)保留留痕。
 
 ## 1. 优先级与证据规则
 
@@ -105,7 +111,7 @@ EXT-1附加schema仍属待批，不据CPU命令推导GPU batch，不提前冻ban
 
 ## 5. 分批顺序与当前启动范围
 
-| 顺序 | 建议包 | 输出/停止条件 |
+| 顺序 | 建议包 | 阶段产物/完成条件 |
 |---|---|---|
 | 0 | 用户确认文档及测量范围 | 总体启动已批准；完整M0的平台/workload/运行窗口/准确范围仍须具名 |
 | 1 | 当前版本基础取证与总内存/0GC基线 | 先复用既有计数；缺埋点另立Change，记录加载/稳定/过渡/退出、worker和插值成本 |
@@ -122,18 +128,19 @@ EXT-1附加schema仍属待批，不据CPU命令推导GPU batch，不提前冻ban
 首批采用现有聚焦测试确认两处缓存遗漏，先H-11预热子批；
 完整整局/M0基线和父H-11验收仍开放，未测量收益不晋升。
 
-## 6. 实施前批准字段与验收底线
+## 6. 实施前声明、必要授权与验收底线
 
-启动请求必须写：条目/Task/Change ID、精确文件/符号或资源清单、平台/设备/API/workload、
+每个具名包实施前必须写：条目/Task/Change ID、精确文件/符号或资源清单、平台/设备/API/workload、
 是否运行Unity/测试/测量、共享Editor窗口、容量/预算/latency未决项、验证门与可回滚方式。
-不以“开始优化”推定改Scene/Input Actions/Server/资源格式/segment语义等新增权限。
+已批准六项范围内的后继必要工作按执行合同留痕，不因开始新子批/定位未知点重复要求人类启动批准。
+实质新增范围/生产推广/资源等权限另请明确授权；不以“开始优化”推定改Scene/Input Actions/Server/资源格式/segment语义。
 
-每个实际批次按风险执行并报告：
-compile → focused/SelfCheck → 固定输入/checksum/RNG/事件A/B →
-真实Scene表现/first-visible/UV/透明/声音 → 0GC/steady-transition →
-11阶段关闭及重进 → Player/Android具名证书。
-文档整理阶段以上全未运行；后续子批01已执行编译/具名聚焦，
-其余门未运行。项目级全部完成只在对应证据齐备时声明。
+实际批次按影响域执行并报告适用门：compile、focused/SelfCheck、固定输入/checksum/RNG/事件A/B、
+真实Scene表现/first-visible/UV/透明/声音、0GC/steady-transition、11阶段关闭/重进。
+阶段出口必需门不能删除；未受影响且指纹可复用的既有证据不重复全量运行。
+Player/Android证书仅在对应阶段获批且平台具备时执行，不强制每个Windows微改动重跑全部平台。
+上文2026-10-06事实仅是历史基线，实际历次已运行/未运行门见总表和具名报告；
+项目级全部完成只在全部对应域证据齐备时声明。
 预算/容量/硬性能门数值在获批测量后冻结，不因现在未冻结数字制造文档阻断项。
 
 ## 7. 文档收口条件与留痕

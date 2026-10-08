@@ -1,0 +1,7 @@
+{
+  "chunk_id": "36a33a",
+  "wall_time_seconds": 0.1390958,
+  "exit_code": 0,
+  "original_token_count": 288,
+  "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job status retrieved.\",\"data\":{\"job_id\":\"728a0db4296a40859855b11c3d690f93\",\"status\":\"failed\",\"mode\":\"EditMode\",\"started_unix_ms\":1791415795248,\"finished_unix_ms\":1791415815447,\"last_update_unix_ms\":1791415815447,\"progress\":{\"completed\":5,\"total\":9787,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791415811009,\"last_finished_test_full_name\":\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)\",\"last_finished_unix_ms\":1791415811009,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeResidentBudgetUsesActualManagedArrays\",\"message\":\"System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.\\r\\n  ----> NUnit.Framework.AssertionException :   allocation counter missed a retained known-positive allocation\\r\\n  Expected: greater than or equal to 4096\\r\\n  But was:  0\\r\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":null}}}\r\n"
+}

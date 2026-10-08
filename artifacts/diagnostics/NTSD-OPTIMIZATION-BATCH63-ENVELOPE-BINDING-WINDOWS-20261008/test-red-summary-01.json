@@ -1,0 +1,199 @@
+{
+  "utc": "2026-10-08T00:33:18.3515549Z",
+  "job": "f5706fd8e6a1445b9c2aea98bfa934de",
+  "copy": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/test-red-original-01.xml",
+  "bytes": 58817,
+  "sha": "6E8821E412F2A6B70AAD8F722FC50881875F6D930A3BBDC58B80B08152ADBB53",
+  "total": "37",
+  "passed": "0",
+  "failed": "37",
+  "skipped": "0",
+  "duration": "4.477172",
+  "cases": [
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ApplyCompleteRestoresBothAndPreservesDefaults(False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ApplyCompleteRestoresBothAndPreservesDefaults(True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteCoarseEnvelopeForDiagnostics\",False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteRejectedBindingReuseForDiagnostics\",False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteExactCacheForDiagnostics\",False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteKind5PresenceForDiagnostics\",True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_MenuPreservesLegacySignatureAndColdOwnership",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeDefaultsFalseAndRoutesBeforeScope",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(0)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(1)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(2)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(3)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(4)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRecordsMaximumAndLatchesDrift",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(False,False,0L,0L,True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,False,0L,0L,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,True,12L,3L,True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,True,12L,0L,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(False,False,12L,0L,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,False,12L,3L,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteKind5PresenceForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteEligibilityReuseForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseDispatchForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteBranchTimingForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseEnvelopeForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteRejectedBindingReuseForDiagnostics\")",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsSecondOrOldOwnerWithoutChangingFlags(False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsSecondOrOldOwnerWithoutChangingFlags(True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(False,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(False,True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(True,False)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(True,True)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_RejectsOutsideFixedMatrix",
+      "result": "Failed",
+      "message": "System.Xml.XmlElement"
+    }
+  ]
+}

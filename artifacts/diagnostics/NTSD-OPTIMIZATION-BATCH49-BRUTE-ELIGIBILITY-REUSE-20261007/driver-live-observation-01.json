@@ -1,0 +1,26 @@
+{
+  "jobId": "ed1a5d70ad134798bf6c1ddb91d413a5",
+  "observedAt": "2026-10-07T15:25:45.6441625Z",
+  "editorPid": 19040,
+  "cpu": 116214.921875,
+  "responding": true,
+  "workingSet": 4874862592,
+  "logBytes": 11006311522,
+  "header": [
+    "\r",
+    "<color=cyan>[BMP 文件] a/kat/kat2.png -> J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\vfs\\a\\kat\\kat2.png, 范围=[0-23], 尺寸=81x82, 行列=4x6</color>\r",
+    "UnityEngine.StackTraceUtility:ExtractStackTrace ()\r",
+    "UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[])\r",
+    "UnityEngine.Logger:Log (UnityEngine.LogType,object)\r",
+    "UnityEngine.Debug:Log (object)\r",
+    "NTSD.Animation.CharacterAnimtorManager:BuildSpriteFilesForSource (NTSD.DatParser.Lf2DatFile,string,NTSD.Animation.BattleContentSource) (at Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:1176)\r",
+    "NTSD.Animation.CharacterAnimtorManager:BuildCharacterDataCore (NTSD.DatParser.Lf2DatFile,string,NTSD.Animation.BattleContentSource) (at Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:1111)\r",
+    "NTSD.Animation.CharacterAnimtorManager:BuildCharacterDataFromSource (string,string,NTSD.Animation.BattleContentSource) (at Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:1066)\r",
+    "NTSD.Animation.CharacterAnimtorManager:BuildCharacterFrameConfigsFromCatalog (NTSD.Animation.LoganObjectCatalog) (at Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:1019)\r"
+  ],
+  "testReferences": [
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r",
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r",
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r"
+  ]
+}

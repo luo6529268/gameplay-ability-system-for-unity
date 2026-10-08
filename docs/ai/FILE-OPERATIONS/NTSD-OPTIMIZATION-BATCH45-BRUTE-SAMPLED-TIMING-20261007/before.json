@@ -1,0 +1,243 @@
+{
+  "observedUtc": "2026-10-07T12:22:43.2093717Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "bytes": 356582,
+      "sha256": "8F791BD53836C54002A936F788C58956934FF1B59454DFA03D5E20C37AAFA263",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/01-BruteForceSceneQuery.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\ProductionEntityStressEditorTests.cs",
+      "bytes": 341769,
+      "sha256": "D49E2BDCD179D787A5E627F04A37CA1F9675DACF0E53C78F2191A1A8C4C6F9CA",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/02-ProductionEntityStressEditorTests.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 79192,
+      "sha256": "32F3B5A1497B523CBEAC50B997BFB067F2578DE8D75A6414CEEC3B51ABED5B2E",
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/03-BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 681590,
+      "sha256": "C91BA85C704EC368CCA2F643994336F596831A1B3424F5DF419EFDCB5598241E",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/04-CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1585875,
+      "sha256": "64856C5AC5A57E0576F8C44FBBF12BE47F8347E9F68B313E28FE9BEB9E5976E5",
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/05-STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1518867,
+      "sha256": "837C19044BB24B5A7119F97F1007F7510B7D494C9B3452B3F5B2300B83A9CCE7",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/06-CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 68629,
+      "sha256": "C02A3686C19AE5DD119D701057508EBD95B2C3B0CEBF97DB58077C75FAFF5ACB",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/07-INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 94233,
+      "sha256": "51AC757ED1685D922809C7642057D2FD06EC3453B6EE07E1CC6D546A7BEB9DD2",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/08-battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "bytes": 18804,
+      "sha256": "19CAE6364E0458A6385DAF8F278ABA8088439BBC47AD45538873BEFA5E5ADB31",
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007/backup/09-h-07-fresh-1000-ai-certificate.md"
+    }
+  ],
+  "guards": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "bytes": 35985
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "bytes": 24069
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "bytes": 28102
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "bytes": 27269
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "bytes": 43193
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "bytes": 2127125
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "sha256": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2",
+      "bytes": 3668
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "sha256": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343",
+      "bytes": 197
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "bytes": 109282
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "bytes": 652229
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "sha256": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "bytes": 17264
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "sha256": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "bytes": 14690
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "sha256": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "bytes": 9636
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "sha256": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "bytes": 2772
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "bytes": 175639
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "bytes": 13676
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "sha256": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "bytes": 16476
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "bytes": 266112
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "bytes": 371096
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "bytes": 2923
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "sha256": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+      "bytes": 2574
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "bytes": 87
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha256": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "bytes": 39905
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "sha256": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037",
+      "bytes": 32120
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha256": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D",
+      "bytes": 112256
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "6A76987ED708A3FEBD208C4C5660CC9BFE10EA6871812069FE6117CD278087B7",
+      "bytes": 32909
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "DE063F0E0BBE496FFC88034EBE8BA5903A0ED20FB6CBC6611E3119BDBBF96454",
+      "bytes": 102563
+    }
+  ],
+  "originalEditor": [
+    {
+      "Id": 19040,
+      "Responding": true,
+      "CPU": 108263.625
+    }
+  ],
+  "sharedRequestAbsent": true,
+  "sharedResultBytes": "UEFTUwpJOlxHaXRIdWJcVW5pdHlfR0FTXGdhbWVwbGF5LWFiaWxpdHktc3lzdGVtLWZvci11bml0eVxhcnRpZmFjdHNcZGlhZ25vc3RpY3NcTlRTRC1PUFRJTUlaQVRJT04tQkFUQ0g0NC1CUlVURS1CUkFOQ0gtVElNSU5HLTIwMjYxMDA3XHdpbmRvd3MtMDFcMDMtY29tYmF0MTAwMC10aW1pbmctb25ccmVwb3J0Lmpzb24KcmVhc29uPXNhbXBsZS1jb21wbGV0ZTsgcmVzdG9yZWQ9VHJ1ZTsgYWN0aXZlQ2xlYW51cFJlc3RvcmVkPVRydWU7IGRyaXZlclJlc3RvcmVkPVRydWU7IGxvZ2dlclJlc3RvcmVkPVRydWU7IGNsZWFudXBFeGNlcHRpb25zPTA7IGFjdGl2ZUdPPTEwMDAtPjA7IHdvcmxkT2JqZWN0cz0yMDAwLT4wOyB3b3JsZEVudGl0aWVzPTEwMDAtPjA7IGNsYWltZWQ9MTAwMC0+MDsgb2JqZWN0UG9vbEFjdGl2ZT0wLT4wOyByZWZlcmVuY2VQb29sQWN0aXZlPTAtPjA7IHJldGFpbmVkSW5hY3RpdmVPYmplY3RQb29sQ2FwYWNpdHk9MTA1MC0+MTA1MCAoZGVsdGE9MDsgZG9lc05vdEFmZmVjdFJlc3RvcmVkPVRydWUp",
+  "sharedResultSha": "B8843F54DA14BA20D105E193D22DBF2D16B3EFD282C740D5674F8FC0BBCEDF32"
+}

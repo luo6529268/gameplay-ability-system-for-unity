@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-07T21:59:32.9443889Z",
+  "source": "Temp/Goal18_LastTestResults.xml",
+  "destination": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/test-green-original-01.xml",
+  "sourceSha": "6C0CA09503A1B295B3930762DCCCDA6EAD5D20D1BAD795283DD82DE5EF60C76A",
+  "copySha": "6C0CA09503A1B295B3930762DCCCDA6EAD5D20D1BAD795283DD82DE5EF60C76A",
+  "start": "2026-10-07 21:56:22Z",
+  "end": "2026-10-07 21:56:30Z",
+  "total": "31",
+  "passed": "29",
+  "failed": "2",
+  "skipped": "0",
+  "cost": [
+    {
+      "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_1000ParticipantsBalancedCostAndFullSequence(120)",
+      "state": "Passed",
+      "output": "BRUTE_COARSE_ENVELOPE_COST participants=1000 warmup=4 sample=8 spacing=120 baselineMeanMs=21.719637499999997 candidateMeanMs=16.7807375 baselineSamples=21.8847,22.0976,21.8486,21.8049,21.472,21.6747,21.5495,21.4251 candidateSamples=17.0018,16.9173,16.8261,16.7196,16.271,16.9372,16.8237,16.7492 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n"
+    },
+    {
+      "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_1000ParticipantsBalancedCostAndFullSequence(12)",
+      "state": "Passed",
+      "output": "BRUTE_COARSE_ENVELOPE_COST participants=1000 warmup=4 sample=8 spacing=12 baselineMeanMs=41.5352625 candidateMeanMs=38.257175000000004 baselineSamples=41.7504,41.9632,41.9073,41.8927,41.5199,41.1797,41.134,40.9349 candidateSamples=38.6659,38.9647,38.4874,37.2649,38.3025,38.21,38.8526,37.3094 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "observedAt": "2026-10-07T15:52:11.2349100Z",
+  "copies": [
+    {
+      "source": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\01-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "7801F5847ADEDF3BC883102B496842C75DDCB6CA5E4D31E176E25DA166ADC5C9",
+      "start": "2026-10-07T15:52:10.4923540Z",
+      "end": "2026-10-07T15:52:10.4982482Z"
+    },
+    {
+      "source": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\02-CHANGE-LEDGER.md",
+      "sha256": "8ECCBA5DAF75837C4267218B0D974B5EA0016E89E90D299088D957A15B76C0EE",
+      "start": "2026-10-07T15:52:10.5015875Z",
+      "end": "2026-10-07T15:52:10.5049191Z"
+    },
+    {
+      "source": "docs/ai/STATE.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\03-STATE.md",
+      "sha256": "0124DDC57DC9F5EEEAED10B40EC4A46F89788BE80A1F53401333DF52B832EF07",
+      "start": "2026-10-07T15:52:10.5072170Z",
+      "end": "2026-10-07T15:52:10.5109177Z"
+    },
+    {
+      "source": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\04-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "6C7EB64F0C2F06C402257DC08BAB4735AA6D768AAE6C8E62FB63F50B224CC119",
+      "start": "2026-10-07T15:52:10.5132597Z",
+      "end": "2026-10-07T15:52:10.5174148Z"
+    },
+    {
+      "source": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\05-INDEX.md",
+      "sha256": "B3D8EB7BF57EF32B67FBAAAEB6588EC0F0056F0A5A9FD18DD9078A5190373192",
+      "start": "2026-10-07T15:52:10.5181357Z",
+      "end": "2026-10-07T15:52:10.5201916Z"
+    },
+    {
+      "source": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\06-battle-optimization-progress-tracker.md",
+      "sha256": "09B04E6E6FFE2D62D5E19535616F2145C1421CF344292D126D0BB077599AD550",
+      "start": "2026-10-07T15:52:10.5208957Z",
+      "end": "2026-10-07T15:52:10.5227910Z"
+    },
+    {
+      "source": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\07-h-07-fresh-1000-ai-certificate.md",
+      "sha256": "65905C6B90E64CD9D5EBC1FE7A5D1666744D2097379B775EAFECDADF9A349101",
+      "start": "2026-10-07T15:52:10.5233635Z",
+      "end": "2026-10-07T15:52:10.5249615Z"
+    }
+  ],
+  "terminal": {
+    "source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+    "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\backup\\08-NTSD_ProductionEntityStress.result",
+    "sha256": "4CB974B2C88F842100F2425A9DDDFA70D9681F69C14DF78BDBFEE5D13C154CCD",
+    "bytes": 531,
+    "gitStatus": "",
+    "content": "PASS\nI:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007\\windows-01\\01-combat1000-kind5-presence\\report.json\nreason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)",
+    "start": "2026-10-07T15:52:10.5281157Z",
+    "end": "2026-10-07T15:52:11.2347435Z"
+  }
+}

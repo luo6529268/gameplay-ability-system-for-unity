@@ -1,0 +1,48 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DefaultOffPreservesProductionDefaults",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DisabledExactCachePreservesFallback",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DoesNotEnterRoleAwareCollector",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_AttackExemptDoesNotProbe",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_FarPairWithVrestKeepsStateAndRejectsGeometry",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_Kind5OutsideOrdinaryUnionIsNotDropped",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteKind5Presence_RectCapacityMissFallsBackWithoutGrowth",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "98f2f29d192c4d5bac2eb3306b1fb1e9",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

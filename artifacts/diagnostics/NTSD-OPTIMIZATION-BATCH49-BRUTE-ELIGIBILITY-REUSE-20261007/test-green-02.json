@@ -1,0 +1,186 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "36c811e4c61148658a35eb501127ce1f",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791385828231,
+      "finished_unix_ms": 1791385839900,
+      "last_update_unix_ms": 1791385839900,
+      "progress": {
+        "completed": 16,
+        "total": 9592,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791385839329,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(True)",
+        "last_finished_unix_ms": 1791385839331,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 3.2764051,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "OrdinaryBruteDefaultsEnableAdmittedFastPath",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+            "state": "Passed",
+            "durationSeconds": 0.757195,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence",
+            "state": "Passed",
+            "durationSeconds": 1.5435874,
+            "message": null,
+            "stackTrace": null,
+            "output": "BRUTE_ELIGIBILITY_REUSE_COST participants=1000 warmup=4 sample=8 baselineMeanMs=21.793637500000003 candidateMeanMs=19.8967 baselineSamples=22.0574,22.08,21.7148,21.8209,21.4546,21.627,21.8518,21.7426 candidateSamples=19.4396,20.5182,20.1942,19.7395,19.6707,19.7103,20.0049,19.8962 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+          },
+          {
+            "name": "BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow",
+            "state": "Passed",
+            "durationSeconds": 0.0045486,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence",
+            "state": "Passed",
+            "durationSeconds": 0.0037229,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_DefaultOffPreservesProductionDefaults",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DefaultOffPreservesProductionDefaults",
+            "state": "Passed",
+            "durationSeconds": 0.0012782,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_DisabledExactCachePreservesFallback",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DisabledExactCachePreservesFallback",
+            "state": "Passed",
+            "durationSeconds": 0.0020982,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_DoesNotEnterRoleAwareCollector",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DoesNotEnterRoleAwareCollector",
+            "state": "Passed",
+            "durationSeconds": 0.0091391,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"suppressed\")",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"suppressed\")",
+            "state": "Passed",
+            "durationSeconds": 0.0044945,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"pending\")",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"pending\")",
+            "state": "Passed",
+            "durationSeconds": 0.0062135,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"nullPS\")",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(\"nullPS\")",
+            "state": "Passed",
+            "durationSeconds": 0.0028275,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(0,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0029805,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(4,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(4,False)",
+            "state": "Passed",
+            "durationSeconds": 0.002159,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(5,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(5,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0055947,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(0,True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(0,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0129202,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0557463,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0016265,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

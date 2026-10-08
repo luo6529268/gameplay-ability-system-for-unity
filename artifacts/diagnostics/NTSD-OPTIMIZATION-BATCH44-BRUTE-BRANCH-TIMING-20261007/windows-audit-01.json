@@ -1,0 +1,524 @@
+{
+  "observedUtc": "2026-10-07T12:11:22.3543394Z",
+  "runs": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007/windows-01/00-dispersed1000-timing-off/report.json",
+      "status": "StoppedCleanly",
+      "valid": true,
+      "timingOn": false,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 80.72716999999992,
+        "maximum": 181.8969,
+        "p95": 102.77731,
+        "p99": 137.27206400000017
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 260.1924840609233,
+        "maximum": 1951.075553894043,
+        "p95": 559.8734378814688,
+        "p99": 675.6884986162182
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 49.413895,
+        "maximum": 104.4936,
+        "p95": 69.159465,
+        "p99": 82.08036200000004
+      },
+      "branches": [
+        {
+          "name": "CandidateCollect/PairExactLoop",
+          "average": 48.80617888888891,
+          "p95": 68.62332500000001,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteCoarse",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteRejectedBinding",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BrutePairAllowed",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteExactWork",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\00-dispersed1000-timing-off\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "finalParity": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalParitySnapshotJsonPath",
+          "value": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\00-dispersed1000-timing-off\\report.json.final-checksum.json"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007/windows-01/01-dispersed1000-timing-on/report.json",
+      "status": "StoppedCleanly",
+      "valid": true,
+      "timingOn": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 133.85719833333332,
+        "maximum": 295.5409,
+        "p95": 234.15591999999998,
+        "p99": 266.5177130000001
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 360.161369740963,
+        "maximum": 1426.3633489608765,
+        "p95": 805.0195455551147,
+        "p99": 981.8434399366361
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 84.70843166666664,
+        "maximum": 191.1673,
+        "p95": 153.29682999999994,
+        "p99": 178.6250330000001
+      },
+      "branches": [
+        {
+          "name": "CandidateCollect/PairExactLoop",
+          "average": 83.68366333333336,
+          "p95": 152.23183999999998,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteCoarse",
+          "average": 14.76083055555556,
+          "p95": 24.351064999999995,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteRejectedBinding",
+          "average": 9.692511666666663,
+          "p95": 18.507044999999987,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BrutePairAllowed",
+          "average": 3.836207222222221,
+          "p95": 7.21872,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteExactWork",
+          "average": 15.590683888888881,
+          "p95": 32.35391,
+          "samples": 180
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\01-dispersed1000-timing-on\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "finalParity": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalParitySnapshotJsonPath",
+          "value": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\01-dispersed1000-timing-on\\report.json.final-checksum.json"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007/windows-01/02-combat1000-timing-off/report.json",
+      "status": "StoppedCleanly",
+      "valid": true,
+      "timingOn": false,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 84.1266477777778,
+        "maximum": 167.5341,
+        "p95": 110.10650999999997,
+        "p99": 153.550665
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 245.46502957741419,
+        "maximum": 1316.2853717803955,
+        "p95": 426.80948376655573,
+        "p99": 537.0955500006665
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 52.62591944444444,
+        "maximum": 124.59880000000001,
+        "p95": 77.171075,
+        "p99": 93.89897600000002
+      },
+      "branches": [
+        {
+          "name": "CandidateCollect/PairExactLoop",
+          "average": 52.03839499999996,
+          "p95": 76.35976,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteCoarse",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteRejectedBinding",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BrutePairAllowed",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteExactWork",
+          "average": 0,
+          "p95": 0,
+          "samples": 180
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\02-combat1000-timing-off\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "finalParity": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalParitySnapshotJsonPath",
+          "value": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\02-combat1000-timing-off\\report.json.final-checksum.json"
+        }
+      ],
+      "failure": null
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007/windows-01/03-combat1000-timing-on/report.json",
+      "status": "StoppedCleanly",
+      "valid": true,
+      "timingOn": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 94.37464833333337,
+        "maximum": 216.4196,
+        "p95": 118.04303,
+        "p99": 176.60247400000006
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 270.17367084821063,
+        "maximum": 1084.2132568359375,
+        "p95": 498.92140775918926,
+        "p99": 683.831626772879
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 63.66040833333334,
+        "maximum": 123.917,
+        "p95": 87.25918999999999,
+        "p99": 120.47156700000004
+      },
+      "branches": [
+        {
+          "name": "CandidateCollect/PairExactLoop",
+          "average": 63.09045444444446,
+          "p95": 86.69744499999999,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteCoarse",
+          "average": 12.932637777777767,
+          "p95": 17.107969999999995,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteRejectedBinding",
+          "average": 6.100257222222224,
+          "p95": 7.800104999999999,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BrutePairAllowed",
+          "average": 2.6881866666666663,
+          "p95": 4.27713,
+          "samples": 180
+        },
+        {
+          "name": "CandidateCollect/BruteExactWork",
+          "average": 10.421791666666664,
+          "p95": 17.795379999999998,
+          "samples": 180
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\03-combat1000-timing-on\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "finalParity": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalParitySnapshotJsonPath",
+          "value": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\windows-01\\03-combat1000-timing-on\\report.json.final-checksum.json"
+        }
+      ],
+      "failure": null
+    }
+  ],
+  "suiteStatus": "MEASUREMENTS_COMPLETED",
+  "orderedShutdown": true,
+  "objects": 0,
+  "slots": 0,
+  "borrowers": 0,
+  "sceneSame": true,
+  "originalRestored": true
+}

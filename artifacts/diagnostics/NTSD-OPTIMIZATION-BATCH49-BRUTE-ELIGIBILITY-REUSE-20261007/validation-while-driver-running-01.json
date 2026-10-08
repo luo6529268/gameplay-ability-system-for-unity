@@ -1,0 +1,12 @@
+{
+  "observedAt": "2026-10-07T15:34:39.8422765Z",
+  "validatorExitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1345",
+    "  Governed code files in diff: 14"
+  ],
+  "warningCount": 4257,
+  "diffExitCode": 0,
+  "diffOutput": []
+}

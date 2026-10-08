@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-07T20:00:22.0015157Z",
+  "guardCount": 69,
+  "guardDifferences": [],
+  "backupCount": 11,
+  "backupDifferences": [],
+  "sourceDifferences": [],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "sharedRequestJsonPresent": false,
+  "recoveryState": {
+    "status": "RECOVERED_RETAINED_LOGIC_CALLSITES",
+    "error": "",
+    "settingsRestored": true,
+    "previousHistorySaved": true,
+    "importedFirstFrame": 1865,
+    "importedLastFrame": 1937,
+    "validMainThreadFrames": 73
+  },
+  "reportSummary": {
+    "evidence": "RETAINED_PARTIAL_CAPTURE_DIAGNOSTIC_ONLY; driver marker includes observer Begin/End; no absolute tick mapping or zero-GC/FPS certificate",
+    "previousFirstFrame": 1565,
+    "previousLastFrame": 1864,
+    "appendedFirstFrame": 1865,
+    "appendedLastFrame": 1937,
+    "scannedFrames": 73,
+    "validMainThreadFrames": 73,
+    "scanComplete": true,
+    "allocationMetadataAndStacksPresent": true,
+    "allocationEvents": 7,
+    "outsideDriverAllocationEvents": 2858883
+  },
+  "driverScopeCount": 144,
+  "settingsEqual": true,
+  "priorHistoryEquals": true,
+  "files": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\logic-gc-callstacks-recovered.json",
+      "bytes": 159203,
+      "sha256": "8E722F74CA77692E27EEC12062364144216DABDAAD9656E1EFB5F637E459A682"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\logic-gc-recovery-state.json",
+      "bytes": 1977,
+      "sha256": "F64B5B026F04A8B762804E590DF4A6B713992183649DC7B7BCF3F787F0D220E3"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\profiler-history-before-logic-recovery.raw",
+      "bytes": 35640372,
+      "sha256": "6EC0313E1FD6001AD95C0470435620A173CDB0B36DD932169581B064257C4241"
+    }
+  ],
+  "process": {
+    "Id": 19040,
+    "ProcessName": "Unity"
+  }
+}

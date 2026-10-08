@@ -1,0 +1,296 @@
+{
+  "observedUtc": "2026-10-07T12:17:09.8971827Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "headEqual": true,
+  "rows": [
+    {
+      "group": "sources",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "before": "8F791BD53836C54002A936F788C58956934FF1B59454DFA03D5E20C37AAFA263",
+      "after": "8F791BD53836C54002A936F788C58956934FF1B59454DFA03D5E20C37AAFA263",
+      "equal": true
+    },
+    {
+      "group": "sources",
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "before": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "after": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "equal": true
+    },
+    {
+      "group": "sources",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "before": "D49E2BDCD179D787A5E627F04A37CA1F9675DACF0E53C78F2191A1A8C4C6F9CA",
+      "after": "D49E2BDCD179D787A5E627F04A37CA1F9675DACF0E53C78F2191A1A8C4C6F9CA",
+      "equal": true
+    },
+    {
+      "group": "sources",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "before": "32F3B5A1497B523CBEAC50B997BFB067F2578DE8D75A6414CEEC3B51ABED5B2E",
+      "after": "32F3B5A1497B523CBEAC50B997BFB067F2578DE8D75A6414CEEC3B51ABED5B2E",
+      "equal": true
+    },
+    {
+      "group": "sources",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "before": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037",
+      "after": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "AGENTS.md",
+      "before": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "after": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "before": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "after": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "before": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "after": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "before": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "after": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "before": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "after": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "before": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "after": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "before": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2",
+      "after": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "before": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343",
+      "after": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "before": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "after": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "before": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "after": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "before": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "after": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "before": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "after": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "before": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "after": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "before": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "after": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "before": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "after": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "before": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "after": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "before": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "after": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "before": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "after": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "before": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "after": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "Packages/manifest.json",
+      "before": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "after": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "before": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+      "after": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+      "equal": true
+    },
+    {
+      "group": "guards",
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "before": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "after": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\01-BruteForceSceneQuery.cs",
+      "before": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+      "after": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\02-SimulationWorld.DetailTimingDiagnostics.cs",
+      "before": "9B7A960BEFED7E5B04E69B45ECB8F306824B0CE83FEB5FB2CEC07FEA69E3C13D",
+      "after": "9B7A960BEFED7E5B04E69B45ECB8F306824B0CE83FEB5FB2CEC07FEA69E3C13D",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\03-ProductionEntityStressEditorTests.cs",
+      "before": "854833578447E858425100E7ED60B81136EBBF4FAF7E09737D7FFB0F5C0846C4",
+      "after": "854833578447E858425100E7ED60B81136EBBF4FAF7E09737D7FFB0F5C0846C4",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\04-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "before": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+      "after": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\05-battle-optimization-progress-tracker.md",
+      "before": "61CE223782956CDD5630D24C2E16D8D4A9DFEB8E126AD9BF047C95EDA68A0A4A",
+      "after": "61CE223782956CDD5630D24C2E16D8D4A9DFEB8E126AD9BF047C95EDA68A0A4A",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\06-h-07-fresh-1000-ai-certificate.md",
+      "before": "51879498B6413D4B397487D25C5992ECF9FD15E8BC25AD2B9C5BA4F75B7063C1",
+      "after": "51879498B6413D4B397487D25C5992ECF9FD15E8BC25AD2B9C5BA4F75B7063C1",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\07-CHANGE-LEDGER.md",
+      "before": "4F96A5440927E9CDEE90D094C2C25D78E89D8652ACE587AB68B486824C815559",
+      "after": "4F96A5440927E9CDEE90D094C2C25D78E89D8652ACE587AB68B486824C815559",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\08-STATE.md",
+      "before": "1FACDA45DD3E526C957E9BB2ADDB4FEAB4F2BFBA152DC02C4F785F0A2ED62D42",
+      "after": "1FACDA45DD3E526C957E9BB2ADDB4FEAB4F2BFBA152DC02C4F785F0A2ED62D42",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\09-CODEX-CURRENT-HANDOFF.md",
+      "before": "6A30D2C99BF2C09336B0873A5983142F0B68AD7496EB89209331CE2F65A3CEA4",
+      "after": "6A30D2C99BF2C09336B0873A5983142F0B68AD7496EB89209331CE2F65A3CEA4",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007\\backup\\10-INDEX.md",
+      "before": "620F2262B8CF5F20F6F3D6192E672075CB1E89824BCF2EC3CBF12B613B30E766",
+      "after": "620F2262B8CF5F20F6F3D6192E672075CB1E89824BCF2EC3CBF12B613B30E766",
+      "equal": true
+    },
+    {
+      "group": "backups",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH44-BRUTE-BRANCH-TIMING-20261007/backup/11-ProductionEntityStressDetailTimingEditorTests.cs",
+      "before": "F8FDA6DDF209183E38525E9D8914DDC98AEEEC1B8928E7DAA57D0E26E585A6B3",
+      "after": "F8FDA6DDF209183E38525E9D8914DDC98AEEEC1B8928E7DAA57D0E26E585A6B3",
+      "equal": true
+    }
+  ],
+  "finalPairs": [
+    {
+      "workload": "00-dispersed1000-timing-off",
+      "hashCount": 20,
+      "mismatch": [],
+      "snapshotByteEqual": true,
+      "tick": 300
+    },
+    {
+      "workload": "02-combat1000-timing-off",
+      "hashCount": 20,
+      "mismatch": [],
+      "snapshotByteEqual": true,
+      "tick": 300
+    }
+  ],
+  "editor": {
+    "chunk_id": "98aac5",
+    "wall_time_seconds": 0.252581,
+    "exit_code": 0,
+    "original_token_count": 410,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Retrieved editor state.\",\"data\":{\"schema_version\":\"unity-mcp/editor_state@2\",\"observed_at_unix_ms\":1791375411425,\"sequence\":9,\"unity\":{\"instance_id\":null,\"unity_version\":\"2022.3.62f3\",\"project_id\":null,\"platform\":\"WindowsEditor\",\"is_batch_mode\":false},\"editor\":{\"is_focused\":false,\"play_mode\":{\"is_playing\":false,\"is_paused\":false,\"is_changing\":false},\"active_scene\":{\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"guid\":\"132c934aff207b048833ab33c1961278\",\"name\":\"NTSD_Menu\"}},\"activity\":{\"phase\":\"idle\",\"since_unix_ms\":1791374980113,\"reasons\":[\"tick\"]},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_started_unix_ms\":null,\"last_compile_finished_unix_ms\":null,\"last_domain_reload_before_unix_ms\":null,\"last_domain_reload_after_unix_ms\":1791374650687},\"assets\":{\"is_updating\":false,\"external_changes_dirty\":false,\"external_changes_last_seen_unix_ms\":null,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":null,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_requested_unix_ms\":null,\"last_refresh_finished_unix_ms\":null}},\"tests\":{\"is_running\":false,\"mode\":null,\"current_job_id\":null,\"started_unix_ms\":null,\"started_by\":\"unknown\",\"last_run\":null},\"transport\":{\"unity_bridge_connected\":null,\"last_message_unix_ms\":null},\"settings\":{\"batch_execute_max_commands\":25}}}}\r\n{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"1 scene(s) loaded.\",\"data\":{\"scenes\":[{\"name\":\"NTSD_Menu\",\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"buildIndex\":0,\"isLoaded\":true,\"isDirty\":false,\"isActive\":true,\"rootCount\":8}]}}}\r\n"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "job": "f5219d6a418a4ec2b6f8f61aea276f77",
+  "commandResult": {
+    "chunk_id": "2926e3",
+    "wall_time_seconds": 0.1217151,
+    "exit_code": 0,
+    "original_token_count": 218,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job status retrieved.\",\"data\":{\"job_id\":\"f5219d6a418a4ec2b6f8f61aea276f77\",\"status\":\"succeeded\",\"mode\":\"EditMode\",\"started_unix_ms\":1791411413626,\"finished_unix_ms\":1791411918575,\"last_update_unix_ms\":1791411918575,\"progress\":{\"completed\":8,\"total\":9756,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791411908679,\"last_finished_test_full_name\":\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)\",\"last_finished_unix_ms\":1791411908679,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"EditMode\",\"summary\":{\"total\":8,\"passed\":8,\"failed\":0,\"skipped\":0,\"durationSeconds\":483.2665803,\"resultState\":\"Passed\"},\"results\":[]}}}}\r\n"
+  }
+}

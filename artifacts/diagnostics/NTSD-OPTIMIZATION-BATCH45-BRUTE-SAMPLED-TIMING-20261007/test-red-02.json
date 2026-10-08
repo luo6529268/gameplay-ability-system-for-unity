@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "9cd57d2ae2194d22a5e81a954c9d6ca4",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791375924407,
+      "finished_unix_ms": 1791375935529,
+      "last_update_unix_ms": 1791375935529,
+      "progress": {
+        "completed": 10,
+        "total": 9528,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791375934697,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence(True)",
+        "last_finished_unix_ms": 1791375934699,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_DefaultStrideIsOne",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(False)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(True)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(0)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(-1)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(3)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(8192)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence(False)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence(True)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

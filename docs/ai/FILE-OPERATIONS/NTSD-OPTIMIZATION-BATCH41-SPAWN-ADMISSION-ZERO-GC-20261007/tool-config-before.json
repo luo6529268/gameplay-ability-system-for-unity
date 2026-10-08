@@ -1,0 +1,19 @@
+{
+  "configChanges": [
+    {
+      "path": "C:/Users/Logan/.unity-mcp/unity-mcp-port-b1b02287.json",
+      "sha256": "B561617DBE96D888617640B4DA13ADD87A998B522B00D38DEA8C49D78B96A237",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007/backup/unity-mcp-port-b1b02287.json",
+      "beforePort": 6401,
+      "afterPort": 6402
+    },
+    {
+      "path": "C:/Users/Logan/.unity-mcp/unity-mcp-port.json",
+      "sha256": "B561617DBE96D888617640B4DA13ADD87A998B522B00D38DEA8C49D78B96A237",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007/backup/unity-mcp-port.json",
+      "beforePort": 6401,
+      "afterPort": 6402
+    }
+  ],
+  "reason": "Original Editor MCP reload port6401 occupied by existing droid PID57212; preserve process; use free port6402; no network ACL/package/Editor instance changes"
+}

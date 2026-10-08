@@ -1,0 +1,27 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d14fc8c579d04d7c93246bde32906993",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

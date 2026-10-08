@@ -2654,7 +2654,7 @@ namespace NTSD.Animation.Rendering.Editor
                 "CandidateCollect/PairExactLoop",
             };
 
-            Assert.That(BattleTickDetailPhaseDiagnostics.PhaseCount, Is.EqualTo(44));
+            Assert.That(BattleTickDetailPhaseDiagnostics.PhaseCount, Is.EqualTo(48));
             for (int phaseIndex = 0; phaseIndex < phases.Length; phaseIndex++)
             {
                 Assert.That(
@@ -2686,6 +2686,249 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(
                 world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics,
                 Is.Null);
+        }
+
+        [Test]
+        public void BruteSampleTiming_DefaultStrideIsOne()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            PropertyInfo stride = typeof(BruteForceSceneQuery).GetProperty(
+                "BruteBranchTimingSampleStrideForDiagnostics");
+            Assert.That(stride, Is.Not.Null);
+            Assert.That(stride.GetValue(query), Is.EqualTo(1));
+        }
+
+        [TestCase(0)]
+        [TestCase(-1)]
+        [TestCase(3)]
+        [TestCase(8192)]
+        public void BruteSampleTiming_InvalidStrideIsRejected(int value)
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            PropertyInfo stride = typeof(BruteForceSceneQuery).GetProperty(
+                "BruteBranchTimingSampleStrideForDiagnostics");
+            Assert.That(stride, Is.Not.Null);
+            TargetInvocationException error = Assert.Throws<TargetInvocationException>(
+                () => stride.SetValue(query, value));
+            Assert.That(error.InnerException, Is.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(stride.GetValue(query), Is.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteSampleTiming_RotatingCoveragePreservesSequence(bool rejected)
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker);
+            query.PrepareBattleCapacity(16);
+            if (rejected)
+            {
+                attacker.Runtime.SetPosition(1000, 0, 0);
+                attacker.Runtime.SyncIntegerPosition();
+            }
+            CandidateCollectTimingRun baseline = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            PropertyInfo stride = typeof(BruteForceSceneQuery).GetProperty(
+                "BruteBranchTimingSampleStrideForDiagnostics");
+            Assert.That(stride, Is.Not.Null);
+            stride.SetValue(query, 64);
+            query.EnableBruteBranchTimingForDiagnostics = true;
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            for (int offset = 0; offset < 64; offset++)
+            {
+                recorder.BeginTick(77 + offset);
+                CandidateCollectTimingRun actual = RunCandidateCollectTimingFixture(
+                    world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+                AssertCandidateCollectTimingRunsEqual(baseline, actual);
+                Assert.That(ReadBruteTimingCoverage(query, false, "eligibleDirections"), Is.EqualTo(2));
+                Assert.That(ReadBruteTimingCoverage(query, false, "timedDirections"), Is.InRange(0, 1));
+            }
+            Assert.That(ReadBruteTimingCoverage(query, true, "eligibleDirections"), Is.EqualTo(128));
+            Assert.That(ReadBruteTimingCoverage(query, true, "timedDirections"), Is.EqualTo(2));
+            Assert.That(ReadBruteTimingCoverage(query, true, "rejectedBindingVisits"), Is.EqualTo(rejected ? 128 : 0));
+            Assert.That(ReadBruteTimingCoverage(query, true, "rejectedBindingTimed"), Is.EqualTo(rejected ? 2 : 0));
+            Assert.That(ReadBruteTimingCoverage(query, true, "pairAllowedVisits"), Is.EqualTo(rejected ? 0 : 128));
+            Assert.That(ReadBruteTimingCoverage(query, true, "pairAllowedTimed"), Is.EqualTo(rejected ? 0 : 2));
+            Assert.That(ReadBruteTimingCoverage(query, true, "exactWorkVisits"), Is.EqualTo(rejected ? 0 : 128));
+            Assert.That(ReadBruteTimingCoverage(query, true, "exactWorkTimed"), Is.EqualTo(rejected ? 0 : 2));
+            query.EnableBruteBranchTimingForDiagnostics = false;
+            recorder.BeginTick(200);
+            RunCandidateCollectTimingFixture(world, query, attacker,
+                CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            Assert.That(ReadBruteTimingCoverage(query, false, "eligibleDirections"), Is.Zero);
+            Assert.That(ReadBruteTimingCoverage(query, true, "eligibleDirections"), Is.EqualTo(128));
+            for (int phaseId = 44; phaseId < 48; phaseId++)
+                Assert.That(recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phaseId), Is.Zero);
+        }
+
+        [Test]
+        public void BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory()
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out _);
+            query.PrepareBattleCapacity(16);
+            PropertyInfo stride = typeof(BruteForceSceneQuery).GetProperty(
+                "BruteBranchTimingSampleStrideForDiagnostics");
+            Assert.That(stride, Is.Not.Null);
+            stride.SetValue(query, 64);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+            query.EnableBruteBranchTimingForDiagnostics = true;
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            world.CaptureCollisionFrameSnapshotsAll();
+            for (int iteration = 0; iteration < 16; iteration++)
+            {
+                recorder.BeginTick(iteration);
+                query.CollectCollisionCandidates();
+                query.EndCollisionCandidateConsumption();
+            }
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int iteration = 0; iteration < 128; iteration++)
+            {
+                recorder.BeginTick(iteration + 16);
+                query.CollectCollisionCandidates();
+                query.EndCollisionCandidateConsumption();
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+            Assert.That(ReadBruteTimingCoverage(query, true, "eligibleDirections"), Is.EqualTo(288));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(bool enableRecorder)
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker);
+            query.PrepareBattleCapacity(16);
+            PropertyInfo stride = typeof(BruteForceSceneQuery).GetProperty(
+                "BruteBranchTimingSampleStrideForDiagnostics");
+            Assert.That(stride, Is.Not.Null);
+            stride.SetValue(query, 64);
+            query.EnableBruteBranchTimingForDiagnostics = true;
+            if (enableRecorder)
+            {
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(77);
+                query.EnableBruteGeometryFirstForDiagnostics = false;
+            }
+            RunCandidateCollectTimingFixture(world, query, attacker,
+                CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            Assert.That(ReadBruteTimingCoverage(query, false, "eligibleDirections"), Is.Zero);
+            Assert.That(ReadBruteTimingCoverage(query, true, "eligibleDirections"), Is.Zero);
+        }
+
+        private static long ReadBruteTimingCoverage(BruteForceSceneQuery query, bool total, string field)
+        {
+            PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                total ? "TotalBruteBranchTimingCoverageForDiagnostics" : "LastBruteBranchTimingCoverageForDiagnostics");
+            Assert.That(property, Is.Not.Null);
+            object coverage = property.GetValue(query);
+            FieldInfo value = coverage.GetType().GetField(field);
+            Assert.That(value, Is.Not.Null);
+            return (long)value.GetValue(coverage);
+        }
+
+        [TestCase(44, "CandidateCollect/BruteCoarse")]
+        [TestCase(45, "CandidateCollect/BruteRejectedBinding")]
+        [TestCase(46, "CandidateCollect/BrutePairAllowed")]
+        [TestCase(47, "CandidateCollect/BruteExactWork")]
+        public void BruteBranchTiming_PhaseIdsAreAppended(int phaseId, string expected)
+        {
+            Assert.That(BattleTickDetailPhaseDiagnostics.GetPhaseName(
+                (BattleTickDetailPhase)phaseId), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void BruteBranchTiming_DefaultIsOff()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteBranchTimingForDiagnostics");
+            Assert.That(property, Is.Not.Null);
+            Assert.That(property.GetValue(query), Is.False);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteBranchTiming_PreservesCandidatesAndRng(bool enabled)
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker);
+            query.PrepareBattleCapacity(16);
+            CandidateCollectTimingRun baseline = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteBranchTimingForDiagnostics");
+            Assert.That(property, Is.Not.Null);
+            property.SetValue(query, enabled);
+            recorder.BeginTick(77);
+            CandidateCollectTimingRun actual = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            AssertCandidateCollectTimingRunsEqual(baseline, actual);
+            Assert.That(query.LastBruteExactCacheAppliedForDiagnostics, Is.True);
+            for (int phaseId = 44; phaseId < 48; phaseId++)
+            {
+                long elapsed = recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phaseId);
+                if (!enabled)
+                    Assert.That(elapsed, Is.Zero);
+                else if (phaseId != 45)
+                    Assert.That(elapsed, Is.GreaterThan(0));
+            }
+            property.SetValue(query, false);
+            recorder.BeginTick(78);
+            RunCandidateCollectTimingFixture(world, query, attacker,
+                CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            for (int phaseId = 44; phaseId < 48; phaseId++)
+                Assert.That(recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phaseId), Is.Zero);
+        }
+
+        [Test]
+        public void BruteBranchTiming_RejectedPairRecordsCoarseAndBindingOnly()
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker);
+            query.PrepareBattleCapacity(16);
+            attacker.Runtime.SetPosition(1000, 0, 0);
+            attacker.Runtime.SyncIntegerPosition();
+            CandidateCollectTimingRun baseline = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            Assert.That(baseline.Candidates, Is.Empty);
+            query.EnableBruteBranchTimingForDiagnostics = true;
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            recorder.BeginTick(77);
+            CandidateCollectTimingRun actual = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            AssertCandidateCollectTimingRunsEqual(baseline, actual);
+            Assert.That(query.LastBruteExactCacheAppliedForDiagnostics, Is.True);
+            for (int phaseId = 44; phaseId < 48; phaseId++)
+            {
+                long elapsed = recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phaseId);
+                Assert.That(elapsed, phaseId < 46 ? Is.GreaterThan(0) : Is.Zero);
+            }
+        }
+
+        [Test]
+        public void BruteBranchTiming_GeometryDisabledDoesNotRecordBranches()
+        {
+            CreateCandidateCollectTimingFixture(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker);
+            query.PrepareBattleCapacity(16);
+            query.EnableBruteGeometryFirstForDiagnostics = false;
+            CandidateCollectTimingRun baseline = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            query.EnableBruteBranchTimingForDiagnostics = true;
+            BattleTickDetailPhaseDiagnostics recorder =
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            recorder.BeginTick(77);
+            CandidateCollectTimingRun actual = RunCandidateCollectTimingFixture(
+                world, query, attacker, CollisionFormalCollectorMode.ForceBruteForce, false, false);
+            AssertCandidateCollectTimingRunsEqual(baseline, actual);
+            for (int phaseId = 44; phaseId < 48; phaseId++)
+                Assert.That(recorder.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phaseId), Is.Zero);
         }
 
         [TestCase(CollisionFormalCollectorMode.ForceRoleAware, true, false)]

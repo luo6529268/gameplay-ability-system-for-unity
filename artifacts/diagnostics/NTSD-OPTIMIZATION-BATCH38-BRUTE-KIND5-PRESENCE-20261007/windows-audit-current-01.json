@@ -1,0 +1,512 @@
+{
+  "observedUtc": "2026-10-07T13:01:19.9535673Z",
+  "suite": {
+    "phase": "DONE",
+    "status": "MEASUREMENTS_COMPLETED",
+    "completedRuns": 2,
+    "error": "",
+    "updatedUtc": "2026-10-07T12:59:41.9573123Z",
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "battleSceneUnchanged": true,
+    "originalSceneRestored": true
+  },
+  "runs": [
+    {
+      "action": "dispersed1000",
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007/windows-01/00-dispersed1000-kind5-presence/report.json",
+      "baseline": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\00-dispersed1000-timing-off\\report.json",
+      "status": "StoppedCleanly",
+      "sampled": 180,
+      "warm": 120,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 74.60960166666666,
+        "maximum": 173.2583,
+        "p95": 89.40332,
+        "p99": 137.163131
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 236.72157446543375,
+        "maximum": 1750.2288818359375,
+        "p95": 514.6239310502993,
+        "p99": 638.5321635007857
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 45.478463888888854,
+        "maximum": 94.7741,
+        "p95": 60.06095,
+        "p99": 85.514017
+      },
+      "baselineLogic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 77.60523944444449,
+        "maximum": 173.0932,
+        "p95": 92.221915,
+        "p99": 149.6489930000001
+      },
+      "baselineCollector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 48.3118488888889,
+        "maximum": 104.935,
+        "p95": 62.950165,
+        "p99": 98.43100000000003
+      },
+      "collectorChangeMs": -2.8333850000000496,
+      "collectorReductionPercent": 5.864782791725637,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "dropped": 694,
+      "workloadValid": true,
+      "minimumAi": 1000,
+      "minimumBase": 1000,
+      "flagApplied": true,
+      "flagRestored": true,
+      "kind5Applied": 300,
+      "maxSkippedScans": 138512,
+      "productionDefaults": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "participantCapacity": 1050,
+      "bodyCapacity": 5250,
+      "itrCapacity": 14700,
+      "capacityPressure": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 10,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 10,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 1040,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=10->1050 (delta=1040; doesNotAffectRestored=True)"
+      },
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "snapshotBytesEqual": true,
+      "hashCount": 20,
+      "hashDifferences": [],
+      "finalHashes": [
+        {
+          "Name": "finalParityInputHash",
+          "Value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "Name": "finalParityRngHash",
+          "Value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "Name": "finalParityMetadataHash",
+          "Value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "Name": "finalParityWorldHash",
+          "Value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "Name": "finalParitySlotsHash",
+          "Value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "Name": "finalParityARestHash",
+          "Value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "Name": "finalParityVRestHash",
+          "Value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "Name": "finalParityStatsHash",
+          "Value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "Name": "finalParityEventsHash",
+          "Value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "Name": "finalParityOverallHash",
+          "Value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "Name": "finalLockstepInputHash",
+          "Value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "Name": "finalLockstepRngHash",
+          "Value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "Name": "finalLockstepMetadataHash",
+          "Value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "Name": "finalLockstepWorldHash",
+          "Value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "Name": "finalLockstepSlotsHash",
+          "Value": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676"
+        },
+        {
+          "Name": "finalLockstepARestHash",
+          "Value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "Name": "finalLockstepVRestHash",
+          "Value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "Name": "finalLockstepStatsHash",
+          "Value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "Name": "finalLockstepEventsHash",
+          "Value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "Name": "finalLockstepOverallHash",
+          "Value": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+        }
+      ],
+      "zeroGcRaw": true,
+      "zeroGcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN"
+    },
+    {
+      "action": "combat1000",
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007/windows-01/01-combat1000-kind5-presence/report.json",
+      "baseline": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\02-combat1000-timing-off\\report.json",
+      "status": "StoppedCleanly",
+      "sampled": 180,
+      "warm": 120,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 77.46729722222231,
+        "maximum": 152.4754,
+        "p95": 98.277305,
+        "p99": 125.29098300000008
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 229.061186114947,
+        "maximum": 866.9533729553223,
+        "p95": 397.9412093758582,
+        "p99": 667.4520090222325
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 48.12688222222225,
+        "maximum": 84.6083,
+        "p95": 68.78275,
+        "p99": 75.31466800000001
+      },
+      "baselineLogic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 79.94999944444444,
+        "maximum": 158.7461,
+        "p95": 103.27005999999999,
+        "p99": 138.27774500000004
+      },
+      "baselineCollector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 50.740074444444446,
+        "maximum": 97.29400000000001,
+        "p95": 72.84300499999999,
+        "p99": 87.27004700000003
+      },
+      "collectorChangeMs": -2.613192222222196,
+      "collectorReductionPercent": 5.15015448998482,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "dropped": 660,
+      "workloadValid": true,
+      "minimumAi": 1000,
+      "minimumBase": 1000,
+      "flagApplied": true,
+      "flagRestored": true,
+      "kind5Applied": 300,
+      "maxSkippedScans": 137179,
+      "productionDefaults": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "participantCapacity": 1050,
+      "bodyCapacity": 5250,
+      "itrCapacity": 14700,
+      "capacityPressure": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 1050,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 1050,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 0,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      },
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "snapshotBytesEqual": true,
+      "hashCount": 20,
+      "hashDifferences": [],
+      "finalHashes": [
+        {
+          "Name": "finalParityInputHash",
+          "Value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "Name": "finalParityRngHash",
+          "Value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "Name": "finalParityMetadataHash",
+          "Value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "Name": "finalParityWorldHash",
+          "Value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "Name": "finalParitySlotsHash",
+          "Value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "Name": "finalParityARestHash",
+          "Value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "Name": "finalParityVRestHash",
+          "Value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "Name": "finalParityStatsHash",
+          "Value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "Name": "finalParityEventsHash",
+          "Value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "Name": "finalParityOverallHash",
+          "Value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "Name": "finalLockstepInputHash",
+          "Value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "Name": "finalLockstepRngHash",
+          "Value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "Name": "finalLockstepMetadataHash",
+          "Value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "Name": "finalLockstepWorldHash",
+          "Value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "Name": "finalLockstepSlotsHash",
+          "Value": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364"
+        },
+        {
+          "Name": "finalLockstepARestHash",
+          "Value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "Name": "finalLockstepVRestHash",
+          "Value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "Name": "finalLockstepStatsHash",
+          "Value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "Name": "finalLockstepEventsHash",
+          "Value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "Name": "finalLockstepOverallHash",
+          "Value": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+        }
+      ],
+      "zeroGcRaw": true,
+      "zeroGcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN"
+    }
+  ]
+}

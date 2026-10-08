@@ -1,0 +1,7 @@
+{
+  "chunk_id": "614f50",
+  "wall_time_seconds": 6.0112537,
+  "exit_code": 0,
+  "original_token_count": 313,
+  "output": "{\r\n  \"startedUtc\": \"2026-10-07T16:29:07.9603466Z\",\r\n  \"finishedUtc\": \"2026-10-07T16:29:13.7752680Z\",\r\n  \"validatorExit\": 0,\r\n  \"validatorLines\": 4274,\r\n  \"validatorSummary\": [\r\n    \"  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/preview-renderer.test.ts, which is not in the current code diff.\",\r\n    \"  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/client-project-contract.test.ts, which is not in the current code diff.\",\r\n    \"  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/project-open-lifecycle.test.ts, which is not in the current code diff.\",\r\n    \"  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.\",\r\n    \"  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.\",\r\n    \"  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff.\"\r\n  ],\r\n  \"validatorErrors\": [],\r\n  \"diffExit\": 0,\r\n  \"diffMessages\": []\r\n}\r\n"
+}

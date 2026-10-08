@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "38ced267ee59485e9439cd6e39765602",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791390505856,
+      "finished_unix_ms": 1791390606272,
+      "last_update_unix_ms": 1791390606272,
+      "progress": {
+        "completed": 4,
+        "total": 9612,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791390581723,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCacheThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "last_finished_unix_ms": 1791390602772,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCachePreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+            "message": "  Expected: False\r\n  But was:  True\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCachePreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+            "message": "  Expected: False\r\n  But was:  True\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCacheThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+            "message": "  Expected: False\r\n  But was:  True\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCacheThousandCanonicalAiPreservesEveryTick(Combat1000)",
+            "message": "  Expected: False\r\n  But was:  True\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

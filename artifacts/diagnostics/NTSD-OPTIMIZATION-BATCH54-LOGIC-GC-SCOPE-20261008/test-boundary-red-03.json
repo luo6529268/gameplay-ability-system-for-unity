@@ -1,0 +1,25 @@
+{
+  "success": true,
+  "job_id": "8c0af44211404e588397df6200ae4c48",
+  "job_status": "failed",
+  "summary": null,
+  "progress": {
+    "completed": 24,
+    "total": 9664,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1791398286105,
+    "last_finished_test_full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+    "last_finished_unix_ms": 1791398286107,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_BeginFailurePreservesOriginalAndDoesNotCallEnd",
+        "message": "  An unopened scope must not run a balancing End.\r\n  Expected: 0\r\n  But was:  1\r\n"
+      }
+    ],
+    "failures_capped": false
+  },
+  "failures": []
+}

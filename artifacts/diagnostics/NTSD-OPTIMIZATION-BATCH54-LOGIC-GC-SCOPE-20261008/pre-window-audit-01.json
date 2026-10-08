@@ -1,0 +1,40 @@
+{
+  "utc": "2026-10-07T18:44:11.4773676Z",
+  "guardCount": 61,
+  "guardDifferences": [],
+  "backupCount": 8,
+  "backupDifferences": [],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928",
+      "bytes": 554934
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "E36B84D3CF2516476E565806DE460EC4EE9C5EC1D0951A1CACFA48EDC5E02D57",
+      "bytes": 125611
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "sha256": "F2DC9B547B94C4B7949E3220A8536ED7687125912F4073AB7A826B1D98B26993",
+      "bytes": 25600
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs.meta",
+      "sha256": "DC295B149A9D40DD46436117C4E50C9CAD321C662AF11099D2AB5BF7444898C1",
+      "bytes": 60
+    }
+  ],
+  "validatorExit": 0,
+  "validatorHeader": [
+    "Change ledger validation PASSED.",
+    "  Records: 1350"
+  ],
+  "validatorError": [],
+  "historicalWarnings": 0,
+  "diffExit": 0,
+  "diffProblems": [],
+  "diffCrLfWarnings": 25
+}

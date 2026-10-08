@@ -1,0 +1,213 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "9bde15ef15674e15a9e53ca775a0952a",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791376090707,
+      "finished_unix_ms": 1791376100882,
+      "last_update_unix_ms": 1791376100882,
+      "progress": {
+        "completed": 19,
+        "total": 9528,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791376100345,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix",
+        "last_finished_unix_ms": 1791376100346,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 19,
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.7013149,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "BruteSampleTiming_DefaultStrideIsOne",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_DefaultStrideIsOne",
+            "state": "Passed",
+            "durationSeconds": 0.8955524,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(False)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(False)",
+            "state": "Passed",
+            "durationSeconds": 0.2669799,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(True)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount(True)",
+            "state": "Passed",
+            "durationSeconds": 0.003161,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InvalidStrideIsRejected(0)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(0)",
+            "state": "Passed",
+            "durationSeconds": 0.213736,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InvalidStrideIsRejected(-1)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0010123,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InvalidStrideIsRejected(3)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0009349,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_InvalidStrideIsRejected(8192)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected(8192)",
+            "state": "Passed",
+            "durationSeconds": 0.000846,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory",
+            "state": "Passed",
+            "durationSeconds": 0.0066567,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RotatingCoveragePreservesSequence(False)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0182295,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RotatingCoveragePreservesSequence(True)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0097729,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RestoreRestoresStrideAndFlag(False,1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag(False,1)",
+            "state": "Passed",
+            "durationSeconds": 0.0018653,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RestoreRestoresStrideAndFlag(False,128)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag(False,128)",
+            "state": "Passed",
+            "durationSeconds": 0.0009276,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RestoreRestoresStrideAndFlag(True,1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag(True,1)",
+            "state": "Passed",
+            "durationSeconds": 0.000982,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTiming_RestoreRestoresStrideAndFlag(True,128)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag(True,128)",
+            "state": "Passed",
+            "durationSeconds": 0.0008416,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0015736,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0001665,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0001325,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0001297,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix",
+            "state": "Passed",
+            "durationSeconds": 0.0003957,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

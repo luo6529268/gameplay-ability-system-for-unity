@@ -441,6 +441,1152 @@ namespace NTSD.Test
     [Category("U6RoleAwareFormal")]
     public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
     {
+        [Test]
+        public void BruteCoarseEnvelope_DefaultOffPreservesProductionDefaults()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteCoarseEnvelopeForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteRejectedBindingReuseForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteCoarseDispatchForDiagnostics, Is.False);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void BruteCoarseEnvelope_MultiBodySequenceHandlesRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            long directions = query.LastBruteExactCacheDirectionCountForDiagnostics;
+            SetBruteCoarseEnvelope(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(query.LastBruteExactCacheDirectionCountForDiagnostics, Is.EqualTo(directions));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeDirectionCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseEnvelope_Kind5OutsideOrdinaryUnionIsRetained(bool mixed)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (!mixed)
+                attacker.GetCollisionFrameData().itrs.Clear();
+            attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 5, vrest = 1, x = 980, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeRejectCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseEnvelope_GapFalsePositiveStillUsesOriginalCoarsePredicate()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 5, vrest = 1, x = 980, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            target.Runtime.SetPosition(500, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 9);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long rejects = query.LastBruteGeometryFirstRejectCountForDiagnostics;
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeDirectionCountForDiagnostics"), Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeRejectCountForDiagnostics"), Is.Zero);
+            Assert.That(query.LastBruteGeometryFirstRejectCountForDiagnostics, Is.EqualTo(rejects));
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(9));
+        }
+
+        [Test]
+        public void BruteCoarseEnvelope_RebuildsAfterSameTickKindAndPositionChanges()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            InteractionArea changing = attacker.GetCollisionFrameData().itrs[0];
+            foreach (int x in new[] { 1000, 0, -1000, 0 })
+            {
+                changing.kind = x == 0 ? 0 : 5;
+                changing.x = x - 20;
+                target.Runtime.SetPosition(x, 0, 0);
+                target.Runtime.SyncIntegerPosition();
+                SetBruteCoarseEnvelope(query, false);
+                CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                SetBruteCoarseEnvelope(query, true);
+                CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                AssertPairSnapshotRunsEqual(baseline, candidate);
+            }
+            target.Runtime.SetPosition(10000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeRejectCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseEnvelope_PostSnapshotStaleBindingKeepsBaseGate(bool exempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = exempt ? 1 : 0;
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int victimSlot = target.Runtime.SlotIndex;
+            Action invalidate = () =>
+            {
+                var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+                Assert.That(store.ReleaseBinding(handle), Is.True);
+            };
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, victimSlot, false), Is.True);
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeRejectCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase("geometry")]
+        [TestCase("cache")]
+        [TestCase("timing")]
+        public void BruteCoarseEnvelope_InactiveGateKeepsOriginalPath(string gate)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            if (gate == "geometry") SetBruteGeometryFirst(query, false);
+            if (gate == "cache") SetBruteExactCache(query, false);
+            if (gate == "timing") query.EnableBruteBranchTimingForDiagnostics = true;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(1, 3)]
+        [TestCase(2, 1)]
+        public void BruteCoarseEnvelope_CapacityFallbackDoesNotApplyOrGrow(int participants, int bodies)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(participants, bodies, 8);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(participants));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseEnvelope_DoesNotEnterRoleAwareCollector()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteCoarseEnvelope(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseEnvelope_RawIntEndpointUnionHasNoFalseNegative()
+        {
+            var union = typeof(BruteForceSceneQuery).GetMethod("UnionBruteCoarseEnvelope",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(union, Is.Not.Null);
+            Type rectType = typeof(BruteForceSceneQuery).Assembly.GetType("NTSD.Animation.WorldRect", true);
+            int[][] boxes =
+            {
+                new[] { -20, -10, 60, 10 }, new[] { 980, -10, 1060, 10 },
+                new[] { 20, 10, -20, -10 }, new[] { 0, 0, 0, 0 },
+                new[] { int.MinValue, -1, int.MaxValue, 1 },
+                new[] { int.MaxValue, int.MaxValue, int.MinValue, int.MinValue },
+                new[] { -1001, -1000, -999, -998 }, new[] { 60, 10, 61, 11 },
+            };
+            object Rect(int[] b) => Activator.CreateInstance(rectType, new object[] { b[0], b[1], b[2], b[3] });
+            bool Hits(int[] a, int[] b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
+            foreach (int[] first in boxes)
+            {
+                foreach (int[] second in boxes)
+                {
+                    object merged = union.Invoke(null, new[] { Rect(first), Rect(second) });
+                    var envelope = new int[4];
+                    string[] names = { "X1", "Y1", "X2", "Y2" };
+                    for (int i = 0; i < 4; i++)
+                        envelope[i] = (int)rectType.GetField(names[i]).GetValue(merged);
+                    Assert.That(envelope, Is.EqualTo(new[]
+                    {
+                        Math.Min(first[0], second[0]), Math.Min(first[1], second[1]),
+                        Math.Max(first[2], second[2]), Math.Max(first[3], second[3]),
+                    }));
+                    foreach (int[] body in boxes)
+                        if (Hits(first, body) || Hits(second, body))
+                            Assert.That(Hits(envelope, body), Is.True);
+                }
+            }
+        }
+
+        [TestCase(120)]
+        [TestCase(12)]
+        public void BruteCoarseEnvelope_1000ParticipantsBalancedCostAndFullSequence(int spacing)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("CoarseEnvelope_Cost_" + i, 7800 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * spacing + (i % 5) * 5);
+                if (attack) attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseEnvelope(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseEnvelopeRejectCountForDiagnostics"), Is.GreaterThan(0));
+            var baselineSamples = new List<double>(8);
+            var candidateSamples = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteCoarseEnvelope(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) *
+                        1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0) (enabled ? candidateSamples : baselineSamples).Add(ms);
+                }
+            }
+            double baselineMs = 0, candidateMs = 0;
+            foreach (double sample in baselineSamples) baselineMs += sample;
+            foreach (double sample in candidateSamples) candidateMs += sample;
+            TestContext.WriteLine("BRUTE_COARSE_ENVELOPE_COST participants=1000 warmup=4 sample=8 spacing=" + spacing +
+                " baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineSamples=" + string.Join(",", baselineSamples) +
+                " candidateSamples=" + string.Join(",", candidateSamples) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteCoarseEnvelope(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteCoarseEnvelopeForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The envelope candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_DefaultOffPreservesProductionDefaults()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteCoarseDispatchForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void BruteCoarseDispatch_MultiBodySequenceHandlesRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            long directions = query.LastBruteExactCacheDirectionCountForDiagnostics;
+            SetBruteCoarseDispatch(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(query.LastBruteExactCacheDirectionCountForDiagnostics, Is.EqualTo(directions));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseDispatch_RejectedBindingKeepsVrestAndCounters(bool reuseBinding)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, reuseBinding);
+            LF2Entity target = world.FindEntityByRuntimeSlotForQuery(7);
+            target.ItrRest.SetVrest(attackers[0].Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            long geometryRejects = query.LastBruteGeometryFirstRejectCountForDiagnostics;
+            long probes = query.LastBruteRejectedBindingProbeCountForDiagnostics;
+            long reuse = query.LastBruteRejectedBindingReuseCountForDiagnostics;
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(query.LastBruteGeometryFirstRejectCountForDiagnostics, Is.EqualTo(geometryRejects));
+            Assert.That(query.LastBruteRejectedBindingProbeCountForDiagnostics, Is.EqualTo(probes));
+            Assert.That(query.LastBruteRejectedBindingReuseCountForDiagnostics, Is.EqualTo(reuse));
+            Assert.That(target.ItrRest.GetVrest(attackers[0].Runtime.SlotIndex), Is.EqualTo(9));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.EqualTo(geometryRejects));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseDispatch_PostSnapshotStaleBindingKeepsBaseGate(bool exempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = exempt ? 1 : 0;
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int victimSlot = target.Runtime.SlotIndex;
+            Action invalidate = () =>
+            {
+                var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+                Assert.That(store.ReleaseBinding(handle), Is.True);
+            };
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, victimSlot, false), Is.True);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+        }
+
+        [TestCase("geometry")]
+        [TestCase("cache")]
+        [TestCase("timing")]
+        public void BruteCoarseDispatch_InactiveGateKeepsOriginalPath(string gate)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            if (gate == "geometry") SetBruteGeometryFirst(query, false);
+            if (gate == "cache") SetBruteExactCache(query, false);
+            if (gate == "timing") query.EnableBruteBranchTimingForDiagnostics = true;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_CapacityFallbackDoesNotApplyOrGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 1);
+            SetBruteGeometryFirst(query, true);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(1));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_DoesNotEnterRoleAwareCollector()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_RebuildsAfterSameTickMovement()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.GreaterThan(0));
+            SetBruteCoarseDispatch(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(120)]
+        [TestCase(12)]
+        public void BruteCoarseDispatch_1000ParticipantsBalancedCostAndFullSequence(int spacing)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("CoarseDispatch_Cost_" + i, 7400 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * spacing + (i % 5) * 5);
+                if (attack) attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.GreaterThan(0));
+            var baselineSamples = new List<double>(8);
+            var candidateSamples = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteCoarseDispatch(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) *
+                        1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0) (enabled ? candidateSamples : baselineSamples).Add(ms);
+                }
+            }
+            double baselineMs = 0, candidateMs = 0;
+            foreach (double sample in baselineSamples) baselineMs += sample;
+            foreach (double sample in candidateSamples) candidateMs += sample;
+            TestContext.WriteLine("BRUTE_COARSE_DISPATCH_COST participants=1000 warmup=4 sample=8 spacing=" + spacing +
+                " baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineSamples=" + string.Join(",", baselineSamples) +
+                " candidateSamples=" + string.Join(",", candidateSamples) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteCoarseDispatch(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteCoarseDispatchForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The coarse dispatch candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DefaultOffPreservesProductionDefaults()
+        {
+            BruteForceSceneQuery query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteEligibilityReuseForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteRejectedBindingReuseForDiagnostics, Is.False);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            long pairs = ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics");
+            SetBruteEligibilityReuse(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(pairs));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [TestCase("suppressed")]
+        [TestCase("pending")]
+        [TestCase("nullPS")]
+        public void BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(string gate)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character excluded = CreateCharacter("Eligibility_Excluded", 7102, MakePairSnapshotReuseFrame(true, 0));
+            LF2Character eligibleAfter = CreateCharacter("Eligibility_After", 7103, MakePairSnapshotReuseFrame(false, 0));
+            Register(world, excluded, 2, 3, 0);
+            Register(world, eligibleAfter, 3, 2, 0);
+            PrepareBruteGeometryFirst(query, 4);
+            SetBruteGeometryFirst(query, true);
+            PhysicsState originalPs = excluded.PS;
+            Action exclude = () =>
+            {
+                if (gate == "suppressed")
+                    excluded.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+                else if (gate == "pending")
+                    excluded.Runtime.PendingFlushDestroy = true;
+                else
+                    typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { null });
+            };
+            try
+            {
+                CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                    CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, exclude, attacker);
+                long pairs = ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics");
+                typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { originalPs });
+                SetBruteEligibilityReuse(query, true);
+                CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                    CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, exclude, attacker);
+                AssertPairSnapshotRunsEqual(baseline, candidate);
+                Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+                Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(3));
+                Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(pairs));
+                Assert.That(candidate.Sequences[0].Exists(hit => ReferenceEquals(hit.Target, excluded)), Is.False);
+                Assert.That(candidate.Sequences[0].Exists(hit => ReferenceEquals(hit.Target, eligibleAfter)), Is.True);
+            }
+            finally
+            {
+                typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { originalPs });
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(bool resnapshot)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun initial = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(initial.Counts[0], Is.GreaterThan(0));
+            int tick = world.CurrentTickIndex;
+            target.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.Zero);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+            target.Runtime.SuppressCollisionCandidateUntilTick = 0;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(initial.Counts[0]));
+            Assert.That(world.CurrentTickIndex, Is.EqualTo(tick));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(2));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.EqualTo(3));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 1, 1);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics");
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, fallback);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics"), Is.EqualTo(capacity));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DisabledExactCachePreservesFallback()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteExactCache(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, fallback);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DoesNotEnterRoleAwareCollector()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteEligibilityReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("Eligibility_Cost_" + i, 7200 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            var baselineSamples = new List<double>(8);
+            var candidateSamples = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteEligibilityReuse(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) *
+                        1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0)
+                        (enabled ? candidateSamples : baselineSamples).Add(ms);
+                }
+            }
+            double baselineMs = 0, candidateMs = 0;
+            foreach (double sample in baselineSamples) baselineMs += sample;
+            foreach (double sample in candidateSamples) candidateMs += sample;
+            TestContext.WriteLine("BRUTE_ELIGIBILITY_REUSE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineSamples=" + string.Join(",", baselineSamples) +
+                " candidateSamples=" + string.Join(",", candidateSamples) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteEligibilityReuse(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteEligibilityReuseForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The eligibility candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+
+        [Test]
+        public void BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteRejectedBindingReuseForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            LF2Entity target = world.FindEntityByRuntimeSlotForQuery(7);
+            target.ItrRest.SetVrest(attackers[0].Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+            Assert.That(target.ItrRest.GetVrest(attackers[0].Runtime.SlotIndex), Is.EqualTo(9));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(bool resnapshot)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            int tick = world.CurrentTickIndex;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(world.CurrentTickIndex, Is.EqualTo(tick));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_AttackExemptDoesNotProbe()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            foreach (LF2Entity attacker in attackers)
+                attacker.AttackExempt = 1;
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteGeometryFirstRejectCountForDiagnostics"), Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(0)]
+        [TestCase(4)]
+        [TestCase(5)]
+        public void BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(int kind)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character far = CreateCharacter("BindingReuse_Far", 6302,
+                MakePairSnapshotReuseFrame(false, kind));
+            Register(world, far, 2, 2, 1000);
+            PrepareBruteGeometryFirst(query, 3);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(1));
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 3);
+            CandidateRun blocked = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(blocked.Counts[0], Is.Zero);
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(3));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(bool exempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = exempt ? 1 : 0;
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int victimSlot = target.Runtime.SlotIndex;
+            Action invalidate = () =>
+            {
+                var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+                Assert.That(store.ReleaseBinding(handle), Is.True);
+            };
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, victimSlot, false), Is.True);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"),
+                Is.EqualTo(exempt ? 0 : 1));
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 1);
+            SetBruteGeometryFirst(query, true);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(1));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_1000ParticipantsBalancedCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("BindingReuse_Cost_" + i, 6400 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.GreaterThan(0));
+            double baselineMs = 0, candidateMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteRejectedBindingReuse(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        candidateMs += ms;
+                    else
+                        baselineMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_REJECTED_BINDING_REUSE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteRejectedBindingReuse(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteRejectedBindingReuseForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The rejected-binding candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        private static void CreateRejectedBindingReuseScenario(out SimulationWorld world,
+            out BruteForceSceneQuery query, out LF2Entity[] attackers)
+        {
+            world = new SimulationWorld();
+            attackers = new LF2Entity[3];
+            for (int i = 0; i < 8; i++)
+            {
+                LF2Character participant = CreateCharacter("BindingReuse_Target_" + i, 6300 + i,
+                    MakePairSnapshotReuseFrame(i < 3, 0));
+                Register(world, participant, i, i < 3 ? 1 : 2, i * 1000);
+                if (i < 3)
+                    attackers[i] = participant;
+            }
+            query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 8);
+            SetBruteGeometryFirst(query, true);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteKind5Presence_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteKind5PresenceForDiagnostics"), Is.EqualTo(false));
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetBruteKind5Presence(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteKind5PresenceAppliedForDiagnostics"), Is.EqualTo(true));
+            if (nearest)
+                Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteKind5Presence_NoKind5FarPairSkipsScanAndKeepsRest()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(9));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteKind5Presence_Kind5OutsideOrdinaryUnionIsRetained(bool mixed)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (!mixed)
+                attacker.GetCollisionFrameData().itrs.Clear();
+            attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 5, vrest = 1, x = 980, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteKind5Presence_RebuildsAfterSameItrChangesKind()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            InteractionArea changing = attacker.GetCollisionFrameData().itrs[0];
+            foreach (int kind in new[] { 0, 5, 0 })
+            {
+                changing.kind = kind;
+                SetBruteKind5Presence(query, false);
+                CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                SetBruteKind5Presence(query, true);
+                CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                AssertPairSnapshotRunsEqual(baseline, candidate);
+                Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"),
+                    Is.EqualTo(kind == 5 ? 0 : 1));
+            }
+        }
+
+        [Test]
+        public void BruteKind5Presence_RectCapacityMissFallsBackWithoutGrowth()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 1, 1);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics");
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteKind5PresenceAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics"), Is.EqualTo(capacity));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteKind5Presence_1000ParticipantsLocalCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2FrameData frame = MakePairSnapshotReuseFrame(attack, 0);
+                if (attack)
+                    while (frame.itrs.Count < 8)
+                        frame.itrs.Add(new InteractionArea
+                        {
+                            kind = 0, vrest = 1, x = -20, y = -10, w = 80, h = 20, zwidth = 15,
+                        });
+                LF2Character participant = CreateCharacter("Kind5Presence_Cost_" + i, 5700 + i, frame);
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(1000, 3, 8);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            SetBruteKind5Presence(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.GreaterThan(0));
+            double baselineMs = 0, candidateMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteKind5Presence(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        candidateMs += ms;
+                    else
+                        baselineMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_KIND5_PRESENCE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteKind5Presence(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteKind5PresenceForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Kind5 metadata candidate must remain explicit opt-in.");
+            property.SetValue(query, value);
+        }
 
         [TestCase(0, false)]
         [TestCase(4, false)]
@@ -5759,7 +6905,12 @@ namespace NTSD.Test
         private static BruteForceSceneQuery GetQuery(SimulationWorld world)
         {
             Assert.That(world.SceneQuery, Is.TypeOf<BruteForceSceneQuery>());
-            return (BruteForceSceneQuery)world.SceneQuery;
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.EnableEmptyItrPairGuardForDiagnostics = false;
+            query.EnableBruteEmptyItrRosterForDiagnostics = false;
+            query.EnableBruteExactCacheForDiagnostics = false;
+            query.EnableBruteGeometryFirstForDiagnostics = false;
+            return query;
         }
 
         private static bool[] ReadRoleAwareParticipantFlags(

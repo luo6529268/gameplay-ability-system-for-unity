@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-08T00:16:50.6867272Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "guards": 104,
+  "guardChanges": [],
+  "backupCount": 8,
+  "backupChanges": [],
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "Records: 1358",
+    "Governed code files in diff: 20"
+  ],
+  "warnings": 4252,
+  "errors": 0,
+  "diffExit": 0,
+  "diffCrLfWarnings": 26,
+  "diffOther": [],
+  "uniqueParents": 34,
+  "six": [
+    {
+      "id": "H-11",
+      "rows": 3
+    },
+    {
+      "id": "M-03",
+      "rows": 3
+    },
+    {
+      "id": "H-06",
+      "rows": 3
+    },
+    {
+      "id": "H-07",
+      "rows": 3
+    },
+    {
+      "id": "M-13",
+      "rows": 3
+    },
+    {
+      "id": "M-14",
+      "rows": 3
+    }
+  ],
+  "M13rowsPreserved": true,
+  "sourceBytes": 46288,
+  "sourceSha": "DCD8031ADC0E9B5094F0C900431AFD39604F603D07366693F1EEB3E573AF565B",
+  "xmlSha": "2658642E7F5A09A943AA513AECC3AF43189C782BD8A51571AD7813F59C974A9B"
+}

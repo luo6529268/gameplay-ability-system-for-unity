@@ -1,0 +1,142 @@
+warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it
+diff --git a/docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs b/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+index 2ceeeac5..de6d756e 100644
+--- a/docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+@@ -27,6 +27,7 @@ namespace NTSD.Test.Editor
+         private const string Kind5Output = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/";
+         private const string EligibilityOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/driver-qualification-01/";
+         private const string CombinedOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008/driver-qualification-01/";
++        private const string CoarseEnvelopeOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/driver-qualification-01/";
+ 
+         [Test]
+         public void OrdinaryBruteDefaultsEnableAdmittedFastPath()
+@@ -226,9 +227,85 @@ namespace NTSD.Test.Editor
+             }, CombinedOutput);
+         }
+ 
++        [Test]
++        public void CoarseEnvelopeQualificationDoesNotPromoteAnyCandidateDefault()
++        {
++            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
++            Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics, Is.False);
++            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
++            Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, Is.False);
++            Assert.That(query.EnableBruteRejectedBindingReuseForDiagnostics, Is.False);
++            Assert.That(query.EnableBruteCoarseDispatchForDiagnostics, Is.False);
++            Assert.That(query.EnableBruteBranchTimingForDiagnostics, Is.False);
++        }
++
++        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
++            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
++        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
++            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
++        public void CoarseEnvelopePreservesApplicableFormalRootAndEveryTick(
++            string side, string trace, string expectedSha)
++        {
++            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
++                Is.EqualTo(FormalSha));
++            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
++            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
++                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
++            Assert.That(native.Length, Is.EqualTo(12));
++            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
++            TickRow[] candidate = RunCoarseEnvelope(scenario, false, ProductionEntityStressMode.Combat1000,
++                12, native, true);
++            TickRow[] baseline = RunCoarseEnvelope(scenario, false, ProductionEntityStressMode.Combat1000,
++                12, native, false);
++            CompareEveryTick(baseline, candidate);
++            AssertCoarseEnvelopeApplication(baseline, candidate);
++            SaveNew(side + "-envelope-parity.json", new
++            {
++                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
++                rootFields = new[] { "oid", "action", "hp", "vx" },
++                performanceEvidence = false,
++            }, CoarseEnvelopeOutput);
++        }
++
++        [TestCase(ProductionEntityStressMode.Dispersed1000)]
++        [TestCase(ProductionEntityStressMode.Combat1000)]
++        public void CoarseEnvelopeThousandCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
++        {
++            string scenario = ScenarioRoot + "unity-scenario-right-x550.json";
++            TickRow[] candidate = RunCoarseEnvelope(scenario, true, mode, 32, null, true);
++            TickRow[] baseline = RunCoarseEnvelope(scenario, true, mode, 32, null, false);
++            CompareEveryTick(baseline, candidate);
++            AssertCoarseEnvelopeApplication(baseline, candidate);
++            Assert.That(candidate.Any(row => row.coarseEnvelopeDirections > 0), Is.True,
++                "the envelope must be exercised by the canonical AI workload");
++            Assert.That(candidate.Any(row => row.coarseEnvelopeRejects > 0), Is.True,
++                "the envelope must reject an actual direction before qualification can pass");
++            SaveNew(mode + "-envelope-parity.json",
++                new { baseline, candidate, performanceEvidence = false }, CoarseEnvelopeOutput);
++        }
++
++        private static TickRow[] RunCoarseEnvelope(string scenario, bool thousand,
++            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
++        {
++            MethodInfo run = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
++                "Run", BindingFlags.Static | BindingFlags.NonPublic);
++            Assert.That(run, Is.Not.Null);
++            Assert.That(run.GetParameters().Any(parameter => parameter.Name == "coarseEnvelope"), Is.True,
++                "the full Driver fixture must explicitly integrate the envelope candidate");
++            return (TickRow[])run.Invoke(null, new object[]
++                { scenario, true, thousand, mode, ticks, native, null, null, enabled });
++        }
++
++        private static void AssertCoarseEnvelopeApplication(TickRow[] baseline, TickRow[] candidate)
++        {
++            Assert.That(baseline.All(row => !row.coarseEnvelopeEnabled &&
++                row.coarseEnvelopeDirections == 0 && row.coarseEnvelopeRejects == 0), Is.True);
++            Assert.That(candidate.All(row => row.coarseEnvelopeEnabled), Is.True);
++        }
++
+         private static TickRow[] Run(string scenario, bool enabled, bool thousand,
+             ProductionEntityStressMode mode, int ticks, JObject[] native,
+-            bool? kind5Presence = null, bool? eligibilityReuse = null)
++            bool? kind5Presence = null, bool? eligibilityReuse = null, bool? coarseEnvelope = null)
+         {
+             var result = new List<TickRow>(ticks);
+             NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+@@ -259,6 +336,20 @@ namespace NTSD.Test.Editor
+                         Assert.That(query.EnableBruteBranchTimingForDiagnostics, Is.False);
+                         query.EnableBruteEligibilityReuseForDiagnostics = eligibilityReuse.Value;
+                     }
++                    if (coarseEnvelope.HasValue)
++                    {
++                        Assert.That(enabled, Is.True, "both paths must retain the admitted production mechanisms");
++                        Assert.That(kind5Presence.HasValue || eligibilityReuse.HasValue, Is.False,
++                            "envelope qualification must not compose other unadmitted candidates");
++                        Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics, Is.False,
++                            "qualification must not promote the production default");
++                        Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
++                        Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, Is.False);
++                        Assert.That(query.EnableBruteRejectedBindingReuseForDiagnostics, Is.False);
++                        Assert.That(query.EnableBruteCoarseDispatchForDiagnostics, Is.False);
++                        Assert.That(query.EnableBruteBranchTimingForDiagnostics, Is.False);
++                        query.EnableBruteCoarseEnvelopeForDiagnostics = coarseEnvelope.Value;
++                    }
+                     if (thousand)
+                         PrepareThousandAi(world, mode);
+                     ulong before = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+@@ -288,6 +379,9 @@ namespace NTSD.Test.Editor
+                             kind5PresenceApplied = query.LastBruteKind5PresenceAppliedForDiagnostics,
+                             kind5ScansSkipped = query.LastBruteKind5ScanSkippedForDiagnostics,
+                             eligibilityReuseApplied = query.LastBruteEligibilityReuseAppliedForDiagnostics,
++                            coarseEnvelopeEnabled = query.EnableBruteCoarseEnvelopeForDiagnostics,
++                            coarseEnvelopeDirections = query.LastBruteCoarseEnvelopeDirectionCountForDiagnostics,
++                            coarseEnvelopeRejects = query.LastBruteCoarseEnvelopeRejectCountForDiagnostics,
+                         });
+                         if (kind5Presence.HasValue)
+                         {
+@@ -416,6 +510,9 @@ namespace NTSD.Test.Editor
+             public bool kind5PresenceApplied;
+             public long kind5ScansSkipped;
+             public bool eligibilityReuseApplied;
++            public bool coarseEnvelopeEnabled;
++            public long coarseEnvelopeDirections;
++            public long coarseEnvelopeRejects;
+         }
+     }
+ }

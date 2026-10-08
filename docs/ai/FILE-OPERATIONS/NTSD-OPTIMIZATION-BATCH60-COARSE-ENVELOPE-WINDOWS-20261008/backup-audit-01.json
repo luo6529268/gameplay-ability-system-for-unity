@@ -1,0 +1,70 @@
+{
+  "utc": "2026-10-07T22:41:25.1036107Z",
+  "rows": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\01-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 129908,
+      "expected": "BEAC09ED3AE7C829F5644A976E16520960B8236F7AF779DCB1A8B31FE1D3A391",
+      "actual": "BEAC09ED3AE7C829F5644A976E16520960B8236F7AF779DCB1A8B31FE1D3A391",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\02-CHANGE-LEDGER.md",
+      "bytes": 702342,
+      "expected": "47254E8C5B06EF93DACB618AF2622097289B7843A9FE6B9B4486AD3BD6B58892",
+      "actual": "47254E8C5B06EF93DACB618AF2622097289B7843A9FE6B9B4486AD3BD6B58892",
+      "same": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\03-STATE.md",
+      "bytes": 1606627,
+      "expected": "A43A5959CB911C63903623163C5B5F3AE0838FDEB6F27897E7F8A244DE2988DB",
+      "actual": "A43A5959CB911C63903623163C5B5F3AE0838FDEB6F27897E7F8A244DE2988DB",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\04-CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1540186,
+      "expected": "D9676B8DA31864149A1D9C3651D46E8BAC002D18407E7E579B2957C3004FAA0F",
+      "actual": "D9676B8DA31864149A1D9C3651D46E8BAC002D18407E7E579B2957C3004FAA0F",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\05-INDEX.md",
+      "bytes": 89851,
+      "expected": "4D17F4ECB1CE029A80557188143682FBBEE1F5D20C546D662199DE02F3E46B26",
+      "actual": "4D17F4ECB1CE029A80557188143682FBBEE1F5D20C546D662199DE02F3E46B26",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\06-battle-optimization-progress-tracker.md",
+      "bytes": 132235,
+      "expected": "F014C82DBA38A59D98A2CDC40A089974747CCBEC2CF91A01D564A81D221DCD6B",
+      "actual": "F014C82DBA38A59D98A2CDC40A089974747CCBEC2CF91A01D564A81D221DCD6B",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\07-NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008.md",
+      "bytes": 5725,
+      "expected": "EEFD86776FD0A55A99C5A49FBF646147540A2AD09892732D768750B299CA3578",
+      "actual": "EEFD86776FD0A55A99C5A49FBF646147540A2AD09892732D768750B299CA3578",
+      "same": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\backups-01\\08-Goal18_LastTestResults.xml",
+      "bytes": 7193758,
+      "expected": "F4AB092E77B94B76CBC3F90CA5839A1342FC2669D68942EA358B8D5D2A3111B3",
+      "actual": "F4AB092E77B94B76CBC3F90CA5839A1342FC2669D68942EA358B8D5D2A3111B3",
+      "same": true
+    }
+  ],
+  "allSame": true
+}

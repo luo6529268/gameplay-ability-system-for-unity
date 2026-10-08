@@ -1,0 +1,240 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "b5638cb54b354cb6bb9b80ab6f23801d",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791406282130,
+      "finished_unix_ms": 1791406298071,
+      "last_update_unix_ms": 1791406298071,
+      "progress": {
+        "completed": 22,
+        "total": 9718,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791406296181,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.UnsealedGenerationChangeRebuildsColdTexts",
+        "last_finished_unix_ms": 1791406296184,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 22,
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.6702012,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "AppendFlagKeepsBareOrCharacterName(False)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.AppendFlagKeepsBareOrCharacterName(False)",
+            "state": "Passed",
+            "durationSeconds": 1.2561701,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "AppendFlagKeepsBareOrCharacterName(True)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.AppendFlagKeepsBareOrCharacterName(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0039021,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ColdPreparationExistsAndDoesNotPublish",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.ColdPreparationExistsAndDoesNotPublish",
+            "state": "Passed",
+            "durationSeconds": 0.0022967,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ComputerTextClassDoesNotShareSnapshotSlotOrTeam",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.ComputerTextClassDoesNotShareSnapshotSlotOrTeam",
+            "state": "Passed",
+            "durationSeconds": 0.0027999,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CustomNamesBracketUtf8AndFrozenCopyRemainExact",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.CustomNamesBracketUtf8AndFrozenCopyRemainExact",
+            "state": "Passed",
+            "durationSeconds": 0.00462,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EmptyOrMissingCatalogNameUsesPreparedNone(5)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.EmptyOrMissingCatalogNameUsesPreparedNone(5)",
+            "state": "Passed",
+            "durationSeconds": 0.0076518,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EmptyOrMissingCatalogNameUsesPreparedNone(99999)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.EmptyOrMissingCatalogNameUsesPreparedNone(99999)",
+            "state": "Passed",
+            "durationSeconds": 0.0059694,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FeedRebindInvalidatesPreparation",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FeedRebindInvalidatesPreparation",
+            "state": "Passed",
+            "durationSeconds": 0.0077649,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstAndRepeatedPreparedProjectionHasCalibratedZeroEvents",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstAndRepeatedPreparedProjectionHasCalibratedZeroEvents",
+            "state": "Passed",
+            "durationSeconds": 0.0113458,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(0,\"Remie\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(0,\"Remie\")",
+            "state": "Passed",
+            "durationSeconds": 0.0067331,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(1,\"Kezeal\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(1,\"Kezeal\")",
+            "state": "Passed",
+            "durationSeconds": 0.0050859,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(7,\"8\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(7,\"8\")",
+            "state": "Passed",
+            "durationSeconds": 0.052622,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(8,\"<No name>\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(8,\"<No name>\")",
+            "state": "Passed",
+            "durationSeconds": 0.0464575,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(9,\"\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(9,\"\")",
+            "state": "Passed",
+            "durationSeconds": 0.0049155,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(10,\"Com\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(10,\"Com\")",
+            "state": "Passed",
+            "durationSeconds": 0.0048417,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(100,\"Com\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(100,\"Com\")",
+            "state": "Passed",
+            "durationSeconds": 0.0048506,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FirstVisibleNamePreservesNativeSlotAndUtf8Width(998,\"Com\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstVisibleNamePreservesNativeSlotAndUtf8Width(998,\"Com\")",
+            "state": "Passed",
+            "durationSeconds": 0.0047529,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ManagedColdInputCanPrepareWithoutUnityManager",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.ManagedColdInputCanPrepareWithoutUnityManager",
+            "state": "Passed",
+            "durationSeconds": 0.0032318,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SameTickOidChangeUsesAlreadyPreparedName",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.SameTickOidChangeUsesAlreadyPreparedName",
+            "state": "Passed",
+            "durationSeconds": 0.0052335,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedGenerationChangeRejectsInsteadOfGrowing",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.SealedGenerationChangeRejectsInsteadOfGrowing",
+            "state": "Passed",
+            "durationSeconds": 0.0048992,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SealedUnpreparedInputRejectsWithoutPartialRows",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.SealedUnpreparedInputRejectsWithoutPartialRows",
+            "state": "Passed",
+            "durationSeconds": 0.0049742,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnsealedGenerationChangeRebuildsColdTexts",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.UnsealedGenerationChangeRebuildsColdTexts",
+            "state": "Passed",
+            "durationSeconds": 0.0032763,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

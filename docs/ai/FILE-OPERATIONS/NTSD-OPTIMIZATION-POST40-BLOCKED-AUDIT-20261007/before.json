@@ -1,0 +1,60 @@
+{
+  "timeUtc": "2026-10-07T08:45:16.9219989Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "paths": [
+    {
+      "relativePath": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "CDD17A8616B073E7DD452B0C40B4CD4795835CECB9E601F43BDBD8F127A1298A",
+      "bytes": 81424,
+      "gitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "firstLine": "> 2026-10-07 POST40有据复盘 / NEXT_DIRECTION_NEEDS_AUTHORIZATION：本轮只读核查及文档维护，无新C#、Unity/测试/测量或新优化批。40普通千人collector仍约60%；同报告logic减collector约33.180/33.103ms只是算术拆分，不是实测收益或严格下界。rest绑定验证有失效清理副作用，尚无缓存该检查的收益证据，不新增微候选。建议后继仅已有Role-aware必要生产准入，门通过才考虑接入、失败保留Brute；历史29 collector15–16ms非当前生产证明，25集中fixture仍秒级。现授权明确不切collector，此方向待用户准确批准，不自动实施；H07/H11未达、父关闭0、Goal active、次数/专项门保持。详情回链[40报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007/REPORT.md#2026-10-07-post40只读后继判断)。"
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "ACF2AD59EC9960E548D60E43B346CDAF232523D15C36FB29BB419A9BC2443F85",
+      "bytes": 1509401,
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> 2026-10-07 POST40有据复盘 / NEXT_DIRECTION_NEEDS_AUTHORIZATION：本轮只读核查及文档维护，无新C#、Unity/测试/测量或新优化批。40普通千人collector仍约60%；同报告logic减collector约33.180/33.103ms只是算术拆分，不是实测收益或严格下界。rest绑定验证有失效清理副作用，尚无缓存该检查的收益证据，不新增微候选。建议后继仅已有Role-aware必要生产准入，门通过才考虑接入、失败保留Brute；历史29 collector15–16ms非当前生产证明，25集中fixture仍秒级。现授权明确不切collector，此方向待用户准确批准，不自动实施；H07/H11未达、父关闭0、Goal active、次数/专项门保持。详情回链[40报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007/REPORT.md#2026-10-07-post40只读后继判断)。"
+    },
+    {
+      "relativePath": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "EA45AB4EC628C6038644363AED568B2C0213D533905EF9817A68C9FE88FA2307",
+      "bytes": 1576626,
+      "gitStatus": " M docs/ai/STATE.md",
+      "firstLine": "> 2026-10-07 POST40有据复盘 / NEXT_DIRECTION_NEEDS_AUTHORIZATION：本轮只读核查及文档维护，无新C#、Unity/测试/测量或新优化批。40普通千人collector仍约60%；同报告logic减collector约33.180/33.103ms只是算术拆分，不是实测收益或严格下界。rest绑定验证有失效清理副作用，尚无缓存该检查的收益证据，不新增微候选。建议后继仅已有Role-aware必要生产准入，门通过才考虑接入、失败保留Brute；历史29 collector15–16ms非当前生产证明，25集中fixture仍秒级。现授权明确不切collector，此方向待用户准确批准，不自动实施；H07/H11未达、父关闭0、Goal active、次数/专项门保持。详情回链[40报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007/REPORT.md#2026-10-07-post40只读后继判断)。"
+    },
+    {
+      "relativePath": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "184B46B7238363B082DACFEF2C70FE58C0F637D67370B8B0F5F8815A127C6FC8",
+      "bytes": 59921,
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "firstLine": "> POST40后继方向只读复盘 / VERIFIED（文档维护限定）：五当前文档副本、七源码/配置守卫及HEAD逐SHA保持；没有新优化批、C#修改或Unity/测试/测量。Role-aware后继生产准入需新增准确授权，H07/H11未达、Goal active，专项门不变。[Operation](NTSD-OPTIMIZATION-POST40-NEXT-SCOPE-REVIEW-20261007/RECORD.md)。"
+    }
+  ],
+  "guards": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    }
+  ]
+}

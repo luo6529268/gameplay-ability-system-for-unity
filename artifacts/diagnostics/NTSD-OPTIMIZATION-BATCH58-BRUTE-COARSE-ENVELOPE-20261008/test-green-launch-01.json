@@ -1,0 +1,30 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_",
+        "^NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_(?!1000)",
+        "^NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteExactCache_(SuppressedAndPending|RectCapacityMiss)",
+        "^NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteKind5Presence_Kind5OutsideOrdinaryUnion"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "ee477e5cb7994d8896a04e8656f5eba0",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

@@ -9,9 +9,25 @@ namespace NTSD.Simulation.Ecs
         internal static bool IsInitialActionAdmitted(LF2CharacterDataWrapper wrapper, int action)
         {
             // Alignment contract: NTSD28-Q06-STATE9996-DIRECT-SPAWN-TRANSACTION-001.
-            return wrapper?.characterData != null && action >= 0 &&
-                action < LF2FrameCache.NativeMaxFrameIdExclusive &&
-                (action != 999 || wrapper.characterData.frames.Exists(frame => frame.frameId == action));
+            if (wrapper?.characterData == null || action < 0 ||
+                action >= LF2FrameCache.NativeMaxFrameIdExclusive)
+            {
+                return false;
+            }
+            if (action != 999)
+            {
+                return true;
+            }
+
+            var frames = wrapper.characterData.frames;
+            for (int index = 0; index < frames.Count; index++)
+            {
+                if (frames[index].frameId == action)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         internal static void InitializeBirth(LF2Entity entity, OPointCreateTask task)

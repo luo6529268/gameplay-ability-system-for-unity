@@ -1,0 +1,294 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "087d58af73ed424388146547dff86073",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791408203135,
+      "finished_unix_ms": 1791408215541,
+      "last_update_unix_ms": 1791408215541,
+      "progress": {
+        "completed": 28,
+        "total": 9731,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791408212220,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+        "last_finished_unix_ms": 1791408212222,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 28,
+          "passed": 28,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.8103037,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Request_PreservesAllProductionCombatFieldsExceptOutput",
+            "fullName": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_PreservesAllProductionCombatFieldsExceptOutput",
+            "state": "Passed",
+            "durationSeconds": 0.002722,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_RejectsIndicesOutsideSingleCombatWindow(-1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_RejectsIndicesOutsideSingleCombatWindow(-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0004847,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_RejectsIndicesOutsideSingleCombatWindow(1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_RejectsIndicesOutsideSingleCombatWindow(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0001068,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_UsesFreshBatch55OwnedOutput",
+            "fullName": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_UsesFreshBatch55OwnedOutput",
+            "state": "Passed",
+            "durationSeconds": 0.0002085,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CalibratedEmptyScope_ProvesZeroOnlyWithExactCoverage",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.CalibratedEmptyScope_ProvesZeroOnlyWithExactCoverage",
+            "state": "Passed",
+            "durationSeconds": 0.3123451,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "FixedCapacityOverflow_IsInvalidAndNeverExpands",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.FixedCapacityOverflow_IsInvalidAndNeverExpands",
+            "state": "Passed",
+            "durationSeconds": 0.0022676,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidSequence_IsRejectedAndCannotBecomeZero(0)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0016555,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidSequence_IsRejectedAndCannotBecomeZero(1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0010628,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidSequence_IsRejectedAndCannotBecomeZero(2)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0009675,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidSequence_IsRejectedAndCannotBecomeZero(3)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0010047,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "KnownAllocation_IsNotFalseZeroOrPortableRawBytes",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.KnownAllocation_IsNotFalseZeroOrPortableRawBytes",
+            "state": "Passed",
+            "durationSeconds": 0.0013206,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ObserverAttachAndDispose_ReleaseRunnerOwnership",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ObserverAttachAndDispose_ReleaseRunnerOwnership",
+            "state": "Passed",
+            "durationSeconds": 0.0074265,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OwnerThreadAndDisposedScope_AreRejected",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.OwnerThreadAndDisposedScope_AreRejected",
+            "state": "Passed",
+            "durationSeconds": 0.0019462,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RefusedTickOrMissingSampleCoverage_CannotPass(False)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.RefusedTickOrMissingSampleCoverage_CannotPass(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0014546,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RefusedTickOrMissingSampleCoverage_CannotPass(True)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.RefusedTickOrMissingSampleCoverage_CannotPass(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0009796,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_BeginFailurePreservesOriginalAndDoesNotCallEnd",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_BeginFailurePreservesOriginalAndDoesNotCallEnd",
+            "state": "Passed",
+            "durationSeconds": 0.0019736,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "state": "Passed",
+            "durationSeconds": 0.0004433,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_DetachDuringInFlightScopeIsRejected",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DetachDuringInFlightScopeIsRejected",
+            "state": "Passed",
+            "durationSeconds": 0.000566,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsDedicatedWorkerScope",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsDedicatedWorkerScope",
+            "state": "Passed",
+            "durationSeconds": 0.0004893,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsIncompleteCallbackGroup(0)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0007998,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsIncompleteCallbackGroup(1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0003009,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsIncompleteCallbackGroup(2)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0002673,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "state": "Passed",
+            "durationSeconds": 0.0006524,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ScopedRequest_PreservesOriginalProductionWorkload(0)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_PreservesOriginalProductionWorkload(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0005347,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ScopedRequest_PreservesOriginalProductionWorkload(1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_PreservesOriginalProductionWorkload(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0001599,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ScopedRequest_RejectsOutOfRangeIndex(-1)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_RejectsOutOfRangeIndex(-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0005169,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ScopedRequest_RejectsOutOfRangeIndex(2)",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_RejectsOutOfRangeIndex(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0001138,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+            "state": "Passed",
+            "durationSeconds": 0.0015235,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

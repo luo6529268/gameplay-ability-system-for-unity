@@ -1,0 +1,99 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ad6f48cade6242e398cb3357eabad3fd",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791402573057,
+      "finished_unix_ms": 1791402591375,
+      "last_update_unix_ms": 1791402591375,
+      "progress": {
+        "completed": 32,
+        "total": 9696,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791402589447,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_UsesFreshBatch55OwnedOutput",
+        "last_finished_unix_ms": 1791402589448,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,3,10,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,3,11,True)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,3,13,True)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,3,14,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,0,11,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(-1,3,0,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(10,-1,11,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_AttributesOnlyStrictDescendants(2147483646,1,int.MaxValue,True)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicDescendant\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_BoundsRetainedScanAndUsesExistingDriverMarker",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_ExposesDedicatedOfflineEntry",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.RecoverRetainedLogicRaw\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(-1,0,0,True)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(1864,1865,1900,True)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(1864,1864,1900,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(1864,-1,1900,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(1864,1865,1864,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(-2,0,1,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.LogicRecovery_RejectsMixedOrMissingAppendedRange(int.MaxValue,int.MaxValue,int.MaxValue,False)",
+            "message": "  BattleOptimizationCpuGcCaptureEditor.IsLogicAppendedRange\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

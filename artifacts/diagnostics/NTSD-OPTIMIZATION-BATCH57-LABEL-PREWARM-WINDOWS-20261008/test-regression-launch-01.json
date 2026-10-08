@@ -1,0 +1,26 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests",
+        "NTSD.Test.Editor.BattleLogicGcCallsiteWindowEditorTests.Request_"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job started.",
+    "data": {
+      "job_id": "087d58af73ed424388146547dff86073",
+      "status": "running",
+      "mode": "EditMode",
+      "include_details": true,
+      "include_failed_tests": true
+    }
+  }
+}

@@ -1,0 +1,350 @@
+{
+    "evidence": "INSTRUMENTED_CALLSITE_DIAGNOSTIC_ONLY; profiler indices are not Unity frame numbers; same-frame point pairs follow camera boundary order",
+    "beginMarker": "NTSD.Optimization.H11.CameraBeginBoundary",
+    "endMarker": "NTSD.Optimization.H11.CameraEndBoundary",
+    "envelopes": [
+        {
+            "boundary": {
+                "ordinal": 1,
+                "beginUnityFrame": 2869,
+                "endUnityFrame": 2869,
+                "beginLogicTick": 10,
+                "endLogicTick": 10,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 57,
+            "beginMarkerSampleIndex": 14125,
+            "endMarkerSampleIndex": 14334,
+            "beginMarkerEndMs": 1103251426.9926,
+            "endMarkerStartMs": 1103251428.343,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 2,
+                "beginUnityFrame": 2870,
+                "endUnityFrame": 2870,
+                "beginLogicTick": 11,
+                "endLogicTick": 11,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 58,
+            "beginMarkerSampleIndex": 13869,
+            "endMarkerSampleIndex": 14074,
+            "beginMarkerEndMs": 1103251476.2826,
+            "endMarkerStartMs": 1103251477.325999,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 3,
+                "beginUnityFrame": 2871,
+                "endUnityFrame": 2871,
+                "beginLogicTick": 12,
+                "endLogicTick": 12,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 59,
+            "beginMarkerSampleIndex": 13519,
+            "endMarkerSampleIndex": 13709,
+            "beginMarkerEndMs": 1103251518.5944989,
+            "endMarkerStartMs": 1103251519.718699,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 4,
+                "beginUnityFrame": 2872,
+                "endUnityFrame": 2872,
+                "beginLogicTick": 14,
+                "endLogicTick": 14,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 60,
+            "beginMarkerSampleIndex": 13552,
+            "endMarkerSampleIndex": 13733,
+            "beginMarkerEndMs": 1103251561.3545,
+            "endMarkerStartMs": 1103251562.3234,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 5,
+                "beginUnityFrame": 2873,
+                "endUnityFrame": 2873,
+                "beginLogicTick": 15,
+                "endLogicTick": 15,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 61,
+            "beginMarkerSampleIndex": 13589,
+            "endMarkerSampleIndex": 13790,
+            "beginMarkerEndMs": 1103251602.515199,
+            "endMarkerStartMs": 1103251603.52,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 6,
+                "beginUnityFrame": 2874,
+                "endUnityFrame": 2874,
+                "beginLogicTick": 16,
+                "endLogicTick": 16,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 62,
+            "beginMarkerSampleIndex": 13626,
+            "endMarkerSampleIndex": 13821,
+            "beginMarkerEndMs": 1103251643.921099,
+            "endMarkerStartMs": 1103251645.0479,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 7,
+                "beginUnityFrame": 2875,
+                "endUnityFrame": 2875,
+                "beginLogicTick": 17,
+                "endLogicTick": 17,
+                "allocationEvents": 0,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 63,
+            "beginMarkerSampleIndex": 13505,
+            "endMarkerSampleIndex": 13730,
+            "beginMarkerEndMs": 1103251682.4927,
+            "endMarkerStartMs": 1103251683.4615,
+            "threadName": "Main Thread",
+            "allocations": []
+        },
+        {
+            "boundary": {
+                "ordinal": 8,
+                "beginUnityFrame": 2876,
+                "endUnityFrame": 2876,
+                "beginLogicTick": 18,
+                "endLogicTick": 18,
+                "allocationEvents": 1,
+                "calibratedScopeValid": true
+            },
+            "profilerFrameIndex": 64,
+            "beginMarkerSampleIndex": 13611,
+            "endMarkerSampleIndex": 13813,
+            "beginMarkerEndMs": 1103251722.8818999,
+            "endMarkerStartMs": 1103251723.8895,
+            "threadName": "Main Thread",
+            "allocations": [
+                {
+                    "index": 13737,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.017999999225139619,
+                    "startMs": 1103251723.6554,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 40,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CF726",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69358FC",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69352E2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05C259F",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05C3A55",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A0979",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6AF64C8EB",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E7F5CF1",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A770432C33",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering::BattleFootMarkerAnimation.ResolveSprite()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleFootMarkerBatchBackend.cs",
+                            "line": 60
+                        },
+                        {
+                            "address": "000001A77043290B",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering::BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+                            "line": 2199
+                        },
+                        {
+                            "address": "000001A7704306AB",
+                            "method": "Assembly-CSharp.dll!::BattleRenderPass.Execute()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderFeature.cs",
+                            "line": 235
+                        },
+                        {
+                            "address": "000001A7621D95D8",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.ExecuteRenderPass()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+                            "line": 1477
+                        },
+                        {
+                            "address": "000001A7621D848B",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.ExecuteBlock()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+                            "line": 1459
+                        },
+                        {
+                            "address": "000001A7621C21A3",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.Execute()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+                            "line": 1099
+                        },
+                        {
+                            "address": "000001A76216B80B",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.RenderSingleCamera()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+                            "line": 602
+                        },
+                        {
+                            "address": "000001A7625F9253",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.RenderCameraStack()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+                            "line": 718
+                        },
+                        {
+                            "address": "000001A762148AE3",
+                            "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.Render()",
+                            "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+                            "line": 303
+                        },
+                        {
+                            "address": "000001A762147259",
+                            "method": "UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipeline.InternalRender()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76200947B",
+                            "method": "UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A762009945",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05C2424",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B059ED54",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B01A3CFF",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6AFFB4B08",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,71 @@
+{
+  "timeUtc": "2026-10-07T08:33:54.2873229Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "paths": [
+    {
+      "relativePath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007/REPORT.md",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\REPORT.md",
+      "sha256": "E7A175DFEA965B7BDB594F696E2734B81572715939920413CE070939DBD079AB",
+      "bytes": 6951,
+      "gitStatus": "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007/REPORT.md"
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "4D158C5B5F9FA00FC21DE4B8BE2F6442781362798D371C66D94E7505660362A6",
+      "bytes": 80534,
+      "gitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "9D55764B99D3BC58D32236575F1487F58D924298976CC77A8677D1483B038D0F",
+      "bytes": 1508509,
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "relativePath": "docs/ai/STATE.md",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "791299695920B622C8146254E235C4E8E602261F4EDFBBD4D689B468ADDC6D55",
+      "bytes": 1575737,
+      "gitStatus": " M docs/ai/STATE.md"
+    },
+    {
+      "relativePath": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "7C5EB1FB449008B0A31074A482177655C45C4C7120F36F5777E54FED99546B26",
+      "bytes": 59204,
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "guards": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Packages\\manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\NTSD_Server\\packages\\com.ntsd.battle-kernel\\Runtime\\Core\\RuntimeRestStore.cs",
+      "sha256": "5F5CD4341DC42CCE4FFB704FA212D4623B363B8179A21425AAC30025FADEA745"
+    }
+  ]
+}

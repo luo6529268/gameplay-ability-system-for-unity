@@ -1,0 +1,402 @@
+{
+  "utc": "2026-10-07T21:34:04.0556976Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "guards": [
+    {
+      "path": "AGENTS.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "same": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "same": true
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "same": true
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-right-x550.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-left-x350.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/right-x550-root-v1-trace.jsonl",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/left-x350-root-v2-trace.jsonl",
+      "same": true
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ItrRestTracker.cs",
+      "same": true
+    },
+    {
+      "path": "../NTSD_Server/packages/com.ntsd.battle-kernel/Runtime/Core/RuntimeRestStore.cs",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/REPORT.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs.meta",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/prior-history.raw",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-state.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeDataCatalog.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KnockoutFeedRowSnapshotEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs.meta",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.logic-gc.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.final-checksum.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.logic-gc.json",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.final-checksum.json",
+      "same": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008.md",
+      "same": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "same": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "BEAC09ED3AE7C829F5644A976E16520960B8236F7AF779DCB1A8B31FE1D3A391",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs",
+      "sha256": "8CE190A95FFA3A7A7F0BD9F04C41A3BC39201177B725CC88FD2757A54ACA6404",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs.meta",
+      "sha256": "BEEC83A26525EE5BA40162A638C8F80FC2A410766AA3325DAC0E9A3B5CDE6D91",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "sha256": "D338303119F02F8912735C84F6029AE2A989170BA04AA1C9E68024411D420593",
+      "same": true
+    }
+  ],
+  "actualSharedRequestAbsent": true,
+  "sceneMenuSame": true,
+  "sceneBattleSame": true,
+  "editorPid": 19040
+}

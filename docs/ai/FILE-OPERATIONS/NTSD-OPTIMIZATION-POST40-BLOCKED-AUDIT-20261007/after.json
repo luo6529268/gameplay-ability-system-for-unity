@@ -1,0 +1,69 @@
+{
+  "timeUtc": "2026-10-07T08:46:06.2787100Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "guards": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "unchanged": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "unchanged": true
+    }
+  ],
+  "paths": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "840354C837F34F4D1714AF85EE86965C23414FF4D58ECB315416399299837D2D",
+      "backupSha256": "CDD17A8616B073E7DD452B0C40B4CD4795835CECB9E601F43BDBD8F127A1298A",
+      "backupVerified": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "A208D0B2A6B1958D74169BD6D06449442371E19140877F9C6871FF6E896ABDB0",
+      "backupSha256": "ACF2AD59EC9960E548D60E43B346CDAF232523D15C36FB29BB419A9BC2443F85",
+      "backupVerified": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "AA1A56773849137FD5E8514D236C6651788D94943CE40BB1CA057405A0C2F9D7",
+      "backupSha256": "EA45AB4EC628C6038644363AED568B2C0213D533905EF9817A68C9FE88FA2307",
+      "backupVerified": true
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "78BB1E796A8916ACB483A00E0EE89ACB2DE5427AEA816EDF6272B442AB76B877",
+      "backupSha256": "184B46B7238363B082DACFEF2C70FE58C0F637D67370B8B0F5F8815A127C6FC8",
+      "backupVerified": true
+    }
+  ],
+  "diffCheckExitCode": 0,
+  "diffCheckMessages": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "goalReceipt": {
+    "threadId": "01a0721a-c27c-7823-b5c8-06b5a29ed3cf",
+    "status": "blocked",
+    "tokensUsed": 6098646
+  }
+}

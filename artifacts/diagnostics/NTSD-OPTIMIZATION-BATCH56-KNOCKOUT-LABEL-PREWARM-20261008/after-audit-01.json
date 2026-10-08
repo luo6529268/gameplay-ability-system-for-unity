@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-07T20:56:33.0236294Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "expectedHead": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "guardCount": 75,
+  "guardDifferences": [],
+  "backupCount": 6,
+  "backupDifferences": [],
+  "sourceHashes": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "sha256": "D338303119F02F8912735C84F6029AE2A989170BA04AA1C9E68024411D420593"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs",
+      "sha256": "69B0EC20F814E8E322CDF4FA4C02D9DD658212C8ADD28322FE47BF3E42F2279E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs.meta",
+      "sha256": "6F62ECD41AFA101BD77033108D3B7D9DD2252DDB8BA94D428142ED75351DADC1"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    }
+  ]
+}

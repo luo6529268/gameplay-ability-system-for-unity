@@ -1,0 +1,12 @@
+{
+  "ledgerExitCode": 0,
+  "warningCount": 4297,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1337",
+    "  Governed code files in diff: 6"
+  ],
+  "errors": [],
+  "diffCheckExitCode": 0,
+  "diffCheckNonWarnings": []
+}

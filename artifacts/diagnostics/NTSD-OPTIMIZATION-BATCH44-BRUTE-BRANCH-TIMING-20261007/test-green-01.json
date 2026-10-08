@@ -1,0 +1,159 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1d5e47db767e48678e416a08abdf57c1",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791374162973,
+      "finished_unix_ms": 1791374172704,
+      "last_update_unix_ms": 1791374172704,
+      "progress": {
+        "completed": 13,
+        "total": 9505,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791374171930,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_RejectsOutsideFixedOffOnMatrix",
+        "last_finished_unix_ms": 1791374172140,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 13,
+          "passed": 13,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.5202853,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "BruteBranchTiming_DefaultIsOff",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_DefaultIsOff",
+            "state": "Passed",
+            "durationSeconds": 0.6612184,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PhaseIdsAreAppended(44,\"CandidateCollect/BruteCoarse\")",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended(44,\"CandidateCollect/BruteCoarse\")",
+            "state": "Passed",
+            "durationSeconds": 0.2147538,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PhaseIdsAreAppended(45,\"CandidateCollect/BruteRejectedBinding\")",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended(45,\"CandidateCollect/BruteRejectedBinding\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001221,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PhaseIdsAreAppended(46,\"CandidateCollect/BrutePairAllowed\")",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended(46,\"CandidateCollect/BrutePairAllowed\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000861,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PhaseIdsAreAppended(47,\"CandidateCollect/BruteExactWork\")",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended(47,\"CandidateCollect/BruteExactWork\")",
+            "state": "Passed",
+            "durationSeconds": 0.0000639,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PreservesCandidatesAndRng(False)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PreservesCandidatesAndRng(False)",
+            "state": "Passed",
+            "durationSeconds": 0.2626695,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTiming_PreservesCandidatesAndRng(True)",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PreservesCandidatesAndRng(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0041924,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CandidateCollectDetailTiming_PhaseNamesAndCountAreStable",
+            "fullName": "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_PhaseNamesAndCountAreStable",
+            "state": "Passed",
+            "durationSeconds": 0.0002945,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0015348,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0001822,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0001393,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0001286,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteBranchTimingRequest_RejectsOutsideFixedOffOnMatrix",
+            "fullName": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteBranchTimingRequest_RejectsOutsideFixedOffOnMatrix",
+            "state": "Passed",
+            "durationSeconds": 0.2096451,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

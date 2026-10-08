@@ -1,0 +1,23 @@
+{
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "guards": 8,
+  "guardMismatch": [],
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+    }
+  ]
+}

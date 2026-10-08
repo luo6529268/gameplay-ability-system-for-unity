@@ -1,32 +1,34 @@
-> 2026-10-07 第35批原1800camera验收已完成：PROVENANCE_PASS / OBSERVER_ZERO_EVENTS / FULL_CAMERA_ZERO_GC_FAIL。完整1800/1800，双recorder前后校准PASS；observer3600scope/六子块0event，相机仍2（ordinal1/5、logic9/11、同slot1），调用点UNKNOWN，不豁免首帧。两slot/Foot与Health至少2、11592 CPU DrawMesh录制=执行/growth0/CPUlease0、11阶段三残留0/双Scene同/原Menu8roots clean idle恢复；本轮无C#修改、复跑测试或1000AI窗口，非FPS收益。H11/H07未达、5of6有限交付/父关闭0/Goal active；已执行16批＋第38批仅PLANNED（累计17，不归零），NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038尚无实现或收益，先不堆新微候选；生产默认和专项门未解冻。 [35报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md) / [38未实施Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md)。
+> 2026-10-07 第47批 FINITE_DIAGNOSTIC_COMPLETED / CALLSITE_NOT_REPRODUCED：NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047 / RUNTIME_PENDING，50/50＋末33/33（51去重），唯一完整1800camera0event/四校准PASS、two slots/Foot2/Health2、draw11560录制=执行、growth/CPUlease/十一阶段残留0、双Scene同/Menu8roots clean。原history/new raw保留、settings恢复；R1只读容量缓存保护不重采。旧43迟发12event FAIL不消去，无新FPS/调用点。下一H07实际45—48ms collector有据候选，不重复此窗/旧资格；阶段4/6/26已执行/Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047.md)。下方为历史。
 
-> 2026-10-07 第35批 RUNTIME_PENDING / FOCUSED_TEST_PASS：新8有效RED为7FAIL/1控制PASS；原Editor job f48e74c052b34740b4dc62bb957b8894 实际25/25 PASS（1.7635508s），三热方法literal数0/0/0、原文本/错误合同与正反校准保持。仅Editor工具整改，尚无新相机/0GC/FPS结果；按用户0.7FPS反馈，先转H07已测PairExactLoop热点，不追加本批长窗。H11严格FAIL/H07性能未达、5of6有限交付/父关闭0/新批14/Goal active，默认及专项门不变。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+> 2026-10-07 第47批 PLANNED / LATE_CALLSITE_DIAGNOSTIC_ONLY：NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047；首8工具不足解释ordinal937，三个Editor脚本拟增事件触发/固定8边界ring、最多1800/300s，旧history先保存/不clear，完整scope/失败不缩。9当前副本/42guards/HEAD先核；尚无新代码/测试/调用点，H07/H11未达、阶段4/6/25已执行、Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047.md)。下方为历史。
 
-> 历史事前快照：2026-10-07 第35批PLANNED：仅两个Editor诊断脚本，11/2字面量绑定与33事件对应是待测假设；immutable错误文本绑定前移、热检查/首帧/完整scope不缩小，8 test-first/一次原1800camera冻结。9当前副本/319保护/HEAD已核；尚无新代码或因果/0GC结果。H11严格FAIL/H07性能未达保持，5of6有限交付/父关闭0/新批14/Goal active，默认与专项门不解冻。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+> 2026-10-07 第43批 / PARTIAL_REENTRY_WINDOW_ZERO_GC_PASS：NTSD-OPT-H11-FOOT-TEXTURE-READINESS-043 / RUNTIME_PENDING。冷设置28行引用持有，8有效RED→39/39 GREEN；01完整1800仍FAIL12（ordinal937/tick678，调用点UNKNOWN），02必要重进1800可靠camera/observer0event，首帧不豁免。11536/11570 CPU draws各录制=执行，growth/CPUlease/十一阶段残留0；原Menu单Scene8roots clean/idle恢复，21guards/9backup/5pre-camera指纹/HEAD同。02 Play无MCP观察；01观察干扰仅假设，不消去FAIL，不盲采第三窗口、不认证H11/FPS。H07仍未达，下一转既有普通Brute残余成本判断；H11未知必要归因保留。阶段4/6、限定产物5/6、父关闭0，21已执行＋38仅PLANNED累计22；Goal active，次数只复盘，专项门保持。[留痕](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-FOOT-TEXTURE-READINESS-043.md)。
 
-> 历史快照：2026-10-07 第33批终态 PARTIAL / PROVENANCE_PASS / ZERO_GC_FAIL：10/10＋一次1800实际camera完成；observer13事件归入首帧snapshot/gates11、completion2，其他四块0、invalid/unattributed均0；camera另2事件（ordinal1/5）实际调用点仍未知。两recorder前后校准有效，严格完整0GC仍FAIL，不跳帧或当FPS收益。11560 CPU draw录制=执行/growth0/CPUlease0，两slot/Foot与Health各2；11阶段三残留0/双Scene SHA同/原Menu8roots clean恢复。247保护/8备份/HEAD/source保持、validator1329/11 PASS（4248历史warning）。有限交付5of6/父关闭0/新批12/Goal active；不切默认、不重复此诊断或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+> 下方42、43 PLANNED及其结果待记录均为历史快照；当前以本条和43报告为准。
 
-> 历史事前快照：2026-10-07 第33批FOCUSED_TEST_PASS / CAMERA_READY：原10/10、nested空/已知1MiB正反通过，247保护/8备份/HEAD、validator1329/11 PASS（4248历史warning）。仅Editor六scope诊断，原完整camera/observer root不缩小；下一一次原1800camera，真实归属/0GC未有结果。阶段5of6/父关闭0/新批12/Goal active，不切默认或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+> 2026-10-07 第42批 / SCOPED_ALLOCATION_CALLSITE_DIAGNOSTIC_VERIFIED：NTSD-OPT-H11-CAMERA-GC-CALLSTACK-042 / VERIFIED（仅诊断）。R1实际33/33 PASS；camera-02完整8point pairs与原camera事件逐帧全匹配，ordinal8 40B栈定位Foot ResolveSprite→ResolveRuntimeFootMarkerTexture→RenderPass。四校准PASS、observer/invalid/unattributed0、settings恢复、11-stage残留0、原Menu clean/idle/nonPlay。camera-01长marker仪器错误拒绝，原件保留；不是生产修复/完整0GC/FPS通过。H07/H11未达、阶段4/6/限定产物5/6/父关闭0；20已执行＋38仅PLANNED累计21。Goal实返active，次数只复盘不停止；下一窄域验证Foot六帧纹理预获取与强引用，不解冻专项门，不重开已过assessment。[留痕](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-CAMERA-GC-CALLSTACK-042.md)。
 
-> 2026-10-07 第33批PLANNED：NTSD-OPT-H11-OBSERVER-STAGES-033；只现有Editor observer六固定子范围/第二预先校准recorder，原完整root和严格FAIL不变、不跳早期帧。准确8当前备份/247非写域/HEAD核同；10 test-first和一次原1800camera冻结，尚无代码/新归属/0GC收益。阶段5of6/父关闭0/新批12/Goal active，不切默认、重跑32或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
-
-> 2026-10-07 第28批帧级归属通过、完整0GC仍FAIL：1800frames sum一致，camera2在第3/8帧、EndObserver13全在首帧；调用点未知，不跳帧/认定冷启动例外。Foot/Health各2/两slot/11484 CPU draw录制=执行/0growth/lease0，11阶段零残留/Scene同/Menu恢复。27校准/两桥复用，不继续同构观察或当FPS收益；H11保持EVIDENCE_PENDING。[第28批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/REPORT.md)。
-
-> 历史第27批可靠采样实证：校准4/4（已知1MiB正对照响应/空0/饱和拒证）、两完整CPU桥各1800sample有效0event；原1800camera前后校准通过，但camera2/observer13event导致严格FAIL，未跳帧或放宽。Foot/Health各2/两slot/1800Build/CPUlease0/关闭保护通过，完整H11仍EVIDENCE_PENDING，分配调用点未知，不能直接归因生产或0.7FPS。旧第23API0B不恢复认证。 [第27批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/REPORT.md)。
-
-> 2026-10-07 第25批必要证据更正：当前Editor已知存活1MiB数组仍由GC.GetAllocatedBytesForCurrentThread读0，positive control未响应。第23批未有校准，原0B读数/断言事实保留，但不再作为完整热路径0GC验收；H11更正为EVIDENCE_PENDING，容量/显示/成本/lease/关闭保持。M03显示/成本/GameConfig Foot限定通过不撤回，不称0GC。原父项均OPEN，不重跑历史或改production。详第25批REPORT。
-
-> 2026-10-07 第23批限定收口：NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023 / VERIFIED（本Task）。原Editor24/24；两活动aux完整CPU桥各1800sample当前线程0B/growth0/CPUlease0；原Battle重进1800camera每帧Foot2/Health2，两slot、DrawMesh11504录制=执行、1800Build，11阶段三残留0/Scene同/Menu恢复。第13批A-B五指纹同、第15批消费域及动态/像素等限定证据复用；不称global/native/GPU/1000AI/Android。新子批2/8完成，六项首阶段H11/M03限定交付2/6，34父项关闭0；下一H06/H07与M13/M14，不加本条目可选验收，专项门保持。
+> 下述第42批PLANNED及原失败过程为历史快照；当前以此条、Record与REPORT最终证据为准。
 
 # H-11 表现缓存容量预热与完整热路径 0GC 方案
 
 > 优先级：高
-> 状态：`OPEN / RUNTIME_PENDING / CACHE_PREWARM_AND_CAPACITY_GUARD_FOCUSED_PASS`
-> 最后更新：2026-10-06
+> 状态：`OPEN / EVIDENCE_PENDING / CAPACITY_DISPLAY_LIFECYCLE_PASS / FULL_CAMERA_ZERO_GC_FAIL`
+> 最后更新：2026-10-07
 > 主登记表：[优化风险登记表](../android-mobile-readiness-priority-risk-register.md)
 > 共同合同与启动门：[本轮复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)
 > 用户已批准按文档开始；子批01/02/03/04/05见[统一进度](../battle-optimization-progress-tracker.md)。
 > 下面父项完整验收条件不等于子批已通过；实际执行证据单列。
+
+## 当前六项首阶段完成边界
+
+[执行合同第0—8节](../../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)要求完整物化—上传—录制—提交热路径可靠0GC、已改容量/显示正确性及关闭/重进通过。第35批完整1800camera双校准有效，observer3600scope/六子块0event，但camera仍2event（ordinal1/5、logic9/11），调用点UNKNOWN；原严格FAIL保持，不豁免首帧或缩scope。
+
+未知调用点首先是范围内技术待办：复用35/39证据判断是否足够，不能凭静态调用猜测归因；不足时事前声明回答该新问题的最小必要定位、准确路径、有效scope和Editor安全窗口。不得因旧诊断次数已用或还没有函数名就自动改成“待新增授权、停止整个Goal”。不得再做同构观察报告或重复无效计数来填进度。
+
+定位生产分配则按声明的最小范围修复，并重验受影响门；定位诊断干扰则修工具恢复可信证据，不改变生产0GC标准。候选无效停止推广，继续有据同范围方向；真实专项/资源/权限变化才单独请求。旧两slot/容量单位/fail-closed、steady/transition、CPU/GPU consumer生命周期和完整scope要求不变。
+
+本轮仅文档修改，未取得新0GC结果、未恢复平台Goal或启动定位/测量；该阶段仍未完成，父项OPEN。未批准native/GPU/设备域不自动扩大当前工作。
 
 ## 当前事实与缺口
 
@@ -74,7 +76,8 @@ EnsureMesh延后到Build/GetChunkMesh。现已在原EnsureChunk后访问Mesh，�
 
 ## 实施前门与验收
 
-- 用户批准最小Task/Change和准确调用路径；确认slot/command/segment上限及启动预热成本，
+- 已批准首阶段内每包事前登记最小Task/Change和准确调用路径；实质新增范围另请批准。
+  确认slot/command/segment上限及启动预热成本，
   不能以4096 QuadsPerChunk充当submission容量。容量数值可在获批基线阶段定，但seal前必须冻结。
 - 指定workload在seal后完整物化—上传—录制—提交热路径0B managed allocation、
   0隐式/显式增长；测量范围与诊断自身分配分离，不豁免残余热路径分配。
@@ -147,3 +150,27 @@ Configure no-op局部0B，冷未命中与满缓存仍解析全部字段，不扩
 17/4097 × Ordered/Strict恢复后首次Build+8轮稀疏/空/密集共25调用含resolve/write/mesh Upload局部0B；
 通用API先暖但恢复后首次Build未豁免，不是RenderPass/完整central0GC、原Battle进退重进或GPU证据。
 其他物化缓存/突发native丢失/完整链/总内存native/GPU预算/1000AI/Android仍开放。
+
+## 历史执行快照（HISTORICAL / SUPERSEDED）
+
+下列原文保留当时失败、数量和证据；“3/3到限不继续”“Goal active”等旧操作/状态以当前执行合同及总表最新记录替代，不作为当前停工或达成依据。
+
+> 2026-10-07 第35批原1800camera验收已完成：PROVENANCE_PASS / OBSERVER_ZERO_EVENTS / FULL_CAMERA_ZERO_GC_FAIL。完整1800/1800，双recorder前后校准PASS；observer3600scope/六子块0event，相机仍2（ordinal1/5、logic9/11、同slot1），调用点UNKNOWN，不豁免首帧。两slot/Foot与Health至少2、11592 CPU DrawMesh录制=执行/growth0/CPUlease0、11阶段三残留0/双Scene同/原Menu8roots clean idle恢复；本轮无C#修改、复跑测试或1000AI窗口，非FPS收益。H11/H07未达、5of6有限交付/父关闭0/Goal active；已执行16批＋第38批仅PLANNED（累计17，不归零），NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038尚无实现或收益，先不堆新微候选；生产默认和专项门未解冻。 [35报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md) / [38未实施Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md)。
+
+> 2026-10-07 第35批 RUNTIME_PENDING / FOCUSED_TEST_PASS：新8有效RED为7FAIL/1控制PASS；原Editor job f48e74c052b34740b4dc62bb957b8894 实际25/25 PASS（1.7635508s），三热方法literal数0/0/0、原文本/错误合同与正反校准保持。仅Editor工具整改，尚无新相机/0GC/FPS结果；按用户0.7FPS反馈，先转H07已测PairExactLoop热点，不追加本批长窗。H11严格FAIL/H07性能未达、5of6有限交付/父关闭0/新批14/Goal active，默认及专项门不变。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+
+> 历史事前快照：2026-10-07 第35批PLANNED：仅两个Editor诊断脚本，11/2字面量绑定与33事件对应是待测假设；immutable错误文本绑定前移、热检查/首帧/完整scope不缩小，8 test-first/一次原1800camera冻结。9当前副本/319保护/HEAD已核；尚无新代码或因果/0GC结果。H11严格FAIL/H07性能未达保持，5of6有限交付/父关闭0/新批14/Goal active，默认与专项门不解冻。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+
+> 历史快照：2026-10-07 第33批终态 PARTIAL / PROVENANCE_PASS / ZERO_GC_FAIL：10/10＋一次1800实际camera完成；observer13事件归入首帧snapshot/gates11、completion2，其他四块0、invalid/unattributed均0；camera另2事件（ordinal1/5）实际调用点仍未知。两recorder前后校准有效，严格完整0GC仍FAIL，不跳帧或当FPS收益。11560 CPU draw录制=执行/growth0/CPUlease0，两slot/Foot与Health各2；11阶段三残留0/双Scene SHA同/原Menu8roots clean恢复。247保护/8备份/HEAD/source保持、validator1329/11 PASS（4248历史warning）。有限交付5of6/父关闭0/新批12/Goal active；不切默认、不重复此诊断或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 历史事前快照：2026-10-07 第33批FOCUSED_TEST_PASS / CAMERA_READY：原10/10、nested空/已知1MiB正反通过，247保护/8备份/HEAD、validator1329/11 PASS（4248历史warning）。仅Editor六scope诊断，原完整camera/observer root不缩小；下一一次原1800camera，真实归属/0GC未有结果。阶段5of6/父关闭0/新批12/Goal active，不切默认或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 2026-10-07 第33批PLANNED：NTSD-OPT-H11-OBSERVER-STAGES-033；只现有Editor observer六固定子范围/第二预先校准recorder，原完整root和严格FAIL不变、不跳早期帧。准确8当前备份/247非写域/HEAD核同；10 test-first和一次原1800camera冻结，尚无代码/新归属/0GC收益。阶段5of6/父关闭0/新批12/Goal active，不切默认、重跑32或解冻专项门。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 2026-10-07 第28批帧级归属通过、完整0GC仍FAIL：1800frames sum一致，camera2在第3/8帧、EndObserver13全在首帧；调用点未知，不跳帧/认定冷启动例外。Foot/Health各2/两slot/11484 CPU draw录制=执行/0growth/lease0，11阶段零残留/Scene同/Menu恢复。27校准/两桥复用，不继续同构观察或当FPS收益；H11保持EVIDENCE_PENDING。[第28批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH28-ALLOCATION-PROVENANCE-20261007/REPORT.md)。
+
+> 历史第27批可靠采样实证：校准4/4（已知1MiB正对照响应/空0/饱和拒证）、两完整CPU桥各1800sample有效0event；原1800camera前后校准通过，但camera2/observer13event导致严格FAIL，未跳帧或放宽。Foot/Health各2/两slot/1800Build/CPUlease0/关闭保护通过，完整H11仍EVIDENCE_PENDING，分配调用点未知，不能直接归因生产或0.7FPS。旧第23API0B不恢复认证。 [第27批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH27-CALIBRATED-GC-20261007/REPORT.md)。
+
+> 2026-10-07 第25批必要证据更正：当前Editor已知存活1MiB数组仍由GC.GetAllocatedBytesForCurrentThread读0，positive control未响应。第23批未有校准，原0B读数/断言事实保留，但不再作为完整热路径0GC验收；H11更正为EVIDENCE_PENDING，容量/显示/成本/lease/关闭保持。M03显示/成本/GameConfig Foot限定通过不撤回，不称0GC。原父项均OPEN，不重跑历史或改production。详第25批REPORT。
+
+> 2026-10-07 第23批限定收口：NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023 / VERIFIED（本Task）。原Editor24/24；两活动aux完整CPU桥各1800sample当前线程0B/growth0/CPUlease0；原Battle重进1800camera每帧Foot2/Health2，两slot、DrawMesh11504录制=执行、1800Build，11阶段三残留0/Scene同/Menu恢复。第13批A-B五指纹同、第15批消费域及动态/像素等限定证据复用；不称global/native/GPU/1000AI/Android。新子批2/8完成，六项首阶段H11/M03限定交付2/6，34父项关闭0；下一H06/H07与M13/M14，不加本条目可选验收，专项门保持。

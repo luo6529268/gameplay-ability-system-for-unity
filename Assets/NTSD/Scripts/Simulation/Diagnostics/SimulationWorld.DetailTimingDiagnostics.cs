@@ -58,7 +58,11 @@ namespace NTSD.Simulation
         FrameAdvanceEntityUpdate = 41,
         FrameAdvanceRuntimeSnapshot = 42,
         FrameAdvanceState9998Cleanup = 43,
-        Count = 44,
+        CandidateCollectBruteCoarse = 44,
+        CandidateCollectBruteRejectedBinding = 45,
+        CandidateCollectBrutePairAllowed = 46,
+        CandidateCollectBruteExactWork = 47,
+        Count = 48,
     }
 
     /// <summary>
@@ -521,6 +525,14 @@ namespace NTSD.Simulation
                     return "FrameAdvance/RefreshRuntimeSnapshot";
                 case BattleTickDetailPhase.FrameAdvanceState9998Cleanup:
                     return "FrameAdvance/State9998Cleanup";
+                case BattleTickDetailPhase.CandidateCollectBruteCoarse:
+                    return "CandidateCollect/BruteCoarse";
+                case BattleTickDetailPhase.CandidateCollectBruteRejectedBinding:
+                    return "CandidateCollect/BruteRejectedBinding";
+                case BattleTickDetailPhase.CandidateCollectBrutePairAllowed:
+                    return "CandidateCollect/BrutePairAllowed";
+                case BattleTickDetailPhase.CandidateCollectBruteExactWork:
+                    return "CandidateCollect/BruteExactWork";
                 default:
                     return string.Empty;
             }

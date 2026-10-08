@@ -1,0 +1,58 @@
+{
+  "validation": {
+    "utc": "2026-10-08T00:59:15.5998120Z",
+    "validatorExit": 0,
+    "validatorSummary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1359"
+    ],
+    "validatorWarningCount": 4252,
+    "validatorErrors": [],
+    "diffExit": 0,
+    "diffCrLfWarnings": 26,
+    "diffOther": []
+  },
+  "protection": {
+    "utc": "2026-10-08T01:00:57.3284248Z",
+    "guardCount": 109,
+    "badGuards": [],
+    "backupCount": 9,
+    "badBackups": [],
+    "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "expectedHead": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "sourceSha": "03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71",
+    "sourceBytes": 190378,
+    "exactOwnDiff": "520 added / 5 removed",
+    "m13RowCount": 3,
+    "m13Unchanged": true,
+    "files": [
+      {
+        "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-BINDING-WINDOWS-063.md",
+        "sha": "9D48DF93CF181F004B77BE94C3A963D4343E2E398B1E205C291E0D789134696E",
+        "bytes": 10272
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008.md",
+        "sha": "E4BF23658C5A97789E567B39D31416BAC02F6D47C52C2FD7A15542D1DA093A5B",
+        "bytes": 4753
+      },
+      {
+        "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/REPORT.md",
+        "sha": "9BB51545F017F01F1800990CDE69876D2E31CF52E35762A9D3268DE5A6D5F3EE",
+        "bytes": 6616
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "sha": "A5E8C0BE6AF17FECE24DAEAFE3135467CF6190F56A4DF744FEC2CDAEA028626C",
+        "bytes": 140875
+      },
+      {
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+        "sha": "D93C4371D0AAB7EA5EEDC8DF665F27F41D65C8C6D84CA1047498001E07BD6761",
+        "bytes": 6148
+      }
+    ],
+    "nextTask": "64 READY only; no C# edits, import, test or measurement",
+    "scope": "63 diagnostic integration VERIFIED, gain signal only, H07 performance fail, H11 scope remains open, Goal active; no goal state mutation"
+  }
+}

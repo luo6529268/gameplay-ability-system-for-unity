@@ -1,0 +1,687 @@
+{
+  "utc": "2026-10-08T00:49:33.4639380Z",
+  "suite": {
+    "phase": "DONE",
+    "status": "MEASUREMENTS_COMPLETED",
+    "error": "",
+    "completedRuns": 4,
+    "runIndex": 4,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "battleSceneUnchanged": true,
+    "originalSceneRestored": true,
+    "bruteEnvelopeBindingCandidate": true
+  },
+  "rows": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\00-dispersed1000-binding-off\\report.json",
+      "sha": "34E9DBD4F100AEEF2AA7E9AE78AA915D7D3A4401A4B8FC5E4C9C2DCECEBFCA84",
+      "action": "dispersed1000",
+      "status": "StoppedCleanly",
+      "failure": "",
+      "workloadValid": true,
+      "warm": 120,
+      "sample": 180,
+      "ticks": 300,
+      "minimumAi": 1000,
+      "minimumRoster": 1000,
+      "logic": {
+        "available": true,
+        "sampleCount": 180,
+        "average": 73.653375,
+        "p95": 115.03947999999998
+      },
+      "frame": {
+        "available": true,
+        "sampleCount": 150,
+        "average": 234.54492499430975,
+        "p95": 462.325084209441
+      },
+      "dropped": 690,
+      "collector": [
+        {
+          "average": 42.44757111111112,
+          "p95": 65.60008999999994
+        }
+      ],
+      "pairLoop": [
+        {
+          "average": 41.87916166666669,
+          "p95": 64.96019499999994
+        }
+      ],
+      "bindingEnabled": false,
+      "bindingConfigured": true,
+      "bindingUnchanged": true,
+      "bindingActualApplied": false,
+      "bindingRestored": true,
+      "previousBinding": false,
+      "previousEnvelope": false,
+      "bindingSampledMaxProbes": 0,
+      "bindingSampledMaxReuses": 0,
+      "envelopeEnabled": true,
+      "envelopeConfigured": true,
+      "envelopeUnchanged": true,
+      "envelopeRestored": true,
+      "envelopeSampledMaxDirections": 159840,
+      "envelopeSampledMaxRejects": 138672,
+      "productionDefaultsObserved": true,
+      "productionDefaultsUnchanged": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "zeroGc": true,
+      "gcBefore": true,
+      "gcAfter": true,
+      "gcUnit": "TimeNanoseconds",
+      "gcMarker": "GC.Alloc",
+      "gcCoverage": true,
+      "gcAcceptedTicks": 300,
+      "gcSteadyScopes": 180,
+      "gcInvalidScopes": 0,
+      "gcEvents": 0,
+      "gcProvenBytes": 0,
+      "capacityPassed": true,
+      "capacityCritical": 0,
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "cleanupExceptionCount": 0,
+        "worldObjectsAfter": 0,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsAfter": 0,
+        "activeGameObjectsAfter": 0,
+        "objectPoolActiveAfter": 0,
+        "referencePoolActiveAfter": 0
+      },
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\00-dispersed1000-binding-off\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "reportedDrawFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\01-dispersed1000-binding-on\\report.json",
+      "sha": "A54780498FBDD06E7A5AC84EEC34A74119379A4174A48DE439F126396CF5D092",
+      "action": "dispersed1000",
+      "status": "StoppedCleanly",
+      "failure": "",
+      "workloadValid": true,
+      "warm": 120,
+      "sample": 180,
+      "ticks": 300,
+      "minimumAi": 1000,
+      "minimumRoster": 1000,
+      "logic": {
+        "available": true,
+        "sampleCount": 180,
+        "average": 70.76660277777782,
+        "p95": 88.318355
+      },
+      "frame": {
+        "available": true,
+        "sampleCount": 150,
+        "average": 218.99637738863626,
+        "p95": 430.31641691923124
+      },
+      "dropped": 619,
+      "collector": [
+        {
+          "average": 40.37329666666666,
+          "p95": 53.92713
+        }
+      ],
+      "pairLoop": [
+        {
+          "average": 39.79978888888887,
+          "p95": 53.400755
+        }
+      ],
+      "bindingEnabled": true,
+      "bindingConfigured": true,
+      "bindingUnchanged": true,
+      "bindingActualApplied": true,
+      "bindingRestored": true,
+      "previousBinding": false,
+      "previousEnvelope": false,
+      "bindingSampledMaxProbes": 1000,
+      "bindingSampledMaxReuses": 110222,
+      "envelopeEnabled": true,
+      "envelopeConfigured": true,
+      "envelopeUnchanged": true,
+      "envelopeRestored": true,
+      "envelopeSampledMaxDirections": 164835,
+      "envelopeSampledMaxRejects": 143646,
+      "productionDefaultsObserved": true,
+      "productionDefaultsUnchanged": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "zeroGc": true,
+      "gcBefore": true,
+      "gcAfter": true,
+      "gcUnit": "TimeNanoseconds",
+      "gcMarker": "GC.Alloc",
+      "gcCoverage": true,
+      "gcAcceptedTicks": 300,
+      "gcSteadyScopes": 180,
+      "gcInvalidScopes": 0,
+      "gcEvents": 0,
+      "gcProvenBytes": 0,
+      "capacityPassed": true,
+      "capacityCritical": 0,
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "cleanupExceptionCount": 0,
+        "worldObjectsAfter": 0,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsAfter": 0,
+        "activeGameObjectsAfter": 0,
+        "objectPoolActiveAfter": 0,
+        "referencePoolActiveAfter": 0
+      },
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\01-dispersed1000-binding-on\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "reportedDrawFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\02-combat1000-binding-off\\report.json",
+      "sha": "8EFCB4E58062154BA16D4F2D50F6D2202E6D6AF3CC1FB98497EC6EB7C7F8A995",
+      "action": "combat1000",
+      "status": "StoppedCleanly",
+      "failure": "",
+      "workloadValid": true,
+      "warm": 120,
+      "sample": 180,
+      "ticks": 300,
+      "minimumAi": 1000,
+      "minimumRoster": 1000,
+      "logic": {
+        "available": true,
+        "sampleCount": 180,
+        "average": 74.76605944444447,
+        "p95": 93.62807499999998
+      },
+      "frame": {
+        "available": true,
+        "sampleCount": 150,
+        "average": 221.45252386728922,
+        "p95": 395.16481161117554
+      },
+      "dropped": 632,
+      "collector": [
+        {
+          "average": 44.168224444444455,
+          "p95": 62.963975
+        }
+      ],
+      "pairLoop": [
+        {
+          "average": 43.56637222222224,
+          "p95": 62.33582499999999
+        }
+      ],
+      "bindingEnabled": false,
+      "bindingConfigured": true,
+      "bindingUnchanged": true,
+      "bindingActualApplied": false,
+      "bindingRestored": true,
+      "previousBinding": false,
+      "previousEnvelope": false,
+      "bindingSampledMaxProbes": 0,
+      "bindingSampledMaxReuses": 0,
+      "envelopeEnabled": true,
+      "envelopeConfigured": true,
+      "envelopeUnchanged": true,
+      "envelopeRestored": true,
+      "envelopeSampledMaxDirections": 172827,
+      "envelopeSampledMaxRejects": 139368,
+      "productionDefaultsObserved": true,
+      "productionDefaultsUnchanged": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "zeroGc": true,
+      "gcBefore": true,
+      "gcAfter": true,
+      "gcUnit": "TimeNanoseconds",
+      "gcMarker": "GC.Alloc",
+      "gcCoverage": true,
+      "gcAcceptedTicks": 300,
+      "gcSteadyScopes": 180,
+      "gcInvalidScopes": 0,
+      "gcEvents": 0,
+      "gcProvenBytes": 0,
+      "capacityPassed": true,
+      "capacityCritical": 0,
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "cleanupExceptionCount": 0,
+        "worldObjectsAfter": 0,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsAfter": 0,
+        "activeGameObjectsAfter": 0,
+        "objectPoolActiveAfter": 0,
+        "referencePoolActiveAfter": 0
+      },
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\02-combat1000-binding-off\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "reportedDrawFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\03-combat1000-binding-on\\report.json",
+      "sha": "548235E4EF6981F73C72ED2907ED52E4966C2091E19BBBE33967C2DD31927918",
+      "action": "combat1000",
+      "status": "StoppedCleanly",
+      "failure": "",
+      "workloadValid": true,
+      "warm": 120,
+      "sample": 180,
+      "ticks": 300,
+      "minimumAi": 1000,
+      "minimumRoster": 1000,
+      "logic": {
+        "available": true,
+        "sampleCount": 180,
+        "average": 71.2023905555556,
+        "p95": 92.45533999999999
+      },
+      "frame": {
+        "available": true,
+        "sampleCount": 150,
+        "average": 212.98493752876917,
+        "p95": 368.46698373556126
+      },
+      "dropped": 598,
+      "collector": [
+        {
+          "average": 41.97486055555556,
+          "p95": 61.16444
+        }
+      ],
+      "pairLoop": [
+        {
+          "average": 41.444105555555566,
+          "p95": 60.669425000000004
+        }
+      ],
+      "bindingEnabled": true,
+      "bindingConfigured": true,
+      "bindingUnchanged": true,
+      "bindingActualApplied": true,
+      "bindingRestored": true,
+      "previousBinding": false,
+      "previousEnvelope": false,
+      "bindingSampledMaxProbes": 1000,
+      "bindingSampledMaxReuses": 105987,
+      "envelopeEnabled": true,
+      "envelopeConfigured": true,
+      "envelopeUnchanged": true,
+      "envelopeRestored": true,
+      "envelopeSampledMaxDirections": 170829,
+      "envelopeSampledMaxRejects": 137350,
+      "productionDefaultsObserved": true,
+      "productionDefaultsUnchanged": true,
+      "cacheApplied": 300,
+      "cacheFallback": 0,
+      "geometryApplied": 300,
+      "zeroGc": true,
+      "gcBefore": true,
+      "gcAfter": true,
+      "gcUnit": "TimeNanoseconds",
+      "gcMarker": "GC.Alloc",
+      "gcCoverage": true,
+      "gcAcceptedTicks": 300,
+      "gcSteadyScopes": 180,
+      "gcInvalidScopes": 0,
+      "gcEvents": 0,
+      "gcProvenBytes": 0,
+      "capacityPassed": true,
+      "capacityCritical": 0,
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "cleanupExceptionCount": 0,
+        "worldObjectsAfter": 0,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsAfter": 0,
+        "activeGameObjectsAfter": 0,
+        "objectPoolActiveAfter": 0,
+        "referencePoolActiveAfter": 0
+      },
+      "hashes": [
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+        }
+      ],
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-01\\03-combat1000-binding-on\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "reportedDrawFields": []
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "red": {
+    "cases": 20,
+    "passed": 19,
+    "failed": 1,
+    "expectedFailure": "AdmissionCompiledIlHasNoManagedConstructionOrDelegate",
+    "opcodes": [
+      "newobj",
+      "ldftn",
+      "newobj"
+    ]
+  },
+  "green01": {
+    "cases": 20,
+    "passed": 19,
+    "failed": 1,
+    "status": "STALE_COMPILED_ARTIFACT",
+    "resultTime": "2026-10-07 17:41:16 +08:00",
+    "newRuntimeDllTime": "2026-10-07 17:41:21 +08:00"
+  },
+  "green02": {
+    "cases": 20,
+    "passed": 20,
+    "failed": 0,
+    "directManagedConstructionOpcodes": 0
+  },
+  "affected": {
+    "cases": 6,
+    "passed": 6,
+    "failed": 0
+  },
+  "performanceMeasurement": "NOT_RUN",
+  "fullLogicZeroGc": "NOT_CERTIFIED",
+  "h11Camera": "FAIL_RETAINED_SITE_UNKNOWN",
+  "authoritySha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "goalStatus": "active"
+}

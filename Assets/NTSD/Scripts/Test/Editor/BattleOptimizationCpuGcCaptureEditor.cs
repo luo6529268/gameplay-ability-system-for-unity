@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using NTSD.Animation.Rendering.Editor;
+using Unity.Profiling;
 using UnityEditor;
 using UnityEditor.Profiling;
 using UnityEditorInternal;
@@ -17,6 +19,15 @@ namespace NTSD.Test.Editor
     {
         private const int CaptureFrameCount = 8;
         private const int ThreadScanLimit = 128;
+        private const int LateCameraLimit = 1800;
+        private const int LogicRecoveryFrameLimit = 300;
+        private const string LogicDriverMarkerName = "NTSD.ProductionEntityStress.Driver.StepOneTick";
+        private const string LateEventMarkerName = "NTSD.Optimization.H11.LateAllocationEvent";
+        private static readonly ProfilerMarker LateEventMarker = new ProfilerMarker(LateEventMarkerName);
+        private const string CameraBeginMarkerName = "NTSD.Optimization.H11.CameraBeginBoundary";
+        private const string CameraEndMarkerName = "NTSD.Optimization.H11.CameraEndBoundary";
+        private static readonly ProfilerMarker CameraBeginMarker = new ProfilerMarker(CameraBeginMarkerName);
+        private static readonly ProfilerMarker CameraEndMarker = new ProfilerMarker(CameraEndMarkerName);
         private static CaptureState state;
 
         [Serializable]
@@ -31,6 +42,7 @@ namespace NTSD.Test.Editor
             public bool profileEditor;
             public bool deepProfiling;
             public int memoryRecordMode;
+            public int maximumBufferedBytes;
         }
 
         [Serializable]
@@ -49,6 +61,7 @@ namespace NTSD.Test.Editor
             public int[] frameIndices = new int[CaptureFrameCount];
             public int warmupTicks;
             public int sampleTickAtStart;
+            public int minimumSampleTick = 1;
             public int activeAiAtStart;
             public int baseRosterAtStart;
             public double deadline;
@@ -57,6 +70,82 @@ namespace NTSD.Test.Editor
             public int validMainThreadFrames;
             public int exportedThreadFrames;
             public bool threadScanLimitReached;
+            public bool cameraEnvelopeMode;
+            public bool cameraEnvelopeOpen;
+            public bool cameraBoundariesValid = true;
+            public int completedCameras;
+            public CameraBoundary[] cameraBoundaries;
+            public int importedFirstFrame = -1;
+            public int importedLastFrame = -1;
+            public int exportedCameraEnvelopes;
+            public bool allocationCountsMatch;
+            public bool allocationCallstacksPresent;
+            public bool lateCameraMode;
+            public int triggerOrdinal;
+            public int historyCapacity;
+            public bool previousHistorySaved;
+            public bool previousHistoryWasEmpty;
+        }
+
+        [Serializable]
+        private struct CameraBoundary
+        {
+            public int ordinal;
+            public int beginUnityFrame;
+            public int endUnityFrame;
+            public int beginLogicTick;
+            public int endLogicTick;
+            public long allocationEvents;
+            public bool calibratedScopeValid;
+        }
+
+        [Serializable]
+        private sealed class CameraSamplesReport
+        {
+            public string evidence = "INSTRUMENTED_CALLSITE_DIAGNOSTIC_ONLY; profiler indices are not Unity frame numbers; same-frame point pairs follow camera boundary order";
+            public string beginMarker = CameraBeginMarkerName;
+            public string endMarker = CameraEndMarkerName;
+            public CameraEnvelopeSamples[] envelopes;
+        }
+
+        [Serializable]
+        private sealed class CameraEnvelopeSamples
+        {
+            public CameraBoundary boundary;
+            public int profilerFrameIndex;
+            public int beginMarkerSampleIndex;
+            public int endMarkerSampleIndex;
+            public double beginMarkerEndMs;
+            public double endMarkerStartMs;
+            public string threadName;
+            public Sample[] allocations;
+        }
+
+        [Serializable]
+        private sealed class LogicRecoveryReport
+        {
+            public string evidence = "RETAINED_PARTIAL_CAPTURE_DIAGNOSTIC_ONLY; driver marker includes observer Begin/End; no absolute tick mapping or zero-GC/FPS certificate";
+            public string marker = LogicDriverMarkerName;
+            public int previousFirstFrame;
+            public int previousLastFrame;
+            public int appendedFirstFrame;
+            public int appendedLastFrame;
+            public int scannedFrames;
+            public int validMainThreadFrames;
+            public bool scanComplete;
+            public bool allocationMetadataAndStacksPresent = true;
+            public int allocationEvents;
+            public int outsideDriverAllocationEvents;
+            public LogicDriverSamples[] envelopes;
+        }
+
+        [Serializable]
+        private sealed class LogicDriverSamples
+        {
+            public int frameIndex;
+            public string threadName;
+            public Sample driver;
+            public Sample[] allocations;
         }
 
         [Serializable]
@@ -126,6 +215,298 @@ namespace NTSD.Test.Editor
             state = new CaptureState { outputRoot = root, before = ReadSettings() };
         }
 
+        internal static void ArmLogicCallsiteWindow(string outputRoot)
+        {
+            Arm(outputRoot);
+            state.minimumSampleTick = 35;
+            state.previousHistoryWasEmpty = ProfilerDriver.firstFrameIndex < 0;
+            if (!state.previousHistoryWasEmpty)
+                SaveProfilerHistory(Path.Combine(state.outputRoot, "prior-history.raw"));
+            state.previousHistorySaved = true;
+        }
+
+        internal static bool HasReachedLogicCallsiteStart(int sampledTicks)
+        {
+            return sampledTicks >= 35 && sampledTicks <= 180;
+        }
+
+        internal static void BeginCameraWindow(string outputRoot)
+        {
+            Arm(outputRoot);
+            state.cameraEnvelopeMode = true;
+            state.cameraBoundaries = new CameraBoundary[CaptureFrameCount];
+            state.deadline = EditorApplication.timeSinceStartup + 45d;
+            state.status = "RECORDING";
+            state.recording = true;
+            try
+            {
+                ProfilerDriver.profileEditor = false;
+                ProfilerDriver.SetAreaEnabled(ProfilerArea.CPU, true);
+                Profiler.enableAllocationCallstacks = true;
+                Profiler.logFile = Path.Combine(state.outputRoot, "cpu-gc.raw");
+                Profiler.enableBinaryLog = true;
+                Profiler.enabled = true;
+            }
+            catch (Exception exception)
+            {
+                state.error = exception.ToString();
+                FinishAndRestore("camera-capture-start-error");
+                throw;
+            }
+        }
+
+        internal static void BeginLateCameraWindow(string outputRoot)
+        {
+            Arm(outputRoot);
+            CaptureState armed = state;
+            state = CreateLateCameraState(armed.outputRoot);
+            state.before = armed.before;
+            try
+            {
+                if (ProfilerDriver.firstFrameIndex >= 0)
+                {
+                    SaveProfilerHistory(Path.Combine(state.outputRoot, "profiler-history-before.raw"));
+                    state.previousHistorySaved = true;
+                }
+                else
+                    state.previousHistorySaved = true;
+                state.historyCapacity = ReadLateHistoryCapacity();
+                if (!IsLateHistoryCapacitySafe(state.historyCapacity))
+                    throw new InvalidOperationException("Late capture requires an initialized history capacity from 8 to 300; it will not initialize or change user settings.");
+                state.startLastFrame = ProfilerDriver.lastFrameIndex;
+                state.deadline = EditorApplication.timeSinceStartup + 300d;
+                state.status = "RECORDING";
+                state.recording = true;
+                ProfilerDriver.profileEditor = false;
+                ProfilerDriver.SetAreaEnabled(ProfilerArea.CPU, true);
+                Profiler.enableAllocationCallstacks = true;
+                Profiler.enableBinaryLog = false;
+                ProfilerDriver.enabled = true;
+                Profiler.enabled = true;
+            }
+            catch (Exception exception)
+            {
+                state.error = exception.ToString();
+                FinishAndRestore("late-capture-start-error");
+                throw;
+            }
+        }
+
+        private static CaptureState CreateLateCameraState(string outputRoot)
+        {
+            return new CaptureState
+            {
+                outputRoot = outputRoot, cameraEnvelopeMode = true, lateCameraMode = true,
+                cameraBoundaries = new CameraBoundary[CaptureFrameCount],
+            };
+        }
+
+        private static bool IsLateHistoryCapacitySafe(int capacity)
+        {
+            return capacity >= CaptureFrameCount && capacity <= 300;
+        }
+
+        private static int ReadLateHistoryCapacity()
+        {
+            // The frameCount getter can change native history on first access; inspect only its existing cache.
+            Type settings = typeof(ProfilerDriver).Assembly.GetType("UnityEditor.Profiling.ProfilerUserSettings", true);
+            return (int)settings.GetField("m_FrameCount", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+        }
+
+        private static bool ShouldStopLateCameraWindow(int completed, long events, bool valid)
+        {
+            return !valid || events != 0 || completed >= LateCameraLimit;
+        }
+
+        private static void OpenLateCameraBoundary(CaptureState capture, int unityFrame, int logicTick)
+        {
+            if (capture.cameraEnvelopeOpen || capture.completedCameras >= LateCameraLimit || capture.finishPending)
+            {
+                capture.cameraBoundariesValid = false;
+                capture.finishPending = true;
+                return;
+            }
+            capture.cameraBoundaries[capture.completedCameras % CaptureFrameCount] = new CameraBoundary
+            {
+                ordinal = capture.completedCameras + 1, beginUnityFrame = unityFrame, beginLogicTick = logicTick,
+            };
+            capture.cameraEnvelopeOpen = true;
+        }
+
+        private static void CompleteLateCameraBoundary(CaptureState capture, int unityFrame,
+            int logicTick, long events, bool valid)
+        {
+            ref CameraBoundary boundary = ref capture.cameraBoundaries[capture.completedCameras % CaptureFrameCount];
+            valid &= capture.cameraEnvelopeOpen && boundary.beginUnityFrame == unityFrame && events >= 0;
+            boundary.endUnityFrame = unityFrame;
+            boundary.endLogicTick = logicTick;
+            boundary.allocationEvents = events;
+            boundary.calibratedScopeValid = valid;
+            capture.cameraEnvelopeOpen = false;
+            capture.cameraBoundariesValid &= valid;
+            capture.completedCameras++;
+            if (valid && events > 0)
+                capture.triggerOrdinal = capture.completedCameras;
+            capture.finishPending = ShouldStopLateCameraWindow(capture.completedCameras, events,
+                capture.cameraBoundariesValid);
+        }
+
+        internal static bool LateCameraStopRequested => state != null && state.lateCameraMode && state.finishPending;
+
+        internal static void BeginCameraEnvelope(int unityFrame, int logicTick)
+        {
+            if (state == null || !state.cameraEnvelopeMode || !state.recording || state.finishPending)
+                return;
+            if (state.lateCameraMode)
+                OpenLateCameraBoundary(state, unityFrame, logicTick);
+            else if (state.cameraEnvelopeOpen || state.completedCameras >= CaptureFrameCount)
+            {
+                state.cameraBoundariesValid = false;
+                state.finishPending = true;
+                return;
+            }
+            else
+            {
+                state.cameraBoundaries[state.completedCameras] = new CameraBoundary
+                {
+                    ordinal = state.completedCameras + 1, beginUnityFrame = unityFrame,
+                    beginLogicTick = logicTick,
+                };
+                state.cameraEnvelopeOpen = true;
+            }
+            // Point samples remain nested inside their own URP callback wrapper, never across wrappers.
+            using (CameraBeginMarker.Auto())
+            {
+            }
+        }
+
+        internal static void EndCameraEnvelope(int unityFrame, int logicTick, long events, bool valid)
+        {
+            if (state == null || !state.cameraEnvelopeMode || !state.cameraEnvelopeOpen)
+                return;
+            using (CameraEndMarker.Auto())
+            {
+            }
+            if (state.lateCameraMode)
+            {
+                CompleteLateCameraBoundary(state, unityFrame, logicTick, events, valid);
+                if (state.triggerOrdinal > 0)
+                    using (LateEventMarker.Auto())
+                    {
+                    }
+                return;
+            }
+            state.cameraEnvelopeOpen = false;
+            ref CameraBoundary boundary = ref state.cameraBoundaries[state.completedCameras];
+            boundary.endUnityFrame = unityFrame;
+            boundary.endLogicTick = logicTick;
+            boundary.allocationEvents = events;
+            boundary.calibratedScopeValid = valid;
+            state.cameraBoundariesValid &= valid && boundary.beginUnityFrame == unityFrame;
+            state.completedCameras++;
+            // Alignment contract: NTSD-OPT-H11-CAMERA-GC-CALLSTACK-042; stop on the next editor update, after the full camera is recorded.
+            state.finishPending = HasCompletedCameraWindow(state.completedCameras);
+        }
+
+        private static bool HasCompletedCameraWindow(int completed)
+        {
+            return completed == CaptureFrameCount;
+        }
+
+        private static bool IsWithinCameraTime(double sampleStart, double beginEnd, double endStart)
+        {
+            return !double.IsNaN(sampleStart) && !double.IsInfinity(sampleStart) &&
+                !double.IsNaN(beginEnd) && !double.IsInfinity(beginEnd) &&
+                !double.IsNaN(endStart) && !double.IsInfinity(endStart) &&
+                endStart >= beginEnd && sampleStart >= beginEnd && sampleStart <= endStart;
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch47 Recover Late Camera GC Raw")]
+        private static void RecoverLateCameraRaw()
+        {
+            RequireAvailable();
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+                throw new InvalidOperationException("Late camera parsing requires idle Edit Mode; no recapture.");
+            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "..",
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01"));
+            string output = Path.Combine(root, "cpu-gc-state-recovered.json");
+            if (File.Exists(output) || File.Exists(Path.Combine(root, "camera-gc-callstacks.json")))
+                throw new InvalidOperationException("Late camera output must be fresh; retained evidence is preserved.");
+            CaptureState recovered = JsonUtility.FromJson<CaptureState>(File.ReadAllText(Path.Combine(root, "cpu-gc-state.json")));
+            if (recovered == null || !recovered.lateCameraMode || !recovered.settingsRestored ||
+                !recovered.cameraBoundariesValid || recovered.triggerOrdinal <= 0 ||
+                recovered.cameraBoundaries == null || recovered.cameraBoundaries.Length != CaptureFrameCount)
+                throw new InvalidOperationException("A valid triggered late camera capture is required; no-event evidence is inconclusive.");
+            recovered.before = ReadSettings();
+            recovered.outputRoot = root;
+            recovered.error = null;
+            try
+            {
+                ExportCameraSamples(recovered);
+                recovered.status = recovered.exportedCameraEnvelopes == 1 && recovered.allocationCountsMatch &&
+                    recovered.allocationCallstacksPresent ? "RECOVERED_LATE_CAMERA_CALLSITE" : "PARTIAL";
+            }
+            catch (Exception exception)
+            {
+                recovered.status = "PARTIAL";
+                recovered.error = exception.ToString();
+            }
+            finally
+            {
+                RestoreSettings(recovered.before);
+                recovered.after = ReadSettings();
+                recovered.settingsRestored = JsonUtility.ToJson(recovered.before) == JsonUtility.ToJson(recovered.after);
+                if (!recovered.settingsRestored)
+                    recovered.status = "PARTIAL";
+                SaveNew(output, JsonUtility.ToJson(recovered, true));
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch42 Recover Retained Camera GC Raw")]
+        private static void RecoverRetainedCameraRaw()
+        {
+            RequireAvailable();
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+                throw new InvalidOperationException("Retained camera parsing requires idle Edit Mode; no recapture.");
+            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "..",
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02"));
+            string statePath = Path.Combine(root, "cpu-gc-state-recovered.json");
+            if (File.Exists(statePath) || File.Exists(Path.Combine(root, "camera-gc-callstacks.json")))
+                throw new InvalidOperationException("Retained camera output must be fresh; prior evidence is preserved.");
+            CaptureState recovered = JsonUtility.FromJson<CaptureState>(File.ReadAllText(Path.Combine(root, "cpu-gc-state.json")));
+            if (recovered == null || !recovered.cameraEnvelopeMode || !recovered.settingsRestored ||
+                (recovered.status != "PARTIAL" && recovered.status != "RAW_RETAINED_CAMERA_PARSE_PENDING") ||
+                !recovered.cameraBoundariesValid ||
+                !HasCompletedCameraWindow(recovered.completedCameras) ||
+                recovered.cameraBoundaries == null || recovered.cameraBoundaries.Length != CaptureFrameCount)
+                throw new InvalidOperationException("Requires the retained partial capture with eight valid camera boundaries.");
+            recovered.before = ReadSettings();
+            recovered.error = null;
+            recovered.stopReason = "retained-camera-raw-parse-only-no-recapture";
+            recovered.outputRoot = root;
+            try
+            {
+                ExportCameraSamples(recovered);
+                recovered.status = recovered.exportedCameraEnvelopes == CaptureFrameCount &&
+                    recovered.allocationCountsMatch && recovered.allocationCallstacksPresent
+                    ? "RECOVERED_CAMERA_CALLSITES" : "PARTIAL";
+            }
+            catch (Exception exception)
+            {
+                recovered.status = "PARTIAL";
+                recovered.error = exception.ToString();
+            }
+            finally
+            {
+                RestoreSettings(recovered.before);
+                recovered.after = ReadSettings();
+                recovered.settingsRestored = JsonUtility.ToJson(recovered.before) == JsonUtility.ToJson(recovered.after);
+                if (!recovered.settingsRestored)
+                    recovered.status = "PARTIAL";
+                SaveNew(statePath, JsonUtility.ToJson(recovered, true));
+            }
+        }
+
         [MenuItem("NTSD/Validation/Optimization/Batch39 Recover Retained CPU GC Raw")]
         private static void RecoverRetainedRaw()
         {
@@ -186,6 +567,8 @@ namespace NTSD.Test.Editor
         {
             if (state == null || state.status != "ARMED" || !IsCaptureReady(report))
                 return;
+            if (state.minimumSampleTick > 1 && !HasReachedLogicCallsiteStart(report.sampledLogicTicks))
+                return;
             try
             {
                 state.warmupTicks = report.warmupTicksCompleted;
@@ -213,7 +596,7 @@ namespace NTSD.Test.Editor
 
         private static void OnFrameRecorded(int connectionId, int frameIndex)
         {
-            if (state == null || !state.recording || state.finishPending ||
+            if (state == null || state.cameraEnvelopeMode || !state.recording || state.finishPending ||
                 frameIndex <= state.startLastFrame)
                 return;
             if (state.connectionId < 0)
@@ -230,14 +613,162 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [MenuItem("NTSD/Validation/Optimization/Batch55 Recover Retained Logic GC Raw")]
+        private static void RecoverRetainedLogicRaw()
+        {
+            RequireAvailable();
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+                throw new InvalidOperationException("Logic recovery requires idle Edit Mode; no recapture is authorized.");
+            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "..",
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01"));
+            string samplesPath = Path.Combine(root, "logic-gc-callstacks-recovered.json");
+            string statePath = Path.Combine(root, "logic-gc-recovery-state.json");
+            string historyPath = Path.Combine(root, "profiler-history-before-logic-recovery.raw");
+            string rawPath = Path.Combine(root, "cpu-gc.raw");
+            if (File.Exists(samplesPath) || File.Exists(statePath) || File.Exists(historyPath) ||
+                !File.Exists(rawPath) || new FileInfo(rawPath).Length == 0)
+                throw new InvalidOperationException("Logic recovery requires retained raw and fresh outputs; nothing will be overwritten.");
+            var recovered = new CaptureState
+            {
+                outputRoot = root,
+                before = ReadSettings(),
+                stopReason = "retained-logic-binary-parse-only-no-recapture",
+                status = "PARTIAL",
+            };
+            var report = new LogicRecoveryReport
+            {
+                previousFirstFrame = ProfilerDriver.firstFrameIndex,
+                previousLastFrame = ProfilerDriver.lastFrameIndex,
+            };
+            var envelopes = new List<LogicDriverSamples>();
+            var stack = new List<ulong>(64);
+            try
+            {
+                recovered.previousHistoryWasEmpty = report.previousFirstFrame < 0;
+                if (!recovered.previousHistoryWasEmpty)
+                    SaveProfilerHistory(historyPath);
+                recovered.previousHistorySaved = true;
+                if (!ProfilerDriver.LoadProfile(rawPath, true))
+                    throw new InvalidOperationException("Retained logic raw could not be appended; existing history will not be cleared.");
+                report.appendedFirstFrame = report.previousLastFrame < 0
+                    ? ProfilerDriver.firstFrameIndex : ProfilerDriver.GetNextFrameIndex(report.previousLastFrame);
+                report.appendedLastFrame = ProfilerDriver.lastFrameIndex;
+                if (!IsLogicAppendedRange(report.previousLastFrame, report.appendedFirstFrame, report.appendedLastFrame))
+                    throw new InvalidOperationException("Cannot identify appended logic frames; no mixed-history attribution.");
+                recovered.importedFirstFrame = report.appendedFirstFrame;
+                recovered.importedLastFrame = report.appendedLastFrame;
+                for (int frame = report.appendedFirstFrame; frame >= 0 && frame <= report.appendedLastFrame;
+                    frame = ProfilerDriver.GetNextFrameIndex(frame))
+                {
+                    if (++report.scannedFrames > LogicRecoveryFrameLimit)
+                        throw new InvalidOperationException("Retained logic frame range exceeds the declared scan; no silent truncation.");
+                    using (RawFrameDataView view = ProfilerDriver.GetRawFrameDataView(frame, 0))
+                    {
+                        if (!view.valid || view.threadName != "Main Thread")
+                            throw new InvalidOperationException("Retained logic frame lacks its valid main thread.");
+                        report.validMainThreadFrames++;
+                        for (int index = 0; index < view.sampleCount; index++)
+                        {
+                            string name = view.GetSampleName(index);
+                            if (name == "GC.Alloc")
+                            {
+                                report.outsideDriverAllocationEvents++;
+                                continue;
+                            }
+                            if (name != LogicDriverMarkerName)
+                                continue;
+                            int children = view.GetSampleChildrenCountRecursive(index);
+                            if (children < 0 || (long)index + children >= view.sampleCount)
+                                throw new InvalidOperationException("Retained driver subtree is incomplete.");
+                            var allocations = new List<Sample>();
+                            for (int child = index + 1; IsLogicDescendant(index, children, child); child++)
+                            {
+                                if (view.GetSampleName(child) != "GC.Alloc")
+                                    continue;
+                                int metadata = view.GetSampleMetadataCount(child);
+                                stack.Clear();
+                                view.GetSampleCallstack(child, stack);
+                                report.allocationMetadataAndStacksPresent &= metadata > 0 && stack.Count > 0;
+                                var callstack = new Callsite[stack.Count];
+                                for (int address = 0; address < stack.Count; address++)
+                                {
+                                    FrameDataView.MethodInfo method = view.ResolveMethodInfo(stack[address]);
+                                    callstack[address] = new Callsite
+                                    {
+                                        address = stack[address].ToString("X16"), method = method.methodName,
+                                        file = method.sourceFileName, line = method.sourceFileLine,
+                                    };
+                                }
+                                allocations.Add(new Sample
+                                {
+                                    index = child, name = "GC.Alloc", metadataCount = metadata,
+                                    inclusiveMs = view.GetSampleTimeMs(child), startMs = view.GetSampleStartTimeMs(child),
+                                    gcAllocBytes = metadata > 0 ? view.GetSampleMetadataAsLong(child, 0) : -1,
+                                    gcCallstack = callstack,
+                                });
+                            }
+                            report.allocationEvents += allocations.Count;
+                            envelopes.Add(new LogicDriverSamples
+                            {
+                                frameIndex = view.frameIndex, threadName = view.threadName,
+                                driver = new Sample
+                                {
+                                    index = index, name = name, recursiveChildren = children,
+                                    children = view.GetSampleChildrenCount(index),
+                                    inclusiveMs = view.GetSampleTimeMs(index), startMs = view.GetSampleStartTimeMs(index),
+                                },
+                                allocations = allocations.ToArray(),
+                            });
+                            index += children;
+                        }
+                    }
+                    if (frame == report.appendedLastFrame)
+                    {
+                        report.scanComplete = true;
+                        break;
+                    }
+                }
+                if (report.scanComplete && envelopes.Count > 0)
+                    recovered.status = report.allocationEvents == 0 ? "RECOVERED_RETAINED_LOGIC_BINARY_NO_CALLSITE"
+                        : report.allocationMetadataAndStacksPresent ? "RECOVERED_RETAINED_LOGIC_CALLSITES" : "PARTIAL";
+            }
+            catch (Exception exception)
+            {
+                recovered.error = exception.ToString();
+            }
+            finally
+            {
+                report.envelopes = envelopes.ToArray();
+                recovered.validMainThreadFrames = report.validMainThreadFrames;
+                recovered.exportedThreadFrames = report.validMainThreadFrames;
+                RestoreSettings(recovered.before);
+                recovered.after = ReadSettings();
+                recovered.settingsRestored = JsonUtility.ToJson(recovered.before) == JsonUtility.ToJson(recovered.after);
+                SaveNew(samplesPath, JsonUtility.ToJson(report, true));
+                SaveNew(statePath, JsonUtility.ToJson(recovered, true));
+            }
+        }
+
+        internal static bool IsLogicDescendant(int rootIndex, int recursiveChildren, int sampleIndex)
+        {
+            return rootIndex >= 0 && recursiveChildren > 0 && sampleIndex > rootIndex &&
+                (long)sampleIndex <= (long)rootIndex + recursiveChildren;
+        }
+
+        internal static bool IsLogicAppendedRange(int previousLast, int first, int last)
+        {
+            return previousLast >= -1 && first >= 0 && last >= first &&
+                (previousLast < 0 || first > previousLast);
+        }
+
         private static void Update()
         {
             if (state == null)
                 return;
             if (state.finishPending)
-                FinishAndRestore("eight-completed-frames");
+                FinishAndRestore(state.lateCameraMode ? "late-event-or-capacity" : "eight-completed-frames");
             else if (state.recording && EditorApplication.timeSinceStartup >= state.deadline)
-                FinishAndRestore("45-second-deadline");
+                FinishAndRestore(state.lateCameraMode ? "300-second-late-deadline" : "45-second-deadline");
         }
 
         private static void OnPlayMode(PlayModeStateChange change)
@@ -257,13 +788,41 @@ namespace NTSD.Test.Editor
             if (finished == null)
                 return;
             state = null;
+            bool wasRecording = finished.recording;
+            if (finished.cameraEnvelopeOpen)
+            {
+                finished.cameraEnvelopeOpen = false;
+                finished.cameraBoundariesValid = false;
+            }
             finished.stopReason = reason;
             finished.recording = false;
             try
             {
+                if (finished.lateCameraMode && wasRecording)
+                {
+                    Profiler.enabled = false;
+                    ProfilerDriver.enabled = false;
+                    SaveProfilerHistory(Path.Combine(finished.outputRoot, "cpu-gc.raw"));
+                }
                 RestoreSettings(finished.before);
                 finished.after = ReadSettings();
                 finished.settingsRestored = JsonUtility.ToJson(finished.before) == JsonUtility.ToJson(finished.after);
+                if (finished.cameraEnvelopeMode)
+                {
+                    if (finished.lateCameraMode)
+                    {
+                        bool valid = finished.settingsRestored && finished.previousHistorySaved &&
+                            finished.cameraBoundariesValid && string.IsNullOrEmpty(finished.error);
+                        finished.status = valid && finished.triggerOrdinal > 0 ? "RAW_RETAINED_LATE_PARSE_PENDING" :
+                            valid && finished.completedCameras == LateCameraLimit ? "NO_EVENT_OBSERVED" : "PARTIAL";
+                        return;
+                    }
+                    finished.status = finished.settingsRestored &&
+                        HasCompletedCameraWindow(finished.completedCameras) &&
+                        finished.cameraBoundariesValid && string.IsNullOrEmpty(finished.error)
+                        ? "RAW_RETAINED_CAMERA_PARSE_PENDING" : "PARTIAL";
+                    return;
+                }
                 finished.status = finished.settingsRestored && finished.capturedFrames == CaptureFrameCount &&
                     string.IsNullOrEmpty(finished.error) ? "CAPTURED" : "PARTIAL";
                 ExportSamples(finished);
@@ -298,6 +857,7 @@ namespace NTSD.Test.Editor
                 profileEditor = ProfilerDriver.profileEditor,
                 deepProfiling = ProfilerDriver.deepProfiling,
                 memoryRecordMode = (int)ProfilerDriver.memoryRecordMode,
+                maximumBufferedBytes = Profiler.maxUsedMemory,
             };
         }
 
@@ -309,6 +869,8 @@ namespace NTSD.Test.Editor
             ProfilerDriver.memoryRecordMode = (ProfilerMemoryRecordMode)settings.memoryRecordMode;
             ProfilerDriver.SetAreaEnabled(ProfilerArea.CPU, settings.cpuArea);
             ProfilerDriver.profileEditor = settings.profileEditor;
+            if (settings.maximumBufferedBytes > 0)
+                Profiler.maxUsedMemory = settings.maximumBufferedBytes;
             Profiler.logFile = settings.logFile;
             Profiler.enableBinaryLog = settings.binary;
             ProfilerDriver.enabled = settings.driverEnabled;
@@ -383,6 +945,130 @@ namespace NTSD.Test.Editor
             finished.exportedThreadFrames = threads.Count;
             SaveNew(Path.Combine(finished.outputRoot, outputFile),
                 JsonUtility.ToJson(new SamplesReport { threads = threads.ToArray() }, true));
+        }
+
+        private static void ExportCameraSamples(CaptureState finished)
+        {
+            int previousLast = ProfilerDriver.lastFrameIndex;
+            if (!ProfilerDriver.LoadProfile(Path.Combine(finished.outputRoot, "cpu-gc.raw"), true))
+                throw new InvalidOperationException("Camera raw capture could not be appended; existing history will not be cleared.");
+            int first = previousLast < 0 ? ProfilerDriver.firstFrameIndex : ProfilerDriver.GetNextFrameIndex(previousLast);
+            int last = ProfilerDriver.lastFrameIndex;
+            finished.importedFirstFrame = first;
+            finished.importedLastFrame = last;
+            if (first < 0 || (previousLast >= 0 && first <= previousLast))
+                throw new InvalidOperationException("Cannot identify appended raw frames; no mixed-history attribution.");
+            var envelopes = new List<CameraEnvelopeSamples>(CaptureFrameCount);
+            var stack = new List<ulong>(64);
+            bool countsMatch = true;
+            bool callstacksPresent = true;
+            int scanned = 0;
+            for (int frame = first; frame >= 0 && frame <= last; frame = ProfilerDriver.GetNextFrameIndex(frame))
+            {
+                if (++scanned > (finished.lateCameraMode ? 300 : 128))
+                    throw new InvalidOperationException("Unexpected camera capture frame range; raw retained without truncation.");
+                using (RawFrameDataView view = ProfilerDriver.GetRawFrameDataView(frame, 0))
+                {
+                    if (!view.valid)
+                        continue;
+                    if (view.threadName != "Main Thread")
+                        throw new InvalidOperationException("Camera raw thread zero is not the main thread.");
+                    if (finished.lateCameraMode)
+                    {
+                        int eventPoints = 0;
+                        for (int sampleIndex = 0; sampleIndex < view.sampleCount; sampleIndex++)
+                            if (view.GetSampleName(sampleIndex) == LateEventMarkerName)
+                                eventPoints++;
+                        if (eventPoints == 0)
+                            continue;
+                        if (eventPoints != 1 || envelopes.Count > 0)
+                            throw new InvalidOperationException("Late raw requires exactly one triggered camera frame; no mixed attribution.");
+                    }
+                    int beginMarker = -1;
+                    int endMarker = -1;
+                    for (int sampleIndex = 0; sampleIndex < view.sampleCount; sampleIndex++)
+                    {
+                        string name = view.GetSampleName(sampleIndex);
+                        if (name == CameraBeginMarkerName)
+                        {
+                            if (beginMarker >= 0)
+                                throw new InvalidOperationException("Multiple camera begin points in one profiler frame.");
+                            beginMarker = sampleIndex;
+                        }
+                        if (name == CameraEndMarkerName)
+                        {
+                            if (endMarker >= 0)
+                                throw new InvalidOperationException("Multiple camera end points in one profiler frame.");
+                            endMarker = sampleIndex;
+                        }
+                    }
+                    if (beginMarker < 0 && endMarker < 0)
+                        continue;
+                    if (beginMarker < 0 || endMarker < 0 || envelopes.Count >= finished.completedCameras)
+                        throw new InvalidOperationException("Raw camera point pairs differ from recorded boundaries.");
+                    double beginEnd = view.GetSampleStartTimeMs(beginMarker) + view.GetSampleTimeMs(beginMarker);
+                    double endStart = view.GetSampleStartTimeMs(endMarker);
+                    if (!IsWithinCameraTime(beginEnd, beginEnd, endStart))
+                        throw new InvalidOperationException("Camera raw point times are non-finite or reversed.");
+                    var allocations = new List<Sample>();
+                    for (int sampleIndex = 0; sampleIndex < view.sampleCount; sampleIndex++)
+                    {
+                        if (view.GetSampleName(sampleIndex) != "GC.Alloc" ||
+                            !IsWithinCameraTime(view.GetSampleStartTimeMs(sampleIndex), beginEnd, endStart))
+                            continue;
+                        int metadata = view.GetSampleMetadataCount(sampleIndex);
+                        stack.Clear();
+                        view.GetSampleCallstack(sampleIndex, stack);
+                        callstacksPresent &= stack.Count > 0 && metadata > 0;
+                        var callstack = new Callsite[stack.Count];
+                        for (int address = 0; address < stack.Count; address++)
+                        {
+                            FrameDataView.MethodInfo method = view.ResolveMethodInfo(stack[address]);
+                            callstack[address] = new Callsite
+                            {
+                                address = stack[address].ToString("X16"), method = method.methodName,
+                                file = method.sourceFileName, line = method.sourceFileLine,
+                            };
+                        }
+                        allocations.Add(new Sample
+                        {
+                            index = sampleIndex, name = "GC.Alloc", metadataCount = metadata,
+                            inclusiveMs = view.GetSampleTimeMs(sampleIndex),
+                            startMs = view.GetSampleStartTimeMs(sampleIndex),
+                            gcAllocBytes = metadata > 0 ? view.GetSampleMetadataAsLong(sampleIndex, 0) : -1,
+                            gcCallstack = callstack,
+                        });
+                    }
+                    CameraBoundary boundary = finished.lateCameraMode
+                        ? finished.cameraBoundaries[(finished.triggerOrdinal - 1) % CaptureFrameCount]
+                        : finished.cameraBoundaries[envelopes.Count];
+                    countsMatch &= boundary.calibratedScopeValid && allocations.Count == boundary.allocationEvents;
+                    envelopes.Add(new CameraEnvelopeSamples
+                    {
+                        boundary = boundary, profilerFrameIndex = view.frameIndex,
+                        beginMarkerSampleIndex = beginMarker, endMarkerSampleIndex = endMarker,
+                        beginMarkerEndMs = beginEnd, endMarkerStartMs = endStart,
+                        threadName = view.threadName, allocations = allocations.ToArray(),
+                    });
+                }
+                if (frame == last)
+                    break;
+            }
+            finished.exportedCameraEnvelopes = envelopes.Count;
+            finished.allocationCountsMatch = countsMatch &&
+                envelopes.Count == (finished.lateCameraMode ? 1 : finished.completedCameras);
+            finished.allocationCallstacksPresent = callstacksPresent;
+            SaveNew(Path.Combine(finished.outputRoot, "camera-gc-callstacks.json"),
+                JsonUtility.ToJson(new CameraSamplesReport { envelopes = envelopes.ToArray() }, true));
+        }
+
+        private static void SaveProfilerHistory(string path)
+        {
+            if (File.Exists(path))
+                throw new InvalidOperationException("Profiler raw output must be fresh.");
+            ProfilerDriver.SaveProfile(path);
+            if (!File.Exists(path) || new FileInfo(path).Length == 0)
+                throw new InvalidOperationException("Profiler history was not saved; evidence cannot be claimed.");
         }
 
         private static void SaveNew(string path, string content)

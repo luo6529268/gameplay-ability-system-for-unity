@@ -1,0 +1,257 @@
+{
+  "editorPid": 19040,
+  "strictStatus": "FAIL",
+  "phase": "DONE",
+  "pipeline": "URP",
+  "samples": 8,
+  "cameraEvents": 1,
+  "observerEvents": 0,
+  "invalidCameraScopes": 0,
+  "invalidObserverScopes": 0,
+  "observerStageInvalidFrames": 0,
+  "observerStageUnattributedEvents": 0,
+  "calibrationPass": true,
+  "recovery": "RECOVERED_CAMERA_CALLSITES",
+  "settingsRestored": true,
+  "matchingCounts": true,
+  "cameraEnvelopes": 8,
+  "events": [
+    {
+      "ordinal": 8,
+      "unityFrame": 2876,
+      "logicTick": 18,
+      "allocations": [
+        {
+          "bytes": 40,
+          "methods": [
+            {
+              "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering::BattleFootMarkerAnimation.ResolveSprite()",
+              "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleFootMarkerBatchBackend.cs",
+              "line": 60
+            },
+            {
+              "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering::BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture()",
+              "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+              "line": 2199
+            },
+            {
+              "method": "Assembly-CSharp.dll!::BattleRenderPass.Execute()",
+              "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderFeature.cs",
+              "line": 235
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.ExecuteRenderPass()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+              "line": 1477
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.ExecuteBlock()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+              "line": 1459
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::ScriptableRenderer.Execute()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\ScriptableRenderer.cs",
+              "line": 1099
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.RenderSingleCamera()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+              "line": 602
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.RenderCameraStack()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+              "line": 718
+            },
+            {
+              "method": "Unity.RenderPipelines.Universal.Runtime.dll!UnityEngine.Rendering.Universal::UniversalRenderPipeline.Render()",
+              "file": ".\\Library\\PackageCache\\com.unity.render-pipelines.universal@14.0.12\\Runtime\\UniversalRenderPipeline.cs",
+              "line": 303
+            },
+            {
+              "method": "UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipeline.InternalRender()",
+              "file": "",
+              "line": 0
+            },
+            {
+              "method": "UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal()",
+              "file": "",
+              "line": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sceneClean": true,
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "unchanged": true
+    },
+    {
+      "path": "AGENTS.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "unchanged": true
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "unchanged": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "unchanged": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "unchanged": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "unchanged": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "unchanged": true
+    }
+  ],
+  "rejectedEvidence": [
+    {
+      "path": "cpu-gc-state-recovered.json",
+      "unchanged": true
+    },
+    {
+      "path": "cpu-gc-state.json",
+      "unchanged": true
+    },
+    {
+      "path": "cpu-gc.raw",
+      "unchanged": true
+    },
+    {
+      "path": "materialization-window-01.json",
+      "unchanged": true
+    },
+    {
+      "path": "production-window-01.json",
+      "unchanged": true
+    }
+  ],
+  "headUnchanged": true,
+  "files": [
+    {
+      "name": "camera-gc-callstacks.json",
+      "bytes": 15091,
+      "sha256": "1BC32352D54D76D62CE7D60D4E9E0595AD296964EE007604FF6381B06C0D9AB3"
+    },
+    {
+      "name": "cpu-gc-state-recovered.json",
+      "bytes": 3795,
+      "sha256": "A67B946CEFBE3D6B07452367B5E6E1700B4ADF6879F95FAE9D2375881CAA987B"
+    },
+    {
+      "name": "cpu-gc-state.json",
+      "bytes": 3786,
+      "sha256": "2875C460BB4B62FC40F8ACF7ED7DCCB33B31D07C0FB5FF6194F942D18D8CD759"
+    },
+    {
+      "name": "cpu-gc.raw",
+      "bytes": 23907522,
+      "sha256": "D1D40060948EF8167EDF912B81B8B90C7B831C4294829BC367E29956C775F555"
+    },
+    {
+      "name": "materialization-window-01.json",
+      "bytes": 4292,
+      "sha256": "ABA217234ACF58C72715F7BB59618668CD0A5749F2E14006C45F66887A9CFE76"
+    },
+    {
+      "name": "production-window-01.json",
+      "bytes": 46221,
+      "sha256": "2773DECE1D4D712446B197B68EA570A75DC74D0FEE678389DE0DC153B13446FE"
+    }
+  ]
+}

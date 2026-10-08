@@ -1,0 +1,325 @@
+{
+  "utc": "2026-10-07T14:06:57.5662276Z",
+  "capture": {
+    "outputRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\",
+    "status": "NO_EVENT_OBSERVED",
+    "stopReason": "eight-completed-cameras",
+    "error": "",
+    "recording": false,
+    "finishPending": true,
+    "settingsRestored": true,
+    "startLastFrame": 65,
+    "connectionId": -1,
+    "capturedFrames": 0,
+    "frameIndices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "warmupTicks": 0,
+    "sampleTickAtStart": 0,
+    "activeAiAtStart": 0,
+    "baseRosterAtStart": 0,
+    "deadline": 239968.3126985,
+    "before": {
+      "enabled": false,
+      "driverEnabled": false,
+      "binary": false,
+      "logFile": "",
+      "allocationCallstacks": false,
+      "cpuArea": false,
+      "profileEditor": false,
+      "deepProfiling": false,
+      "memoryRecordMode": 0,
+      "maximumBufferedBytes": 536870912
+    },
+    "after": {
+      "enabled": false,
+      "driverEnabled": false,
+      "binary": false,
+      "logFile": "",
+      "allocationCallstacks": false,
+      "cpuArea": false,
+      "profileEditor": false,
+      "deepProfiling": false,
+      "memoryRecordMode": 0,
+      "maximumBufferedBytes": 536870912
+    },
+    "validMainThreadFrames": 0,
+    "exportedThreadFrames": 0,
+    "threadScanLimitReached": false,
+    "cameraEnvelopeMode": true,
+    "cameraEnvelopeOpen": false,
+    "cameraBoundariesValid": true,
+    "completedCameras": 1800,
+    "cameraBoundaries": [
+      {
+        "ordinal": 1793,
+        "beginUnityFrame": 5093,
+        "endUnityFrame": 5093,
+        "beginLogicTick": 1315,
+        "endLogicTick": 1315,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1794,
+        "beginUnityFrame": 5094,
+        "endUnityFrame": 5094,
+        "beginLogicTick": 1316,
+        "endLogicTick": 1316,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1795,
+        "beginUnityFrame": 5095,
+        "endUnityFrame": 5095,
+        "beginLogicTick": 1317,
+        "endLogicTick": 1317,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1796,
+        "beginUnityFrame": 5096,
+        "endUnityFrame": 5096,
+        "beginLogicTick": 1318,
+        "endLogicTick": 1318,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1797,
+        "beginUnityFrame": 5097,
+        "endUnityFrame": 5097,
+        "beginLogicTick": 1318,
+        "endLogicTick": 1318,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1798,
+        "beginUnityFrame": 5098,
+        "endUnityFrame": 5098,
+        "beginLogicTick": 1319,
+        "endLogicTick": 1319,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1799,
+        "beginUnityFrame": 5099,
+        "endUnityFrame": 5099,
+        "beginLogicTick": 1320,
+        "endLogicTick": 1320,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      },
+      {
+        "ordinal": 1800,
+        "beginUnityFrame": 5100,
+        "endUnityFrame": 5100,
+        "beginLogicTick": 1320,
+        "endLogicTick": 1320,
+        "allocationEvents": 0,
+        "calibratedScopeValid": true
+      }
+    ],
+    "importedFirstFrame": -1,
+    "importedLastFrame": -1,
+    "exportedCameraEnvelopes": 0,
+    "allocationCountsMatch": false,
+    "allocationCallstacksPresent": false,
+    "lateCameraMode": true,
+    "triggerOrdinal": 0,
+    "historyCapacity": 300,
+    "previousHistorySaved": true
+  },
+  "window": {
+    "status": "DIAGNOSTIC_NO_EVENT",
+    "phase": "DONE",
+    "startedUtc": "2026-10-07T14:02:03.3717743Z",
+    "error": "",
+    "renderPipeline": "URP",
+    "sampleCount": 1800,
+    "startTick": 8,
+    "endTick": 1320,
+    "targetCameraFrames": 1800,
+    "lateCameraStopRequested": true,
+    "gcAllocBefore": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 200
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "gcAllocAfter": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 100
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "observerStageGcBefore": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 200
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "observerStageGcAfter": {
+      "passed": true,
+      "knownLiveBytes": 1048576,
+      "positive": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 1,
+        "allocationEvents": 1,
+        "rawValueTotal": 100
+      },
+      "empty": {
+        "valid": true,
+        "calibratedBefore": false,
+        "saturated": false,
+        "wrapped": false,
+        "sampleCount": 0,
+        "allocationEvents": 0,
+        "rawValueTotal": 0
+      }
+    },
+    "cameraGcAllocEvents": 0,
+    "cameraGcAllocScopes": 1800,
+    "cameraGcAllocInvalidScopes": 0,
+    "observerGcAllocEvents": 0,
+    "observerGcAllocInvalidScopes": 0,
+    "observerStageUnattributedEvents": 0,
+    "observerStageInvalidFrames": 0,
+    "sceneHashBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneHashAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneClean": true,
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "observedSubmissionSlots": 2
+  },
+  "frameAudit": {
+    "count": 1800,
+    "firstCameraScope": {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    },
+    "lastCameraScope": {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    },
+    "allCpuLeaseZero": true,
+    "allAuxVisible": true,
+    "drawsMatched": true,
+    "recordedDraws": 11560,
+    "executedDraws": 11560,
+    "first": {
+      "unityFrame": 3301,
+      "logicTick": 10,
+      "activeFootMarkers": 2,
+      "activeHealthBars": 2
+    },
+    "last": {
+      "unityFrame": 5100,
+      "logicTick": 1320,
+      "activeFootMarkers": 2,
+      "activeHealthBars": 2
+    },
+    "allGrowthZero": true
+  },
+  "artifacts": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\cpu-gc-state.json",
+      "bytes": 4036,
+      "sha256": "4ACD5FA34B3032238FD649BAA7AE84A8A928E9AA93A5011052ADB7C032F85368"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\cpu-gc.raw",
+      "bytes": 35646140,
+      "sha256": "1013DC2FD0F195FEC38CF4B980C3F30F697FAEEB1CF47E95D588714F8752C3ED"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\materialization-window-01.json",
+      "bytes": 4407,
+      "sha256": "6F927052918AF41813F72EA32D14BE45286DA26C30608E4FC0B24BF33DD94F92"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\production-window-01.json",
+      "bytes": 8655310,
+      "sha256": "4B0A9A810480FD8503CB1D0FCC1DB75B2486088A037ECF99FB6DD58199D7B954"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\profiler-history-before.raw",
+      "bytes": 183362700,
+      "sha256": "EEA426A6E43110E1AA381B33C2B43A31709D16AED1B6B3FEDB281C7C5831DCEF"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "snapshotBytesEqual": true,
+  "differentHashSections": [],
+  "metadata55": {
+    "claimedCount": 1000,
+    "logicalCapacity": 1050,
+    "objectCount": 2000,
+    "profile": "MobileExtended",
+    "schema": "ntsd-unity-extended-battle-checksum-v5",
+    "tick": 300
+  },
+  "metadata54": {
+    "claimedCount": 1000,
+    "logicalCapacity": 1050,
+    "objectCount": 2000,
+    "profile": "MobileExtended",
+    "schema": "ntsd-unity-extended-battle-checksum-v5",
+    "tick": 300
+  },
+  "rng55": {
+    "callCount": 19105,
+    "seed": 276539415
+  },
+  "rng54": {
+    "callCount": 19105,
+    "seed": 276539415
+  },
+  "tick55": 300,
+  "tick54": 300
+}
+{
+  "action": null,
+  "logicTicks": 300,
+  "steady": 180,
+  "warmup": 120,
+  "valid": true,
+  "capacityCriticalDelta": 0,
+  "failure": ""
+}

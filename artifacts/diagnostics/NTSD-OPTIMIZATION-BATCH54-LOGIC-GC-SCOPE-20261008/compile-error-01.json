@@ -1,0 +1,11 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      "Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs(4909,17): error CS0019: Operator '==' cannot be applied to operands of type 'ProductionEntityStressConfig' and '<null>'",
+      "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)"
+    ]
+  }
+}

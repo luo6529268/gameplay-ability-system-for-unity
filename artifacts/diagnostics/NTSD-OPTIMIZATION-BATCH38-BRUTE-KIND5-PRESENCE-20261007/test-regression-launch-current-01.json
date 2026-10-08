@@ -1,0 +1,44 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_PhaseNamesAndCountAreStable",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_DefaultIsOff",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PreservesCandidatesAndRng",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_RejectedPairRecordsCoarseAndBindingOnly",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_GeometryDisabledDoesNotRecordBranches",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_DefaultOffDoesNotAllocateOrCreateRecorder",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_EnablementPreservesSequenceAndRng",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_DefaultStrideIsOne",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory",
+        "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke",
+        "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "e159dbba41fb47648ce07616d4ec6b7e",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

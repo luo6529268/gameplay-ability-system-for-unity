@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-07T19:27:26.7239023Z",
+  "requestFieldCount": 65,
+  "nonOutputDifferences": [],
+  "output": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/00-combat1000-callsite/report.json",
+  "action": "combat1000",
+  "warmupTicks": 120,
+  "sampleTicks": 180,
+  "sha256": "788B746FCD0E9DB2054E977D887F29AE35DA8F05CF41656D0F597B4D229EB48D"
+}
+{
+  "Name": "report.json.request.json",
+  "Length": 2735,
+  "LastWriteTime": "2026-10-08T03:26:14.0844184+08:00"
+}

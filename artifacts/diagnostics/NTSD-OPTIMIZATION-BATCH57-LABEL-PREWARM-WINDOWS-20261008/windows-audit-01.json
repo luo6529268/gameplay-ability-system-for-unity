@@ -1,0 +1,709 @@
+{
+  "utc": "2026-10-07T21:32:56.8697203Z",
+  "runs": [
+    {
+      "layout": "00-dispersed1000",
+      "status": "StoppedCleanly",
+      "warmup": 120,
+      "sampled": 180,
+      "logicTicks": 300,
+      "harnessValidity": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 82.43235555555555,
+        "maximum": 178.228,
+        "p95": 102.51349999999991,
+        "p99": 160.47476800000004
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 258.7442448735237,
+        "maximum": 2031.9483280181885,
+        "p95": 550.7683187723151,
+        "p99": 676.425127983093
+      },
+      "drop": 807,
+      "aiControlledEntityTicks": 300000,
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "collector": [
+        {
+          "phase": "CandidateCollect/CacheSetup",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2602544444444446,
+            "maximum": 0.8716,
+            "p95": 0.35622,
+            "p99": 0.5183410000000012
+          }
+        },
+        {
+          "phase": "CandidateCollect/ParticipantBodyItrBuild",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/InputValidation",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/DirectBroadphase",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/TreeBroadphase",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/FallbackPairAdd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/SortDeduplicate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 51.10239500000003,
+            "maximum": 106.4762,
+            "p95": 68.82164499999999,
+            "p99": 90.97100500000002
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        }
+      ],
+      "centralRefusal": "",
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 10,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 10,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 1040,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=10->1050 (delta=1040; doesNotAffectRestored=True)"
+      },
+      "gc": {
+        "scope": "Entire synchronous main-thread SimulationTickDriver.StepOneTick; original final steady-sample policy",
+        "marker": "GC.Alloc",
+        "unit": "TimeNanoseconds",
+        "capacity": 256,
+        "before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "after": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "begunTicks": 300,
+        "endedTicks": 300,
+        "acceptedTicks": 300,
+        "steadyScopes": 180,
+        "nonsteadyScopes": 120,
+        "invalidScopes": 0,
+        "rejectedTicks": 0,
+        "sequenceErrors": 0,
+        "steadyAllocationEvents": 0,
+        "nonsteadyAllocationEvents": 128,
+        "steadyRawValue": 0,
+        "provenSteadyAllocatedBytes": 0,
+        "firstNonzeroSteadyTick": 0,
+        "expectedTicks": 300,
+        "expectedSamples": 180,
+        "coverageValid": true,
+        "zeroAllocationPassed": true,
+        "status": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS"
+      },
+      "checksumSame": true,
+      "checksumSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "requestFieldCount": 65,
+      "requestDiffExceptOutput": []
+    },
+    {
+      "layout": "01-combat1000",
+      "status": "StoppedCleanly",
+      "warmup": 120,
+      "sampled": 180,
+      "logicTicks": 300,
+      "harnessValidity": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 84.66264388888894,
+        "maximum": 159.2144,
+        "p95": 109.401905,
+        "p99": 148.019083
+      },
+      "display": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 249.7690456112226,
+        "maximum": 985.4786992073059,
+        "p95": 442.2484397888183,
+        "p99": 762.1897709369637
+      },
+      "drop": 755,
+      "aiControlledEntityTicks": 300000,
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "collector": [
+        {
+          "phase": "CandidateCollect/CacheSetup",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.25080722222222224,
+            "maximum": 0.4615,
+            "p95": 0.363715,
+            "p99": 0.397257
+          }
+        },
+        {
+          "phase": "CandidateCollect/ParticipantBodyItrBuild",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/InputValidation",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/DirectBroadphase",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/TreeBroadphase",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/FallbackPairAdd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/SortDeduplicate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 53.67138833333334,
+            "maximum": 101.9589,
+            "p95": 79.24623,
+            "p99": 89.33459100000002
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        }
+      ],
+      "centralRefusal": "",
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 1050,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 1050,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 0,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      },
+      "gc": {
+        "scope": "Entire synchronous main-thread SimulationTickDriver.StepOneTick; original final steady-sample policy",
+        "marker": "GC.Alloc",
+        "unit": "TimeNanoseconds",
+        "capacity": 256,
+        "before": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "after": {
+          "passed": true,
+          "knownLiveBytes": 1048576,
+          "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+          },
+          "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+          }
+        },
+        "begunTicks": 300,
+        "endedTicks": 300,
+        "acceptedTicks": 300,
+        "steadyScopes": 180,
+        "nonsteadyScopes": 120,
+        "invalidScopes": 0,
+        "rejectedTicks": 0,
+        "sequenceErrors": 0,
+        "steadyAllocationEvents": 0,
+        "nonsteadyAllocationEvents": 12,
+        "steadyRawValue": 0,
+        "provenSteadyAllocatedBytes": 0,
+        "firstNonzeroSteadyTick": 0,
+        "expectedTicks": 300,
+        "expectedSamples": 180,
+        "coverageValid": true,
+        "zeroAllocationPassed": true,
+        "status": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS"
+      },
+      "checksumSame": true,
+      "checksumSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "requestFieldCount": 65,
+      "requestDiffExceptOutput": []
+    }
+  ]
+}

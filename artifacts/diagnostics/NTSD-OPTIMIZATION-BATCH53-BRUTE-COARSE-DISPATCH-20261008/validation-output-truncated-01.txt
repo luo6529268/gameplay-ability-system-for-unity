@@ -1,0 +1,49 @@
+Warning: truncated output (original token count: 2023)
+Total output lines: 49
+
+{
+  "utc": "2026-10-07T17:51:17.4948476Z",
+  "validatorExit": 0,
+  "lineCount": 4274,
+  "header": [
+    "Change ledger validation PASSED.",
+    "  Records: 1349",
+    "  Governed code files in diff: 14",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs -> CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-CPOINT-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-WPOINT-VALUE-SEAM-001, NTSD-OPT-H07-BRUTE-BRANCH-TIMING-044, NTSD-OPT-H07-BRUTE-COARSE-DISPATCH-053, NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048, NTSD-OPT-H07-BRUTE-SAMPLED-TIMING-045, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD28-336B44-BODY-DEPTH-CANDIDATE-001, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-B5-CANDIDATE-EFFECT-TYPE-PRODUCTION-FILTER-001, NTSD28-B5-EFFECT-ELIGIBILITY-POSTACTION-AUDIT-001, NTSD28-B5-HIT-CANDIDATE-PAIR-SNAPSHOT-CARRIER-001, NTSD28-B5-HIT-GROUP-ELIGIBILITY-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-DEAD-WEAPONCOUNT-SELECTION-RETIREMENT-001, NTSD28-B5-KIND8-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001, NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001, NTSD28-Q06-COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001, NTSD28-Q06-COLLISION-FRAME-UNITY-001, NTSD28-Q06-PLATFORM-TRANSACTION-001, NTSD28-Q06-UNARMORED-WEAPON-REACTION-001, NTSD28-Q07-CONTROL-ONLY-ITR-CANDIDATE-001, NTSD28-Q07-D024-PLATFORM-ITR-SOURCE-GATE-001, NTSD28-Q07-D024-SHARED-ANCHOR-CALLSITE-001, NTSD28-Q07-D024-SHARED-COLLISION-PROJECTION-001, NTSD28-Q07-KIND-DAT-COMBAT-CONSUMERS-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, BATTLE-RUNTIME-ORDERED-SHUTDOWN-001, BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001, NTSD-OPT-H11-AUX-CAPACITY-SEAL-003, NTSD-OPT-H11-CACHE-PREWARM-001, NTSD-OPT-H11-CAPACITY-SEAL-002, NTSD-OPT-H11-FOOT-TEXTURE-READINESS-043, NTSD-OPT-M03-BUILD-UPLOAD-ATTRIBUTION-009, NTSD-OPT-M03-CAMERA-MATERIALIZATION-015, NTSD-OPT-M03-MATERIALIZATION-COUNTERS-008, NTSD-OPT-M03-MATERIALIZATION-REPORT-010, NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-Q09-P02-VISIBLE-CONSUMERS-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs -> BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-FOOT-MARKER-GAMECONFIG-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, NTSD-OPT-H11-FOOT-TEXTURE-READINESS-043, NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs -> NTSD-OPT-H07-BRUTE-BRANCH-TIMING-044"
+  ],
+  "footer": [
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/client-project-contract.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/project-open-lifecycle.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.…23 tokens truncated…  "diff": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scene/NTSD_Menu.unity', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007/REPORT.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md', LF will be replaced by CRLF the next time Git touches it"
+  ]
+}
+

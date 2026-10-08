@@ -1,0 +1,31 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteEnvelopeBinding",
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteCoarseEnvelope",
+        "^NTSD\\.Test\\.Editor\\.BattleKnockoutLabelWindowEditorTests\\.",
+        "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.(OrdinaryBruteDefaultsEnableAdmittedFastPath|ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate)"
+      ],
+      "initTimeout": 180000,
+      "includeDetails": false,
+      "includeFailedTests": true
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "ea63b3cd510045be831a3d249013a18b",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

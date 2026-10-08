@@ -1,0 +1,7 @@
+{
+  "chunk_id": "112bd8",
+  "wall_time_seconds": 2.2109103,
+  "exit_code": 0,
+  "original_token_count": 69,
+  "output": "MethodInvocationException: \r\nLine |\r\n   5 |          $client.Connect('127.0.0.1',6402);\r\n     |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Exception calling \"Connect\" with \"2\" argument(s): \"由于目标计算机积极拒绝，无法连接。 [::ffff:127.0.0.1]:6402\"\r\n"
+}

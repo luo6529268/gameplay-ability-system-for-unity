@@ -1,0 +1,497 @@
+{
+  "utc": "2026-10-07T22:00:59.1419239Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "headSame": true,
+  "guards": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "sha256": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "sha256": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "sha256": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "sha256": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "sha256": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "sha256": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "sha256": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "same": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "same": true
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "sha256": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+      "same": true
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha256": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "sha256": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha256": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "sha256": "92E597D3A2FA9152EAB5DEAD667F8E708BDD9769E88D0A3A36CB6CEA978C68EF",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "sha256": "C2B22C76704DE14E6D6533282942195B143D255E3197A424F893BAFCDD02C4CF",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "sha256": "4100394C9BD4A0AC6A5C53C9B6553F9C291FC6BC40E0F34442F3444B5FDA5D6A",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "47531885C4D94017D0B91F8F01D38A7E9E860FD81BE0CFB3CA904F466180D989",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-right-x550.json",
+      "sha256": "C2CA6F31380366CD49F9278A679282F203929AE38691AB4428AA6811D05834C8",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-left-x350.json",
+      "sha256": "8A9A59275A7CB09685A33DCE4C4E764DEA13F9CCD29474C63D2BBBD258DA3627",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/right-x550-root-v1-trace.jsonl",
+      "sha256": "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/left-x350-root-v2-trace.jsonl",
+      "sha256": "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2",
+      "same": true
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+      "sha256": "5D53AEE14BAEFDD7AF8E9971DE5182E8C2B860A00EE8C9258229CD9A08B82336",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "sha256": "C36C4ABEE086104A13BDE5363322C3BC777AEF766D83A3EEB49794761263602D",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "sha256": "D630B6A08824D4C4F621BAAFF242896322C2CBAA56CAF542DE7C53217694336F",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "sha256": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/REPORT.md",
+      "sha256": "FA0304C2D67295583105AD5C7D32E113A9C0D5FA64B75FDC7B674A8C1D535E76",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+      "sha256": "D1D40060948EF8167EDF912B81B8B90C7B831C4294829BC367E29956C775F555",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "351937511B65C91E951626FF375C188EBC33EF30F43FCF1D54ACBACCA3ED1AA7",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "sha256": "63018018DB4D9397A959B0FE77181982248397908BFA71DC6978EF1D552C51A2",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ItrRestTracker.cs",
+      "sha256": "8B5BFED71E3FA3843431703C3619431EE7C6D78CFB02219EF8BE84E1395236CD",
+      "same": true
+    },
+    {
+      "path": "../NTSD_Server/packages/com.ntsd.battle-kernel/Runtime/Core/RuntimeRestStore.cs",
+      "sha256": "5F5CD4341DC42CCE4FFB704FA212D4623B363B8179A21425AAC30025FADEA745",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007/REPORT.md",
+      "sha256": "F42EED845714FF6513611AB357249DA8913B9A13F956C33CB1E3C9859626D2F4",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048.md",
+      "sha256": "D0C31222AF942A717C565AFA3C7DEB2575FC624FE4A71BCC1BCC51949C82FF32",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007.md",
+      "sha256": "A86826BC9976C73E9B7BD2FC2BC3A0CC8CFF97CC5A0FBA130D77A3347DEF5179",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/REPORT.md",
+      "sha256": "EAB5FB84FA9AC10FF6878D9F2AF0A491D9125811178D202F84D6F95F27A49075",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007.md",
+      "sha256": "67C52E63D4B6485734DC8B0B0896663BFFDB2EE02672D46D74D3288E7C769065",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049.md",
+      "sha256": "257CB77C702D26C7C11568B160B0A33035057F471A4C27B4D9D2BEDEB2041799",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007.md",
+      "sha256": "F4AD612FE677182CDCF09167CE4648073C99B0EBE2F2509256F0A6E5ACA56C8A",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050.md",
+      "sha256": "9D327F4988102EDFA00590E5F9C8F9A0ED06A9014ECDFE58B13BED336EE8065B",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007/REPORT.md",
+      "sha256": "4D48680D5AE305A6387B9EBE74E613248CEC58ADE01615F33833712945818B18",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "5894AC04AF8FE1DEFDECD1A1389C134FE34003BE36B29BF87A00589E384D84B5",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008.md",
+      "sha256": "F2DC52B8061828E69D32FBDAF3895B9058DF5971F94B9BC4F97FD85D84039A10",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051.md",
+      "sha256": "F50A252573919A11E73AD8DA672EC4D63649828580BEA7CC226F9FBA0C8AFCCD",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008/REPORT.md",
+      "sha256": "5E75BE46D12F8DCC7258F01AC849A6036A8180CB120245566BE624C8C0427D2E",
+      "same": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008.md",
+      "sha256": "60CF6F0D7DEDB5D67B84F3D75508003B2B1400A7A04994CC659F5086EFA8A6EF",
+      "same": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md",
+      "sha256": "BD89A2BA0150C9595AEFFCA8C4FC7621C85A66D423D80BF0B6B9EF3009D9FEA4",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/REPORT.md",
+      "sha256": "3B9F194A747F02BC7BE795E99C20CC16C9C4EB8E3487D3F0F8CEDE783FFC6ECB",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "sha256": "F2DC9B547B94C4B7949E3220A8536ED7687125912F4073AB7A826B1D98B26993",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs.meta",
+      "sha256": "DC295B149A9D40DD46436117C4E50C9CAD321C662AF11099D2AB5BF7444898C1",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs.meta",
+      "sha256": "AAF467A87589D7C6780283FE5AF0CFD4C607D03EA312D07ABB7C3A64C0515F97",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+      "sha256": "695BCB882892D1CF585B471F2F1937EAAB560CD922BF5941ED7B1AD4194E19BE",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/prior-history.raw",
+      "sha256": "6EC0313E1FD6001AD95C0470435620A173CDB0B36DD932169581B064257C4241",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-state.json",
+      "sha256": "04C8EBD2C8C3390595D6C9D775D628B9E485B2A0AA761B22F162A5B4C347F2AC",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+      "sha256": "CBE21260FDDB7A1D0014021E2735D9823E480806C92B9841C16AAD17E2859591",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeDataCatalog.cs",
+      "sha256": "4741563E9A275D72D125A8D522E34A90B62A13FA32349325029BE99D2BE8C4A9",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KnockoutFeedRowSnapshotEditorTests.cs",
+      "sha256": "DC8ABD9E1B35970C572A663ED877255675E90BDD9F96FD637881DE8049DD36A6",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "3838B133247C5835A8DE71EAD2BABCA75720475E88D9E01D342B913B6C1ACE25",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs",
+      "sha256": "E6C99D13964A441AA143F8B42752993D8D1CAD0CC3583646BD85B8BBA56F6F54",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "sha256": "D338303119F02F8912735C84F6029AE2A989170BA04AA1C9E68024411D420593",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs",
+      "sha256": "69B0EC20F814E8E322CDF4FA4C02D9DD658212C8ADD28322FE47BF3E42F2279E",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs.meta",
+      "sha256": "6F62ECD41AFA101BD77033108D3B7D9DD2252DDB8BA94D428142ED75351DADC1",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json",
+      "sha256": "DA6802D9EB6519BCE03CD92423CB15E35B2077CA57C1C63291DFDC49F34195D5",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.logic-gc.json",
+      "sha256": "33BAABF0CB76B9ECF15BD33F04771FD9DC2D9BC8951430CAB2315FF190FB77E2",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.final-checksum.json",
+      "sha256": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json",
+      "sha256": "50F35D4F736B87CF8FE63C1D0597ED7DFE04998DD7E44451B60DBC3CF5A9C199",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.logic-gc.json",
+      "sha256": "CB790793173FCE63CFE9F11F92770FEE8B5391180AFDA95F157E1E5249C9FDE9",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.final-checksum.json",
+      "sha256": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "BEAC09ED3AE7C829F5644A976E16520960B8236F7AF779DCB1A8B31FE1D3A391",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs",
+      "sha256": "8CE190A95FFA3A7A7F0BD9F04C41A3BC39201177B725CC88FD2757A54ACA6404",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs.meta",
+      "sha256": "BEEC83A26525EE5BA40162A638C8F80FC2A410766AA3325DAC0E9A3B5CDE6D91",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008/windows-audit-01.json",
+      "sha256": "54CA99C2BF4C57098B934C37D85FEA93005F7A4F59024AE8AFFF1AC9357EC1BA",
+      "same": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008/windows-01/suite-result.json",
+      "sha256": "29B5E6C767FEAA753483F5FECB83819FC26ECB8DE1F4B45B7CC4F8FC17770094",
+      "same": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/01-BruteForceSceneQuery.cs",
+      "sha256": "8540EA267D6FED8705B38B81244A3D97A4A815977B47BA691CAFC0AE547E5F56",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "D37FA3BE2A372097025B0EEBD3DC40B509E9DDF08B1E314309A9CB3834890B00",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "sha256": "17BA89DA6D93A906AB6E8B1222813E5181804F24A6C632FFF55A904EC9D52C61",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/04-STATE.md",
+      "sha256": "D3699AAE3111E37AA2932FAD3C4AF7F474625FB2773C3ED664E4B07D4A3FA3B7",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "87513B2F6F997AC5F785EA47716AACD9703AC409CAF2C6725A248AB765CCCADB",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/06-INDEX.md",
+      "sha256": "72BF1CDBF35814098CE24585F4B5A2B4F8FB1AF7F60009CDEB80FF99FA4934D4",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "sha256": "33B7E1D7E674CE02042D3DD68E90D00CE8C65DFC3F6DD6D59D54516DFCD9F883",
+      "same": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008.md",
+      "sha256": "9CFC117F8A13C21620F049F3ED9BAE048B85E11B4B7955D56DE5637B96AC0B15",
+      "same": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "2EAF124DCC51EA10D752F64CDFA34CD7CADDAD0CDB9F187E4B95DC3FD9D11970"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "C2D330956550050AF6D956E4A8711A68D3C11AE51AD9B047D0A9FFEDA0C5F129"
+    }
+  ],
+  "guardChanged": [],
+  "backupChanged": [],
+  "sharedProductionRequestAbsent": true
+}

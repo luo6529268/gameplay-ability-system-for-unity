@@ -1,0 +1,25 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job started.",
+    "data": {
+      "job_id": "a11b2cd49e034a30becbc25777480293",
+      "status": "running",
+      "mode": "EditMode",
+      "include_details": true,
+      "include_failed_tests": true
+    }
+  }
+}

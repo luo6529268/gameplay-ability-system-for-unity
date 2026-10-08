@@ -101,6 +101,9 @@ namespace NTSD.Test.Editor
             public bool allocationFrameProvenance;
             public bool allocationObserverStages;
             public bool prepareObserverLiterals;
+            public bool cameraGcCallstackCapture;
+            public bool lateCameraGcCallstackCapture;
+            public bool lateCameraStopRequested;
             public bool observerLiteralReadinessPrepared;
             public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcBefore;
             public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcAfter;
@@ -509,6 +512,77 @@ namespace NTSD.Test.Editor
             StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01/", true, true, true);
         }
 
+        [MenuItem("NTSD/Validation/Optimization/Batch43 Foot Texture Readiness 1800 Cameras")]
+        private static void StartBatch43FootTextureReadiness()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/camera-01/", true, true, true);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch43 Foot Texture Readiness Reentry 1800 Cameras")]
+        private static void StartBatch43FootTextureReadinessReentry()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/camera-02/", true, true, true);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch42 First Eight Camera GC Callstacks")]
+        private static void StartBatch42CameraCallstacks()
+        {
+            const string root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/";
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            Require(!Directory.Exists(root), "Refuses to reuse camera callstack evidence directory.");
+            Directory.CreateDirectory(root);
+            report = CreateCameraCallstackReport(root);
+            report.renderPipeline = DetectPipeline();
+            report.startedUtc = DateTime.UtcNow.ToString("O");
+            report.sceneHashBefore = HashScene();
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch47 Late Camera GC Callstacks")]
+        private static void StartBatch47LateCameraCallstacks()
+        {
+            const string root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/";
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            Require(!Directory.Exists(root), "Refuses to reuse late camera evidence directory.");
+            Directory.CreateDirectory(root);
+            report = CreateLateCameraCallstackReport(root);
+            report.renderPipeline = DetectPipeline();
+            report.startedUtc = DateTime.UtcNow.ToString("O");
+            report.sceneHashBefore = HashScene();
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        private static Report CreateLateCameraCallstackReport(string root)
+        {
+            Report late = CreateCameraCallstackReport(root);
+            late.targetCameraFrames = 1800;
+            late.lateCameraGcCallstackCapture = true;
+            late.allocationScope = "INSTRUMENTED_CALLSITE_DIAGNOSTIC_ONLY; stop after a calibrated allocation event or at 1800 cameras; " +
+                "full camera scopes with separate observers; no-event capture does not replace strict zero-GC acceptance";
+            return late;
+        }
+
+        private static Report CreateCameraCallstackReport(string root)
+        {
+            return new Report
+            {
+                cycle = 1, outputRoot = root, runNextCycle = false, targetCameraFrames = 8,
+                requireActiveAuxiliaryCoverage = true, calibratedAllocationSampling = true,
+                allocationFrameProvenance = true, allocationObserverStages = true,
+                prepareObserverLiterals = true, cameraGcCallstackCapture = true,
+                allocationScope = "INSTRUMENTED_CALLSITE_DIAGNOSTIC_ONLY; first eight complete calibrated camera envelopes, " +
+                    "separate observers; does not replace the strict 1800-camera zero-GC acceptance",
+            };
+        }
+
         private static void StartCalibratedGc(string root, bool frameProvenance,
             bool observerStages = false, bool prepareLiterals = false)
         {
@@ -668,6 +742,10 @@ namespace NTSD.Test.Editor
                             "Observer stage recorder calibration failed; UNKNOWN, not zero-GC.");
                     }
                 }
+                if (report.lateCameraGcCallstackCapture)
+                    BattleOptimizationCpuGcCaptureEditor.BeginLateCameraWindow(OutputRoot);
+                else if (report.cameraGcCallstackCapture)
+                    BattleOptimizationCpuGcCaptureEditor.BeginCameraWindow(OutputRoot);
                 report.phase = "OBSERVING";
                 SaveSession();
             }
@@ -696,6 +774,8 @@ namespace NTSD.Test.Editor
                 beginObserverAllocationScope = allocationRecorder.End();
                 RecordObserverScope(beginObserverAllocationScope);
             }
+            if (report.cameraGcCallstackCapture)
+                BattleOptimizationCpuGcCaptureEditor.BeginCameraEnvelope(Time.frameCount, driver.CurrentTickIndex);
             allocationRecorder?.Begin();
             cameraObservationOpen = true;
             if (report.sampleTiming)
@@ -716,6 +796,12 @@ namespace NTSD.Test.Editor
                 if (!cameraAllocationScope.valid || !cameraAllocationScope.calibratedBefore)
                     report.cameraGcAllocInvalidScopes++;
             }
+            if (report.cameraGcCallstackCapture)
+                BattleOptimizationCpuGcCaptureEditor.EndCameraEnvelope(Time.frameCount, driver.CurrentTickIndex,
+                    cameraAllocationScope.allocationEvents,
+                    cameraAllocationScope.valid && cameraAllocationScope.calibratedBefore);
+            if (report.lateCameraGcCallstackCapture)
+                report.lateCameraStopRequested = BattleOptimizationCpuGcCaptureEditor.LateCameraStopRequested;
             cameraObservationOpen = false;
             allocationRecorder?.Begin();
             long observerStart = GC.GetAllocatedBytesForCurrentThread();
@@ -758,6 +844,8 @@ namespace NTSD.Test.Editor
                     }
                 }
             }
+            if (report.lateCameraGcCallstackCapture && report.lateCameraStopRequested)
+                report.phase = PhaseComplete;
         }
 
         private static void RecordObserverScope(BattleScopedGcAllocationRecorder.ScopeResult result)
@@ -770,6 +858,8 @@ namespace NTSD.Test.Editor
 
         private static void DisposeAllocationRecorder()
         {
+            if (report != null && report.cameraGcCallstackCapture)
+                BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("camera-probe-dispose");
             observerStageRecorder?.Dispose();
             observerStageRecorder = null;
             observerStageIndex = -1;
@@ -1264,6 +1354,8 @@ namespace NTSD.Test.Editor
 
         private static void CompleteWindow()
         {
+            if (report.cameraGcCallstackCapture)
+                BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("eight-completed-cameras");
             if (report.calibratedAllocationSampling && allocationRecorder != null)
                 report.gcAllocAfter = allocationRecorder.Calibrate();
             if (report.allocationObserverStages && observerStageRecorder != null)
@@ -1325,11 +1417,14 @@ namespace NTSD.Test.Editor
             }
             SaveNew(OutputRoot + "materialization-window-" + report.cycle.ToString("00") + ".json",
                 window.ToJson());
-            Require(report.observedSubmissionSlots >= 1 && report.observedSubmissionSlots <= 2 && report.sampleCount > 1,
+            Require(report.observedSubmissionSlots >= 1 && report.observedSubmissionSlots <= 2 &&
+                report.sampleCount > (report.lateCameraGcCallstackCapture ? 0 : 1),
                 "No valid submission-slot observation window.");
             if (report.replayProductionCatalog || report.requireActiveAuxiliaryCoverage)
             {
-                Require(report.sampleCount == report.targetCameraFrames, "Distinct camera target not met.");
+                Require(report.sampleCount == report.targetCameraFrames ||
+                    (report.lateCameraGcCallstackCapture && report.lateCameraStopRequested),
+                    "Distinct camera target not met.");
                 for (int index = 0; index < report.frames.Length; index++)
                 {
                     FrameSample sample = report.frames[index];
@@ -1346,11 +1441,13 @@ namespace NTSD.Test.Editor
                 }
                 if (report.calibratedAllocationSampling)
                 {
+                    int requiredScopes = report.lateCameraGcCallstackCapture ? report.sampleCount : report.targetCameraFrames;
                     Require(report.gcAllocBefore.passed && report.gcAllocAfter.passed &&
-                        report.cameraGcAllocScopes >= report.targetCameraFrames &&
-                        report.observerGcAllocScopes >= report.targetCameraFrames * 2 &&
+                        report.cameraGcAllocScopes >= requiredScopes &&
+                        report.observerGcAllocScopes >= requiredScopes * 2 &&
                         report.cameraGcAllocInvalidScopes == 0 && report.observerGcAllocInvalidScopes == 0 &&
-                        report.cameraGcAllocEvents == 0 && report.observerGcAllocEvents == 0,
+                        (report.lateCameraGcCallstackCapture ||
+                            (report.cameraGcAllocEvents == 0 && report.observerGcAllocEvents == 0)),
                         "The full camera/observer scope did not prove calibrated zero GC.Alloc events; evidence retained.");
                 }
                 else
@@ -1376,7 +1473,8 @@ namespace NTSD.Test.Editor
                     report.footAuthoringAfter.runtimeEnabled, report.footAuthoringAfter.runtimeSpriteAvailable,
                     maximumSelfCommands, maximumFootMarkers);
             }
-            report.status = "PASS";
+            report.status = report.lateCameraGcCallstackCapture
+                ? (report.cameraGcAllocEvents > 0 ? "DIAGNOSTIC_COMPLETE" : "DIAGNOSTIC_NO_EVENT") : "PASS";
         }
 
         private static MemorySnapshot CaptureMemory(BattleManagedMemoryBoundary memory)

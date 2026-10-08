@@ -1,0 +1,7 @@
+{
+  "chunk_id": "262ca1",
+  "wall_time_seconds": 0.6534252,
+  "exit_code": 0,
+  "original_token_count": 68,
+  "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Refresh requested.\",\"data\":{\"refresh_triggered\":false,\"compile_requested\":true,\"resulting_state\":\"compiling\",\"hint\":\"If Unity enters compilation/domain reload, poll editor_state until ready_for_tools is true.\"}}}\r\n"
+}

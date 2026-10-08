@@ -1,0 +1,13 @@
+{
+  "classification": "REJECTED_ATTRIBUTION_INSTRUMENTATION_LIFO_ERROR",
+  "observed": "Console reported Missing and Non-matching Profiler.EndSample for NTSD.Optimization.H11.CameraEnvelope; both Play and subsequent idle Edit Mode LoadProfile returned false.",
+  "sourceProof": "Library/PackageCache/com.unity.render-pipelines.universal@14.0.12/Runtime/UniversalRenderPipeline.cs:820-823 and875-878 wrap begin/end callbacks in separate ProfilingScope blocks.",
+  "limitation": "Cannot call these two allocation events a clean reproduction of production GC sites. Original35 strict full-camera FAIL remains open. No inferred bytes from TimeNanoseconds counters.",
+  "files": [
+    {"name":"cpu-gc-state-recovered.json","bytes":4451,"sha256":"27733E8FEBAD3D41E46B7D1311CA6DDF38C790973BE669F534CE40A0F4D8D32A"},
+    {"name":"cpu-gc-state.json","bytes":4403,"sha256":"C643BC855D0FAEACE156900EF7AE07A5CBB1BED206336D78B37B15999E394DEB"},
+    {"name":"cpu-gc.raw","bytes":23915448,"sha256":"98FCB7129C11F246423DCD1616CE2146E5C27E400AC8B50B3B58A2BA0DFB1819"},
+    {"name":"materialization-window-01.json","bytes":4280,"sha256":"0717739DCC6D138A39BDCEAB26787AD7451419F5B06C39FC52DCA462D7F1C0E8"},
+    {"name":"production-window-01.json","bytes":46212,"sha256":"CC70B06C105EFB306DE4175C9E3CC4E88EAD485B9D7EE858BAD95FA161AD31D8"}
+  ]
+}

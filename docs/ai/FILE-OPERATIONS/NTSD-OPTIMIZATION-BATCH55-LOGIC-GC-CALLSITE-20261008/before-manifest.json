@@ -1,0 +1,436 @@
+{
+  "utc": "2026-10-07T19:14:26.6256250Z",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "rows": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "exists": true,
+      "sha256": "36DC4DBFE3C3DAB06D5D52C5AB46783A5761FEF0B4D30231A1D8828F2165192A",
+      "bytes": 43559
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha256": "E36B84D3CF2516476E565806DE460EC4EE9C5EC1D0951A1CACFA48EDC5E02D57",
+      "bytes": 125611
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha256": "CCE0F4295C6A10AD6BEB4E4CC314A0CEC02121D3C5640EC97D1461F1618CF572",
+      "bytes": 695636
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha256": "271AD9E94BD4E16895AF7D6BB97CCBC6F054E64ED1E9A237C044AB1A89A3595C",
+      "bytes": 1599921
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha256": "B08FB6C93FC53862E191A383426D5E50669AB38FFC05AB9C65A17AF5DADA1CE1",
+      "bytes": 1533287
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha256": "9413F4A4BCD736429FAE0FB723B83692F24259E14EB93836371B8BFE05F06115",
+      "bytes": 82798
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha256": "F5C49E4A06E94E6CD47CED8FE86574E5723D340C4F70328FF4A20DAA02BD430F",
+      "bytes": 119550
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha256": "FD0AC60C9C3C6BB3B2CA776E6E28F347FBDB6E40B604F2B61C224F030D767C78",
+      "bytes": 510
+    },
+    {
+      "path": "AGENTS.md",
+      "exists": true,
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "bytes": 35985
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "exists": true,
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "bytes": 24069
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "exists": true,
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "bytes": 28102
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "exists": true,
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "bytes": 27269
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "exists": true,
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "bytes": 43193
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "exists": true,
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "bytes": 2127125
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "exists": true,
+      "sha256": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2",
+      "bytes": 3668
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "exists": true,
+      "sha256": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343",
+      "bytes": 197
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "exists": true,
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "bytes": 109282
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "exists": true,
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "bytes": 652229
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "exists": true,
+      "sha256": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "bytes": 17264
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "exists": true,
+      "sha256": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "bytes": 14690
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "exists": true,
+      "sha256": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "bytes": 9636
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "exists": true,
+      "sha256": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "bytes": 2772
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "exists": true,
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "bytes": 175639
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "exists": true,
+      "sha256": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "bytes": 16476
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "exists": true,
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "bytes": 371096
+    },
+    {
+      "path": "Packages/manifest.json",
+      "exists": true,
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "bytes": 2923
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "exists": true,
+      "sha256": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+      "bytes": 2574
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "exists": true,
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "bytes": 87
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "exists": true,
+      "sha256": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "bytes": 39905
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "exists": true,
+      "sha256": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037",
+      "bytes": 32120
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "exists": true,
+      "sha256": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D",
+      "bytes": 112256
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "exists": true,
+      "sha256": "92E597D3A2FA9152EAB5DEAD667F8E708BDD9769E88D0A3A36CB6CEA978C68EF",
+      "bytes": 349782
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "exists": true,
+      "sha256": "C2B22C76704DE14E6D6533282942195B143D255E3197A424F893BAFCDD02C4CF",
+      "bytes": 243
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "exists": true,
+      "sha256": "4100394C9BD4A0AC6A5C53C9B6553F9C291FC6BC40E0F34442F3444B5FDA5D6A",
+      "bytes": 150720
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha256": "47531885C4D94017D0B91F8F01D38A7E9E860FD81BE0CFB3CA904F466180D989",
+      "bytes": 42590
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-right-x550.json",
+      "exists": true,
+      "sha256": "C2CA6F31380366CD49F9278A679282F203929AE38691AB4428AA6811D05834C8",
+      "bytes": 717
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-left-x350.json",
+      "exists": true,
+      "sha256": "8A9A59275A7CB09685A33DCE4C4E764DEA13F9CCD29474C63D2BBBD258DA3627",
+      "bytes": 717
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/right-x550-root-v1-trace.jsonl",
+      "exists": true,
+      "sha256": "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE",
+      "bytes": 556054
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/left-x350-root-v2-trace.jsonl",
+      "exists": true,
+      "sha256": "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2",
+      "bytes": 552792
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+      "exists": true,
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "bytes": 5469312
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+      "exists": true,
+      "sha256": "5D53AEE14BAEFDD7AF8E9971DE5182E8C2B860A00EE8C9258229CD9A08B82336",
+      "bytes": 11804
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "exists": true,
+      "sha256": "C36C4ABEE086104A13BDE5363322C3BC777AEF766D83A3EEB49794761263602D",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "exists": true,
+      "sha256": "D630B6A08824D4C4F621BAAFF242896322C2CBAA56CAF542DE7C53217694336F",
+      "bytes": 60
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "exists": true,
+      "sha256": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "bytes": 240
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/REPORT.md",
+      "exists": true,
+      "sha256": "FA0304C2D67295583105AD5C7D32E113A9C0D5FA64B75FDC7B674A8C1D535E76",
+      "bytes": 6306
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+      "exists": true,
+      "sha256": "D1D40060948EF8167EDF912B81B8B90C7B831C4294829BC367E29956C775F555",
+      "bytes": 23907522
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "exists": true,
+      "sha256": "351937511B65C91E951626FF375C188EBC33EF30F43FCF1D54ACBACCA3ED1AA7",
+      "bytes": 105171
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "exists": true,
+      "sha256": "63018018DB4D9397A959B0FE77181982248397908BFA71DC6978EF1D552C51A2",
+      "bytes": 10579
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ItrRestTracker.cs",
+      "exists": true,
+      "sha256": "8B5BFED71E3FA3843431703C3619431EE7C6D78CFB02219EF8BE84E1395236CD",
+      "bytes": 11165
+    },
+    {
+      "path": "../NTSD_Server/packages/com.ntsd.battle-kernel/Runtime/Core/RuntimeRestStore.cs",
+      "exists": true,
+      "sha256": "5F5CD4341DC42CCE4FFB704FA212D4623B363B8179A21425AAC30025FADEA745",
+      "bytes": 52426
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007/REPORT.md",
+      "exists": true,
+      "sha256": "F42EED845714FF6513611AB357249DA8913B9A13F956C33CB1E3C9859626D2F4",
+      "bytes": 5986
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048.md",
+      "exists": true,
+      "sha256": "D0C31222AF942A717C565AFA3C7DEB2575FC624FE4A71BCC1BCC51949C82FF32",
+      "bytes": 3360
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007.md",
+      "exists": true,
+      "sha256": "A86826BC9976C73E9B7BD2FC2BC3A0CC8CFF97CC5A0FBA130D77A3347DEF5179",
+      "bytes": 5318
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/REPORT.md",
+      "exists": true,
+      "sha256": "EAB5FB84FA9AC10FF6878D9F2AF0A491D9125811178D202F84D6F95F27A49075",
+      "bytes": 7705
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007.md",
+      "exists": true,
+      "sha256": "67C52E63D4B6485734DC8B0B0896663BFFDB2EE02672D46D74D3288E7C769065",
+      "bytes": 6036
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049.md",
+      "exists": true,
+      "sha256": "257CB77C702D26C7C11568B160B0A33035057F471A4C27B4D9D2BEDEB2041799",
+      "bytes": 6605
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007.md",
+      "exists": true,
+      "sha256": "F4AD612FE677182CDCF09167CE4648073C99B0EBE2F2509256F0A6E5ACA56C8A",
+      "bytes": 5960
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050.md",
+      "exists": true,
+      "sha256": "9D327F4988102EDFA00590E5F9C8F9A0ED06A9014ECDFE58B13BED336EE8065B",
+      "bytes": 6005
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007/REPORT.md",
+      "exists": true,
+      "sha256": "4D48680D5AE305A6387B9EBE74E613248CEC58ADE01615F33833712945818B18",
+      "bytes": 5909
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha256": "5894AC04AF8FE1DEFDECD1A1389C134FE34003BE36B29BF87A00589E384D84B5",
+      "bytes": 25247
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008.md",
+      "exists": true,
+      "sha256": "F2DC52B8061828E69D32FBDAF3895B9058DF5971F94B9BC4F97FD85D84039A10",
+      "bytes": 3481
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051.md",
+      "exists": true,
+      "sha256": "F50A252573919A11E73AD8DA672EC4D63649828580BEA7CC226F9FBA0C8AFCCD",
+      "bytes": 4296
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008/REPORT.md",
+      "exists": true,
+      "sha256": "5E75BE46D12F8DCC7258F01AC849A6036A8180CB120245566BE624C8C0427D2E",
+      "bytes": 4164
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008.md",
+      "exists": true,
+      "sha256": "60CF6F0D7DEDB5D67B84F3D75508003B2B1400A7A04994CC659F5086EFA8A6EF",
+      "bytes": 4645
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md",
+      "exists": true,
+      "sha256": "BD89A2BA0150C9595AEFFCA8C4FC7621C85A66D423D80BF0B6B9EF3009D9FEA4",
+      "bytes": 4474
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/REPORT.md",
+      "exists": true,
+      "sha256": "3B9F194A747F02BC7BE795E99C20CC16C9C4EB8E3487D3F0F8CEDE783FFC6ECB",
+      "bytes": 5507
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha256": "8540EA267D6FED8705B38B81244A3D97A4A815977B47BA691CAFC0AE547E5F56",
+      "bytes": 368809
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha256": "D37FA3BE2A372097025B0EEBD3DC40B509E9DDF08B1E314309A9CB3834890B00",
+      "bytes": 319028
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "exists": true,
+      "sha256": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928",
+      "bytes": 554934
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "exists": true,
+      "sha256": "F2DC9B547B94C4B7949E3220A8536ED7687125912F4073AB7A826B1D98B26993",
+      "bytes": 25600
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs.meta",
+      "exists": true,
+      "sha256": "DC295B149A9D40DD46436117C4E50C9CAD321C662AF11099D2AB5BF7444898C1",
+      "bytes": 60
+    }
+  ],
+  "sharedRequestJsonPresent": false,
+  "newOutputPresent": false,
+  "newScriptPresent": false,
+  "guid": "7c32f58b2600482fa8b42836b4dfb03e"
+}

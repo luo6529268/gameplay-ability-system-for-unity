@@ -1,0 +1,22 @@
+[
+  {
+    "mode": "dispersed1000",
+    "fieldCount": 65,
+    "differenceExceptOutput": 0,
+    "entity": 1000,
+    "AI": "ai",
+    "warmup": 120,
+    "samples": 180,
+    "hash": "6A2D88C991CC01070903B2643FD030E191BA3BA07DCC46A6FEE5A5BB76186272"
+  },
+  {
+    "mode": "combat1000",
+    "fieldCount": 65,
+    "differenceExceptOutput": 0,
+    "entity": 1000,
+    "AI": "ai",
+    "warmup": 120,
+    "samples": 180,
+    "hash": "2071FB57DDEAA2A1C35EF3726ECA2D9556F19C6399B6F1D77701EF3750F071D6"
+  }
+]

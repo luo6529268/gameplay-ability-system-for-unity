@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-08T00:29:12.4526424Z",
+  "copies": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/01-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "1542837B7ACBEA8E2E6963A06BE692F8D04B4EE62BC228147BD08F130BF88510",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/02-CHANGE-LEDGER.md",
+      "sha": "DE169D0F8635238DB49F0BDC6623FE11CE5B66447445D8F57C6986A615707D1B",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/03-STATE.md",
+      "sha": "CBB3CBA00C85DAC4DA58C9288F59D9F57409FEE2B89D80F8AD98B0F19D84D468",
+      "matched": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/04-CODEX-CURRENT-HANDOFF.md",
+      "sha": "6DF7B7A7950FF07DC89D530C934D6FEC1ED3A5CE74044B2C7208B5D39A51BC9E",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/05-INDEX.md",
+      "sha": "505977766B17A785F2561B45AA2209A289FFB85727B99430ECAD9F17255BD2FB",
+      "matched": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/06-battle-optimization-progress-tracker.md",
+      "sha": "B849818594FDF266E9A1254A1D455AC731381E0F4D183C54D281FCBB018D94EC",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/07-NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008.md",
+      "sha": "BDF0A4CE07F6733E2B4B839C593AA5A8362C7624C2B520811C7B072D0ADB2EFF",
+      "matched": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/08-Goal18_LastTestResults.xml",
+      "sha": "2658642E7F5A09A943AA513AECC3AF43189C782BD8A51571AD7813F59C974A9B",
+      "matched": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/backups-01/09-NTSD_ProductionEntityStress.result",
+      "sha": "DC616706D02D177854F73B86B1FE2D7E9B470FA81C984779F2B978B2F2DF361C",
+      "matched": true
+    }
+  ]
+}

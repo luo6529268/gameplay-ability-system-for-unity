@@ -1,0 +1,147 @@
+warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/01-BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it
+diff --git a/docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/01-BruteForceSceneQuery.cs b/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+index 72e5f096..31930098 100644
+--- a/docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/01-BruteForceSceneQuery.cs
++++ b/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+@@ -254,6 +254,9 @@ namespace NTSD.Animation
+         public bool EnableBruteCoarseDispatchForDiagnostics { get; set; }
+         public long LastBruteCoarseDispatchDirectionCountForDiagnostics { get; private set; }
+         public long LastBruteCoarseDispatchRejectCountForDiagnostics { get; private set; }
++        public bool EnableBruteCoarseEnvelopeForDiagnostics { get; set; }
++        public long LastBruteCoarseEnvelopeDirectionCountForDiagnostics { get; private set; }
++        public long LastBruteCoarseEnvelopeRejectCountForDiagnostics { get; private set; }
+         public bool LastBruteEligibilityReuseAppliedForDiagnostics { get; private set; }
+         public long TotalBruteEligibilityReuseCollectionAppliedForDiagnostics { get; private set; }
+         public bool EnableBruteRejectedBindingReuseForDiagnostics { get; set; }
+@@ -1674,6 +1677,8 @@ namespace NTSD.Animation
+                 LastBruteGeometryFirstRejectCountForDiagnostics = 0;
+                 LastBruteCoarseDispatchDirectionCountForDiagnostics = 0;
+                 LastBruteCoarseDispatchRejectCountForDiagnostics = 0;
++                LastBruteCoarseEnvelopeDirectionCountForDiagnostics = 0;
++                LastBruteCoarseEnvelopeRejectCountForDiagnostics = 0;
+                 LastBruteKind5PresenceAppliedForDiagnostics = false;
+                 LastBruteKind5ScanSkippedForDiagnostics = 0;
+                 LastBruteRejectedBindingReuseAppliedForDiagnostics = false;
+@@ -2546,6 +2551,9 @@ namespace NTSD.Animation
+ 
+                 // Alignment contract: NTSD-OPT-H07-BRUTE-EXACT-CACHE-036.
+                 // Ordinary collection only; keep pair order and rebuild per call.
++                bool buildCoarseEnvelope = EnableBruteCoarseEnvelopeForDiagnostics &&
++                                           EnableBruteGeometryFirstForDiagnostics &&
++                                           !EnableBruteBranchTimingForDiagnostics;
+                 for (int i = 0; i < count; i++)
+                 {
+                     ref RoleAwareFormalParticipant participant = ref _roleFormalParticipants[i];
+@@ -2553,7 +2561,7 @@ namespace NTSD.Animation
+                         continue;
+                     if (!BuildRoleAwareFormalExactCommonCache(ref participant))
+                         return false;
+-                    BuildRoleAwareFormalExactAttackCache(ref participant);
++                    BuildRoleAwareFormalExactAttackCache(ref participant, buildCoarseEnvelope);
+                     BuildRoleAwareFormalExactBodyCache(ref participant);
+                     LastBruteExactCacheBuildCountForDiagnostics++;
+                 }
+@@ -2583,6 +2591,32 @@ namespace NTSD.Animation
+             _lastPairCollectionGateCallCount++;
+ #endif
+             LastBruteExactCacheDirectionCountForDiagnostics++;
++            if (EnableBruteCoarseEnvelopeForDiagnostics &&
++                EnableBruteGeometryFirstForDiagnostics &&
++                !EnableBruteBranchTimingForDiagnostics)
++            {
++                LastBruteCoarseEnvelopeDirectionCountForDiagnostics++;
++                LF2Entity attacker = attackerParticipant.Entity;
++                LF2Entity target = targetParticipant.Entity;
++                if (attacker == null || target == null || attacker == target)
++                {
++                    _lastRoleAwareExactDirectionCount++;
++                    return;
++                }
++                // Alignment contract: NTSD-OPT-H07-BRUTE-COARSE-ENVELOPE-058.
++                // An overlapping envelope is not acceptance; retain the original coarse test.
++                if (!attackerParticipant.HasBruteCoarseEnvelope ||
++                    !targetParticipant.HasCollisionReleaseBody ||
++                    !targetParticipant.HasBodyUnion ||
++                    !Overlap(attackerParticipant.BruteCoarseEnvelopeWorld, targetParticipant.BodyUnionWorld))
++                {
++                    _lastRoleAwareExactDirectionCount++;
++                    PreserveBruteRejectedBinding(in attackerParticipant, in targetParticipant, targetOrdinal);
++                    LastBruteGeometryFirstRejectCountForDiagnostics++;
++                    LastBruteCoarseEnvelopeRejectCountForDiagnostics++;
++                    return;
++                }
++            }
+             if (EnableBruteCoarseDispatchForDiagnostics &&
+                 EnableBruteGeometryFirstForDiagnostics &&
+                 !EnableBruteBranchTimingForDiagnostics)
+@@ -4380,7 +4414,8 @@ namespace NTSD.Animation
+         }
+ 
+         private void BuildRoleAwareFormalExactAttackCache(
+-            ref RoleAwareFormalParticipant participant)
++            ref RoleAwareFormalParticipant participant,
++            bool buildBruteCoarseEnvelope = false)
+         {
+             if (participant.HasExactAttackCache)
+                 return;
+@@ -4431,6 +4466,13 @@ namespace NTSD.Animation
+                             itr,
+                             itrIndex,
+                             worldRect));
++                    if (buildBruteCoarseEnvelope && itr.kind == 5)
++                    {
++                        participant.BruteCoarseEnvelopeWorld = participant.HasBruteCoarseEnvelope
++                            ? UnionBruteCoarseEnvelope(participant.BruteCoarseEnvelopeWorld, worldRect)
++                            : worldRect;
++                        participant.HasBruteCoarseEnvelope = true;
++                    }
+                     participant.ExactItrRectCount++;
+                     _lastRoleAwareExactItrRectBuildCount++;
+                 }
+@@ -4444,11 +4486,27 @@ namespace NTSD.Animation
+                     ordinaryItrUnion,
+                     fullHeight: false);
+                 participant.HasOrdinaryItrUnion = true;
++                if (buildBruteCoarseEnvelope)
++                {
++                    participant.BruteCoarseEnvelopeWorld = participant.HasBruteCoarseEnvelope
++                        ? UnionBruteCoarseEnvelope(participant.BruteCoarseEnvelopeWorld, participant.OrdinaryItrUnionWorld)
++                        : participant.OrdinaryItrUnionWorld;
++                    participant.HasBruteCoarseEnvelope = true;
++                }
+             }
+ 
+             participant.HasExactAttackCache = true;
+         }
+ 
++        private static WorldRect UnionBruteCoarseEnvelope(in WorldRect first, in WorldRect second)
++        {
++            return new WorldRect(
++                Math.Min(first.X1, second.X1),
++                Math.Min(first.Y1, second.Y1),
++                Math.Max(first.X2, second.X2),
++                Math.Max(first.Y2, second.Y2));
++        }
++
+         private void BuildRoleAwareFormalExactBodyCache(
+             ref RoleAwareFormalParticipant participant)
+         {
+@@ -8657,6 +8715,8 @@ namespace NTSD.Animation
+             HasExactCommonCache = false;
+             HasExactAttackCache = false;
+             HasExactKind5Itr = false;
++            HasBruteCoarseEnvelope = false;
++            BruteCoarseEnvelopeWorld = default;
+             HasExactBodyCache = false;
+             HasBruteRejectedBindingProbe = false;
+         }
+@@ -8676,6 +8736,8 @@ namespace NTSD.Animation
+         public WorldRect BodyUnionWorld { get; set; }
+         public bool HasOrdinaryItrUnion { get; set; }
+         public bool HasExactKind5Itr { get; set; }
++        public bool HasBruteCoarseEnvelope { get; set; }
++        public WorldRect BruteCoarseEnvelopeWorld { get; set; }
+         public bool HasBruteRejectedBindingProbe { get; set; }
+         public WorldRect OrdinaryItrUnionWorld { get; set; }
+         public int CollisionX { get; set; }

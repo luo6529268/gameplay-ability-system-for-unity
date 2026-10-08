@@ -1,0 +1,63 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "4b879277b5a34bd5b9ebccae2c6698b5",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791371022794,
+      "finished_unix_ms": 1791371033855,
+      "last_update_unix_ms": 1791371033855,
+      "progress": {
+        "completed": 8,
+        "total": 9493,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791371032935,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessStillHonorsExplicitAuthoring",
+        "last_finished_unix_ms": 1791371033152,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessHoldsBothFramesBeforeSampling",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessHoldsFallbackWhenFramesEmpty",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessRefreshesInPlaceFrameReplacement",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessReleasesOldFramesOnShorterConfig",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessReleasesReferencesWhenConfigRemoved",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessRepeatedSamplingKeepsStorage",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessReusesArrayForUnchangedCount",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCentralRuntimeFootMarkerEditorTests.RuntimeConfig_ReadinessStillHonorsExplicitAuthoring",
+            "message": "  All animation textures must be acquired and held before camera sampling.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

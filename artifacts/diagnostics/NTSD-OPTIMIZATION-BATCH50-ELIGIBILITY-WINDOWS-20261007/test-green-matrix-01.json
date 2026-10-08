@@ -1,0 +1,19 @@
+{
+  "testNames": [
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_OnlyChangesOutputFromProductionSmoke",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_RejectsOutsideFixedOffOnMatrix",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_ApplyAndRestorePreservesProductionFlags",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RestoreRestoresPriorValueAndReleasesReference",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RejectsOtherDefaultOffCandidate",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_CompleteRejectsFlagDriftAndRestoreStillWorks",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_OnlyChangesOutputFromProductionSmoke",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_RejectsOutsideFixedTwoMatrix",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5Presence_RestoreRestoresOriginalFlag",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix"
+  ],
+  "newCases": 12,
+  "oldCases": 14,
+  "expectedCases": 26
+}

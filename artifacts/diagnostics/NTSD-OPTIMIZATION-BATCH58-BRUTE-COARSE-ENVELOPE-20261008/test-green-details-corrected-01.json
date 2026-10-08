@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ee477e5cb7994d8896a04e8656f5eba0",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791410165496,
+      "finished_unix_ms": 1791410197707,
+      "last_update_unix_ms": 1791410197707,
+      "progress": {
+        "completed": 31,
+        "total": 9751,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791410190346,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteKind5Presence_Kind5OutsideOrdinaryUnionIsRetained(True)",
+        "last_finished_unix_ms": 1791410190348,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_CapacityFallbackDoesNotApplyOrGrow(1,3)",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_CapacityFallbackDoesNotApplyOrGrow(2,1)",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

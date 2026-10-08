@@ -1,0 +1,233 @@
+# NTSD 有限首阶段优化执行合同（完成边界更正）
+
+> 当前有效版本：`PHASE_COMPLETION_BOUNDARY_CORRECTED / STAGE_NOT_COMPLETE`（2026-10-07）。
+> 用户更正：边界用于判断阶段是否完成，不是次数到限就停止目标。当前第0—8节是执行入口；后文历史快照与原次数停点不再定义执行规则。
+> 本轮仅修订文档；没有新优化子批、C#改动、Unity/测试/测量或Goal状态操作。操作：[NTSD-OPTIMIZATION-PHASE-COMPLETION-BOUNDARY-CORRECTION-20261007](../FILE-OPERATIONS/NTSD-OPTIMIZATION-PHASE-COMPLETION-BOUNDARY-CORRECTION-20261007/RECORD.md)。
+
+## 0. 恢复规则与真实状态
+
+用户此前批准六项首阶段及继续未完成优化；本次明确统一完成边界。原8个子批、1次诊断、2个候选、3轮修复数值，以及旧Goal摘要中的相同停止语义，均已由本次要求取代：保留累计记录，只用来复盘，不是停止、等待新授权或标complete的理由。
+
+平台Goal最后一次工具实际返回`blocked`，优化未完成；本轮不伪造恢复，也不创建替代Goal。POST40“没有任何范围内安全动作”的全局阻塞解释予以更正：Role-aware生产切换未批准仅阻止该推广；H11两个分配事件调用点未知，是范围内技术待办，不自动等同外部授权阻塞。后继执行以本合同恢复，不以过时次数停点停工。
+
+唯一进度总表仍是[优化总表](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。合同定义完成条件，总表记录事实、缺口、下一安全动作和证据；不得新建重复总表或把报告交付当成优化成功。
+
+## 1. 目的与当前基线
+
+完成已选有限阶段，不是无限扩大优化或重开全部NTSD对齐。限制的是范围、规则和验收域；阶段未达时持续解决该范围内真实问题，达到批准条件后收口，不追加可选证明。
+
+截至第40批：共34父项（高12/中14/低8），父项关闭0；六项中5/6限定产物已交付，不表示五项优化完成。已执行22—37、39、40共18个新子批，38仅PLANNED，累计19且不归零。H07普通Brute已有机制已准入接入，但千人短窗logic P95为107.065/113.849ms（仍大于33ms）、显示估算3.7—3.9FPS；H11完整camera严格0GC仍FAIL。新鲜运行事实以具名报告为准，本轮不新增收益。
+
+依据为[共同启动门](../../../Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md)、各独立方案、[AGENTS](../../../AGENTS.md)与[当前权威](../CURRENT-AUTHORITY.md)。不修改PERF/ATLAS/Mono/EXT-1正文或状态。
+
+## 2. 不可改变的边界
+
+- 保持当前正式 336B44 EXE 及对应 playable closure 权威、D-023 内容边界和已接受的限定收尾；不得晋升候选 EXE 或以可变开发源码重新定义规则。
+- 正常逻辑间隔精确 33 ms，F5 精确 3 ms，LocalFreeRun 最多 2 个 active interval；不做模拟降频、模拟 LOD、分帧摊逻辑或跳过规则事件。
+- 同 seed/input/tick 的 checksum、RNG、输入消费、pass 顺序、slot/generation、命中、OPoint 和声音事件保持；表现只读 publication，不反写 World 真值。
+- 保持透明命令顺序、插值、first-visible、latency、物理 segment 与 fail-closed 合同；不读取活跃 Q06 方法体来补齐未确认的排序语义。
+- 保持十一阶段有序关闭、worker Join hard gate、资源所有权和 lease/generation。CPU lease 归零或 ExecuteCommandBuffer 返回不能作为 GPU 完成证明。
+- 保持热路径 0GC 和 seal 后禁止显式/隐式扩容；容量溢出按既有合同拒绝整份 submission，不允许截断、丢实例或提交部分结果。
+- EXT-1 保持 `PROPOSED / MODIFY_REQUIRED`，不启动专项 M0 或 instancing；Mono/asmdef 专项保持 USER_HOLD；不冻结或改变 ATLAS bank、预算、纹理格式及 segment 合并语义。
+- 不改 Scene、Prefab、资源、importer、ProjectSettings、Input Actions、Gen、Plugins 或 Server；如选定阶段确需其中某项，先由用户批准准确路径和操作，不能从总体优化授权推导出来。
+- 不执行破坏性 Git、删除、移动、覆盖用户现有改动或 push。文件操作、脚本 Change Record 和 Ledger 按仓库既有规则执行，不以本合同豁免。
+
+## 3. 六项首阶段的完成条件
+
+六项范围不变；H07按用户后续“未优化好继续”要求，从仅报告交付明确为现有已批准路径的性能优化闭环。表中判断的是本阶段，不强制全部父项全域关闭。
+
+| 条目 | 本阶段完成条件 | 未满足时的处理 / 排除 |
+|---|---|---|
+| H-11 | 已改容量/显示路径必要正确性、完整物化—上传—录制—提交0GC、关闭/重进通过；采样可靠且原完整scope无残余事件、无seal后增长。 | 两camera事件仍未知则继续必要定位/修复；不豁免首帧、不缩scope、不用单reader局部0B覆盖完整FAIL。未测native/GPU/设备域不宣称父项关闭。 |
+| M-03 | 已改warm消重/上传的限定显示正确性与受控成本验证通过；既有GameConfig Foot接线及活动辅助显示/关闭通过。 | 已完成限定交付保留；不重复Foot同根因诊断，不引入instancing、MeshData job或排序重构。 |
+| H-06 | 既有BruteForce与Role-aware/Direct/Sweep/tree的固定四形状强一致及成本评估得到有据准入/不采用/待依赖结论。 | 评估已结束不重开。评估完成不等于生产默认切换；Role-aware推广仍需准确授权及必要证据，不影响其它范围内工作。 |
+| M-13 | 真实热点资格及最小候选是否值得实施得到有据结论；无热点可结束本阶段评估。 | 停止的是无效候选，不是整个Goal；声音语义/PCM/资产和算法实现仍非自动授权。 |
+| M-14 | 重复完整性校验IO成本、immutable manifest/read lease前置评估有结论。 | 前置缺失可以完成评估并记录DEPENDENCY_NOT_READY，不声称缓存已实现；不删除校验或顺带实施H01部署链。 |
+| H-07 | 当前Windows真实Dispersed1000/Combat1000完成有效固定正式窗口，logic P95 <33ms、无持续backlog、正常dropped tick 0、warmup后logic allocation 0 B/tick；capacity reject、central unresolved/stale、teardown残留0，适用正确性门通过；优化收益与剩余未知如实报告。 | 依据既有H07性能方案，不降低33ms预算。短窗、末tick一致或报告交付不能代替通过；不承诺Android/120FPS/全角色/持续或完整父项证书，不自动切collector/backend。 |
+
+H09/M09复用共同正确性与指纹门，按影响域失效，不额外启动全量历史审计。H10全局音频账本未齐，不能宣称完整H07父项证书。其余28项不自动进入本阶段；首阶段通过后下一阶段另定范围。
+
+## 4. 事前声明与按影响域验证
+
+范围内每个后继包仍先写准确Task/Change、路径/方法、假设、owner/容量/生命周期、具名验证和回滚来源；这是实施留痕，不是每个子批都重新请求用户批准。只有实质新增范围、专项变更或生产推广权限才另请授权。
+
+冻结workload、seed/input、roster、spawn、AI/profile/collector、renderer、分辨率和warmup/sample；基线与候选尽量同环境A/B。证据复用必须核依赖指纹；不因HEAD变化或新批名称就重跑全部历史。必要正确性门不能删除，新鲜反例必须处理。
+
+默认采样：
+
+- H07既有两工作负载：120 warmup +180 sampled tick冒烟，再120+1800正式采样，确有1000 active AI；不以slots或重复显示替代。
+- H06固定Dispersed/Combat/Concentrated/OPoint burst四形状评估，不扩大场景排列组合。
+- 同版同request默认2次有效运行；有记录的干扰或不一致可再1次。此默认用于控制重复采集，达到次数只触发证据复盘，不使阶段停止。新定位问题、候选修改或失效证据确需补采时，先声明新信息/失效原因和最小窗口，不无限重跑找PASS。
+- 未达、工具失效和失败原件完整保留；0GC校准、完整scope和必要首帧不放宽。
+
+共享Editor安全窗口事前核实；无窗口则转其它安全工作，不启动第二个写同Library的Editor。单次作业观察截止只判断该作业状态/工具异常，不能据超时认定Goal完成或停止；先检查是否仍运行，禁止重复启动或强行重启。
+
+## 5. 阶段判断与继续执行规则
+
+| 当前证据 | 阶段判断 | 下一动作 |
+|---|---|---|
+| 批次、诊断、候选或修复累计达到旧数值 | 未说明完成或无路可做；只触发复盘。 | 复盘根因、实际收益/失效证据、未通过门和下一最小有信息量动作，然后继续已批准范围；计数不归零，不靠改名逃避留痕。 |
+| 检测/工具有缺陷，生产结论未知 | EVIDENCE_PENDING，不把无效读数当通过。 | 修复具名检测缺陷并补必要证据；不重复无效counter、跳帧、缩scope或降低验收。 |
+| 当前候选有正确性回归 | 候选禁止推广，阶段仍未完成。 | 修复本候选引入错误并做受影响验证；不能改权威规则让测试通过。 |
+| 候选无收益、收益不可辨或方向假设不成立 | NO_GAIN / INCONCLUSIVE；不继续推广该候选。 | 用已有实测复盘；存在同一已批准路径内有据替代时改向并声明新Task/Change，不堆无证微候选。不执行破坏性恢复；确需范围外方案只阻止该新增方案，先做其它READY动作。 |
+| 热点或分配调用点尚未定位 | 技术待办，不自动构成新增授权阻塞。 | 用现有证据和范围内必要最小诊断定位；禁止凭猜测修复或再做同构状态审计。 |
+| 一项已满足冻结验收条件 | 该项本阶段完成，不自动父项全关闭。 | 收口并复用结果，转剩余必需项，不追加可选再确认批。 |
+| 单项确需新增权限、平台或安全窗口 | 仅受影响动作等待，不自动全局BLOCKED。 | 写明确切缺口和请求，转其它独立READY动作。 |
+| 所有必需阶段条件已通过 | STAGE_COMPLETE。 | 返回阶段结果及父项剩余门；只有当前Goal实际目标全部满足才可按工具合同complete。 |
+| 必需条件未过且所有安全范围内动作确已耗尽 | STAGE_NOT_COMPLETE / EXTERNAL_BLOCKER。 | 列已排查路径与无法继续的具体证据，请求最小方向/条件变化；不能用次数到限、未知项或重复三次状态审计替代耗尽证明。 |
+
+每个子批必须推进一个具名失败、完成条件、因果证据或有效“不采用”判断。重复相同状态检查/相同报告不算进展。阶段完成边界约束范围和退出条件，不限制为了达成它所需的必要工作次数；同时不授权无限角色/地图/平台或全部历史对齐。
+
+平台blocked另遵工具合同：同一真实外部阻塞至少连续三goal turn且确实无安全有效动作才可标记；“审核过三次”本身不证明无技术路径。用户明确暂停才paused。次数、短窗结束和报告交付均不能代替达成或触发自动停止。
+
+## 6. 正确性与授权，不重开全项目
+
+仅验证受影响域及必要组合。保持当前正式权威与适用证据；Unity旧/新相同不能定义native规则。缺少准入权威证据时禁止生产推广，允许其它已授权范围内定位/修复；不因此重建全套native对齐campaign。
+
+编译、focused、SelfCheck、真实场景、Player/device分别报告。候选回归立即停止推广，不停止安全的范围内修复。Foot方向已在22批生产接线/活动辅助限定通过，原FAIL原件保留，不重复同根因追查，不称M03全域认证。
+
+用户此前“可以”批准的39一次千人CPU/GC采集与40已有Brute机制生产准入已交付，不自动重复39采集，也不授权Role-aware默认切换或EXT1/ATLAS/Mono。第38批仅PLANNED，不因已有编号自动启动或推广；若要采用，先按第4/5节核必要性、原授权范围和准确Task/Change，而不是因它是“新候选”就机械等待批准。新的采集若回答未解决的不同技术问题，先核已有证据能否回答，按本合同第4/5节声明必要性和精确范围；不把“禁止重复旧窗口”解释成永远不得获取必要新证据。
+
+## 7. 预算与完成状态
+
+CPU/GPU buffer、两slot、lease保持数据和staging均按steady/transition记账，总峰值汇总防双计；不擅自冻结设备数字或改变ATLAS合同。硬容量/0GC红线是运行安全约束，不是次数复盘阈值。
+
+120FPS需具名硬件/构建/分辨率/workload，本阶段不承诺该证书，不降低PERF最终标准。H07现有Windows阶段使用其已载明logic P95 <33ms等门；显示FPS是必须报告的真实结果，不据未批准的120FPS目标无限扩域。
+
+阶段完成分别判定六项验收。报告/评估产物数、已执行子批数、父项关闭数、平台Goal状态单独记录；5/6产物不是5/6优化完成。NO_GAIN能完成约定评估，不能代替必须实施/通过的H11或H07条件。未过只能PARTIAL/EVIDENCE_PENDING/PERFORMANCE_FAIL；不一律写NEEDS_USER_DECISION，只有明确的缺权限/前置才需要用户决定。
+
+## 8. 唯一总表与阶段收口
+
+主总表每次写：已观察事实/测量层级、必要门通过与失败、剩余阶段条件、下一安全动作及证据。Task/Change/Ledger/操作审计保留强制留痕，不要求在多文档复制全套报告。
+
+达到某项冻结条件立即收口该项；全部必需条件达成再收口阶段并返回下一阶段选择，不再追加可选验证。不因次数、候选被拒、工具修复耗时或未知调用点停止目标。不可跨越第2节安全/权威/权限约束；真实外部阻塞须证据化并保留其它READY工作的执行空间。
+
+## 9. 历史记录（HISTORICAL / SUPERSEDED，不作为当前停止或状态依据）
+
+下列文字保留当时事实和用户授权沿革；其中“到限停工/等待第四轮批准”“Goal active/尚未创建”“H07只交付报告”等旧操作或状态说明，以当前第0—8节和总表最新证据替代。原失败、数字与真正专项权限不抹除。
+
+### 原执行快照（原文保留）
+
+> 2026-10-07 新授权已收到、Goal恢复active：用户“可以”确认一次千人CPU/GC短窗口采集与已有Brute候选必要一致性通过后生产接入。NTSD-OPT-H07-CPU-GC-CAPTURE-039 / IN_PROGRESS；10/10有效RED，已写single Combat1000/8 profiler frames自动恢复入口，GREEN/采集待。暂无FPS收益、不启用候选；H11/H07未完成，38仍PLANNED，EXT1/ATLAS/Mono/规则边界保持。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-CPU-GC-CAPTURE-039.md)。
+
+> 2026-10-07 第35批原1800camera验收已完成：PROVENANCE_PASS / OBSERVER_ZERO_EVENTS / FULL_CAMERA_ZERO_GC_FAIL。完整1800/1800，双recorder前后校准PASS；observer3600scope/六子块0event，相机仍2（ordinal1/5、logic9/11、同slot1），调用点UNKNOWN，不豁免首帧。两slot/Foot与Health至少2、11592 CPU DrawMesh录制=执行/growth0/CPUlease0、11阶段三残留0/双Scene同/原Menu8roots clean idle恢复；本轮无C#修改、复跑测试或1000AI窗口，非FPS收益。H11/H07未达、5of6有限交付/父关闭0/Goal active；已执行16批＋第38批仅PLANNED（累计17，不归零），NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038尚无实现或收益，先不堆新微候选；生产默认和专项门未解冻。 [35报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/REPORT.md) / [38未实施Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md)。
+
+> 2026-10-07 第37批两1000AI短窗完成 / SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING：164/164；各120+180/actualAI1000、cache/geometry全300应用0回退、四flag恢复。对36同65字段仅output非同期logic84.25→79.67 / 86.22→80.61ms、collector52.60→48.31 / 54.10→50.12ms；显示249.77/235.68ms、SetPass1994/1995未降，仍未达。末tick300各20hash/完整JSON同；post-preparation容量1050/5250/14700、roster下界4204B非全预算，36旧0原件不改。11阶段零残留/双Scene同/原Menu8roots clean idle、379保护11备份HEAD/source保持。H07/H11开放、5of6有限交付/父关闭0/累计16/Goal active，默认false/专项门不变。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037.md)。
+
+> 历史事前快照：第37批PLANNED：ordinary Brute现有粗判前置，保留vrest失效binding副作用；11当前dirty副本/379非写域已冻结，8collector＋3request test-first，局部有收益才一次两1000AI短窗。默认false/专项门不变，尚无新代码/收益；H07/H11未达、父关闭0/新批16/Goal active。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037.md)。
+
+> 2026-10-07 第36批两1000AI短窗已完成 / SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING：153/153；各120+180且cache全部300应用/0回退、三flag恢复。对34同请求非同期logic187.13→84.25 / 183.18→86.22ms、collector154.75→52.60 / 152.60→54.10ms，显示帧527→259 / 483→249ms；仍远未达标、SetPass约1994/1995未降。末tick300各20hash/完整JSON同；capacity snapshot采于准备前为0，真实capacity/bytes UNKNOWN不补造。11阶段零残留/双Scene同；原PID19040已按当前6400核实Menu8roots clean/idle。334保护/11副本/HEAD/source全同，validator1332/12与diff检查PASS（4247历史warning）；H07/H11未达、5of6有限交付/父关闭0/新批15/Goal active，默认false/专项门不变。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EXACT-CACHE-036.md)。
+
+> 历史事前快照：2026-10-07 第36批 RUNTIME_PENDING / WINDOWS_READY：11有效RED后153/153 PASS，固定1000逻辑实体roster53.94→cache22.42ms仅局部；334保护/11副本/HEAD/双Scene/validator保持，首次Index EOF已修。三源冻结，下一一次两实际1000AI120+180短窗；未有本批实景FPS/0GC/native结果，默认与专项门不变，H07/H11未达、父关闭0/新批15/Goal active。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EXACT-CACHE-036.md)。
+
+> 2026-10-07 第36批PLANNED：普通Brute每次收集复用既有精确缓存，PairExactLoop已测152.07ms；11当前副本/334保护先于脚本，8collector＋3request test-first，收益成立才一次两1000AI短窗。默认false/规则和专项门不变，尚无代码或收益；H07/H11未达、父关闭0/新批15/Goal active。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EXACT-CACHE-036.md)。
+
+> 2026-10-07 第35批 RUNTIME_PENDING / FOCUSED_TEST_PASS：新8有效RED为7FAIL/1控制PASS；原Editor job f48e74c052b34740b4dc62bb957b8894 实际25/25 PASS（1.7635508s），三热方法literal数0/0/0、原文本/错误合同与正反校准保持。仅Editor工具整改，尚无新相机/0GC/FPS结果；按用户0.7FPS反馈，先转H07已测PairExactLoop热点，不追加本批长窗。H11严格FAIL/H07性能未达、5of6有限交付/父关闭0/新批14/Goal active，默认及专项门不变。[Record](../CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+
+> 历史事前快照：2026-10-07 第35批PLANNED：仅两个Editor诊断脚本，11/2字面量绑定与33事件对应是待测假设；immutable错误文本绑定前移、热检查/首帧/完整scope不缩小，8 test-first/一次原1800camera冻结。9当前副本/319保护/HEAD已核；尚无新代码或因果/0GC结果。H11严格FAIL/H07性能未达保持，5of6有限交付/父关闭0/新批14/Goal active，默认与专项门不解冻。[Record](../CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-LITERAL-READINESS-035.md)
+
+> 历史快照：2026-10-07 第34批限定检查完成 / SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING：142/142、两actual1000AI各120+180有效；旧32同请求非同期logic231.62→187.13 / 236.77→183.18ms、collector201.00→154.75 / 206.56→152.60ms，仍占83%/可见帧527/483ms，未达标。末tick300各20hash/完整JSON同、capacityCritical0/roster applied且无fallback/两flag恢复；11阶段三残留0/双Scene同/Menu8roots clean。Play缺两个新capacity观察字段，实际scratch bytes UNKNOWN；退出补导入3/3，不重复窗口。270保护/11副本/HEAD/source保持，rawGC UNKNOWN/H11严格FAIL不变。5of6有限交付/父关闭0/新批13/Goal active，默认false/专项门不解冻。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034.md)。
+
+> 历史事前快照：2026-10-07 第34批 RUNTIME_PENDING / WINDOWS_READY：具名12有效RED→原两类142/142 GREEN（13.4186s）；固定1000实体夹具collector114.46→53.73ms、pair499500→39180，仅局部证据非FPS/1000AI。3源SHA冻结、270保护/11副本/HEAD与Scene保持、validator1330/11 PASS（4248历史warning）。下一仅一次两真实1000AI 120+180短窗，默认false/容量不足回旧；H07实际性能与H11完整0GC仍未达、5of6有限交付/父关闭0/新批13/Goal active，不解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034.md)。
+
+> 历史事前快照：2026-10-07 第34批PLANNED：普通Brute双方空ITR pair有界跳过，原有效pair/方向顺序不变；3脚本/11当前字节备份/270保护已冻结，12 test-first＋一次两1000AI短窗，尚无新代码或收益。默认false/容量不足回旧，不解冻专项门；可变C++源不作formal336新证书。有限交付5of6/父关闭0/新批13/Goal active。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034.md)。
+
+> 2026-10-07 第33批终态 PARTIAL / PROVENANCE_PASS / ZERO_GC_FAIL：10/10＋一次1800实际camera完成；observer13事件归入首帧snapshot/gates11、completion2，其他四块0、invalid/unattributed均0；camera另2事件（ordinal1/5）实际调用点仍未知。两recorder前后校准有效，严格完整0GC仍FAIL，不跳帧或当FPS收益。11560 CPU draw录制=执行/growth0/CPUlease0，两slot/Foot与Health各2；11阶段三残留0/双Scene SHA同/原Menu8roots clean恢复。247保护/8备份/HEAD/source保持、validator1329/11 PASS（4248历史warning）。有限交付5of6/父关闭0/新批12/Goal active；不切默认、不重复此诊断或解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 历史事前快照：2026-10-07 第33批FOCUSED_TEST_PASS / CAMERA_READY：原10/10、nested空/已知1MiB正反通过，247保护/8备份/HEAD、validator1329/11 PASS（4248历史warning）。仅Editor六scope诊断，原完整camera/observer root不缩小；下一一次原1800camera，真实归属/0GC未有结果。阶段5of6/父关闭0/新批12/Goal active，不切默认或解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 2026-10-07 第33批PLANNED：NTSD-OPT-H11-OBSERVER-STAGES-033；只现有Editor observer六固定子范围/第二预先校准recorder，原完整root和严格FAIL不变、不跳早期帧。准确8当前备份/247非写域/HEAD核同；10 test-first和一次原1800camera冻结，尚无代码/新归属/0GC收益。阶段5of6/父关闭0/新批12/Goal active，不切默认、重跑32或解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H11-OBSERVER-STAGES-033.md)。
+
+> 2026-10-07 第32批限定检查完成 / SCOPED_GAIN_NOT_ADMITTED：130/130、两真实1000AI各120+180有效/StoppedCleanly；旧26同请求非同期基线logic467.52→231.62 / 431.00→236.77ms、collector429.19→201.00 / 398.07→206.56ms，但可见帧614/583ms、collector仍占约87%，远未达标。末tick300十hash/完整JSON同、容量拒绝0、guard已恢复、11阶段零残留/Menu8roots clean；238保护/11备份/HEAD与双Scene保持。raw GC PASS仍UNKNOWN、不撤销H11FAIL；Change RUNTIME_PENDING指整体准入/native/逐tick/全链0GC待，不是短窗未跑。有限交付5of6/父关闭0/新批11/Goal active，不切默认、不重复此版窗口或解冻专项门。[证据](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032.md)。
+
+> 2026-10-07 第32批PLANNED：NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032；原默认Brute空itr方向前置纯guard候选，默认false、不换collector/索引；3脚本、7＋3 test-first与一次两1000AI120+180冻结，11当前备份/238保护/HEAD已核。尚无代码/新收益；H07/H11/Goal仍开放，5of6有限交付/新批11，不切默认或解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032.md)。
+
+> 2026-10-07 第31批限定检查完成 / PERFORMANCE_INCONCLUSIVE：120/120；两真实1000AI短窗已跑，整tick48.42→44.16 / 45.72→46.90ms、可见帧仍158–162ms，末tick300完整JSON同/关闭零残留。局部capture六分之一不是稳定FPS收益，raw GC PASS仍UNCALIBRATED/UNKNOWN，H11完整FAIL不撤回。232保护/11备份/HEAD保持；Change RUNTIME_PENDING为整体准入待，不再称短窗未跑。5of6有限交付/34父项关闭0/Goal active/新批10，不切默认、不追加同构长窗刷PASS。[证据](../CHANGE-RECORDS/NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.md)。
+
+> 2026-10-07 第31批PLANNED：NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031；3准确脚本/11当前备份/232保护，现有Role同方向快照复用，7 collector＋3 request先RED、两真实1000AI短窗冻结。新批10/交付5of6，H11/H07/Goal仍开放，不切默认或解冻专项门。[Record](../CHANGE-RECORDS/NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.md)。
+
+> 2026-10-07 第30批固定正式报告收集限定VERIFIED：四120+1800完成/observed1000AI，logic mean52.404/56.969/49.973/49.149ms、P9582.606/95.590/76.336/64.358仍>33，四GC FAIL/harnessValidity=false原件保留，WITH_FAILURES非有效证书。Dispersed末tick1920完整SHA同原brute，Combat重复同/无其brute长窗，非逐tick/native，不切默认。33/33、11阶段零残留/双Scene同/Menu恢复、232保护/9备份/HEAD保持。有限报告交付5of6，不等于优化完成；H11完整0GC及第13节H07实际热点优化仍未达、父OPEN/Goal active/新批9。 [证据](../CHANGE-RECORDS/NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030.md)。
+
+> 2026-10-07 第30批RUNTIME_PENDING / FORMAL_WINDOWS_RUNNING：NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030；24 RED→33/33 GREEN，原30菜单一次/四65字段request仅collector/output异于26，120+1800各两Dispersed/Combat。原Editor Battle Play已启动，终态/末tick/耗时待；GC FAIL保留而非豁免，生产默认不切。232保护/9备份/HEAD与事前双Scene同，validator1326/9 PASS；H07/H11 OPEN、4of6/新批9/Goal active，运行中不改C#/刷新/重启。 [Record](../CHANGE-RECORDS/NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030.md)。
+
+> 2026-10-07 第29批候选评估限定VERIFIED：NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029；9/9、两valid 120+180/观测1000AI，logic467.524→48.423/431.000→45.721ms，collector429.187→15.651/398.074→15.259ms。末tick300扩展/lockstep各10hash及完整snapshot SHA同；P9573.499/54.921>33、0GC UNKNOWN，未切默认或替代四formal长窗。11阶段零残留/双Scene同/Menu恢复、195保护/11备份/HEAD同；H11/H07父项OPEN、4of6/新批8/Goal active，下一沿现有候选必要准入，不重复GC观察或解冻专项门。 [Record](../CHANGE-RECORDS/NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029.md)。
+
+> 2026-10-07 用户明确修订次数边界：H07未完成必须继续，次数到限只触发复盘，检测缺陷修复后继续、无效方向据证据调整；原3of3 WAITING停点被本次授权替代，累计次数不归零。第26批 NTSD-OPT-H07-HARNESS-RECOVERY-026 / PLANNED，新批5，准确三个diagnostic代码路径与原六request已冻结；未有新的测试/性能通过，四已完成交付保留。H11仍证据待补，EXT1/Mono/ATLAS/规则与其余28项范围不变。 [Task](NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007.md)。
+
+> 2026-10-07 第25批限定评估完成：NTSD-OPT-H06-M13-M14-ADMISSION-PROBE-025 / VERIFIED（仅评估），原Editor18/18＋GC正对照1/1；四collector序列同但集中秒级，不切默认；M13无真实多cue热点不实施，M14成本3.83/3.66s但无immutable/lease不缓存。已知存活1MiB counter读0，H11完整0GC证据更正待补、Record23 RUNTIME_PENDING，显示/容量/关闭及M03 Foot/成本保持。阶段4/6、新批4/8；H07仍3/3到限，两剩余待方向，不complete/不扩28项。详Batch25报告，旧下方为历史。
+
+> 2026-10-07 第23批限定收口：NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023 / VERIFIED（本Task）。原Editor24/24；两活动aux完整CPU桥各1800sample当前线程0B/growth0/CPUlease0；原Battle重进1800camera每帧Foot2/Health2，两slot、DrawMesh11504录制=执行、1800Build，11阶段三残留0/Scene同/Menu恢复。第13批A-B五指纹同、第15批消费域及动态/像素等限定证据复用；不称global/native/GPU/1000AI/Android。新子批2/8完成，六项首阶段H11/M03限定交付2/6，34父项关闭0；下一H06/H07与M13/M14，不加本条目可选验收，专项门保持。
+
+> 2026-10-07 第22批限定通过：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / SCOPED_RUNTIME_FOOT_CONFIG_PASS；NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / VERIFIED（本批）。GameConfig fallback接线，显式authoring/禁用保持；原Editor32/32，Battle1800实际camera每帧Foot2/Health2、两slot、CPU DrawMesh11815录制=执行、growth0；三档100/500/1000真实catalog重复命令重放均局部0B/growth0，非1000AI。11阶段关闭三残留0/Scene同/Menu恢复，30保护/11备份保持。有限首阶段1/8新子批完成，34项父项关闭仍0；完整选定链与后续5项继续，EXT-1/Mono/ATLAS门不解冻。下方旧快照按时间阅读。
+
+历史快照（第27/28批，不表示当前状态）：2026-10-07 最新第28批PARTIAL / PROVENANCE_PASS / ZERO_GC_FAIL：1800frames求和一致，camera2在第3/8帧、EndObserver13全在首帧，调用点未知，不跳帧或设冷启动例外。11阶段零残留/Scene同/原Menu恢复/187保护与10备份保持；阶段4of6、新批7、Goal active，不当FPS收益。下一性能主线为现有collector实际1000AI完整tick准入，不重复同构GC观察/切默认/解冻专项门。此前次数停点仅历史，按第13节用户更正执行。
+
+历史快照（第27/28批，不表示当前状态）：状态：`PARTIAL / FOUR_OF_SIX_DELIVERABLES_COMPLETE / IN_PROGRESS`（平台Goal仍active，未complete/paused）。M03限定和三评估交付保持。第26批PARTIAL/DONE、后三formal未跑，1000AI性能FAIL。第27批实际校准4/4、两个完整CPU桥各1800sample有效0event；一次原1800camera前后响应但camera2/observer13event，严格FAIL，H11仍待实际分配定位。均十一阶段零残留/双Scene同/原Menu恢复；新批累计6，不因次数停止，不重跑已有效正例、切生产默认或解冻专项门，剩余28项不执行。
+
+历史状态更正：第25批完成时曾为 `PARTIAL / NEEDS_USER_DECISION`，原因是H07原3/3次数停点；用户随后明确要求继续，第13节已替代该停点。保留原历史事实，不再将旧停点作为当前状态。
+
+用户已确认下列六项有限首阶段、Foot方向，并明确“开始执行吧”。平台Goal已启动，第22批Task/Change与固定request先登记后实施，Foot接线限定通过；六项阶段仍未完成，父项不关闭。后继各批仍事前冻结准确路径/测试和留痕，不解除其它专项门。此前EXECUTION_NOT_STARTED段落为历史确认快照。
+
+### 原次数上限条款（全文保留，停止语义SUPERSEDED）
+
+#### 历史原第5节：有界执行规则
+
+以下数量沿用原草案作为本阶段保守执行上限；不得自行提高。它们限制执行次数，不替代设备预算、slot 容量数值或测试 request，也不构成创建/启动自动目标的指令。
+
+| 限制 | 执行上限与到限处理 |
+|---|---|
+| 新子批总量 | 首阶段最多 8 个新子批，诊断、实施和验收均计入；仅修订同一 Record 不新增计数额度。到限仍未达成目标则交付部分结果与未达成项，不自动续批。 |
+| 同一问题的新诊断 | 最多 1 个有界诊断子批。复用已有结果；诊断后进入实施、不采用或待用户/前置之一，不再创建同构观察批。证据采集失效也须在该批内按修复上限处理。 |
+| 优化候选 | 同一条目最多 2 个预先具名候选，优先既有机制和最小改动；不做无限参数搜索，不把“尝试不同架构”作为第三个候选。 |
+| 修复复验 | 同一条目最多 3 轮修复—复验，跨子批累计。每轮针对具名失败；不能用重命名条目/Change ID/子批归零。到限保留失败证据，等待方向。 |
+| 无收益或不具备前置 | 结束该候选的评估，不启用/不推广；保留原生产路径。若已改文件，需要恢复时仍先取得准确恢复操作批准，不用 reset/restore 偷做回滚。 |
+| 外部阻塞 | 完成安全的范围内检查后转到其他 READY 项；没有 READY 项则交付当前结果与所需用户决定，不反复轮询、不添加无关任务填充自动执行。 |
+
+总量上限与单项上限同时适用，以先达到者为准。拆分同一诊断、扩大采样或更换报告标题不得绕过上限。到限不代表完成、失败可被忽略或正确性门可降低。
+
+一个子批至少闭合一个明确交付，不以“又观察 64 帧”“补一份相同报告”单独制造进度。每次交付更新原优化总表中的父项进展和证据；新增 Goal 合同不成为第二份重复进度总表。
+
+### 原用户确认与后续授权记录（历史原第9—14节）
+
+### 历史原第 9 节：用户确认与下一启动边界
+
+2026-10-07，用户本轮明确回复接受“这 6 项有限首阶段”，以及“Foot 采用此前建议的方向”。据此登记：
+
+1. 首阶段确定为 H-11、M-03、H-06、H-07、M-13、M-14；交付类型、排除范围和完成口径保持第 3 节，不扩展到其余 28 项。
+2. Foot 采用“生产 runtime 读取既有 GameConfig 的六帧配置，保留显式 authoring 设置，不添加 Scene/Prefab 组件”；本方向无需重复批准。准确代码路径、既有配置优先级和生命周期仍须在实施前核对并登记，不把方向确认写成已经实现。
+3. 尚未创建或启动自动 Goal。原 Editor 使用窗口及具名测试/request 在启动准备时核实；没有安全窗口不启动第二个写同一 Library 的 Editor。正式设备型号、Android/120 FPS、资源改造与生产 broadphase 默认切换均未获本轮授权。
+
+本次仅更新本合同确认状态、原优化总表的确认记录和[文档操作留痕](../FILE-OPERATIONS/NTSD-OPTIMIZATION-FIRST-STAGE-CONFIRMATION-20261007/RECORD.md)。主进度仍以原总表为准；没有新的优化子批、代码 Change 或父项完成状态。
+
+历史：首次创建时为待确认草案，未创建自动目标或执行优化；本次范围/Foot 方向确认后仍保持 EXECUTION_NOT_STARTED，没有启动 Unity/测试/性能测量或更新任何原父项为完成。
+### 历史原第 10 节：2026-10-07 执行启动追加
+
+用户“开始执行吧”后平台 Goal 已启动，当前执行 IN_PROGRESS；上文 EXECUTION_NOT_STARTED 是此前确认快照，不再表示最新执行状态。首个冻结实施附件：[第22批 Task](NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007.md)，Change NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / PLANNED；新子批1/8，其余批进入前冻结准确 request/路径，原次数上限不变。原 Editor Menu idle/clean 可用，不启动第二 Editor。尚无本批代码/测试/运行通过或父项关闭。
+
+执行追加：第22批SCOPED_RUNTIME_FOOT_CONFIG_PASS / Change VERIFIED（本批）；Foot生产接线及32/32、1800camera/三档重放/关闭保护通过，主总表更新，新子批1/8完成。六项其余必需交付未齐，仍IN_PROGRESS，不能Goal complete；上段PLANNED/尚无通过是事前登记事实。
+
+### 历史原第 11 节：第23批首阶段限定收口
+恢复追加：第24批PARTIAL/H07_RETRY_LIMIT_REACHED；有限新批3/8已用、交付仍2/6。固定Dispersed120+180实际1000AI/0B但harnessValidity=false，下一Combat因poolseal冲突停，四formal未跑；3/3到限、不自动第四修。关闭/Scene/原Menu保护通过。H07待用户方向，其他H06/M13/M14独立READY仍须执行；必需报告未达成，平台Goal不可complete。以下第23批是此前成功快照。
+
+SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；原Editor24/24，两个活动aux完整CPU桥各1800sample/两slot/0B/growth0/CPUlease0；原saved Battle严格重进1800camera每帧Foot2/Health2、1800Build、11504DrawMesh录制=执行，11阶段三残留0、Scene同、Menu恢复。13当前backend/fixture等五指纹全同，15消费域源同及16–18显示证据按范围复用。仅首阶段选定CPU域，不认证global/native/GPU/Android，Q06内部未知不晋升。H11/M03本阶段限定交付已通过，父项开放，不另加可选再确认批。
+新子批2/8完成、阶段2/6；H06/H07/M13/M14仍必需，平台Goal保持active不得complete。下一在剩余最多6批内执行已有READY评估/固定Windows报告；本批fixture修复复验1/3，未新增优化候选或同构诊断。原第20FAIL和本批两个fixture FAIL保留。
+
+### 历史原第 12 节：第25批当前停点与必要证据更正
+
+第25批三有限评估完成，18/18＋唯一正对照1/1，详原优化总表/同名报告。M03限定显示/成本交付与H06/M13/M14评估共4/6完成，34父项仍开放，新批4/8已用。没有把NO_DEFAULT_PROMOTION/DEPENDENCY_NOT_READY称为算法已经实现。
+
+存活1MiB positive control API读0，H11第23批未校准的0B不再满足完整热路径0GC门，Record23更正RUNTIME_PENDING；容量/显示/生命周期/AB有效事实保持。保守计入H11累计修复复验2/3（23 fixture1、25必要计数控制1），不重命名归零；需可靠采样路径的一份冻结附件，不能重跑无效counter或全量历史。
+
+H07仍3/3到限，两个完整工作负载报告未交付。三个READY评估已结束；本停点需要用户选择有限后继窗口/原Editor使用及H07是否明确授权额外一轮，不自动第4修、不重开全部优化/对齐。建议后继仅可靠GC采样与压力suite局部生命周期，原固定矩阵不扩，生产默认/其它专项门不变。平台Goal当前active而非complete/paused；必需两项未齐，不标达成。
+
+### 历史原第 13 节：2026-10-07 用户更正：次数不是停止或完成标准
+
+用户明确要求：未优化好就继续，不能只因次数达到上限停止；检测/工具缺陷修好后继续，方案有问题或无效才根据证据换方向。此新要求替代第5/12节中仅因次数到限就等待方向的执行停点；累计批次/诊断/候选/复验次数仍记录，达到原数值须复盘但不得冒充达成或机械终止。正常scope/规则/外部权限/共享Editor安全与专项门没有被解除，不自动展开其余28项。
+
+H07当前仍未优化完成。第26批先闭合现有压力诊断生命周期和已核实AI统计误断言，再原固定六窗口；不能把报告交付、测试工具恢复或Editor数字视为性能合格。若报告不达标，按实际热点继续最小有证优化，无效方向停止推广而非重复原失败。H11未校准的0B结论继续撤回；还未取得完整0GC证据。四项已完成限定交付不重开，主进度仍只原优化总表。
+
+准确范围/测试/7200s诊断观察截止已在第26批Task冻结；新批累计5，H07此前3轮保持历史、本批为第4轮。此文档不操作平台Goal状态；不得新建目标或把旧目标标complete以绕开未完成项。
+
+### 历史原第 14 节：用户新增范围已批准（2026-10-07）
+用户“可以”已确认一次千人CPU/GC栈采集与已有Brute候选在必要一致性通过后生产接入。本授权解除的是该两项旧停点，不是collector/backend切换或EXT1/ATLAS/Mono/M0、33ms、checksum、segment、资源、规则变化授权；不重复询问已批准范围。
+39唯一Combat1000窗口与同raw恢复已交付CPU热点：collector约92%、render主要等待主线程；所有ProfilerSettings/Scene/11阶段恢复，原回调失败和未扫线程如实保留。已有32/34/36/37生产准入是下一包，不实施38新候选，不重跑39刷PASS或增加历史全量对齐。末tick300同只能复用终态，不代替必要逐tick/适用当前权威证据；通过后接入普通Brute，而不是继续把专项flag收益称生产优化。H07/H11未达，5of6有限交付/34父关闭0保持，累计已执行22–37及39共17、38仅PLANNED（累计18，不归零）。Goal active不得complete/blocked/paused仅因次数或诊断已出结果。

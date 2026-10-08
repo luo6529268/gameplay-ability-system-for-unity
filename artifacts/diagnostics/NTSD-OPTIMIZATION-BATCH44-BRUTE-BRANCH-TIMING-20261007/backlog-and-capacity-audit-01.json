@@ -1,0 +1,59 @@
+{
+  "observedUtc": "2026-10-07T12:17:09.8971827Z",
+  "source": "ProductionEntityStressHarness.cs:5816-5825; accumulator debt cap discarded intervals, cumulative for runner, not steady-only",
+  "runs": [
+    {
+      "name": "Dispersed1000 OFF",
+      "dropped": 810,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "capacityCritical": 0,
+      "capacityPassed": true,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingPoolActive": 0
+    },
+    {
+      "name": "Dispersed1000 ON",
+      "dropped": 1257,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "capacityCritical": 0,
+      "capacityPassed": true,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingPoolActive": 0
+    },
+    {
+      "name": "Combat1000 OFF",
+      "dropped": 742,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "capacityCritical": 0,
+      "capacityPassed": true,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingPoolActive": 0
+    },
+    {
+      "name": "Combat1000 ON",
+      "dropped": 853,
+      "currentBacklog": 0,
+      "maxBacklog": 0,
+      "capacityCritical": 0,
+      "capacityPassed": true,
+      "teardownRestored": true,
+      "cleanupExceptions": 0,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingPoolActive": 0
+    }
+  ],
+  "claim": "not H07 pass; raw zeroGc counter uncalibrated"
+}

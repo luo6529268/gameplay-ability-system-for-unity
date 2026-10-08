@@ -1,0 +1,85 @@
+{
+  "utc": "2026-10-07T22:00:59.1419239Z",
+  "state": "SCOPED_QUALIFICATION_PASS_LOCAL_GAIN_SIGNAL_NOT_ADMITTED",
+  "newCases": 20,
+  "oldAffectedCases": 11,
+  "proofGroups": [
+    {
+      "job": "ee477e5cb7994d8896a04e8656f5eba0",
+      "source": "test-green-original-01.xml",
+      "summary": {
+        "total": 31,
+        "passed": 29,
+        "failed": 2,
+        "skipped": 0
+      },
+      "retainedCostPassed": 2,
+      "note": "Failed overall due two new fixture setup omissions; not 31/31 PASS."
+    },
+    {
+      "job": "e15fc448625b4513a359e1158a381637",
+      "source": "test-green-terminal-02.json",
+      "summary": {
+        "total": 29,
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 5.8881065,
+        "resultState": "Passed"
+      },
+      "newNonCostPassed": 18,
+      "oldPassed": 11,
+      "note": "No repeated cost; necessary qualification uses this + original two cost cases."
+    }
+  ],
+  "cost": [
+    {
+      "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_1000ParticipantsBalancedCostAndFullSequence(120)",
+      "state": "Passed",
+      "output": "BRUTE_COARSE_ENVELOPE_COST participants=1000 warmup=4 sample=8 spacing=120 baselineMeanMs=21.719637499999997 candidateMeanMs=16.7807375 baselineSamples=21.8847,22.0976,21.8486,21.8049,21.472,21.6747,21.5495,21.4251 candidateSamples=17.0018,16.9173,16.8261,16.7196,16.271,16.9372,16.8237,16.7492 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n"
+    },
+    {
+      "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_1000ParticipantsBalancedCostAndFullSequence(12)",
+      "state": "Passed",
+      "output": "BRUTE_COARSE_ENVELOPE_COST participants=1000 warmup=4 sample=8 spacing=12 baselineMeanMs=41.5352625 candidateMeanMs=38.257175000000004 baselineSamples=41.7504,41.9632,41.9073,41.8927,41.5199,41.1797,41.134,40.9349 candidateSamples=38.6659,38.9647,38.4874,37.2649,38.3025,38.21,38.8526,37.3094 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n"
+    }
+  ],
+  "flags": {
+    "coarseEnvelopeDefault": false,
+    "admittedEmptyGuard": true,
+    "admittedEmptyRoster": true,
+    "admittedExactCache": true,
+    "admittedGeometry": true,
+    "eligibility": false,
+    "kind5Presence": false,
+    "rejectedBindingReuse": false,
+    "coarseDispatch": false
+  },
+  "memory": {
+    "newParticipantMetadataPayloadLowerBoundBytes": 17,
+    "newContainer": false,
+    "actualStrideAndResidentDelta": "UNKNOWN",
+    "perCollectionRebuild": true,
+    "hotGrowthAllowed": false,
+    "budgetPromotion": false
+  },
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "2EAF124DCC51EA10D752F64CDFA34CD7CADDAD0CDB9F187E4B95DC3FD9D11970"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "C2D330956550050AF6D956E4A8711A68D3C11AE51AD9B047D0A9FFEDA0C5F129"
+    }
+  ],
+  "notProven": [
+    "full Driver every-tick/native qualification",
+    "candidate complete logic/presentation 0GC",
+    "real1000AI benefit",
+    "120+1800 Windows formal gates",
+    "Android/120FPS",
+    "H11 old late12 root cause"
+  ],
+  "next": "Batch59 necessary existing Driver ON/OFF qualification; no Suite/window/default promotion"
+}

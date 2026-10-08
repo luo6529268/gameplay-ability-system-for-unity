@@ -1,0 +1,328 @@
+{
+  "schema": "ntsd-opt43-terminal-audit-v1",
+  "scope": "existing two Batch43 windows; no new run or sampling",
+  "windows": [
+    {
+      "window": "camera-01",
+      "status": "FAIL",
+      "phase": "DONE",
+      "startedUtc": "2026-10-07T11:14:14.7226097Z",
+      "target": 1800,
+      "sampleCount": 1800,
+      "startTick": 8,
+      "endTick": 1292,
+      "renderPipeline": "URP",
+      "gcUnit": "TimeNanoseconds",
+      "calibration": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "cameraScopes": 1801,
+      "cameraEvents": 12,
+      "observerScopes": 3602,
+      "observerEvents": 0,
+      "invalid": 0,
+      "unattributed": 0,
+      "nonzero": [
+        {
+          "ordinal": 937,
+          "unityFrame": 4048,
+          "logicTick": 678,
+          "slot": 1,
+          "events": 12,
+          "rawTimeNanoseconds": 300
+        }
+      ],
+      "firstFrameEvents": 0,
+      "minFoot": 2,
+      "minHealth": 2,
+      "slots": 2,
+      "recordedDraws": 11536,
+      "executedDraws": 11536,
+      "drawMismatchFrames": 0,
+      "capacityGrowthFrames": 0,
+      "nonzeroCpuLeaseFrames": 0,
+      "sceneClean": true,
+      "sceneHashSame": true,
+      "orderedShutdown": true,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingBorrowers": 0,
+      "materializationBuilds": {
+        "admittedBuildCount": 1800,
+        "buildInvocationCount": 1800,
+        "completedBuildCount": 1800,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 1408000,
+        "uploadedVertexCount": 32000,
+        "vertexUploadCallCount": 1800
+      },
+      "publicationBuilds": 1278,
+      "alphaBuilds": 522,
+      "reportSHA": "AB29B3FE16C30D99EA7AD87E1CED15EC86E92C81BC6E05552204CC5D65235315",
+      "materializationSHA": "BBBAE110DB73E4E506FAF8427DADA79C6976DA796D9C128987F78ECD715F0269"
+    },
+    {
+      "window": "camera-02",
+      "status": "PASS",
+      "phase": "DONE",
+      "startedUtc": "2026-10-07T11:20:59.1814405Z",
+      "target": 1800,
+      "sampleCount": 1800,
+      "startTick": 8,
+      "endTick": 1275,
+      "renderPipeline": "URP",
+      "gcUnit": "TimeNanoseconds",
+      "calibration": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "cameraScopes": 1800,
+      "cameraEvents": 0,
+      "observerScopes": 3600,
+      "observerEvents": 0,
+      "invalid": 0,
+      "unattributed": 0,
+      "nonzero": [],
+      "firstFrameEvents": 0,
+      "minFoot": 2,
+      "minHealth": 2,
+      "slots": 2,
+      "recordedDraws": 11570,
+      "executedDraws": 11570,
+      "drawMismatchFrames": 0,
+      "capacityGrowthFrames": 0,
+      "nonzeroCpuLeaseFrames": 0,
+      "sceneClean": true,
+      "sceneHashSame": true,
+      "orderedShutdown": true,
+      "remainingObjects": 0,
+      "remainingSlots": 0,
+      "remainingBorrowers": 0,
+      "materializationBuilds": {
+        "admittedBuildCount": 1800,
+        "buildInvocationCount": 1800,
+        "completedBuildCount": 1800,
+        "failedBuildCount": 0,
+        "rejectedBeforeBuildCount": 0,
+        "uploadedVertexBytes": 1414336,
+        "uploadedVertexCount": 32144,
+        "vertexUploadCallCount": 1800
+      },
+      "publicationBuilds": 1262,
+      "alphaBuilds": 538,
+      "reportSHA": "80793EDDE026DD3E131CB2E77D7DD6635B0DC6DC83E0C6895014C3262D43A3C1",
+      "materializationSHA": "93600345313D8B9A9123E78FF077AC81F50A1EB19C57B90DCBA1196D84E8338E"
+    }
+  ],
+  "editorFinal": {
+    "pid": 19040,
+    "scene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "sceneCount": 1,
+    "rootCount": 8,
+    "isDirty": false,
+    "isPlaying": false,
+    "isCompiling": false,
+    "testsRunning": false
+  },
+  "conclusion": "PARTIAL_REENTRY_WINDOW_ZERO_GC_PASS / RUNTIME_PENDING; camera-01 late cluster unknown, H11 stage not closed; H07 performance fail unchanged",
+  "limitations": [
+    "raw GC TimeNanoseconds is not bytes",
+    "CPU draw count is not GPU batches",
+    "Foot authoring observations were disabled; their default false/zero fields are not evidence of disabled runtime; actual activeFootMarkers and Health were 2 per frame",
+    "CPU read lease zero is not GPU completion",
+    "No new Profiler, 1000AI, Android or device evidence",
+    "camera-01 cumulative scopes1801/observer3602 are not the retained-frame count1800; camera-02 cumulative scopes1800/observer3600"
+  ],
+  "protection": {
+    "utc": "2026-10-07T11:30:59.1871851Z",
+    "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "expectedHead": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "guards": [
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "expected": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+        "actual": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+      },
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "expected": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+        "actual": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+      },
+      {
+        "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+        "expected": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+        "actual": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+        "expected": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+        "actual": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+        "expected": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+        "actual": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+        "expected": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+        "actual": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+        "expected": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+        "actual": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+        "expected": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+        "actual": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+        "expected": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+        "actual": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37"
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+        "expected": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+        "actual": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+        "expected": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+        "actual": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+        "expected": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+        "actual": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+      },
+      {
+        "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+        "expected": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+        "actual": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+      },
+      {
+        "path": "AGENTS.md",
+        "expected": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+        "actual": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+      },
+      {
+        "path": "docs/ai/CURRENT-AUTHORITY.md",
+        "expected": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+        "actual": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD"
+      },
+      {
+        "path": "ProjectSettings/ProjectVersion.txt",
+        "expected": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+        "actual": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+      },
+      {
+        "path": "Packages/manifest.json",
+        "expected": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+        "actual": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+        "expected": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+        "actual": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+        "expected": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+        "actual": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+        "expected": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+        "actual": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+        "expected": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+        "actual": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A"
+      }
+    ],
+    "backups": [
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/01-BattleCentralRenderSystem.cs",
+        "expected": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+        "actual": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/02-BattleCentralRuntimeFootMarkerEditorTests.cs",
+        "expected": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B",
+        "actual": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/03-BattleCentralProductionWindowSceneProbeEditor.cs",
+        "expected": "BE749B6330399CF660F51D66291E639468CB14371B20B6FF140364CECA1E71E0",
+        "actual": "BE749B6330399CF660F51D66291E639468CB14371B20B6FF140364CECA1E71E0"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/04-battle-optimization-progress-tracker.md",
+        "expected": "B2812D93A052CE5E94C1C3436AAACCAF34AEDB4763A9DC2BCACD48E67121227A",
+        "actual": "B2812D93A052CE5E94C1C3436AAACCAF34AEDB4763A9DC2BCACD48E67121227A"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/05-h-11-presentation-capacity-zero-gc.md",
+        "expected": "930DFB95023921A4147E04C766F6A8310C15D09A29B0E34DF6D7F0173735BFA4",
+        "actual": "930DFB95023921A4147E04C766F6A8310C15D09A29B0E34DF6D7F0173735BFA4"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/06-CHANGE-LEDGER.md",
+        "expected": "ECB7E9BFA364C7F7C0D904FD6B2CAEEA3C8492A849279924AE173CB751101B63",
+        "actual": "ECB7E9BFA364C7F7C0D904FD6B2CAEEA3C8492A849279924AE173CB751101B63"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/07-STATE.md",
+        "expected": "4B798964015B70DC3E471BB813C0D42C86A08F5835453054E3B5210506537473",
+        "actual": "4B798964015B70DC3E471BB813C0D42C86A08F5835453054E3B5210506537473"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/08-CODEX-CURRENT-HANDOFF.md",
+        "expected": "8A0CA9F4A1A23E6BF384E1360B5AF8E3E05597085A6792817737BEE78E3149C8",
+        "actual": "8A0CA9F4A1A23E6BF384E1360B5AF8E3E05597085A6792817737BEE78E3149C8"
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/09-INDEX.md",
+        "expected": "CA88E414217E49E927B8E7892032950F44B3267F2B5EBD35611C7C0E2A58D035",
+        "actual": "CA88E414217E49E927B8E7892032950F44B3267F2B5EBD35611C7C0E2A58D035"
+      }
+    ],
+    "preCamera": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+        "expected": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D",
+        "actual": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+        "expected": "A09FA7BE52043D9B8A9FACD35BEBCE15282FC0B9DA2531489C7F8CA2023484EC",
+        "actual": "A09FA7BE52043D9B8A9FACD35BEBCE15282FC0B9DA2531489C7F8CA2023484EC"
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+        "expected": "DE063F0E0BBE496FFC88034EBE8BA5903A0ED20FB6CBC6611E3119BDBBF96454",
+        "actual": "DE063F0E0BBE496FFC88034EBE8BA5903A0ED20FB6CBC6611E3119BDBBF96454"
+      },
+      {
+        "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+        "expected": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+        "actual": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF"
+      },
+      {
+        "path": "ProjectSettings/GraphicsSettings.asset",
+        "expected": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D",
+        "actual": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D"
+      }
+    ]
+  }
+}

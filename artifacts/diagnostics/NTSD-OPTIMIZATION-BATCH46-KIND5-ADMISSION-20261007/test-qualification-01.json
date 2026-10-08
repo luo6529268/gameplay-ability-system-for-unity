@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "561602e5d8d44aa5b4e8de3849edf287",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791378907349,
+      "finished_unix_ms": 1791379425447,
+      "last_update_unix_ms": 1791379425447,
+      "progress": {
+        "completed": 4,
+        "total": 9546,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791379231672,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresenceThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "last_finished_unix_ms": 1791379418349,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 502.582669,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Kind5PresencePreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresencePreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+            "state": "Passed",
+            "durationSeconds": 72.1608096,
+            "message": null,
+            "stackTrace": null,
+            "output": "[omitted loader logs; exact parity JSON and all result metadata retained]"
+          },
+          {
+            "name": "Kind5PresencePreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresencePreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+            "state": "Passed",
+            "durationSeconds": 70.0053548,
+            "message": null,
+            "stackTrace": null,
+            "output": "[omitted loader logs; exact parity JSON and all result metadata retained]"
+          },
+          {
+            "name": "Kind5PresenceThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresenceThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+            "state": "Passed",
+            "durationSeconds": 172.8751713,
+            "message": null,
+            "stackTrace": null,
+            "output": "[omitted loader logs; exact parity JSON and all result metadata retained]"
+          },
+          {
+            "name": "Kind5PresenceThousandCanonicalAiPreservesEveryTick(Combat1000)",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresenceThousandCanonicalAiPreservesEveryTick(Combat1000)",
+            "state": "Passed",
+            "durationSeconds": 186.6766146,
+            "message": null,
+            "stackTrace": null,
+            "output": "[omitted loader logs; exact parity JSON and all result metadata retained]"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "minFoot": 2,
+  "drawExecuted": 11536,
+  "growth": 0,
+  "minHealth": 2,
+  "drawRecorded": 11536,
+  "events": [
+    {
+      "foot": 2,
+      "raw": 300,
+      "logicTick": 678,
+      "health": 2,
+      "slot": 1,
+      "events": 12,
+      "observer": 0,
+      "ordinal": 937,
+      "unityFrame": 4048
+    }
+  ],
+  "cpuLeaseNonzero": 0
+}

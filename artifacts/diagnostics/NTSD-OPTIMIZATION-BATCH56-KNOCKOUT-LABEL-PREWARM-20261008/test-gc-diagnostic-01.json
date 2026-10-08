@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "f1874021aea1499f8cde59da16a12ffc",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791405978800,
+      "finished_unix_ms": 1791405990017,
+      "last_update_unix_ms": 1791405990017,
+      "progress": {
+        "completed": 1,
+        "total": 9718,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791405988562,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstAndRepeatedPreparedProjectionHasCalibratedZeroEvents",
+        "last_finished_unix_ms": 1791405989533,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.FirstAndRepeatedPreparedProjectionHasCalibratedZeroEvents",
+            "message": "  Full selected Project including first row; events=7, samples=7, valid=True, before=True, after=True, storageBefore=Int32 get_EntityCapacity();Int32 get_HitRecordCapacity();Int32 get_KnockoutFeedRowCapacity();Int32 get_CommandCapacity();Void EnsureEntityCapacity(Int32);Void EnsureMotionStateCapacity(Int32);Void EnsureHitRecordCapacity(Int32);Void EnsureCommandCapacity(Int32);Void PrepareCapacity(Int32, Int32, Int32);, storageAfter=Int32 get_EntityCapacity();Int32 get_HitRecordCapacity();Int32 get_KnockoutFeedRowCapacity();Int32 get_CommandCapacity();Void EnsureEntityCapacity(Int32);Void EnsureMotionStateCapacity(Int32);Void EnsureHitRecordCapacity(Int32);Void EnsureCommandCapacity(Int32);Void PrepareCapacity(Int32, Int32, Int32);. Not a full Driver/FPS certificate.\r\n  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

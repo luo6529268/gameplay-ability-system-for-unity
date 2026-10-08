@@ -1,0 +1,29 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OffAndOnPreserveApplicableFormalRootTraceAndEveryTick",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ThousandCanonicalAiFullDriverPreservesEveryTick"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "99850ae614ec44da8fbcb0c418bf69cd",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

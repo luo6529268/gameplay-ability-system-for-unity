@@ -1,0 +1,99 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "73abb86fc0bf4624995f9c227aa7d85d",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791381429309,
+      "finished_unix_ms": 1791381440370,
+      "last_update_unix_ms": 1791381440370,
+      "progress": {
+        "completed": 32,
+        "total": 9563,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791381439217,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_PreservesCallerOwnedFreshOutputRoot",
+        "last_finished_unix_ms": 1791381439697,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(0,False)",
+            "message": "  IsLateHistoryCapacitySafe is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(7,False)",
+            "message": "  IsLateHistoryCapacitySafe is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(8,True)",
+            "message": "  IsLateHistoryCapacitySafe is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(300,True)",
+            "message": "  IsLateHistoryCapacitySafe is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(301,False)",
+            "message": "  IsLateHistoryCapacitySafe is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRequest_PreservesFullScopeAndFiniteSingleWindow",
+            "message": "  CreateLateCameraCallstackReport is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRequest_RemainsDiagnosticWithoutReplayTimingOrInput",
+            "message": "  CreateLateCameraCallstackReport is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRing_RejectsCrossFrameCameraBoundary",
+            "message": "  CreateLateCameraState is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRing_RetainsOrdinal937WithoutGrowingOrStoppingAtEight",
+            "message": "  CreateLateCameraState is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateSettings_RecordsProducerBufferSeparatelyFromHistory",
+            "message": "  maximumBufferedBytes\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1,0L,True,False)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(8,0L,True,False)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(937,12L,True,True)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1799,0L,True,False)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1800,0L,True,True)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,0L,False,True)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,-1L,True,True)",
+            "message": "  ShouldStopLateCameraWindow is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

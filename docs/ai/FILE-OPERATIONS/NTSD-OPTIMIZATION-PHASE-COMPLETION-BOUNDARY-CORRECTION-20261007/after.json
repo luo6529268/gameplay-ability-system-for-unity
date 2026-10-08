@@ -1,0 +1,216 @@
+{
+  "TimestampUtc": "2026-10-07T09:14:03.2692820Z",
+  "Head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "HeadUnchanged": true,
+  "DiffCheck": {
+    "ExitCode": 0,
+    "Output": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md', LF will be replaced by CRLF the next time Git touches it"
+    ]
+  },
+  "CurrentFiles": [
+    {
+      "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "Sha256": "ECB8723CCE16CE32F3812845E4660692CE6F7694029C5801918958D520499541"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "Sha256": "8F6F0C887B644C5AE502B6923AE2F8C9E3AA210C12FBAC9FD38668C3BDB027A1"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "Sha256": "799DC3B86A80260685A057AD35877060D953429BA72BF59ABC4BC4D914DCF02B"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "Sha256": "D9E8F891F68C9AED47AD6AD6A992BBB49FC7F860A70D406B92340A0605D27C5B"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "Sha256": "FAEEC0DD102FC8E4370FF6B1B90EA465F38C3522F0B08D1CE5ACFD52A561A4B0"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "Sha256": "DCB3AB569D75784D33127AF4D140ECFAE365FC2EAA01F21D603D11707B26012B"
+    },
+    {
+      "Path": "docs/ai/STATE.md",
+      "Sha256": "51FEBB9AB92312A0D17A83AD8B04B3071C9E003031547FDFBB7DCA4B434A0A0D"
+    },
+    {
+      "Path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "Sha256": "0128D8B95F2C192D94D5241CAE6A05A8AF17C0540FF671746766436DE92CA31E"
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "Sha256": "52335D3D788C6513187162D87347DD01C0E3367B92A6BEDFBCB86237A32AE3FE"
+    }
+  ],
+  "Protected": [
+    {
+      "Path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "Sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "Sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "Sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "Sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "Sha256": "C2B22C76704DE14E6D6533282942195B143D255E3197A424F893BAFCDD02C4CF",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "Sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "Sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "Sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "Sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "Unchanged": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "Sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "Unchanged": true
+    },
+    {
+      "Path": "AGENTS.md",
+      "Sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "Unchanged": true
+    },
+    {
+      "Path": "docs/ai/CURRENT-AUTHORITY.md",
+      "Sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "Unchanged": true
+    },
+    {
+      "Path": "docs/ai/CHANGE-LEDGER.md",
+      "Sha256": "25E50B266FE94AAA13133301C290F070D6BA2AA7D38C4CC49A47499CF0825F52",
+      "Unchanged": true
+    },
+    {
+      "Path": "ProjectSettings/ProjectVersion.txt",
+      "Sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "Unchanged": true
+    },
+    {
+      "Path": "Packages/manifest.json",
+      "Sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "Unchanged": true
+    }
+  ],
+  "Backups": [
+    {
+      "Path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "BackupSha256": "FAE00887AD940FEF36FBA2ADF57ABACC83A4B3CFE91353909E831E2A95200EAC",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "BackupSha256": "840354C837F34F4D1714AF85EE86965C23414FF4D58ECB315416399299837D2D",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "BackupSha256": "FE076ECF614F0EE1DC644268AA4BEB68F288EDD910235D50E202887762BFDF77",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "BackupSha256": "3FC0AA6448535A6660975D3F6675018623D0C3527A5182F5AF6BA829C11EA3DA",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "BackupSha256": "16D4C7120BF37FDFE395A87CB65C3156343529A266643927961207071A98D3A7",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "BackupSha256": "C8BFD3D429BA3819BDEC8F2D4015226B43CF66B9B7C11529C57684C2FCE28102",
+      "Verified": true
+    },
+    {
+      "Path": "docs/ai/STATE.md",
+      "BackupSha256": "AA1A56773849137FD5E8514D236C6651788D94943CE40BB1CA057405A0C2F9D7",
+      "Verified": true
+    },
+    {
+      "Path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "BackupSha256": "A208D0B2A6B1958D74169BD6D06449442371E19140877F9C6871FF6E896ABDB0",
+      "Verified": true
+    },
+    {
+      "Path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "BackupSha256": "78BB1E796A8916ACB483A00E0EE89ACB2DE5427AEA816EDF6272B442AB76B877",
+      "Verified": true
+    }
+  ],
+  "SemanticsCheck": {
+    "Pass": true,
+    "Checks": {
+      "InvariantUnchanged": true,
+      "HistoricalPrefixPreserved": true,
+      "OldCapsPreservedAsHistory": true,
+      "CurrentPhaseRules": true,
+      "NoCurrentCapStop": true,
+      "ReportNotCompletion": true,
+      "TechnicalUnknownNotApproval": true,
+      "PartialApprovalNotGlobalStop": true,
+      "H07BudgetRetained": true,
+      "NoGoalMutation": true
+    }
+  },
+  "NewLocalLinksCheck": {
+    "NewLocalLinks": 15,
+    "Failed": [],
+    "Pass": true
+  },
+  "ChangeLedgerCheck": {
+    "ExitCode": 0,
+    "Summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1336",
+      "  Governed code files in diff: 4",
+      "  COVERED: Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs -> CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-CPOINT-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-WPOINT-VALUE-SEAM-001, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD28-336B44-BODY-DEPTH-CANDIDATE-001, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-B5-CANDIDATE-EFFECT-TYPE-PRODUCTION-FILTER-001, NTSD28-B5-EFFECT-ELIGIBILITY-POSTACTION-AUDIT-001, NTSD28-B5-HIT-CANDIDATE-PAIR-SNAPSHOT-CARRIER-001, NTSD28-B5-HIT-GROUP-ELIGIBILITY-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-DEAD-WEAPONCOUNT-SELECTION-RETIREMENT-001, NTSD28-B5-KIND8-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001, NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001, NTSD28-Q06-COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001, NTSD28-Q06-COLLISION-FRAME-UNITY-001, NTSD28-Q06-PLATFORM-TRANSACTION-001, NTSD28-Q06-UNARMORED-WEAPON-REACTION-001, NTSD28-Q07-CONTROL-ONLY-ITR-CANDIDATE-001, NTSD28-Q07-D024-PLATFORM-ITR-SOURCE-GATE-001, NTSD28-Q07-D024-SHARED-ANCHOR-CALLSITE-001, NTSD28-Q07-D024-SHARED-COLLISION-PROJECTION-001, NTSD28-Q07-KIND-DAT-COMBAT-CONSUMERS-001",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs -> NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs -> NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-CPU-GC-CAPTURE-039, NTSD-OPT-H07-HARNESS-RECOVERY-026, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029, NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030, NTSD-OPT-H07-WINDOWS-AI-SUITE-024",
+      "  COVERED: Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs -> CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD28-B5-HIT-CANDIDATE-PAIR-SNAPSHOT-CARRIER-001, NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001, NTSD28-Q06-COLLISION-ROLE-MATRIX-ORACLE-001, NTSD28-Q06-DAMAGE-REMAINING-SPECIAL-KINDS-001"
+    ],
+    "WarningLines": 4298
+  },
+  "PlatformGoalState": "Last confirmed blocked; no goal tool operation this turn",
+  "RuntimeValidation": "NOT_RUN_DOCUMENTS_ONLY"
+}

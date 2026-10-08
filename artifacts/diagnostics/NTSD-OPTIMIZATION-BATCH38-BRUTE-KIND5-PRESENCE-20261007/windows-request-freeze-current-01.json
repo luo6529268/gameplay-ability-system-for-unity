@@ -1,0 +1,21 @@
+{
+  "observedUtc": "2026-10-07T12:56:33.0444673Z",
+  "requests": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007\\windows-01\\00-dispersed1000-kind5-presence\\report.json.request.json",
+      "sha256": "2F6BDB768B25027558A0AF417D8EED81317780C2F05CCE3882190170E2D636E1",
+      "action": "dispersed1000",
+      "fields": 65,
+      "baseline": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\windows-01\\00-dispersed1000-smoke\\report.json.request.json",
+      "differentFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007\\windows-01\\01-combat1000-kind5-presence\\report.json.request.json",
+      "sha256": "39B03A5FCAFDFFF5C5A746D33FE1DE4854AEC56985E35691BBB12ADFC72BAE03",
+      "action": "combat1000",
+      "fields": 65,
+      "baseline": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\windows-01\\01-combat1000-smoke\\report.json.request.json",
+      "differentFields": []
+    }
+  ]
+}

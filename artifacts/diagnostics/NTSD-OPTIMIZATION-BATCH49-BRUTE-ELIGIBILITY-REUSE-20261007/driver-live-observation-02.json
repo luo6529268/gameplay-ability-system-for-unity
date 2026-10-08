@@ -1,0 +1,15 @@
+{
+  "observedAt": "2026-10-07T15:38:16.2663746Z",
+  "editorPid": 19040,
+  "cpu": 116966.828125,
+  "responding": true,
+  "workingSet": 5005672448,
+  "logBytes": 11500710037,
+  "testReferences": [
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r",
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r",
+    "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests:EligibilityReuseThousandCanonicalAiPreservesEveryTick (NTSD.Animation.Rendering.Editor.ProductionEntityStressMode) (at Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs:165)\r"
+  ],
+  "jobId": "d13af60af90548d3a6c96ec46d389837",
+  "outcome": "RESULT_PENDING_NO_RESTART"
+}

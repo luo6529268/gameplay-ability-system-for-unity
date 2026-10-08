@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "9d1dc43cc61442219bdf2f0d60f61d10",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791377573179,
+      "finished_unix_ms": 1791377586980,
+      "last_update_unix_ms": 1791377586980,
+      "progress": {
+        "completed": 5,
+        "total": 9542,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791377586479,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_RejectsOutsideFixedTwoMatrix",
+        "last_finished_unix_ms": 1791377586480,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5Presence_RestoreRestoresOriginalFlag(False)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5Presence_RestoreRestoresOriginalFlag(True)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteKind5PresenceRequest_RejectsOutsideFixedTwoMatrix",
+            "message": "  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

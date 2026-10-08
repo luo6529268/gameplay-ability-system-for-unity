@@ -1,0 +1,55 @@
+{
+  "startedAt": "2026-10-07T14:55:30.4314685Z",
+  "finishedAt": "2026-10-07T14:55:30.4800071Z",
+  "exitCode": 0,
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/01-BruteForceSceneQuery.cs",
+      "sha256": "3543603040204BD68F79A7D85B6BA2C87B9BA7C2671F32720EC640ED21F4D20D",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "8EFCE96ABD7E766BBB0D2B353C13FFC0FE9E9B997C1EB0C6FB7CAF29A781E08D",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/03-CHANGE-LEDGER.md",
+      "sha256": "D2EA6950E49F1A9C10944E77C08C6376DC78291C9457CDA47EF410171B24601A",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/04-STATE.md",
+      "sha256": "739F0DB2567A059C6822120E63977AA8B3B4D205848FAEC2A3627C966BB4A24B",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/05-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "BAE55E853987DD5DDE19DE25214DDC3E8F4430B195BB4368B8C6B56EBDE34EDC",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/06-INDEX.md",
+      "sha256": "72079D35AA5B0703C084FEC8F975A3D1E29D56A9F92854C8EF3ED84923FA8348",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/07-battle-optimization-progress-tracker.md",
+      "sha256": "CBDC44465F8BF105275D5C3A9CF6643731C90CA626D5F73B94EC7FAF5EDA2776",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/backup/08-h-07-fresh-1000-ai-certificate.md",
+      "sha256": "3DD3BD8FAE0F924BC6F9DB89769549E434893FDC646569CC1E2E0090807DD820",
+      "matches": true
+    }
+  ]
+}

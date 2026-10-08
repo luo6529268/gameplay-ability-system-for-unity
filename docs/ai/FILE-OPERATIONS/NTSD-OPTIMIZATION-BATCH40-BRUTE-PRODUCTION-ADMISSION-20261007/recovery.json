@@ -1,0 +1,61 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\backup\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+    "sha256": "FFBC1A8A4725FA04CB0150E8743EA14C56D6749D168D44382A8CE4320CC68A92",
+    "blob": "dfcc1da7ea3930a148f777a36b9a97bbc92865b6"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\backup\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+    "sha256": "003B58517BFCD373A8C2156B75CB285DCF4EDAE24AE500D29291BCA98AD2F620",
+    "blob": "eeab775f3d29689572b26f6c6329c3c02a804b04"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\backup\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+    "sha256": "F5A26F5A78EBF78C98800B877DCA769E06D6B5FD2FC22EA9D53A0D361303A3A0",
+    "blob": "bd02047c9729751339d344fb3f22ff002729ddb0"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "recoveryCommit": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "blob": "efafbe3dc21b10f3ae27083ea6a78ee7270efeee",
+    "worktreeBeforeSha256": "75ABA521FA2355698F6033C21FC1A60849CF096DB3712C8BC34B976478880C87",
+    "note": "clean tracked pre-edit baseline; original blob, not modified planning document"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "recoveryCommit": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "blob": "022ac4c49bd56b253dad8321f16c771af98c6527",
+    "worktreeBeforeSha256": "170A73A04C93CF4BB4FDB1C15467FF77ED30BC72B4219CA00653D6BEA517BFAE",
+    "note": "clean tracked pre-edit baseline; original blob, not modified planning document"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "recoveryCommit": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "blob": "67b605e3c41bc07191ce4916ddc138e2aa5dbab1",
+    "worktreeBeforeSha256": "E5E974D78F4FB5B8492F3745E64F6B2A6A386D4948F797055550EC9285FCCAD2",
+    "note": "clean tracked pre-edit baseline; original blob, not modified planning document"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "recoveryCommit": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "blob": "a928e3eeaedf2e276b626cc696f5366c44a0b9ea",
+    "worktreeBeforeSha256": "96527DE369C8DD6E054FE32AAD98D43A4C2EE4B8AAB9C4CC376141D885C4088E",
+    "note": "clean tracked pre-edit baseline; original blob, not modified planning document"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "recoveryCommit": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "blob": "1cbd40e4c6a878c5148ae939cc0e5de5c702a48c",
+    "worktreeBeforeSha256": "3F974CA0F62CCF79135DB066E12EDD9F092B4E2DC9DA2B91C03C5B177AA51BBD",
+    "note": "clean tracked pre-edit baseline; original blob, not modified planning document"
+  },
+  {
+    "path": "Temp/NTSD_ProductionEntityStress.result",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH40-BRUTE-PRODUCTION-ADMISSION-20261007\\backup\\Temp\\NTSD_ProductionEntityStress.result",
+    "sha256": "28EDECF7A336E7D5CD68EE615CDEFB1D1C480FA7688F55F4EFF2A96B95EEB8D3",
+    "blob": "HEAD:Temp/NTSD_ProductionEntityStress.result"
+  }
+]

@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-07T22:04:22.9913486Z",
+  "validatorExit": 0,
+  "validatorLines": 4275,
+  "warningCount": 4252,
+  "errorCount": 0,
+  "summary": "Change ledger validation PASSED.",
+  "diffCheckExit": 2,
+  "diffErrors": [
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md:5706: new blank line at EOF.",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md:514: new blank line at EOF.",
+    "docs/ai/CHANGE-LEDGER.md:2070: new blank line at EOF.",
+    "docs/ai/FILE-OPERATIONS/INDEX.md:445: new blank line at EOF.",
+    "docs/ai/STATE.md:6542: new blank line at EOF."
+  ],
+  "note": "Selected actual returned fields; full validator stdout not persisted. Task-added EOF blank lines only corrected by apply_patch; no C# or tests changed."
+}

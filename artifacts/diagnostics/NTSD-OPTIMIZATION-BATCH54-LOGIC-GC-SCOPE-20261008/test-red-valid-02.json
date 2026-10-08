@@ -1,0 +1,106 @@
+{
+  "status": "success",
+  "success": true,
+  "job_id": "27b5e1cc7fc64a14a7e8f679035166cf",
+  "job_status": "failed",
+  "summary": null,
+  "progress": {
+    "completed": 21,
+    "total": 9661,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1791397409826,
+    "last_finished_test_full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+    "last_finished_unix_ms": 1791397409827,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.CalibratedEmptyScope_ProvesZeroOnlyWithExactCoverage",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.FixedCapacityOverflow_IsInvalidAndNeverExpands",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(0)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(1)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(2)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.InvalidSequence_IsRejectedAndCannotBecomeZero(3)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.KnownAllocation_IsNotFalseZeroOrPortableRawBytes",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.OwnerThreadAndDisposedScope_AreRejected",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.RefusedTickOrMissingSampleCoverage_CannotPass(False)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.RefusedTickOrMissingSampleCoverage_CannotPass(True)",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsDedicatedWorkerScope",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(0)",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(1)",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsIncompleteCallbackGroup(2)",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+        "message": "  No complete-driver GC scope hook exists.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_PreservesOriginalProductionWorkload(0)",
+        "message": "  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_PreservesOriginalProductionWorkload(1)",
+        "message": "  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_RejectsOutOfRangeIndex(-1)",
+        "message": "  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.ScopedRequest_RejectsOutOfRangeIndex(2)",
+        "message": "  Expected: not null\r\n  But was:  null\r\n"
+      },
+      {
+        "full_name": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.WarmAndNonsteadyScopes_AreCountedButNotSteadyAllocation",
+        "message": "  Reliable full-driver observer has not been implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+      }
+    ],
+    "failures_capped": false
+  },
+  "failures": []
+}

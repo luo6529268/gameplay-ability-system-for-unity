@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-07T19:24:46.7175598Z",
+  "guards": 63,
+  "guardDifferences": [],
+  "backups": 8,
+  "backupDifferences": [],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "sharedRequestJsonPresent": false,
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "A01B3E8C5F9A6FB58AC8A2486AD7897DFF388C0DFC023705DCFAD776F57794AF",
+      "bytes": 44369
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "BE88B8C474EF5FAD20B77DB8AE98E1F8FFA298126C4E00653961F4B8A3D8395A",
+      "bytes": 127774
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs",
+      "sha256": "600E03C6E1E740CD525DEFAD9DA7A24A245C479B3CD5F2B0E56C9DEB09061EE2",
+      "bytes": 4433
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs.meta",
+      "sha256": "AAF467A87589D7C6780283FE5AF0CFD4C607D03EA312D07ABB7C3A64C0515F97",
+      "bytes": 60
+    }
+  ]
+}

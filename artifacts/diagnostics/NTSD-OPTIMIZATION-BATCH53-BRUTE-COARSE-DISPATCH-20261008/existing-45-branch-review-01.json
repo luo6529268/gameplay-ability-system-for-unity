@@ -1,0 +1,119 @@
+{
+  "source": "Batch45/windows-audit-01.json",
+  "rows": [
+    {
+      "name": "00-dispersed1000-timing-off",
+      "collectorMeanMs": 48.3118488888889,
+      "stride": 64,
+      "sampled": 180,
+      "branches": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 47.80356666666668
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "meanMs": 0
+        }
+      ]
+    },
+    {
+      "name": "01-dispersed1000-timing-stride64",
+      "collectorMeanMs": 50.96797277777776,
+      "stride": 64,
+      "sampled": 180,
+      "branches": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 50.455704999999966
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "meanMs": 0.21069500000000008
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "meanMs": 0.10440555555555563
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "meanMs": 0.03809944444444444
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "meanMs": 0.14652277777777784
+        }
+      ]
+    },
+    {
+      "name": "02-combat1000-timing-off",
+      "collectorMeanMs": 50.740074444444446,
+      "stride": 64,
+      "sampled": 180,
+      "branches": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 50.23100277777777
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "meanMs": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "meanMs": 0
+        }
+      ]
+    },
+    {
+      "name": "03-combat1000-timing-stride64",
+      "collectorMeanMs": 54.28030666666669,
+      "stride": 64,
+      "sampled": 180,
+      "branches": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 53.728329999999985
+        },
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "meanMs": 0.2218616666666669
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "meanMs": 0.10751166666666659
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "meanMs": 0.04378222222222223
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "meanMs": 0.1630277777777778
+        }
+      ]
+    }
+  ],
+  "limit": "diagnostic stride64 sampled/nested phase sums; do not multiply by64 or equate visits with cost; original45 source is historical, no new measurement"
+}
+

@@ -1,0 +1,25 @@
+{
+  "job": "f5219d6a418a4ec2b6f8f61aea276f77",
+  "first": {
+    "chunk_id": "b074c5",
+    "wall_time_seconds": 0.0000243,
+    "exit_code": 1,
+    "original_token_count": 106,
+    "output": "ParentContainsErrorRecordException: \r\nLine |\r\n  15 |  … e($read -lt 8){$n=$stream.Read($responseHeader,$read,8-$read);if($n - …\r\n     |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Exception calling \"Read\" with \"3\" argument(s): \"Unable to read data from the transport connection: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。.\"\r\n"
+  },
+  "second": {
+    "chunk_id": "ee7a78",
+    "wall_time_seconds": 0.0000145,
+    "exit_code": 1,
+    "original_token_count": 106,
+    "output": "ParentContainsErrorRecordException: \r\nLine |\r\n  15 |  … e($read -lt 8){$n=$stream.Read($responseHeader,$read,8-$read);if($n - …\r\n     |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\r\n     | Exception calling \"Read\" with \"3\" argument(s): \"Unable to read data from the transport connection: 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。.\"\r\n"
+  },
+  "progressFiles": {
+    "chunk_id": "d86685",
+    "wall_time_seconds": 0.2859853,
+    "exit_code": 0,
+    "original_token_count": 138,
+    "output": "[{\"file\":\"left-x350-envelope-parity-c435e6547b08443288694cd8326b8a0e.json\",\"sha256\":\"97801BA9F6F026B48D6B30848F75EA6D39CFFB0BB4127D56431706726E51DD68\",\"baselineTicks\":12,\"candidateTicks\":12,\"candidateEnabled\":12,\"directions\":18.0,\"rejects\":14.0,\"performanceEvidence\":false},{\"file\":\"right-x550-envelope-parity-9b7ba10c4e4e477ebdf91d2493098846.json\",\"sha256\":\"7F47FBF71773FC388B826203E8D3CCCE6B3A24935289E37F390741179DF8D242\",\"baselineTicks\":12,\"candidateTicks\":12,\"candidateEnabled\":12,\"directions\":24.0,\"rejects\":16.0,\"performanceEvidence\":false}]\r\n"
+  },
+  "meaning": "transport observation timeouts only; original test handle retained; no restart or code edits; not a test verdict"
+}

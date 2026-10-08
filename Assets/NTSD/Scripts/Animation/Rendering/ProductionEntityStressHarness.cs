@@ -4890,6 +4890,30 @@ namespace NTSD.Animation.Rendering.Editor
         public static ProductionEntityStressRunner Active { get; private set; }
         public ProductionEntityStressReport Report => report;
 
+#if UNITY_EDITOR
+        private Action beginDriverTickObserver;
+        private Action<bool> endDriverTickObserver;
+        private Action<int, bool> acceptDriverTickObserver;
+        private bool driverTickObserverInFlight;
+
+        public bool DriverTickObserverAttachedForDiagnostics => beginDriverTickObserver != null;
+
+        public void ConfigureDriverTickObserverForDiagnostics(Action begin, Action<bool> end,
+            Action<int, bool> accept)
+        {
+            if (driverTickObserverInFlight)
+                throw new InvalidOperationException("Cannot replace a live Driver tick observer.");
+            bool detach = begin == null && end == null && accept == null;
+            if (!detach && (begin == null || end == null || accept == null ||
+                beginDriverTickObserver != null || report == null || report.logicTicksExecuted != 0 ||
+                config.UseDedicatedSimulationWorker))
+                throw new InvalidOperationException("A complete main-thread observer requires an unobserved first-tick boundary.");
+            beginDriverTickObserver = begin;
+            endDriverTickObserver = end;
+            acceptDriverTickObserver = accept;
+        }
+#endif
+
         internal static ProductionEntityStressRunner StartRun(ProductionEntityStressConfig runConfig)
         {
             if (!Application.isPlaying)
@@ -6139,10 +6163,22 @@ namespace NTSD.Animation.Rendering.Editor
                 ProfilerMarker.AutoScope driverStepOneTickProfilerScope =
                     DriverStepOneTickProfilerMarker.Auto();
                 long driverStepOneTickTimestamp = Stopwatch.GetTimestamp();
-                bool stepped;
+                bool stepped = false;
                 long driverStepOneTickElapsedTicks;
+#if UNITY_EDITOR
+                bool driverTickObserverBegan = false;
+#endif
                 try
                 {
+#if UNITY_EDITOR
+                    if (beginDriverTickObserver != null)
+                    {
+                        driverTickObserverInFlight = true;
+                        beginDriverTickObserver();
+                        driverTickObserverBegan = true;
+                        driverStepOneTickTimestamp = Stopwatch.GetTimestamp();
+                    }
+#endif
                     stepped = driver.StepOneTick(
                         ignorePaused: true,
                         buildPresentation: buildPresentation);
@@ -6151,11 +6187,24 @@ namespace NTSD.Animation.Rendering.Editor
                 {
                     driverStepOneTickElapsedTicks =
                         Stopwatch.GetTimestamp() - driverStepOneTickTimestamp;
-                    driverStepOneTickProfilerScope.Dispose();
-                    RecordCpuElapsedTicksForReport(
-                        report,
-                        ProductionEntityStressCpuRegion.DriverStepOneTick,
-                        driverStepOneTickElapsedTicks);
+                    try
+                    {
+#if UNITY_EDITOR
+                        if (driverTickObserverBegan)
+                            endDriverTickObserver(stepped);
+#endif
+                    }
+                    finally
+                    {
+#if UNITY_EDITOR
+                        driverTickObserverInFlight = false;
+#endif
+                        driverStepOneTickProfilerScope.Dispose();
+                        RecordCpuElapsedTicksForReport(
+                            report,
+                            ProductionEntityStressCpuRegion.DriverStepOneTick,
+                            driverStepOneTickElapsedTicks);
+                    }
                 }
                 double elapsedMs =
                     driverStepOneTickElapsedTicks * 1000d / Stopwatch.Frequency;
@@ -6376,6 +6425,9 @@ namespace NTSD.Animation.Rendering.Editor
                     config.EntityCount,
                     rosterMutatedDuringTick,
                     poolExpandedDuringTick);
+#if UNITY_EDITOR
+            acceptDriverTickObserver?.Invoke(report.logicTicksExecuted, isSteadyStateSample);
+#endif
             long postTickTimingCollectorsAllocatedBefore =
                 GC.GetAllocatedBytesForCurrentThread();
             long postTickTimingCollectorsTimestamp = Stopwatch.GetTimestamp();
@@ -9996,6 +10048,12 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 cleaned = true;
                 cleanupInProgress = false;
+#if UNITY_EDITOR
+                beginDriverTickObserver = null;
+                endDriverTickObserver = null;
+                acceptDriverTickObserver = null;
+                driverTickObserverInFlight = false;
+#endif
                 if (ReferenceEquals(Active, this))
                     Active = null;
             }

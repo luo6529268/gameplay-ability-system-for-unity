@@ -1,0 +1,28 @@
+[
+  {
+    "workload": "dispersed1000",
+    "snapshotByteEqual": true,
+    "hashCount": 20,
+    "hashesEqual": true,
+    "collectorDelta": 2.6561238888888568,
+    "collectorDeltaPercent": 5.497872571587159,
+    "logicDelta": 2.699269444444397,
+    "offEquivalentFps": 4.058445453420401,
+    "coverageFraction": 0.015624803307330376,
+    "coarseRejectedFraction": 0.8486108836560808,
+    "note": "coverage totals include warmup; phase means are steady samples; do not multiply by64 or derive pure full-cost proportions"
+  },
+  {
+    "workload": "combat1000",
+    "snapshotByteEqual": true,
+    "hashCount": 20,
+    "hashesEqual": true,
+    "collectorDelta": 3.5402322222222438,
+    "collectorDeltaPercent": 6.977191620202405,
+    "logicDelta": 4.279869444444415,
+    "offEquivalentFps": 4.259077343712539,
+    "coverageFraction": 0.015624848149119994,
+    "coarseRejectedFraction": 0.8200724781831407,
+    "note": "coverage totals include warmup; phase means are steady samples; do not multiply by64 or derive pure full-cost proportions"
+  }
+]

@@ -291,6 +291,8 @@ namespace NTSD.Animation.Rendering
         private static bool runtimeFootMarkersEnabled;
         private static Sprite runtimeFootMarkerSprite;
         private static Sprite[] runtimeFootMarkerAnimationFrames = Array.Empty<Sprite>();
+        private static Texture2D runtimeFootMarkerReferenceTexture;
+        private static Texture2D[] runtimeFootMarkerAnimationTextures = Array.Empty<Texture2D>();
         private static float runtimeFootMarkerAnimationFrameDurationSeconds =
             BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
         private static BattleFootMarkerStyle runtimeFootMarkerStyle =
@@ -2193,6 +2195,32 @@ namespace NTSD.Animation.Rendering
             runtimeFootMarkersEnabled = enabled && sprite != null;
             runtimeFootMarkerSprite = sprite;
             runtimeFootMarkerStyle = style;
+            PrepareRuntimeFootMarkerTextures();
+        }
+
+        private static void PrepareRuntimeFootMarkerTextures()
+        {
+            if (featureOwner == null)
+            {
+                runtimeFootMarkerReferenceTexture = null;
+                runtimeFootMarkerAnimationTextures = Array.Empty<Texture2D>();
+                return;
+            }
+
+            // Hold every Unity texture wrapper at settings bind time, before camera animation sampling.
+            runtimeFootMarkerReferenceTexture = runtimeFootMarkerSprite != null
+                ? runtimeFootMarkerSprite.texture
+                : null;
+            int frameCount = runtimeFootMarkerAnimationFrames.Length;
+            if (runtimeFootMarkerAnimationTextures.Length != frameCount)
+                runtimeFootMarkerAnimationTextures = frameCount == 0
+                    ? Array.Empty<Texture2D>()
+                    : new Texture2D[frameCount];
+            for (int index = 0; index < frameCount; index++)
+            {
+                Sprite frame = runtimeFootMarkerAnimationFrames[index];
+                runtimeFootMarkerAnimationTextures[index] = frame != null ? frame.texture : null;
+            }
         }
 
         internal static Texture ResolveRuntimeFootMarkerTexture(double elapsedSeconds)

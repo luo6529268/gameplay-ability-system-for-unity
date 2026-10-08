@@ -1,0 +1,30 @@
+{
+  "observedUtc": "2026-10-07T12:32:28.652Z",
+  "rows": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\00-dispersed1000-timing-off\\report.json.request.json",
+      "sha256": "0341B3210DD3ACBC1D8D4EB6E3080642ABE42EB8E9033173497BF4699C3BC663",
+      "fieldCount": 65,
+      "differentFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\01-dispersed1000-timing-stride64\\report.json.request.json",
+      "sha256": "BA09FF4595BEA604A68BF81A0B06960F74AF80A97541AEAA312CAFD480086F74",
+      "fieldCount": 65,
+      "differentFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\02-combat1000-timing-off\\report.json.request.json",
+      "sha256": "8C05F7DCB6D0583E851A1907624474ADDDC6871A17B1AC4347F878BA67D6E444",
+      "fieldCount": 65,
+      "differentFields": []
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH45-BRUTE-SAMPLED-TIMING-20261007\\windows-01\\03-combat1000-timing-stride64\\report.json.request.json",
+      "sha256": "8D264CCA8FD8B319ACB3C74188DC17D39B9BAB474268EFD3310D2651226D9B3B",
+      "fieldCount": 65,
+      "differentFields": []
+    }
+  ],
+  "note": "Initial read-only comparison had invalid parenthesized if expression and missing baseline, so its output rejected; corrected action-pattern comparison shown here."
+}

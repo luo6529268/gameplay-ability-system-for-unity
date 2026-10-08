@@ -1,0 +1,103 @@
+{
+  "utc": "2026-10-07T22:15:26.3128989Z",
+  "source": "Temp/Goal18_LastTestResults.xml",
+  "copy": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/test-red-original-01.xml",
+  "sha256": "16F48F317E67E89A1491229F5D4F42E83694D73F0C36CDE30A7975C2D1DEE826",
+  "copyMatches": true,
+  "attributes": [
+    {
+      "name": "type",
+      "value": "TestSuite"
+    },
+    {
+      "name": "id",
+      "value": "12241"
+    },
+    {
+      "name": "name",
+      "value": "NTSD"
+    },
+    {
+      "name": "fullname",
+      "value": "NTSD"
+    },
+    {
+      "name": "runstate",
+      "value": "Runnable"
+    },
+    {
+      "name": "testcasecount",
+      "value": "9756"
+    },
+    {
+      "name": "result",
+      "value": "Failed"
+    },
+    {
+      "name": "site",
+      "value": "Child"
+    },
+    {
+      "name": "start-time",
+      "value": "2026-10-07 22:15:02Z"
+    },
+    {
+      "name": "end-time",
+      "value": "2026-10-07 22:15:05Z"
+    },
+    {
+      "name": "duration",
+      "value": "2.991045"
+    },
+    {
+      "name": "total",
+      "value": "4"
+    },
+    {
+      "name": "passed",
+      "value": "0"
+    },
+    {
+      "name": "failed",
+      "value": "4"
+    },
+    {
+      "name": "inconclusive",
+      "value": "0"
+    },
+    {
+      "name": "skipped",
+      "value": "0"
+    },
+    {
+      "name": "asserts",
+      "value": "0"
+    }
+  ],
+  "cases": [
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopePreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+      "result": "Failed",
+      "duration": "1.313542",
+      "failure": "  the full Driver fixture must explicitly integrate the envelope candidate\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopePreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+      "result": "Failed",
+      "duration": "0.354672",
+      "failure": "  the full Driver fixture must explicitly integrate the envelope candidate\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+      "result": "Failed",
+      "duration": "0.000891",
+      "failure": "  the full Driver fixture must explicitly integrate the envelope candidate\n  Expected: True\n  But was:  False\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeThousandCanonicalAiPreservesEveryTick(Combat1000)",
+      "result": "Failed",
+      "duration": "0.000352",
+      "failure": "  the full Driver fixture must explicitly integrate the envelope candidate\n  Expected: True\n  But was:  False\n"
+    }
+  ]
+}

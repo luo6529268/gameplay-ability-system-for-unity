@@ -1,0 +1,150 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "cd7206cf58e04bb6a868442a640b45db",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791408148281,
+      "finished_unix_ms": 1791408161815,
+      "last_update_unix_ms": 1791408161815,
+      "progress": {
+        "completed": 12,
+        "total": 9731,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791408159880,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.RequestRejectsOutOfRangeWithoutStartingSuite(2)",
+        "last_finished_unix_ms": 1791408159880,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.4019042,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CurrentRequestRoutingKeepsLabelAndLegacyIdentitiesSeparate(False)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.CurrentRequestRoutingKeepsLabelAndLegacyIdentitiesSeparate(False)",
+            "state": "Passed",
+            "durationSeconds": 0.9147416,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CurrentRequestRoutingKeepsLabelAndLegacyIdentitiesSeparate(True)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.CurrentRequestRoutingKeepsLabelAndLegacyIdentitiesSeparate(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0004837,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "DeserializedLegacyStateDefaultsLabelWindowToFalse",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.DeserializedLegacyStateDefaultsLabelWindowToFalse",
+            "state": "Passed",
+            "durationSeconds": 0.0005466,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LabelWindowHasExplicitMenuAndColdOptIn",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.LabelWindowHasExplicitMenuAndColdOptIn",
+            "state": "Passed",
+            "durationSeconds": 0.0021675,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(0)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(0)",
+            "state": "Passed",
+            "durationSeconds": 0.3090603,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(1)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0001997,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(2)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.LabelWindowRejectsIncompleteScopeOrCaptureBeforeStateCreation(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0001249,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Legacy54And55OutputsRemainUnchanged",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.Legacy54And55OutputsRemainUnchanged",
+            "state": "Passed",
+            "durationSeconds": 0.000404,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RequestPreservesCompleteProductionInputExceptFreshOutput(0,\"dispersed1000\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.RequestPreservesCompleteProductionInputExceptFreshOutput(0,\"dispersed1000\")",
+            "state": "Passed",
+            "durationSeconds": 0.0006042,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RequestPreservesCompleteProductionInputExceptFreshOutput(1,\"combat1000\")",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.RequestPreservesCompleteProductionInputExceptFreshOutput(1,\"combat1000\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001748,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RequestRejectsOutOfRangeWithoutStartingSuite(-1)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.RequestRejectsOutOfRangeWithoutStartingSuite(-1)",
+            "state": "Passed",
+            "durationSeconds": 0.0005384,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RequestRejectsOutOfRangeWithoutStartingSuite(2)",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelWindowEditorTests.RequestRejectsOutOfRangeWithoutStartingSuite(2)",
+            "state": "Passed",
+            "durationSeconds": 0.000116,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

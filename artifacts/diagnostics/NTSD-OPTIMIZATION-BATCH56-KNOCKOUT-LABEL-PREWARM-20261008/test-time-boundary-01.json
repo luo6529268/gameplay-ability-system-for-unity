@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "53c912e1fc4a4e9d86daaa9b706f4070",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791406506685,
+      "finished_unix_ms": 1791406516614,
+      "last_update_unix_ms": 1791406516614,
+      "progress": {
+        "completed": 1,
+        "total": 9719,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791406514867,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.ThirtyTickRowsAndFrozenTextRemainExactWithCurrentResourceAvailability",
+        "last_finished_unix_ms": 1791406516136,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 2.0408621,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "ThirtyTickRowsAndFrozenTextRemainExactWithCurrentResourceAvailability",
+            "fullName": "NTSD.Test.Editor.BattleKnockoutLabelPrewarmEditorTests.ThirtyTickRowsAndFrozenTextRemainExactWithCurrentResourceAvailability",
+            "state": "Passed",
+            "durationSeconds": 1.2652602,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

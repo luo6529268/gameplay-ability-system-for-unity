@@ -117,6 +117,11 @@ namespace NTSD.Simulation.Presentation
         private readonly bool[] typeResourceAvailable = new bool[7];
         private readonly Dictionary<LabelKey, string> labelCache =
             new Dictionary<LabelKey, string>(32);
+        private readonly string[] fallbackLabels = new string[11];
+        private BattleRuntimeDataCatalog preparedLabelCatalog;
+        private LoganContentIdentity preparedLabelContentIdentity;
+        private int preparedLabelGeneration;
+        private bool labelsPrepared;
         private LoganModeKnockoutFeedInput feed;
         private bool runtimeDisplayEnabled = true;
 
@@ -144,7 +149,7 @@ namespace NTSD.Simulation.Presentation
                             nameof(config));
                 }
             }
-            labelCache.Clear();
+            InvalidateLabels();
             runtimeDisplayEnabled = config?.nativeKnockoutFeedRuntimeDisplayEnabled ?? true;
             Array.Copy(DefaultPlayerNames, playerNames, playerNames.Length);
             Array.Clear(bracketPlayerNames, 0, bracketPlayerNames.Length);
@@ -167,11 +172,28 @@ namespace NTSD.Simulation.Presentation
         internal void SetFeed(LoganObjectCatalog catalog)
         {
             SetFeed(catalog?.ModeComboInput?.KnockoutFeed, catalog?.Source);
+            if (feed == null || catalog == null)
+                return;
+
+            CharacterAnimtorManager manager = CharacterAnimtorManager.TryGetInstance();
+            if (manager == null || !ReferenceEquals(manager.PublishedLoganCatalog, catalog))
+                return;
+
+            // Alignment contract: NTSD-OPT-H07-KNOCKOUT-LABEL-PREWARM-056; cold binding uses the same published configs as Host.
+            BeginLabelPreparation(catalog.Entries.Count);
+            for (int index = 0; index < catalog.Entries.Count; index++)
+            {
+                int objectId = catalog.Entries[index].Id;
+                PrepareObjectLabels(objectId, manager.GetCharacterConfig(objectId)?.characterData?.name);
+            }
+            preparedLabelContentIdentity = catalog.ContentIdentity;
+            labelsPrepared = true;
         }
 
         internal void SetFeed(LoganModeKnockoutFeedInput input,
             BattleContentSource source)
         {
+            InvalidateLabels();
             feed = input;
             Array.Clear(typeResourceAvailable, 0, typeResourceAvailable.Length);
             if (feed == null)
@@ -186,6 +208,85 @@ namespace NTSD.Simulation.Presentation
                 string path = source.ResolveImagePath(virtualPath, null);
                 typeResourceAvailable[type] = File.Exists(path);
             }
+        }
+
+        internal void PrepareLabels(BattleRuntimeDataCatalog catalog)
+        {
+            IReadOnlyList<ObjectDefinition> definitions = catalog?.ObjectDefinitions;
+            BeginLabelPreparation(definitions?.Count ?? 0);
+            if (definitions != null)
+            {
+                for (int index = 0; index < definitions.Count; index++)
+                {
+                    ObjectDefinition definition = definitions[index];
+                    if (definition != null)
+                        PrepareObjectLabels(definition.id, catalog.GetCharacterData(definition.id)?.name);
+                }
+            }
+            preparedLabelCatalog = catalog;
+            preparedLabelGeneration = catalog?.Generation ?? 0;
+            preparedLabelContentIdentity = catalog?.LoganContentIdentity;
+            labelsPrepared = true;
+        }
+
+        private void InvalidateLabels()
+        {
+            labelCache.Clear();
+            Array.Clear(fallbackLabels, 0, fallbackLabels.Length);
+            preparedLabelCatalog = null;
+            preparedLabelContentIdentity = null;
+            preparedLabelGeneration = 0;
+            labelsPrepared = false;
+        }
+
+        private void BeginLabelPreparation(int objectCount)
+        {
+            InvalidateLabels();
+            labelCache.EnsureCapacity(checked((objectCount + 1) * fallbackLabels.Length));
+            for (int nameSlot = 0; nameSlot < fallbackLabels.Length; nameSlot++)
+            {
+                string text = nameSlot < playerNames.Length ? playerNames[nameSlot] : "Com";
+                if (nameSlot < bracketPlayerNames.Length && bracketPlayerNames[nameSlot])
+                    text = "[" + text + "]";
+                labelCache.Add(new LabelKey(nameSlot, 0, false), text);
+                fallbackLabels[nameSlot] = text + " [none]";
+                _ = Encoding.UTF8.GetByteCount(text);
+                _ = Encoding.UTF8.GetByteCount(fallbackLabels[nameSlot]);
+            }
+        }
+
+        private void PrepareObjectLabels(int objectId, string characterName)
+        {
+            for (int nameSlot = 0; nameSlot < fallbackLabels.Length; nameSlot++)
+            {
+                string text = string.IsNullOrEmpty(characterName)
+                    ? fallbackLabels[nameSlot]
+                    : labelCache[new LabelKey(nameSlot, 0, false)] + " [" + characterName + "]";
+                labelCache[new LabelKey(nameSlot, objectId, true)] = text;
+                _ = Encoding.UTF8.GetByteCount(text);
+            }
+        }
+
+        private void EnsureLabelsPrepared(SimulationWorld world)
+        {
+            BattleRuntimeDataCatalog catalog = world.RuntimeDataCatalog;
+            int generation = catalog?.Generation ?? 0;
+            if (labelsPrepared && ReferenceEquals(preparedLabelCatalog, catalog) &&
+                preparedLabelGeneration == generation)
+                return;
+            if (labelsPrepared && preparedLabelCatalog == null &&
+                preparedLabelContentIdentity != null &&
+                ReferenceEquals(preparedLabelContentIdentity, catalog?.LoganContentIdentity))
+            {
+                preparedLabelCatalog = catalog;
+                preparedLabelGeneration = generation;
+                return;
+            }
+            if (world.RuntimeCapacity.IsSealed)
+                throw new InvalidOperationException("Knockout labels were not prepared for the current battle catalog.");
+
+            // Unsealed managed/diagnostic input has no published Unity manager.
+            PrepareLabels(catalog);
         }
 
         internal void Project(SimulationWorld world, int tick, BattlePresentationFrame frame)
@@ -208,6 +309,7 @@ namespace NTSD.Simulation.Presentation
                 !AllowsMode(world.BattleGameModeId))
                 return;
 
+            EnsureLabelsPrepared(world);
             int rowTop = feed.ScreenTop;
             for (int index = 0; index < activeCount; index++)
             {
@@ -263,21 +365,15 @@ namespace NTSD.Simulation.Presentation
             int slot, NTSDEntityRuntime runtime, int top, int left,
             bool teamColored, bool rightAligned, bool appendCharacterName)
         {
-            var key = new LabelKey(slot, runtime.ObjectId, appendCharacterName);
+            int nameSlot = Math.Min(slot, playerNames.Length);
+            var key = new LabelKey(nameSlot,
+                appendCharacterName ? runtime.ObjectId : 0, appendCharacterName);
             if (!labelCache.TryGetValue(key, out string text))
             {
-                text = slot < playerNames.Length ? playerNames[slot] : "Com";
-                if (slot < bracketPlayerNames.Length && bracketPlayerNames[slot])
-                    text = "[" + text + "]";
-                if (appendCharacterName)
-                {
-                    string characterName = world.RuntimeDataCatalog?
-                        .GetCharacterData(runtime.ObjectId)?.name;
-                    text += " [" + (string.IsNullOrEmpty(characterName)
-                        ? "none"
-                        : characterName) + "]";
-                }
-                labelCache.Add(key, text);
+                if (!appendCharacterName ||
+                    !string.IsNullOrEmpty(world.RuntimeDataCatalog?.GetCharacterData(runtime.ObjectId)?.name))
+                    throw new InvalidOperationException("A named knockout actor is missing from the prepared labels.");
+                text = fallbackLabels[nameSlot];
             }
             if (rightAligned)
                 left -= Encoding.UTF8.GetByteCount(text) * 9;

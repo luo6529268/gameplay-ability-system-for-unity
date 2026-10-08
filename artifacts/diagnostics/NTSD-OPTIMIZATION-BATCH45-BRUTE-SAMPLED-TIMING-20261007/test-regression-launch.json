@@ -1,0 +1,30 @@
+{
+  "launch": {
+    "chunk_id": "edc4ee",
+    "wall_time_seconds": 0.548802,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"ca621103c91741c084ec33343d2f426b\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":true,\"include_failed_tests\":false}}}\r\n"
+  },
+  "selectors": [
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_PhaseNamesAndCountAreStable",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_DefaultIsOff",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PreservesCandidatesAndRng",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_RejectedPairRecordsCoarseAndBindingOnly",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_GeometryDisabledDoesNotRecordBranches",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_DefaultOffDoesNotAllocateOrCreateRecorder",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_EnablementPreservesSequenceAndRng",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests",
+    "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_DefaultStrideIsOne",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InvalidStrideIsRejected",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_RotatingCoveragePreservesSequence",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_PreparedHotPathAllocatesNoManagedMemory",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteSampleTiming_InactiveRecorderOrGeometryDoesNotCount",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTiming_RestoreRestoresStrideAndFlag",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_OnlyChangesOutputFromProductionSmoke",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteSampleTimingRequest_RejectsOutsideFixedOffOnMatrix"
+  ]
+}

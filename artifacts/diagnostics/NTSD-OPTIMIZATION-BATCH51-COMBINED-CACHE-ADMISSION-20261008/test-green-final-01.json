@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "e630855adb2141a096c73eb283c9dd8a",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791390707760,
+      "finished_unix_ms": 1791391181631,
+      "last_update_unix_ms": 1791391181631,
+      "progress": {
+        "completed": 4,
+        "total": 9612,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791391012491,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CombinedCacheThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "last_finished_unix_ms": 1791391173753,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 458.7709922,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

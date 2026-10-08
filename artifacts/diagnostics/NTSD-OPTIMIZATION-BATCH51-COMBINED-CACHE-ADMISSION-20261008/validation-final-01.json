@@ -1,0 +1,24 @@
+{
+  "startedUtc": "2026-10-07T16:44:22.1573053Z",
+  "finishedUtc": "2026-10-07T16:44:30.3882435Z",
+  "validatorExit": 0,
+  "validatorLines": 4274,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1347",
+    "  Governed code files in diff: 14",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleHealthBarBatchBackend.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditorTests.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff."
+  ],
+  "historicalWarnings": 4257,
+  "validatorErrors": [],
+  "diffExit": 0,
+  "diffMessages": []
+}

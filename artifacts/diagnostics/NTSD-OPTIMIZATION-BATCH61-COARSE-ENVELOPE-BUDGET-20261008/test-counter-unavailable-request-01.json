@@ -1,0 +1,12 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "initTimeout": 180000,
+    "groupNames": [
+      "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.(CoarseEnvelopeResidentBudgetUsesActualManagedArrays|CoarseEnvelopeBudgetTracksPreparedOwnerAndTransition|OrdinaryBruteDefaultsEnableAdmittedFastPath|ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate)"
+    ],
+    "includeDetails": false,
+    "includeFailedTests": true
+  }
+}

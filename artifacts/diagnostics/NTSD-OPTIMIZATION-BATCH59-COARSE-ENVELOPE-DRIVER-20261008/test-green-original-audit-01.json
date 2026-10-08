@@ -1,0 +1,132 @@
+{
+  "utc": "2026-10-07T22:25:47.0294873Z",
+  "source": "Temp/Goal18_LastTestResults.xml",
+  "copy": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/test-green-original-01.xml",
+  "bytes": 7193758,
+  "sha256": "F4AB092E77B94B76CBC3F90CA5839A1342FC2669D68942EA358B8D5D2A3111B3",
+  "copyMatches": true,
+  "attributes": [
+    {
+      "name": "type",
+      "value": "TestSuite"
+    },
+    {
+      "name": "id",
+      "value": "12241"
+    },
+    {
+      "name": "name",
+      "value": "NTSD"
+    },
+    {
+      "name": "fullname",
+      "value": "NTSD"
+    },
+    {
+      "name": "runstate",
+      "value": "Runnable"
+    },
+    {
+      "name": "testcasecount",
+      "value": "9756"
+    },
+    {
+      "name": "result",
+      "value": "Passed"
+    },
+    {
+      "name": "start-time",
+      "value": "2026-10-07 22:17:05Z"
+    },
+    {
+      "name": "end-time",
+      "value": "2026-10-07 22:25:08Z"
+    },
+    {
+      "name": "duration",
+      "value": "483.266580"
+    },
+    {
+      "name": "total",
+      "value": "8"
+    },
+    {
+      "name": "passed",
+      "value": "8"
+    },
+    {
+      "name": "failed",
+      "value": "0"
+    },
+    {
+      "name": "inconclusive",
+      "value": "0"
+    },
+    {
+      "name": "skipped",
+      "value": "0"
+    },
+    {
+      "name": "asserts",
+      "value": "0"
+    }
+  ],
+  "cases": [
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopePreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+      "result": "Passed",
+      "duration": "72.715509",
+      "failure": null,
+      "outputLength": 1621243
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopePreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+      "result": "Passed",
+      "duration": "74.797630",
+      "failure": null,
+      "outputLength": 1621242
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeQualificationDoesNotPromoteAnyCandidateDefault",
+      "result": "Passed",
+      "duration": "0.000893",
+      "failure": null,
+      "outputLength": 0
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+      "result": "Passed",
+      "duration": "171.206350",
+      "failure": null,
+      "outputLength": 1621339
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeThousandCanonicalAiPreservesEveryTick(Combat1000)",
+      "result": "Passed",
+      "duration": "163.224693",
+      "failure": null,
+      "outputLength": 1621415
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+      "result": "Passed",
+      "duration": "0.001269",
+      "failure": null,
+      "outputLength": 0
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(0)",
+      "result": "Passed",
+      "duration": "0.001335",
+      "failure": null,
+      "outputLength": 0
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+      "result": "Passed",
+      "duration": "0.000158",
+      "failure": null,
+      "outputLength": 0
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DefaultOffPreservesProductionDefaults",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DisabledExactCachePreservesFallback",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_DoesNotEnterRoleAwareCollector",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence",
+        "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "36c811e4c61148658a35eb501127ce1f",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

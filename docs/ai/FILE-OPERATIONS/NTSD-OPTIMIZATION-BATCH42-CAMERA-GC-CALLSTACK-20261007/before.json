@@ -1,0 +1,144 @@
+{
+  "utc": "2026-10-07T10:14:03.0830676+00:00",
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 99174,
+      "sha256": "2FEF406CAB0A4B80316EB8F58E62EA3C8EDE710DFD4773EE5074A2AEB4B7BF80",
+      "gitStatus": "",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs",
+      "bytes": 17387,
+      "sha256": "8911EF301DC17A83F0BBF8446D28A6611C5D3E8E6E1599D5D4992513FCF7B1EF",
+      "gitStatus": "",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 677289,
+      "sha256": "0AC9A8C51885301217F751908D1928E724BCD95C754D636ED6486D014C2D3985",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md",
+      "firstLine": "> 2026-10-07 第41批 / SCOPED_ADMISSION_ALLOCATION_SOURCE_FIX_PASS：NTSD-OPT-H07-SPAWN-ADMISSION-ZERO-GC-041 / FOCUSED_TEST_PASS；原19/1有效RED→新20/20 GREEN＋6/6生成回归。仅去生成准入捕获lambda，IL直接构造指令0，规则/出生/cadence不改；旧green-01抢先旧domain复验原件保留。无新FPS/千人/完整0GC测量，H07/H11仍未达；5/6限定产物、本阶段4/6、父关闭0，已执行19＋38仅PLANNED累计20。Goal实际active、无停止/完成操作，次数只复盘；六backup/17保护/HEAD稳定、原Menu clean/idle/nonPlay，桥端口6401→6402已有backup，不改插件/OS权限。[Record](CHANGE-RECORDS/NTSD-OPT-H07-SPAWN-ADMISSION-ZERO-GC-041.md)。"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1580540,
+      "sha256": "94DD1C288502B3D33B3D18239235286D1EDE7373273504E5BD9EE3AAA993DE51",
+      "gitStatus": " M docs/ai/STATE.md",
+      "firstLine": "> 2026-10-07 完成边界当前状态对账 / DOCUMENTS_ONLY：本次get_goal实返active；旧blocked及8/1/2/3停点只作历史，不定义当前执行。完成六项阶段验收才收口；未达且存在范围内安全必要动作则继续，不逐批等待用户启动。当前4/6阶段、5/6产物、父关闭0，H07/H11未达；不重开已通过项、不解冻专项门。本次没有新代码/Unity/测试/测量或Goal状态操作。[Operation](FILE-OPERATIONS/NTSD-OPTIMIZATION-COMPLETION-STATE-RECONCILIATION-20261007/RECORD.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1513396,
+      "sha256": "0165CFC09AA94DD3842774B14238B8F36AC2E7FC80CBEBED0AD08C3762315A07",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> 2026-10-07 完成边界当前状态对账 / DOCUMENTS_ONLY：本次get_goal实返active；旧blocked及8/1/2/3停点只作历史，不定义当前执行。完成六项阶段验收才收口；未达且存在范围内安全必要动作则继续，不逐批等待用户启动。当前4/6阶段、5/6产物、父关闭0，H07/H11未达；不重开已通过项、不解冻专项门。本次没有新代码/Unity/测试/测量或Goal状态操作。[Operation](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-COMPLETION-STATE-RECONCILIATION-20261007/RECORD.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 88251,
+      "sha256": "3705D7EF181D12902A6239AF8B6A4824FDB961E59E5A498559CF00F8C277C6FE",
+      "gitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "firstLine": "> 2026-10-07 第41批 / SCOPED_ADMISSION_ALLOCATION_SOURCE_FIX_PASS：NTSD-OPT-H07-SPAWN-ADMISSION-ZERO-GC-041 / FOCUSED_TEST_PASS；原19/1有效RED→新20/20 GREEN＋6/6生成回归。仅去生成准入捕获lambda，IL直接构造指令0，规则/出生/cadence不改；旧green-01抢先旧domain复验原件保留。无新FPS/千人/完整0GC测量，H07/H11仍未达；5/6限定产物、本阶段4/6、父关闭0，已执行19＋38仅PLANNED累计20。Goal实际active、无停止/完成操作，次数只复盘；六backup/17保护/HEAD稳定、原Menu clean/idle/nonPlay，桥端口6401→6402已有backup，不改插件/OS权限。[Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SPAWN-ADMISSION-ZERO-GC-041.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md",
+      "bytes": 18464,
+      "sha256": "DCB3AB569D75784D33127AF4D140ECFAE365FC2EAA01F21D603D11707B26012B",
+      "gitStatus": " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "firstLine": "# H-11 表现缓存容量预热与完整热路径 0GC 方案"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 63221,
+      "sha256": "BA437FCFD95CDC0FE2B543CA4C108AAD7AB3066F7A1440C89B0D0159977C1744",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "firstLine": "> 2026-10-07 完成边界当前状态对账 / VERIFIED（文档限定）：get_goal两次新鲜返回active；当前入口按阶段完成执行，旧blocked/次数停点仅历史。同范围必要动作不逐批等待用户启动；八份当前副本已备份核同、19保护SHA/HEAD保持、8项静态语义与diff检查通过、Ledger exit0（4297历史warnings）。无新优化批/代码/Unity/测量/Goal状态操作。[Operation](NTSD-OPTIMIZATION-COMPLETION-STATE-RECONCILIATION-20261007/RECORD.md)。"
+    }
+  ],
+  "guards": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "sha256": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "sha256": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    }
+  ]
+}

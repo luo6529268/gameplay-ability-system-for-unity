@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-07T22:13:04.5333244Z",
+  "copies": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "5894AC04AF8FE1DEFDECD1A1389C134FE34003BE36B29BF87A00589E384D84B5",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/02-CHANGE-LEDGER.md",
+      "sha256": "795155CB0F48AAAE73A4F662640FDE375AFB7605C00F85A16D8562F86669D34C",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/03-STATE.md",
+      "sha256": "5F8BA55E854F9D7CAE8CF0F78C5727D7F0A4A04DA6FE7B6C1B19A415F5257721",
+      "matchesBefore": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/04-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "A1B30E5F4E4B354CCD8E9999417128DF1D40302BDC79B0A5FFF8F882FB889799",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/05-INDEX.md",
+      "sha256": "F8FA81D1DF9D5A00663B6E10EF6660456C4EF14AC613CD44F0B4FA2979329250",
+      "matchesBefore": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/06-battle-optimization-progress-tracker.md",
+      "sha256": "4177F1016F257FBEB4718C561616156E617078C5B9F9B1647E60C3C3BFA2D6F9",
+      "matchesBefore": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/07-NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008.md",
+      "sha256": "3CD29D47769E4F178AA809C6C2EFF8DF49AF226FEF6D93E2E465B1E25C05916C",
+      "matchesBefore": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/backups-01/08-Goal18_LastTestResults.xml",
+      "sha256": "3AA8BA31D4D239A987E4A29F036BFF56E564D5BEB558E41E5B4C55D8E0675FF7",
+      "matchesBefore": true
+    }
+  ]
+}

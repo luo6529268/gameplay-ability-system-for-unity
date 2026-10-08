@@ -1,0 +1,27 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresencePreservesApplicableFormalRootAndEveryTick",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.Kind5PresenceThousandCanonicalAiPreservesEveryTick"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "561602e5d8d44aa5b4e8de3849edf287",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

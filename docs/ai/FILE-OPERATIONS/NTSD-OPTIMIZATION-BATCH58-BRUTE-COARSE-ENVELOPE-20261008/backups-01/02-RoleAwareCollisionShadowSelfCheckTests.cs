@@ -1,0 +1,6877 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NTSD.Simulation.Spatial;
+using NUnit.Framework;
+using UnityEngine;
+
+namespace NTSD.Test
+{
+    public sealed class RoleAwareCollisionShadowSelfCheckTests
+    {
+
+        [Test]
+        public void Shadow_DefaultsOff_AndOnlyEmitsAttackToBodyPairs()
+        {
+            var world = new SimulationWorld();
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea { kind = 0, x = 100, y = -10, w = 20, h = 20, zwidth = 15 },
+                new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 });
+            LF2Character attacker = CreateCharacter("RoleShadow_Attacker", 1, attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleShadow_Target",
+                2,
+                MakeFrame(null, new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            RegisterPair(world, attacker, target);
+
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            Assert.That(query.ShadowBroadphaseDiagnosticsEnabled, Is.False);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.RoleAwareShadowDiagnostics.RebuildCount, Is.Zero);
+            world.EndCollisionCandidateConsumption();
+
+            query.ShadowBroadphaseDiagnosticsEnabled = true;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            RoleAwareCollisionShadowDiagnostics diagnostics = query.RoleAwareShadowDiagnostics;
+            Assert.That(diagnostics.ParticipantCount, Is.EqualTo(2));
+            Assert.That(diagnostics.BodyCount, Is.EqualTo(2));
+            Assert.That(diagnostics.IndexedBodyCount, Is.EqualTo(2));
+            Assert.That(diagnostics.AttackItrCount, Is.EqualTo(1));
+            Assert.That(diagnostics.BrutePairCount, Is.Zero);
+            Assert.That(diagnostics.QuadtreePairCount, Is.Zero);
+            Assert.That(diagnostics.MismatchCount, Is.Zero);
+            Assert.That(diagnostics.CollectionAborted, Is.False);
+            world.EndCollisionCandidateConsumption();
+
+            attackerFrame.itrs[0].x = -10;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(diagnostics.BrutePairCount, Is.EqualTo(1));
+            Assert.That(diagnostics.QuadtreePairCount, Is.EqualTo(1));
+            Assert.That(diagnostics.MismatchCount, Is.Zero);
+            Assert.That(diagnostics.FirstDifferencePair, Is.EqualTo(-1));
+            Assert.That(diagnostics.FirstDifference,
+                Is.EqualTo(RoleAwareCollisionShadowDifference.None));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void Shadow_NonIndexableRoleBoundsFallbackConservatively()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleShadow_DegenerateItr",
+                1,
+                MakeFrame(
+                    new InteractionArea { kind = 0, x = 0, y = 0, w = 0, h = 20, zwidth = 15 },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleShadow_FallbackTarget",
+                2,
+                MakeFrame(null, new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            RegisterPair(world, attacker, target);
+
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.ShadowBroadphaseDiagnosticsEnabled = true;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            RoleAwareCollisionShadowDiagnostics diagnostics = query.RoleAwareShadowDiagnostics;
+            Assert.That(diagnostics.FallbackAttackItrCount, Is.EqualTo(1));
+            Assert.That(diagnostics.BrutePairCount, Is.EqualTo(1));
+            Assert.That(diagnostics.QuadtreePairCount, Is.EqualTo(1));
+            Assert.That(diagnostics.MismatchCount, Is.Zero);
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void Shadow_ExceptionCannotChangeFormalCollection_AndNextRunResetsAbort()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleShadow_AbortAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                        zwidth = 15,
+                        injury = 10,
+                        dvx = 1,
+                        arest = 4,
+                        vrest = 1,
+                    },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleShadow_AbortTarget",
+                2,
+                MakeFrame(null, new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            RegisterPair(world, attacker, target);
+
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.ShadowBroadphaseDiagnosticsEnabled = true;
+            query.ThrowDuringRoleAwareShadowForSelfCheck = true;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.TryGetCollisionCandidateSequence(
+                attacker,
+                out List<SceneQueryHit> candidates), Is.True);
+            Assert.That(query.RoleAwareShadowDiagnostics.CollectionAborted, Is.True);
+            Assert.That(query.RoleAwareShadowDiagnostics.MismatchCount, Is.Zero);
+            Assert.That(query.RoleAwareShadowDiagnostics.FirstDifferencePair, Is.EqualTo(-1));
+            Assert.That(query.FormalCollectionAborted, Is.False);
+            Assert.That(candidates.Count, Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+
+            query.ThrowDuringRoleAwareShadowForSelfCheck = false;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.RoleAwareShadowDiagnostics.CollectionAborted, Is.False);
+            Assert.That(query.RoleAwareShadowDiagnostics.ParticipantCount, Is.EqualTo(2));
+            Assert.That(query.RoleAwareShadowDiagnostics.MismatchCount, Is.Zero);
+            Assert.That(query.RoleAwareShadowDiagnostics.FirstDifferencePair, Is.EqualTo(-1));
+            Assert.That(query.FormalCollectionAborted, Is.False);
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_DefaultOff_DoesNotApply()
+        {
+            var world = new SimulationWorld();
+            LF2Character entity = CreateCharacter(
+                "RoleZero_DefaultOff",
+                3010,
+                MakeFrame(null, null));
+            RegisterPair(world, entity, CreateCharacter("RoleZero_DefaultOffTarget", 3011,
+                MakeFrame(null, null)));
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+
+            Assert.That(query.CollisionRoleZeroItrFastPathEnabled, Is.False);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.EqualTo(1),
+                "default-off must retain the existing role-aware validation path");
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_NullItrClearsCarriersAndBuildsEmptyStore()
+        {
+            var world = new SimulationWorld();
+            LF2FrameData nullItrFrame = MakeFrame(null, null);
+            nullItrFrame.itrs.Add(null);
+            LF2Character entity = CreateCharacter("RoleZero_NullItr", 3020, nullItrFrame);
+            LF2Character target = CreateCharacter("RoleZero_NullItrTarget", 3021,
+                MakeFrame(null, null));
+            RegisterPair(world, entity, target);
+            entity.Runtime.HitCandidateCount = 7;
+            entity.Runtime.HitCandidateNearestDistance = 1;
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+            query.SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(true);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.CollisionRoleZeroItrFastPathZeroItrCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(entity.Runtime.HitCandidateCount, Is.Zero);
+            Assert.That(entity.Runtime.HitCandidateNearestDistance, Is.EqualTo(1000));
+            Assert.That(query.LastRoleAwareParticipantCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.True);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    entity.Runtime.SlotIndex,
+                    entity,
+                    out RuntimeEntityHandle entityHandle),
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    entityHandle,
+                    out int candidateCount),
+                Is.True);
+            Assert.That(candidateCount, Is.Zero);
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_ValidItrAtHighestSlotFallsBack()
+        {
+            var world = new SimulationWorld();
+            LF2Character target = CreateCharacter("RoleZero_HighTarget", 3030,
+                MakeFrame(null, new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character attacker = CreateCharacter("RoleZero_HighAttacker", 3031,
+                MakeFrame(new InteractionArea { kind = 0, x = -10, y = -10, w = 20, h = 20, zwidth = 15 }, null));
+            RegisterAtSlot(world, target, 0, 2, 0);
+            RegisterAtSlot(world, attacker, world.RuntimeSlotCapacityForDiagnostics - 1, 1, 0);
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+            query.SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(true);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.Zero);
+            Assert.That(query.CollisionRoleZeroItrFastPathFallbackCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareItrQueryCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_DegenerateAuthoredItrUsesConservativeIndexAndMatchesOriginalCollector()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleZero_DegenerateAttacker",
+                3040,
+                MakeFrame(
+                    new InteractionArea { kind = 0, x = 0, y = -10, w = 0, h = 20, zwidth = 15 },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleZero_DegenerateTarget",
+                3041,
+                MakeFrame(null, new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            RegisterPair(world, attacker, target);
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(query.TryGetCollisionCandidateSequence(
+                attacker,
+                out List<SceneQueryHit> originalCandidates), Is.True);
+            int originalCandidateCount = originalCandidates.Count;
+            int originalRuntimeCandidateCount = attacker.Runtime.HitCandidateCount;
+            world.EndCollisionCandidateConsumption();
+
+            query.SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(true);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.Zero);
+            Assert.That(query.CollisionRoleZeroItrFastPathFallbackCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.TryGetLastRoleAwareParticipantFlagsForSelfCheck(
+                attacker,
+                out _,
+                out _,
+                out bool hasAttackItr,
+                out bool hasFallbackAttackItr), Is.True);
+            Assert.That(hasAttackItr, Is.True);
+            Assert.That(hasFallbackAttackItr, Is.False);
+            Assert.That(query.TryGetCollisionCandidateSequence(
+                attacker,
+                out List<SceneQueryHit> fallbackCandidates), Is.True);
+            Assert.That(fallbackCandidates.Count, Is.EqualTo(originalCandidateCount));
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(originalRuntimeCandidateCount));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_CandidateStoreShadowDiagnosticsFallsBack()
+        {
+            var world = new SimulationWorld();
+            LF2Character entity = CreateCharacter(
+                "RoleZero_CandidateStoreShadow",
+                3045,
+                MakeFrame(null, null));
+            RegisterPair(world, entity, CreateCharacter(
+                "RoleZero_CandidateStoreShadowTarget",
+                3046,
+                MakeFrame(null, null)));
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = true;
+            query.SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(true);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(query.CollisionRoleZeroItrFastPathAppliedCountForDiagnostics, Is.Zero);
+            Assert.That(query.CollisionRoleZeroItrFastPathFallbackCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareCheapInputValidationCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void CollisionRoleZeroItrFastPath_WarmedCollectionAllocatesNothing()
+        {
+            var world = new SimulationWorld();
+            LF2Character entity = CreateCharacter("RoleZero_Allocation", 3050,
+                MakeFrame(null, null));
+            RegisterAtSlot(world, entity, 0, 1, 0);
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            ConfigureRoleZeroItrStoreOnly(query);
+            query.SetCollisionRoleZeroItrFastPathEnabledForSelfCheck(true);
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            Assert.That(
+                query.MeasureWarmedCollisionRoleZeroItrFastPathAllocationsForSelfCheck(128),
+                Is.Zero);
+        }
+
+        private static void ConfigureRoleZeroItrStoreOnly(BruteForceSceneQuery query)
+        {
+            query.CollisionCandidateStoreAuthorityEnabled = true;
+            query.CollisionCandidateStoreLegacyOracleInterval = 0;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+        }
+
+        private static void RegisterAtSlot(
+            SimulationWorld world,
+            LF2Entity entity,
+            int slot,
+            int team,
+            int x)
+        {
+            entity.SetRequiredRuntimeSlot(slot);
+            world.Register(entity);
+            Configure(entity, team);
+            entity.Runtime.SetPosition(x, 0, 0);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private static LF2FrameData MakeFrame(InteractionArea itr, BodyBox body)
+        {
+            var frame = new LF2FrameData
+            {
+                frameId = 0,
+                state = 0,
+                wait = 1,
+                next = 0,
+                centerx = 0,
+                centery = 0,
+            };
+            if (itr != null)
+                frame.itrs.Add(itr);
+            if (body != null)
+                frame.bodies.Add(body);
+            return frame;
+        }
+
+        private static LF2Character CreateCharacter(
+            string name,
+            int objectId,
+            LF2FrameData frame)
+        {
+            var data = new LF2CharacterData
+            {
+                name = name,
+                type_sub = 1,
+                frames = new List<LF2FrameData> { frame },
+            };
+            var character = new LF2Character();
+            character.ModuleInitialize();
+            character.Name = name;
+            character.ObjectId = objectId;
+            character.Controller = new ShadowSelfCheckController();
+            character.FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+            character.Frame.D = character.FrameCache.GetFrameDataById(0);
+            character.Frame.PN = 0;
+            character.Frame.N = 0;
+            character.Initialize(500, 500);
+            character.FrameDelay = 0;
+            return character;
+        }
+
+        private static void RegisterPair(
+            SimulationWorld world,
+            LF2Character attacker,
+            LF2Character target)
+        {
+            world.Register(attacker);
+            Configure(attacker, 1);
+            world.Register(target);
+            Configure(target, 2);
+        }
+
+        private static void Configure(LF2Entity entity, int team)
+        {
+            entity.Team = team;
+            entity.RelationTeam = team;
+            entity.Health.HP = 100;
+            entity.Health.HPBound = 100;
+            entity.FrameDelay = 0;
+            entity.AttackExempt = 0;
+            entity.HitStun = 0;
+            entity.Runtime.LinkState = 0;
+            entity.ItrRest.Reset();
+            entity.Runtime.SetPosition(0, 0, 0);
+            entity.Runtime.SetVelocity(0, 0, 0);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private sealed class ShadowSelfCheckController : ILF2Controller
+        {
+            public SimInputBuffer InputBuffer { get; set; } = new SimInputBuffer();
+            bool ILF2Controller.IsUp => false;
+            bool ILF2Controller.IsDown => false;
+            bool ILF2Controller.IsLeft => false;
+            bool ILF2Controller.IsRight => false;
+            bool ILF2Controller.IsAttack => false;
+            bool ILF2Controller.IsJump => false;
+            bool ILF2Controller.IsDefend => false;
+            public int Dirv() => 0;
+            public (int dx, int dz) GetMoveInput() => (0, 0);
+            public void SetInputID(int inputId)
+            {
+            }
+        }
+    }
+
+    [Category("U6RoleAwareFormal")]
+    public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
+    {
+
+        [Test]
+        public void BruteCoarseDispatch_DefaultOffPreservesProductionDefaults()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteCoarseDispatchForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void BruteCoarseDispatch_MultiBodySequenceHandlesRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            long directions = query.LastBruteExactCacheDirectionCountForDiagnostics;
+            SetBruteCoarseDispatch(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(query.LastBruteExactCacheDirectionCountForDiagnostics, Is.EqualTo(directions));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseDispatch_RejectedBindingKeepsVrestAndCounters(bool reuseBinding)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, reuseBinding);
+            LF2Entity target = world.FindEntityByRuntimeSlotForQuery(7);
+            target.ItrRest.SetVrest(attackers[0].Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            long geometryRejects = query.LastBruteGeometryFirstRejectCountForDiagnostics;
+            long probes = query.LastBruteRejectedBindingProbeCountForDiagnostics;
+            long reuse = query.LastBruteRejectedBindingReuseCountForDiagnostics;
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(query.LastBruteGeometryFirstRejectCountForDiagnostics, Is.EqualTo(geometryRejects));
+            Assert.That(query.LastBruteRejectedBindingProbeCountForDiagnostics, Is.EqualTo(probes));
+            Assert.That(query.LastBruteRejectedBindingReuseCountForDiagnostics, Is.EqualTo(reuse));
+            Assert.That(target.ItrRest.GetVrest(attackers[0].Runtime.SlotIndex), Is.EqualTo(9));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.EqualTo(geometryRejects));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteCoarseDispatch_PostSnapshotStaleBindingKeepsBaseGate(bool exempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = exempt ? 1 : 0;
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int victimSlot = target.Runtime.SlotIndex;
+            Action invalidate = () =>
+            {
+                var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+                Assert.That(store.ReleaseBinding(handle), Is.True);
+            };
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, victimSlot, false), Is.True);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+        }
+
+        [TestCase("geometry")]
+        [TestCase("cache")]
+        [TestCase("timing")]
+        public void BruteCoarseDispatch_InactiveGateKeepsOriginalPath(string gate)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            if (gate == "geometry") SetBruteGeometryFirst(query, false);
+            if (gate == "cache") SetBruteExactCache(query, false);
+            if (gate == "timing") query.EnableBruteBranchTimingForDiagnostics = true;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_CapacityFallbackDoesNotApplyOrGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 1);
+            SetBruteGeometryFirst(query, true);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(1));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_DoesNotEnterRoleAwareCollector()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteCoarseDispatch_RebuildsAfterSameTickMovement()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteCoarseDispatch(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.GreaterThan(0));
+            SetBruteCoarseDispatch(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(120)]
+        [TestCase(12)]
+        public void BruteCoarseDispatch_1000ParticipantsBalancedCostAndFullSequence(int spacing)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("CoarseDispatch_Cost_" + i, 7400 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * spacing + (i % 5) * 5);
+                if (attack) attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteCoarseDispatch(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteCoarseDispatchRejectCountForDiagnostics"), Is.GreaterThan(0));
+            var baselineSamples = new List<double>(8);
+            var candidateSamples = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteCoarseDispatch(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) *
+                        1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0) (enabled ? candidateSamples : baselineSamples).Add(ms);
+                }
+            }
+            double baselineMs = 0, candidateMs = 0;
+            foreach (double sample in baselineSamples) baselineMs += sample;
+            foreach (double sample in candidateSamples) candidateMs += sample;
+            TestContext.WriteLine("BRUTE_COARSE_DISPATCH_COST participants=1000 warmup=4 sample=8 spacing=" + spacing +
+                " baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineSamples=" + string.Join(",", baselineSamples) +
+                " candidateSamples=" + string.Join(",", candidateSamples) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteCoarseDispatch(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteCoarseDispatchForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The coarse dispatch candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DefaultOffPreservesProductionDefaults()
+        {
+            BruteForceSceneQuery query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteEligibilityReuseForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteKind5PresenceForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteRejectedBindingReuseForDiagnostics, Is.False);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void BruteEligibilityReuse_MultiBodySequenceHandlesRngAndPairOrder(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            long pairs = ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics");
+            SetBruteEligibilityReuse(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(pairs));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [TestCase("suppressed")]
+        [TestCase("pending")]
+        [TestCase("nullPS")]
+        public void BruteEligibilityReuse_ExcludedMiddleOrdinalKeepsEligibleSequence(string gate)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character excluded = CreateCharacter("Eligibility_Excluded", 7102, MakePairSnapshotReuseFrame(true, 0));
+            LF2Character eligibleAfter = CreateCharacter("Eligibility_After", 7103, MakePairSnapshotReuseFrame(false, 0));
+            Register(world, excluded, 2, 3, 0);
+            Register(world, eligibleAfter, 3, 2, 0);
+            PrepareBruteGeometryFirst(query, 4);
+            SetBruteGeometryFirst(query, true);
+            PhysicsState originalPs = excluded.PS;
+            Action exclude = () =>
+            {
+                if (gate == "suppressed")
+                    excluded.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+                else if (gate == "pending")
+                    excluded.Runtime.PendingFlushDestroy = true;
+                else
+                    typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { null });
+            };
+            try
+            {
+                CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                    CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, exclude, attacker);
+                long pairs = ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics");
+                typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { originalPs });
+                SetBruteEligibilityReuse(query, true);
+                CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                    CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, exclude, attacker);
+                AssertPairSnapshotRunsEqual(baseline, candidate);
+                Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+                Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(3));
+                Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(pairs));
+                Assert.That(candidate.Sequences[0].Exists(hit => ReferenceEquals(hit.Target, excluded)), Is.False);
+                Assert.That(candidate.Sequences[0].Exists(hit => ReferenceEquals(hit.Target, eligibleAfter)), Is.True);
+            }
+            finally
+            {
+                typeof(LF2Entity).GetProperty("PS").GetSetMethod(true).Invoke(excluded, new object[] { originalPs });
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteEligibilityReuse_RebuildsAtSameTickWhenEligibilityChanges(bool resnapshot)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun initial = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(initial.Counts[0], Is.GreaterThan(0));
+            int tick = world.CurrentTickIndex;
+            target.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.Zero);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(1));
+            world.EndCollisionCandidateConsumption();
+            target.Runtime.SuppressCollisionCandidateUntilTick = 0;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(initial.Counts[0]));
+            Assert.That(world.CurrentTickIndex, Is.EqualTo(tick));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(2));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.EqualTo(3));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_CapacityFallbackPreservesResultsAndDoesNotGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 1, 1);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics");
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, fallback);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics"), Is.EqualTo(capacity));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DisabledExactCachePreservesFallback()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteExactCache(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, fallback);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_DoesNotEnterRoleAwareCollector()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteEligibilityReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteEligibilityReuseCollectionAppliedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_CombinedBindingReuseKeepsFirstProbeAndSequence()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+        }
+
+        [Test]
+        public void BruteEligibilityReuse_1000ParticipantsBalancedCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("Eligibility_Cost_" + i, 7200 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteEligibilityReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEligibilityReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            var baselineSamples = new List<double>(8);
+            var candidateSamples = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteEligibilityReuse(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) *
+                        1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0)
+                        (enabled ? candidateSamples : baselineSamples).Add(ms);
+                }
+            }
+            double baselineMs = 0, candidateMs = 0;
+            foreach (double sample in baselineSamples) baselineMs += sample;
+            foreach (double sample in candidateSamples) candidateMs += sample;
+            TestContext.WriteLine("BRUTE_ELIGIBILITY_REUSE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineSamples=" + string.Join(",", baselineSamples) +
+                " candidateSamples=" + string.Join(",", candidateSamples) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteEligibilityReuse(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteEligibilityReuseForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The eligibility candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+
+        [Test]
+        public void BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteRejectedBindingReuseForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            LF2Entity target = world.FindEntityByRuntimeSlotForQuery(7);
+            target.ItrRest.SetVrest(attackers[0].Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+            Assert.That(target.ItrRest.GetVrest(attackers[0].Runtime.SlotIndex), Is.EqualTo(9));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(bool resnapshot)
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            int tick = world.CurrentTickIndex;
+            if (resnapshot)
+                world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(world.CurrentTickIndex, Is.EqualTo(tick));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(8));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.EqualTo(13));
+            world.EndCollisionCandidateConsumption();
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_AttackExemptDoesNotProbe()
+        {
+            CreateRejectedBindingReuseScenario(out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Entity[] attackers);
+            foreach (LF2Entity attacker in attackers)
+                attacker.AttackExempt = 1;
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteGeometryFirstRejectCountForDiagnostics"), Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(0)]
+        [TestCase(4)]
+        [TestCase(5)]
+        public void BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(int kind)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character far = CreateCharacter("BindingReuse_Far", 6302,
+                MakePairSnapshotReuseFrame(false, kind));
+            Register(world, far, 2, 2, 1000);
+            PrepareBruteGeometryFirst(query, 3);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.EqualTo(1));
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 3);
+            CandidateRun blocked = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(blocked.Counts[0], Is.Zero);
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(3));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(bool exempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = exempt ? 1 : 0;
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int victimSlot = target.Runtime.SlotIndex;
+            Action invalidate = () =>
+            {
+                var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+                Assert.That(store.ReleaseBinding(handle), Is.True);
+            };
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, victimSlot, false), Is.True);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"),
+                Is.EqualTo(exempt ? 0 : 1));
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 1);
+            SetBruteGeometryFirst(query, true);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(1));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            SetBruteRejectedBindingReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteRejectedBindingReuseAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingProbeCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteRejectedBindingReuse_1000ParticipantsBalancedCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("BindingReuse_Cost_" + i, 6400 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteRejectedBindingReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteRejectedBindingReuseCountForDiagnostics"), Is.GreaterThan(0));
+            double baselineMs = 0, candidateMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteRejectedBindingReuse(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        candidateMs += ms;
+                    else
+                        baselineMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_REJECTED_BINDING_REUSE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteRejectedBindingReuse(BruteForceSceneQuery query, bool value)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteRejectedBindingReuseForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The rejected-binding candidate must be explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        private static void CreateRejectedBindingReuseScenario(out SimulationWorld world,
+            out BruteForceSceneQuery query, out LF2Entity[] attackers)
+        {
+            world = new SimulationWorld();
+            attackers = new LF2Entity[3];
+            for (int i = 0; i < 8; i++)
+            {
+                LF2Character participant = CreateCharacter("BindingReuse_Target_" + i, 6300 + i,
+                    MakePairSnapshotReuseFrame(i < 3, 0));
+                Register(world, participant, i, i < 3 ? 1 : 2, i * 1000);
+                if (i < 3)
+                    attackers[i] = participant;
+            }
+            query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 8);
+            SetBruteGeometryFirst(query, true);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteKind5Presence_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteKind5PresenceForDiagnostics"), Is.EqualTo(false));
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetBruteKind5Presence(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteKind5PresenceAppliedForDiagnostics"), Is.EqualTo(true));
+            if (nearest)
+                Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteKind5Presence_NoKind5FarPairSkipsScanAndKeepsRest()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 9);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(9));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteKind5Presence_Kind5OutsideOrdinaryUnionIsRetained(bool mixed)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (!mixed)
+                attacker.GetCollisionFrameData().itrs.Clear();
+            attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 5, vrest = 1, x = 980, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteKind5Presence_RebuildsAfterSameItrChangesKind()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            InteractionArea changing = attacker.GetCollisionFrameData().itrs[0];
+            foreach (int kind in new[] { 0, 5, 0 })
+            {
+                changing.kind = kind;
+                SetBruteKind5Presence(query, false);
+                CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                SetBruteKind5Presence(query, true);
+                CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+                AssertPairSnapshotRunsEqual(baseline, candidate);
+                Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"),
+                    Is.EqualTo(kind == 5 ? 0 : 1));
+            }
+        }
+
+        [Test]
+        public void BruteKind5Presence_RectCapacityMissFallsBackWithoutGrowth()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 1, 1);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics");
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteKind5PresenceAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics"), Is.EqualTo(capacity));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteKind5Presence_1000ParticipantsLocalCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2FrameData frame = MakePairSnapshotReuseFrame(attack, 0);
+                if (attack)
+                    while (frame.itrs.Count < 8)
+                        frame.itrs.Add(new InteractionArea
+                        {
+                            kind = 0, vrest = 1, x = -20, y = -10, w = 80, h = 20, zwidth = 15,
+                        });
+                LF2Character participant = CreateCharacter("Kind5Presence_Cost_" + i, 5700 + i, frame);
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(1000, 3, 8);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            SetBruteGeometryFirst(query, true);
+            SetBruteKind5Presence(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteKind5Presence(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteKind5ScanSkippedForDiagnostics"), Is.GreaterThan(0));
+            double baselineMs = 0, candidateMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteKind5Presence(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        candidateMs += ms;
+                    else
+                        baselineMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_KIND5_PRESENCE_COST participants=1000 warmup=4 sample=8 " +
+                "baselineMeanMs=" + (baselineMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteKind5Presence(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteKind5PresenceForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Kind5 metadata candidate must remain explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteEmptyItrRoster_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 3, 2);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetBruteEmptyItrRoster(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEmptyItrRosterAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(1));
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(1));
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(1));
+            Assert.That(roster.Counts[0], Is.GreaterThan(0));
+            if (nearest)
+                Assert.That(roster.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_AllInertSkipsPairsAndKeepsRejectAccounting()
+        {
+            var world = new SimulationWorld();
+            Register(world, CreateCharacter("Roster_Inert_A", 2400, MakePairSnapshotReuseFrame(false, 0)), 0, 1, 0);
+            Register(world, CreateCharacter("Roster_Inert_B", 2401, MakePairSnapshotReuseFrame(false, 0)), 1, 2, 0);
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(2, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+            Assert.That(roster.RngCalls, Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterBuildCountForDiagnostics"), Is.EqualTo(2));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterSkippedPairCountForDiagnostics"), Is.EqualTo(1));
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(2));
+            Assert.That(ReadBrutePairGateCount(query), Is.Zero);
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_LaterCollectionRebuildsAfterNewItr()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(1));
+            target.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 0, vrest = 1, x = -20, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.Zero);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(2));
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_CapacityMissFallsBackWithoutGrowthOrLostCandidates()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(1, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteEmptyItrRosterCapacityForDiagnostics");
+            Assert.That(capacity, Is.EqualTo(1));
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, fallback);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEmptyItrRosterAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteEmptyItrRosterFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteEmptyItrRosterCapacityForDiagnostics"), Is.EqualTo(capacity));
+            Assert.That(fallback.Counts[0], Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_SuppressedAndPendingParticipantsRemainExcluded()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character suppressed = CreateCharacter("Roster_Suppressed", 2402, MakePairSnapshotReuseFrame(false, 0));
+            LF2Character pending = CreateCharacter("Roster_Pending", 2403, MakePairSnapshotReuseFrame(false, 0));
+            Register(world, suppressed, 2, 3, 0);
+            Register(world, pending, 3, 4, 0);
+            suppressed.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+            pending.Runtime.PendingFlushDestroy = true;
+            query.PrepareBattleCapacity(4, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(1));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterSkippedPairCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_AllActiveKeepsEveryPairInOriginalOrder()
+        {
+            var world = new SimulationWorld();
+            var participants = new LF2Entity[3];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                participants[i] = CreateCharacter("Roster_Active_" + i, 2410 + i, MakePairSnapshotReuseFrame(true, 0));
+                Register(world, participants[i], i, i + 1, i * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(3, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, participants);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, participants);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(3));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterSkippedPairCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(6));
+        }
+
+        [Test]
+        public void BruteEmptyItrRoster_1000ParticipantsLocalCostAndPairCounts()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("Roster_Cost_" + i, 2500 + i, MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(1000, 3, 2);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun roster = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(legacy, roster);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterBuildCountForDiagnostics"), Is.EqualTo(1000));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(39180));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterSkippedPairCountForDiagnostics"), Is.EqualTo(460320));
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(39960));
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(959040));
+            double legacyMs = 0, rosterMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteEmptyItrRoster(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        rosterMs += ms;
+                    else
+                        legacyMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_EMPTY_ITR_ROSTER_COST participants=1000 warmup=4 sample=8 " +
+                "guardMeanMs=" + (legacyMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " rosterMeanMs=" + (rosterMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " visitedPairs=499500_to_39180 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteExactCache_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteExactCacheForDiagnostics"), Is.EqualTo(false));
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetBruteExactCache(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun cached = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, cached);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(cached.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(2));
+            if (nearest)
+                Assert.That(cached.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteExactCache_AllActiveKeepsBothDirectionsAndSequence()
+        {
+            var world = new SimulationWorld();
+            var participants = new LF2Entity[3];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                LF2FrameData frame = MakePairSnapshotReuseFrame(true, 0);
+                foreach (BattleBodyBoxValue body in MakePairSnapshotReuseFrame(false, 0).bodies)
+                    frame.bodies.Add(body);
+                participants[i] = CreateCharacter("ExactCache_Active_" + i, 3600 + i, frame);
+                Register(world, participants[i], i, i % 2 + 1, i * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(3, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, participants);
+            SetBruteExactCache(query, true);
+            CandidateRun cached = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, participants);
+            AssertPairSnapshotRunsEqual(legacy, cached);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(3));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheDirectionCountForDiagnostics"), Is.EqualTo(6));
+        }
+
+        [Test]
+        public void BruteExactCache_LaterCollectionRebuildsAfterPositionAndItrChange()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+            CandidateRun initial = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(initial.Counts[0], Is.GreaterThan(0));
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 0, vrest = 1, x = -20, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            CandidateRun cached = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            SetBruteExactCache(query, false);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            AssertPairSnapshotRunsEqual(legacy, cached);
+            Assert.That(cached.Counts[0], Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteExactCache_RectCapacityMissFallsBackWithoutGrowthOrLostCandidates()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 1, 1);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            long capacity = ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics");
+            SetBruteExactCache(query, true);
+            CandidateRun fallback = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, fallback);
+            Assert.That(fallback.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterValue(query, "LastBruteExactCacheFallbackForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "BruteExactBodyCapacityForDiagnostics"), Is.EqualTo(capacity));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteExactCache_SuppressedAndPendingParticipantsRemainExcluded()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character suppressed = CreateCharacter("ExactCache_Suppressed", 3610, MakePairSnapshotReuseFrame(true, 0));
+            LF2Character pending = CreateCharacter("ExactCache_Pending", 3611, MakePairSnapshotReuseFrame(true, 0));
+            Register(world, suppressed, 2, 3, 0);
+            Register(world, pending, 3, 4, 0);
+            suppressed.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+            pending.Runtime.PendingFlushDestroy = true;
+            query.PrepareBattleCapacity(4, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteExactCache(query, true);
+            CandidateRun cached = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, cached);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void BruteExactCache_1000ParticipantsLocalCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("ExactCache_Cost_" + i, 3700 + i, MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.PrepareBattleCapacity(1000, 3, 2);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteExactCache(query, true);
+            CandidateRun cached = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(legacy, cached);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteExactCacheBuildCountForDiagnostics"), Is.EqualTo(1000));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteEmptyItrRosterVisitedPairCountForDiagnostics"), Is.EqualTo(39180));
+            double legacyMs = 0, cachedMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteExactCache(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        cachedMs += ms;
+                    else
+                        legacyMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_EXACT_CACHE_COST participants=1000 warmup=4 sample=8 " +
+                "rosterMeanMs=" + (legacyMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " cachedMeanMs=" + (cachedMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            Assert.That(ReadBruteRosterValue(query, "EnableBruteGeometryFirstForDiagnostics"), Is.EqualTo(false));
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetBruteGeometryFirst(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadBruteRosterCount(query, "TotalBruteGeometryFirstCollectionAppliedForDiagnostics"), Is.EqualTo(1));
+            if (nearest)
+                Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteGeometryFirst_FarPairWithVrestKeepsStateAndRejectsGeometry()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            target.ItrRest.SetVrest(attacker.Runtime.SlotIndex, 9);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, candidate);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(target.ItrRest.GetVrest(attacker.Runtime.SlotIndex), Is.EqualTo(9));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteGeometryFirstRejectCountForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate(bool attackExempt)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            PrepareBruteGeometryFirst(query, 2);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            attacker.AttackExempt = attackExempt ? 1 : 0;
+            const System.Reflection.BindingFlags flags =
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            System.Reflection.FieldInfo storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            System.Reflection.FieldInfo handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            var handle = (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest);
+            Assert.That(store, Is.Not.Null);
+            Assert.That(store.ReleaseBinding(handle), Is.True);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            object expectedStore = storeField.GetValue(target.ItrRest);
+            // Snapshot preparation writes the target's Arest mirror and clears stale binding
+            // before either pair gate, including when this attacker is attack-exempt.
+            Assert.That(expectedStore, Is.Null);
+            storeField.SetValue(target.ItrRest, store);
+            handleField.SetValue(target.ItrRest, handle);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), Is.SameAs(expectedStore));
+        }
+
+        [Test]
+        public void BruteGeometryFirst_Kind5OutsideOrdinaryUnionIsNotDropped()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 5, vrest = 1, x = 980, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            PrepareBruteGeometryFirst(query, 2);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(legacy.Counts[0], Is.GreaterThan(0));
+            SetBruteGeometryFirst(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteGeometryFirstRejectCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteGeometryFirst_1000ParticipantsLocalCostAndFullSequence()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("GeometryFirst_Cost_" + i, 4700 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2, (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            CandidateRun legacy = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(legacy, candidate);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteGeometryFirstRejectCountForDiagnostics"), Is.GreaterThan(0));
+            double legacyMs = 0, candidateMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteGeometryFirst(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                        candidateMs += ms;
+                    else
+                        legacyMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_GEOMETRY_FIRST_COST participants=1000 warmup=4 sample=8 " +
+                " cachedMeanMs=" + (legacyMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " geometryFirstMeanMs=" + (candidateMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void PrepareBruteGeometryFirst(BruteForceSceneQuery query, int count)
+        {
+            query.PrepareBattleCapacity(count, 3, 3);
+            SetBruteEmptyItrGuard(query, true);
+            SetBruteEmptyItrRoster(query, true);
+            SetBruteExactCache(query, true);
+        }
+
+        private static void SetBruteGeometryFirst(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteGeometryFirstForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Geometry ordering must remain explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+
+        private static void SetBruteExactCache(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteExactCacheForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Exact cache must remain explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        private static void SetBruteEmptyItrRoster(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableBruteEmptyItrRosterForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Roster must remain explicit opt-in.");
+            property.SetValue(query, value);
+        }
+
+        private static long ReadBruteRosterCount(BruteForceSceneQuery query, string name)
+        {
+            return Convert.ToInt64(ReadBruteRosterValue(query, name));
+        }
+
+        private static object ReadBruteRosterValue(BruteForceSceneQuery query, string name)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Record actual roster use and fallback.");
+            return property.GetValue(query);
+        }
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void BruteEmptyItrGuard_MultiBodyPreservesPayloadRngAndKind4(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            SetBruteEmptyItrGuard(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            int legacySourceCount = attacker.Runtime.Kind4SourceCount92;
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(2));
+
+            SetBruteEmptyItrGuard(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun guarded = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, guarded);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(1));
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(1));
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(legacySourceCount));
+            Assert.That(guarded.Counts[0], Is.GreaterThan(0));
+            if (nearest)
+                Assert.That(guarded.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void BruteEmptyItrGuard_AllInertSkipsPairGateWithoutRng()
+        {
+            var world = new SimulationWorld();
+            Register(world, CreateCharacter("EmptyItr_A", 2100,
+                MakePairSnapshotReuseFrame(false, 0)), 0, 1, 0);
+            Register(world, CreateCharacter("EmptyItr_B", 2101,
+                MakePairSnapshotReuseFrame(false, 0)), 1, 2, 0);
+            BruteForceSceneQuery query = GetQuery(world);
+            SetBruteEmptyItrGuard(query, false);
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(2));
+            SetBruteEmptyItrGuard(query, true);
+            CandidateRun guarded = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce);
+            AssertPairSnapshotRunsEqual(legacy, guarded);
+            Assert.That(guarded.RngCalls, Is.Zero);
+            Assert.That(ReadBrutePairGateCount(query), Is.Zero);
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void BruteEmptyItrGuard_LaterCollectionRechecksNewItr()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetBruteEmptyItrGuard(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(1));
+            target.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 0, vrest = 1, x = -20, y = -10, w = 80, h = 20, zwidth = 15,
+            });
+            CandidateRun guarded = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.Zero);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(2));
+            SetBruteEmptyItrGuard(query, false);
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker, target);
+            AssertPairSnapshotRunsEqual(legacy, guarded);
+        }
+
+        [Test]
+        public void BruteEmptyItrGuard_ActiveAttackExemptStillRejects()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            attacker.AttackExempt = 1;
+            SetBruteEmptyItrGuard(query, false);
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteEmptyItrGuard(query, true);
+            CandidateRun guarded = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(legacy, guarded);
+            Assert.That(guarded.Counts[0], Is.Zero);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.Zero);
+        }
+
+        [Test]
+        public void BruteEmptyItrGuard_1000ParticipantsLocalCostAndGateCounts()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("EmptyItr_Cost_" + i,
+                    2200 + i, MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participant, i, attack ? 1 : 2,
+                    (i / 25) * 120 + (i % 5) * 5);
+                if (attack)
+                    attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+            query.PrepareBattleCapacity(1000, 3, 2);
+            SetBruteEmptyItrGuard(query, false);
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(999000));
+            SetBruteEmptyItrGuard(query, true);
+            CandidateRun guarded = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(legacy, guarded);
+            Assert.That(ReadBrutePairGateCount(query), Is.EqualTo(39960));
+            Assert.That(ReadBruteEmptyItrRejectCount(query), Is.EqualTo(959040));
+            double legacyMs = 0;
+            double guardedMs = 0;
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool guard = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteEmptyItrGuard(query, guard);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (guard)
+                        guardedMs += ms;
+                    else
+                        legacyMs += ms;
+                }
+            }
+            TestContext.WriteLine("BRUTE_EMPTY_ITR_GUARD_COST participants=1000 warmup=4 sample=8 " +
+                "legacyMeanMs=" + (legacyMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " guardedMeanMs=" + (guardedMs / 8d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " gateCalls=999000_to_39960 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void SetBruteEmptyItrGuard(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "EnableEmptyItrPairGuardForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The candidate must remain opt-in.");
+            property.SetValue(query, value);
+        }
+
+        private static int ReadBrutePairGateCount(BruteForceSceneQuery query)
+        {
+            return ReadBruteGuardCounter(query, "LastPairCollectionGateCallCountForDiagnostics");
+        }
+
+        private static int ReadBruteEmptyItrRejectCount(BruteForceSceneQuery query)
+        {
+            return ReadBruteGuardCounter(query, "LastEmptyItrGuardRejectCountForDiagnostics");
+        }
+
+        private static int ReadBruteGuardCounter(BruteForceSceneQuery query, string name)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Count actual guard/gate calls.");
+            return (int)property.GetValue(query);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        public void PairSnapshotReuse_MultiItrBody_PreservesSequenceSnapshotRngAndKind4Count(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            SetLegacyPairSnapshotCapture(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int legacyCaptures = ReadPairSnapshotCaptureCount(query);
+            int legacySourceCount = attacker.Runtime.Kind4SourceCount92;
+
+            SetLegacyPairSnapshotCapture(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun reused = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(legacy, reused);
+            Assert.That(legacyCaptures, Is.EqualTo(6));
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(1));
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(legacySourceCount));
+            Assert.That(legacySourceCount, Is.EqualTo(kind == 4 ? 6 : 0));
+            Assert.That(reused.Counts[0], Is.GreaterThan(0));
+            if (nearest)
+            {
+                Assert.That(reused.Counts[0], Is.EqualTo(1));
+                Assert.That(reused.RngCalls, Is.GreaterThan(0));
+            }
+        }
+
+        [Test]
+        public void PairSnapshotReuse_NoOverlap_DoesNotCapture()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetLegacyPairSnapshotCapture(query, false);
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            CandidateRun run = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(run.Counts[0], Is.Zero);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.Zero);
+        }
+
+        [Test]
+        public void PairSnapshotReuse_DifferentTargets_DoNotSharePayload()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2Character second = CreateCharacter("SnapshotReuse_Second", 1302,
+                MakePairSnapshotReuseFrame(false, 4));
+            Register(world, second, 2, 3, 0);
+            SetLegacyPairSnapshotCapture(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun legacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(12));
+            SetLegacyPairSnapshotCapture(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun reused = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(legacy, reused);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(2));
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(12));
+            Assert.That(reused.Sequences[0][0].PairSnapshot,
+                Is.Not.EqualTo(reused.Sequences[0][6].PairSnapshot));
+        }
+
+        [Test]
+        public void PairSnapshotReuse_LaterCollection_RecapturesChangedTeamsAndFacing()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetLegacyPairSnapshotCapture(query, false);
+            CandidateRun first = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            attacker.RelationTeam = 4;
+            target.RelationTeam = 5;
+            attacker.Runtime.Dir = "left";
+            attacker.PS.dir = "left";
+            SetLegacyPairSnapshotCapture(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun changedLegacy = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetLegacyPairSnapshotCapture(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun changedReused = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(changedLegacy, changedReused);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(1));
+            Assert.That(changedReused.Sequences[0][0].PairSnapshot,
+                Is.Not.EqualTo(first.Sequences[0][0].PairSnapshot));
+        }
+
+        [Test]
+        public void PairSnapshotReuse_1000Participants_LocalCostAndCaptureCounts()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var participants = new LF2Character[1000];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                bool attacker = i % 25 == 0;
+                participants[i] = CreateCharacter("SnapshotReuse_Cost_" + i,
+                    1300 + i, MakePairSnapshotReuseFrame(attacker, 0));
+                Register(world, participants[i], i, attacker ? 1 : 2,
+                    (i / 25) * 120 + (i % 5) * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.PrepareBattleCapacity(1000, 3, 2);
+            double legacyMs = 0;
+            double reusedMs = 0;
+            long legacyCaptures = 0;
+            long reusedCaptures = 0;
+            for (int iteration = -8; iteration < 16; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool legacy = ((iteration & 1) == 0) == (order == 0);
+                    SetLegacyPairSnapshotCapture(query, legacy);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double elapsedMs = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (legacy)
+                    {
+                        legacyMs += elapsedMs;
+                        legacyCaptures += ReadPairSnapshotCaptureCount(query);
+                    }
+                    else
+                    {
+                        reusedMs += elapsedMs;
+                        reusedCaptures += ReadPairSnapshotCaptureCount(query);
+                    }
+                }
+            }
+            Assert.That(reusedCaptures, Is.GreaterThan(0));
+            Assert.That(legacyCaptures, Is.GreaterThan(reusedCaptures));
+            Assert.That(legacyMs, Is.GreaterThan(0));
+            Assert.That(reusedMs, Is.GreaterThan(0));
+            TestContext.WriteLine("PAIR_SNAPSHOT_REUSE_COST participants=1000 warmup=8 sample=16 " +
+                "legacyMeanMs=" + (legacyMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " reusedMeanMs=" + (reusedMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " legacyCaptures=" + legacyCaptures + " reusedCaptures=" + reusedCaptures +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void CreatePairSnapshotReuseScenario(int kind,
+            out SimulationWorld world, out BruteForceSceneQuery query,
+            out LF2Character attacker, out LF2Character target)
+        {
+            world = new SimulationWorld();
+            attacker = CreateCharacter("SnapshotReuse_Attacker", 1300,
+                MakePairSnapshotReuseFrame(true, kind));
+            target = CreateCharacter("SnapshotReuse_Target", 1301,
+                MakePairSnapshotReuseFrame(false, kind));
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+            attacker.Runtime.EnvironmentState320 = 1;
+            query = GetQuery(world);
+        }
+
+        private static LF2FrameData MakePairSnapshotReuseFrame(bool attack, int kind)
+        {
+            LF2FrameData frame = MakeFrame(null, null);
+            if (attack)
+            {
+                for (int i = 0; i < 2; i++)
+                    frame.itrs.Add(new InteractionArea
+                    {
+                        kind = kind, vrest = 1, x = -20, y = -10,
+                        w = 80, h = 20, zwidth = 15, fall = 100,
+                    });
+            }
+            else
+            {
+                for (int i = 0; i < 3; i++)
+                    frame.bodies.Add(new BodyBox
+                    {
+                        kind = 0, x = -9 + i, y = -10, w = 20, h = 20,
+                    });
+            }
+            return frame;
+        }
+
+        private static void SetLegacyPairSnapshotCapture(BruteForceSceneQuery query, bool value)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The per-body capture control must exist for scoped A/B.");
+            property.SetValue(query, value);
+        }
+
+        private static int ReadPairSnapshotCaptureCount(BruteForceSceneQuery query)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(
+                "LastRoleAwareCachedPairSnapshotCaptureCountForDiagnostics");
+            Assert.That(property, Is.Not.Null, "The count must measure actual factory captures, not accepted candidates.");
+            return (int)property.GetValue(query);
+        }
+
+        private static void AssertPairSnapshotRunsEqual(CandidateRun expected, CandidateRun actual)
+        {
+            AssertRunsEqual(expected, actual);
+            for (int attacker = 0; attacker < expected.Sequences.Count; attacker++)
+                for (int candidate = 0; candidate < expected.Sequences[attacker].Count; candidate++)
+                    Assert.That(actual.Sequences[attacker][candidate].PairSnapshot,
+                        Is.EqualTo(expected.Sequences[attacker][candidate].PairSnapshot));
+        }
+        private const uint CollectionSeed = 0x41C64E6Du;
+
+        [Test]
+        public void Formal_CollisionGeometryUsesRuntimeFacingWhenPhysicsMirrorIsStale()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_RuntimeFacingAttacker",
+                3400,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 10,
+                        y = -10,
+                        w = 10,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleFormal_RuntimeFacingTarget",
+                3401,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -20,
+                        y = -10,
+                        w = 10,
+                        h = 20,
+                    }));
+            Register(world, attacker, 0, 1, 100);
+            Register(world, target, 1, 2, 100);
+
+            attacker.Runtime.Dir = "left";
+            attacker.PS.dir = "right";
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+
+            AssertRunsEqual(brute, role);
+            Assert.That(brute.Sequences[0], Has.Count.EqualTo(1));
+            Assert.That(brute.Sequences[0][0].TargetSlot, Is.EqualTo(1));
+            Assert.That(attacker.Runtime.IsFacingLeft, Is.True);
+            Assert.That(attacker.PS.dir, Is.EqualTo("right"));
+        }
+
+        [Test]
+        public void Formal_DefaultConfiguredBruteForceBackendRemainsBrute()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_DefaultAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleFormal_DefaultTarget",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            Assert.That(query.FormalCollectorMode,
+                Is.EqualTo(CollisionFormalCollectorMode.Configured));
+            RunCollection(world, query, CollisionFormalCollectorMode.Configured, attacker);
+            Assert.That(query.LastFormalCollectorModeForDiagnostics,
+                Is.EqualTo(CollisionFormalCollectorMode.ForceBruteForce));
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+        }
+
+        [Test]
+        public void Formal_ConfiguredLooseReusesStationaryRoleAwareIndexAndMatchesBrute()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.Authority400,
+                BattleRuntimeProfilePolicy.AuthorityRuntimeSlotCapacity,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_StationaryAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character target = CreateCharacter(
+                "RoleFormal_StationaryTarget",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                    }));
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun initial = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.Configured,
+                CollectionSeed,
+                attacker);
+            var initialSync = query.LastFormalSynchronizeResultForDiagnostics;
+            Assert.That(
+                query.LastFormalCollectorModeForDiagnostics,
+                Is.EqualTo(CollisionFormalCollectorMode.ForceRoleAware));
+            Assert.That(initialSync.Succeeded, Is.True);
+            Assert.That(initialSync.FullRebuild, Is.True);
+            Assert.That(initialSync.IndexedCount, Is.EqualTo(1));
+
+            CandidateRun stationary = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.Configured,
+                CollectionSeed,
+                attacker);
+            var stationarySync = query.LastFormalSynchronizeResultForDiagnostics;
+            Assert.That(
+                query.LastFormalCollectorModeForDiagnostics,
+                Is.EqualTo(CollisionFormalCollectorMode.ForceRoleAware));
+            Assert.That(stationarySync.Succeeded, Is.True);
+            Assert.That(stationarySync.FullRebuild, Is.False);
+            Assert.That(stationarySync.InsertedCount, Is.Zero);
+            Assert.That(stationarySync.UpdatedInPlaceCount, Is.Zero);
+            Assert.That(stationarySync.MigratedCount, Is.Zero);
+            Assert.That(stationarySync.RemovedCount, Is.Zero);
+            Assert.That(stationarySync.IndexedCount, Is.EqualTo(1));
+            AssertRunsEqual(initial, stationary);
+
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                CollectionSeed,
+                attacker);
+            AssertRunsEqual(brute, stationary);
+            Assert.That(stationary.CollectionAborted, Is.False);
+            Assert.That(stationary.Counts, Is.EqualTo(new[] { 1 }));
+            Assert.That(stationary.RngCalls, Is.EqualTo(brute.RngCalls));
+            Assert.That(stationary.RngState, Is.EqualTo(brute.RngState));
+        }
+
+        [Test]
+        public void Formal_RoleAwareMatchesLegacyExactSequenceCountAndRng_WithAuthorityOrder()
+        {
+            var world = new SimulationWorld();
+            LF2Character registeredFirstHighSlot = CreateCharacter(
+                "RoleFormal_HighSlot",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -25,
+                        y = -10,
+                        w = 50,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    new BodyBox { kind = 0, x = 5, y = -10, w = 20, h = 20 }));
+            LF2Character registeredSecondLowSlot = CreateCharacter(
+                "RoleFormal_LowSlot",
+                2,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -25,
+                        y = -10,
+                        w = 50,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    new BodyBox { kind = 0, x = -5, y = -10, w = 20, h = 20 }));
+            registeredFirstHighSlot.GetCollisionFrameData().bodies.Add(
+                new BodyBox { kind = 0, x = 35, y = -10, w = 10, h = 20 });
+            registeredFirstHighSlot.GetCollisionFrameData().itrs.Insert(0, null);
+            registeredSecondLowSlot.GetCollisionFrameData().itrs.Insert(0, null);
+
+            Register(world, registeredFirstHighSlot, 9, 1, -192);
+            Register(world, registeredSecondLowSlot, 2, 2, -91);
+            registeredFirstHighSlot.Runtime.SetPosition(0, 0, 0);
+            registeredFirstHighSlot.Runtime.SyncIntegerPosition();
+            registeredSecondLowSlot.Runtime.SetPosition(0, 0, 0);
+            registeredSecondLowSlot.Runtime.SyncIntegerPosition();
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                registeredSecondLowSlot,
+                registeredFirstHighSlot);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun direct = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                registeredSecondLowSlot,
+                registeredFirstHighSlot);
+            long directComparisons =
+                query.LastRoleAwareDirectComparisonCountForDiagnostics;
+            long directAllocations =
+                query.MeasureWarmedRoleAwareDirectAllocationsForSelfCheck(32);
+            long exactRectCacheAllocations =
+                query.MeasureWarmedRoleAwareExactRectCacheAllocationsForSelfCheck(32);
+            query.ForceRoleAwareDirectForDiagnostics = false;
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun tree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                registeredSecondLowSlot,
+                registeredFirstHighSlot);
+
+            AssertRunsEqual(legacy, direct);
+            AssertRunsEqual(direct, tree);
+            Assert.That(direct.Sequences[0].Count, Is.EqualTo(1));
+            Assert.That(direct.Sequences[0][0].TargetSlot, Is.EqualTo(9));
+            Assert.That(direct.Sequences[0][0].ItrIndex, Is.EqualTo(1));
+            Assert.That(direct.Sequences[0][0].BodyX, Is.EqualTo(5));
+            Assert.That(direct.Sequences[1].Count, Is.EqualTo(1));
+            Assert.That(direct.Sequences[1][0].TargetSlot, Is.EqualTo(2));
+            Assert.That(direct.Sequences[1][0].ItrIndex, Is.EqualTo(1));
+            Assert.That(direct.Sequences[1][0].BodyX, Is.EqualTo(-5));
+            Assert.That(directComparisons, Is.EqualTo(4));
+            Assert.That(directAllocations, Is.Zero);
+            Assert.That(exactRectCacheAllocations, Is.Zero);
+            Assert.That(
+                query.LastRoleAwareExactItrRectBuildCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                query.LastRoleAwareExactBodyRectBuildCountForDiagnostics,
+                Is.EqualTo(3));
+            Assert.That(
+                query.LastRoleAwareExactDirectionCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                query.LastRoleAwareExactItrVisitCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics,
+                Is.EqualTo(3));
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.TotalRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.TotalRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastFormalPairCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareBodyEntryCountForDiagnostics, Is.EqualTo(3));
+            Assert.That(query.LastRoleAwareItrQueryCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+        }
+
+        [Test]
+        public void Formal_WarmedRoleAwareCollectDoesNotAllocateParticipantObjects()
+        {
+            const int participantCount = 128;
+            const int measuredIterations = 16;
+            var world = new SimulationWorld();
+            LF2FrameData sharedBodyFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            for (int slot = 0; slot < participantCount; slot++)
+            {
+                LF2Character participant = CreateCharacter(
+                    $"RoleFormal_Allocation_{slot}",
+                    3000 + slot,
+                    sharedBodyFrame);
+                Register(world, participant, slot, (slot % 2) + 1, slot * 30);
+            }
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            world.CaptureCollisionFrameSnapshotsAll();
+
+            long allocatedBytes =
+                query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(
+                    measuredIterations);
+
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+            Assert.That(
+                query.LastRoleAwareParticipantCountForDiagnostics,
+                Is.EqualTo(participantCount));
+            Assert.That(
+                allocatedBytes,
+                Is.LessThan(4096L),
+                "The warmed full role-aware collection must not allocate one " +
+                "participant object per entity; only unrelated collection overhead is allowed.");
+        }
+
+        [Test]
+        public void Formal_RoleAwareParticipantFlagsMatchLegacyBuildForAllBodyPaths()
+        {
+            LF2FrameData noBodyFrame = MakeFrame(null, null);
+            LF2FrameData validBodyFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            LF2FrameData invalidBodyFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = 20,
+                    y = -10,
+                    w = 0,
+                    h = 20,
+                });
+            var world = new SimulationWorld();
+            LF2Character noBody = CreateCharacter(
+                "RoleFormal_FlagsNoBody",
+                3200,
+                noBodyFrame);
+            LF2Character fast = CreateCharacter(
+                "RoleFormal_FlagsFast",
+                3201,
+                validBodyFrame);
+            LF2Character fallback = CreateCharacter(
+                "RoleFormal_FlagsFallback",
+                3202,
+                validBodyFrame);
+            LF2Character invalidBounds = CreateCharacter(
+                "RoleFormal_FlagsInvalidBounds",
+                3203,
+                invalidBodyFrame);
+            Register(world, noBody, 0, 1, 0);
+            Register(world, fast, 1, 2, 0);
+            Register(world, fallback, 2, 2, 999999995);
+            Register(world, invalidBounds, 3, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceLegacyRoleBodyBuildForDiagnostics = true;
+            RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                noBody,
+                fast,
+                fallback,
+                invalidBounds);
+            bool[] noBodyLegacy = ReadRoleAwareParticipantFlags(query, noBody);
+            bool[] fastLegacy = ReadRoleAwareParticipantFlags(query, fast);
+            bool[] fallbackLegacy = ReadRoleAwareParticipantFlags(query, fallback);
+            bool[] invalidBoundsLegacy =
+                ReadRoleAwareParticipantFlags(query, invalidBounds);
+
+            query.ForceLegacyRoleBodyBuildForDiagnostics = false;
+            RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                noBody,
+                fast,
+                fallback,
+                invalidBounds);
+
+            Assert.That(
+                ReadRoleAwareParticipantFlags(query, noBody),
+                Is.EqualTo(noBodyLegacy));
+            Assert.That(
+                ReadRoleAwareParticipantFlags(query, fast),
+                Is.EqualTo(fastLegacy));
+            Assert.That(
+                ReadRoleAwareParticipantFlags(query, fallback),
+                Is.EqualTo(fallbackLegacy));
+            Assert.That(
+                ReadRoleAwareParticipantFlags(query, invalidBounds),
+                Is.EqualTo(invalidBoundsLegacy));
+            Assert.That(noBodyLegacy, Is.EqualTo(new[] { false, false, false, false }));
+            Assert.That(fastLegacy, Is.EqualTo(new[] { true, false, false, false }));
+            Assert.That(fallbackLegacy, Is.EqualTo(new[] { true, false, false, false }));
+            Assert.That(invalidBoundsLegacy, Is.EqualTo(new[] { true, false, false, false }));
+            Assert.That(
+                query.LastRoleAwareBodyTemplateFallbackCountForDiagnostics,
+                Is.EqualTo(2));
+        }
+
+        [TestCase(false, false, 0)]
+        [TestCase(false, true, 1)]
+        [TestCase(true, false, 0)]
+        [TestCase(true, true, 1)]
+        public void Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(
+            bool currentHasRoles,
+            bool collisionHasRoles,
+            int expectedCandidateCount)
+        {
+            LF2FrameData attackerCurrentFrame = MakeFrame(
+                currentHasRoles
+                    ? new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                        zwidth = 15,
+                    }
+                    : null,
+                null);
+            LF2FrameData attackerCollisionFrame = MakeFrame(
+                collisionHasRoles
+                    ? new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                        zwidth = 15,
+                    }
+                    : null,
+                null);
+            LF2FrameData targetCurrentFrame = MakeFrame(
+                null,
+                currentHasRoles
+                    ? new BodyBox
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                    }
+                    : null);
+            LF2FrameData targetCollisionFrame = MakeFrame(
+                null,
+                collisionHasRoles
+                    ? new BodyBox
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                    }
+                    : null);
+            attackerCurrentFrame.frameId = 0;
+            attackerCollisionFrame.frameId = 1;
+            targetCurrentFrame.frameId = 0;
+            targetCollisionFrame.frameId = 1;
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacterWithFrames(
+                "RoleFormal_CurrentCollisionAttacker",
+                3300,
+                new List<LF2FrameData>
+                {
+                    attackerCurrentFrame,
+                    attackerCollisionFrame,
+                });
+            LF2Character target = CreateCharacterWithFrames(
+                "RoleFormal_CurrentCollisionTarget",
+                3301,
+                new List<LF2FrameData>
+                {
+                    targetCurrentFrame,
+                    targetCollisionFrame,
+                });
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            Action overrideCollisionFrames = () =>
+            {
+                OverrideCollisionFrame(attacker, 1);
+                OverrideCollisionFrame(target, 1);
+            };
+
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = true;
+            CandidateRun legacyExact = RunCollectionWithCollisionSnapshotOverride(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                overrideCollisionFrames,
+                attacker);
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = false;
+            CandidateRun cachedExact = RunCollectionWithCollisionSnapshotOverride(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                overrideCollisionFrames,
+                attacker);
+
+            AssertRunsEqual(legacyExact, cachedExact);
+            Assert.That(
+                cachedExact.Counts,
+                Is.EqualTo(new[] { expectedCandidateCount }));
+        }
+
+        [Test]
+        public void Formal_CachedExactMatchesLegacyForKind5MixedAndFullHeightClamp()
+        {
+            LF2FrameData kind5OnlyFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 5,
+                    vrest = 1,
+                    x = -20,
+                    y = -20,
+                    w = 40,
+                    h = 40,
+                    zwidth = 15,
+                },
+                null);
+            LF2FrameData mixedFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = -20,
+                    y = -20,
+                    w = 40,
+                    h = 40,
+                    zwidth = 15,
+                },
+                null);
+            mixedFrame.itrs.Add(new InteractionArea
+            {
+                kind = 5,
+                vrest = 1,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+                zwidth = 15,
+            });
+            LF2FrameData fullHeightFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -200,
+                    y = int.MinValue,
+                    w = 900,
+                    h = 999,
+                });
+
+            var world = new SimulationWorld();
+            LF2Character holder = CreateCharacter(
+                "RoleFormal_Kind5Holder",
+                3310,
+                MakeFrame(null, null));
+            LF2Character kind5Only = CreateCharacter(
+                "RoleFormal_Kind5Only",
+                3311,
+                kind5OnlyFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_FullHeightTarget",
+                3312,
+                fullHeightFrame);
+            LF2Character mixed = CreateCharacter(
+                "RoleFormal_Kind5Mixed",
+                3313,
+                mixedFrame);
+            Register(world, holder, 0, 1, 999999900);
+            Register(world, kind5Only, 1, 1, 999999900);
+            Register(world, target, 2, 2, 999999900);
+            Register(world, mixed, 3, 1, 999999900);
+            target.PS.dir = "left";
+            target.Runtime.Dir = "left";
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = true;
+            CandidateRun legacyExact = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                kind5Only,
+                mixed);
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = false;
+            CandidateRun cachedExact = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                kind5Only,
+                mixed);
+
+            AssertRunsEqual(legacyExact, cachedExact);
+            Assert.That(cachedExact.Counts, Is.EqualTo(new[] { 1, 2 }));
+            Assert.That(cachedExact.CollectionAborted, Is.False);
+            Assert.That(
+                query.LastRoleAwareExactItrRectBuildCountForDiagnostics,
+                Is.EqualTo(3));
+            Assert.That(
+                query.LastRoleAwareExactBodyRectBuildCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareExactDirectionCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                query.LastRoleAwareExactItrVisitCountForDiagnostics,
+                Is.EqualTo(3));
+            Assert.That(
+                query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics,
+                Is.EqualTo(3));
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(3)]
+        public void Formal_ForcedDirectAndTreeMatchForZeroOneAndManyItrs(
+            int itrCount)
+        {
+            LF2FrameData attackerFrame = MakeFrame(null, null);
+            for (int itrIndex = 0; itrIndex < itrCount; itrIndex++)
+            {
+                attackerFrame.itrs.Add(new InteractionArea
+                {
+                    kind = itrIndex == 1 ? 1 : 0,
+                    vrest = 1,
+                    x = -20 + itrIndex,
+                    y = -10,
+                    w = 40,
+                    h = 20,
+                    zwidth = 15,
+                });
+            }
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                $"RoleDirect_Itrs_{itrCount}",
+                1400 + itrCount,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                $"RoleDirect_Target_{itrCount}",
+                1410 + itrCount,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                    }));
+            Register(world, target, 7, 2, 0);
+            Register(world, attacker, 3, 1, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            LF2Entity[] trackedAttackers =
+                itrCount == 0 ? Array.Empty<LF2Entity>() : new LF2Entity[] { attacker };
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun direct = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                trackedAttackers);
+            long directComparisons =
+                query.LastRoleAwareDirectComparisonCountForDiagnostics;
+            query.ForceRoleAwareDirectForDiagnostics = false;
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun tree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                trackedAttackers);
+
+            AssertRunsEqual(direct, tree);
+            Assert.That(direct.ItrQueryCount, Is.EqualTo(itrCount));
+            Assert.That(direct.BodyEntryCount, Is.EqualTo(1));
+            Assert.That(directComparisons, Is.EqualTo(itrCount));
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Formal_EpochGuardedExactLoopMatchesLegacyPerPairValidationWithRng(
+            bool forceTree)
+        {
+            CreateExactLoopTieFixture(
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character attacker);
+            query.ForceRoleAwareDirectForDiagnostics = !forceTree;
+            query.ForceRoleAwareTreeForDiagnostics = forceTree;
+
+            CandidateRun legacyValidation;
+            CandidateRun epochGuarded;
+            try
+            {
+                query.ForceLegacyPerPairValidationForDiagnostics = true;
+                legacyValidation = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker);
+                query.ForceLegacyPerPairValidationForDiagnostics = false;
+                epochGuarded = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker);
+            }
+            finally
+            {
+                query.ForceLegacyPerPairValidationForDiagnostics = false;
+                query.ForceRoleAwareDirectForDiagnostics = false;
+                query.ForceRoleAwareTreeForDiagnostics = false;
+            }
+
+            AssertRunsEqual(legacyValidation, epochGuarded);
+            Assert.That(epochGuarded.RngCalls, Is.GreaterThan(0));
+            Assert.That(query.ForceLegacyPerPairValidationForDiagnostics, Is.False);
+        }
+
+        [TestCase(false, 0)]
+        [TestCase(true, 0)]
+        [TestCase(false, 1)]
+        [TestCase(true, 1)]
+        [TestCase(false, 2)]
+        [TestCase(true, 2)]
+        [TestCase(false, 3)]
+        [TestCase(true, 3)]
+        public void Formal_EpochGuardedDirectionalCallsMatchLegacyValidation(
+            bool forceTree,
+            int scenario)
+        {
+            CreateExactLoopDirectionalFixture(
+                scenario,
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character first,
+                out LF2Character second);
+            query.ForceRoleAwareDirectForDiagnostics = !forceTree;
+            query.ForceRoleAwareTreeForDiagnostics = forceTree;
+
+            CandidateRun legacyValidation;
+            CandidateRun epochGuarded;
+            try
+            {
+                query.ForceLegacyPerPairValidationForDiagnostics = true;
+                legacyValidation = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    first,
+                    second);
+                query.ForceLegacyPerPairValidationForDiagnostics = false;
+                epochGuarded = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    first,
+                    second);
+            }
+            finally
+            {
+                query.ForceLegacyPerPairValidationForDiagnostics = false;
+                query.ForceRoleAwareDirectForDiagnostics = false;
+                query.ForceRoleAwareTreeForDiagnostics = false;
+            }
+
+            AssertRunsEqual(legacyValidation, epochGuarded);
+            Assert.That(query.ForceLegacyPerPairValidationForDiagnostics, Is.False);
+        }
+
+        [Test]
+        public void Formal_OccupancyEpochMutationAbortsAndRestoresBruteRngAndCandidates()
+        {
+            CreateExactLoopTieFixture(
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character attacker);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                CollectionSeed,
+                attacker);
+            LF2Character lateInert = CreateCharacter(
+                "RoleExact_EpochLateInert",
+                1899,
+                MakeFrame(null, null));
+            bool mutated = false;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.AfterRoleAwareExactPairForSelfCheck = _ =>
+            {
+                if (mutated)
+                    return;
+
+                mutated = true;
+                Register(world, lateInert, 3, 4, 10000);
+            };
+
+            CandidateRun recovered;
+            try
+            {
+                recovered = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker);
+            }
+            finally
+            {
+                query.AfterRoleAwareExactPairForSelfCheck = null;
+                query.ForceRoleAwareDirectForDiagnostics = false;
+            }
+
+            Assert.That(mutated, Is.True);
+            AssertRunsEqual(brute, recovered);
+            Assert.That(recovered.CollectionAborted, Is.True);
+            Assert.That(recovered.RngCalls, Is.GreaterThan(0));
+            Assert.That(lateInert.Runtime.SlotIndex, Is.EqualTo(3));
+            Assert.That(query.AfterRoleAwareExactPairForSelfCheck, Is.Null);
+        }
+
+        [TestCase(1024, 256, true)]
+        [TestCase(1417, 185, false)]
+        [Timeout(30000)]
+        public void Formal_DirectCostThresholdIsInclusive(
+            int itrEntryCount,
+            int bodyUnionEntryCount,
+            bool expectDirect)
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.DesktopExtended,
+                bodyUnionEntryCount + 8,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            LF2FrameData attackerFrame = MakeFrame(null, null);
+            for (int itrIndex = 0; itrIndex < itrEntryCount; itrIndex++)
+            {
+                attackerFrame.itrs.Add(new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = -20,
+                    y = -10,
+                    w = 40,
+                    h = 20,
+                    zwidth = 15,
+                });
+            }
+            LF2Character attacker = CreateCharacter(
+                $"RoleDirect_ThresholdAttacker_{itrEntryCount}_{bodyUnionEntryCount}",
+                1500,
+                attackerFrame);
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            for (int bodyIndex = 0;
+                 bodyIndex < bodyUnionEntryCount;
+                 bodyIndex++)
+            {
+                LF2Character target = CreateCharacter(
+                    $"RoleDirect_ThresholdTarget_{bodyIndex}",
+                    1600 + bodyIndex,
+                    targetFrame);
+                Register(world, target, bodyIndex, 2, bodyIndex * 1000);
+            }
+            Register(world, attacker, bodyUnionEntryCount, 1, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun run = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+
+            long expectedCost =
+                (long)itrEntryCount * bodyUnionEntryCount;
+            Assert.That(run.BodyEntryCount, Is.EqualTo(bodyUnionEntryCount));
+            Assert.That(run.ItrQueryCount, Is.EqualTo(itrEntryCount));
+            Assert.That(
+                expectedCost,
+                Is.EqualTo(expectDirect ? 262144L : 262145L));
+            Assert.That(
+                query.LastRoleAwareDirectTickCountForDiagnostics,
+                Is.EqualTo(expectDirect ? 1 : 0));
+            Assert.That(
+                query.LastRoleAwareTreeTickCountForDiagnostics,
+                Is.EqualTo(expectDirect ? 0 : 1));
+            Assert.That(
+                query.LastRoleAwareDirectCostForDiagnostics,
+                Is.EqualTo(expectedCost));
+            Assert.That(
+                query.LastRoleAwareSweepDirectTickCountForDiagnostics,
+                Is.EqualTo(expectDirect ? 1 : 0));
+            Assert.That(run.CollectionAborted, Is.False);
+        }
+
+        [Test]
+        public void Formal_SharedFrameBodyTemplateMatchesForcedLegacyAfterMovementDirectionAndType3Z()
+        {
+            LF2FrameData sharedFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = -50,
+                    y = -20,
+                    w = 100,
+                    h = 40,
+                    zwidth = 40,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -20,
+                    y = -20,
+                    w = 10,
+                    h = 40,
+                });
+            sharedFrame.centerx = 5;
+            sharedFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = 10,
+                y = -20,
+                w = 30,
+                h = 40,
+            });
+
+            var world = new SimulationWorld();
+            LF2Character right = CreateCharacter(
+                "RoleTemplate_Right",
+                1300,
+                sharedFrame);
+            LF2Character left = CreateCharacter(
+                "RoleTemplate_Left",
+                1301,
+                sharedFrame);
+            LF2Character type3 = CreateCharacter(
+                "RoleTemplate_Type3",
+                1302,
+                sharedFrame,
+                true);
+            Register(world, right, 0, 1, 90);
+            Register(world, left, 1, 2, 100);
+            Register(world, type3, 2, 3, 110);
+            right.Runtime.SetPosition(90, 0, 200);
+            left.Runtime.SetPosition(100, 0, 200);
+            type3.Runtime.SetPosition(110, 0, 206);
+            right.Runtime.SyncIntegerPosition();
+            left.Runtime.SyncIntegerPosition();
+            type3.Runtime.SyncIntegerPosition();
+            left.PS.dir = "left";
+            left.Runtime.Dir = "left";
+            type3.Runtime.Type3VisualZOffset = 6;
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceLegacyRoleBodyBuildForDiagnostics = true;
+            CandidateRun forcedLegacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                right,
+                left,
+                type3);
+            query.ForceLegacyRoleBodyBuildForDiagnostics = false;
+            CandidateRun templated = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                right,
+                left,
+                type3);
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun templatedTree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                right,
+                left,
+                type3);
+            query.ForceRoleAwareTreeForDiagnostics = false;
+
+            AssertRunsEqual(forcedLegacy, templated);
+            AssertRunsEqual(templated, templatedTree);
+            Assert.That(templated.BodyEntryCount, Is.EqualTo(6));
+            Assert.That(
+                query.LastRoleAwareBodyTemplateBuildCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareBodyTemplateHitCountForDiagnostics,
+                Is.EqualTo(2));
+            Assert.That(
+                query.LastRoleAwareBodyTemplateFallbackCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    right,
+                    out SpatialAabbXZ rightBounds),
+                Is.True);
+            Assert.That(rightBounds, Is.EqualTo(new SpatialAabbXZ(65, 200, 125, 201)));
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    left,
+                    out SpatialAabbXZ leftBounds),
+                Is.True);
+            Assert.That(leftBounds, Is.EqualTo(new SpatialAabbXZ(65, 200, 125, 201)));
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    type3,
+                    out SpatialAabbXZ type3Bounds),
+                Is.True);
+            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(85, 206, 145, 207)));
+
+            right.Runtime.SetPosition(120, 0, 210);
+            left.Runtime.SetPosition(150, 0, 210);
+            type3.Runtime.SetPosition(135, 0, 220);
+            right.Runtime.SyncIntegerPosition();
+            left.Runtime.SyncIntegerPosition();
+            type3.Runtime.SyncIntegerPosition();
+            right.PS.dir = "left";
+            right.Runtime.Dir = "left";
+            left.PS.dir = "right";
+            left.Runtime.Dir = "right";
+            type3.Runtime.Type3VisualZOffset = 10;
+
+            query.ForceLegacyRoleBodyBuildForDiagnostics = true;
+            CandidateRun movedForcedLegacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                right,
+                left,
+                type3);
+            query.ForceLegacyRoleBodyBuildForDiagnostics = false;
+            CandidateRun movedTemplated = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                right,
+                left,
+                type3);
+
+            AssertRunsEqual(movedForcedLegacy, movedTemplated);
+            Assert.That(movedTemplated.BodyEntryCount, Is.EqualTo(6));
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    right,
+                    out rightBounds),
+                Is.True);
+            Assert.That(rightBounds, Is.EqualTo(new SpatialAabbXZ(85, 210, 145, 211)));
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    left,
+                    out leftBounds),
+                Is.True);
+            Assert.That(leftBounds, Is.EqualTo(new SpatialAabbXZ(125, 210, 185, 211)));
+            Assert.That(
+                query.TryGetLastRoleAwareBodyBoundsForSelfCheck(
+                    type3,
+                    out type3Bounds),
+                Is.True);
+            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(110, 220, 170, 221)));
+        }
+
+        [Test]
+        public void Formal_DegenerateTemplateUsesConservativeIndexAndClampFallsBackWithParity()
+        {
+            LF2FrameData degenerateFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    x = -100,
+                    y = -20,
+                    w = 200,
+                    h = 40,
+                    zwidth = 40,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -20,
+                    w = 20,
+                    h = 40,
+                });
+            degenerateFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = 20,
+                y = -20,
+                w = 0,
+                h = 40,
+            });
+
+            var degenerateWorld = new SimulationWorld();
+            LF2Character first = CreateCharacter(
+                "RoleTemplate_DegenerateFirst",
+                1310,
+                degenerateFrame);
+            LF2Character second = CreateCharacter(
+                "RoleTemplate_DegenerateSecond",
+                1311,
+                degenerateFrame);
+            Register(degenerateWorld, first, 0, 1, 0);
+            Register(degenerateWorld, second, 1, 2, 5);
+            BruteForceSceneQuery degenerateQuery = GetQuery(degenerateWorld);
+
+            degenerateQuery.ForceLegacyRoleBodyBuildForDiagnostics = true;
+            CandidateRun degenerateLegacy = RunCollection(
+                degenerateWorld,
+                degenerateQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                first,
+                second);
+            degenerateQuery.ForceLegacyRoleBodyBuildForDiagnostics = false;
+            CandidateRun degenerateTemplated = RunCollection(
+                degenerateWorld,
+                degenerateQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                first,
+                second);
+
+            AssertRunsEqual(degenerateLegacy, degenerateTemplated);
+            Assert.That(degenerateTemplated.BodyEntryCount, Is.EqualTo(4));
+            Assert.That(
+                degenerateQuery.LastRoleAwareBodyTemplateBuildCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                degenerateQuery.LastRoleAwareBodyTemplateHitCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                degenerateQuery.LastRoleAwareBodyTemplateFallbackCountForDiagnostics,
+                Is.EqualTo(2));
+
+            LF2FrameData clampFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    x = -20,
+                    y = -20,
+                    w = 40,
+                    h = 40,
+                    zwidth = 40,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -20,
+                    w = 20,
+                    h = 40,
+                });
+            var clampWorld = new SimulationWorld();
+            LF2Character safe = CreateCharacter(
+                "RoleTemplate_ClampSafe",
+                1320,
+                clampFrame);
+            LF2Character edge = CreateCharacter(
+                "RoleTemplate_ClampEdge",
+                1321,
+                clampFrame);
+            Register(clampWorld, safe, 0, 1, 0);
+            Register(clampWorld, edge, 1, 2, 999999995);
+            BruteForceSceneQuery clampQuery = GetQuery(clampWorld);
+
+            clampQuery.ForceLegacyRoleBodyBuildForDiagnostics = true;
+            CandidateRun clampLegacy = RunCollection(
+                clampWorld,
+                clampQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                safe,
+                edge);
+            clampQuery.ForceLegacyRoleBodyBuildForDiagnostics = false;
+            CandidateRun clampTemplated = RunCollection(
+                clampWorld,
+                clampQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                safe,
+                edge);
+
+            AssertRunsEqual(clampLegacy, clampTemplated);
+            Assert.That(clampTemplated.BodyEntryCount, Is.EqualTo(2));
+            Assert.That(
+                clampQuery.LastRoleAwareBodyTemplateBuildCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                clampQuery.LastRoleAwareBodyTemplateHitCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                clampQuery.LastRoleAwareBodyTemplateFallbackCountForDiagnostics,
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void CandidateStore_CapOrderFieldsEndAndZeroAllocation()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_CapAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(world, attacker, 30, 1, 0);
+
+            var targets = new List<LF2Character>();
+            for (int slot = 0; slot < 21; slot++)
+            {
+                LF2Character target = CreateCharacter(
+                    $"RoleFormal_CapTarget_{slot}",
+                    100 + slot,
+                    MakeFrame(
+                        null,
+                        new BodyBox
+                        {
+                            kind = 0,
+                            x = slot - 10,
+                            y = -10,
+                            w = 5,
+                            h = 20,
+                        }));
+                Register(world, target, slot, 2, 0);
+                targets.Add(target);
+            }
+
+            LF2Character itrOnlyFarAway = CreateCharacter(
+                "RoleFormal_ItrOnlyFarAway",
+                200,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(world, itrOnlyFarAway, 31, 3, 10000);
+
+            // It has neither an attack nor a body. Legacy union-AABB marks that
+            // participant unindexable; role-aware diagnostics must retain the
+            // same fact without manufacturing an impossible collision pair.
+            LF2Character inertFarAway = CreateCharacter(
+                "RoleFormal_InertFarAway",
+                201,
+                MakeFrame(null, null));
+            Register(world, inertFarAway, 32, 4, 20000);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            Assert.That(query.CollisionCandidateStoreShadowDiagnosticsEnabled, Is.False);
+            Assert.That(query.CollisionCandidateStoreRuntimeCapacityForDiagnostics, Is.Zero,
+                "the default-disabled shadow must not allocate its fixed slab");
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                attacker);
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+            long directComparisons =
+                query.LastRoleAwareDirectComparisonCountForDiagnostics;
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun tree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+
+            AssertRunsEqual(brute, role);
+            AssertRunsEqual(role, tree);
+            Assert.That(role.Sequences[0].Count, Is.EqualTo(20));
+            for (int candidateIndex = 0; candidateIndex < 20; candidateIndex++)
+            {
+                Assert.That(
+                    role.Sequences[0][candidateIndex].TargetSlot,
+                    Is.EqualTo(candidateIndex));
+            }
+            Assert.That(
+                role.Sequences[0].Exists(hit => hit.TargetSlot == targets[20].Runtime.SlotIndex),
+                Is.False);
+            Assert.That(query.LastFormalPairCountForDiagnostics, Is.EqualTo(21));
+            Assert.That(directComparisons, Is.EqualTo(42));
+            Assert.That(query.LastFormalFallbackParticipantCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.Rng.Seed(CollectionSeed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange legacyRange),
+                Is.True);
+            Assert.That(legacyRange.Count, Is.EqualTo(20));
+            Assert.That(legacyRange.TryGet(0, out _), Is.True);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.RangeReadCount,
+                Is.Zero,
+                "authority-off range reads must not touch the candidate store");
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.EntryReadCount,
+                Is.Zero,
+                "authority-off entry reads must not touch the candidate store");
+            world.EndCollisionCandidateConsumption();
+
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = true;
+            query.CollisionCandidateStoreAuthorityEnabled = true;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.Rng.Seed(CollectionSeed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                query.CollisionCandidateStoreRuntimeCapacityForDiagnostics,
+                Is.EqualTo(world.RuntimeSlotCapacityForDiagnostics));
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    attacker.Runtime.SlotIndex,
+                    attacker,
+                    out RuntimeEntityHandle attackerHandle),
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerHandle,
+                    out int storeCount),
+                Is.True);
+            Assert.That(storeCount, Is.EqualTo(20));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange authorityRange),
+                Is.True);
+            Assert.That(authorityRange.Count, Is.EqualTo(20));
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange secondConsumerRange),
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange thirdConsumerRange),
+                Is.True);
+            Assert.That(secondConsumerRange.Count, Is.EqualTo(20));
+            Assert.That(thirdConsumerRange.Count, Is.EqualTo(20));
+            Assert.That(secondConsumerRange.TryGet(19, out SceneQueryHit secondTail), Is.True);
+            Assert.That(thirdConsumerRange.TryGet(19, out SceneQueryHit thirdTail), Is.True);
+            Assert.That(secondTail.TargetSlot, Is.EqualTo(thirdTail.TargetSlot),
+                "all formal consumers must see the same complete step6 window");
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    itrOnlyFarAway,
+                    out CollisionCandidateRange emptyAuthorityRange),
+                Is.True);
+            Assert.That(emptyAuthorityRange.Count, Is.Zero,
+                "an initialized attacker row with no candidates must remain empty");
+            for (int candidateIndex = 0; candidateIndex < storeCount; candidateIndex++)
+            {
+                Assert.That(
+                    query.TryGetCollisionCandidateStoreEntryForSelfCheck(
+                        attackerHandle,
+                        candidateIndex,
+                        out CollisionCandidateStoreEntry entry),
+                    Is.True);
+                SceneQueryHit expected = tree.Sequences[0][candidateIndex];
+                Assert.That(entry.TargetSlot, Is.EqualTo(expected.TargetSlot));
+                Assert.That(
+                    entry.TargetHandle,
+                    Is.EqualTo(tree.TargetHandles[0][candidateIndex]));
+                Assert.That(entry.BodyX, Is.EqualTo(expected.BodyX));
+                Assert.That(entry.ItrIndex, Is.EqualTo(expected.ItrIndex));
+                Assert.That(entry.RuntimeItr, Is.SameAs(expected.RuntimeItr));
+                Assert.That(entry.PairSnapshot, Is.EqualTo(expected.PairSnapshot));
+                Assert.That(
+                    entry.ZeroAttackerHpOnConsume,
+                    Is.EqualTo(expected.ZeroAttackerHpOnConsume));
+                Assert.That(
+                    entry.ReleaseHeavyHeldTargetOnConsume,
+                    Is.EqualTo(expected.ReleaseHeavyHeldTargetOnConsume));
+                Assert.That(
+                    authorityRange.TryGet(candidateIndex, out SceneQueryHit authorityHit),
+                    Is.True);
+                Assert.That(authorityHit.TargetSlot, Is.EqualTo(expected.TargetSlot));
+                Assert.That(authorityHit.Target, Is.SameAs(expected.Target));
+                Assert.That(authorityHit.BodyX, Is.EqualTo(expected.BodyX));
+                Assert.That(authorityHit.ItrIndex, Is.EqualTo(expected.ItrIndex));
+                Assert.That(authorityHit.RuntimeItr, Is.SameAs(expected.RuntimeItr));
+                Assert.That(authorityHit.PairSnapshot,
+                    Is.EqualTo(expected.PairSnapshot));
+                Assert.That(
+                    authorityHit.ZeroAttackerHpOnConsume,
+                    Is.EqualTo(expected.ZeroAttackerHpOnConsume));
+                Assert.That(
+                    authorityHit.ReleaseHeavyHeldTargetOnConsume,
+                    Is.EqualTo(expected.ReleaseHeavyHeldTargetOnConsume));
+            }
+            Assert.That(
+                query.MeasureWarmedCollisionCandidateStoreShadowAllocationsForSelfCheck(32),
+                Is.Zero);
+            Assert.That(
+                query.MeasureWarmedCollisionCandidateStoreAuthorityAllocationsForSelfCheck(
+                    attacker,
+                    32),
+                Is.Zero);
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.MismatchCount, Is.Zero);
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.InvalidCount, Is.Zero);
+            Assert.That(
+                query.CollisionCandidateStoreShadowDiagnostics.FirstMismatchReason,
+                Is.EqualTo(CollisionCandidateStoreMismatchReason.None));
+            world.EndCollisionCandidateConsumption();
+            Assert.That(authorityRange.Count, Is.Zero);
+            Assert.That(authorityRange.TryGet(0, out _), Is.False);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerHandle,
+                    out _),
+                Is.False);
+        }
+
+        [Test]
+        public void CandidateStoreAuthority_StrictListRuntimeStoreCountLocksWholeTickToLegacy()
+        {
+            var world = new SimulationWorld();
+            InteractionArea itr = new InteractionArea
+            {
+                kind = 0,
+                vrest = 1,
+                x = -20,
+                y = -20,
+                w = 40,
+                h = 40,
+                zwidth = 15,
+            };
+            LF2Character attacker = CreateCharacter(
+                "CandidateStoreAuthority_StrictCountAttacker",
+                1,
+                MakeFrame(itr, null));
+            LF2Character target = CreateCharacter(
+                "CandidateStoreAuthority_StrictCountTarget",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = true;
+            query.CollisionCandidateStoreAuthorityEnabled = true;
+            bool appendedLegacyTail = false;
+            query.BeforeCollisionCandidateStoreFinalCompareForSelfCheck = () =>
+            {
+                var extra = new SceneQueryHit(target, 1234, 0, itr);
+                appendedLegacyTail =
+                    query.TryAppendCollisionCandidateLegacyOracleForSelfCheck(
+                        attacker,
+                        in extra);
+            };
+
+            try
+            {
+                world.CaptureCollisionFrameSnapshotsAll();
+                world.CollectCollisionCandidatesAll();
+            }
+            finally
+            {
+                query.BeforeCollisionCandidateStoreFinalCompareForSelfCheck = null;
+            }
+
+            Assert.That(appendedLegacyTail, Is.True);
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreShadowDiagnostics.FirstMismatchReason,
+                Is.EqualTo(CollisionCandidateStoreMismatchReason.CandidateCountMismatch));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.False);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.LegacyFallbackTickCount,
+                Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.FirstFailureReason,
+                Is.EqualTo(CollisionCandidateStoreAuthorityFailureReason.StoreNotComplete));
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange fallbackRange),
+                Is.True);
+            Assert.That(fallbackRange.Count, Is.EqualTo(2),
+                "strict mismatch must choose the whole legacy oracle, not a store prefix");
+            Assert.That(fallbackRange.TryGet(1, out SceneQueryHit legacyTail), Is.True);
+            Assert.That(legacyTail.BodyX, Is.EqualTo(1234));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.RangeReadCount,
+                Is.Zero,
+                "a tick locked to legacy must not perform authority reads");
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.EntryReadCount,
+                Is.Zero);
+
+            world.EndCollisionCandidateConsumption();
+            Assert.That(fallbackRange.Count, Is.Zero);
+            Assert.That(fallbackRange.TryGet(0, out _), Is.False);
+        }
+
+        [Test]
+        public void Formal_DegenerateRoleBoundsUseConservativeIndexAndMatchLegacy()
+        {
+            var world = new SimulationWorld();
+            LF2Character degenerateItr = CreateCharacter(
+                "RoleFormal_DegenerateItr",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 0,
+                        y = 0,
+                        w = 0,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character validBody = CreateCharacter(
+                "RoleFormal_ValidBody",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character degenerateBody = CreateCharacter(
+                "RoleFormal_DegenerateBody",
+                3,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 0, y = -10, w = 0, h = 20 }));
+            LF2Character validItr = CreateCharacter(
+                "RoleFormal_ValidItr",
+                4,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(world, degenerateItr, 0, 1, 0);
+            Register(world, validBody, 1, 2, 0);
+            Register(world, degenerateBody, 2, 2, 0);
+            Register(world, validItr, 3, 3, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                degenerateItr,
+                validItr);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                degenerateItr,
+                validItr);
+
+            AssertRunsEqual(legacy, role);
+            Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareDirectComparisonCountForDiagnostics, Is.EqualTo(4));
+            Assert.That(query.LastFormalPairCountForDiagnostics, Is.EqualTo(4));
+            Assert.That(query.LastFormalFallbackParticipantCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void Formal_EqualDistanceKind1TieMatchesLegacyRngAndReplacement(int seed)
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = 0,
+                    y = -10,
+                    w = 30,
+                    h = 20,
+                    zwidth = 15,
+                },
+                null);
+            attackerFrame.itrs.Add(new InteractionArea
+            {
+                kind = 1,
+                vrest = 1,
+                x = 0,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 15,
+            });
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 });
+            targetFrame.state = LF2States.Injured2;
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_Kind1Attacker",
+                1,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_Kind1Target",
+                2,
+                targetFrame);
+            Register(world, target, 0, 2, 10);
+            Register(world, attacker, 5, 1, 0);
+            attacker.Runtime.KeyRight = 1;
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                unchecked((uint)seed),
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun direct = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                unchecked((uint)seed),
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = false;
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun tree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                unchecked((uint)seed),
+                attacker);
+
+            var expectedRng = new DeterministicRng(unchecked((uint)seed));
+            bool tieReplaced = expectedRng.NextInt(0, 2) == 0;
+            AssertRunsEqual(legacy, direct);
+            AssertRunsEqual(direct, tree);
+            Assert.That(direct.RngCalls, Is.EqualTo(1));
+            Assert.That(direct.RngState, Is.EqualTo(expectedRng.State));
+            Assert.That(
+                direct.Sequences[0].Count,
+                Is.EqualTo(tieReplaced ? 2 : 1));
+            Assert.That(direct.Sequences[0][0].ItrIndex, Is.EqualTo(0));
+            if (tieReplaced)
+                Assert.That(direct.Sequences[0][1].ItrIndex, Is.EqualTo(1));
+            Assert.That(direct.CollectionAborted, Is.False);
+        }
+
+        [Test]
+        public void Formal_PreLoopExactCacheInvalidationFallsBackAndRestoresRng()
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = 0,
+                    y = -10,
+                    w = 30,
+                    h = 20,
+                    zwidth = 15,
+                },
+                null);
+            attackerFrame.itrs.Add(new InteractionArea
+            {
+                kind = 1,
+                vrest = 1,
+                x = 0,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 15,
+            });
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            targetFrame.state = LF2States.Injured2;
+
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_PreLoopInvalidationAttacker",
+                3320,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_PreLoopInvalidationTarget",
+                3321,
+                targetFrame);
+            Register(world, target, 0, 2, 10);
+            Register(world, attacker, 5, 1, 0);
+            attacker.Runtime.KeyRight = 1;
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+            {
+                target.Runtime.SetPosition(11, 0, 0);
+                target.Runtime.SyncIntegerPosition();
+            };
+            CandidateRun fallback = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                1u,
+                attacker);
+            int cheapValidationCount =
+                query.LastRoleAwareCheapInputValidationCountForDiagnostics;
+            int fullValidationCount =
+                query.LastRoleAwareFullInputValidationCountForDiagnostics;
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = null;
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                1u,
+                attacker);
+
+            AssertRunsEqual(brute, fallback);
+            Assert.That(fallback.CollectionAborted, Is.True);
+            Assert.That(fallback.RngCalls, Is.EqualTo(1));
+            Assert.That(fallback.RngState, Is.EqualTo(brute.RngState));
+            Assert.That(cheapValidationCount, Is.EqualTo(1));
+            Assert.That(fullValidationCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Formal_InputValidationRoutesPreserveCandidatesRngAndWarmedAllocations()
+        {
+            CreateExactLoopTieFixture(
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+
+            CandidateRun cheap = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                attacker);
+            Assert.That(
+                query.LastRoleAwareCheapInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareFullInputValidationCountForDiagnostics,
+                Is.Zero);
+
+            query.ForceFullRoleAwareFormalInputValidationForDiagnostics = true;
+            CandidateRun forcedFull = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                attacker);
+            Assert.That(
+                query.LastRoleAwareCheapInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareFullInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+
+            query.ForceFullRoleAwareFormalInputValidationForDiagnostics = false;
+            int hookCalls = 0;
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = () => hookCalls++;
+            CandidateRun hooked;
+            try
+            {
+                hooked = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker);
+            }
+            finally
+            {
+                query.BeforeRoleAwareFormalInputValidationForSelfCheck = null;
+            }
+
+            Assert.That(hookCalls, Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareCheapInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareFullInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+            AssertRunsEqual(cheap, forcedFull);
+            AssertRunsEqual(cheap, hooked);
+            Assert.That(cheap.CollectionAborted, Is.False);
+
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.CaptureCollisionFrameSnapshotsAll();
+            long allocatedBytes =
+                query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(16);
+            Assert.That(
+                query.LastRoleAwareCheapInputValidationCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareFullInputValidationCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                allocatedBytes,
+                Is.LessThan(65536L),
+                "Default cheap validation must not add warmed per-tick allocation.");
+        }
+
+        [Test]
+        public void Formal_NoFrameInertAtNonZeroLeftPositionDoesNotAbortRoleAware()
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = 0,
+                    y = -10,
+                    w = 30,
+                    h = 20,
+                    zwidth = 15,
+                },
+                null);
+            attackerFrame.itrs.Add(new InteractionArea
+            {
+                kind = 1,
+                vrest = 1,
+                x = 0,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 15,
+            });
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            targetFrame.state = LF2States.Injured2;
+
+            var world = new SimulationWorld();
+            LF2Character target = CreateCharacter(
+                "RoleFormal_InertBoundaryTarget",
+                3330,
+                targetFrame);
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_InertBoundaryAttacker",
+                3331,
+                attackerFrame);
+            LF2Character inert = CreateCharacter(
+                "RoleFormal_InertBoundaryNoFrame",
+                3332,
+                MakeFrame(null, null));
+            Register(world, target, 0, 2, 10);
+            Register(world, attacker, 1, 1, 0);
+            Register(world, inert, 2, 3, 123);
+            attacker.Runtime.KeyRight = 1;
+            inert.Frame.D = null;
+            inert.Frame.Prev2D = null;
+            inert.Runtime.SetPosition(123, 0, 205);
+            inert.Runtime.SyncIntegerPosition();
+            inert.PS.dir = "left";
+            inert.Runtime.Dir = "left";
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                1u,
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                1u,
+                attacker);
+
+            AssertRunsEqual(brute, role);
+            Assert.That(role.CollectionAborted, Is.False);
+            Assert.That(role.RngCalls, Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareParticipantCountForDiagnostics,
+                Is.EqualTo(3));
+            Assert.That(
+                query.LastRoleAwareInertParticipantCountForDiagnostics,
+                Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Formal_LazyExactCacheBuildsOnlyRolesRequiredByActualPairs()
+        {
+            LF2FrameData pairedFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = -20,
+                    y = -10,
+                    w = 40,
+                    h = 20,
+                    zwidth = 15,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            var world = new SimulationWorld();
+            LF2Character first = CreateCharacter(
+                "RoleFormal_LazyFirst",
+                3340,
+                pairedFrame);
+            LF2Character second = CreateCharacter(
+                "RoleFormal_LazySecond",
+                3341,
+                pairedFrame);
+            LF2Character noPair = CreateCharacter(
+                "RoleFormal_LazyNoPair",
+                3342,
+                pairedFrame);
+            LF2Character inert = CreateCharacter(
+                "RoleFormal_LazyInert",
+                3343,
+                MakeFrame(null, null));
+            Register(world, first, 0, 1, 0);
+            Register(world, second, 1, 2, 5);
+            Register(world, noPair, 2, 3, 1000);
+            Register(world, inert, 3, 4, 2000);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            world.CaptureCollisionFrameSnapshotsAll();
+            long allocatedBytes =
+                query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(16);
+
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+            Assert.That(query.LastFormalPairCountForDiagnostics, Is.EqualTo(1));
+            AssertExactCacheCounts(
+                query,
+                first,
+                1,
+                1,
+                1,
+                1,
+                true,
+                true);
+            AssertExactCacheCounts(
+                query,
+                second,
+                1,
+                1,
+                1,
+                1,
+                true,
+                true);
+            AssertExactCacheCounts(
+                query,
+                noPair,
+                0,
+                0,
+                0,
+                0,
+                false,
+                false);
+            AssertExactCacheCounts(
+                query,
+                inert,
+                0,
+                0,
+                0,
+                0,
+                false,
+                false);
+            Assert.That(
+                allocatedBytes,
+                Is.LessThan(65536L),
+                "Warmed collection may retain existing candidate-list overhead, " +
+                "but lazy exact-role tracking must not allocate per participant/pair.");
+        }
+
+        [TestCase(15, 0)]
+        [TestCase(-15, 0)]
+        [TestCase(14, 1)]
+        [TestCase(-14, 1)]
+        public void Formal_LazyExactCachePreservesStrictZBoundaryAgainstLegacy(
+            int targetZ,
+            int expectedCandidateCount)
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = -20,
+                    y = -10,
+                    w = 40,
+                    h = 20,
+                    zwidth = 15,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            LF2FrameData targetFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = -20,
+                    y = -10,
+                    w = 40,
+                    h = 20,
+                    zwidth = 100,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            targetFrame.state = LF2States.Injured2;
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_StrictZAttacker",
+                3350,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_StrictZTarget",
+                3351,
+                targetFrame);
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+            attacker.Runtime.KeyLeft = 1;
+            attacker.Runtime.KeyRight = 0;
+            target.Runtime.SetPosition(0, 0, targetZ);
+            target.Runtime.SyncIntegerPosition();
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = true;
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+            query.ForceLegacyRoleAwareExactPrefilterForDiagnostics = false;
+            CandidateRun cached = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+
+            AssertRunsEqual(legacy, cached, $"targetZ={targetZ}");
+            Assert.That(cached.FormalPairCount, Is.EqualTo(1));
+            Assert.That(cached.Counts, Is.EqualTo(new[] { expectedCandidateCount }));
+            Assert.That(cached.CollectionAborted, Is.False);
+        }
+
+        [Test]
+        [Category("U6Slice57")]
+        // Covers the exact-cache product-reuse boundary independently from performance A/B.
+        public void Formal_ExactItrWorldRectReuseMatchesLegacyBuildOrderAndCandidates()
+        {
+            LF2FrameData attackerFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 1,
+                    vrest = 1,
+                    x = -24,
+                    y = -12,
+                    w = 48,
+                    h = 24,
+                    zwidth = 15,
+                },
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -12,
+                    y = -12,
+                    w = 24,
+                    h = 24,
+                });
+            attackerFrame.itrs.Add(null);
+            attackerFrame.itrs.Add(new InteractionArea
+            {
+                kind = 5,
+                vrest = 0,
+                x = 7,
+                y = int.MinValue,
+                w = 13,
+                h = 19,
+                zwidth = 23,
+            });
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -16,
+                    y = -16,
+                    w = 32,
+                    h = 32,
+                });
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_ExactItrReuseAttacker",
+                3352,
+                attackerFrame);
+            LF2Character target = CreateCharacter(
+                "RoleFormal_ExactItrReuseTarget",
+                3353,
+                targetFrame);
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun legacy;
+            CandidateRun reused;
+            try
+            {
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = true;
+                legacy = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker,
+                    target);
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = false;
+                reused = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    CollectionSeed,
+                    attacker,
+                    target);
+            }
+            finally
+            {
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics = false;
+                query.ForceRoleAwareDirectForDiagnostics = false;
+            }
+
+            AssertRunsEqual(legacy, reused);
+            Assert.That(reused.CollectionAborted, Is.False);
+            Assert.That(
+                query.ForceLegacyFormalItrWorldRectReuseForDiagnostics,
+                Is.False);
+        }
+
+        [Test]
+        public void Formal_ConservativeDegenerateRolesLeaveFallbackListsEmptyAndStayWarm()
+        {
+            var world = new SimulationWorld();
+            LF2Character fallbackAttack = CreateCharacter(
+                "RoleFormal_FallbackListAttack",
+                3360,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 0,
+                        y = -10,
+                        w = 0,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character fallbackBody = CreateCharacter(
+                "RoleFormal_FallbackListBody",
+                3361,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = 0,
+                        y = -10,
+                        w = 0,
+                        h = 20,
+                    }));
+            LF2Character dualFallback = CreateCharacter(
+                "RoleFormal_FallbackListDual",
+                3362,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 0,
+                        y = -10,
+                        w = 0,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = 0,
+                        y = -10,
+                        w = 0,
+                        h = 20,
+                    }));
+            LF2Character exact = CreateCharacter(
+                "RoleFormal_FallbackListExact",
+                3363,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -10,
+                        w = 40,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                    }));
+            LF2Character bodyOnly = CreateCharacter(
+                "RoleFormal_FallbackListBodyOnly",
+                3364,
+                MakeFrame(
+                    null,
+                    new BodyBox
+                    {
+                        kind = 0,
+                        x = -10,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                    }));
+            LF2Character inert = CreateCharacter(
+                "RoleFormal_FallbackListInert",
+                3365,
+                MakeFrame(null, null));
+            Register(world, fallbackAttack, 0, 1, 0);
+            Register(world, fallbackBody, 1, 2, 0);
+            Register(world, dualFallback, 2, 3, 0);
+            Register(world, exact, 3, 4, 0);
+            Register(world, bodyOnly, 4, 5, 0);
+            Register(world, inert, 5, 6, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.CaptureCollisionFrameSnapshotsAll();
+            long fullCollectionAllocations =
+                query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(16);
+            var oldPredicateKeys = new List<long>();
+            var roleListKeys = new List<long>();
+            query.CopyLastRoleAwareFallbackPairKeysForSelfCheck(
+                oldPredicateKeys,
+                roleListKeys);
+            query.GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(
+                out int bodyCount,
+                out int fallbackAttackCount,
+                out int exactAttackCount,
+                out int fallbackBodyCount);
+
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+            Assert.That(roleListKeys, Is.EqualTo(oldPredicateKeys));
+            Assert.That(roleListKeys, Is.Empty);
+            Assert.That(
+                roleListKeys.Contains(((long)2 << 32) | 2L),
+                Is.False);
+            Assert.That(
+                roleListKeys.Contains(((long)3 << 32) | 4L),
+                Is.False);
+            Assert.That(bodyCount, Is.EqualTo(4));
+            Assert.That(fallbackAttackCount, Is.Zero);
+            Assert.That(exactAttackCount, Is.EqualTo(3));
+            Assert.That(fallbackBodyCount, Is.Zero);
+            Assert.That(
+                query.MeasureWarmedRoleAwareFallbackPairAllocationsForSelfCheck(64),
+                Is.Zero);
+            Assert.That(
+                fullCollectionAllocations,
+                Is.LessThan(65536L),
+                "Warmed role-aware collection must not allocate ordinal lists per tick.");
+
+            world.Unregister(fallbackAttack);
+            world.Unregister(fallbackBody);
+            world.Unregister(dualFallback);
+            world.Unregister(bodyOnly);
+            world.Unregister(inert);
+            RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                exact);
+            query.GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(
+                out bodyCount,
+                out fallbackAttackCount,
+                out exactAttackCount,
+                out fallbackBodyCount);
+            query.CopyLastRoleAwareFallbackPairKeysForSelfCheck(
+                oldPredicateKeys,
+                roleListKeys);
+
+            Assert.That(bodyCount, Is.EqualTo(1));
+            Assert.That(fallbackAttackCount, Is.Zero);
+            Assert.That(exactAttackCount, Is.EqualTo(1));
+            Assert.That(fallbackBodyCount, Is.Zero);
+            Assert.That(oldPredicateKeys, Is.Empty);
+            Assert.That(roleListKeys, Is.Empty);
+        }
+
+        [Test]
+        public void Formal_MixedIndexableAndDegenerateRolesMatchBruteWhereLegacyMisses()
+        {
+            // Authority CollisionCollect keeps zero-width authored rectangles and
+            // uses strict endpoint comparisons. A zero-width interval therefore
+            // still overlaps when its coordinate lies strictly inside the other
+            // interval. The role collector uses a conservative non-empty broadphase
+            // range and still delegates the final strict decision to the exact pass.
+            AssertMixedDegenerateRoleParity(
+                mixedParticipantIsAttacker: true,
+                expectedBodyX: 40);
+            AssertMixedDegenerateRoleParity(
+                mixedParticipantIsAttacker: false,
+                expectedBodyX: 50);
+        }
+
+        [TestCase(17)]
+        [TestCase(911)]
+        [TestCase(20260725)]
+        public void Formal_RandomizedRolesMatchBruteAcrossIndexableAndDegenerateBounds(int seed)
+        {
+            const int participantCount = 32;
+            var random = new System.Random(seed);
+            var world = new SimulationWorld();
+            var entitiesBySlot = new LF2Character[participantCount];
+            var attackers = new List<LF2Entity>(participantCount);
+            var registrationOrder = new List<int>(participantCount);
+            int expectedFallbackParticipants = 0;
+
+            for (int slot = 0; slot < participantCount; slot++)
+            {
+                bool hasItr = random.Next(0, 4) != 0;
+                bool hasBody = random.Next(0, 4) != 0;
+                bool degenerateItr = hasItr && random.Next(0, 5) == 0;
+                bool degenerateBody = hasBody && random.Next(0, 5) == 0;
+                if (slot == 0)
+                {
+                    hasItr = true;
+                    hasBody = false;
+                    degenerateItr = true;
+                }
+                else if (slot == 1)
+                {
+                    hasItr = false;
+                    hasBody = true;
+                    degenerateBody = false;
+                }
+                else if (slot == 2)
+                {
+                    hasItr = true;
+                    hasBody = false;
+                    degenerateItr = false;
+                }
+                else if (slot == 3)
+                {
+                    hasItr = false;
+                    hasBody = true;
+                    degenerateBody = true;
+                }
+
+                InteractionArea itr = hasItr
+                    ? new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = random.Next(0, 2),
+                        x = random.Next(-15, 16),
+                        y = random.Next(-15, 1),
+                        w = degenerateItr ? 0 : random.Next(6, 25),
+                        h = random.Next(6, 25),
+                        zwidth = random.Next(1, 24),
+                        injury = random.Next(0, 50),
+                        dvx = random.Next(-3, 4),
+                        effect = random.Next(0, 2),
+                    }
+                    : null;
+                BodyBox body = hasBody
+                    ? new BodyBox
+                    {
+                        kind = 0,
+                        x = random.Next(-15, 16),
+                        y = random.Next(-15, 1),
+                        w = degenerateBody ? 0 : random.Next(6, 25),
+                        h = random.Next(6, 25),
+                    }
+                    : null;
+                if (!hasItr && !hasBody)
+                    expectedFallbackParticipants++;
+
+                LF2Character entity = CreateCharacter(
+                    $"RoleFormal_Random_{seed}_{slot}",
+                    1000 + slot,
+                    MakeFrame(itr, body));
+                entitiesBySlot[slot] = entity;
+                registrationOrder.Add(slot);
+                if (hasItr)
+                    attackers.Add(entity);
+            }
+
+            for (int i = registrationOrder.Count - 1; i > 0; i--)
+            {
+                int swapIndex = random.Next(0, i + 1);
+                (registrationOrder[i], registrationOrder[swapIndex]) =
+                    (registrationOrder[swapIndex], registrationOrder[i]);
+            }
+
+            for (int orderIndex = 0;
+                 orderIndex < registrationOrder.Count;
+                 orderIndex++)
+            {
+                int slot = registrationOrder[orderIndex];
+                LF2Character entity = entitiesBySlot[slot];
+                int x = random.Next(-120, 121);
+                int z = random.Next(-20, 21);
+                Register(world, entity, slot, (slot % 3) + 1, x);
+                entity.Runtime.SetPosition(x, 0, z);
+                entity.Runtime.SyncIntegerPosition();
+            }
+
+            uint collectionSeed = unchecked((uint)(seed * 397) ^ 0xA341316Cu);
+            BruteForceSceneQuery query = GetQuery(world);
+            LF2Entity[] trackedAttackers = attackers.ToArray();
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                collectionSeed,
+                trackedAttackers);
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                collectionSeed,
+                trackedAttackers);
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                collectionSeed,
+                trackedAttackers);
+
+            string diagnostics = FormatRandomizedParityDiagnostics(
+                seed,
+                entitiesBySlot,
+                brute,
+                legacy,
+                role);
+            AssertRunsEqual(brute, role, diagnostics);
+            Assert.That(brute.CollectionAborted, Is.False, diagnostics);
+            Assert.That(legacy.CollectionAborted, Is.False);
+            Assert.That(role.CollectionAborted, Is.False, diagnostics);
+            Assert.That(
+                role.FallbackParticipantCount,
+                Is.EqualTo(expectedFallbackParticipants),
+                diagnostics);
+            Assert.That(role.BodyEntryCount, Is.GreaterThan(0), diagnostics);
+            Assert.That(role.ItrQueryCount, Is.GreaterThan(0), diagnostics);
+        }
+
+        [Test]
+        public void Formal_SweepMatchesNestedForStrictXEdgeCases()
+        {
+            var world = new SimulationWorld();
+            LF2FrameData duplicateItrFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = 0,
+                    y = -10,
+                    w = 10,
+                    h = 20,
+                    zwidth = 15,
+                },
+                new BodyBox { kind = 0, x = 0, y = -10, w = 10, h = 20 });
+            duplicateItrFrame.itrs.Add(new InteractionArea
+            {
+                kind = 0,
+                vrest = 1,
+                x = 0,
+                y = -10,
+                w = 10,
+                h = 20,
+                zwidth = 15,
+            });
+            LF2Character duplicateItr = CreateCharacter(
+                "RoleSweep_DuplicateItr",
+                4100,
+                duplicateItrFrame);
+            LF2Character touchingBody = CreateCharacter(
+                "RoleSweep_TouchingBody",
+                4101,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 10, y = -10, w = 10, h = 20 }));
+            LF2Character containedBody = CreateCharacter(
+                "RoleSweep_ContainedBody",
+                4102,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 2, y = -10, w = 4, h = 20 }));
+            LF2Character wideBody = CreateCharacter(
+                "RoleSweep_WideBody",
+                4103,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -100, y = -10, w = 200, h = 20 }));
+            LF2Character sameStartDual = CreateCharacter(
+                "RoleSweep_SameStartDual",
+                4104,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = 0,
+                        y = -10,
+                        w = 10,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    new BodyBox { kind = 0, x = 0, y = -10, w = 10, h = 20 }));
+            LF2Character zRejectedBody = CreateCharacter(
+                "RoleSweep_ZRejectedBody",
+                4105,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 0, y = -10, w = 10, h = 20 }));
+
+            Register(world, duplicateItr, 0, 1, 0);
+            Register(world, touchingBody, 1, 2, 0);
+            Register(world, containedBody, 2, 2, 0);
+            Register(world, wideBody, 3, 2, 0);
+            Register(world, sameStartDual, 4, 3, 0);
+            Register(world, zRejectedBody, 5, 2, 0);
+            zRejectedBody.Runtime.SetPosition(0, 0, 100);
+            zRejectedBody.Runtime.SyncIntegerPosition();
+
+            BruteForceSceneQuery query = GetQuery(world);
+            LF2Entity[] attackers = { duplicateItr, sameStartDual };
+            query.ForceRoleAwareNestedDirectForDiagnostics = true;
+            CandidateRun nested = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                attackers);
+            Assert.That(
+                query.LastRoleAwareNestedDirectTickCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareSweepDirectTickCountForDiagnostics,
+                Is.Zero);
+
+            query.ForceRoleAwareSweepDirectForDiagnostics = true;
+            CandidateRun sweep = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                attackers);
+
+            AssertRunsEqual(nested, sweep);
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Is.EqualTo(nested.FormalRuntimeSlotPairKeys));
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Has.No.Member(RuntimeSlotPairKey(0, 1)),
+                "Strict half-open X must reject endpoint-only contact.");
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Has.Member(RuntimeSlotPairKey(0, 2)),
+                "Contained body must be discovered.");
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Has.Member(RuntimeSlotPairKey(0, 3)),
+                "Wide containing body must be discovered.");
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Has.Member(RuntimeSlotPairKey(0, 4)),
+                "Equal-start opposite roles must meet exactly once before dedup.");
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys.Exists(
+                    key => (int)(key >> 32) == 5 || (int)key == 5),
+                Is.False,
+                "X candidates rejected on Z must not become authority pairs.");
+            Assert.That(
+                query.LastRoleAwareSweepDirectTickCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareNestedDirectTickCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                query.LastRoleAwareSweepXCandidateCountForDiagnostics,
+                Is.GreaterThan(query.LastFormalPairCountForDiagnostics));
+            Assert.That(
+                query.LastRoleAwareSweepFullOverlapCheckCountForDiagnostics,
+                Is.EqualTo(query.LastRoleAwareSweepXCandidateCountForDiagnostics));
+        }
+
+        [Test]
+        public void Formal_AdaptiveDirectUsesNestedBelowAndSweepAtCrossover()
+        {
+            var smallWorld = new SimulationWorld();
+            for (int slot = 0; slot < 2; slot++)
+            {
+                LF2Character entity = CreateCharacter(
+                    $"RoleSweep_Small_{slot}",
+                    4150 + slot,
+                    MakeFrame(
+                        new InteractionArea
+                        {
+                            kind = 0,
+                            x = 0,
+                            y = -10,
+                            w = 10,
+                            h = 20,
+                            zwidth = 15,
+                        },
+                        new BodyBox { kind = 0, x = 0, y = -10, w = 10, h = 20 }));
+                Register(smallWorld, entity, slot, slot + 1, slot * 100);
+            }
+            BruteForceSceneQuery smallQuery = GetQuery(smallWorld);
+            RunCollection(
+                smallWorld,
+                smallQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                Array.Empty<LF2Entity>());
+            Assert.That(
+                smallQuery.LastRoleAwareDirectCostForDiagnostics,
+                Is.LessThan(BruteForceSceneQuery.RoleAwareSweepDirectCrossover));
+            Assert.That(
+                smallQuery.LastRoleAwareNestedDirectTickCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                smallQuery.LastRoleAwareSweepDirectTickCountForDiagnostics,
+                Is.Zero);
+
+            const int mediumParticipantCount = 91;
+            var mediumWorld = new SimulationWorld();
+            for (int slot = 0; slot < mediumParticipantCount; slot++)
+            {
+                LF2Character entity = CreateCharacter(
+                    $"RoleSweep_Medium_{slot}",
+                    4160 + slot,
+                    MakeFrame(
+                        new InteractionArea
+                        {
+                            kind = 0,
+                            x = 0,
+                            y = -10,
+                            w = 10,
+                            h = 20,
+                            zwidth = 15,
+                        },
+                        new BodyBox { kind = 0, x = 0, y = -10, w = 10, h = 20 }));
+                Register(mediumWorld, entity, slot, (slot % 4) + 1, slot * 100);
+            }
+            BruteForceSceneQuery mediumQuery = GetQuery(mediumWorld);
+            RunCollection(
+                mediumWorld,
+                mediumQuery,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                Array.Empty<LF2Entity>());
+            Assert.That(
+                mediumQuery.LastRoleAwareDirectCostForDiagnostics,
+                Is.GreaterThanOrEqualTo(
+                    BruteForceSceneQuery.RoleAwareSweepDirectCrossover));
+            Assert.That(
+                mediumQuery.LastRoleAwareDirectCostForDiagnostics,
+                Is.LessThanOrEqualTo(
+                    BruteForceSceneQuery.RoleAwareDirectComparisonThreshold));
+            Assert.That(
+                mediumQuery.LastRoleAwareSweepDirectTickCountForDiagnostics,
+                Is.EqualTo(1));
+            Assert.That(
+                mediumQuery.LastRoleAwareNestedDirectTickCountForDiagnostics,
+                Is.Zero);
+            Assert.That(
+                mediumQuery.LastRoleAwareSweepXCandidateCountForDiagnostics,
+                Is.EqualTo(mediumParticipantCount),
+                "Separated medium fixtures should retain only self X candidates, " +
+                "which AddAuthorityOrdinalPair rejects.");
+        }
+
+        [TestCase(19)]
+        [TestCase(733)]
+        [TestCase(20260801)]
+        public void Formal_SweepMatchesNestedForDeterministicRandomFixtures(int seed)
+        {
+            const int participantCount = 48;
+            var random = new System.Random(seed);
+            var world = new SimulationWorld();
+            var attackers = new LF2Entity[participantCount];
+            for (int slot = 0; slot < participantCount; slot++)
+            {
+                var itr = new InteractionArea
+                {
+                    kind = 0,
+                    vrest = random.Next(0, 2),
+                    x = random.Next(-25, 26),
+                    y = -10,
+                    w = random.Next(1, 51),
+                    h = 20,
+                    zwidth = random.Next(1, 31),
+                };
+                var body = new BodyBox
+                {
+                    kind = 0,
+                    x = random.Next(-25, 26),
+                    y = -10,
+                    w = random.Next(1, 51),
+                    h = 20,
+                };
+                LF2FrameData frame = MakeFrame(itr, body);
+                if (slot % 5 == 0)
+                {
+                    frame.itrs.Add(new InteractionArea
+                    {
+                        kind = itr.kind,
+                        vrest = itr.vrest,
+                        x = itr.x,
+                        y = itr.y,
+                        w = itr.w,
+                        h = itr.h,
+                        zwidth = itr.zwidth,
+                    });
+                }
+                LF2Character entity = CreateCharacter(
+                    $"RoleSweep_Random_{seed}_{slot}",
+                    4200 + slot,
+                    frame);
+                int x = random.Next(-250, 251);
+                int z = random.Next(-40, 41);
+                Register(world, entity, slot, (slot % 4) + 1, x);
+                entity.Runtime.SetPosition(x, 0, z);
+                entity.Runtime.SyncIntegerPosition();
+                attackers[slot] = entity;
+            }
+
+            BruteForceSceneQuery query = GetQuery(world);
+            uint collectionSeed = unchecked((uint)seed * 2654435761u);
+            query.ForceRoleAwareNestedDirectForDiagnostics = true;
+            CandidateRun nested = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                collectionSeed,
+                attackers);
+            query.ForceRoleAwareSweepDirectForDiagnostics = true;
+            CandidateRun sweep = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                collectionSeed,
+                attackers);
+
+            AssertRunsEqual(nested, sweep, $"seed={seed}");
+            Assert.That(
+                sweep.FormalRuntimeSlotPairKeys,
+                Is.EqualTo(nested.FormalRuntimeSlotPairKeys),
+                $"seed={seed}");
+            Assert.That(sweep.CollectionAborted, Is.False);
+            Assert.That(query.LastRoleAwareSweepDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(
+                query.LastRoleAwareSweepFullOverlapCheckCountForDiagnostics,
+                Is.LessThan(query.LastRoleAwareDirectCostForDiagnostics));
+
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.CaptureCollisionFrameSnapshotsAll();
+            long allocatedBytes =
+                query.MeasureWarmedRoleAwareDirectAllocationsForSelfCheck(64);
+            Assert.That(
+                allocatedBytes,
+                Is.LessThanOrEqualTo(256L),
+                "Warmed event sweep must reuse event, active, and position buffers.");
+        }
+
+        [Test]
+        public void Formal_ForcedSweepIndexesDegenerateRolesConservatively()
+        {
+            var world = new SimulationWorld();
+            LF2Character invalidItr = CreateCharacter(
+                "RoleSweep_InvalidItr",
+                4300,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        x = 0,
+                        y = -10,
+                        w = 0,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character validItr = CreateCharacter(
+                "RoleSweep_ValidItr",
+                4301,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        x = 0,
+                        y = -10,
+                        w = 20,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character invalidBody = CreateCharacter(
+                "RoleSweep_InvalidBody",
+                4302,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 0, y = -10, w = 0, h = 20 }));
+            LF2Character validBody = CreateCharacter(
+                "RoleSweep_ValidBody",
+                4303,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = 0, y = -10, w = 20, h = 20 }));
+            Register(world, invalidItr, 0, 1, 0);
+            Register(world, validItr, 1, 1, 0);
+            Register(world, invalidBody, 2, 2, 0);
+            Register(world, validBody, 3, 2, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            LF2Entity[] attackers = { invalidItr, validItr };
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                CollectionSeed,
+                attackers);
+            query.ForceRoleAwareSweepDirectForDiagnostics = true;
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                CollectionSeed,
+                attackers);
+
+            AssertRunsEqual(brute, role);
+            Assert.That(role.CollectionAborted, Is.False);
+            Assert.That(query.LastRoleAwareSweepDirectTickCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(query.LastRoleAwareNestedDirectTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.Zero);
+            Assert.That(query.LastRoleAwareSweepXCandidateCountForDiagnostics, Is.GreaterThan(0));
+        }
+
+        [Test]
+        [Timeout(30000)]
+        public void Formal_ThousandSyntheticConfiguredLooseDropsPairsAndMatchesBrute()
+        {
+            const int participantCount = 1000;
+            const int attackOffsetParticipants = 500;
+            const int spacing = 20;
+            LF2FrameData sharedFrame = MakeFrame(
+                new InteractionArea
+                {
+                    kind = 0,
+                    vrest = 1,
+                    x = attackOffsetParticipants * spacing,
+                    y = -5,
+                    w = 10,
+                    h = 10,
+                    zwidth = 15,
+                },
+                new BodyBox { kind = 0, x = 0, y = -5, w = 10, h = 10 });
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.DesktopExtended,
+                1100,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            var participants = new LF2Entity[participantCount];
+            for (int slot = 0; slot < participantCount; slot++)
+            {
+                LF2Character entity = CreateCharacter(
+                    $"RoleFormal_Thousand_{slot}",
+                    1,
+                    sharedFrame);
+                int team = slot < attackOffsetParticipants ? 1 : 2;
+                Register(world, entity, slot, team, slot * spacing);
+                participants[slot] = entity;
+            }
+
+            BruteForceSceneQuery query = GetQuery(world);
+            int gameDataManagerLogCount = 0;
+            string firstGameDataManagerLog = null;
+            Application.LogCallback captureTypeResolutionLogs =
+                (condition, stackTrace, type) =>
+                {
+                    if (string.IsNullOrEmpty(condition) ||
+                        condition.IndexOf(
+                            "GameDataManager",
+                            StringComparison.Ordinal) < 0)
+                    {
+                        return;
+                    }
+
+                    gameDataManagerLogCount++;
+                    if (firstGameDataManagerLog == null)
+                        firstGameDataManagerLog = $"{type}: {condition}";
+            };
+            CandidateRun brute;
+            CandidateRun configured;
+            Application.logMessageReceived += captureTypeResolutionLogs;
+            try
+            {
+                brute = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceBruteForce,
+                    CollectionSeed,
+                    participants);
+                configured = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.Configured,
+                    CollectionSeed,
+                    participants);
+            }
+            finally
+            {
+                Application.logMessageReceived -= captureTypeResolutionLogs;
+            }
+
+            AssertRunsEqual(brute, configured);
+            Assert.That(
+                query.FormalCollectorMode,
+                Is.EqualTo(CollisionFormalCollectorMode.Configured));
+            Assert.That(
+                query.LastFormalCollectorModeForDiagnostics,
+                Is.EqualTo(CollisionFormalCollectorMode.ForceRoleAware));
+            Assert.That(
+                gameDataManagerLogCount,
+                Is.Zero,
+                firstGameDataManagerLog);
+            Assert.That(configured.CollectionAborted, Is.False);
+            Assert.That(configured.FallbackParticipantCount, Is.Zero);
+            Assert.That(
+                configured.FormalPairCount,
+                Is.EqualTo(attackOffsetParticipants));
+            int bruteAuthorityPairCount =
+                participantCount * (participantCount - 1) / 2;
+            Assert.That(
+                configured.FormalPairCount * 50,
+                Is.LessThan(bruteAuthorityPairCount));
+            Assert.That(
+                configured.BodyEntryCount,
+                Is.EqualTo(participantCount));
+            Assert.That(
+                configured.ItrQueryCount,
+                Is.EqualTo(participantCount));
+            Assert.That(configured.RngCalls, Is.Zero);
+        }
+
+        [Test]
+        public void CandidateStore_GenerationTargetReuseFaultIsolationAndGrow()
+        {
+            var world = new SimulationWorld();
+            LF2Character otherTarget = CreateCharacter(
+                "RoleFormal_GenerationOther",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character oldTarget = CreateCharacter(
+                "RoleFormal_GenerationOld",
+                3,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_GenerationAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 0,
+                        x = -30,
+                        y = -10,
+                        w = 60,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(world, otherTarget, 0, 2, -10);
+            Register(world, oldTarget, 1, 2, 10);
+            Register(world, attacker, 2, 1, 0);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    1,
+                    oldTarget,
+                    out RuntimeEntityHandle oldHandle),
+                Is.True);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+            world.Unregister(oldTarget);
+            Assert.That(
+                world.TryResolveRuntimeHandleForDiagnostics(oldHandle, out _),
+                Is.False);
+
+            LF2Character replacement = CreateCharacter(
+                "RoleFormal_GenerationReplacement",
+                4,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            Register(world, replacement, 1, 2, 10);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    1,
+                    replacement,
+                    out RuntimeEntityHandle replacementHandle),
+                Is.True);
+            Assert.That(replacementHandle, Is.Not.EqualTo(oldHandle));
+
+            uint replacementWinsSeed = FindSeedWithFirstTieReplacement();
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                replacementWinsSeed,
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            CandidateRun direct = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                replacementWinsSeed,
+                attacker);
+            query.ForceRoleAwareDirectForDiagnostics = false;
+            query.ForceRoleAwareTreeForDiagnostics = true;
+            CandidateRun tree = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                replacementWinsSeed,
+                attacker);
+            AssertRunsEqual(legacy, direct);
+            AssertRunsEqual(direct, tree);
+            Assert.That(direct.CollectionAborted, Is.False);
+            Assert.That(direct.TargetHandles[0], Has.Count.EqualTo(1));
+            Assert.That(direct.TargetHandles[0][0], Is.EqualTo(replacementHandle));
+
+            query.ForceRoleAwareTreeForDiagnostics = false;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = true;
+            query.CollisionCandidateStoreAuthorityEnabled = true;
+            query.ThrowAfterRoleAwareFormalPairCountForSelfCheck = 2;
+            CandidateRun recovered;
+            try
+            {
+                recovered = RunCollection(
+                    world,
+                    query,
+                    CollisionFormalCollectorMode.ForceRoleAware,
+                    replacementWinsSeed,
+                    attacker);
+            }
+            finally
+            {
+                query.ThrowAfterRoleAwareFormalPairCountForSelfCheck = -1;
+            }
+
+            AssertRunsEqual(legacy, recovered);
+            Assert.That(recovered.CollectionAborted, Is.True);
+            Assert.That(recovered.RngCalls, Is.EqualTo(1));
+            Assert.That(recovered.TargetHandles[0][0], Is.EqualTo(replacementHandle));
+            Assert.That(
+                world.TryResolveRuntimeHandleForDiagnostics(oldHandle, out _),
+                Is.False);
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.BuildTickCount,
+                Is.EqualTo(2),
+                "the failed formal write set must be discarded before the brute fallback rebuild");
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.MismatchCount,
+                Is.Zero);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.AppliedTickCount,
+                Is.EqualTo(1),
+                "formal abort must rebuild once from the brute authority and then expose that completed store");
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.LegacyFallbackTickCount,
+                Is.Zero);
+
+            query.ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck = 1;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.Rng.Seed(replacementWinsSeed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.False,
+                "an incomplete store must lock the whole tick to the legacy oracle");
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.LegacyFallbackTickCount,
+                Is.EqualTo(1));
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False,
+                "a shadow append failure must not abort formal authority");
+            Assert.That(world.Rng.State, Is.EqualTo(recovered.RngState));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(recovered.RngCalls));
+            Assert.That(
+                query.TryGetCollisionCandidateSequence(
+                    attacker,
+                    out List<SceneQueryHit> faultAuthority),
+                Is.True);
+            Assert.That(
+                faultAuthority.ConvertAll(hit => hit.TargetSlot),
+                Is.EqualTo(recovered.Sequences[0].ConvertAll(hit => hit.TargetSlot)));
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    attacker.Runtime.SlotIndex,
+                    attacker,
+                    out RuntimeEntityHandle attackerHandle),
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerHandle,
+                    out _),
+                Is.False,
+                "a partial slab must remain invisible after an injected failure");
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.InvalidCount,
+                Is.EqualTo(1));
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.MismatchCount,
+                Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreShadowDiagnostics.FirstMismatchReason,
+                Is.EqualTo(CollisionCandidateStoreMismatchReason.UnexpectedShadowException));
+            world.EndCollisionCandidateConsumption();
+
+            query.ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck = -1;
+            world.Rng.Seed(replacementWinsSeed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreEntryForSelfCheck(
+                    attackerHandle,
+                    0,
+                    out CollisionCandidateStoreEntry storedBeforeReuse),
+                Is.True);
+            Assert.That(storedBeforeReuse.TargetHandle, Is.EqualTo(replacementHandle));
+            Assert.That(
+                query.TryGetCollisionCandidateSequence(
+                    attacker,
+                    out List<SceneQueryHit> liveAuthority),
+                Is.True);
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange storeAuthorityRange),
+                Is.True);
+            Assert.That(storeAuthorityRange.Count, Is.EqualTo(liveAuthority.Count));
+
+            world.Unregister(replacement);
+            LF2Character newborn = CreateCharacter(
+                "RoleFormal_GenerationNewborn",
+                5,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            Register(world, newborn, 1, 2, 10);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    1,
+                    newborn,
+                    out RuntimeEntityHandle newbornHandle),
+                Is.True);
+            Assert.That(newbornHandle, Is.Not.EqualTo(replacementHandle));
+            Assert.That(liveAuthority[0].ResolveCurrentTarget(world), Is.SameAs(newborn));
+            Assert.That(
+                storeAuthorityRange.TryGet(0, out SceneQueryHit storeAuthorityAfterTargetReuse),
+                Is.True);
+            Assert.That(storeAuthorityAfterTargetReuse.TargetSlot, Is.EqualTo(1));
+            Assert.That(storeAuthorityAfterTargetReuse.Target, Is.SameAs(newborn),
+                "target generation is diagnostic-only; authority follows the current slot occupant");
+            Assert.That(
+                query.TryGetCollisionCandidateStoreEntryForSelfCheck(
+                    attackerHandle,
+                    0,
+                    out CollisionCandidateStoreEntry storedAfterReuse),
+                Is.True);
+            Assert.That(storedAfterReuse.TargetSlot, Is.EqualTo(1));
+            Assert.That(storedAfterReuse.TargetHandle, Is.EqualTo(replacementHandle),
+                "target generation is diagnostic-only and must not gate slot-based authority");
+
+            world.Unregister(attacker);
+            LF2Character attackerNewborn = CreateCharacter(
+                "RoleFormal_GenerationAttackerNewborn",
+                6,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -30,
+                        y = -10,
+                        w = 60,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(world, attackerNewborn, 2, 1, 0);
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    2,
+                    attackerNewborn,
+                    out RuntimeEntityHandle attackerNewbornHandle),
+                Is.True);
+            Assert.That(attackerNewbornHandle, Is.Not.EqualTo(attackerHandle));
+            Assert.That(storeAuthorityRange.TryGet(0, out _), Is.False,
+                "an attacker range is generation-gated after same-slot reuse");
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerHandle,
+                    out _),
+                Is.False,
+                "the released attacker handle must be rejected before End");
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerNewbornHandle,
+                    out _),
+                Is.False,
+                "the same-slot newborn generation must not inherit the old row");
+            Assert.That(
+                query.TryGetCollisionCandidateSequence(
+                    attackerNewborn,
+                    out List<SceneQueryHit> newbornAuthorityBeforeEnd),
+                Is.True);
+            Assert.That(newbornAuthorityBeforeEnd, Is.Empty,
+                "the newborn remains outside the current authoritative snapshot");
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attackerNewborn,
+                    out CollisionCandidateRange newbornAuthorityRange),
+                Is.True);
+            Assert.That(newbornAuthorityRange.Count, Is.Zero,
+                "a step8 newborn must not trigger an immediate query or inherit a row");
+            world.EndCollisionCandidateConsumption();
+            Assert.That(storeAuthorityRange.Count, Is.Zero);
+            Assert.That(newbornAuthorityRange.Count, Is.Zero);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(
+                world.TryGetCurrentRuntimeHandleForDiagnostics(
+                    2,
+                    attackerNewborn,
+                    out RuntimeEntityHandle currentAttackerNewbornHandle),
+                Is.True);
+            Assert.That(currentAttackerNewbornHandle, Is.EqualTo(attackerNewbornHandle));
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerHandle,
+                    out _),
+                Is.False);
+            Assert.That(
+                query.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    attackerNewbornHandle,
+                    out int attackerNewbornCount),
+                Is.True);
+            Assert.That(attackerNewbornCount, Is.GreaterThan(0));
+            Assert.That(query.CollisionCandidateStoreShadowDiagnostics.MismatchCount,
+                Is.EqualTo(1),
+                "the injected fault remains diagnostic history after next-tick recovery");
+            world.EndCollisionCandidateConsumption();
+
+            var grownWorld = new SimulationWorld(
+                BattleRuntimeProfile.DesktopExtended,
+                512);
+            BruteForceSceneQuery grownQuery = GetQuery(grownWorld);
+            grownQuery.CollisionCandidateStoreShadowDiagnosticsEnabled = true;
+            Assert.That(grownQuery.CollisionCandidateStoreRuntimeCapacityForDiagnostics,
+                Is.Zero);
+            grownWorld.CaptureCollisionFrameSnapshotsAll();
+            grownWorld.CollectCollisionCandidatesAll();
+            Assert.That(grownQuery.CollisionCandidateStoreRuntimeCapacityForDiagnostics,
+                Is.EqualTo(512));
+            grownWorld.EndCollisionCandidateConsumption();
+
+            LF2Character grownTarget = CreateCharacter(
+                "CandidateStore_GrowTarget",
+                7001,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character highSlotAttacker = CreateCharacter(
+                "CandidateStore_HighSlotAttacker",
+                7002,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 1,
+                        x = -20,
+                        y = -20,
+                        w = 40,
+                        h = 40,
+                        zwidth = 15,
+                    },
+                    null));
+            Register(grownWorld, grownTarget, 1, 2, 0);
+            Register(grownWorld, highSlotAttacker, 600, 1, 0);
+            int grownRuntimeCapacity = grownWorld.RuntimeSlotCapacityForDiagnostics;
+            Assert.That(grownRuntimeCapacity, Is.GreaterThan(512));
+            Assert.That(grownRuntimeCapacity, Is.GreaterThan(600),
+                "the grown runtime must address the requested high slot");
+            grownWorld.CaptureCollisionFrameSnapshotsAll();
+            grownWorld.CollectCollisionCandidatesAll();
+            Assert.That(
+                grownWorld.TryGetCurrentRuntimeHandleForDiagnostics(
+                    600,
+                    highSlotAttacker,
+                    out RuntimeEntityHandle highSlotHandle),
+                Is.True);
+            Assert.That(
+                grownQuery.TryGetCollisionCandidateStoreRowForSelfCheck(
+                    highSlotHandle,
+                    out int highSlotCount),
+                Is.True);
+            Assert.That(highSlotCount, Is.EqualTo(1));
+            Assert.That(grownQuery.CollisionCandidateStoreRuntimeCapacityForDiagnostics,
+                Is.EqualTo(grownRuntimeCapacity));
+            grownWorld.EndCollisionCandidateConsumption();
+
+            Assert.That(
+                grownQuery.TryBuildCollisionCandidateStoreCapacityForSelfCheck(int.MaxValue),
+                Is.False);
+            Assert.That(grownQuery.CollisionCandidateStoreRuntimeCapacityForDiagnostics,
+                Is.EqualTo(grownRuntimeCapacity),
+                "overflow rejection must retain the last valid slab");
+            Assert.That(grownQuery.CollisionCandidateStoreShadowDiagnostics.InvalidCount,
+                Is.EqualTo(1));
+            Assert.That(
+                grownQuery.CollisionCandidateStoreShadowDiagnostics.FirstMismatchReason,
+                Is.EqualTo(CollisionCandidateStoreMismatchReason.RuntimeCapacityInvalid));
+        }
+
+        [Test]
+        public void CandidateStoreAuthority_StoreOnlyProducerFaultFailsClosedWithoutCollectorRerun()
+        {
+            uint seed = FindSeedWithFirstTieReplacement();
+            CreateStoreOnlyFaultScenario(
+                out SimulationWorld expectedWorld,
+                out BruteForceSceneQuery expectedQuery,
+                out LF2Character expectedAttacker,
+                out _,
+                out _);
+            expectedWorld.Rng.Seed(seed);
+            expectedWorld.CaptureCollisionFrameSnapshotsAll();
+            expectedWorld.CollectCollisionCandidatesAll();
+            uint expectedRngState = expectedWorld.Rng.State;
+            ulong expectedRngCalls = expectedWorld.Rng.CallCount;
+            Assert.That(expectedRngCalls, Is.EqualTo(1));
+            Assert.That(expectedQuery.LastFormalCollectionAbortedForDiagnostics, Is.False);
+            Assert.That(expectedAttacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            expectedWorld.EndCollisionCandidateConsumption();
+
+            CreateStoreOnlyFaultScenario(
+                out SimulationWorld world,
+                out BruteForceSceneQuery query,
+                out LF2Character attacker,
+                out InteractionArea itr,
+                out PhysicsState.BattleVolume volume);
+            Assert.That(query.QueryBodyHits(attacker, attacker.Frame.D, itr), Is.Not.Empty,
+                "the geometry must produce immediate hits before the frozen window");
+            query.ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck = 1;
+            world.Rng.Seed(seed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+
+            Assert.That(query.CollisionCandidateStoreOnlyForCurrentTickForDiagnostics, Is.True);
+            Assert.That(
+                query.CollisionCandidateStoreLegacyOracleSampledForCurrentTickForDiagnostics,
+                Is.False);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityAppliedForCurrentTickForDiagnostics,
+                Is.False);
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False,
+                "a store producer fault must not route through formal collector fallback");
+            Assert.That(
+                query.CollisionCandidateStoreShadowDiagnostics.BuildTickCount,
+                Is.EqualTo(1),
+                "a store producer fault must not restart the collector/store build");
+            Assert.That(world.Rng.State, Is.EqualTo(expectedRngState));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(expectedRngCalls));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.SampledOracleTickCount,
+                Is.Zero);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.StoreOnlyTickCount,
+                Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.StoreOnlyHardFailureCount,
+                Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.LegacyFallbackTickCount,
+                Is.Zero);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics
+                    .LegacyListCreatedOrWrittenCount,
+                Is.Zero);
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.FailureCount,
+                Is.EqualTo(1));
+            Assert.That(
+                query.CollisionCandidateStoreAuthorityDiagnostics.FirstFailureReason,
+                Is.EqualTo(
+                    CollisionCandidateStoreAuthorityFailureReason
+                        .StoreOnlyProducerUnavailable));
+
+            Assert.That(
+                query.TryGetCollisionCandidateRange(
+                    attacker,
+                    out CollisionCandidateRange failedRange),
+                Is.True);
+            Assert.That(failedRange.Count, Is.Zero);
+            Assert.That(failedRange.TryGet(0, out _), Is.False);
+            uint frozenWindowRngState = world.Rng.State;
+            ulong frozenWindowRngCalls = world.Rng.CallCount;
+            Assert.That(query.QueryBodyHits(volume, attacker), Is.Empty);
+            Assert.That(query.QueryBodyHits(attacker, attacker.Frame.D, itr), Is.Empty);
+            Assert.That(
+                query.QueryBodyHits(attacker, attacker.Frame.D, itr, volume),
+                Is.Empty);
+            Assert.That(world.Rng.State, Is.EqualTo(frozenWindowRngState));
+            Assert.That(world.Rng.CallCount, Is.EqualTo(frozenWindowRngCalls),
+                "frozen-window queries must not fall back to an immediate collector");
+
+            world.EndCollisionCandidateConsumption();
+            Assert.That(failedRange.Count, Is.Zero);
+            Assert.That(failedRange.TryGet(0, out _), Is.False);
+            query.ThrowAfterCollisionCandidateStoreAppendCountForSelfCheck = -1;
+        }
+
+        [Test]
+        public void Formal_ExceptionRestoresRngAndCandidatesThenRunsFullBruteFallback()
+        {
+            var world = new SimulationWorld();
+            LF2Character attacker = CreateCharacter(
+                "RoleFormal_RollbackAttacker",
+                1,
+                MakeFrame(
+                    new InteractionArea
+                    {
+                        kind = 0,
+                        vrest = 0,
+                        x = -30,
+                        y = -10,
+                        w = 60,
+                        h = 20,
+                        zwidth = 15,
+                    },
+                    null));
+            LF2Character leftTarget = CreateCharacter(
+                "RoleFormal_RollbackLeft",
+                2,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            LF2Character rightTarget = CreateCharacter(
+                "RoleFormal_RollbackRight",
+                3,
+                MakeFrame(
+                    null,
+                    new BodyBox { kind = 0, x = -10, y = -10, w = 20, h = 20 }));
+            Register(world, leftTarget, 0, 2, -10);
+            Register(world, rightTarget, 1, 2, 10);
+            Register(world, attacker, 2, 1, 0);
+
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                attacker);
+
+            query.ThrowAfterRoleAwareFormalPairCountForSelfCheck = 2;
+            CandidateRun recovered = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                attacker);
+            query.ThrowAfterRoleAwareFormalPairCountForSelfCheck = -1;
+
+            AssertRunsEqual(brute, recovered);
+            Assert.That(brute.RngCalls, Is.GreaterThan(0));
+            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.True);
+            Assert.That(query.LastFormalSynchronizeResultForDiagnostics.Succeeded, Is.False);
+        }
+
+        private static void CreateExactLoopTieFixture(
+            out SimulationWorld world,
+            out BruteForceSceneQuery query,
+            out LF2Character attacker)
+        {
+            world = new SimulationWorld();
+            attacker = CreateCharacter(
+                "RoleExact_TieAttacker",
+                1880,
+                MakeFrame(
+                    MakeExactLoopItr(kind: 0, vrest: 0),
+                    null));
+            LF2FrameData targetFrame = MakeFrame(
+                null,
+                new BodyBox
+                {
+                    kind = 0,
+                    x = -10,
+                    y = -10,
+                    w = 20,
+                    h = 20,
+                });
+            LF2Character left = CreateCharacter(
+                "RoleExact_TieLeft",
+                1881,
+                targetFrame);
+            LF2Character right = CreateCharacter(
+                "RoleExact_TieRight",
+                1882,
+                targetFrame);
+            Register(world, left, 0, 2, -10);
+            Register(world, right, 1, 2, 10);
+            Register(world, attacker, 2, 1, 0);
+            query = GetQuery(world);
+        }
+
+        private static void CreateExactLoopDirectionalFixture(
+            int scenario,
+            out SimulationWorld world,
+            out BruteForceSceneQuery query,
+            out LF2Character first,
+            out LF2Character second)
+        {
+            InteractionArea firstItr;
+            InteractionArea secondItr;
+            switch (scenario)
+            {
+                case 0:
+                    firstItr = MakeExactLoopItr(kind: 0, vrest: 1);
+                    secondItr = null;
+                    break;
+                case 1:
+                    firstItr = MakeExactLoopItr(kind: 0, vrest: 1);
+                    secondItr = MakeExactLoopItr(kind: 0, vrest: 1);
+                    break;
+                case 2:
+                    firstItr = null;
+                    secondItr = MakeExactLoopItr(kind: 0, vrest: 1);
+                    break;
+                case 3:
+                    firstItr = MakeExactLoopItr(kind: 5, vrest: 1);
+                    secondItr = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(scenario));
+            }
+
+            var body = new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            };
+            world = new SimulationWorld();
+            first = CreateCharacter(
+                $"RoleExact_DirectionalFirst_{scenario}",
+                1900 + scenario * 2,
+                MakeFrame(firstItr, body));
+            second = CreateCharacter(
+                $"RoleExact_DirectionalSecond_{scenario}",
+                1901 + scenario * 2,
+                MakeFrame(secondItr, body));
+            Register(world, first, 0, 1, 0);
+            Register(world, second, 1, 2, 0);
+            query = GetQuery(world);
+        }
+
+        private static InteractionArea MakeExactLoopItr(int kind, int vrest)
+        {
+            return new InteractionArea
+            {
+                kind = kind,
+                vrest = vrest,
+                x = -30,
+                y = -10,
+                w = 60,
+                h = 20,
+                zwidth = 15,
+            };
+        }
+
+        private static uint FindSeedWithFirstTieReplacement()
+        {
+            for (uint seed = 1; seed < 1024; seed++)
+            {
+                var rng = new DeterministicRng(seed);
+                if (rng.NextInt(0, 2) == 0)
+                    return seed;
+            }
+
+            Assert.Fail("Could not find a deterministic tie-replacement seed.");
+            return 0;
+        }
+
+        private static void AssertMixedDegenerateRoleParity(
+            bool mixedParticipantIsAttacker,
+            int expectedBodyX)
+        {
+            var world = new SimulationWorld();
+            LF2Character mixed;
+            LF2Character other;
+            LF2Entity trackedAttacker;
+            if (mixedParticipantIsAttacker)
+            {
+                mixed = CreateCharacter(
+                    "RoleFormal_MixedDegenerateItr",
+                    1200,
+                    MakeFrame(
+                        new InteractionArea
+                        {
+                            kind = 0,
+                            vrest = 1,
+                            x = 50,
+                            y = -10,
+                            w = 0,
+                            h = 20,
+                            zwidth = 15,
+                        },
+                        new BodyBox
+                        {
+                            kind = 0,
+                            x = 0,
+                            y = -10,
+                            w = 10,
+                            h = 20,
+                        }));
+                other = CreateCharacter(
+                    "RoleFormal_ValidBodyTarget",
+                    1201,
+                    MakeFrame(
+                        null,
+                        new BodyBox
+                        {
+                            kind = 0,
+                            x = 40,
+                            y = -10,
+                            w = 20,
+                            h = 20,
+                        }));
+                trackedAttacker = mixed;
+            }
+            else
+            {
+                other = CreateCharacter(
+                    "RoleFormal_ValidItrAttacker",
+                    1202,
+                    MakeFrame(
+                        new InteractionArea
+                        {
+                            kind = 0,
+                            vrest = 1,
+                            x = 40,
+                            y = -10,
+                            w = 20,
+                            h = 20,
+                            zwidth = 15,
+                        },
+                        null));
+                mixed = CreateCharacter(
+                    "RoleFormal_MixedDegenerateBody",
+                    1203,
+                    MakeFrame(
+                        new InteractionArea
+                        {
+                            kind = 0,
+                            vrest = 1,
+                            x = 100,
+                            y = -10,
+                            w = 10,
+                            h = 20,
+                            zwidth = 15,
+                        },
+                        new BodyBox
+                        {
+                            kind = 0,
+                            x = 50,
+                            y = -10,
+                            w = 0,
+                            h = 20,
+                        }));
+                trackedAttacker = other;
+            }
+
+            Register(world, mixed, 0, 1, 0);
+            Register(world, other, 1, 2, 0);
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun brute = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceBruteForce,
+                trackedAttacker);
+            CandidateRun legacy = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceLegacyUnionAabb,
+                trackedAttacker);
+            CandidateRun role = RunCollection(
+                world,
+                query,
+                CollisionFormalCollectorMode.ForceRoleAware,
+                trackedAttacker);
+            string context =
+                $"mixedParticipantIsAttacker={mixedParticipantIsAttacker}\n" +
+                FormatParticipantDiagnostics(new[] { mixed, other }) +
+                FormatRunDiagnostics("brute", brute) +
+                FormatRunDiagnostics("legacy", legacy) +
+                FormatRunDiagnostics("role", role);
+
+            AssertRunsEqual(brute, role, context);
+            Assert.That(brute.Counts, Is.EqualTo(new[] { 1 }), context);
+            Assert.That(brute.Sequences[0][0].BodyX, Is.EqualTo(expectedBodyX), context);
+            Assert.That(legacy.Counts, Is.EqualTo(new[] { 0 }), context);
+            Assert.That(legacy.FormalPairCount, Is.Zero, context);
+            Assert.That(role.FormalPairCount, Is.EqualTo(1), context);
+            Assert.That(role.FallbackParticipantCount, Is.Zero, context);
+        }
+
+        private static void AssertExactCacheCounts(
+            BruteForceSceneQuery query,
+            LF2Entity participant,
+            int expectedCommonBuildCount,
+            int expectedAttackBuildCount,
+            int expectedBodyBuildCount,
+            int expectedValidationCount,
+            bool expectedAttackRequired,
+            bool expectedBodyRequired)
+        {
+            Assert.That(
+                query.TryGetLastRoleAwareExactCacheCountsForSelfCheck(
+                    participant,
+                    out int commonBuildCount,
+                    out int attackBuildCount,
+                    out int bodyBuildCount,
+                    out int validationCount,
+                    out bool attackRequired,
+                    out bool bodyRequired),
+                Is.True);
+            Assert.That(commonBuildCount, Is.EqualTo(expectedCommonBuildCount));
+            Assert.That(attackBuildCount, Is.EqualTo(expectedAttackBuildCount));
+            Assert.That(bodyBuildCount, Is.EqualTo(expectedBodyBuildCount));
+            Assert.That(validationCount, Is.EqualTo(expectedValidationCount));
+            Assert.That(attackRequired, Is.EqualTo(expectedAttackRequired));
+            Assert.That(bodyRequired, Is.EqualTo(expectedBodyRequired));
+            Assert.That(commonBuildCount, Is.LessThanOrEqualTo(1));
+            Assert.That(attackBuildCount, Is.LessThanOrEqualTo(1));
+            Assert.That(bodyBuildCount, Is.LessThanOrEqualTo(1));
+            Assert.That(validationCount, Is.LessThanOrEqualTo(1));
+        }
+
+        private static CandidateRun RunCollection(
+            SimulationWorld world,
+            BruteForceSceneQuery query,
+            CollisionFormalCollectorMode mode,
+            params LF2Entity[] attackers)
+        {
+            return RunCollection(world, query, mode, CollectionSeed, attackers);
+        }
+
+        private static CandidateRun RunCollection(
+            SimulationWorld world,
+            BruteForceSceneQuery query,
+            CollisionFormalCollectorMode mode,
+            uint seed,
+            params LF2Entity[] attackers)
+        {
+            return RunCollectionCore(
+                world,
+                query,
+                mode,
+                seed,
+                null,
+                attackers);
+        }
+
+        private static CandidateRun RunCollectionWithCollisionSnapshotOverride(
+            SimulationWorld world,
+            BruteForceSceneQuery query,
+            CollisionFormalCollectorMode mode,
+            uint seed,
+            Action collisionSnapshotOverride,
+            params LF2Entity[] attackers)
+        {
+            return RunCollectionCore(
+                world,
+                query,
+                mode,
+                seed,
+                collisionSnapshotOverride,
+                attackers);
+        }
+
+        private static CandidateRun RunCollectionCore(
+            SimulationWorld world,
+            BruteForceSceneQuery query,
+            CollisionFormalCollectorMode mode,
+            uint seed,
+            Action collisionSnapshotOverride,
+            params LF2Entity[] attackers)
+        {
+            query.FormalCollectorMode = mode;
+            world.Rng.Seed(seed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            collisionSnapshotOverride?.Invoke();
+            world.CollectCollisionCandidatesAll();
+
+            var sequences = new List<List<SceneQueryHit>>(attackers.Length);
+            var targetHandles = new List<List<RuntimeEntityHandle>>(attackers.Length);
+            var counts = new List<int>(attackers.Length);
+            var attackerSlots = new List<int>(attackers.Length);
+            var formalRuntimeSlotPairKeys = new List<long>();
+            query.CopyLastFormalRuntimeSlotPairKeysForSelfCheck(
+                formalRuntimeSlotPairKeys);
+            for (int attackerIndex = 0; attackerIndex < attackers.Length; attackerIndex++)
+            {
+                LF2Entity attacker = attackers[attackerIndex];
+                attackerSlots.Add(attacker.Runtime?.SlotIndex ?? -1);
+                Assert.That(
+                    query.TryGetCollisionCandidateSequence(
+                        attacker,
+                        out List<SceneQueryHit> sequence),
+                    Is.True);
+                sequences.Add(new List<SceneQueryHit>(sequence));
+                var handles = new List<RuntimeEntityHandle>(sequence.Count);
+                for (int candidateIndex = 0;
+                     candidateIndex < sequence.Count;
+                     candidateIndex++)
+                {
+                    SceneQueryHit candidate = sequence[candidateIndex];
+                    Assert.That(
+                        world.TryGetCurrentRuntimeHandleForDiagnostics(
+                            candidate.TargetSlot,
+                            candidate.Target,
+                            out RuntimeEntityHandle targetHandle),
+                        Is.True);
+                    handles.Add(targetHandle);
+                }
+                targetHandles.Add(handles);
+                counts.Add(attacker.Runtime.HitCandidateCount);
+            }
+
+            var result = new CandidateRun(
+                sequences,
+                targetHandles,
+                counts,
+                world.Rng.State,
+                world.Rng.CallCount,
+                query.LastFormalPairCountForDiagnostics,
+                query.LastFormalFallbackParticipantCountForDiagnostics,
+                query.LastFormalCollectionAbortedForDiagnostics,
+                query.LastRoleAwareBodyEntryCountForDiagnostics,
+                query.LastRoleAwareItrQueryCountForDiagnostics,
+                formalRuntimeSlotPairKeys,
+                attackerSlots);
+            world.EndCollisionCandidateConsumption();
+            return result;
+        }
+
+        private static void AssertRunsEqual(
+            CandidateRun expected,
+            CandidateRun actual,
+            string diagnostics = null)
+        {
+            Assert.That(actual.RngState, Is.EqualTo(expected.RngState), diagnostics);
+            Assert.That(actual.RngCalls, Is.EqualTo(expected.RngCalls), diagnostics);
+            Assert.That(
+                actual.Sequences.Count,
+                Is.EqualTo(expected.Sequences.Count),
+                diagnostics);
+            Assert.That(
+                actual.TargetHandles.Count,
+                Is.EqualTo(expected.TargetHandles.Count),
+                diagnostics);
+            Assert.That(actual.Counts, Is.EqualTo(expected.Counts), diagnostics);
+            for (int attackerIndex = 0;
+                 attackerIndex < expected.Sequences.Count;
+                 attackerIndex++)
+            {
+                List<SceneQueryHit> expectedSequence = expected.Sequences[attackerIndex];
+                List<SceneQueryHit> actualSequence = actual.Sequences[attackerIndex];
+                Assert.That(
+                    actualSequence.Count,
+                    Is.EqualTo(expectedSequence.Count),
+                    diagnostics);
+                Assert.That(
+                    actual.TargetHandles[attackerIndex],
+                    Is.EqualTo(expected.TargetHandles[attackerIndex]),
+                    diagnostics);
+                for (int candidateIndex = 0;
+                     candidateIndex < expectedSequence.Count;
+                     candidateIndex++)
+                {
+                    SceneQueryHit expectedHit = expectedSequence[candidateIndex];
+                    SceneQueryHit actualHit = actualSequence[candidateIndex];
+                    Assert.That(
+                        actualHit.TargetSlot,
+                        Is.EqualTo(expectedHit.TargetSlot),
+                        diagnostics);
+                    Assert.That(
+                        actualHit.ItrIndex,
+                        Is.EqualTo(expectedHit.ItrIndex),
+                        diagnostics);
+                    Assert.That(
+                        actualHit.BodyX,
+                        Is.EqualTo(expectedHit.BodyX),
+                        diagnostics);
+                    Assert.That(
+                        actualHit.ZeroAttackerHpOnConsume,
+                        Is.EqualTo(expectedHit.ZeroAttackerHpOnConsume),
+                        diagnostics);
+                    Assert.That(
+                        actualHit.ReleaseHeavyHeldTargetOnConsume,
+                        Is.EqualTo(expectedHit.ReleaseHeavyHeldTargetOnConsume),
+                        diagnostics);
+                    Assert.That(
+                        actualHit.RuntimeItr,
+                        Is.SameAs(expectedHit.RuntimeItr),
+                        diagnostics);
+                    AssertItrFieldsEqual(
+                        expectedHit.RuntimeItr,
+                        actualHit.RuntimeItr,
+                        diagnostics);
+                }
+            }
+        }
+
+        private static void AssertItrFieldsEqual(
+            InteractionArea expected,
+            InteractionArea actual,
+            string diagnostics = null)
+        {
+            if (expected == null || actual == null)
+            {
+                Assert.That(actual, Is.SameAs(expected), diagnostics);
+                return;
+            }
+
+            Assert.That(actual.kind, Is.EqualTo(expected.kind), diagnostics);
+            Assert.That(actual.x, Is.EqualTo(expected.x), diagnostics);
+            Assert.That(actual.y, Is.EqualTo(expected.y), diagnostics);
+            Assert.That(actual.w, Is.EqualTo(expected.w), diagnostics);
+            Assert.That(actual.h, Is.EqualTo(expected.h), diagnostics);
+            Assert.That(actual.zwidth, Is.EqualTo(expected.zwidth), diagnostics);
+            Assert.That(actual.dvx, Is.EqualTo(expected.dvx), diagnostics);
+            Assert.That(actual.dvy, Is.EqualTo(expected.dvy), diagnostics);
+            Assert.That(actual.dvz, Is.EqualTo(expected.dvz), diagnostics);
+            Assert.That(actual.injury, Is.EqualTo(expected.injury), diagnostics);
+            Assert.That(actual.fall, Is.EqualTo(expected.fall), diagnostics);
+            Assert.That(actual.vaction, Is.EqualTo(expected.vaction), diagnostics);
+            Assert.That(actual.arest, Is.EqualTo(expected.arest), diagnostics);
+            Assert.That(actual.vrest, Is.EqualTo(expected.vrest), diagnostics);
+            Assert.That(actual.effect, Is.EqualTo(expected.effect), diagnostics);
+            Assert.That(actual.kill, Is.EqualTo(expected.kill), diagnostics);
+            Assert.That(actual.bdefend, Is.EqualTo(expected.bdefend), diagnostics);
+            Assert.That(actual.attacking, Is.EqualTo(expected.attacking), diagnostics);
+            Assert.That(actual.throwvz, Is.EqualTo(expected.throwvz), diagnostics);
+            Assert.That(actual.respond, Is.EqualTo(expected.respond), diagnostics);
+            Assert.That(actual.pickingact, Is.EqualTo(expected.pickingact), diagnostics);
+            Assert.That(actual.pickedact, Is.EqualTo(expected.pickedact), diagnostics);
+            Assert.That(actual.throwvx, Is.EqualTo(expected.throwvx), diagnostics);
+            Assert.That(actual.throwvy, Is.EqualTo(expected.throwvy), diagnostics);
+            Assert.That(actual.throwinjury, Is.EqualTo(expected.throwinjury), diagnostics);
+            Assert.That(actual.catchingact, Is.EqualTo(expected.catchingact), diagnostics);
+            Assert.That(actual.caughtact, Is.EqualTo(expected.caughtact), diagnostics);
+            Assert.That(actual.catchingact2, Is.EqualTo(expected.catchingact2), diagnostics);
+            Assert.That(actual.caughtact2, Is.EqualTo(expected.caughtact2), diagnostics);
+        }
+
+        private static string FormatRandomizedParityDiagnostics(
+            int seed,
+            LF2Entity[] participants,
+            CandidateRun brute,
+            CandidateRun legacy,
+            CandidateRun role)
+        {
+            var builder = new StringBuilder(8192);
+            builder.Append("seed=").Append(seed).AppendLine();
+            builder.Append(FormatParticipantDiagnostics(participants));
+            builder.Append(FormatRunDiagnostics("brute", brute));
+            builder.Append(FormatRunDiagnostics("legacy", legacy));
+            builder.Append(FormatRunDiagnostics("role", role));
+            AppendPairSetDifference(
+                builder,
+                "legacy-minus-role",
+                legacy.FormalRuntimeSlotPairKeys,
+                role.FormalRuntimeSlotPairKeys);
+            AppendPairSetDifference(
+                builder,
+                "role-minus-legacy",
+                role.FormalRuntimeSlotPairKeys,
+                legacy.FormalRuntimeSlotPairKeys);
+            return builder.ToString();
+        }
+
+        private static string FormatParticipantDiagnostics(LF2Entity[] participants)
+        {
+            var builder = new StringBuilder(4096);
+            builder.AppendLine("participants:");
+            for (int participantIndex = 0;
+                 participantIndex < participants.Length;
+                 participantIndex++)
+            {
+                LF2Entity entity = participants[participantIndex];
+                if (entity == null)
+                {
+                    builder.Append("  [").Append(participantIndex).AppendLine("] null");
+                    continue;
+                }
+
+                LF2FrameData frame = entity.GetCollisionFrameData();
+                int x = entity.Runtime?.XInt ?? 0;
+                int y = entity.Runtime?.YInt ?? 0;
+                int z = entity.Runtime?.ZInt ?? 0;
+                bool left = entity.PS?.dir == "left";
+                builder.Append("  slot=")
+                    .Append(entity.Runtime?.SlotIndex ?? -1)
+                    .Append(" team=")
+                    .Append(entity.RelationTeam)
+                    .Append(" pos=(")
+                    .Append(x).Append(',').Append(y).Append(',').Append(z)
+                    .Append(") dir=")
+                    .Append(left ? "left" : "right");
+
+                if (frame == null)
+                {
+                    builder.AppendLine(" frame=null");
+                    continue;
+                }
+
+                builder.Append(" frame=").Append(frame.frameId);
+                if (frame.itrs != null)
+                {
+                    for (int itrIndex = 0; itrIndex < frame.itrs.Count; itrIndex++)
+                    {
+                        InteractionArea itr = frame.itrs[itrIndex];
+                        if (itr == null)
+                        {
+                            builder.Append(" itr[").Append(itrIndex).Append("]=null");
+                            continue;
+                        }
+
+                        ResolveWorldX(
+                            x,
+                            frame.centerx,
+                            itr.x,
+                            itr.w,
+                            left,
+                            out int x1,
+                            out int x2);
+                        int y1 = y - frame.centery + itr.y;
+                        int y2 = y1 + itr.h;
+                        int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+                        builder.Append(" itr[").Append(itrIndex).Append("]={k=")
+                            .Append(itr.kind)
+                            .Append(",local=")
+                            .Append(itr.x).Append(',').Append(itr.y).Append(',')
+                            .Append(itr.w).Append(',').Append(itr.h)
+                            .Append(",world=")
+                            .Append(x1).Append(',').Append(y1).Append("..")
+                            .Append(x2).Append(',').Append(y2)
+                            .Append(",z=")
+                            .Append(z - zHalf).Append("..").Append(z + zHalf)
+                            .Append(",indexableAabb=")
+                            .Append(x1 < x2 && z - zHalf < z + zHalf)
+                            .Append('}');
+                    }
+                }
+
+                if (frame.bodies != null)
+                {
+                    for (int bodyIndex = 0; bodyIndex < frame.bodies.Count; bodyIndex++)
+                    {
+                        BattleBodyBoxValue body = frame.bodies[bodyIndex];
+
+                        ResolveWorldX(
+                            x,
+                            frame.centerx,
+                            body.X,
+                            body.W,
+                            left,
+                            out int x1,
+                            out int x2);
+                        int y1 = y - frame.centery + body.Y;
+                        int y2 = y1 + body.H;
+                        builder.Append(" body[").Append(bodyIndex).Append("]={local=")
+                            .Append(body.X).Append(',').Append(body.Y).Append(',')
+                            .Append(body.W).Append(',').Append(body.H)
+                            .Append(",world=")
+                            .Append(x1).Append(',').Append(y1).Append("..")
+                            .Append(x2).Append(',').Append(y2)
+                            .Append(",z=")
+                            .Append(z).Append("..").Append(z + 1)
+                            .Append(",indexableAabb=")
+                            .Append(x1 < x2)
+                            .Append('}');
+                    }
+                }
+
+                builder.AppendLine();
+            }
+
+            return builder.ToString();
+        }
+
+        private static void ResolveWorldX(
+            int entityX,
+            int centerX,
+            int localX,
+            int width,
+            bool left,
+            out int x1,
+            out int x2)
+        {
+            if (!left)
+            {
+                x1 = entityX - centerX + localX;
+                x2 = x1 + width;
+                return;
+            }
+
+            x2 = entityX + centerX - localX;
+            x1 = x2 - width;
+        }
+
+        private static string FormatRunDiagnostics(string label, CandidateRun run)
+        {
+            var builder = new StringBuilder(2048);
+            builder.Append(label)
+                .Append(": rng=").Append(run.RngState)
+                .Append('/').Append(run.RngCalls)
+                .Append(" pairs=").Append(run.FormalPairCount)
+                .Append(" fallback=").Append(run.FallbackParticipantCount)
+                .Append(" aborted=").Append(run.CollectionAborted)
+                .Append(" bodies=").Append(run.BodyEntryCount)
+                .Append(" itrQueries=").Append(run.ItrQueryCount)
+                .Append(" pairKeys=");
+            AppendPairKeys(builder, run.FormalRuntimeSlotPairKeys);
+            builder.AppendLine();
+            for (int attackerIndex = 0;
+                 attackerIndex < run.Sequences.Count;
+                 attackerIndex++)
+            {
+                builder.Append("  attacker=")
+                    .Append(run.AttackerSlots[attackerIndex])
+                    .Append(" count=")
+                    .Append(run.Counts[attackerIndex])
+                    .Append(" candidates=");
+                List<SceneQueryHit> sequence = run.Sequences[attackerIndex];
+                for (int candidateIndex = 0;
+                     candidateIndex < sequence.Count;
+                     candidateIndex++)
+                {
+                    if (candidateIndex > 0)
+                        builder.Append(',');
+                    SceneQueryHit hit = sequence[candidateIndex];
+                    RuntimeEntityHandle handle =
+                        run.TargetHandles[attackerIndex][candidateIndex];
+                    builder.Append(handle)
+                        .Append("/itr").Append(hit.ItrIndex)
+                        .Append("/bodyX").Append(hit.BodyX);
+                }
+                builder.AppendLine();
+            }
+            return builder.ToString();
+        }
+
+        private static void AppendPairSetDifference(
+            StringBuilder builder,
+            string label,
+            List<long> first,
+            List<long> second)
+        {
+            builder.Append(label).Append('=');
+            bool wroteAny = false;
+            for (int firstIndex = 0; firstIndex < first.Count; firstIndex++)
+            {
+                long key = first[firstIndex];
+                if (second.BinarySearch(key) >= 0)
+                    continue;
+                if (wroteAny)
+                    builder.Append(',');
+                AppendPairKey(builder, key);
+                wroteAny = true;
+            }
+            if (!wroteAny)
+                builder.Append("[]");
+            builder.AppendLine();
+        }
+
+        private static void AppendPairKeys(StringBuilder builder, List<long> pairKeys)
+        {
+            builder.Append('[');
+            for (int pairIndex = 0; pairIndex < pairKeys.Count; pairIndex++)
+            {
+                if (pairIndex > 0)
+                    builder.Append(',');
+                AppendPairKey(builder, pairKeys[pairIndex]);
+            }
+            builder.Append(']');
+        }
+
+        private static void AppendPairKey(StringBuilder builder, long pairKey)
+        {
+            builder.Append((int)(pairKey >> 32))
+                .Append('-')
+                .Append((int)(pairKey & 0xffffffffL));
+        }
+
+        private static BruteForceSceneQuery GetQuery(SimulationWorld world)
+        {
+            Assert.That(world.SceneQuery, Is.TypeOf<BruteForceSceneQuery>());
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.EnableEmptyItrPairGuardForDiagnostics = false;
+            query.EnableBruteEmptyItrRosterForDiagnostics = false;
+            query.EnableBruteExactCacheForDiagnostics = false;
+            query.EnableBruteGeometryFirstForDiagnostics = false;
+            return query;
+        }
+
+        private static bool[] ReadRoleAwareParticipantFlags(
+            BruteForceSceneQuery query,
+            LF2Entity entity)
+        {
+            Assert.That(
+                query.TryGetLastRoleAwareParticipantFlagsForSelfCheck(
+                    entity,
+                    out bool hasBody,
+                    out bool hasFallbackBody,
+                    out bool hasAttackItr,
+                    out bool hasFallbackAttackItr),
+                Is.True);
+            return new[]
+            {
+                hasBody,
+                hasFallbackBody,
+                hasAttackItr,
+                hasFallbackAttackItr,
+            };
+        }
+
+        private static LF2FrameData MakeFrame(InteractionArea itr, BodyBox body)
+        {
+            var frame = new LF2FrameData
+            {
+                frameId = 0,
+                state = 0,
+                wait = 1,
+                next = 0,
+                centerx = 0,
+                centery = 0,
+            };
+            if (itr != null)
+                frame.itrs.Add(itr);
+            if (body != null)
+                frame.bodies.Add(body);
+            return frame;
+        }
+
+        private static void CreateStoreOnlyFaultScenario(
+            out SimulationWorld world,
+            out BruteForceSceneQuery query,
+            out LF2Character attacker,
+            out InteractionArea itr,
+            out PhysicsState.BattleVolume volume)
+        {
+            itr = new InteractionArea
+            {
+                kind = 0,
+                vrest = 0,
+                x = -30,
+                y = -10,
+                w = 60,
+                h = 20,
+                zwidth = 15,
+            };
+            var body = new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            };
+            world = new SimulationWorld();
+            LF2Character leftTarget = CreateCharacter(
+                "CandidateStoreOnlyFault_LeftTarget",
+                2100,
+                MakeFrame(null, body));
+            LF2Character rightTarget = CreateCharacter(
+                "CandidateStoreOnlyFault_RightTarget",
+                2101,
+                MakeFrame(null, body));
+            attacker = CreateCharacter(
+                "CandidateStoreOnlyFault_Attacker",
+                2102,
+                MakeFrame(itr, null));
+            Register(world, leftTarget, 0, 2, -10);
+            Register(world, rightTarget, 1, 2, 10);
+            Register(world, attacker, 2, 1, 0);
+            query = GetQuery(world);
+            query.CollisionCandidateStoreAuthorityEnabled = true;
+            query.CollisionCandidateStoreLegacyOracleInterval = 0;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            volume = new PhysicsState.BattleVolume(
+                -100f,
+                -100f,
+                0f,
+                0f,
+                0f,
+                200f,
+                200f,
+                30f);
+        }
+
+        private static long RuntimeSlotPairKey(int firstSlot, int secondSlot)
+        {
+            uint min = (uint)Math.Min(firstSlot, secondSlot);
+            uint max = (uint)Math.Max(firstSlot, secondSlot);
+            return ((long)min << 32) | max;
+        }
+
+        private static LF2Character CreateCharacter(
+            string name,
+            int objectId,
+            LF2FrameData frame,
+            bool specialAttack = false)
+        {
+            return CreateCharacterWithFrames(
+                name,
+                objectId,
+                new List<LF2FrameData> { frame },
+                specialAttack);
+        }
+
+        private static LF2Character CreateCharacterWithFrames(
+            string name,
+            int objectId,
+            List<LF2FrameData> frames,
+            bool specialAttack = false)
+        {
+            var data = new LF2CharacterData
+            {
+                name = name,
+                type_sub = 1,
+                frames = frames,
+            };
+            LF2Character character = specialAttack
+                ? new FormalSelfCheckSpecialAttack()
+                : new FormalSelfCheckCharacter();
+            character.ModuleInitialize();
+            character.Name = name;
+            character.ObjectId = objectId;
+            character.Controller = new FormalSelfCheckController();
+            character.FrameCache.Load(new LF2CharacterDataWrapper(objectId, data));
+            character.Frame.D = character.FrameCache.GetFrameDataById(0);
+            character.Frame.PN = 0;
+            character.Frame.N = 0;
+            character.Initialize(500, 500);
+            character.FrameDelay = 0;
+            return character;
+        }
+
+        private static void Register(
+            SimulationWorld world,
+            LF2Entity entity,
+            int requiredSlot,
+            int team,
+            int x)
+        {
+            entity.SetRequiredRuntimeSlot(requiredSlot);
+            world.Register(entity);
+            Assert.That(entity.Runtime.SlotIndex, Is.EqualTo(requiredSlot));
+            entity.Team = team;
+            entity.RelationTeam = team;
+            entity.Health.HP = 100;
+            entity.Health.HPBound = 100;
+            entity.FrameDelay = 0;
+            entity.AttackExempt = 0;
+            entity.HitStun = 0;
+            entity.Runtime.LinkState = 0;
+            entity.ItrRest.Reset();
+            entity.Runtime.SetPosition(x, 0, 0);
+            entity.Runtime.SetVelocity(0, 0, 0);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private static void OverrideCollisionFrame(
+            LF2Entity entity,
+            int collisionFrameId)
+        {
+            LF2FrameData collisionFrame =
+                entity.FrameCache.GetFrameDataById(collisionFrameId);
+            Assert.That(collisionFrame, Is.Not.Null);
+            entity.Frame.Prev2 = collisionFrameId;
+            entity.Frame.Prev2D = collisionFrame;
+            entity.Runtime.PrevFrame2 = collisionFrameId;
+        }
+
+        private sealed class CandidateRun
+        {
+            public CandidateRun(
+                List<List<SceneQueryHit>> sequences,
+                List<List<RuntimeEntityHandle>> targetHandles,
+                List<int> counts,
+                uint rngState,
+                ulong rngCalls,
+                int formalPairCount,
+                int fallbackParticipantCount,
+                bool collectionAborted,
+                int bodyEntryCount,
+                int itrQueryCount,
+                List<long> formalRuntimeSlotPairKeys,
+                List<int> attackerSlots)
+            {
+                Sequences = sequences;
+                TargetHandles = targetHandles;
+                Counts = counts;
+                RngState = rngState;
+                RngCalls = rngCalls;
+                FormalPairCount = formalPairCount;
+                FallbackParticipantCount = fallbackParticipantCount;
+                CollectionAborted = collectionAborted;
+                BodyEntryCount = bodyEntryCount;
+                ItrQueryCount = itrQueryCount;
+                FormalRuntimeSlotPairKeys = formalRuntimeSlotPairKeys;
+                AttackerSlots = attackerSlots;
+            }
+
+            public List<List<SceneQueryHit>> Sequences { get; }
+            public List<List<RuntimeEntityHandle>> TargetHandles { get; }
+            public List<int> Counts { get; }
+            public uint RngState { get; }
+            public ulong RngCalls { get; }
+            public int FormalPairCount { get; }
+            public int FallbackParticipantCount { get; }
+            public bool CollectionAborted { get; }
+            public int BodyEntryCount { get; }
+            public int ItrQueryCount { get; }
+            public List<long> FormalRuntimeSlotPairKeys { get; }
+            public List<int> AttackerSlots { get; }
+        }
+
+        private sealed class FormalSelfCheckCharacter : LF2Character
+        {
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)LF2ObjectType.Character;
+        }
+
+        private sealed class FormalSelfCheckSpecialAttack : LF2Character
+        {
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)LF2ObjectType.SpecialAttack;
+        }
+
+        private sealed class FormalSelfCheckController : ILF2Controller
+        {
+            public SimInputBuffer InputBuffer { get; set; } = new SimInputBuffer();
+            bool ILF2Controller.IsUp => false;
+            bool ILF2Controller.IsDown => false;
+            bool ILF2Controller.IsLeft => false;
+            bool ILF2Controller.IsRight => false;
+            bool ILF2Controller.IsAttack => false;
+            bool ILF2Controller.IsJump => false;
+            bool ILF2Controller.IsDefend => false;
+            public int Dirv() => 0;
+            public (int dx, int dz) GetMoveInput() => (0, 0);
+            public void SetInputID(int inputId)
+            {
+            }
+        }
+    }
+}
+#endif

@@ -1,0 +1,65 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD.Tests.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteCoarseEnvelope_"
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "fab1ca5016a746af8a9ec0e78754c162",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791409973471,
+        "finished_unix_ms": 1791409988856,
+        "last_update_unix_ms": 1791409988856,
+        "progress": {
+          "completed": 1,
+          "total": 9751,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791409986436,
+          "last_finished_test_full_name": "NTSD",
+          "last_finished_unix_ms": 1791409986769,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 0,
+            "passed": 0,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.3294801,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "NTSD",
+              "fullName": "NTSD",
+              "state": "Passed",
+              "durationSeconds": 0.3294801,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "note": "Wrong namespace Tests vs actual Test; zero selected, not valid RED or PASS."
+}

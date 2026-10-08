@@ -1,0 +1,7 @@
+{
+  "chunk_id": "fcade3",
+  "wall_time_seconds": 1.6371139000000001,
+  "exit_code": 0,
+  "original_token_count": 55,
+  "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"524ca94fa73c440e97249f5f3d404f78\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":false,\"include_failed_tests\":true}}}\r\n"
+}

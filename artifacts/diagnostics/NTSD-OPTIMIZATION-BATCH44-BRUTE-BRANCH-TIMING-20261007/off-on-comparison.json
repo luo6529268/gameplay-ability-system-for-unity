@@ -1,0 +1,88 @@
+[
+  {
+    "workload": "Dispersed1000",
+    "snapshotByteEqual": true,
+    "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+    "logicOff": 80.72716999999992,
+    "logicOn": 133.85719833333332,
+    "collectorOff": 49.413895,
+    "collectorOn": 84.70843166666664,
+    "collectorDeltaMs": 35.294536666666644,
+    "collectorDeltaPercent": 71.42634003384403,
+    "pairLoopOff": 48.80617888888891,
+    "pairLoopOn": 83.68366333333336,
+    "branchMeans": [
+      {
+        "name": "CandidateCollect/BruteCoarse",
+        "average": 14.76083055555556,
+        "p95": 24.351064999999995,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BruteRejectedBinding",
+        "average": 9.692511666666663,
+        "p95": 18.507044999999987,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BrutePairAllowed",
+        "average": 3.836207222222221,
+        "p95": 7.21872,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BruteExactWork",
+        "average": 15.590683888888881,
+        "p95": 32.35391,
+        "samples": 180
+      }
+    ],
+    "branchSum": 43.88023333333332,
+    "inclusiveParentMinusChildren": 39.803430000000034,
+    "productionEquivalentFps": 3.843308555238102,
+    "claim": "instrumented readings only; delta confounded by wall-clock/CPU environment; do not use as pure production branch proportions or optimization gains"
+  },
+  {
+    "workload": "Combat1000",
+    "snapshotByteEqual": true,
+    "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+    "logicOff": 84.1266477777778,
+    "logicOn": 94.37464833333337,
+    "collectorOff": 52.62591944444444,
+    "collectorOn": 63.66040833333334,
+    "collectorDeltaMs": 11.034488888888902,
+    "collectorDeltaPercent": 20.967783566304576,
+    "pairLoopOff": 52.03839499999996,
+    "pairLoopOn": 63.09045444444446,
+    "branchMeans": [
+      {
+        "name": "CandidateCollect/BruteCoarse",
+        "average": 12.932637777777767,
+        "p95": 17.107969999999995,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BruteRejectedBinding",
+        "average": 6.100257222222224,
+        "p95": 7.800104999999999,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BrutePairAllowed",
+        "average": 2.6881866666666663,
+        "p95": 4.27713,
+        "samples": 180
+      },
+      {
+        "name": "CandidateCollect/BruteExactWork",
+        "average": 10.421791666666664,
+        "p95": 17.795379999999998,
+        "samples": 180
+      }
+    ],
+    "branchSum": 32.14287333333332,
+    "inclusiveParentMinusChildren": 30.94758111111114,
+    "productionEquivalentFps": 4.073900065201029,
+    "claim": "instrumented readings only; delta confounded by wall-clock/CPU environment; do not use as pure production branch proportions or optimization gains"
+  }
+]

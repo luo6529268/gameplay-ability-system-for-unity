@@ -1,0 +1,280 @@
+{
+  "allocations": [
+    {
+      "frame": 1865,
+      "driverIndex": 23076,
+      "sampleIndex": 35123,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    },
+    {
+      "frame": 1865,
+      "driverIndex": 23076,
+      "sampleIndex": 35125,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    },
+    {
+      "frame": 1867,
+      "driverIndex": 24885,
+      "sampleIndex": 24893,
+      "bytes": 30,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeRunning()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+          "line": 1210
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeGroundBuiltins()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+          "line": 573
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSD28InputTwoPassModule.ProcessNativeSampledState()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Input\\NTSD28InputTwoPassModule.cs",
+          "line": 83
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RunCharacterInputPasses()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+          "line": 3032
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.NativeProducerSampleAndInputRouteAll()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+          "line": 3021
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.NativeProducerSampleAndInputRoute()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+          "line": 650
+        }
+      ]
+    },
+    {
+      "frame": 1929,
+      "driverIndex": 24311,
+      "sampleIndex": 36358,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    },
+    {
+      "frame": 1929,
+      "driverIndex": 24311,
+      "sampleIndex": 36360,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    },
+    {
+      "frame": 1932,
+      "driverIndex": 24393,
+      "sampleIndex": 36440,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    },
+    {
+      "frame": 1932,
+      "driverIndex": 24393,
+      "sampleIndex": 36442,
+      "bytes": 46,
+      "stackCount": 31,
+      "resolvedHead": [
+        {
+          "method": "mscorlib.dll!System::String.Concat()",
+          "file": "",
+          "line": 0
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 265
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+          "line": 192
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2403
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 2335
+        },
+        {
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+          "line": 1766
+        }
+      ]
+    }
+  ],
+  "bytes": 306,
+  "rootCount": 144,
+  "frames": 73
+}

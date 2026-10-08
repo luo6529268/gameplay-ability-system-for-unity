@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-07T23:42:33.2851876Z",
+  "originalMethodsAndAssertionsSame": true,
+  "actualPassingOwnerMethodSame": true,
+  "writesAfter": [
+    {
+      "sha": "05547FD2284635CD28D3FE6028798AACB4B971CD7448505DBB33DD70BFC4343F",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "bytes": 39016
+    },
+    {
+      "sha": "A5327A9D8C71CF0A00D67615B20E3122D95EB013CE687FC5D5D17F1552F770AC",
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 703732
+    },
+    {
+      "sha": "F7CEFB6AD3E9079A0177ED44CFDE63A06C291E965A141D2DAE955C84FFA0C3AC",
+      "path": "docs/ai/STATE.md",
+      "bytes": 1608017
+    },
+    {
+      "sha": "E9B35A464624444BA6D7C11473BD95133F6B8A089032E748392C6D99F491C7D8",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1541596
+    },
+    {
+      "sha": "D9CFE239AE4167F5005378DFE2AC487A392CE07A792B52193D534670AF2BB835",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 91802
+    },
+    {
+      "sha": "6ED6107F68DBD31AB26B9BD258C1F17F159CCFE404875C6830976AD1A00B243E",
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 137126
+    },
+    {
+      "sha": "D16349AB204836EA404D610F2A6CCBFC1FB3E0CF7D764FC0BD02FFD5C39AB179",
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH61-COARSE-ENVELOPE-BUDGET-20261008.md",
+      "bytes": 3025
+    },
+    {
+      "sha": "0D9BCDABF737609C33D97B588EE09AE2643CAC5BE3FE7F45E2E4B5463E47CBFC",
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "bytes": 6772
+    }
+  ]
+}

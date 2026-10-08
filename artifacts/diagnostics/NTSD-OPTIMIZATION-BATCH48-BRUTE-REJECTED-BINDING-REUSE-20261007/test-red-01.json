@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "fdf1b3c288154b388e655ccf83741459",
+      "status": "running",
+      "mode": "EditMode",
+      "started_unix_ms": 1791383719173,
+      "finished_unix_ms": null,
+      "last_update_unix_ms": 1791383729559,
+      "progress": {
+        "completed": 0,
+        "total": 9577,
+        "current_test_full_name": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+        "current_test_started_unix_ms": 1791383729559,
+        "last_finished_test_full_name": null,
+        "last_finished_unix_ms": null,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

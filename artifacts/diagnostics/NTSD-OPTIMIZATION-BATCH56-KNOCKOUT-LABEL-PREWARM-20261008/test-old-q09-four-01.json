@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "284ff9f0273348f29fbaa7aa66386f43",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791406749704,
+      "finished_unix_ms": 1791406756451,
+      "last_update_unix_ms": 1791406756451,
+      "progress": {
+        "completed": 4,
+        "total": 9719,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791406755912,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q09KnockoutFeedRowSnapshotEditorTests.NativeNameOverridesRequireTenBoundedPayloads",
+        "last_finished_unix_ms": 1791406755942,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.6112546,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "BattleOnlyNamesAndModeGateDoNotUseLocalPlayerSettings",
+            "fullName": "NTSD.Test.Editor.NTSD28Q09KnockoutFeedRowSnapshotEditorTests.BattleOnlyNamesAndModeGateDoNotUseLocalPlayerSettings",
+            "state": "Passed",
+            "durationSeconds": 0.0050081,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CentralOnlyWorkerPublicationCarriesRowsWithoutUnityResourceBinding",
+            "fullName": "NTSD.Test.Editor.NTSD28Q09KnockoutFeedRowSnapshotEditorTests.CentralOnlyWorkerPublicationCarriesRowsWithoutUnityResourceBinding",
+            "state": "Passed",
+            "durationSeconds": 0.0146273,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MissingAndExcludedActorsConsumeRowsWithoutDrawing",
+            "fullName": "NTSD.Test.Editor.NTSD28Q09KnockoutFeedRowSnapshotEditorTests.MissingAndExcludedActorsConsumeRowsWithoutDrawing",
+            "state": "Passed",
+            "durationSeconds": 0.0136325,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeNameOverridesRequireTenBoundedPayloads",
+            "fullName": "NTSD.Test.Editor.NTSD28Q09KnockoutFeedRowSnapshotEditorTests.NativeNameOverridesRequireTenBoundedPayloads",
+            "state": "Passed",
+            "durationSeconds": 0.0304886,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

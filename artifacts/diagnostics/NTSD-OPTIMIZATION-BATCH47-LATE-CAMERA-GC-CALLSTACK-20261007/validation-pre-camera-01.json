@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-07T14:01:22.9577820Z",
+  "command": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "validatorExit": 0,
+  "records": 1343,
+  "governedCodeFiles": 14,
+  "historicalWarningCount": 4257,
+  "errorCount": 0,
+  "diffCommand": "git -c core.safecrlf=false diff --check",
+  "diffExit": 0,
+  "diffMessages": []
+}

@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-07T21:26:22.4048944Z",
+  "actualSharedRequestPath": "Temp/NTSD_ProductionEntityStress.request.json",
+  "actualSharedRequestAbsent": true,
+  "terminalSame": true,
+  "freshWindowsAbsent": true,
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "BEAC09ED3AE7C829F5644A976E16520960B8236F7AF779DCB1A8B31FE1D3A391"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs",
+      "sha256": "8CE190A95FFA3A7A7F0BD9F04C41A3BC39201177B725CC88FD2757A54ACA6404"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "sha256": "D338303119F02F8912735C84F6029AE2A989170BA04AA1C9E68024411D420593"
+    }
+  ]
+}

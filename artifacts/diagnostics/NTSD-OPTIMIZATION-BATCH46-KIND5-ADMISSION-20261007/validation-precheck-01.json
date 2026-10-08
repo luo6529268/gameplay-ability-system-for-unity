@@ -1,0 +1,13 @@
+{
+  "observedUtc": "2026-10-07T13:17:53.7571753Z",
+  "validatorExit": 0,
+  "records": 1342,
+  "governedCodeFilesInDiff": 14,
+  "warningCount": null,
+  "warningCountNote": "parent PowerShell capture did not yield a reliable warning count; zero must not be inferred",
+  "diffCheckExit": 2,
+  "failure": "six new progress append paragraphs have an extra blank line at EOF; preserve this failure and remove only the newly added blank after test terminal",
+  "paths": ["Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md", "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md", "Assets/NTSD/Docs/battle-optimization-progress-tracker.md", "docs/ai/CHANGE-LEDGER.md", "docs/ai/FILE-OPERATIONS/INDEX.md", "docs/ai/STATE.md"],
+  "qualificationJob": "561602e5d8d44aa5b4e8de3849edf287",
+  "observation": "two get_test_job TCP observations timed out; original PID19040 remains live with increasing CPU; no restart or redispatch"
+}

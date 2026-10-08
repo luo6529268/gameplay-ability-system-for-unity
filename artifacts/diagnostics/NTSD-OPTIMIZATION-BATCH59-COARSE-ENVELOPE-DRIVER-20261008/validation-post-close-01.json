@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-07T22:36:49.6430126Z",
+  "validatorCommand": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1355",
+    "  Governed code files in diff: 20"
+  ],
+  "warningCount": 4252,
+  "errorCount": 0,
+  "errors": [],
+  "diffExit": 0,
+  "diffWarnings": 26,
+  "diffErrors": [],
+  "qualificationFileAudit": [
+    {
+      "file": "Combat1000-envelope-parity-ab872bfc38dd46558a7175134a925ee6.json",
+      "same": true
+    },
+    {
+      "file": "Dispersed1000-envelope-parity-7762152ad9dd491eb5515d237e85c6fe.json",
+      "same": true
+    },
+    {
+      "file": "left-x350-envelope-parity-c435e6547b08443288694cd8326b8a0e.json",
+      "same": true
+    },
+    {
+      "file": "right-x550-envelope-parity-9b7ba10c4e4e477ebdf91d2493098846.json",
+      "same": true
+    }
+  ],
+  "green": {
+    "result": "Passed",
+    "total": "8",
+    "passed": "8",
+    "failed": "0",
+    "skipped": "0",
+    "sha256": "F4AB092E77B94B76CBC3F90CA5839A1342FC2669D68942EA358B8D5D2A3111B3"
+  },
+  "fullValidatorStdoutPersisted": false,
+  "newUnityExecution": false
+}

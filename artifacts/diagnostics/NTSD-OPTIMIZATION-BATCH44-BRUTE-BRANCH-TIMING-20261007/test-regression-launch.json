@@ -1,0 +1,29 @@
+{
+  "selection": [
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_PhaseNamesAndCountAreStable",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PhaseIdsAreAppended",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_DefaultIsOff",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_PreservesCandidatesAndRng",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_RejectedPairRecordsCoarseAndBindingOnly",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.BruteBranchTiming_GeometryDisabledDoesNotRecordBranches",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_DefaultOffDoesNotAllocateOrCreateRecorder",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressEditorTests.CandidateCollectDetailTiming_EnablementPreservesSequenceAndRng",
+    "NTSD.Animation.Rendering.Editor.ProductionEntityStressDetailTimingEditorTests",
+    "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests",
+    "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests"
+  ],
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "907233c94c92449d8b8416c73512726b",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

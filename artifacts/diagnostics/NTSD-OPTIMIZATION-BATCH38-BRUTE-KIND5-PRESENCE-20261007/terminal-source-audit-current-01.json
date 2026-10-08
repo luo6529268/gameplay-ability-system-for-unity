@@ -1,0 +1,192 @@
+{
+  "observedUtc": "2026-10-07T13:02:06.5776924Z",
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "F4FF63EDBAEAE62DC34A133C771993C51394E48C7CC1D295F2BC00DFCAD879F6",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "45F33F02FA34B9DAC2ADD2E3DA01BB9D024E51A31A564729632E9124F0E0E647",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "7801F5847ADEDF3BC883102B496842C75DDCB6CA5E4D31E176E25DA166ADC5C9",
+      "equal": true
+    }
+  ],
+  "guards": [
+    {
+      "path": "AGENTS.md",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "equal": true
+    },
+    {
+      "path": "Packages/manifest.json",
+      "equal": true
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "equal": true
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "equal": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "equal": true
+    }
+  ],
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/01-BruteForceSceneQuery.cs",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/03-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/04-CHANGE-LEDGER.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/05-STATE.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/06-CODEX-CURRENT-HANDOFF.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/07-INDEX.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/08-battle-optimization-progress-tracker.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/09-h-07-fresh-1000-ai-certificate.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/10-NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/11-NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038.md",
+      "equal": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/backup/12-Temp-NTSD_ProductionEntityStress.result",
+      "equal": true
+    }
+  ],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "headEqual": true,
+  "sharedRequestAbsent": true,
+  "sharedTerminal": [
+    "PASS",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007\\windows-01\\01-combat1000-kind5-presence\\report.json"
+  ],
+  "originalEditor": {
+    "Id": 19040,
+    "Responding": true,
+    "CPU": 110027.328125
+  }
+}

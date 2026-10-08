@@ -1,0 +1,3710 @@
+{
+    "evidence": "RETAINED_PARTIAL_CAPTURE_DIAGNOSTIC_ONLY; driver marker includes observer Begin/End; no absolute tick mapping or zero-GC/FPS certificate",
+    "marker": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+    "previousFirstFrame": 1565,
+    "previousLastFrame": 1864,
+    "appendedFirstFrame": 1865,
+    "appendedLastFrame": 1937,
+    "scannedFrames": 73,
+    "validMainThreadFrames": 73,
+    "scanComplete": true,
+    "allocationMetadataAndStacksPresent": true,
+    "allocationEvents": 7,
+    "outsideDriverAllocationEvents": 2858883,
+    "envelopes": [
+        {
+            "frameIndex": 1865,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 11029,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 66.14459991455078,
+                "startMs": 1134695074.4894,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1865,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 23076,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 125.74750518798828,
+                "startMs": 1134695141.8404,
+                "children": 33,
+                "recursiveChildren": 12050,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": [
+                {
+                    "index": 35123,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.025699999183416368,
+                    "startMs": 1134695263.6474,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF1AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                },
+                {
+                    "index": 35125,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.00570000009611249,
+                    "startMs": 1134695263.6801,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF3BB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "frameIndex": 1866,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12476,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 128.47579956054688,
+                "startMs": 1134695353.1411,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1866,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24523,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 133.8007049560547,
+                "startMs": 1134695483.4392,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1867,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12838,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 112.64470672607422,
+                "startMs": 1134695706.8109999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1867,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24885,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 129.07179260253907,
+                "startMs": 1134695820.9296,
+                "children": 33,
+                "recursiveChildren": 12049,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": [
+                {
+                    "index": 24893,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.2443999946117401,
+                    "startMs": 1134695843.2796,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 30,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937D4D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE693A611",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE693A471",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6A38658",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69E9A20",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69EB597",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F276C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6AECD84",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6AED848",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A6F4F203A6",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BEB6423",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeRunning()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+                            "line": 1210
+                        },
+                        {
+                            "address": "000001A77BE03A23",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeGroundBuiltins()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+                            "line": 573
+                        },
+                        {
+                            "address": "000001A77B526A4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSD28InputTwoPassModule.ProcessNativeSampledState()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Input\\NTSD28InputTwoPassModule.cs",
+                            "line": 83
+                        },
+                        {
+                            "address": "000001A77B4E192B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RunCharacterInputPasses()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 3032
+                        },
+                        {
+                            "address": "000001A77B4DDD13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.NativeProducerSampleAndInputRouteAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 3021
+                        },
+                        {
+                            "address": "000001A77B4DDC03",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.NativeProducerSampleAndInputRoute()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 650
+                        },
+                        {
+                            "address": "000001A77B4D4003",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "frameIndex": 1868,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12579,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 109.55899810791016,
+                "startMs": 1134696051.2310999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1868,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24626,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.23729705810547,
+                "startMs": 1134696162.4173,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1869,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12689,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 70.39520263671875,
+                "startMs": 1134696302.3392,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1869,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24736,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 71.14459991455078,
+                "startMs": 1134696373.8867,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1870,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12220,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 69.49520111083985,
+                "startMs": 1134696497.6832,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1870,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24267,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.6915054321289,
+                "startMs": 1134696568.3548,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1871,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12308,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 117.7926025390625,
+                "startMs": 1134696695.7516,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1871,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24355,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 134.44920349121095,
+                "startMs": 1134696815.0065,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1872,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12857,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 118.40849304199219,
+                "startMs": 1134697093.254,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1872,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24904,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 105.86740112304688,
+                "startMs": 1134697213.4168,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1873,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12495,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 71.25369262695313,
+                "startMs": 1134697391.8592,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1873,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24542,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 73.44619750976563,
+                "startMs": 1134697464.2932,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1874,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12584,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.05990600585938,
+                "startMs": 1134697591.7742999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1874,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24631,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 88.35379791259766,
+                "startMs": 1134697671.0523999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1875,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12347,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.14729309082031,
+                "startMs": 1134697819.2031999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1875,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24394,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.38980102539063,
+                "startMs": 1134697899.5317,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1876,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.66559600830078,
+                "startMs": 1134698031.3796,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1876,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.42739868164063,
+                "startMs": 1134698111.5558999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1877,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12859,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 74.28620147705078,
+                "startMs": 1134698245.1622999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1877,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24906,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.88590240478516,
+                "startMs": 1134698320.6519,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1878,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12304,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.88960266113281,
+                "startMs": 1134698452.4654999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1878,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24351,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.32889556884766,
+                "startMs": 1134698531.5713,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1879,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12327,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.08070373535156,
+                "startMs": 1134698662.6203,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1879,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24374,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.50900268554688,
+                "startMs": 1134698742.8808,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1880,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12561,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.2406005859375,
+                "startMs": 1134698876.5065,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1880,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24608,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.75139617919922,
+                "startMs": 1134698957.9199,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1881,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12349,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.78700256347656,
+                "startMs": 1134699088.0177999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1881,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24396,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.50390625,
+                "startMs": 1134699170.9798,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1882,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.91889953613281,
+                "startMs": 1134699302.7443,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1882,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 91.41089630126953,
+                "startMs": 1134699384.0275,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1883,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12607,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 153.17190551757813,
+                "startMs": 1134699529.1334,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1883,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24654,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 176.90719604492188,
+                "startMs": 1134699684.1039,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1884,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12602,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 178.06280517578126,
+                "startMs": 1134699966.9219,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1884,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24649,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 162.6427001953125,
+                "startMs": 1134700147.2052999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1885,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 13701,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 146.72409057617188,
+                "startMs": 1134700425.9689,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1885,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 25748,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 114.65910339355469,
+                "startMs": 1134700574.1952999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1886,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12537,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.66590118408203,
+                "startMs": 1134700750.4241,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1886,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24584,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.38520050048828,
+                "startMs": 1134700838.3362,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1887,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12660,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.21809387207031,
+                "startMs": 1134700989.4817,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1887,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24707,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.82319641113281,
+                "startMs": 1134701066.9415,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1888,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12348,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.88259887695313,
+                "startMs": 1134701197.8028999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1888,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24395,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.2116928100586,
+                "startMs": 1134701275.8848999,
+                "children": 33,
+                "recursiveChildren": 12047,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1889,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 82.33430480957031,
+                "startMs": 1134701414.9865,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1889,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.1155014038086,
+                "startMs": 1134701498.5197,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1890,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12605,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.82759857177735,
+                "startMs": 1134701635.6069999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1890,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24652,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 84.87139892578125,
+                "startMs": 1134701715.6476999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1891,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12338,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.81449890136719,
+                "startMs": 1134701852.7589,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1891,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24385,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.9927978515625,
+                "startMs": 1134701941.7575,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1892,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12349,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.8364028930664,
+                "startMs": 1134702076.4607,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1892,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24396,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.4968032836914,
+                "startMs": 1134702157.4754,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1893,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12603,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.34929656982422,
+                "startMs": 1134702292.4399,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1893,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24650,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.1688003540039,
+                "startMs": 1134702373.9524999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1894,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12283,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.42620086669922,
+                "startMs": 1134702504.8632999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1894,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24330,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 82.44259643554688,
+                "startMs": 1134702584.4802,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1895,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12340,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.08190155029297,
+                "startMs": 1134702719.3232,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1895,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24387,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 84.26480102539063,
+                "startMs": 1134702803.5813,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1896,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12605,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.80449676513672,
+                "startMs": 1134702942.0856,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1896,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24652,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.61720275878906,
+                "startMs": 1134703027.0927,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1897,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12323,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.85540008544922,
+                "startMs": 1134703166.4761,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1897,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24370,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.23390197753906,
+                "startMs": 1134703253.5442,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1898,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12369,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.79619598388672,
+                "startMs": 1134703393.3964,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1898,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24416,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.6500015258789,
+                "startMs": 1134703478.3682,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1899,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12603,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 91.34359741210938,
+                "startMs": 1134703619.6749,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1899,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24650,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.85099792480469,
+                "startMs": 1134703712.3241,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1900,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12381,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 90.10929870605469,
+                "startMs": 1134703853.4887,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1900,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24428,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 91.50110626220703,
+                "startMs": 1134703944.7812999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1901,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12348,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 95.2544937133789,
+                "startMs": 1134704089.1887,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1901,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24395,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 91.98310089111328,
+                "startMs": 1134704185.7315,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1902,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12711,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 88.09220123291016,
+                "startMs": 1134704331.9322999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1902,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24758,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.05860137939453,
+                "startMs": 1134704421.2006,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1903,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.29959869384766,
+                "startMs": 1134704561.7756,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1903,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.73280334472656,
+                "startMs": 1134704650.2433,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1904,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12327,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.50399780273438,
+                "startMs": 1134704784.9018,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1904,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24374,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 84.49700164794922,
+                "startMs": 1134704865.6078,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1905,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12603,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.75460052490235,
+                "startMs": 1134705006.7919,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1905,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24650,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 88.96240234375,
+                "startMs": 1134705093.6936999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1906,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12373,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.48790740966797,
+                "startMs": 1134705234.8976999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1906,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24420,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.81220245361328,
+                "startMs": 1134705317.5363,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1907,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12348,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.0958023071289,
+                "startMs": 1134705454.4154,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1907,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24395,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.13880157470703,
+                "startMs": 1134705536.6771,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1908,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12563,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.3175048828125,
+                "startMs": 1134705671.2189,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1908,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24610,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.63939666748047,
+                "startMs": 1134705750.7195,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1909,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12323,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.89859771728516,
+                "startMs": 1134705881.9068,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1909,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24370,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.57140350341797,
+                "startMs": 1134705958.981,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1910,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12341,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.9520034790039,
+                "startMs": 1134706094.5732,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1910,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24388,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.50640106201172,
+                "startMs": 1134706171.7389999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1911,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12561,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.48320007324219,
+                "startMs": 1134706310.1993,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1911,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24608,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.7416000366211,
+                "startMs": 1134706387.85,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1912,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.39839935302735,
+                "startMs": 1134706523.7568999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1912,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 141.8057861328125,
+                "startMs": 1134706600.4009,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1913,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12882,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 138.656494140625,
+                "startMs": 1134706883.8913999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1913,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24929,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 117.3187026977539,
+                "startMs": 1134707024.1901,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1914,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12557,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 113.38929748535156,
+                "startMs": 1134707239.3509,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1914,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24604,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 97.31120300292969,
+                "startMs": 1134707354.2091,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1915,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12775,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.58999633789063,
+                "startMs": 1134707519.2733999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1915,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24822,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.80020141601563,
+                "startMs": 1134707607.3813,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1916,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12281,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.01070404052735,
+                "startMs": 1134707738.5878,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1916,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24328,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.0343017578125,
+                "startMs": 1134707815.8109,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1917,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12348,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.5167007446289,
+                "startMs": 1134707946.802,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1917,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24395,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.04560089111328,
+                "startMs": 1134708026.4905999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1918,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12563,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.14289855957031,
+                "startMs": 1134708157.8151999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1918,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24610,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.63030242919922,
+                "startMs": 1134708236.1835,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1919,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12325,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.64399719238281,
+                "startMs": 1134708365.9717999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1919,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24372,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.1281967163086,
+                "startMs": 1134708444.7904,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1920,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12345,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.6531982421875,
+                "startMs": 1134708579.3328,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1920,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24392,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 82.92140197753906,
+                "startMs": 1134708662.1755,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1921,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12607,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.64540100097656,
+                "startMs": 1134708800.8452,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1921,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24654,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.33999633789063,
+                "startMs": 1134708879.6682,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1922,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12281,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 72.35729217529297,
+                "startMs": 1134709007.7470999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1922,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24328,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 74.69969940185547,
+                "startMs": 1134709081.2712999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1923,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12308,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 72.14140319824219,
+                "startMs": 1134709208.3316999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1923,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24355,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 72.37689208984375,
+                "startMs": 1134709281.6404,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1924,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12544,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 72.03559875488281,
+                "startMs": 1134709405.6519,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1924,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24591,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.45279693603516,
+                "startMs": 1134709478.8523,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1925,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12298,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.70819854736328,
+                "startMs": 1134709607.7735,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1925,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24345,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.91849517822266,
+                "startMs": 1134709688.6901,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1926,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12345,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 75.28019714355469,
+                "startMs": 1134709819.3922,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1926,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24392,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 76.56390380859375,
+                "startMs": 1134709895.8487,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1927,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12565,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.30590057373047,
+                "startMs": 1134710024.274,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1927,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24612,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 79.74340057373047,
+                "startMs": 1134710104.7674,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1928,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12285,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 70.80120086669922,
+                "startMs": 1134710238.3948999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1928,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24332,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 73.34529876708985,
+                "startMs": 1134710310.3616,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1929,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12264,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.20279693603516,
+                "startMs": 1134710437.8502999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1929,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24311,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.73580169677735,
+                "startMs": 1134710517.231,
+                "children": 33,
+                "recursiveChildren": 12050,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": [
+                {
+                    "index": 36358,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.023900000378489496,
+                    "startMs": 1134710593.1408,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF1AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                },
+                {
+                    "index": 36360,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.0032999999821186067,
+                    "startMs": 1134710593.1718,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF3BB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "frameIndex": 1930,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12605,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.63700103759766,
+                "startMs": 1134710647.1234999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1930,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24652,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 80.02710723876953,
+                "startMs": 1134710725.9445999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1931,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12298,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.29679870605469,
+                "startMs": 1134710855.7152999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1931,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24345,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 77.53040313720703,
+                "startMs": 1134710938.2015,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1932,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12346,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 73.89179992675781,
+                "startMs": 1134711065.5500999,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1932,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24393,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.17769622802735,
+                "startMs": 1134711140.6313,
+                "children": 33,
+                "recursiveChildren": 12050,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": [
+                {
+                    "index": 36440,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.020999999716877939,
+                    "startMs": 1134711224.0003,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF1AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                },
+                {
+                    "index": 36442,
+                    "name": "GC.Alloc",
+                    "inclusiveMs": 0.003100000089034438,
+                    "startMs": 1134711224.0253,
+                    "children": 0,
+                    "recursiveChildren": 0,
+                    "metadataCount": 1,
+                    "gcAllocBytes": 46,
+                    "gcCallstack": [
+                        {
+                            "address": "00007FF6B06A9E7D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B166E140",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B04202F9",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FF6B05A913D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69CFA05",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE6937CA2",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE689D80D",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A76B1DE132",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A75E6FE93B",
+                            "method": "mscorlib.dll!System::String.Concat()",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "000001A77BF9C1DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.BuildName()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 265
+                        },
+                        {
+                            "address": "000001A77BEEF3BB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattleKnockoutFeedRowProjection.Project()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+                            "line": 192
+                        },
+                        {
+                            "address": "000001A77BEE0D13",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureAndBuild()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2403
+                        },
+                        {
+                            "address": "000001A77BED44DB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.CaptureBuildAndPublishFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 2335
+                        },
+                        {
+                            "address": "000001A77BED19C3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrameCore()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1766
+                        },
+                        {
+                            "address": "000001A77BED036B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation.Presentation::BattlePresentationCoordinator.BeginFrame()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+                            "line": 1726
+                        },
+                        {
+                            "address": "000001A77BE9E563",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationStageRenderModule.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Stage\\SimulationStageRenderModule.cs",
+                            "line": 384
+                        },
+                        {
+                            "address": "000001A77BE9DFBB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RenderDispatchAll()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+                            "line": 1770
+                        },
+                        {
+                            "address": "000001A77BE9DE63",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RenderDispatch()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 768
+                        },
+                        {
+                            "address": "000001A77BE787CB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunPresentationAndCleanupPhase()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 522
+                        },
+                        {
+                            "address": "000001A77B4D43EB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 310
+                        },
+                        {
+                            "address": "000001A77B4D2A73",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 286
+                        },
+                        {
+                            "address": "000001A77B4D28AB",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+                            "line": 275
+                        },
+                        {
+                            "address": "000001A77B4CAB43",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 637
+                        },
+                        {
+                            "address": "000001A77B4C74A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 581
+                        },
+                        {
+                            "address": "000001A77B4C6B4B",
+                            "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+                            "line": 2394
+                        },
+                        {
+                            "address": "000001A77B4C52A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 6150
+                        },
+                        {
+                            "address": "000001A7705453A3",
+                            "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+                            "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+                            "line": 5721
+                        },
+                        {
+                            "address": "000001A76F826408",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE69F4B7E",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D204",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        },
+                        {
+                            "address": "00007FFEE692D37C",
+                            "method": "",
+                            "file": "",
+                            "line": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "frameIndex": 1933,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12607,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 83.39430236816406,
+                "startMs": 1134711282.0888,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1933,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24654,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.93280029296875,
+                "startMs": 1134711366.6445,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1934,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12323,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 78.72039794921875,
+                "startMs": 1134711499.2149,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1934,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24370,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 81.94840240478516,
+                "startMs": 1134711579.125,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1935,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12306,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 87.83369445800781,
+                "startMs": 1134711711.3696,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1935,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24353,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 90.014892578125,
+                "startMs": 1134711800.3899999,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1936,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 12669,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 85.85489654541016,
+                "startMs": 1134711941.2912,
+                "children": 33,
+                "recursiveChildren": 12039,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        },
+        {
+            "frameIndex": 1936,
+            "threadName": "Main Thread",
+            "driver": {
+                "index": 24716,
+                "name": "NTSD.ProductionEntityStress.Driver.StepOneTick",
+                "inclusiveMs": 86.78359985351563,
+                "startMs": 1134712028.3151,
+                "children": 33,
+                "recursiveChildren": 12046,
+                "metadataCount": 0,
+                "gcAllocBytes": -1,
+                "gcCallstack": []
+            },
+            "allocations": []
+        }
+    ]
+}

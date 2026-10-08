@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-07T17:14:31.0434634Z",
+  "validatorCommand": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity",
+  "validatorExit": 0,
+  "validatorLineCount": 4274,
+  "validatorSummary": [
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/src/client/preview-renderer.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/src/client/render-cadence-sampler.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/render-cadence-sampler.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/preview-renderer.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/client-project-contract.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WEB-PREVIEW-PRESENTATION-002 declares Tools/DatSkillFlowWeb/tests/unit/project-open-lifecycle.test.ts, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+  ],
+  "validatorErrors": [],
+  "diffCommand": "git -c core.safecrlf=false diff --check",
+  "diffExit": 0,
+  "diffOutput": []
+}

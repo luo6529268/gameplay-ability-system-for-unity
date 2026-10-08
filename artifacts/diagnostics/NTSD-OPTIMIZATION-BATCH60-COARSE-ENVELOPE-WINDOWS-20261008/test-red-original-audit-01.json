@@ -1,0 +1,161 @@
+{
+  "utc": "2026-10-07T22:47:29.8318437Z",
+  "source": "Temp/Goal18_LastTestResults.xml",
+  "copy": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008/test-red-original-01.xml",
+  "bytes": 46168,
+  "sha256": "4F3FA0DA3E6230351FD5C0070A3060D64A6EAD3445BEE256E73E89E15EF22E56",
+  "copyMatches": true,
+  "result": "Failed",
+  "total": "29",
+  "passed": "0",
+  "failed": "29",
+  "skipped": "0",
+  "duration": "2.120426",
+  "cases": [
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ApplyCompleteRestoresAndPreservesProductionFlags(False)",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ApplyCompleteRestoresAndPreservesProductionFlags(True)",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_CompleteRejectsDriftAndRestoreStillWorks(False)",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_CompleteRejectsDriftAndRestoreStillWorks(True)",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_MenuPreservesLegacySignatureAndColdOwnership",
+      "result": "Failed",
+      "failure": "  BeginBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeDefaultsFalseAndRoutesFourRequestsBeforeScope",
+      "result": "Failed",
+      "failure": "  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(0)",
+      "result": "Failed",
+      "failure": "  startingCoarseEnvelopeWindow\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(1)",
+      "result": "Failed",
+      "failure": "  startingCoarseEnvelopeWindow\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(2)",
+      "result": "Failed",
+      "failure": "  startingCoarseEnvelopeWindow\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(3)",
+      "result": "Failed",
+      "failure": "  startingCoarseEnvelopeWindow\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ObservationRecordsMaximumNotFabricatedTickTotals",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ObservationRequiresRealActivityAndRestoration(False,0L,0L,True)",
+      "result": "Failed",
+      "failure": "  CoarseEnvelopeObservationValid required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ObservationRequiresRealActivityAndRestoration(True,0L,0L,False)",
+      "result": "Failed",
+      "failure": "  CoarseEnvelopeObservationValid required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ObservationRequiresRealActivityAndRestoration(True,12L,4L,True)",
+      "result": "Failed",
+      "failure": "  CoarseEnvelopeObservationValid required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ObservationRequiresRealActivityAndRestoration(True,12L,0L,False)",
+      "result": "Failed",
+      "failure": "  CoarseEnvelopeObservationValid required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteKind5PresenceForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteEligibilityReuseForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteRejectedBindingReuseForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseDispatchForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteBranchTimingForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseEnvelopeForDiagnostics\")",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RejectsSecondOwnerWithoutChangingEitherFlag",
+      "result": "Failed",
+      "failure": "  ApplyBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RestorePriorValueReleasesOwnerAndIsIdempotent(False)",
+      "result": "Failed",
+      "failure": "  RestoreBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_RestorePriorValueReleasesOwnerAndIsIdempotent(True)",
+      "result": "Failed",
+      "failure": "  RestoreBruteCoarseEnvelope required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelopeRequest_OnlyChangesOutputFromProductionSmoke(0)",
+      "result": "Failed",
+      "failure": "  BuildBruteCoarseEnvelopeRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelopeRequest_OnlyChangesOutputFromProductionSmoke(1)",
+      "result": "Failed",
+      "failure": "  BuildBruteCoarseEnvelopeRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelopeRequest_OnlyChangesOutputFromProductionSmoke(2)",
+      "result": "Failed",
+      "failure": "  BuildBruteCoarseEnvelopeRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelopeRequest_OnlyChangesOutputFromProductionSmoke(3)",
+      "result": "Failed",
+      "failure": "  BuildBruteCoarseEnvelopeRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelopeRequest_RejectsOutsideFixedOffOnMatrix",
+      "result": "Failed",
+      "failure": "  BuildBruteCoarseEnvelopeRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    }
+  ]
+}

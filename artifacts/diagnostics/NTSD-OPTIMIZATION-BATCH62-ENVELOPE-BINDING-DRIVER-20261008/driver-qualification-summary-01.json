@@ -1,0 +1,112 @@
+{
+  "utc": "2026-10-08T00:13:23.6253369Z",
+  "total": "8",
+  "passed": "8",
+  "failed": "0",
+  "skipped": "0",
+  "duration": "494.817868",
+  "start": "2026-10-08 00:03:57Z",
+  "end": "2026-10-08 00:12:12Z",
+  "cases": [
+    {
+      "name": "EnvelopeBindingPreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+      "result": "Passed"
+    },
+    {
+      "name": "EnvelopeBindingPreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+      "result": "Passed"
+    },
+    {
+      "name": "EnvelopeBindingQualificationDoesNotPromoteDefaults",
+      "result": "Passed"
+    },
+    {
+      "name": "EnvelopeBindingThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+      "result": "Passed"
+    },
+    {
+      "name": "EnvelopeBindingThousandCanonicalAiPreservesEveryTick(Combat1000)",
+      "result": "Passed"
+    },
+    {
+      "name": "OrdinaryBruteDefaultsEnableAdmittedFastPath",
+      "result": "Passed"
+    },
+    {
+      "name": "ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(0)",
+      "result": "Passed"
+    },
+    {
+      "name": "ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+      "result": "Passed"
+    }
+  ],
+  "xmlBytes": 7193881,
+  "xmlSha": "2658642E7F5A09A943AA513AECC3AF43189C782BD8A51571AD7813F59C974A9B",
+  "rows": [
+    {
+      "name": "Combat1000-envelope-binding-parity-41d4ec327af446d39337dab5ba537b38.json",
+      "bytes": 137696,
+      "sha": "C9181D132ADDE91C5D91175A6287A5D2E1CD32F60F8F206055CAA03CD088FD0D",
+      "pairedTicks": 32,
+      "differences": [],
+      "baselineEnvelope": 32,
+      "baselineBindingApplied": 0,
+      "candidateBindingApplied": 32,
+      "baselineProbes": 0,
+      "baselineReuses": 0,
+      "candidateProbes": 32000,
+      "candidateReuses": 9760678,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "name": "Dispersed1000-envelope-binding-parity-f58309c62929468596d541bb42399e3a.json",
+      "bytes": 137690,
+      "sha": "6E4EC19FF0C4BF16171C9F55B4BB67969D583593CE30BF9A4CB6F89C0B258F06",
+      "pairedTicks": 32,
+      "differences": [],
+      "baselineEnvelope": 32,
+      "baselineBindingApplied": 0,
+      "candidateBindingApplied": 32,
+      "baselineProbes": 0,
+      "baselineReuses": 0,
+      "candidateProbes": 32000,
+      "candidateReuses": 10928860,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "name": "left-x350-envelope-binding-parity-358e0db2dc234750b2e81917bd4035a3.json",
+      "bytes": 49451,
+      "sha": "C58501718A8584C63D4B89FAC15BBE43FDA5D8B5034817170D34D0A141BCC6D5",
+      "pairedTicks": 12,
+      "differences": [],
+      "baselineEnvelope": 12,
+      "baselineBindingApplied": 0,
+      "candidateBindingApplied": 12,
+      "baselineProbes": 0,
+      "baselineReuses": 0,
+      "candidateProbes": 11,
+      "candidateReuses": 3,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "name": "right-x550-envelope-binding-parity-9068289f952c4e0491d5a4def10a2e67.json",
+      "bytes": 49451,
+      "sha": "D906F8A05F7339988D971CFB17C7D400652EB119993325431984EF4E5C0F5DE1",
+      "pairedTicks": 12,
+      "differences": [],
+      "baselineEnvelope": 12,
+      "baselineBindingApplied": 0,
+      "candidateBindingApplied": 12,
+      "baselineProbes": 0,
+      "baselineReuses": 0,
+      "candidateProbes": 13,
+      "candidateReuses": 3,
+      "noFallback": true,
+      "performanceEvidence": false
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "9bf1610fe75949949c5225f9d1cccbad",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791359252366,
+      "finished_unix_ms": 1791359355680,
+      "last_update_unix_ms": 1791359355680,
+      "progress": {
+        "completed": 7,
+        "total": 9450,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791359330430,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ThousandCanonicalAiFullDriverPreservesEveryTick(Combat1000)",
+        "last_finished_unix_ms": 1791359350736,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OffAndOnPreserveApplicableFormalRootTraceAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+            "message": "System.InvalidOperationException : Extended checksums require a MobileExtended or DesktopExtended world."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OffAndOnPreserveApplicableFormalRootTraceAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+            "message": "System.InvalidOperationException : Extended checksums require a MobileExtended or DesktopExtended world."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(0)",
+            "message": "  ordinary production request entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+            "message": "  ordinary production request entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ThousandCanonicalAiFullDriverPreservesEveryTick(Dispersed1000)",
+            "message": "System.InvalidOperationException : The battle AI execution profile must be configured before entities are registered."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ThousandCanonicalAiFullDriverPreservesEveryTick(Combat1000)",
+            "message": "System.InvalidOperationException : The battle AI execution profile must be configured before entities are registered."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "utc": "2026-10-07T21:50:11.1399220Z",
+  "copies": [
+    {
+      "source": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/01-BruteForceSceneQuery.cs",
+      "sha256": "8540EA267D6FED8705B38B81244A3D97A4A815977B47BA691CAFC0AE547E5F56",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "D37FA3BE2A372097025B0EEBD3DC40B509E9DDF08B1E314309A9CB3834890B00",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "sha256": "17BA89DA6D93A906AB6E8B1222813E5181804F24A6C632FFF55A904EC9D52C61",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/04-STATE.md",
+      "sha256": "D3699AAE3111E37AA2932FAD3C4AF7F474625FB2773C3ED664E4B07D4A3FA3B7",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "87513B2F6F997AC5F785EA47716AACD9703AC409CAF2C6725A248AB765CCCADB",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/06-INDEX.md",
+      "sha256": "72BF1CDBF35814098CE24585F4B5A2B4F8FB1AF7F60009CDEB80FF99FA4934D4",
+      "same": true,
+      "matchesBefore": false,
+      "note": "After planned-index append; old body preserved in source and normalized pre-index snapshot"
+    },
+    {
+      "source": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "sha256": "33B7E1D7E674CE02042D3DD68E90D00CE8C65DFC3F6DD6D59D54516DFCD9F883",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    },
+    {
+      "source": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008.md",
+      "sha256": "9CFC117F8A13C21620F049F3ED9BAE048B85E11B4B7955D56DE5637B96AC0B15",
+      "same": true,
+      "matchesBefore": true,
+      "note": "Exact current-dirty before source edit"
+    }
+  ]
+}

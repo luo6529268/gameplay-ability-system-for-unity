@@ -1,0 +1,141 @@
+{
+    "outputRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\camera-01\\",
+    "status": "NO_EVENT_OBSERVED",
+    "stopReason": "eight-completed-cameras",
+    "error": "",
+    "recording": false,
+    "finishPending": true,
+    "settingsRestored": true,
+    "startLastFrame": 65,
+    "connectionId": -1,
+    "capturedFrames": 0,
+    "frameIndices": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "warmupTicks": 0,
+    "sampleTickAtStart": 0,
+    "activeAiAtStart": 0,
+    "baseRosterAtStart": 0,
+    "deadline": 239968.3126985,
+    "before": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0,
+        "maximumBufferedBytes": 536870912
+    },
+    "after": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0,
+        "maximumBufferedBytes": 536870912
+    },
+    "validMainThreadFrames": 0,
+    "exportedThreadFrames": 0,
+    "threadScanLimitReached": false,
+    "cameraEnvelopeMode": true,
+    "cameraEnvelopeOpen": false,
+    "cameraBoundariesValid": true,
+    "completedCameras": 1800,
+    "cameraBoundaries": [
+        {
+            "ordinal": 1793,
+            "beginUnityFrame": 5093,
+            "endUnityFrame": 5093,
+            "beginLogicTick": 1315,
+            "endLogicTick": 1315,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1794,
+            "beginUnityFrame": 5094,
+            "endUnityFrame": 5094,
+            "beginLogicTick": 1316,
+            "endLogicTick": 1316,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1795,
+            "beginUnityFrame": 5095,
+            "endUnityFrame": 5095,
+            "beginLogicTick": 1317,
+            "endLogicTick": 1317,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1796,
+            "beginUnityFrame": 5096,
+            "endUnityFrame": 5096,
+            "beginLogicTick": 1318,
+            "endLogicTick": 1318,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1797,
+            "beginUnityFrame": 5097,
+            "endUnityFrame": 5097,
+            "beginLogicTick": 1318,
+            "endLogicTick": 1318,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1798,
+            "beginUnityFrame": 5098,
+            "endUnityFrame": 5098,
+            "beginLogicTick": 1319,
+            "endLogicTick": 1319,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1799,
+            "beginUnityFrame": 5099,
+            "endUnityFrame": 5099,
+            "beginLogicTick": 1320,
+            "endLogicTick": 1320,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 1800,
+            "beginUnityFrame": 5100,
+            "endUnityFrame": 5100,
+            "beginLogicTick": 1320,
+            "endLogicTick": 1320,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        }
+    ],
+    "importedFirstFrame": -1,
+    "importedLastFrame": -1,
+    "exportedCameraEnvelopes": 0,
+    "allocationCountsMatch": false,
+    "allocationCallstacksPresent": false,
+    "lateCameraMode": true,
+    "triggerOrdinal": 0,
+    "historyCapacity": 300,
+    "previousHistorySaved": true
+}

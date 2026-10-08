@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-07T19:55:01.3371047Z",
+  "guardCount": 69,
+  "guardDifferences": [],
+  "backupCount": 11,
+  "backupDifferences": [],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "3838B133247C5835A8DE71EAD2BABCA75720475E88D9E01D342B913B6C1ACE25",
+      "bytes": 54759
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs",
+      "sha256": "E6C99D13964A441AA143F8B42752993D8D1CAD0CC3583646BD85B8BBA56F6F54",
+      "bytes": 6788
+    }
+  ],
+  "sharedRequestJsonPresent": false
+}

@@ -1,0 +1,8 @@
+{
+  "status": "success",
+  "result": {
+    "success": false,
+    "code": "Roslyn (Microsoft.CodeAnalysis) is not available. Install it via NuGet or use compiler='codedom'.",
+    "error": "Roslyn (Microsoft.CodeAnalysis) is not available. Install it via NuGet or use compiler='codedom'."
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EligibilityReusePreservesApplicableFormalRootAndEveryTick",
+        "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EligibilityReuseThousandCanonicalAiPreservesEveryTick"
+      ],
+      "includeDetails": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "ed1a5d70ad134798bf6c1ddb91d413a5",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

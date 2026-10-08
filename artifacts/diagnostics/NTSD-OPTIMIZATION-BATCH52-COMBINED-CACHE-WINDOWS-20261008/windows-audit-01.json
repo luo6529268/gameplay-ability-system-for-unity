@@ -1,0 +1,2792 @@
+{
+  "utc": "2026-10-07T17:08:14.2380739Z",
+  "suiteSha": "570A703CB28CC28410E2324063BB3DA7078B357876B18A3502BA96071DC49556",
+  "suiteSummary": {
+    "phase": "DONE",
+    "status": "MEASUREMENTS_COMPLETED",
+    "completedRuns": 4,
+    "error": "",
+    "orderedShutdown": true,
+    "remainingObjects": 0,
+    "remainingSlots": 0,
+    "remainingBorrowers": 0,
+    "battleSceneUnchanged": true,
+    "originalSceneRestored": true,
+    "originalScene": "Assets/NTSD/Scene/NTSD_Menu.unity"
+  },
+  "rows": [
+    {
+      "action": "dispersed1000",
+      "kind5Enabled": false,
+      "report": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/windows-01/00-dispersed1000-kind5-off/report.json",
+      "reportSha": "8C93C96469656B0333C72EBA3C1977F083965B6FB00C91E493BF0AFCD3E041AD",
+      "valid": true,
+      "status": "StoppedCleanly",
+      "performanceVerdict": "EvidenceOnlyNoThreshold",
+      "sample": 180,
+      "warm": 120,
+      "observedAi": 1000,
+      "observedRoster": 1000,
+      "eligibilityDelta": 300,
+      "kind5Delta": 0,
+      "maximumSkippedScans": 0,
+      "flagsApplied": true,
+      "flagsRestored": true,
+      "cacheDelta": 300,
+      "cacheFallbackDelta": 0,
+      "geometryDelta": 300,
+      "defaultsUnchanged": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 92.62411055555555,
+        "maximum": 217.6109,
+        "p95": 139.016665,
+        "p99": 167.48240400000014
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 53.40596333333336,
+        "maximum": 114.92500000000001,
+        "p95": 78.99755999999998,
+        "p99": 96.4592780000001
+      },
+      "pairExactLoop": {
+        "available": true,
+        "unit": "ms",
+        "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 52.49172444444442,
+        "maximum": 103.13510000000001,
+        "p95": 78.15044499999998,
+        "p99": 95.16410900000008
+      },
+      "frame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 368.2517809669177,
+        "maximum": 3952.827215194702,
+        "p95": 902.9623687267299,
+        "p99": 1350.1549458503696
+      },
+      "cpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 235.82730224719097,
+        "maximum": 430.8004,
+        "p95": 346.7207599999999,
+        "p99": 409.0397600000001
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 84,
+        "average": 0.9415801904761905,
+        "maximum": 4.134912,
+        "p95": 2.5969664,
+        "p99": 3.7379993600000008
+      },
+      "setPass": {
+        "available": true,
+        "unit": "count",
+        "source": "Continuously running ProfilerRecorder Render/SetPass Calls Count; LastValue is read at the next MonoBehaviour.Update for the previously completed rendered frame. Resolved category: Render.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1994.314606741573,
+        "maximum": 2032,
+        "p95": 2027.4,
+        "p99": 2032
+      },
+      "submissionDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1991.2808988764045,
+        "maximum": 2029,
+        "p95": 2024.4,
+        "p99": 2029
+      },
+      "drop": 1293,
+      "gcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "rawGc": true,
+      "tick": 300,
+      "lockstepTick": 300,
+      "hashes": {
+        "finalParityInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalParityRngHash": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+        "finalParityMetadataHash": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+        "finalParityWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalParitySlotsHash": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2",
+        "finalParityARestHash": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+        "finalParityVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalParityStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalParityEventsHash": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+        "finalParityOverallHash": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64",
+        "finalLockstepInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalLockstepRngHash": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+        "finalLockstepMetadataHash": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c",
+        "finalLockstepWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalLockstepSlotsHash": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676",
+        "finalLockstepARestHash": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+        "finalLockstepVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalLockstepStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalLockstepEventsHash": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+        "finalLockstepOverallHash": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+      },
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008\\windows-01\\00-dispersed1000-kind5-off\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 10,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 10,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 1040,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=10->1050 (delta=1040; doesNotAffectRestored=True)"
+      },
+      "phaseTimings": [
+        {
+          "phase": "BattleFlow",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.35635055555555556,
+            "maximum": 1.4669,
+            "p95": 0.5228299999999998,
+            "p99": 1.1042710000000004
+          }
+        },
+        {
+          "phase": "Cooldown",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "HumanInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.24720833333333334,
+            "maximum": 1.7726000000000002,
+            "p95": 0.34164999999999995,
+            "p99": 0.8400980000000067
+          }
+        },
+        {
+          "phase": "RuntimeMaintenance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.24632722222222242,
+            "maximum": 0.8176,
+            "p95": 0.6076749999999982,
+            "p99": 0.7918260000000003
+          }
+        },
+        {
+          "phase": "InputClear",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CharacterInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 14.086252777777771,
+            "maximum": 61.4878,
+            "p95": 23.321274999999975,
+            "p99": 37.91137900000006
+          }
+        },
+        {
+          "phase": "NativeTeleport",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.12851333333333337,
+            "maximum": 1.0213,
+            "p95": 0.4216349999999999,
+            "p99": 0.7156380000000012
+          }
+        },
+        {
+          "phase": "FrameMotion",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.428668333333333,
+            "maximum": 5.916,
+            "p95": 3.58709,
+            "p99": 4.70109800000001
+          }
+        },
+        {
+          "phase": "FrameAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.819226111111111,
+            "maximum": 2.3423000000000003,
+            "p95": 1.232114999999999,
+            "p99": 2.0593660000000016
+          }
+        },
+        {
+          "phase": "Revival",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2748338888888887,
+            "maximum": 1.8976000000000002,
+            "p95": 0.62131,
+            "p99": 1.0942250000000022
+          }
+        },
+        {
+          "phase": "StageBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.8379361111111112,
+            "maximum": 3.5535,
+            "p95": 1.3546099999999999,
+            "p99": 2.1079390000000013
+          }
+        },
+        {
+          "phase": "PreInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.6704466666666662,
+            "maximum": 7.0064,
+            "p95": 2.881,
+            "p99": 5.561769000000005
+          }
+        },
+        {
+          "phase": "HeldProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2581788888888889,
+            "maximum": 1.1812,
+            "p95": 0.489735,
+            "p99": 0.9223560000000017
+          }
+        },
+        {
+          "phase": "CollisionSnapshot",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.4215594444444444,
+            "maximum": 0.9279000000000001,
+            "p95": 0.6261549999999996,
+            "p99": 0.8857670000000004
+          }
+        },
+        {
+          "phase": "PairVRest",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2344083333333333,
+            "maximum": 1.1469,
+            "p95": 0.4595299999999995,
+            "p99": 0.9677860000000007
+          }
+        },
+        {
+          "phase": "CandidateCollect",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 53.40596333333336,
+            "maximum": 114.92500000000001,
+            "p95": 78.99755999999998,
+            "p99": 96.4592780000001
+          }
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 3.4306222222222225,
+            "maximum": 11.577300000000001,
+            "p95": 8.05822,
+            "p99": 10.141970000000015
+          }
+        },
+        {
+          "phase": "RandomWeaponDrop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.255165,
+            "maximum": 1.3453000000000002,
+            "p95": 0.48947499999999977,
+            "p99": 0.8562270000000005
+          }
+        },
+        {
+          "phase": "ObjectHitConsume",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.23068555555555556,
+            "maximum": 0.7942,
+            "p95": 0.3394799999999992,
+            "p99": 0.5747730000000015
+          }
+        },
+        {
+          "phase": "CandidateConsumptionEnd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.04412500000000001,
+            "maximum": 0.11900000000000001,
+            "p95": 0.066025,
+            "p99": 0.10613200000000007
+          }
+        },
+        {
+          "phase": "PreFrameBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.5820338888888887,
+            "maximum": 2.0007,
+            "p95": 0.8901149999999982,
+            "p99": 1.5750030000000013
+          }
+        },
+        {
+          "phase": "Stage",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0013166666666666676,
+            "maximum": 0.010100000000000001,
+            "p95": 0.0020049999999999985,
+            "p99": 0.005
+          }
+        },
+        {
+          "phase": "RenderDispatch",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.2621405555555556,
+            "maximum": 11.494200000000001,
+            "p95": 2.9653099999999983,
+            "p99": 5.9334660000000135
+          }
+        },
+        {
+          "phase": "FramePostProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.19979777777777769,
+            "maximum": 1.6124,
+            "p95": 0.28613499999999964,
+            "p99": 0.49840700000000004
+          }
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 7.265834999999999,
+            "maximum": 17.316000000000003,
+            "p95": 14.562244999999999,
+            "p99": 16.790585000000007
+          }
+        },
+        {
+          "phase": "RandomWeaponDropTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.001284444444444445,
+            "maximum": 0.0362,
+            "p95": 0.0019,
+            "p99": 0.004421000000000001
+          }
+        },
+        {
+          "phase": "EntityPostFrameTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2190244444444444,
+            "maximum": 0.7352000000000001,
+            "p95": 0.32309999999999983,
+            "p99": 0.5973880000000014
+          }
+        },
+        {
+          "phase": "BattleResults",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.14239055555555555,
+            "maximum": 0.44020000000000004,
+            "p95": 0.2409749999999997,
+            "p99": 0.41964600000000024
+          }
+        },
+        {
+          "phase": "NativeSparkAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.18040277777777775,
+            "maximum": 0.5871000000000001,
+            "p95": 0.2816499999999999,
+            "p99": 0.5088850000000006
+          }
+        },
+        {
+          "phase": "NestedPhysics",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.3402861111111117,
+            "maximum": 9.5472,
+            "p95": 4.58859,
+            "p99": 7.796485000000006
+          }
+        },
+        {
+          "phase": "ActiveWeaponCount",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.39147055555555565,
+            "maximum": 2.6549,
+            "p95": 0.9284349999999989,
+            "p99": 1.4999920000000009
+          }
+        },
+        {
+          "phase": "NativeResourceTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0006900000000000002,
+            "maximum": 0.0032,
+            "p95": 0.0015,
+            "p99": 0.0024470000000000056
+          }
+        },
+        {
+          "phase": "NativeFrameTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0005555555555555557,
+            "maximum": 0.033100000000000004,
+            "p95": 0.0006049999999999983,
+            "p99": 0.0022340000000000432
+          }
+        }
+      ],
+      "platform": "WindowsEditor"
+    },
+    {
+      "action": "dispersed1000",
+      "kind5Enabled": true,
+      "report": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/windows-01/01-dispersed1000-kind5-on/report.json",
+      "reportSha": "31DA4CE8843FC0CE30617B9ADA209F7658C011B377F271EB4B317C231BB82CD0",
+      "valid": true,
+      "status": "StoppedCleanly",
+      "performanceVerdict": "EvidenceOnlyNoThreshold",
+      "sample": 180,
+      "warm": 120,
+      "observedAi": 1000,
+      "observedRoster": 1000,
+      "eligibilityDelta": 300,
+      "kind5Delta": 300,
+      "maximumSkippedScans": 145753,
+      "flagsApplied": true,
+      "flagsRestored": true,
+      "cacheDelta": 300,
+      "cacheFallbackDelta": 0,
+      "geometryDelta": 300,
+      "defaultsUnchanged": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 117.74403166666663,
+        "maximum": 212.1712,
+        "p95": 162.29337999999996,
+        "p99": 183.25285500000012
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 62.76971166666669,
+        "maximum": 127.04990000000001,
+        "p95": 88.78200000000001,
+        "p99": 95.92641200000003
+      },
+      "pairExactLoop": {
+        "available": true,
+        "unit": "ms",
+        "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 61.50569222222224,
+        "maximum": 126.10950000000001,
+        "p95": 87.71763,
+        "p99": 93.98521300000002
+      },
+      "frame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 341.1293897032738,
+        "maximum": 1332.0282697677612,
+        "p95": 575.0154733657836,
+        "p99": 718.0160075426098
+      },
+      "cpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 310.4470910112359,
+        "maximum": 499.0022,
+        "p95": 401.90623999999997,
+        "p99": 486.67322400000006
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 86,
+        "average": 1.378470697674419,
+        "maximum": 9.21088,
+        "p95": 4.175616,
+        "p99": 6.006937600000022
+      },
+      "setPass": {
+        "available": true,
+        "unit": "count",
+        "source": "Continuously running ProfilerRecorder Render/SetPass Calls Count; LastValue is read at the next MonoBehaviour.Update for the previously completed rendered frame. Resolved category: Render.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1994.314606741573,
+        "maximum": 2032,
+        "p95": 2027.4,
+        "p99": 2032
+      },
+      "submissionDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1991.2808988764045,
+        "maximum": 2029,
+        "p95": 2024.4,
+        "p99": 2029
+      },
+      "drop": 1181,
+      "gcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "rawGc": true,
+      "tick": 300,
+      "lockstepTick": 300,
+      "hashes": {
+        "finalParityInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalParityRngHash": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+        "finalParityMetadataHash": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+        "finalParityWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalParitySlotsHash": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2",
+        "finalParityARestHash": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+        "finalParityVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalParityStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalParityEventsHash": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+        "finalParityOverallHash": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64",
+        "finalLockstepInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalLockstepRngHash": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940",
+        "finalLockstepMetadataHash": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c",
+        "finalLockstepWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalLockstepSlotsHash": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676",
+        "finalLockstepARestHash": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec",
+        "finalLockstepVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalLockstepStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalLockstepEventsHash": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063",
+        "finalLockstepOverallHash": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+      },
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008\\windows-01\\01-dispersed1000-kind5-on\\report.json.final-checksum.json",
+      "snapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 1050,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 1050,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 0,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      },
+      "phaseTimings": [
+        {
+          "phase": "BattleFlow",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.5381622222222225,
+            "maximum": 1.7568000000000001,
+            "p95": 1.205375,
+            "p99": 1.347226
+          }
+        },
+        {
+          "phase": "Cooldown",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "HumanInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.3350533333333334,
+            "maximum": 1.5113,
+            "p95": 0.7349099999999992,
+            "p99": 0.9094720000000014
+          }
+        },
+        {
+          "phase": "RuntimeMaintenance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.38137722222222226,
+            "maximum": 1.2097,
+            "p95": 0.8080349999999998,
+            "p99": 0.9130540000000004
+          }
+        },
+        {
+          "phase": "InputClear",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CharacterInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 19.41638833333333,
+            "maximum": 44.3671,
+            "p95": 29.487854999999993,
+            "p99": 37.51330200000002
+          }
+        },
+        {
+          "phase": "NativeTeleport",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.19121500000000005,
+            "maximum": 1.7404000000000002,
+            "p95": 0.7399399999999989,
+            "p99": 1.3464040000000033
+          }
+        },
+        {
+          "phase": "FrameMotion",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.1552099999999994,
+            "maximum": 11.219700000000001,
+            "p95": 5.489894999999997,
+            "p99": 7.043477000000003
+          }
+        },
+        {
+          "phase": "FrameAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.948555,
+            "maximum": 2.6649000000000003,
+            "p95": 1.4339849999999998,
+            "p99": 2.054891000000003
+          }
+        },
+        {
+          "phase": "Revival",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.46018666666666685,
+            "maximum": 5.630800000000001,
+            "p95": 1.2638549999999988,
+            "p99": 1.9580380000000004
+          }
+        },
+        {
+          "phase": "StageBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.1379299999999999,
+            "maximum": 4.9256,
+            "p95": 2.2521149999999985,
+            "p99": 2.637788000000001
+          }
+        },
+        {
+          "phase": "PreInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.3738077777777766,
+            "maximum": 7.371300000000001,
+            "p95": 5.9434299999999975,
+            "p99": 6.572333000000002
+          }
+        },
+        {
+          "phase": "HeldProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.3323722222222221,
+            "maximum": 1.1217000000000001,
+            "p95": 0.7187599999999998,
+            "p99": 0.9251830000000008
+          }
+        },
+        {
+          "phase": "CollisionSnapshot",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.5492866666666664,
+            "maximum": 1.8362,
+            "p95": 1.1771899999999995,
+            "p99": 1.5694710000000003
+          }
+        },
+        {
+          "phase": "PairVRest",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.34597222222222224,
+            "maximum": 1.4311,
+            "p95": 1.0130149999999989,
+            "p99": 1.3357210000000006
+          }
+        },
+        {
+          "phase": "CandidateCollect",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 62.76971166666669,
+            "maximum": 127.04990000000001,
+            "p95": 88.78200000000001,
+            "p99": 95.92641200000003
+          }
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 5.017887222222224,
+            "maximum": 12.6228,
+            "p95": 9.904364999999997,
+            "p99": 11.192458000000007
+          }
+        },
+        {
+          "phase": "RandomWeaponDrop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.47545666666666675,
+            "maximum": 6.0045,
+            "p95": 1.3575199999999996,
+            "p99": 1.6553940000000025
+          }
+        },
+        {
+          "phase": "ObjectHitConsume",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.33810333333333337,
+            "maximum": 1.9071,
+            "p95": 0.9407799999999978,
+            "p99": 1.6087750000000003
+          }
+        },
+        {
+          "phase": "CandidateConsumptionEnd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.05205111111111111,
+            "maximum": 0.1184,
+            "p95": 0.09148499999999998,
+            "p99": 0.11145500000000005
+          }
+        },
+        {
+          "phase": "PreFrameBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.7150405555555557,
+            "maximum": 3.1752000000000002,
+            "p95": 1.4614199999999995,
+            "p99": 2.3494070000000034
+          }
+        },
+        {
+          "phase": "Stage",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.004125,
+            "maximum": 0.399,
+            "p95": 0.0043,
+            "p99": 0.00775000000000004
+          }
+        },
+        {
+          "phase": "RenderDispatch",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.082819444444444,
+            "maximum": 11.1919,
+            "p95": 7.967019999999999,
+            "p99": 9.138571000000006
+          }
+        },
+        {
+          "phase": "FramePostProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.23334444444444438,
+            "maximum": 1.0104,
+            "p95": 0.48052500000000004,
+            "p99": 0.5919300000000003
+          }
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 9.802413333333336,
+            "maximum": 23.753500000000003,
+            "p95": 19.67614499999999,
+            "p99": 23.394128
+          }
+        },
+        {
+          "phase": "RandomWeaponDropTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0017450000000000015,
+            "maximum": 0.0077,
+            "p95": 0.004214999999999996,
+            "p99": 0.0057420000000000014
+          }
+        },
+        {
+          "phase": "EntityPostFrameTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2870677777777778,
+            "maximum": 2.7952000000000004,
+            "p95": 0.5438899999999999,
+            "p99": 0.8739520000000034
+          }
+        },
+        {
+          "phase": "BattleResults",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.23868722222222225,
+            "maximum": 5.1902,
+            "p95": 0.410105,
+            "p99": 0.6608820000000051
+          }
+        },
+        {
+          "phase": "NativeSparkAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.3052722222222222,
+            "maximum": 1.0625,
+            "p95": 0.7391999999999995,
+            "p99": 0.9583000000000007
+          }
+        },
+        {
+          "phase": "NestedPhysics",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 3.2320344444444435,
+            "maximum": 11.3651,
+            "p95": 7.020235,
+            "p99": 8.732491000000016
+          }
+        },
+        {
+          "phase": "ActiveWeaponCount",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.604327222222222,
+            "maximum": 2.8319,
+            "p95": 1.4262649999999994,
+            "p99": 1.7790550000000072
+          }
+        },
+        {
+          "phase": "NativeResourceTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0008561111111111112,
+            "maximum": 0.0036000000000000003,
+            "p95": 0.0023,
+            "p99": 0.0032
+          }
+        },
+        {
+          "phase": "NativeFrameTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0003922222222222222,
+            "maximum": 0.0012000000000000001,
+            "p95": 0.0008,
+            "p99": 0.0009210000000000008
+          }
+        }
+      ],
+      "platform": "WindowsEditor"
+    },
+    {
+      "action": "combat1000",
+      "kind5Enabled": false,
+      "report": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/windows-01/02-combat1000-kind5-off/report.json",
+      "reportSha": "527164F684E63A0E0F2FB2761E946A4D8BF64164B990C7221D047EAD91F061A1",
+      "valid": true,
+      "status": "StoppedCleanly",
+      "performanceVerdict": "EvidenceOnlyNoThreshold",
+      "sample": 180,
+      "warm": 120,
+      "observedAi": 1000,
+      "observedRoster": 1000,
+      "eligibilityDelta": 300,
+      "kind5Delta": 0,
+      "maximumSkippedScans": 0,
+      "flagsApplied": true,
+      "flagsRestored": true,
+      "cacheDelta": 300,
+      "cacheFallbackDelta": 0,
+      "geometryDelta": 300,
+      "defaultsUnchanged": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 79.29545611111111,
+        "maximum": 152.5031,
+        "p95": 106.82070499999999,
+        "p99": 141.617581
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 48.918877777777745,
+        "maximum": 87.14320000000001,
+        "p95": 73.203745,
+        "p99": 85.743834
+      },
+      "pairExactLoop": {
+        "available": true,
+        "unit": "ms",
+        "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 48.36273055555557,
+        "maximum": 86.4685,
+        "p95": 72.49044,
+        "p99": 84.936288
+      },
+      "frame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 251.92160218954086,
+        "maximum": 1411.9484424591064,
+        "p95": 503.8525104522705,
+        "p99": 613.9535981416698
+      },
+      "cpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 203.34060224719101,
+        "maximum": 386.2651,
+        "p95": 258.57126,
+        "p99": 371.80142000000006
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 82,
+        "average": 0.8942017560975608,
+        "maximum": 4.653056,
+        "p95": 2.4497664,
+        "p99": 3.0215475199999955
+      },
+      "setPass": {
+        "available": true,
+        "unit": "count",
+        "source": "Continuously running ProfilerRecorder Render/SetPass Calls Count; LastValue is read at the next MonoBehaviour.Update for the previously completed rendered frame. Resolved category: Render.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1995,
+        "maximum": 2038,
+        "p95": 2031.2,
+        "p99": 2037.12
+      },
+      "submissionDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1991.4943820224719,
+        "maximum": 2035,
+        "p95": 2026.2,
+        "p99": 2034.12
+      },
+      "drop": 774,
+      "gcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "rawGc": true,
+      "tick": 300,
+      "lockstepTick": 300,
+      "hashes": {
+        "finalParityInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalParityRngHash": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+        "finalParityMetadataHash": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+        "finalParityWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalParitySlotsHash": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd",
+        "finalParityARestHash": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+        "finalParityVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalParityStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalParityEventsHash": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+        "finalParityOverallHash": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c",
+        "finalLockstepInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalLockstepRngHash": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+        "finalLockstepMetadataHash": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c",
+        "finalLockstepWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalLockstepSlotsHash": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364",
+        "finalLockstepARestHash": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+        "finalLockstepVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalLockstepStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalLockstepEventsHash": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+        "finalLockstepOverallHash": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+      },
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008\\windows-01\\02-combat1000-kind5-off\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 1050,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 1050,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 0,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      },
+      "phaseTimings": [
+        {
+          "phase": "BattleFlow",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.25782111111111106,
+            "maximum": 0.43970000000000004,
+            "p95": 0.3439699999999999,
+            "p99": 0.372042
+          }
+        },
+        {
+          "phase": "Cooldown",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "HumanInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.20774944444444438,
+            "maximum": 0.3093,
+            "p95": 0.246835,
+            "p99": 0.29632000000000003
+          }
+        },
+        {
+          "phase": "RuntimeMaintenance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.17184277777777782,
+            "maximum": 5.2224,
+            "p95": 0.26536000000000004,
+            "p99": 0.3236460000000001
+          }
+        },
+        {
+          "phase": "InputClear",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CharacterInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 11.258984444444442,
+            "maximum": 28.735500000000002,
+            "p95": 13.030184999999987,
+            "p99": 23.566337000000008
+          }
+        },
+        {
+          "phase": "NativeTeleport",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.08575111111111124,
+            "maximum": 0.34600000000000003,
+            "p95": 0.17815499999999995,
+            "p99": 0.24759300000000067
+          }
+        },
+        {
+          "phase": "FrameMotion",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.9216411111111106,
+            "maximum": 3.378,
+            "p95": 1.2115999999999993,
+            "p99": 1.8363770000000006
+          }
+        },
+        {
+          "phase": "FrameAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.7315799999999999,
+            "maximum": 1.2547000000000001,
+            "p95": 0.9008699999999996,
+            "p99": 1.1079880000000006
+          }
+        },
+        {
+          "phase": "Revival",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.1933905555555556,
+            "maximum": 0.9234,
+            "p95": 0.23331499999999974,
+            "p99": 0.38223900000000016
+          }
+        },
+        {
+          "phase": "StageBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.6795577777777778,
+            "maximum": 2.1716,
+            "p95": 0.8462499999999998,
+            "p99": 1.4816710000000057
+          }
+        },
+        {
+          "phase": "PreInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.2955361111111108,
+            "maximum": 2.8372,
+            "p95": 1.825394999999999,
+            "p99": 2.2014610000000014
+          }
+        },
+        {
+          "phase": "HeldProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.20428111111111105,
+            "maximum": 0.7048,
+            "p95": 0.25847,
+            "p99": 0.33697800000000144
+          }
+        },
+        {
+          "phase": "CollisionSnapshot",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.3718611111111112,
+            "maximum": 0.5489,
+            "p95": 0.45919999999999994,
+            "p99": 0.533267
+          }
+        },
+        {
+          "phase": "PairVRest",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.17490388888888891,
+            "maximum": 0.2691,
+            "p95": 0.20378,
+            "p99": 0.26425600000000005
+          }
+        },
+        {
+          "phase": "CandidateCollect",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 48.918877777777745,
+            "maximum": 87.14320000000001,
+            "p95": 73.203745,
+            "p99": 85.743834
+          }
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.4143194444444442,
+            "maximum": 5.577500000000001,
+            "p95": 3.742879999999999,
+            "p99": 4.866753000000004
+          }
+        },
+        {
+          "phase": "RandomWeaponDrop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.1821983333333334,
+            "maximum": 0.3249,
+            "p95": 0.234535,
+            "p99": 0.28724800000000017
+          }
+        },
+        {
+          "phase": "ObjectHitConsume",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2041805555555555,
+            "maximum": 0.316,
+            "p95": 0.26613499999999995,
+            "p99": 0.2919520000000002
+          }
+        },
+        {
+          "phase": "CandidateConsumptionEnd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.03307500000000001,
+            "maximum": 0.4798,
+            "p95": 0.05062999999999999,
+            "p99": 0.06006100000000004
+          }
+        },
+        {
+          "phase": "PreFrameBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.5033549999999999,
+            "maximum": 1.4621000000000002,
+            "p95": 0.700125,
+            "p99": 0.7684690000000003
+          }
+        },
+        {
+          "phase": "Stage",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.000926666666666666,
+            "maximum": 0.0018000000000000002,
+            "p95": 0.0013000000000000002,
+            "p99": 0.0017000000000000001
+          }
+        },
+        {
+          "phase": "RenderDispatch",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.072996666666667,
+            "maximum": 5.0459000000000005,
+            "p95": 2.25816,
+            "p99": 4.214162000000009
+          }
+        },
+        {
+          "phase": "FramePostProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.17014222222222222,
+            "maximum": 0.2997,
+            "p95": 0.20961999999999992,
+            "p99": 0.24170900000000012
+          }
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 5.744519999999999,
+            "maximum": 18.302400000000002,
+            "p95": 7.380335,
+            "p99": 12.773997000000033
+          }
+        },
+        {
+          "phase": "RandomWeaponDropTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0007427777777777787,
+            "maximum": 0.0033,
+            "p95": 0.0011,
+            "p99": 0.0014420000000000017
+          }
+        },
+        {
+          "phase": "EntityPostFrameTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.19548777777777768,
+            "maximum": 0.6746,
+            "p95": 0.22551499999999997,
+            "p99": 0.2703740000000002
+          }
+        },
+        {
+          "phase": "BattleResults",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.09416444444444443,
+            "maximum": 0.303,
+            "p95": 0.13586499999999996,
+            "p99": 0.17081800000000028
+          }
+        },
+        {
+          "phase": "NativeSparkAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.1448511111111111,
+            "maximum": 0.2838,
+            "p95": 0.19147,
+            "p99": 0.23951300000000036
+          }
+        },
+        {
+          "phase": "NestedPhysics",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.6963499999999998,
+            "maximum": 4.0157,
+            "p95": 2.274894999999998,
+            "p99": 3.3073170000000043
+          }
+        },
+        {
+          "phase": "ActiveWeaponCount",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.24112444444444456,
+            "maximum": 0.656,
+            "p95": 0.37198499999999995,
+            "p99": 0.44191100000000005
+          }
+        },
+        {
+          "phase": "NativeResourceTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0004422222222222217,
+            "maximum": 0.001,
+            "p95": 0.0007,
+            "p99": 0.0009210000000000008
+          }
+        },
+        {
+          "phase": "NativeFrameTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.00029444444444444516,
+            "maximum": 0.0006000000000000001,
+            "p95": 0.0004,
+            "p99": 0.0006000000000000001
+          }
+        }
+      ],
+      "platform": "WindowsEditor"
+    },
+    {
+      "action": "combat1000",
+      "kind5Enabled": true,
+      "report": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/windows-01/03-combat1000-kind5-on/report.json",
+      "reportSha": "4F06237DB5766EED1783A3C0124EA6DA3451F537200A692872B99A92A6466FEB",
+      "valid": true,
+      "status": "StoppedCleanly",
+      "performanceVerdict": "EvidenceOnlyNoThreshold",
+      "sample": 180,
+      "warm": 120,
+      "observedAi": 1000,
+      "observedRoster": 1000,
+      "eligibilityDelta": 300,
+      "kind5Delta": 300,
+      "maximumSkippedScans": 137316,
+      "flagsApplied": true,
+      "flagsRestored": true,
+      "cacheDelta": 300,
+      "cacheFallbackDelta": 0,
+      "geometryDelta": 300,
+      "defaultsUnchanged": true,
+      "logic": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch around SimulationTickDriver.StepOneTick -> NTSDBattleTickSystem.RunReleaseTick",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 76.51840277777778,
+        "maximum": 133.9954,
+        "p95": 113.06004499999995,
+        "p99": 125.33997300000003
+      },
+      "collector": {
+        "available": true,
+        "unit": "ms",
+        "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 45.76287111111113,
+        "maximum": 90.5781,
+        "p95": 65.4854,
+        "p99": 74.27558800000003
+      },
+      "pairExactLoop": {
+        "available": true,
+        "unit": "ms",
+        "source": "Independent Stopwatch timestamps accumulated inside CharacterInput and LateEntityUpdate plus render build sub-phases; ExecuteCommandBuffer is carried from the preceding render pass into the next logic-tick sample. Nested diagnostic evidence only, with no performance threshold.",
+        "unavailableReason": "",
+        "sampleCount": 180,
+        "average": 45.216995555555556,
+        "maximum": 89.8567,
+        "p95": 64.73325,
+        "p99": 73.48264800000003
+      },
+      "frame": {
+        "available": true,
+        "unit": "ms",
+        "source": "Time.unscaledDeltaTime for visible Play Mode frames",
+        "unavailableReason": "",
+        "sampleCount": 150,
+        "average": 228.71601482232413,
+        "maximum": 864.0463948249817,
+        "p95": 396.85281664133026,
+        "p99": 566.6208380460719
+      },
+      "cpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.cpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 197.45379438202244,
+        "maximum": 345.8572,
+        "p95": 265.97079999999994,
+        "p99": 331.5071280000001
+      },
+      "gpu": {
+        "available": true,
+        "unit": "ms",
+        "source": "Unity FrameTimingManager completed rendered frames requested by formal steady-state stress windows. Field: FrameTiming.gpuFrameTime.",
+        "unavailableReason": "",
+        "sampleCount": 85,
+        "average": 0.8059843764705883,
+        "maximum": 4.929536,
+        "p95": 2.0867071999999998,
+        "p99": 4.700733439999999
+      },
+      "setPass": {
+        "available": true,
+        "unit": "count",
+        "source": "Continuously running ProfilerRecorder Render/SetPass Calls Count; LastValue is read at the next MonoBehaviour.Update for the previously completed rendered frame. Resolved category: Render.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1995,
+        "maximum": 2038,
+        "p95": 2031.2,
+        "p99": 2037.12
+      },
+      "submissionDraw": {
+        "available": true,
+        "unit": "count",
+        "source": "BattleCentralRenderSystem state captured at the next MonoBehaviour.Update after the rendered frame; values are actual central command, segment and render-pass submission counters, not Unity Statistics SetPass estimates.",
+        "unavailableReason": "",
+        "sampleCount": 89,
+        "average": 1991.4943820224719,
+        "maximum": 2035,
+        "p95": 2026.2,
+        "p99": 2034.12
+      },
+      "drop": 664,
+      "gcEvidence": "UNCALIBRATED_COUNTER / UNKNOWN",
+      "rawGc": true,
+      "tick": 300,
+      "lockstepTick": 300,
+      "hashes": {
+        "finalParityInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalParityRngHash": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+        "finalParityMetadataHash": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf",
+        "finalParityWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalParitySlotsHash": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd",
+        "finalParityARestHash": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+        "finalParityVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalParityStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalParityEventsHash": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+        "finalParityOverallHash": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c",
+        "finalLockstepInputHash": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192",
+        "finalLockstepRngHash": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07",
+        "finalLockstepMetadataHash": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c",
+        "finalLockstepWorldHash": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc",
+        "finalLockstepSlotsHash": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364",
+        "finalLockstepARestHash": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d",
+        "finalLockstepVRestHash": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67",
+        "finalLockstepStatsHash": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9",
+        "finalLockstepEventsHash": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a",
+        "finalLockstepOverallHash": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+      },
+      "snapshotPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008\\windows-01\\03-combat1000-kind5-on\\report.json.final-checksum.json",
+      "snapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "capacity": {
+        "required": true,
+        "passed": true,
+        "scope": "Post-warmup monotonic rejection/drop counters. Memory/capacity rejects fail the gate; intentional presentation throttles are reported separately.",
+        "observedTickCount": 180,
+        "violatingTickCount": 0,
+        "firstViolatingLogicTick": -1,
+        "firstViolationSourceMask": 0,
+        "totalRejectedOrDroppedDelta": 0,
+        "capacityCriticalDelta": 0,
+        "presentationThrottleTickCount": 0,
+        "firstPresentationThrottleLogicTick": -1,
+        "firstPresentationThrottleSourceMask": 0,
+        "presentationThrottleDelta": 0,
+        "worldNullRegistrationRejectDelta": 0,
+        "worldBucketCapacityRejectDelta": 0,
+        "worldDuplicateRegistrationRejectDelta": 0,
+        "worldRuntimeSlotCapacityRejectDelta": 0,
+        "worldRuntimeRestBindRejectDelta": 0,
+        "worldStableIdRegistrationRejectDelta": 0,
+        "worldMissingUnregisterDelta": 0,
+        "worldRuntimeSlotReleaseRejectDelta": 0,
+        "runtimeCapacityGrowthRejectDelta": 0,
+        "vrestWriteRejectDelta": 0,
+        "soundEventBufferRejectDelta": 0,
+        "stageSpawnBufferRentRejectDelta": 0,
+        "collisionCandidateListRentRejectDelta": 0,
+        "objectPoolObjectFetchRejectDelta": 0,
+        "objectPoolSpriteFetchRejectDelta": 0,
+        "referencePoolLogicObjectFetchRejectDelta": 0,
+        "referencePoolCharacterFetchRejectDelta": 0,
+        "referencePoolLightWeaponFetchRejectDelta": 0,
+        "referencePoolHeavyWeaponFetchRejectDelta": 0,
+        "referencePoolSpecialAttackFetchRejectDelta": 0,
+        "referencePoolThrowWeaponFetchRejectDelta": 0,
+        "referencePoolOtherFetchRejectDelta": 0,
+        "referencePoolDrinkFetchRejectDelta": 0,
+        "referencePoolTaskFetchRejectDelta": 0,
+        "referencePoolUnknownTaskRecycleRejectDelta": 0,
+        "opointTaskQueueRejectDelta": 0,
+        "opointUnknownTaskTypeDelta": 0,
+        "opointMissingObjectDefinitionDelta": 0,
+        "latePresentationComponentCreateRejectDelta": 0,
+        "mountRegistrationRejectDelta": 0,
+        "mountOwnerBindingRejectDelta": 0,
+        "unpreparedSoundCueRejectDelta": 0,
+        "oneShotVoiceLimitDropDelta": 0,
+        "inputEventRejectDelta": 0
+      },
+      "teardown": {
+        "attempted": true,
+        "restored": true,
+        "activeStateRestored": true,
+        "driverStateRestored": true,
+        "loggingStateRestored": true,
+        "activeGameObjectsBefore": 1000,
+        "activeGameObjectsAfter": 0,
+        "worldObjectsBefore": 2000,
+        "worldObjectsAfter": 0,
+        "worldEntitiesBefore": 1000,
+        "worldEntitiesAfter": 0,
+        "claimedSlotsBefore": 1000,
+        "claimedSlotsAfter": 0,
+        "objectPoolActiveBeforeRun": 0,
+        "objectPoolActiveAfter": 0,
+        "objectPoolAvailableBeforeRun": 1050,
+        "objectPoolAvailableAfter": 1050,
+        "retainedInactiveObjectPoolCapacityBeforeRun": 1050,
+        "retainedInactiveObjectPoolCapacityAfter": 1050,
+        "retainedInactiveObjectPoolCapacityDelta": 0,
+        "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+        "referencePoolActiveBeforeRun": 0,
+        "referencePoolActiveAfter": 0,
+        "cleanupExceptionCount": 0,
+        "cleanupExceptions": "",
+        "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      },
+      "phaseTimings": [
+        {
+          "phase": "BattleFlow",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.26592944444444466,
+            "maximum": 0.4262,
+            "p95": 0.34253499999999987,
+            "p99": 0.3966690000000001
+          }
+        },
+        {
+          "phase": "Cooldown",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "HumanInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.21156777777777783,
+            "maximum": 0.46990000000000004,
+            "p95": 0.2657,
+            "p99": 0.31483300000000036
+          }
+        },
+        {
+          "phase": "RuntimeMaintenance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.15268722222222217,
+            "maximum": 1.8491000000000002,
+            "p95": 0.198455,
+            "p99": 0.3523390000000027
+          }
+        },
+        {
+          "phase": "InputClear",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0,
+            "maximum": 0,
+            "p95": 0,
+            "p99": 0
+          }
+        },
+        {
+          "phase": "CharacterInput",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 11.431891111111112,
+            "maximum": 30.9236,
+            "p95": 15.701254999999987,
+            "p99": 26.076091000000012
+          }
+        },
+        {
+          "phase": "NativeTeleport",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.08821555555555566,
+            "maximum": 0.4571,
+            "p95": 0.2051749999999997,
+            "p99": 0.2650120000000003
+          }
+        },
+        {
+          "phase": "FrameMotion",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.9345683333333336,
+            "maximum": 2.1381,
+            "p95": 1.3213149999999998,
+            "p99": 1.8305260000000008
+          }
+        },
+        {
+          "phase": "FrameAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.7390783333333335,
+            "maximum": 1.1063,
+            "p95": 0.987915,
+            "p99": 1.094116
+          }
+        },
+        {
+          "phase": "Revival",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.187148888888889,
+            "maximum": 0.3104,
+            "p95": 0.25163499999999994,
+            "p99": 0.2698800000000002
+          }
+        },
+        {
+          "phase": "StageBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.6669655555555556,
+            "maximum": 1.3993,
+            "p95": 0.8473749999999993,
+            "p99": 1.133174000000001
+          }
+        },
+        {
+          "phase": "PreInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.2789505555555554,
+            "maximum": 3.4024,
+            "p95": 1.7761649999999987,
+            "p99": 2.4888190000000034
+          }
+        },
+        {
+          "phase": "HeldProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.20062111111111106,
+            "maximum": 0.3448,
+            "p95": 0.24835999999999991,
+            "p99": 0.31567500000000004
+          }
+        },
+        {
+          "phase": "CollisionSnapshot",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.37258222222222215,
+            "maximum": 0.5804,
+            "p95": 0.45713499999999996,
+            "p99": 0.5284710000000001
+          }
+        },
+        {
+          "phase": "PairVRest",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.17474777777777784,
+            "maximum": 0.2783,
+            "p95": 0.21780999999999998,
+            "p99": 0.2644380000000001
+          }
+        },
+        {
+          "phase": "CandidateCollect",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 45.76287111111113,
+            "maximum": 90.5781,
+            "p95": 65.4854,
+            "p99": 74.27558800000003
+          }
+        },
+        {
+          "phase": "CharacterHitConsumePostInteraction",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 2.411029444444447,
+            "maximum": 6.4802,
+            "p95": 3.5291449999999998,
+            "p99": 4.413448000000001
+          }
+        },
+        {
+          "phase": "RandomWeaponDrop",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.18067777777777777,
+            "maximum": 0.3355,
+            "p95": 0.22770500000000002,
+            "p99": 0.2505850000000001
+          }
+        },
+        {
+          "phase": "ObjectHitConsume",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2013161111111112,
+            "maximum": 0.2892,
+            "p95": 0.24992999999999999,
+            "p99": 0.271557
+          }
+        },
+        {
+          "phase": "CandidateConsumptionEnd",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.031205555555555545,
+            "maximum": 0.0538,
+            "p95": 0.041505,
+            "p99": 0.045476000000000044
+          }
+        },
+        {
+          "phase": "PreFrameBounds",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.5335705555555555,
+            "maximum": 5.9524,
+            "p95": 0.70673,
+            "p99": 0.9046730000000057
+          }
+        },
+        {
+          "phase": "Stage",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0009655555555555551,
+            "maximum": 0.0036000000000000003,
+            "p95": 0.0014,
+            "p99": 0.002115000000000012
+          }
+        },
+        {
+          "phase": "RenderDispatch",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.0855411111111115,
+            "maximum": 5.1307,
+            "p95": 2.2361149999999994,
+            "p99": 5.0481620000000005
+          }
+        },
+        {
+          "phase": "FramePostProcess",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.17120222222222228,
+            "maximum": 0.25630000000000003,
+            "p95": 0.227455,
+            "p99": 0.24075100000000002
+          }
+        },
+        {
+          "phase": "LateEntityUpdate",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 5.934009444444444,
+            "maximum": 18.0547,
+            "p95": 8.28920499999997,
+            "p99": 15.89612500000002
+          }
+        },
+        {
+          "phase": "RandomWeaponDropTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0007688888888888892,
+            "maximum": 0.0043,
+            "p95": 0.0012000000000000001,
+            "p99": 0.0016420000000000017
+          }
+        },
+        {
+          "phase": "EntityPostFrameTail",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.19742500000000002,
+            "maximum": 0.6937,
+            "p95": 0.24967999999999976,
+            "p99": 0.27600500000000006
+          }
+        },
+        {
+          "phase": "BattleResults",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.09348833333333335,
+            "maximum": 0.22690000000000002,
+            "p95": 0.14596499999999996,
+            "p99": 0.16527800000000004
+          }
+        },
+        {
+          "phase": "NativeSparkAdvance",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.15208888888888888,
+            "maximum": 1.4787000000000001,
+            "p95": 0.18686,
+            "p99": 0.2267840000000001
+          }
+        },
+        {
+          "phase": "NestedPhysics",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 1.6909111111111113,
+            "maximum": 3.212,
+            "p95": 2.3173099999999995,
+            "p99": 2.889975000000002
+          }
+        },
+        {
+          "phase": "ActiveWeaponCount",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.2383333333333333,
+            "maximum": 0.7196,
+            "p95": 0.32986000000000004,
+            "p99": 0.40207000000000015
+          }
+        },
+        {
+          "phase": "NativeResourceTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0004699999999999995,
+            "maximum": 0.0012000000000000001,
+            "p95": 0.0007,
+            "p99": 0.0009210000000000008
+          }
+        },
+        {
+          "phase": "NativeFrameTick",
+          "timing": {
+            "available": true,
+            "unit": "ms",
+            "source": "Stopwatch timestamps around NTSDBattleTickSystem pass boundaries; diagnostic evidence only, with no performance threshold.",
+            "unavailableReason": "",
+            "sampleCount": 180,
+            "average": 0.0002816666666666671,
+            "maximum": 0.0006000000000000001,
+            "p95": 0.0004,
+            "p99": 0.0005210000000000008
+          }
+        }
+      ],
+      "platform": "WindowsEditor"
+    }
+  ],
+  "pairs": [
+    {
+      "action": "dispersed1000",
+      "logicMeanOff": 92.62411055555555,
+      "logicMeanOn": 117.74403166666663,
+      "logicReductionPercent": -27.12028321831416,
+      "logicP95Off": 139.016665,
+      "logicP95On": 162.29337999999996,
+      "collectorMeanOff": 53.40596333333336,
+      "collectorMeanOn": 62.76971166666669,
+      "collectorReductionPercent": -17.533151260449106,
+      "displayFrameMeanOff": 368.2517809669177,
+      "displayFrameMeanOn": 341.1293897032738,
+      "inverseMeanFpsOff": 2.715533370603946,
+      "inverseMeanFpsOn": 2.9314390087287254,
+      "dropOff": 1293,
+      "dropOn": 1181,
+      "hashesCompared": 20,
+      "hashMismatches": [],
+      "snapshotEqual": true,
+      "tickEqual": true
+    },
+    {
+      "action": "combat1000",
+      "logicMeanOff": 79.29545611111111,
+      "logicMeanOn": 76.51840277777778,
+      "logicReductionPercent": 3.5021594799102225,
+      "logicP95Off": 106.82070499999999,
+      "logicP95On": 113.06004499999995,
+      "collectorMeanOff": 48.918877777777745,
+      "collectorMeanOn": 45.76287111111113,
+      "collectorReductionPercent": 6.45151076646383,
+      "displayFrameMeanOff": 251.92160218954086,
+      "displayFrameMeanOn": 228.71601482232413,
+      "inverseMeanFpsOff": 3.9694888858622757,
+      "inverseMeanFpsOn": 4.372234278289785,
+      "dropOff": 774,
+      "dropOn": 664,
+      "hashesCompared": 20,
+      "hashMismatches": [],
+      "snapshotEqual": true,
+      "tickEqual": true
+    }
+  ],
+  "assertions": {
+    "allWorkloadValid": true,
+    "pairedTerminalParity": true,
+    "formalPerformancePassed": false
+  }
+}

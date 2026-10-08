@@ -1,3 +1,5 @@
+> 2026-10-07 完成边界更正：优化执行以[有限首阶段合同第0—8节](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)为准。次数/批次只触发复盘，不自动停止目标；候选不采用不等于全部Goal无路可做。阶段、产物、父项关闭分别判断，旧停点按历史阅读；[文档操作](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PHASE-COMPLETION-BOUNDARY-CORRECTION-20261007/RECORD.md)。
+
 > 2026-10-07 第22批限定通过：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / SCOPED_RUNTIME_FOOT_CONFIG_PASS；NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / VERIFIED（本批）。GameConfig fallback接线，显式authoring/禁用保持；原Editor32/32，Battle1800实际camera每帧Foot2/Health2、两slot、CPU DrawMesh11815录制=执行、growth0；三档100/500/1000真实catalog重复命令重放均局部0B/growth0，非1000AI。11阶段关闭三残留0/Scene同/Menu恢复，30保护/11备份保持。有限首阶段1/8新子批完成，34项父项关闭仍0；完整选定链与后续5项继续，EXT-1/Mono/ATLAS门不解冻。下方旧快照按时间阅读。
 
 > 2026-10-07 第21批限定诊断通过：NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007 / SCOPED_FOOT_AUTHORING_DIAGNOSIS_PASS；NTSD-OPT-M03-FOOT-AUTHORING-021 / VERIFIED（仅诊断）。原Editor9 RED→新9＋旧61=70/70；原Battle64 distinct camera/tick8→63，每帧Self2/Health2/Foot0；六帧GameConfig有效，loadedPreview0→authoring false→runtime Foot禁用/Sprite空，NO_LOADED_AUTHORING已确认。只Editor观察，无生产修复/Scene变更，第20批严格FAIL/replay NOT_RUN保留；两slot/CPUlease0、关闭三残留0/Scene同/Menu恢复，733保护/8备份保持。34项高12中14低8关闭0、父M03/H11 OPEN，专项门不解冻。执行期外部HEAD提交变化已记录，本轮无Git提交；下方事前历史保留。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH21-FOOT-AUTHORING-20261007/REPORT.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-M03-FOOT-AUTHORING-021.md)。
@@ -85,7 +87,7 @@ before132camera/264Build，after143/143及118/118；每camera实体vertex1408→
 | 音频内存 | 正式音频/PCM 适配已存在；优化待批 | 约 210 MiB 为已有副本 payload 估算，不是实测 RSS/峰值 |
 | 当前战斗正确性 | 用户接受限定收尾；优化回归仍强制 | 当前336B44及已声明例外保持，不自动重开旧 campaign |
 | Mono/Core/Presentation | 方案及正文修正已记录；代码实施仍 USER_HOLD | 从 B0 重新 inventory，不能把目录整理当分层完成 |
-| 本轮优化 | 34项高12/中14/低8；父项关闭0；六项有限Goal执行中新子批1/8；22 Foot限定通过 | 22已补GameConfig fallback，32/32、原Battle1800camera每帧Foot2/Health2、三档catalog重复命令重放局部0B/growth0；旧20严格FAIL/21诊断保留。下一有限选定链/评估/Windows报告；全域0GC/1000AI/真机及专项门保持 |
+| 本轮优化 | 34项高12/中14/低8；父项关闭0；限定产物5/6、阶段条件通过4/6；已执行19批/38仅PLANNED | 40普通Brute接入限定通过，41生成准入分配源聚焦修复；最新千人logic P95仍107.065/113.849ms、显示约3.7—3.9FPS；H11完整camera2事件未定位、严格FAIL。阶段未完成，继续范围内必要工作；次数不构成停止。本次Goal实返active，旧blocked仅历史；实际进度只见统一总表，本次文档对账无运行时收益 |
 
 条目共 **34 项：高 12、中 14、低 8**。原 28 项保留 ID/路径，新增 H-10/H-11、
 M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全性/潜在成本/前置重要性，
@@ -104,6 +106,9 @@ M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全
 - `STALE`：代码、权威、内容、kernel、APK、workload 或设备指纹不匹配的旧结果。
 - 文档整理时的`WAITING_USER_APPROVAL`已由用户后续启动授权替代；
   当前只启动总表中具名批次，未选条目保持排队/原专项门，不启动EXT-1专项M0。
+- 必须实施/通过的阶段按验收判断完成，不按批次数、候选数、修复轮数或报告数量。
+  未通过继续范围内必要定位/修复；无效候选停止采用，已完成评估不重复执行。
+  单项等待新权限/设备不阻塞其它READY项；真实外部阻塞与技术未知项分别记载。
 
 共同合同、证据分级、依赖、下一批建议及启动批准字段见
 [本轮复核与启动门](battle-optimization-rebaseline-and-start-gates-20261006.md)。

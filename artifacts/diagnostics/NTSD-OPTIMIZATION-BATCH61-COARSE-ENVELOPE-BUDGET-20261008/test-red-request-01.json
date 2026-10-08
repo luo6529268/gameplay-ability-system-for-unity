@@ -1,0 +1,12 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "groupNames": [
+      "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeResidentBudgetUsesActualManagedArrays",
+      "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.CoarseEnvelopeBudgetTracksPreparedOwnerAndTransition"
+    ],
+    "includeDetails": true,
+    "includeFailedTests": true
+  }
+}

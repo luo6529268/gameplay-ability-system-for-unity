@@ -1,0 +1,46 @@
+{
+  "observedAt": "2026-10-07T15:40:26.1216558Z",
+  "pairs": 88,
+  "files": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007\\driver-qualification-01\\Combat1000-eligibility-parity-8895eb63ed3f4cfc8dc1145154e15c88.json",
+      "sha256": "B17C4A450FD2B79DC4E298EA5D03BE80FB07EE2E3AA83BE62E3B2D1FC3C00FF4",
+      "baselineTicks": 32,
+      "candidateTicks": 32,
+      "allDeclaredFieldsEqual": true,
+      "actualApplication": true,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007\\driver-qualification-01\\Dispersed1000-eligibility-parity-8d7ebe68c58e4438b12055bc9fe0ac65.json",
+      "sha256": "D2E64263455F5E24DAC4AA5A1C2966C2569217B7AE077F414E313338C48865AF",
+      "baselineTicks": 32,
+      "candidateTicks": 32,
+      "allDeclaredFieldsEqual": true,
+      "actualApplication": true,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007\\driver-qualification-01\\left-x350-eligibility-parity-8e34d4f3981d47cca2a4a7510a819569.json",
+      "sha256": "731D2E5DC96F2FF379459ABBA2CCC07BF8A6FC5919C8B266C5A134D3FB626349",
+      "baselineTicks": 12,
+      "candidateTicks": 12,
+      "allDeclaredFieldsEqual": true,
+      "actualApplication": true,
+      "noFallback": true,
+      "performanceEvidence": false
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007\\driver-qualification-01\\right-x550-eligibility-parity-7401a3e870b844f7ac99c05a567d0b58.json",
+      "sha256": "B15E395D5EC505E43368BF95799A2A065433E6E8AF3348D5623BEC08DC752BE9",
+      "baselineTicks": 12,
+      "candidateTicks": 12,
+      "allDeclaredFieldsEqual": true,
+      "actualApplication": true,
+      "noFallback": true,
+      "performanceEvidence": false
+    }
+  ]
+}

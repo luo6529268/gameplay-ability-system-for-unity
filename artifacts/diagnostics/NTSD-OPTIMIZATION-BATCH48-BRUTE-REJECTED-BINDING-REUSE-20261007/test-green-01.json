@@ -1,0 +1,240 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ee32e28183294629b631d69ff6f2517b",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791383905214,
+      "finished_unix_ms": 1791383916800,
+      "last_update_unix_ms": 1791383916800,
+      "progress": {
+        "completed": 22,
+        "total": 9577,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791383916194,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(True)",
+        "last_finished_unix_ms": 1791383916197,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 22,
+          "passed": 22,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 3.4237206,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "OrdinaryBruteDefaultsEnableAdmittedFastPath",
+            "fullName": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+            "state": "Passed",
+            "durationSeconds": 0.7486256,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_FarPairWithVrestKeepsStateAndRejectsGeometry",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_FarPairWithVrestKeepsStateAndRejectsGeometry",
+            "state": "Passed",
+            "durationSeconds": 0.7688919,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_Kind5OutsideOrdinaryUnionIsNotDropped",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_Kind5OutsideOrdinaryUnionIsNotDropped",
+            "state": "Passed",
+            "durationSeconds": 0.0117455,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0065041,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(4,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0100845,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_MultiBodyPreservesPayloadRngAndKind4(0,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0174652,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate(False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0562137,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate(True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteGeometryFirst_StaleBindingClearMatchesOriginalBaseGate(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0017765,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteKind5Presence_RectCapacityMissFallsBackWithoutGrowth",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteKind5Presence_RectCapacityMissFallsBackWithoutGrowth",
+            "state": "Passed",
+            "durationSeconds": 0.0039788,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_1000ParticipantsBalancedCostAndFullSequence",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_1000ParticipantsBalancedCostAndFullSequence",
+            "state": "Passed",
+            "durationSeconds": 0.767514,
+            "message": null,
+            "stackTrace": null,
+            "output": "BRUTE_REJECTED_BINDING_REUSE_COST participants=1000 warmup=4 sample=8 baselineMeanMs=21.3312625 candidateMeanMs=20.8129125 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\r\n"
+          },
+          {
+            "name": "BruteRejectedBindingReuse_AttackExemptDoesNotProbe",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_AttackExemptDoesNotProbe",
+            "state": "Passed",
+            "durationSeconds": 0.0024506,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults",
+            "state": "Passed",
+            "durationSeconds": 0.0010512,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector",
+            "state": "Passed",
+            "durationSeconds": 0.0118935,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow",
+            "state": "Passed",
+            "durationSeconds": 0.0021687,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(0)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0028781,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(4)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(4)",
+            "state": "Passed",
+            "durationSeconds": 0.0024075,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(5)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(5)",
+            "state": "Passed",
+            "durationSeconds": 0.0028832,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest",
+            "state": "Passed",
+            "durationSeconds": 0.0023718,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(False)",
+            "state": "Passed",
+            "durationSeconds": 0.002517,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0017494,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0022579,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0020459,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

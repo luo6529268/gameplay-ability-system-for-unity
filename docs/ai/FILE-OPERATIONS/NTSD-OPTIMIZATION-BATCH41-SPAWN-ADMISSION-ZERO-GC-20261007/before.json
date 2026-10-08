@@ -1,0 +1,117 @@
+{
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "sha256": "AA19516068C828A9B6854024622E23FF031C048323CA213EF7519CF94F2C0AC2",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\Assets__NTSD__Scripts__Simulation__Ecs__Writers__BattleNativeDirectSpawnWriter.cs",
+      "backupSha256": "AA19516068C828A9B6854024622E23FF031C048323CA213EF7519CF94F2C0AC2",
+      "gitStatus": ""
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "25E50B266FE94AAA13133301C290F070D6BA2AA7D38C4CC49A47499CF0825F52",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\docs__ai__CHANGE-LEDGER.md",
+      "backupSha256": "25E50B266FE94AAA13133301C290F070D6BA2AA7D38C4CC49A47499CF0825F52",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "51FEBB9AB92312A0D17A83AD8B04B3071C9E003031547FDFBB7DCA4B434A0A0D",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\docs__ai__STATE.md",
+      "backupSha256": "51FEBB9AB92312A0D17A83AD8B04B3071C9E003031547FDFBB7DCA4B434A0A0D",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "0128D8B95F2C192D94D5241CAE6A05A8AF17C0540FF671746766436DE92CA31E",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "0128D8B95F2C192D94D5241CAE6A05A8AF17C0540FF671746766436DE92CA31E",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "8F6F0C887B644C5AE502B6923AE2F8C9E3AA210C12FBAC9FD38668C3BDB027A1",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "backupSha256": "8F6F0C887B644C5AE502B6923AE2F8C9E3AA210C12FBAC9FD38668C3BDB027A1",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "52335D3D788C6513187162D87347DD01C0E3367B92A6BEDFBCB86237A32AE3FE",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH41-SPAWN-ADMISSION-ZERO-GC-20261007\\backup\\docs__ai__FILE-OPERATIONS__INDEX.md",
+      "backupSha256": "52335D3D788C6513187162D87347DD01C0E3367B92A6BEDFBCB86237A32AE3FE",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "sha256": "C2B22C76704DE14E6D6533282942195B143D255E3197A424F893BAFCDD02C4CF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs.meta",
+      "sha256": "E77B83343467FB409723B2BB371D4A6F4ADA3B1D3C38FAD2AE5D82E68C5EB75F"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "sha256": "ECB8723CCE16CE32F3812845E4660692CE6F7694029C5801918958D520499541"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    }
+  ]
+}

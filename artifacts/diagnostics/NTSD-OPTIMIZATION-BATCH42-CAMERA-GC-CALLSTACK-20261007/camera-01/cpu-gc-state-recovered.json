@@ -1,0 +1,135 @@
+{
+    "outputRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007\\camera-01",
+    "status": "PARTIAL",
+    "stopReason": "retained-camera-raw-parse-only-no-recapture",
+    "error": "System.InvalidOperationException: Camera raw capture could not be appended; existing history will not be cleared.\r\n  at NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.ExportCameraSamples (NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor+CaptureState finished) [0x00026] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs:566 \r\n  at NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.RecoverRetainedCameraRaw () [0x0011d] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs:266 ",
+    "recording": false,
+    "finishPending": true,
+    "settingsRestored": true,
+    "startLastFrame": 0,
+    "connectionId": -1,
+    "capturedFrames": 0,
+    "frameIndices": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "warmupTicks": 0,
+    "sampleTickAtStart": 0,
+    "activeAiAtStart": 0,
+    "baseRosterAtStart": 0,
+    "deadline": 226899.25536920006,
+    "before": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0
+    },
+    "after": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0
+    },
+    "validMainThreadFrames": 0,
+    "exportedThreadFrames": 0,
+    "threadScanLimitReached": false,
+    "cameraEnvelopeMode": true,
+    "cameraEnvelopeOpen": false,
+    "cameraBoundariesValid": true,
+    "completedCameras": 8,
+    "cameraBoundaries": [
+        {
+            "ordinal": 1,
+            "beginUnityFrame": 3230,
+            "endUnityFrame": 3230,
+            "beginLogicTick": 10,
+            "endLogicTick": 10,
+            "allocationEvents": 1,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 2,
+            "beginUnityFrame": 3231,
+            "endUnityFrame": 3231,
+            "beginLogicTick": 11,
+            "endLogicTick": 11,
+            "allocationEvents": 1,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 3,
+            "beginUnityFrame": 3232,
+            "endUnityFrame": 3232,
+            "beginLogicTick": 12,
+            "endLogicTick": 12,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 4,
+            "beginUnityFrame": 3233,
+            "endUnityFrame": 3233,
+            "beginLogicTick": 14,
+            "endLogicTick": 14,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 5,
+            "beginUnityFrame": 3234,
+            "endUnityFrame": 3234,
+            "beginLogicTick": 15,
+            "endLogicTick": 15,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 6,
+            "beginUnityFrame": 3235,
+            "endUnityFrame": 3235,
+            "beginLogicTick": 16,
+            "endLogicTick": 16,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 7,
+            "beginUnityFrame": 3236,
+            "endUnityFrame": 3236,
+            "beginLogicTick": 17,
+            "endLogicTick": 17,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        },
+        {
+            "ordinal": 8,
+            "beginUnityFrame": 3237,
+            "endUnityFrame": 3237,
+            "beginLogicTick": 19,
+            "endLogicTick": 19,
+            "allocationEvents": 0,
+            "calibratedScopeValid": true
+        }
+    ],
+    "importedFirstFrame": -1,
+    "importedLastFrame": -1,
+    "exportedCameraEnvelopes": 0,
+    "allocationCountsMatch": false,
+    "allocationCallstacksPresent": false
+}

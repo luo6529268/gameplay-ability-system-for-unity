@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "fdf1b3c288154b388e655ccf83741459",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791383719173,
+      "finished_unix_ms": 1791383739788,
+      "last_update_unix_ms": 1791383739788,
+      "progress": {
+        "completed": 13,
+        "total": 9577,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791383733154,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(True)",
+        "last_finished_unix_ms": 1791383733157,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_1000ParticipantsBalancedCostAndFullSequence",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_AttackExemptDoesNotProbe",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DefaultOffPreservesProductionDefaults",
+            "message": "  Record actual roster use and fallback.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_DoesNotEnterRoleAwareCollector",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_ExactCapacityFallbackDoesNotApplyOrGrow",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(0)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(4)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_MultiBodyAndKind5KeepSequenceRngAndNearVrest(5)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_OneProbePerEligibleTargetKeepsVrest",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(False)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_PostSnapshotStaleBindingKeepsFirstReadEligibility(True)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(False)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteRejectedBindingReuse_RebuildsOnEveryCollectionIncludingSameTick(True)",
+            "message": "  The rejected-binding candidate must be explicit opt-in.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

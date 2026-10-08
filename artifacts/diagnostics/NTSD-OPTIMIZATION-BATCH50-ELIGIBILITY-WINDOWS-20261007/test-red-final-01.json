@@ -1,0 +1,79 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c625210931f246aaaf5b2e2a3c4ac97c",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791388434171,
+      "finished_unix_ms": 1791388443448,
+      "last_update_unix_ms": 1791388443448,
+      "progress": {
+        "completed": 12,
+        "total": 9608,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791388442882,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_RejectsOutsideFixedOffOnMatrix",
+        "last_finished_unix_ms": 1791388442883,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_ApplyAndRestorePreservesProductionFlags(False)",
+            "message": "  ApplyBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_ApplyAndRestorePreservesProductionFlags(True)",
+            "message": "  ApplyBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_CompleteRejectsFlagDriftAndRestoreStillWorks",
+            "message": "  ApplyBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RejectsOtherDefaultOffCandidate(False)",
+            "message": "  ApplyBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RejectsOtherDefaultOffCandidate(True)",
+            "message": "  ApplyBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RestoreRestoresPriorValueAndReleasesReference(False)",
+            "message": "  RestoreBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuse_RestoreRestoresPriorValueAndReleasesReference(True)",
+            "message": "  RestoreBruteEligibilityReuse required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_OnlyChangesOutputFromProductionSmoke(0)",
+            "message": "  BuildBruteEligibilityReuseRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_OnlyChangesOutputFromProductionSmoke(1)",
+            "message": "  BuildBruteEligibilityReuseRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_OnlyChangesOutputFromProductionSmoke(2)",
+            "message": "  BuildBruteEligibilityReuseRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_OnlyChangesOutputFromProductionSmoke(3)",
+            "message": "  BuildBruteEligibilityReuseRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEligibilityReuseRequest_RejectsOutsideFixedOffOnMatrix",
+            "message": "  BuildBruteEligibilityReuseRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

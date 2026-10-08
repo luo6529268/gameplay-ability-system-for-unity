@@ -1,0 +1,134 @@
+[
+  {
+    "mode": "dispersed1000",
+    "status": "StoppedCleanly",
+    "harness": true,
+    "logic": [
+      467.52408666666656,
+      79.67079444444448,
+      83.43545277777774
+    ],
+    "logicP95": 107.06470499999999,
+    "collector": [
+      429.1871661111112,
+      48.30789722222224,
+      50.25510555555557
+    ],
+    "frame": [
+      1116.8773126602173,
+      249.7685913244883,
+      268.57422838608426
+    ],
+    "setPass": 1994.314606741573,
+    "cpuDrawCommands": 1991.2808988764045,
+    "hashFieldCount": 20,
+    "hashDifferences": [],
+    "fullSnapshotSha": [
+      "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    ],
+    "phase": [
+      {
+        "phase": "CharacterInput",
+        "mean": 11.953808333333336
+      },
+      {
+        "phase": "FrameMotion",
+        "mean": 1.1062488888888888
+      },
+      {
+        "phase": "PreInteraction",
+        "mean": 1.361129444444444
+      },
+      {
+        "phase": "CandidateCollect",
+        "mean": 50.25510555555557
+      },
+      {
+        "phase": "CharacterHitConsumePostInteraction",
+        "mean": 2.6050149999999994
+      },
+      {
+        "phase": "RenderDispatch",
+        "mean": 1.1622094444444429
+      },
+      {
+        "phase": "LateEntityUpdate",
+        "mean": 6.415953888888889
+      },
+      {
+        "phase": "NestedPhysics",
+        "mean": 1.8411055555555556
+      }
+    ],
+    "capacityCritical": 0,
+    "postCommitBreach": 0
+  },
+  {
+    "mode": "combat1000",
+    "status": "StoppedCleanly",
+    "harness": true,
+    "logic": [
+      431.00028833333295,
+      80.61174833333327,
+      85.77534333333335
+    ],
+    "logicP95": 113.84874999999995,
+    "collector": [
+      398.07425500000005,
+      50.116485555555585,
+      52.67238222222224
+    ],
+    "frame": [
+      1037.4794801076252,
+      235.6777768333753,
+      257.2016202410062
+    ],
+    "setPass": 1995.0,
+    "cpuDrawCommands": 1991.4943820224719,
+    "hashFieldCount": 20,
+    "hashDifferences": [],
+    "fullSnapshotSha": [
+      "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    ],
+    "phase": [
+      {
+        "phase": "CharacterInput",
+        "mean": 12.052280555555559
+      },
+      {
+        "phase": "FrameMotion",
+        "mean": 1.1132094444444443
+      },
+      {
+        "phase": "PreInteraction",
+        "mean": 1.4166805555555553
+      },
+      {
+        "phase": "CandidateCollect",
+        "mean": 52.67238222222224
+      },
+      {
+        "phase": "CharacterHitConsumePostInteraction",
+        "mean": 2.5993961111111097
+      },
+      {
+        "phase": "RenderDispatch",
+        "mean": 1.2320311111111115
+      },
+      {
+        "phase": "LateEntityUpdate",
+        "mean": 6.273781111111114
+      },
+      {
+        "phase": "NestedPhysics",
+        "mean": 1.8781633333333332
+      }
+    ],
+    "capacityCritical": 0,
+    "postCommitBreach": 0
+  }
+]

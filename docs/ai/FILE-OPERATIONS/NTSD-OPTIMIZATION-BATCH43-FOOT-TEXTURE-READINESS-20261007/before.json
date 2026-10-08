@@ -1,0 +1,173 @@
+{
+  "guards": [
+    {
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity"
+    },
+    {
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    },
+    {
+      "sha256": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset"
+    },
+    {
+      "sha256": "531F50A7D965256FDC1A9969D2AE80036BDD980E29CB23273614F1AEB588463C",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+    },
+    {
+      "sha256": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A",
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs"
+    },
+    {
+      "sha256": "33ACAAF961DC582D1D0F958122987F4A4096EC932A13A6FAF241D7FCB244DFED",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "sha256": "6A497B464BEEA0C7A252ABC585D64DB71CFE2C9F1A58F54C9BBBA8754CF1BDB1",
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs"
+    },
+    {
+      "sha256": "712EE3419D66B4E23985F0EFE9057C14B9778607D77B8D4BAFF368D5A7CC2AF2",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs"
+    },
+    {
+      "sha256": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs"
+    },
+    {
+      "sha256": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234",
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md"
+    },
+    {
+      "sha256": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956",
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md"
+    },
+    {
+      "sha256": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8",
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md"
+    },
+    {
+      "sha256": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844",
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md"
+    },
+    {
+      "sha256": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F",
+      "path": "AGENTS.md"
+    },
+    {
+      "sha256": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD",
+      "path": "docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73",
+      "path": "ProjectSettings/ProjectVersion.txt"
+    },
+    {
+      "sha256": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF",
+      "path": "Packages/manifest.json"
+    },
+    {
+      "sha256": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5",
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs"
+    },
+    {
+      "sha256": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs"
+    },
+    {
+      "sha256": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs"
+    },
+    {
+      "sha256": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A",
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs"
+    }
+  ],
+  "before": [
+    {
+      "bytes": 110904,
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "backupSha256": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "gitStatus": "",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/01-BattleCentralRenderSystem.cs",
+      "sha256": "CCE7FABB85ACB746919115004045A527CBAF5F99488EA918DAF1339228CAB575",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs"
+    },
+    {
+      "bytes": 29046,
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "backupSha256": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B",
+      "gitStatus": "",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/02-BattleCentralRuntimeFootMarkerEditorTests.cs",
+      "sha256": "F2089AF652A5D77FDDF45A8F344837EF5AF9B09BCACC0DF7554232209AB6609B",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleCentralRuntimeFootMarkerEditorTests.cs"
+    },
+    {
+      "bytes": 101904,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "backupSha256": "BE749B6330399CF660F51D66291E639468CB14371B20B6FF140364CECA1E71E0",
+      "gitStatus": " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/03-BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "BE749B6330399CF660F51D66291E639468CB14371B20B6FF140364CECA1E71E0",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs"
+    },
+    {
+      "bytes": 89709,
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupSha256": "B2812D93A052CE5E94C1C3436AAACCAF34AEDB4763A9DC2BCACD48E67121227A",
+      "gitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/04-battle-optimization-progress-tracker.md",
+      "sha256": "B2812D93A052CE5E94C1C3436AAACCAF34AEDB4763A9DC2BCACD48E67121227A",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md"
+    },
+    {
+      "bytes": 19432,
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "backupSha256": "930DFB95023921A4147E04C766F6A8310C15D09A29B0E34DF6D7F0173735BFA4",
+      "gitStatus": " M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/05-h-11-presentation-capacity-zero-gc.md",
+      "sha256": "930DFB95023921A4147E04C766F6A8310C15D09A29B0E34DF6D7F0173735BFA4",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-11-presentation-capacity-zero-gc.md"
+    },
+    {
+      "bytes": 678719,
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backupSha256": "ECB7E9BFA364C7F7C0D904FD6B2CAEEA3C8492A849279924AE173CB751101B63",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/06-CHANGE-LEDGER.md",
+      "sha256": "ECB7E9BFA364C7F7C0D904FD6B2CAEEA3C8492A849279924AE173CB751101B63",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md"
+    },
+    {
+      "bytes": 1581970,
+      "path": "docs/ai/STATE.md",
+      "backupSha256": "4B798964015B70DC3E471BB813C0D42C86A08F5835453054E3B5210506537473",
+      "gitStatus": " M docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/07-STATE.md",
+      "sha256": "4B798964015B70DC3E471BB813C0D42C86A08F5835453054E3B5210506537473",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md"
+    },
+    {
+      "bytes": 1514860,
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "8A0CA9F4A1A23E6BF384E1360B5AF8E3E05597085A6792817737BEE78E3149C8",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/08-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "8A0CA9F4A1A23E6BF384E1360B5AF8E3E05597085A6792817737BEE78E3149C8",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "bytes": 64671,
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupSha256": "CA88E414217E49E927B8E7892032950F44B3267F2B5EBD35611C7C0E2A58D035",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/backup/09-INDEX.md",
+      "sha256": "CA88E414217E49E927B8E7892032950F44B3267F2B5EBD35611C7C0E2A58D035",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md"
+    }
+  ],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "utc": "2026-10-07T11:00:47.6941317Z"
+}

@@ -1,0 +1,96 @@
+{
+  "analysis": {
+    "utc": "2026-10-08T00:54:02.2408024Z",
+    "kind": "read-only final comparison of preserved actual windows, not new measurement",
+    "pairs": [
+      {
+        "action": "dispersed1000",
+        "logicMeanReductionPct": 3.919402501544811,
+        "collectorMeanReductionPct": 4.886674054953155,
+        "pairLoopMeanReductionPct": 4.965172880795454,
+        "frameMeanReductionPct": 6.629240690691008,
+        "frameReciprocalEstimateOff": 4.2635755176721934,
+        "frameReciprocalEstimateOn": 4.566285579351734,
+        "terminal20HashesEqual": true,
+        "terminalFullSnapshotEqual": true,
+        "performancePass": false
+      },
+      {
+        "action": "combat1000",
+        "logicMeanReductionPct": 4.7664259897726495,
+        "collectorMeanReductionPct": 4.965931767639309,
+        "pairLoopMeanReductionPct": 4.871341262571671,
+        "frameMeanReductionPct": 3.823657635798483,
+        "frameReciprocalEstimateOff": 4.515640565014622,
+        "frameReciprocalEstimateOn": 4.695167703419984,
+        "terminal20HashesEqual": true,
+        "terminalFullSnapshotEqual": true,
+        "performancePass": false
+      }
+    ],
+    "qualification": "SCOPED_WINDOWS_AB_COMPLETED / GAIN_SIGNAL / PERFORMANCE_FAIL / NOT_ADMITTED; one sequential AB only",
+    "gcScope": "calibrated synchronous full StepOneTick 300 scopes, steady180, zero GC.Alloc events per window; no TimeNanoseconds to bytes conversion; not H11 full presentation path",
+    "countsSemantics": "sampled max probes/reuses, not total of300 ticks; DrawMesh CPU count separate from whole-frame Profiler SetPass and actual GPU batch",
+    "remaining": "P95/drop gates fail; formal1800 not run, envelope byte budget unknown, central full independent unresolved/stale and H11 full scope not closed"
+  },
+  "audit": {
+    "utc": "2026-10-08T00:54:02.2408024Z",
+    "guardCount": 109,
+    "badGuards": [],
+    "backupCount": 9,
+    "badBackups": [],
+    "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "expectedHead": "45bbed41c64e0599601fa0df4028072d9f83303a",
+    "suiteSourceSha": "03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71",
+    "suiteBytes": 190378,
+    "greenRoot": "test-suite",
+    "greenActualCases": 83,
+    "greenTotal": 83,
+    "greenPassed": 83,
+    "greenFailed": 0,
+    "greenSkipped": 0,
+    "greenOriginalSha": "15031FC32202ED7236EB5EAA960F668F5C68F106FFF72B23C5B9E6BC4666097D",
+    "draws": [
+      {
+        "action": "dispersed1000",
+        "binding": false,
+        "centralDrawAverage": 1991.2808988764045,
+        "physicalSegmentAverage": 1990.2808988764045,
+        "acceptedFrames": 89,
+        "wholeFrameSetPassAverage": 1994.314606741573,
+        "snapshotSame": true,
+        "reportSame": true
+      },
+      {
+        "action": "dispersed1000",
+        "binding": true,
+        "centralDrawAverage": 1991.2808988764045,
+        "physicalSegmentAverage": 1990.2808988764045,
+        "acceptedFrames": 89,
+        "wholeFrameSetPassAverage": 1994.314606741573,
+        "snapshotSame": true,
+        "reportSame": true
+      },
+      {
+        "action": "combat1000",
+        "binding": false,
+        "centralDrawAverage": 1991.4943820224719,
+        "physicalSegmentAverage": 1990.4943820224719,
+        "acceptedFrames": 89,
+        "wholeFrameSetPassAverage": 1995,
+        "snapshotSame": true,
+        "reportSame": true
+      },
+      {
+        "action": "combat1000",
+        "binding": true,
+        "centralDrawAverage": 1991.4943820224719,
+        "physicalSegmentAverage": 1990.4943820224719,
+        "acceptedFrames": 89,
+        "wholeFrameSetPassAverage": 1995,
+        "snapshotSame": true,
+        "reportSame": true
+      }
+    ]
+  }
+}

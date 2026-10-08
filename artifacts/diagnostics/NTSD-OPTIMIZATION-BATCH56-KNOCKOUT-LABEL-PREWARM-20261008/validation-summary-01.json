@@ -1,0 +1,28 @@
+{
+  "firstRun": {
+    "exit": 0,
+    "warningCount": 0,
+    "errorCount": 0,
+    "first": [
+      "Change ledger validation PASSED.",
+      "  Records: 1352"
+    ],
+    "last": [
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+      "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+    ]
+  },
+  "correction": "First wrapper matched wrong WARNING syntax; warningCount=0 is invalid. Corrected live validator: exit 0, 1352 records, 19 governed diff code files, 4252 historical warnings, 0 errors.",
+  "corrected": {
+    "exit": 0,
+    "records": 1352,
+    "governedDiffCodeFiles": 19,
+    "warnings": 4252,
+    "errors": 0
+  },
+  "diffCheck": {
+    "exit": 0,
+    "lfCrlfWarnings": 26
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "groupNames": [
+      "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteCoarseEnvelope"
+    ],
+    "includeDetails": false,
+    "includeFailedTests": true
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "observedUtc": "2026-10-07T13:54:55.3498128Z",
+  "backups": [
+    {
+      "source": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\01-BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha256": "6A76987ED708A3FEBD208C4C5660CC9BFE10EA6871812069FE6117CD278087B7"
+    },
+    {
+      "source": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\02-BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha256": "DE063F0E0BBE496FFC88034EBE8BA5903A0ED20FB6CBC6611E3119BDBBF96454"
+    },
+    {
+      "source": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\03-BattleCameraGcCallstackCaptureEditorTests.cs",
+      "sha256": "C9CD85920699DC2CD3DC16FEE316F55B7B3AED05AD6675D77D19DFFD38C8AC6E"
+    },
+    {
+      "source": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\04-CHANGE-LEDGER.md",
+      "sha256": "512CB6D311A7F4B273D5A1F6A2F8257B163C2C102D67373A35B949DBBDE63583"
+    },
+    {
+      "source": "docs/ai/STATE.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\05-STATE.md",
+      "sha256": "AF53F93749132DE61B7CFCE587AFA9446F0102461A3702E50AF98496CA4E59D2"
+    },
+    {
+      "source": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\06-CODEX-CURRENT-HANDOFF.md",
+      "sha256": "0706B952F908BAC6FC673549E47C5A7B394CBF08B38C724B9B28AC4D702BD546"
+    },
+    {
+      "source": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\07-INDEX.md",
+      "sha256": "2AE47B3A227B5D372B5FC5FA835C648AC18157F821850C8E0D5FCF826F9BFB28"
+    },
+    {
+      "source": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\08-battle-optimization-progress-tracker.md",
+      "sha256": "2EF9208E70D121AD9AB8280A59CA5A9927BD06F4CB961E14E9D7209BD1944D56"
+    },
+    {
+      "source": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007\\backup\\09-h-11-presentation-capacity-zero-gc.md",
+      "sha256": "D76EE71DB83FC5249140A1C74E0575F529C72FB866AE5CCEA49E145DACCBEDF6"
+    }
+  ]
+}

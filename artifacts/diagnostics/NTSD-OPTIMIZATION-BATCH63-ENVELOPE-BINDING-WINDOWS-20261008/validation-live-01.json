@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-08T00:45:42.2488765Z",
+  "validatorExit": 0,
+  "validatorWarnings": 4252,
+  "validatorErrors": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1359"
+  ],
+  "diffExit": 0,
+  "diffLineCount": 26,
+  "diffNonCrlf": [],
+  "guards": 109,
+  "changedGuards": [],
+  "backups": 9,
+  "badBackups": [],
+  "head": "45bbed41c64e0599601fa0df4028072d9f83303a",
+  "sourceSha": "03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71",
+  "oldM13RowsUnchanged": true
+}

@@ -539,6 +539,135 @@ namespace NTSD.Animation.Rendering.Editor
             }
         }
 
+        [Test]
+        public void RuntimeConfig_ReadinessHoldsBothFramesBeforeSampling()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Texture2D[] held = ReadPreparedFootTextures();
+                Assert.That(held, Is.EqualTo(new[] { fixture.FirstTexture, fixture.SecondTexture }));
+                Assert.That(ReadPreparedFootReferenceTexture(), Is.SameAs(fixture.FirstTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessReusesArrayForUnchangedCount()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Texture2D[] held = ReadPreparedFootTextures();
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.SameAs(held));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessRefreshesInPlaceFrameReplacement()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Texture2D[] held = ReadPreparedFootTextures();
+                fixture.Config.FootMarkerAnimationFrames[1] = null;
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.SameAs(held));
+                Assert.That(held[1], Is.Null);
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.126d),
+                    Is.SameAs(fixture.FirstTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessReleasesOldFramesOnShorterConfig()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                ReadPreparedFootTextures();
+                fixture.Config.FootMarkerAnimationFrames = new[] { fixture.SecondSprite };
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.EqualTo(new[] { fixture.SecondTexture }));
+                Assert.That(ReadPreparedFootReferenceTexture(), Is.SameAs(fixture.SecondTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessHoldsFallbackWhenFramesEmpty()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.Config.FootMarkerAnimationFrames = System.Array.Empty<Sprite>();
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.Empty);
+                Assert.That(ReadPreparedFootReferenceTexture(), Is.SameAs(fixture.FirstTexture));
+                Assert.That(BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.126d),
+                    Is.SameAs(fixture.FirstTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessReleasesReferencesWhenConfigRemoved()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                ReadPreparedFootTextures();
+                fixture.BindConfig(null);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.Empty);
+                Assert.That(ReadPreparedFootReferenceTexture(), Is.Null);
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessStillHonorsExplicitAuthoring()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                fixture.SetExplicitAuthoring(fixture.SecondSprite, BattleFootMarkerStyle.Default);
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Assert.That(ReadPreparedFootTextures(), Is.Empty);
+                Assert.That(ReadPreparedFootReferenceTexture(), Is.SameAs(fixture.SecondTexture));
+            }
+        }
+
+        [Test]
+        public void RuntimeConfig_ReadinessRepeatedSamplingKeepsStorage()
+        {
+            using (var fixture = new RuntimeConfigFixture())
+            {
+                BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();
+                Texture2D[] held = ReadPreparedFootTextures();
+                System.GC.Collect();
+                long beforeBytes = System.GC.GetAllocatedBytesForCurrentThread();
+                Texture selected = null;
+                for (int index = 0; index < 4096; index++)
+                    selected = BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(index * 0.033d);
+                long allocatedBytes = System.GC.GetAllocatedBytesForCurrentThread() - beforeBytes;
+                Assert.That(allocatedBytes, Is.Zero, "Only selection; the complete camera window is a separate gate.");
+                Assert.That(selected, Is.Not.Null);
+                Assert.That(ReadPreparedFootTextures(), Is.SameAs(held));
+            }
+        }
+
+        private static Texture2D[] ReadPreparedFootTextures()
+        {
+            var field = typeof(BattleCentralRenderSystem).GetField("runtimeFootMarkerAnimationTextures",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.That(field, Is.Not.Null, "All animation textures must be acquired and held before camera sampling.");
+            return (Texture2D[])field.GetValue(null);
+        }
+
+        private static Texture2D ReadPreparedFootReferenceTexture()
+        {
+            var field = typeof(BattleCentralRenderSystem).GetField("runtimeFootMarkerReferenceTexture",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.That(field, Is.Not.Null, "The fallback/reference texture must remain held too.");
+            return (Texture2D)field.GetValue(null);
+        }
+
         private sealed class RuntimeConfigFixture : System.IDisposable
         {
             private readonly System.Reflection.FieldInfo instanceField;

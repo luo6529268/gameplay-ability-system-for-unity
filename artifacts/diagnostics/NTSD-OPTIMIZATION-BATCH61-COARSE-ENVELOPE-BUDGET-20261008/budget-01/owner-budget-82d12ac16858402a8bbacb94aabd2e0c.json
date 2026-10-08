@@ -1,0 +1,16 @@
+{
+  "schema": "ntsd/coarse-envelope-prepared-owner-budget@1",
+  "scope": "cold actual owner path, not live Battle slot readback or a new 0GC measurement",
+  "participantBufferOwnerCount": 1,
+  "participantArrayFieldCount": 1,
+  "initialCapacity": 128,
+  "preparedCapacity": 1050,
+  "countAfterFullBuild": 1000,
+  "countAfterShrunkBuild": 900,
+  "arrayReusedAfterPrepareToggleBuild": true,
+  "oldNewTransitionRecordCapacity": 1178,
+  "transitionModel": "resize old/new arrays may coexist until old array is no longer retained and collected",
+  "instanceGpuLeaseStagingOwnedByThisBuffer": false,
+  "includesEntireWorld": false,
+  "productionCandidateDefault": false
+}

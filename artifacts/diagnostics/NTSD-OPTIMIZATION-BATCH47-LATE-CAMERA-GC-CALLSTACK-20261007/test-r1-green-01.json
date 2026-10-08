@@ -1,0 +1,339 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "6eaf29e3755845e8a6a46ab01d1048c8",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791382198740,
+      "finished_unix_ms": 1791382208017,
+      "last_update_unix_ms": 1791382208017,
+      "progress": {
+        "completed": 33,
+        "total": 9564,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791382207477,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_PreservesCallerOwnedFreshOutputRoot",
+        "last_finished_unix_ms": 1791382207477,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 33,
+          "passed": 33,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.6230392,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CameraCompletion_RequiresExactFixedCapacity(-1,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraCompletion_RequiresExactFixedCapacity(-1,False)",
+            "state": "Passed",
+            "durationSeconds": 0.4850574,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraCompletion_RequiresExactFixedCapacity(0,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraCompletion_RequiresExactFixedCapacity(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001635,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraCompletion_RequiresExactFixedCapacity(7,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraCompletion_RequiresExactFixedCapacity(7,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000866,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraCompletion_RequiresExactFixedCapacity(8,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraCompletion_RequiresExactFixedCapacity(8,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000755,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraCompletion_RequiresExactFixedCapacity(9,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraCompletion_RequiresExactFixedCapacity(9,False)",
+            "state": "Passed",
+            "durationSeconds": 0.000078,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(4.0d,5.0d,8.0d,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(4.0d,5.0d,8.0d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.000693,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(5.0d,5.0d,8.0d,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(5.0d,5.0d,8.0d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0001644,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(6.0d,5.0d,8.0d,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(6.0d,5.0d,8.0d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000944,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(8.0d,5.0d,8.0d,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(8.0d,5.0d,8.0d,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0001103,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(9.0d,5.0d,8.0d,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(9.0d,5.0d,8.0d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000829,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CameraTimeRange_ExcludesOutsideAndReversedBoundaries(7.0d,8.0d,5.0d,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.CameraTimeRange_ExcludesOutsideAndReversedBoundaries(7.0d,8.0d,5.0d,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000702,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_ReadDoesNotInitializeOrChangeNativeHistory",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_ReadDoesNotInitializeOrChangeNativeHistory",
+            "state": "Passed",
+            "durationSeconds": 0.0013527,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_RejectsUnboundedOrInsufficientHistory(0,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0004111,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_RejectsUnboundedOrInsufficientHistory(7,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(7,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000996,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_RejectsUnboundedOrInsufficientHistory(8,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(8,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000861,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_RejectsUnboundedOrInsufficientHistory(300,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(300,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000808,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateHistory_RejectsUnboundedOrInsufficientHistory(301,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateHistory_RejectsUnboundedOrInsufficientHistory(301,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000709,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateRequest_PreservesFullScopeAndFiniteSingleWindow",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRequest_PreservesFullScopeAndFiniteSingleWindow",
+            "state": "Passed",
+            "durationSeconds": 0.0022424,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateRequest_RemainsDiagnosticWithoutReplayTimingOrInput",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRequest_RemainsDiagnosticWithoutReplayTimingOrInput",
+            "state": "Passed",
+            "durationSeconds": 0.4769813,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateRing_RejectsCrossFrameCameraBoundary",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRing_RejectsCrossFrameCameraBoundary",
+            "state": "Passed",
+            "durationSeconds": 0.001034,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateRing_RetainsOrdinal937WithoutGrowingOrStoppingAtEight",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateRing_RetainsOrdinal937WithoutGrowingOrStoppingAtEight",
+            "state": "Passed",
+            "durationSeconds": 0.0199942,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateSettings_RecordsProducerBufferSeparatelyFromHistory",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateSettings_RecordsProducerBufferSeparatelyFromHistory",
+            "state": "Passed",
+            "durationSeconds": 0.0009785,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(1,0L,True,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1,0L,True,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0005927,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(8,0L,True,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(8,0L,True,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0001252,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(937,12L,True,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(937,12L,True,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000813,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(1799,0L,True,False)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1799,0L,True,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0000843,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(1800,0L,True,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(1800,0L,True,True)",
+            "state": "Passed",
+            "durationSeconds": 0.000075,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,0L,False,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,0L,False,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000707,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,-1L,True,True)",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.LateStop_RequiresEventInvalidScopeOrFiniteLimit(12,-1L,True,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0000762,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_CapturesFirstEightCamerasWithoutReplay",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_CapturesFirstEightCamerasWithoutReplay",
+            "state": "Passed",
+            "durationSeconds": 0.0003215,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_DoesNotAddTimingOrInputExperiment",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_DoesNotAddTimingOrInputExperiment",
+            "state": "Passed",
+            "durationSeconds": 0.0002437,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_PreservesCalibratedFullCameraAndObserverScopes",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_PreservesCalibratedFullCameraAndObserverScopes",
+            "state": "Passed",
+            "durationSeconds": 0.0002277,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Request_PreservesCallerOwnedFreshOutputRoot",
+            "fullName": "NTSD.Test.Editor.BattleCameraGcCallstackCaptureEditorTests.Request_PreservesCallerOwnedFreshOutputRoot",
+            "state": "Passed",
+            "durationSeconds": 0.0001719,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

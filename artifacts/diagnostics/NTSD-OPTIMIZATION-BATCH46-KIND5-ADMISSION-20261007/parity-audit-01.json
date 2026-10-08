@@ -1,0 +1,70 @@
+{
+  "utc": "2026-10-07T13:27:27.2527046Z",
+  "cases": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/Combat1000-kind5-parity-084a3687b60d4591a8888a6848758233.json",
+      "bytes": 120976,
+      "sha256": "B480F11D60BE79A366B27607308B2E5BF335A3F29C3D3E97E1E9D29B9DC42DA7",
+      "ticksPerPath": 32,
+      "differences": [],
+      "baselineKind5AppliedTicks": 0,
+      "candidateAppliedTicks": 32,
+      "candidateFallbacks": 0,
+      "skippingTicks": 32,
+      "skipMax": 652451,
+      "minimumEntities": 1000,
+      "nativeCallsFinal": 254626,
+      "performanceEvidence": false
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/Dispersed1000-kind5-parity-cee0a379da28498f931de1a082b5564c.json",
+      "bytes": 120968,
+      "sha256": "9A718D599DF1FAF2774E025E79A7D7F137A48619176526B5A1B544A1340AD7E6",
+      "ticksPerPath": 32,
+      "differences": [],
+      "baselineKind5AppliedTicks": 0,
+      "candidateAppliedTicks": 32,
+      "candidateFallbacks": 0,
+      "skippingTicks": 32,
+      "skipMax": 848001,
+      "minimumEntities": 1000,
+      "nativeCallsFinal": 272727,
+      "performanceEvidence": false
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/left-x350-kind5-parity-9b498134aa0348b6961fde41642cb239.json",
+      "bytes": 43381,
+      "sha256": "7C45462C9CE093CFE27C6BFB341ECF7F5C511CEA7690EC6FA3C83938E59B99FB",
+      "ticksPerPath": 12,
+      "differences": [],
+      "baselineKind5AppliedTicks": 0,
+      "candidateAppliedTicks": 12,
+      "candidateFallbacks": 0,
+      "skippingTicks": 8,
+      "skipMax": 2,
+      "minimumEntities": 2,
+      "nativeCallsFinal": 5,
+      "performanceEvidence": false
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/right-x550-kind5-parity-8dc9ab06ebb14848828ee6e9b332f91d.json",
+      "bytes": 43381,
+      "sha256": "522320823E9DF7C6DBC76306D921BAD9D1426D1B9F7EBB94AFB71B33718157F8",
+      "ticksPerPath": 12,
+      "differences": [],
+      "baselineKind5AppliedTicks": 0,
+      "candidateAppliedTicks": 12,
+      "candidateFallbacks": 0,
+      "skippingTicks": 7,
+      "skipMax": 2,
+      "minimumEntities": 2,
+      "nativeCallsFinal": 5,
+      "performanceEvidence": false
+    }
+  ],
+  "qualificationJob": "561602e5d8d44aa5b4e8de3849edf287",
+  "newCases": 4,
+  "comparedTickPairs": 88,
+  "executedDriverTicks": 176,
+  "note": "exact full-domain checksum hash strings and RNG calls; not complete native World/Scene FPS/GC evidence"
+}

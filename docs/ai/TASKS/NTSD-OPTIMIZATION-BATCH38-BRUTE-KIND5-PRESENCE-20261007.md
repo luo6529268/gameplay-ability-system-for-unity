@@ -1,4 +1,19 @@
 # 第38批普通Brute kind5存在性缓存
+
+必要逐tick/适用正式字段资格已由46限定通过：11/11（4新/7旧）、两侧12与两个千人32 OFF/ON全域checksum/RNG同，候选每tick实际应用无回退；[46报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH46-KIND5-ADMISSION-20261007/REPORT.md)。本38仍RUNTIME_PENDING / NO_DEFAULT_PROMOTION，kind5 default false，H07性能/H11完整0GC不晋升；不重跑该资格或原短窗，下方“下一准入门”为此前快照。
+
+本批实际窗口和有限候选资格已交付，SCOPED_GAIN_NOT_ADMITTED / RUNTIME_PENDING，不默认推广：235/235、两实际1000AI120+180完成，末300完整snapshot/20hash同45；logic74.610/77.467ms、P95仍89.403/98.277ms、drop694/660，GC UNKNOWN/H11旧FAIL保持。详细REPORT当前终态优先，旧37/PLANNED仅历史。下一仅此候选生产准入必要门，不能把现有末tick等价当全tick或正式字段证明。Goal active、24已执行，不因次数停。
+
+## 当前恢复修订（2026-10-07，先于本批C#）
+
+阶段一实际9/9 GREEN（dbb52ed51fb54ffa8719430688974099），固定fixture baseline31.70605→candidate25.3761375ms，局部约19.96%，非实景收益。条件阶段二现进入：只Suite一个准确已备份脚本，新增kind5候选专用两个request与原flag恢复；复用生产40模式，不再切四原默认。先3request+2原flag true/false恢复有效RED（这2项是新增可变配置必要生命周期门，不是新优化批），再实现；普通生产四默认不变、kind5仅两窗前开启/正常终态和abort恢复。65 request字段同40仅output，正式测量仍未执行。
+
+沿用38 ID，IN_PROGRESS / NO_DEFAULT_PROMOTION；下方37 baseline和6400仅事前历史，当前基线为40已接入普通生产默认四机制（true），45关闭额外计时logic77.605/79.950ms、collector48.312/50.740ms。原Editor19040实际6402/Menu clean idle。新kind5 flag仍default false，Role-aware/平台/四原默认不改。
+
+当前唯一候选/9 collector测试沿用下方矩阵。新增bool每次participant构造/attack cache重建清零；仅普通Brute exact-cache且geometry-first路径、所有既有前置成立时启用。HasExactKind5Itr=false才省扫描，有kind5完整原路径，binding副作用不绕过。Last applied/skip与Total collection计数仅诊断，不当GPU/FPS。
+
+准确当前11文件副本（3代码+6进度+38 Task/Record），Operation NTSD-OPTIMIZATION-BATCH38-BRUTE-KIND5-PRESENCE-20261007-CONTINUE/before-current-01.json，旧备份不作当前恢复来源。不修改Goal正文。阶段一query+collector9有效RED→GREEN和既有Formal类回归/固定1000逻辑实体4warm+8sample交替成本；只有局部有收益才阶段二Suite三个request测试/独立菜单及一次两实际1000AI120+180。Suite新request同40（不再同37）65字段仅output，原flags全恢复；无收益不推进实景。真实布局增量bytes待确认，不等于1050 bool字节。H07/H11仍未通过，Goal active。
+
 PLANNED / NO_DEFAULT_PROMOTION；新批累计17（22–38）。37实际collector48.31/50.12ms仍61–62%，性能FAIL。源重扫发现PassesReleaseCoarsePrefilterCached普通union miss后总扫描ExactItrRectCount寻找kind5（6044–6090）；BuildRoleAwareFormalExactAttackCache已每次建立同一exact ITR列表（4242–4305），可同期派生是否存在kind5，不更改几何/规则。
 
 ## 唯一候选

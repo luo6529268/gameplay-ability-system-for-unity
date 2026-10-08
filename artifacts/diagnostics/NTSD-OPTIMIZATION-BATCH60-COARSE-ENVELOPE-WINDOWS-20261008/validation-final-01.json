@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-07T23:18:27.4458259Z",
+  "validatorExit": 0,
+  "summary": "exit 0; validator detailed historical counts not recounted",
+  "diffCheckExit": 0,
+  "diffWarnings": 26,
+  "diffOther": [],
+  "tableUniqueIds": 34,
+  "stageRows": [
+    {
+      "rows": 3,
+      "id": "H-06"
+    },
+    {
+      "rows": 3,
+      "id": "H-07"
+    },
+    {
+      "rows": 3,
+      "id": "H-11"
+    },
+    {
+      "rows": 3,
+      "id": "M-03"
+    },
+    {
+      "rows": 3,
+      "id": "M-13"
+    },
+    {
+      "rows": 3,
+      "id": "M-14"
+    }
+  ],
+  "warningCount": "NOT_RECOUNTED_BAD_PREFIX_FILTER"
+}
