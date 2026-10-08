@@ -1,0 +1,113 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008",
+  "utc": "2026-10-08T12:28:12.4781372Z",
+  "head": "06a5fe9c78681bdb8844e59804f30a9480cb221d",
+  "staged": [],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "43ECB5B1FA0570A6E5B413CE8FB28EC371B8255879978E0B5B2EC10254883D8C",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/01-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "gitStatus": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "659ECEEFF59920D6CB8F99C1BBB695E8D475A498F4205FD8C974D92B2254AF7C",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/02-battle-optimization-progress-tracker.md",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "06586019040878328DDDA53BC9EFE7D1DC5B8EFACA18E95A426496D8DEA00D82",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/03-STATE.md",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "D9BB55A7127FABA972C991B12952C8EDD0EF74E878A7D0BEFD0C853017FDF97A",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "4C60EB36DD37A9773D14FFD5D3269CCFB830BEED67C9F6FFB74D24778652B733",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/05-CHANGE-LEDGER.md",
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "AC8B13DC2D527AFBBFCD75F02C303B8845E0BAD7E42B7A0488842FA4E2579E70",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/06-INDEX.md",
+      "gitStatus": []
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "84F2E3C617E7937D78C9C92C668EC70100400F2883FE420A06F2DEA1F13DBC61",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/07-Goal18_LastTestResults.xml",
+      "gitStatus": []
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "exists": false,
+      "sha": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before/08-NTSD_ProductionEntityStress.result",
+      "gitStatus": []
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before-manifest-01.json",
+      "sha": "9ECBE628AB7636EEAE0DD20BD0EE83E7CEDA5590E0D16DD850076F1D2B21E6D8"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "docs/ai/STATE.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "D33345A3DBA761C41E27B0CFF2A48C451E56C514973D93C50BFAA456B5B09242"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/REPORT.md",
+      "exists": true,
+      "sha": "0BA5FD4E3EBF5DAF45BB9B5ADDF26BC91A04AA907BDD192F028DA53D52AF438D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/correction-green-results-01.xml",
+      "exists": true,
+      "sha": "84F2E3C617E7937D78C9C92C668EC70100400F2883FE420A06F2DEA1F13DBC61"
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "utc": "2026-10-08T14:24:43.3844458Z",
+  "operationId": "NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008",
+  "head": "06a5fe9c78681bdb8844e59804f30a9480cb221d",
+  "staged": [],
+  "protectedCount": 615,
+  "protectedChanges": [],
+  "freshInputs": 16,
+  "preservation": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupSha256": "822C4102483DF0A4B1F5CA78EFA273A71D181EF23295A36F4D9CC25282307099",
+      "afterSha256": "4C3DD53ED6A46683DD85AAF15D0DEF9AB0A4D69AF4C182E3F67520D3EA276E1F",
+      "beforeBytes": 175166,
+      "afterBytes": 175783,
+      "originalPreserved": true,
+      "method": "entire original bytes preserved as suffix"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "3028CAB17E0B29307A4AC2D24C5D6888ED4A01792556E2A3FAB9AFC0F49D1734",
+      "afterSha256": "D7F31A027C41CC5030DC1070237E42F4FB047FB68D2360F3A747F4C18D444859",
+      "beforeBytes": 1563081,
+      "afterBytes": 1564075,
+      "originalPreserved": true,
+      "method": "entire original bytes preserved as suffix"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backupSha256": "0120D3F385492527CC48D255C008D3E94F5F0C58C20F40212C487DFC8FE48138",
+      "afterSha256": "B96622A2F57819AFF1408A518BA0E1CB2390EB5C2CCDB0F62C953BE797464744",
+      "beforeBytes": 1629459,
+      "afterBytes": 1630433,
+      "originalPreserved": true,
+      "method": "entire original bytes preserved as suffix"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backupSha256": "36305741D5D6BBD506424BAEC534EAF95A43E0DF8FB92B19D08B24038DDA44DC",
+      "afterSha256": "BC95EDCDE99EB9112967C9E26D3A865A6A74D17D49A4D711BDC7D5B0372847C8",
+      "beforeBytes": 723907,
+      "afterBytes": 724515,
+      "originalPreserved": true,
+      "method": "entire original bytes preserved as suffix"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupSha256": "1F2FE64BB600A4D28714941A5972EEA1EB4FCFDDA30E90ECECD21538ABC84A85",
+      "afterSha256": "CBEFAB44A9359E4B30F77FA7B14ACEA5F5F20BDAA345F1EF97FC7D99F7DB5901",
+      "beforeBytes": 110855,
+      "afterBytes": 111369,
+      "originalPreserved": true,
+      "method": "entire original bytes preserved as suffix"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md",
+      "backupSha256": "3F098149EDA529E9108015DAEEA74ADD994A17F5728ED065220144E902901D18",
+      "afterSha256": "AD88FA3D17E25BEC1281968C03CC68C7D1D712851FE68773F31050A41EB9237C",
+      "beforeBytes": 4144,
+      "afterBytes": 4765,
+      "originalPreserved": true,
+      "method": "original non-trailing-newline prefix exact; appendix inserted before terminal blank lines"
+    }
+  ],
+  "unityActions": "NOT_RUN",
+  "tests": "NOT_RUN",
+  "measurement": "NOT_RUN",
+  "goalStatusChange": "NOT_CALLED",
+  "validation": {
+    "changeLedger": {
+      "utc": "2026-10-08T14:24:50.2174999Z",
+      "exitCode": 0,
+      "records": 1374,
+      "governedCodeDiffCount": 1,
+      "warningCount": 4398,
+      "note": "Existing Suite diff remains covered; warnings retained, not a runtime certificate."
+    },
+    "diffCheck": {
+      "utc": "2026-10-08T14:24:51.6861680Z",
+      "exitCode": 0,
+      "crlfWarningCount": 10
+    }
+  },
+  "finalizedUtc": "2026-10-08T14:26:07.6246495Z",
+  "finalExisting": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "4C3DD53ED6A46683DD85AAF15D0DEF9AB0A4D69AF4C182E3F67520D3EA276E1F",
+      "bytes": 175783
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "D7F31A027C41CC5030DC1070237E42F4FB047FB68D2360F3A747F4C18D444859",
+      "bytes": 1564075
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "B96622A2F57819AFF1408A518BA0E1CB2390EB5C2CCDB0F62C953BE797464744",
+      "bytes": 1630433
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "BC95EDCDE99EB9112967C9E26D3A865A6A74D17D49A4D711BDC7D5B0372847C8",
+      "bytes": 724515
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "CBEFAB44A9359E4B30F77FA7B14ACEA5F5F20BDAA345F1EF97FC7D99F7DB5901",
+      "bytes": 111369
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md",
+      "sha256": "AD88FA3D17E25BEC1281968C03CC68C7D1D712851FE68773F31050A41EB9237C",
+      "bytes": 4765
+    }
+  ],
+  "finalFreshInputChanges": []
+}

@@ -1,0 +1,364 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008",
+  "changeId": "NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079",
+  "utc": "2026-10-08T14:01:42.2729122Z",
+  "head": "06a5fe9c78681bdb8844e59804f30a9480cb221d",
+  "staged": [],
+  "existing": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 105171,
+      "sha256": "351937511B65C91E951626FF375C188EBC33EF30F43FCF1D54ACBACCA3ED1AA7",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "gitStatus": "",
+      "firstLine": null
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "bytes": 54759,
+      "sha256": "3838B133247C5835A8DE71EAD2BABCA75720475E88D9E01D342B913B6C1ACE25",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleOptimizationCpuGcCaptureEditor.cs",
+      "gitStatus": "",
+      "firstLine": null
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "bytes": 10579,
+      "sha256": "63018018DB4D9397A959B0FE77181982248397908BFA71DC6978EF1D552C51A2",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "gitStatus": "",
+      "firstLine": null
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 175166,
+      "sha256": "822C4102483DF0A4B1F5CA78EFA273A71D181EF23295A36F4D9CC25282307099",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/battle-optimization-progress-tracker.md",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "firstLine": "> SetPass只读补充 / PARTIAL_STATIC_EVIDENCE：OID1 Sakura原始oid引用保守递归为13注册对象/22sheet（13 DAT SHA均匹配正式catalog）；saku799×1119、rage683×247可入现有页，OID900拥有fla3000×800超大sheet，须保持设备能力/Source2D回退，不证明该sheet本窗显示。26153356bytes仅源RGBA估算，非完整闭包/atlas/双预算实测；无代码/Unity/测量/新收益，SetPass沿用77的1995。实施范围仍待人类确认，57执行/4of6/H07H11 OPEN/Goal active不变，不另计优化子批、不解冻专项。[证据](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1563081,
+      "sha256": "3028CAB17E0B29307A4AC2D24C5D6888ED4A01792556E2A3FAB9AFC0F49D1734",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> SetPass只读补充 / PARTIAL_STATIC_EVIDENCE：OID1 Sakura原始oid引用保守递归为13注册对象/22sheet（13 DAT SHA均匹配正式catalog）；saku799×1119、rage683×247可入现有页，OID900拥有fla3000×800超大sheet，须保持设备能力/Source2D回退，不证明该sheet本窗显示。26153356bytes仅源RGBA估算，非完整闭包/atlas/双预算实测；无代码/Unity/测量/新收益，SetPass沿用77的1995。实施范围仍待人类确认，57执行/4of6/H07H11 OPEN/Goal active不变，不另计优化子批、不解冻专项。[证据](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/docs/ai/STATE.md",
+      "bytes": 1629459,
+      "sha256": "0120D3F385492527CC48D255C008D3E94F5F0C58C20F40212C487DFC8FE48138",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/STATE.md",
+      "gitStatus": "M docs/ai/STATE.md",
+      "firstLine": "> SetPass只读补充 / PARTIAL_STATIC_EVIDENCE：OID1 Sakura原始oid引用保守递归为13注册对象/22sheet（13 DAT SHA均匹配正式catalog）；saku799×1119、rage683×247可入现有页，OID900拥有fla3000×800超大sheet，须保持设备能力/Source2D回退，不证明该sheet本窗显示。26153356bytes仅源RGBA估算，非完整闭包/atlas/双预算实测；无代码/Unity/测量/新收益，SetPass沿用77的1995。实施范围仍待人类确认，57执行/4of6/H07H11 OPEN/Goal active不变，不另计优化子批、不解冻专项。[证据](../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/docs/ai/CHANGE-LEDGER.md",
+      "bytes": 723907,
+      "sha256": "36305741D5D6BBD506424BAEC534EAF95A43E0DF8FB92B19D08B24038DDA44DC",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/CHANGE-LEDGER.md",
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md",
+      "firstLine": "> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 110855,
+      "sha256": "1F2FE64BB600A4D28714941A5972EEA1EB4FCFDDA30E90ECECD21538ABC84A85",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/INDEX.md",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "firstLine": "> NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008 / VERIFIED（仅文档操作/只读取证）：13对象22sheet/1超大源；4准确dirty备份与旧正文、48输入及604旧guard核同，HEAD/staged同、diff与ChangeLedger exit0。无代码/资源/Unity/测量，57执行/4of6/H07H11 OPEN不变；共享绑定实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/RECORD.md)。"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Temp/Goal18_LastTestResults.xml",
+      "bytes": 32636,
+      "sha256": "5D9A625DDF59E7EA78EED3398214C0705AFBA1300B71277B0FF5BB89DE517268",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/Goal18_LastTestResults.xml",
+      "gitStatus": "",
+      "firstLine": null
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before-manifest-01.json",
+      "sha": "7B8542A680BCC4141D21A0F4078EAF447146363A5BEFD3227B2C5BC768317E08"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs"
+  ],
+  "additionalGuards": [
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/catalog.csv",
+      "exists": true,
+      "sha": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/c/saku/saku.dat",
+      "exists": true,
+      "sha": "B96FBC8055C0B3B62B05E9AD2AA735A7E32F56EB2648EBAFBDE14D8A0509DB48"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/c/saku/a/atk.dat",
+      "exists": true,
+      "sha": "5DD9B3ED4CB43C633B58A706741EA3CEBA049C783AA59B068A9E04C89B8B8C92"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/w/4.dat",
+      "exists": true,
+      "sha": "54CFFDA696CB220FEC8F606509A4408C954D9EE002E32CBAB5BC442B62A7BB26"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/w/5.dat",
+      "exists": true,
+      "sha": "80EE80252F2CF749E950B2E25035879C11CB7517863AF0CA14B7E88814121B12"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/w/8.dat",
+      "exists": true,
+      "sha": "6DBD01033891ABE442590EB40DEA4E5B31B1FC64F22140E6407C4E834F6F78B5"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/w/1.dat",
+      "exists": true,
+      "sha": "4C463E5504005B5B55E1015D0200251B4AD27AA529C5F366DFFA1959CF9E5743"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/w/l.dat",
+      "exists": true,
+      "sha": "9BA2A5E7B8C46A47B23415A7F7913A984ADC52944320043661F6B8E46C9C13E3"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/a/hea/hea.dat",
+      "exists": true,
+      "sha": "7902F2FC1E3497958D6DD551568275184B0487364B4E5F734D5F62A6E568FB56"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/a/cha/cha.dat",
+      "exists": true,
+      "sha": "20C0704FC53B3D18D77FE61566F0B7445C31DAD9C5D8197C5444F960E89E6692"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/a/gro/gro.dat",
+      "exists": true,
+      "sha": "60816F558FB2EAE757FF1D40CE145A4044881EE3F3D9AC3F30FE1583F5CC6A73"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/a/pof/pof2.dat",
+      "exists": true,
+      "sha": "926AD3324F0B96F5FD235987E612A781491B60496C3AE81FDC7D333A90B1EA6C"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/a/cla/cla.dat",
+      "exists": true,
+      "sha": "563BD1E33CFC5406B102638C66BB12CB36A7C3A2E51411DEA421E5DF531AD8B2"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/decoded_dat/data/broken_weapon.dat",
+      "exists": true,
+      "sha": "C53F8D3882A74DCE9C425111CC1FA9C96D73CBEE9D6255E4978378BEB60D8B7C"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/c/saku/saku.png",
+      "exists": true,
+      "sha": "607C6CB4F23111A1C74AABCB195144187CBF57805F2E45E415DF6C42902451A6"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/c/saku/rage.png",
+      "exists": true,
+      "sha": "DDAB6DE29C8045E1E2BA3CE441C4F7AE8B9C171746A9AE645DF4992A5519CE25"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/c/saku/a/sna3.png",
+      "exists": true,
+      "sha": "C0AC8C2631977CFB346B224D529FB3D9508E079FD58D504833A0C4D2A1A874AC"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/c/saku/a/sna2.png",
+      "exists": true,
+      "sha": "0502F7C88E825C8F0084ADBF016D9D19A1C5897AA40861AAAFAFF274AE151C68"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/w/4.png",
+      "exists": true,
+      "sha": "1657FF0084079D1565CD1D303931A5D6F0B68EB51C03CFBA47EB83AE3D847205"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/w/5.png",
+      "exists": true,
+      "sha": "8F8CE022421865DD6998D6580C69629AE25E3C32CF9AD0335912535DB3819C20"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/data/pixel.png",
+      "exists": true,
+      "sha": "CFAD749FBCEC2FADEDC6F47289E9679DEFACFAC386125BC88643ED1275518EAA"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/w/1.png",
+      "exists": true,
+      "sha": "37BB291F216003F55CEF41EE731D03859C512840F0AA34B2F959DAD09B63795D"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/w/l.png",
+      "exists": true,
+      "sha": "ACAC8DAE8BC6901BE01FFB6EA82276C05BAF8B2568C62CE743143993AA24F8EB"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/hea/hea.png",
+      "exists": true,
+      "sha": "ED6A5C0D3B1A49ED0F9553EB5601FBA7E49404BA0CA86FECCFCFD2AE0F67365F"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cha/cha.png",
+      "exists": true,
+      "sha": "BF69A255C2782014D430664BEDD23E41B961D4E40789B3E360ADAFA3715DF352"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cha/cha2.png",
+      "exists": true,
+      "sha": "0FEA7963FB180C0796C4F5F402983317602D945D83DF5E409E3CD41CE761058B"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/gro/gro.png",
+      "exists": true,
+      "sha": "26E715BD90CF7637CA7BB1A50833745DD14D6FB9AD136812E319986522E1C80A"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/pof/pof2.png",
+      "exists": true,
+      "sha": "207D8E3869FADF58C198E92FA32B7FF8F5AE17029F66AE64DB05C004B77D846F"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/pof/pof3.png",
+      "exists": true,
+      "sha": "F22370E9721E056767EAB585FE59E1DCE6BD90D1F072819F7AE9FCEBB56B5D12"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/pof/pof4.png",
+      "exists": true,
+      "sha": "CC20619AB0DB4DDC0EC1026449214C96C345D95C4BFC5E9C06B3D675B78DEC2B"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cla/cla.png",
+      "exists": true,
+      "sha": "948F2088D910457BA43F79DAA6E82ACC4109B341B4F49E0951299918F0FFE512"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cla/cla2.png",
+      "exists": true,
+      "sha": "70AE0F235793FFAF4C0A6618FFE792A785EB2B9A7FB11D2DE3FC6B7D99B16EC9"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cla/cla3.png",
+      "exists": true,
+      "sha": "9E26A8C33A7839911E6F93710C3B4619371CD7DEAF3660521FA1220456D66D62"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cla/cla4.png",
+      "exists": true,
+      "sha": "F547912920CB2A18B25750B50FD10331C16F08F530684D20AF4055CF9B6AD859"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/a/cla/fla.png",
+      "exists": true,
+      "sha": "23FD23FD3F32A1AF26C186148F232468B32741AF14E0F4DA5BC9B51F16EB06D0"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime/vfs/data/broken.png",
+      "exists": true,
+      "sha": "5B5E6E0A1FACBE41A58BA26B671179BF05EC3C582613B3EF06C050C4F1C77233"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "exists": true,
+      "sha": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "exists": true,
+      "sha": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+      "exists": true,
+      "sha": "057FD4D65B9317110ED5BCF356F92BBEB7A5F9217E09C715E95A036CF20CB32B"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/App/AppManager.cs",
+      "exists": true,
+      "sha": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "exists": true,
+      "sha": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "exists": true,
+      "sha": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "exists": true,
+      "sha": "F5519E8F5AD9634244C5D1DC1E67A6B3415054FAF8F9EAFAC9C694E096E52292"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "exists": true,
+      "sha": "F1649C0F78F1B897FF0E7846F3F5E7FBEF63B3283E1A3BC1E95F6B3AEB99A58B"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "6FE1054C0FE8F02223B706E218D559E90C9215B35001EC274A733591DA8470E7"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/Runtime/BattleAtlasLayoutPlanner.cs",
+      "exists": true,
+      "sha": "340003F9B623A97DD966986DCFF9D15CE4737874B9821E625BD0E1EE197650C8"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "exists": true,
+      "sha": "396653874921D97C45052433E376A732D15FEC94FDDFCC628B658A71F082E6E2"
+    },
+    {
+      "path": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Animation/BattleContentSource.cs",
+      "exists": true,
+      "sha": "D3DE7CD93C965E7DDAB03D3098F55284EB727D48FD4D39AD50C0A7535D8E04D5"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "exists": true,
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "exists": true,
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ],
+  "editor": {
+    "pid": 74724,
+    "port": 6402,
+    "version": "2022.3.62f3",
+    "scene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "clean": true,
+    "roots": 8,
+    "idle": true
+  },
+  "runtimeOutputRoot": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/camera-01",
+  "xmlOutput": "Temp/Goal18_LastTestResults.xml"
+}

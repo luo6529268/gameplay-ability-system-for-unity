@@ -1,3 +1,18 @@
+> SetPass为下一实施主线；79仅事前准备，未改脚本或运行，不推广、不新增已执行批次。下表补齐此前新建Record的恢复索引，PLANNED不表示授权新增视觉准备链或执行工具正对照。
+
+| Change ID | 状态 | 范围 | 记录 | 证据 |
+|---|---|---|---|---|
+| NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079 | PLANNED | 仅三个Editor路径的未执行准备；DEFERRED_SETPASS_PRIORITY | [Record](CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md) | 三源SHA仍同事前manifest；没有测试、Play或收益；不计已执行批次 |
+
+> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。
+
+> 第77批 FOCUSED_TEST_PASS / WINDOWS_READY / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077；仅Suite冷接线，新36有效RED→46/46 GREEN（旧10），source6FE1054C...8470E7。604保护0变化/7准确副本、旧Ordinal tests/BeginSuite17参数和生产Query保持。下一执行四真实1000AI 120+180 OFF/ON，0拒绝覆盖合法但不称收益，三prepared容量/noFallback/正常异常恢复OFF；无新收益。56执行、阶段4/6/H07H11 OPEN、父关闭0、Goal active，SetPass最新1995未降，专项门保持。
+
+> 第77批 PLANNED / WINDOWS_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。仅现有Suite冷接线及同文件测试，复用76 scoped Driver资格；四真实1000AI 120warm+180sample（Dispersed/Combat各OFF/ON），同请求仅outputPath不同，原四默认ON、独立候选/计时OFF，depth测试所有出口恢复OFF。拒绝覆盖与正确性分离，零覆盖不制造失败/收益；三prepared容量不增长、无fallback、逻辑GC沿用现有校准，十一阶段关闭及Scene文件保持。55执行＋77准备、阶段4/6/H07H11 OPEN、父关闭0、Goal active；资源/ATLAS/EXT1/Mono/Q06不解冻，SetPass最新1995未降。
+
+> 当前第76批 FOCUSED_TEST_PASS / SCOPED_DRIVER_QUALIFIED / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076。用户通知原Unity空闲后完成既定资格：首轮7/8（仅Dispersed“必须有拒绝”覆盖假设FAIL），显式覆盖合同新2guard有效RED→窄GREEN3/3，复用原7形成10唯一case证据，不冒充新跑10/10。最终88配对/176step声明checksum/两完整RNG/AI1000/方向一致、三prepared数组/容量/无fallback/旧关闭三0；Dispersed32tick零拒绝NO_REJECT_COVERAGE、Combat正覆盖max26，不当收益。仅Admission冷测试/资格，query/defaultOFF/Suite未改；原Editor Menu唯一clean8roots/nonPlay/CS0/602保护0变化。55已执行、阶段4/6、H07/H11 OPEN、父关闭0、Goal active；无新FPS/SetPass/完整0GC，最新SetPass1995仍未降。下一独立Task按现有Suite做depth实际千人OFF/ON固定短窗，不再重跑已过资格；资源/ATLAS/EXT1/Mono专项保持。执行期间外部HEAD06a5fe9c收录已有文件，本代理无Git提交/回退，受影响字节核同。
+
+历史第76批通知前纯脚本交付快照（下方保留）：
 > 当前第76批 CODE_WRITTEN / ISOLATED_CSHARP_COMPILE_PASS / UNITY_DRIVER_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076；用户要求先pure脚本、通知后再Unity，本批只Admission显式depth资格/新5tests/三prepared数组与容量保护，74候选仍OFF。Unity随附csc隔离编译exit0/0error/6既有warning，非Unity导入或Driver/性能通过；actual RED/8case/88配对tick均未运行。旧case/helpers保持、602保护0变化、7准确源副本核同；validator1372records/4diff全covered/exit0、diffcheck0。55已执行（本批仅脚本）、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。SetPass最新1995未降；资源/ATLAS定向修复仍待准确授权，不解冻EXT1/Mono，不主动操作Editor或重复催问。
 
 历史第76批纯脚本准备快照（下方保留）：

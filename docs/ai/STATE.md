@@ -1,3 +1,20 @@
+> SetPass必要静态前置已核：GameConfig→ShadowPrefab→s.png GUID链一致，s.png.meta isReadable=1；既有统一准备会读shadow像素并与角色共用atlas resources重绑。无需凭猜测改阴影PNG/importer或新增GPU读回；实际可读/完整本局闭包/绑定成功与预算仍待候选验证，OrderedPages异页不能保证合批。无C#/Unity/测试/测量/新收益，57执行、阶段4/6、H07/H11 OPEN；SetPass修复优先，准确冷准备链范围仍待人类确认。 [证据](../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/REPORT.md)。
+
+> 待实施留痕：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079 / PLANNED / NOT_STARTED / DEFERRED_SETPASS_PRIORITY；仅准备文件已存在，三个Editor脚本未改，未启动正对照/测试/Play，不计已执行批次，不以人工GC代替原43自然事件修复。 [Record](CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md)。
+
+> SetPass只读补充 / PARTIAL_STATIC_EVIDENCE：OID1 Sakura原始oid引用保守递归为13注册对象/22sheet（13 DAT SHA均匹配正式catalog）；saku799×1119、rage683×247可入现有页，OID900拥有fla3000×800超大sheet，须保持设备能力/Source2D回退，不证明该sheet本窗显示。26153356bytes仅源RGBA估算，非完整闭包/atlas/双预算实测；无代码/Unity/测量/新收益，SetPass沿用77的1995。实施范围仍待人类确认，57执行/4of6/H07H11 OPEN/Goal active不变，不另计优化子批、不解冻专项。[证据](../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/REPORT.md)。
+
+> 第78批 SOURCE_SCOPE_CLOSED / SETPASS_FIX_PRIORITY / IMPLEMENTATION_NOT_AUTHORIZED：用户要求优先SetPass后，只读闭合上游全集来源：CopyCharacterConfigs→全部Catalog.Entries，LoadingPrewarm仅progress、全文sheet＋共同资源统一规划；全局publication同时提交逻辑/UI/config，不能直接裁掉Configs或只选本帧三纹理。中央当前取全局catalog，cold容量同取其Count。下一优先本局完整视觉依赖＋预算内共享绑定的准确授权/接线，停止先开碰撞微候选；未解冻ATLAS/EXT1/Mono/资源/segment/Q06，不改C#、不控制Unity/测试/测量。SetPass沿用77 Combat1995未降，无新收益；57执行（含78静态）、阶段4/6/H07H11 OPEN/34父关闭0/Goal active。[报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/REPORT.md)。下方77及更早为历史保留。
+
+> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。
+
+> 第77批 FOCUSED_TEST_PASS / WINDOWS_READY / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077；仅Suite冷接线，新36有效RED→46/46 GREEN（旧10），source6FE1054C...8470E7。604保护0变化/7准确副本、旧Ordinal tests/BeginSuite17参数和生产Query保持。下一执行四真实1000AI 120+180 OFF/ON，0拒绝覆盖合法但不称收益，三prepared容量/noFallback/正常异常恢复OFF；无新收益。56执行、阶段4/6/H07H11 OPEN、父关闭0、Goal active，SetPass最新1995未降，专项门保持。
+
+> 第77批 PLANNED / WINDOWS_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。仅现有Suite冷接线及同文件测试，复用76 scoped Driver资格；四真实1000AI 120warm+180sample（Dispersed/Combat各OFF/ON），同请求仅outputPath不同，原四默认ON、独立候选/计时OFF，depth测试所有出口恢复OFF。拒绝覆盖与正确性分离，零覆盖不制造失败/收益；三prepared容量不增长、无fallback、逻辑GC沿用现有校准，十一阶段关闭及Scene文件保持。55执行＋77准备、阶段4/6/H07H11 OPEN、父关闭0、Goal active；资源/ATLAS/EXT1/Mono/Q06不解冻，SetPass最新1995未降。
+
+> 当前第76批 FOCUSED_TEST_PASS / SCOPED_DRIVER_QUALIFIED / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076。用户通知原Unity空闲后完成既定资格：首轮7/8（仅Dispersed“必须有拒绝”覆盖假设FAIL），显式覆盖合同新2guard有效RED→窄GREEN3/3，复用原7形成10唯一case证据，不冒充新跑10/10。最终88配对/176step声明checksum/两完整RNG/AI1000/方向一致、三prepared数组/容量/无fallback/旧关闭三0；Dispersed32tick零拒绝NO_REJECT_COVERAGE、Combat正覆盖max26，不当收益。仅Admission冷测试/资格，query/defaultOFF/Suite未改；原Editor Menu唯一clean8roots/nonPlay/CS0/602保护0变化。55已执行、阶段4/6、H07/H11 OPEN、父关闭0、Goal active；无新FPS/SetPass/完整0GC，最新SetPass1995仍未降。下一独立Task按现有Suite做depth实际千人OFF/ON固定短窗，不再重跑已过资格；资源/ATLAS/EXT1/Mono专项保持。执行期间外部HEAD06a5fe9c收录已有文件，本代理无Git提交/回退，受影响字节核同。
+
+历史第76批通知前纯脚本交付快照（下方保留）：
 > 当前第76批 CODE_WRITTEN / ISOLATED_CSHARP_COMPILE_PASS / UNITY_DRIVER_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076；用户要求先pure脚本、通知后再Unity，本批只Admission显式depth资格/新5tests/三prepared数组与容量保护，74候选仍OFF。Unity随附csc隔离编译exit0/0error/6既有warning，非Unity导入或Driver/性能通过；actual RED/8case/88配对tick均未运行。旧case/helpers保持、602保护0变化、7准确源副本核同；validator1372records/4diff全covered/exit0、diffcheck0。55已执行（本批仅脚本）、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。SetPass最新1995未降；资源/ATLAS定向修复仍待准确授权，不解冻EXT1/Mono，不主动操作Editor或重复催问。
 
 历史第76批纯脚本准备快照（下方保留）：

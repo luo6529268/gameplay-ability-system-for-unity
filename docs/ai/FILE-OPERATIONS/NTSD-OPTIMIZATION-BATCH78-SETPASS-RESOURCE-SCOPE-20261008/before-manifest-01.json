@@ -1,0 +1,102 @@
+{
+  "utc": "2026-10-08T13:12:31.6299072+00:00",
+  "head": "06a5fe9c78681bdb8844e59804f30a9480cb221d",
+  "docs": [
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 173591,
+      "sha": "3BB39ED911B5617E59B9FE9162E5C56E11A1E69BEFE7B62A2A3435E88B38700C",
+      "first": "> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/before-01/01-battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1561502,
+      "sha": "ACFEDA08C7895BF569F2868F225FAF67E7BC010886A9587A6C504B82C83F5DF3",
+      "first": "> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/before-01/02-CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1627886,
+      "sha": "2F7E23307A8DA71335492D3DB074FBACBDB80098FEA94698CF9A6B75E0DF8060",
+      "first": "> 第77批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077。新36有效RED→46/46 GREEN；唯一四actual1000AI120warm+180sample、65请求除output相同、两对tick300完整末态bytes同。分散mean99.762→90.872ms（-8.9117%）但P95132.251→141.626ms（+7.0883%）；混战mean120.189→90.361ms（-24.8175%）、P95158.785→119.763ms（-24.5751%）。ON drop902/913、SetPass1994.3146/1995仍未达，depth已恢复默认OFF；四fullLogic校准稳态0event/proven0B/三容量1050/14700/5250稳定/noFallback/关闭0/Menu唯一clean8/CS0。604保护0变化，7准确before保留。56执行、阶段4/6/H07H11 OPEN、34父关闭0、Goal active；不追加1800刷PASS、不重复资格/本窗，下一普通Brute残余热点有据选择；资源/ATLAS/EXT1/Mono/Q06不解冻。",
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/before-01/03-STATE.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 109136,
+      "sha": "28195C6DD5AC460D9DDF2E9B1D055E9267F3399757DBE17CF7407B16876383D7",
+      "first": "Operation NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008 / VERIFIED（有限接线/对比文件操作）：36有效RED→46/46＋唯一四实际千人120+180完成；604保护/7准确副本保持，normal退出归还Menu clean8。收益混合/性能仍FAIL、defaultOFF，原件全部保留。[Record](NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/RECORD.md)。下行PLANNED为事前快照。",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backupPath": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/before-01/04-INDEX.md"
+    }
+  ],
+  "guards": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha": "35AC697CB8B5A43BC9AE76413F59DD3498218B6C188A06A02E00E99B01D99F9F"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+      "sha": "057FD4D65B9317110ED5BCF356F92BBEB7A5F9217E09C715E95A036CF20CB32B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "sha": "F5519E8F5AD9634244C5D1DC1E67A6B3415054FAF8F9EAFAC9C694E096E52292"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "sha": "F1649C0F78F1B897FF0E7846F3F5E7FBEF63B3283E1A3BC1E95F6B3AEB99A58B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "6FE1054C0FE8F02223B706E218D559E90C9215B35001EC274A733591DA8470E7"
+    }
+  ],
+  "guardSources": [
+    {
+      "sha": "7B8542A680BCC4141D21A0F4078EAF447146363A5BEFD3227B2C5BC768317E08",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/before-manifest-01.json"
+    }
+  ],
+  "operationId": "NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008",
+  "excludedGuardPaths": [
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md"
+  ],
+  "backupRoot": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/before-01"
+}

@@ -117,6 +117,11 @@ namespace NTSD.Test.Editor
         private static BruteForceSceneQuery ordinalPacketQuery;
         private static RunState ordinalPacketRun;
         private static bool previousOrdinalPacket;
+        private const string BruteDepthRejectOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/windows-01";
+        private static bool startingDepthRejectWindow;
+        private static BruteForceSceneQuery depthRejectQuery;
+        private static RunState depthRejectRun;
+        private static bool previousDepthReject;
 
         [Serializable]
         private sealed class RunState
@@ -237,6 +242,19 @@ namespace NTSD.Test.Editor
             public int bruteOrdinalPacketObservedSamples;
             public long bruteOrdinalPacketMaximumObservedRejects;
             public long bruteOrdinalPacketMaximumObservedProofs;
+            public bool bruteDepthRejectEnabled;
+            public bool bruteDepthRejectFlagApplied;
+            public bool bruteDepthRejectFlagUnchanged;
+            public bool bruteDepthRejectRestored;
+            public bool bruteDepthRejectObservedApplied;
+            public bool bruteDepthRejectFallbackObserved;
+            public bool bruteDepthRejectCapacityStable;
+            public int bruteDepthRejectSteadyParticipantCapacity;
+            public int bruteDepthRejectSteadyItrCapacity;
+            public int bruteDepthRejectSteadyBodyCapacity;
+            public int bruteDepthRejectLastObservedTick;
+            public int bruteDepthRejectObservedSamples;
+            public long bruteDepthRejectMaximumObservedRejects;
         }
 
         [Serializable]
@@ -294,6 +312,7 @@ namespace NTSD.Test.Editor
             public bool bruteEnvelopeBranchTimingCandidate;
             public bool renderTextureBindingCandidate;
             public bool bruteOrdinalPacketCandidate;
+            public bool bruteDepthRejectCandidate;
             public bool centralSegmentReadbackOnly;
             public string originalScene;
             public string originalSceneHash;
@@ -531,6 +550,22 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [MenuItem("NTSD/Validation/Optimization/Batch77 Depth Reject Full Driver GC 1000 AI OFF ON")]
+        private static void BeginBruteDepthReject()
+        {
+            Require(!startingDepthRejectWindow && depthRejectQuery == null && depthRejectRun == null,
+                "The depth reject window requires exclusive ownership.");
+            startingDepthRejectWindow = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingDepthRejectWindow = false;
+            }
+        }
+
         [MenuItem("NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback")]
         private static void BeginCentralSegmentReadback()
         {
@@ -557,6 +592,21 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            // Alignment contract: NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077; explicit cold owner, no default promotion.
+            Require(!startingDepthRejectWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
+                !emptyItrRosterCandidate && !bruteExactCacheCandidate && !bruteGeometryFirstCandidate &&
+                !cpuGcCaptureOnly && !bruteBranchTimingOnly && !bruteBranchTimingSampled &&
+                !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate && !bruteCombinedCacheCandidate &&
+                !logicGcCallsiteOnly && !labelPrewarmValidation && !startingCentralSegmentReadback &&
+                !startingOrdinalPacketWindow && !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow &&
+                !startingRenderTextureBindingWindow && ordinalPacketQuery == null && ordinalPacketRun == null &&
+                coarseEnvelopeQuery == null && envelopeBindingQuery == null && kind5PresenceQuery == null &&
+                eligibilityReuseQuery == null && branchTimingQuery == null && !renderTextureBindingReuseOwner &&
+                !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics,
+                "The depth reject window requires production/calibrated scope without another mode or owner.");
+            Require(depthRejectQuery == null && depthRejectRun == null, "A depth reject window already owns the query.");
             Require(!startingCentralSegmentReadback || bruteProductionOnly &&
                 !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
                 !emptyItrRosterCandidate && !bruteExactCacheCandidate && !bruteGeometryFirstCandidate &&
@@ -652,6 +702,7 @@ namespace NTSD.Test.Editor
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
             string outputRoot = startingCentralSegmentReadback ? CentralSegmentReadbackOutputRoot :
+                startingDepthRejectWindow ? BruteDepthRejectOutputRoot :
                 startingOrdinalPacketWindow ? BruteOrdinalPacketOutputRoot :
                 startingRenderTextureBindingWindow ? RenderTextureBindingOutputRoot :
                 startingEnvelopeBranchTimingWindow ? BruteEnvelopeBranchTimingOutputRoot :
@@ -702,8 +753,9 @@ namespace NTSD.Test.Editor
                 bruteEnvelopeBranchTimingCandidate = startingEnvelopeBranchTimingWindow,
                 renderTextureBindingCandidate = startingRenderTextureBindingWindow,
                 bruteOrdinalPacketCandidate = startingOrdinalPacketWindow,
+                bruteDepthRejectCandidate = startingDepthRejectWindow,
                 centralSegmentReadbackOnly = startingCentralSegmentReadback,
-                runs = new RunState[startingCentralSegmentReadback ? 1 : startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                runs = new RunState[startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -789,6 +841,8 @@ namespace NTSD.Test.Editor
                 return BuildCentralSegmentReadbackRequest(index);
             if (state.bruteOrdinalPacketCandidate)
                 return BuildBruteOrdinalPacketRequest(index);
+            if (state.bruteDepthRejectCandidate)
+                return BuildBruteDepthRejectRequest(index);
             if (state.renderTextureBindingCandidate)
                 return BuildRenderTextureBindingRequest(index);
             if (state.bruteEnvelopeBranchTimingCandidate)
@@ -907,6 +961,16 @@ namespace NTSD.Test.Editor
             ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
             request.outputPath = BruteCombinedCacheOutputRoot + "/" + index.ToString("D2") + "-" +
                 request.action + (index % 2 == 0 ? "-kind5-off" : "-kind5-on") + "/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildBruteDepthRejectRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.outputPath = BruteDepthRejectOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-depth-off" : "-depth-on") + "/report.json";
             return request;
         }
 
@@ -1118,6 +1182,8 @@ namespace NTSD.Test.Editor
                 }
                 if (state.bruteOrdinalPacketCandidate)
                     CompleteBruteOrdinalPacket(run);
+                if (state.bruteDepthRejectCandidate)
+                    CompleteBruteDepthReject(run);
                 if (state.renderTextureBindingCandidate)
                     CompleteRenderTextureBindingReuse(run);
                 if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1230,6 +1296,7 @@ namespace NTSD.Test.Editor
                       (run.renderTextureBindingReuseEnabled || run.renderTextureBindingBodyReuseCount == 0))) &&
                     (!state.bruteCoarseEnvelopeCandidate || CoarseEnvelopeObservationValid(run)) &&
                     (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
+                    (!state.bruteDepthRejectCandidate || DepthRejectObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingCandidate || EnvelopeBindingObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingEligibilityCandidate || EnvelopeBindingEligibilityObservationValid(run)) &&
                     (!state.bruteEnvelopeBranchTimingCandidate || EnvelopeBranchTimingObservationValid(run)) &&
@@ -1317,6 +1384,11 @@ namespace NTSD.Test.Editor
             {
                 Require(currentReport.logicTicksExecuted == 0, "The ordinal packet flag must be applied before any tick.");
                 ApplyBruteOrdinalPacket(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
+            }
+            if (state.bruteDepthRejectCandidate)
+            {
+                Require(currentReport.logicTicksExecuted == 0, "The depth reject flag must be applied before any tick.");
+                ApplyBruteDepthReject(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
             }
             if (state.renderTextureBindingCandidate)
             {
@@ -1467,6 +1539,8 @@ namespace NTSD.Test.Editor
             run.observedSampleWindows++;
             if (state.bruteOrdinalPacketCandidate)
                 ObserveBruteOrdinalPacket(run, report.logicTicksExecuted);
+            if (state.bruteDepthRejectCandidate)
+                ObserveBruteDepthReject(run, report.logicTicksExecuted);
             if (state.bruteCoarseEnvelopeCandidate)
                 ObserveBruteCoarseEnvelope(run);
             if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1524,6 +1598,7 @@ namespace NTSD.Test.Editor
         {
             RestoreCentralSegmentReadback();
             Require(RestoreBruteOrdinalPacket(), "The owned ordinal packet flag must be restored before shutdown.");
+            Require(RestoreBruteDepthReject(), "The owned depth reject flag must be restored before shutdown.");
             Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
             Require(RestoreBruteEnvelopeBindingForExit(), EnvelopeBindingOwnerError);
             if (logicGcObserver != null)
@@ -1579,6 +1654,8 @@ namespace NTSD.Test.Editor
                 RestoreCentralSegmentReadback();
             if (state.bruteOrdinalPacketCandidate && change == PlayModeStateChange.ExitingPlayMode)
                 Require(RestoreBruteOrdinalPacket(), "The owned ordinal packet flag must be restored on Play exit.");
+            if (state.bruteDepthRejectCandidate && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreBruteDepthReject(), "The owned depth reject flag must be restored on Play exit.");
             if (state.renderTextureBindingCandidate && change == PlayModeStateChange.ExitingPlayMode)
                 Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
             if ((state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1698,6 +1775,7 @@ namespace NTSD.Test.Editor
             string envelopeBranchTimingOwnerRoot = PathFor(BruteEnvelopeBranchTimingOutputRoot) + Path.DirectorySeparatorChar;
             string renderTextureBindingOwnerRoot = PathFor(RenderTextureBindingOutputRoot) + Path.DirectorySeparatorChar;
             string ordinalPacketOwnerRoot = PathFor(BruteOrdinalPacketOutputRoot) + Path.DirectorySeparatorChar;
+            string depthRejectOwnerRoot = PathFor(BruteDepthRejectOutputRoot) + Path.DirectorySeparatorChar;
             string centralReadbackOwnerRoot = PathFor("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008") + Path.DirectorySeparatorChar;
             return lines.Length >= 2 && (lines[0] == "PASS" || lines[0] == "FAIL") &&
                 (PathFor(lines[1]).StartsWith(ownerRoot, StringComparison.OrdinalIgnoreCase) ||
@@ -1725,6 +1803,7 @@ namespace NTSD.Test.Editor
                    PathFor(lines[1]).StartsWith(envelopeBranchTimingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(renderTextureBindingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(ordinalPacketOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(depthRejectOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(centralReadbackOwnerRoot, StringComparison.OrdinalIgnoreCase));
         }
 
@@ -2231,6 +2310,7 @@ namespace NTSD.Test.Editor
                 eligibilityReuseQuery == null && branchTimingQuery == null && !renderTextureBindingReuseOwner &&
                 OrdinalPacketQueryDefaultsValid(query) && !query.EnableBruteOrdinalPacketForDiagnostics,
                 "The ordinal packet window requires exclusive query/run ownership, four production defaults and no other candidate.");
+            Require(!query.EnableBruteDepthRejectForDiagnostics, "The ordinal packet window excludes depth reject.");
             ordinalPacketQuery = query;
             ordinalPacketRun = run;
             previousOrdinalPacket = query.EnableBruteOrdinalPacketForDiagnostics;
@@ -2247,6 +2327,7 @@ namespace NTSD.Test.Editor
             Require(run != null && ordinalPacketQuery != null && ReferenceEquals(ordinalPacketRun, run),
                 "The ordinal packet window observation requires its owned run.");
             run.bruteOrdinalPacketFlagUnchanged &= OrdinalPacketQueryDefaultsValid(ordinalPacketQuery) &&
+                !ordinalPacketQuery.EnableBruteDepthRejectForDiagnostics &&
                 ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics == run.bruteOrdinalPacketEnabled;
             if (logicTick <= 0 || logicTick <= run.bruteOrdinalPacketLastObservedTick)
                 return;
@@ -2270,6 +2351,7 @@ namespace NTSD.Test.Editor
             Require(run != null && ordinalPacketQuery != null && ReferenceEquals(ordinalPacketRun, run),
                 "The ordinal packet window completion requires its owned run.");
             run.bruteOrdinalPacketFlagUnchanged &= OrdinalPacketQueryDefaultsValid(ordinalPacketQuery) &&
+                !ordinalPacketQuery.EnableBruteDepthRejectForDiagnostics &&
                 ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics == run.bruteOrdinalPacketEnabled;
             // Restore even when evidence is invalid; a wrong run never reaches this release.
             run.bruteOrdinalPacketRestored = RestoreBruteOrdinalPacket();
@@ -2298,6 +2380,90 @@ namespace NTSD.Test.Editor
                 ordinalPacketRun.bruteOrdinalPacketRestored = restored;
             ordinalPacketQuery = null;
             ordinalPacketRun = null;
+            return restored;
+        }
+
+
+        private static bool DepthRejectQueryDefaultsValid(BruteForceSceneQuery query) =>
+            OrdinalPacketQueryDefaultsValid(query) && !query.EnableBruteOrdinalPacketForDiagnostics;
+
+        private static void ApplyBruteDepthReject(BruteForceSceneQuery query, RunState run, bool enabled)
+        {
+            Require(run != null && depthRejectQuery == null && depthRejectRun == null &&
+                ordinalPacketQuery == null && ordinalPacketRun == null &&
+                coarseEnvelopeQuery == null && envelopeBindingQuery == null && kind5PresenceQuery == null &&
+                eligibilityReuseQuery == null && branchTimingQuery == null && !renderTextureBindingReuseOwner &&
+                DepthRejectQueryDefaultsValid(query) && !query.EnableBruteDepthRejectForDiagnostics,
+                "The depth reject window requires exclusive query/run ownership, four production defaults and no other candidate.");
+            depthRejectQuery = query;
+            depthRejectRun = run;
+            previousDepthReject = query.EnableBruteDepthRejectForDiagnostics;
+            run.bruteDepthRejectEnabled = enabled;
+            run.bruteDepthRejectCapacityStable = true;
+            query.EnableBruteDepthRejectForDiagnostics = enabled;
+            run.bruteDepthRejectFlagApplied = query.EnableBruteDepthRejectForDiagnostics == enabled;
+            run.bruteDepthRejectFlagUnchanged = run.bruteDepthRejectFlagApplied;
+        }
+
+        private static void ObserveBruteDepthReject(RunState run, int logicTick)
+        {
+            Require(run != null && depthRejectQuery != null && ReferenceEquals(depthRejectRun, run),
+                "The depth reject window observation requires its owned run.");
+            run.bruteDepthRejectFlagUnchanged &= DepthRejectQueryDefaultsValid(depthRejectQuery) &&
+                depthRejectQuery.EnableBruteDepthRejectForDiagnostics == run.bruteDepthRejectEnabled;
+            if (logicTick <= 0 || logicTick <= run.bruteDepthRejectLastObservedTick)
+                return;
+            int participant = depthRejectQuery.BruteExactParticipantCapacityForDiagnostics;
+            int itr = depthRejectQuery.BruteExactItrCapacityForDiagnostics;
+            int body = depthRejectQuery.BruteExactBodyCapacityForDiagnostics;
+            if (run.bruteDepthRejectObservedSamples == 0)
+            {
+                run.bruteDepthRejectSteadyParticipantCapacity = participant;
+                run.bruteDepthRejectSteadyItrCapacity = itr;
+                run.bruteDepthRejectSteadyBodyCapacity = body;
+            }
+            run.bruteDepthRejectCapacityStable &= participant > 0 && itr > 0 && body > 0 &&
+                participant == run.bruteDepthRejectSteadyParticipantCapacity &&
+                itr == run.bruteDepthRejectSteadyItrCapacity && body == run.bruteDepthRejectSteadyBodyCapacity;
+            run.bruteDepthRejectLastObservedTick = logicTick;
+            run.bruteDepthRejectObservedSamples++;
+            run.bruteDepthRejectObservedApplied |= depthRejectQuery.LastBruteDepthRejectAppliedForDiagnostics;
+            run.bruteDepthRejectFallbackObserved |= depthRejectQuery.LastBruteExactCacheFallbackForDiagnostics;
+            run.bruteDepthRejectMaximumObservedRejects = Math.Max(run.bruteDepthRejectMaximumObservedRejects,
+                depthRejectQuery.LastBruteDepthRejectedDirectionCountForDiagnostics);
+        }
+
+        private static void CompleteBruteDepthReject(RunState run)
+        {
+            Require(run != null && depthRejectQuery != null && ReferenceEquals(depthRejectRun, run),
+                "The depth reject window completion requires its owned run.");
+            run.bruteDepthRejectFlagUnchanged &= DepthRejectQueryDefaultsValid(depthRejectQuery) &&
+                depthRejectQuery.EnableBruteDepthRejectForDiagnostics == run.bruteDepthRejectEnabled;
+            run.bruteDepthRejectRestored = RestoreBruteDepthReject();
+            Require(DepthRejectObservationValid(run),
+                "The depth reject window requires fresh application evidence, unchanged flags/capacities and no observed fallback.");
+        }
+
+        private static bool DepthRejectObservationValid(RunState run) =>
+            run != null && run.bruteDepthRejectFlagApplied && run.bruteDepthRejectFlagUnchanged &&
+            run.bruteDepthRejectRestored && run.bruteDepthRejectObservedSamples > 0 &&
+            run.bruteDepthRejectCapacityStable && run.bruteDepthRejectSteadyParticipantCapacity > 0 &&
+            run.bruteDepthRejectSteadyItrCapacity > 0 && run.bruteDepthRejectSteadyBodyCapacity > 0 &&
+            !run.bruteDepthRejectFallbackObserved &&
+            (run.bruteDepthRejectEnabled
+                ? run.bruteDepthRejectObservedApplied
+                : !run.bruteDepthRejectObservedApplied && run.bruteDepthRejectMaximumObservedRejects == 0);
+
+        private static bool RestoreBruteDepthReject()
+        {
+            if (depthRejectQuery == null)
+                return true;
+            depthRejectQuery.EnableBruteDepthRejectForDiagnostics = previousDepthReject;
+            bool restored = depthRejectQuery.EnableBruteDepthRejectForDiagnostics == previousDepthReject;
+            if (depthRejectRun != null)
+                depthRejectRun.bruteDepthRejectRestored = restored;
+            depthRejectQuery = null;
+            depthRejectRun = null;
             return restored;
         }
 
@@ -2967,6 +3133,312 @@ namespace NTSD.Test.Editor
                 stateOwner.SetValue(null, null);
                 EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null);
             }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteDepthRejectWindow_RequestOnlyOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildBruteDepthRejectRequest")
+                .Invoke(null, new object[] { index });
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-depth-off" : "-depth-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void BruteDepthRejectWindow_OutsideMatrix(int index)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("BuildBruteDepthRejectRequest").Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteDepthRejectWindow_MenuKeepsLegacy17AndColdOwner()
+        {
+            var attributes = EligibilityMethod("BeginBruteDepthReject").GetCustomAttributes(typeof(MenuItem), false);
+            NUnit.Framework.Assert.That(attributes.Length, NUnit.Framework.Is.EqualTo(1));
+            NUnit.Framework.Assert.That(((MenuItem)attributes[0]).menuItem, NUnit.Framework.Is.EqualTo(
+                "NTSD/Validation/Optimization/Batch77 Depth Reject Full Driver GC 1000 AI OFF ON"));
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("startingDepthRejectWindow").GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectQuery").GetValue(null), NUnit.Framework.Is.Null);
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectRun").GetValue(null), NUnit.Framework.Is.Null);
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteDepthRejectWindow_StateDefaultsFalseAndRoutesFourBeforeGc()
+        {
+            EligibilityMethod("BuildBruteDepthRejectRequest");
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            Type type = owner.FieldType;
+            FieldInfo mode = type.GetField("bruteDepthRejectCandidate");
+            NUnit.Framework.Assert.That(mode, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(mode.GetValue(JsonUtility.FromJson("{\"logicGcScopeOnly\":true}", type)), NUnit.Framework.Is.EqualTo(false));
+            object candidate = Activator.CreateInstance(type, true);
+            mode.SetValue(candidate, true);
+            type.GetField("bruteProductionOnly").SetValue(candidate, true);
+            type.GetField("logicGcScopeOnly").SetValue(candidate, true);
+            try
+            {
+                owner.SetValue(null, candidate);
+                for (int index = 0; index < 4; index++)
+                    NUnit.Framework.Assert.That(JsonUtility.ToJson(EligibilityMethod("BuildCurrentRequest").Invoke(null, new object[] { index })),
+                        NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(EligibilityMethod("BuildBruteDepthRejectRequest").Invoke(null, new object[] { index }))));
+            }
+            finally { owner.SetValue(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteDepthRejectWindow_ModeRejectsBeforeState(int defect)
+        {
+            EligibilityMethod("BeginBruteDepthReject");
+            FieldInfo startup = CoarseEnvelopeStaticField("startingDepthRejectWindow");
+            FieldInfo other = CoarseEnvelopeStaticField("startingOrdinalPacketWindow");
+            object saved = startup.GetValue(null), savedOther = other.GetValue(null);
+            MethodInfo begin = EligibilityMethod("BeginSuite");
+            ParameterInfo[] parameters = begin.GetParameters();
+            object[] args = new object[parameters.Length];
+            for (int index = 0; index < args.Length; index++)
+                args[index] = parameters[index].Name == "bruteProductionOnly" && defect != 0 ||
+                    parameters[index].Name == "logicGcScopeOnly" && defect != 1 ||
+                    parameters[index].Name == "bruteBranchTimingOnly" && defect == 2;
+            try
+            {
+                startup.SetValue(null, true);
+                other.SetValue(null, defect == 3);
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    begin.Invoke(null, args)).InnerException.Message, NUnit.Framework.Does.Contain("depth reject window"));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("state").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally { startup.SetValue(null, saved); other.SetValue(null, savedOther); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        [NUnit.Framework.TestCase(5)]
+        [NUnit.Framework.TestCase(6)]
+        [NUnit.Framework.TestCase(7)]
+        public void BruteDepthRejectWindow_RejectQueryScope(int defect)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteDepthReject");
+            var query = NewOrdinalPacketWindowQuery();
+            if (defect == 0) query.EnableBruteDepthRejectForDiagnostics = true;
+            if (defect == 1) query.EnableBruteGeometryFirstForDiagnostics = false;
+            if (defect == 2) query.EnableBruteKind5PresenceForDiagnostics = true;
+            if (defect == 3) query.EnableBruteCoarseEnvelopeForDiagnostics = true;
+            if (defect == 4) query.EnableBruteBranchTimingForDiagnostics = true;
+            if (defect == 5) query.EnableBruteCoarseProofReuseForDiagnostics = true;
+            if (defect == 6) query.EnableBruteOrdinalPacketForDiagnostics = true;
+            if (defect == 7) query.EnableBruteExactCacheForDiagnostics = false;
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                apply.Invoke(null, new object[] { query, NewEligibilityRun(), true })).InnerException,
+                NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectQuery").GetValue(null), NUnit.Framework.Is.Null);
+            NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.EqualTo(defect == 0));
+        }
+
+        [NUnit.Framework.TestCase(false, false)]
+        [NUnit.Framework.TestCase(false, true)]
+        [NUnit.Framework.TestCase(true, false)]
+        [NUnit.Framework.TestCase(true, true)]
+        public void BruteDepthRejectWindow_ApplyObserveCompleteRestores(bool enabled, bool positiveCoverage)
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, enabled });
+                NUnit.Framework.Assert.That(query.BruteExactParticipantCapacityForDiagnostics, NUnit.Framework.Is.EqualTo(0));
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetDepthRejectWindowEvidence(query, enabled, false, enabled && positiveCoverage ? 11L : 0L);
+                EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 121 });
+                EligibilityMethod("CompleteBruteDepthReject").Invoke(null, new[] { run });
+                NUnit.Framework.Assert.That(EligibilityMethod("DepthRejectObservationValid").Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(true));
+                foreach (string field in new[] { "Participant", "Itr", "Body" })
+                    NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectSteady" + field + "Capacity"), NUnit.Framework.Is.EqualTo(32));
+                NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectRun").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        public void BruteDepthRejectWindow_DriftLatchesUntilComplete(int defect)
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetDepthRejectWindowEvidence(query, true, false, 11L);
+                if (defect == 0) query.EnableBruteDepthRejectForDiagnostics = false;
+                else query.EnableBruteGeometryFirstForDiagnostics = false;
+                EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 121 });
+                query.EnableBruteDepthRejectForDiagnostics = query.EnableBruteGeometryFirstForDiagnostics = true;
+                EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 122 });
+                AssertDepthRejectWindowCompletionRejected(query, run);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        public void BruteDepthRejectWindow_RejectSteadyCapacityGrowth(int capacity)
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetDepthRejectWindowEvidence(query, true, false, 11L);
+                EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 121 });
+                typeof(BruteForceSceneQuery).GetField(new[] { "_bruteExactParticipantCapacity", "_bruteExactItrCapacity", "_bruteExactBodyCapacity" }[capacity],
+                    BindingFlags.Instance | BindingFlags.NonPublic).SetValue(query, 64);
+                EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 122 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectCapacityStable"), NUnit.Framework.Is.EqualTo(false));
+                AssertDepthRejectWindowCompletionRejected(query, run);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteDepthRejectWindow_InvalidEvidenceMissingOrFallback(bool fallback)
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, true });
+                if (fallback)
+                {
+                    PrepareOrdinalPacketWindowQuery(query, 32);
+                    SetDepthRejectWindowEvidence(query, true, true, 11L);
+                    EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { run, 121 });
+                }
+                AssertDepthRejectWindowCompletionRejected(query, run);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteDepthRejectWindow_RestorePreviousIdempotent(bool previous)
+        {
+            var query = NewOrdinalPacketWindowQuery();
+            object run = NewEligibilityRun();
+            FieldInfo savedFlag = CoarseEnvelopeStaticField("previousDepthReject");
+            object saved = savedFlag.GetValue(null);
+            try
+            {
+                CoarseEnvelopeStaticField("depthRejectQuery").SetValue(null, query);
+                CoarseEnvelopeStaticField("depthRejectRun").SetValue(null, run);
+                savedFlag.SetValue(null, previous);
+                query.EnableBruteDepthRejectForDiagnostics = !previous;
+                for (int index = 0; index < 2; index++)
+                    NUnit.Framework.Assert.That(EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.EqualTo(previous));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectQuery").GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectRun").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); savedFlag.SetValue(null, saved); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteDepthRejectWindow_SecondAndWrongOwnerCannotRelease()
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                MethodInfo apply = EligibilityMethod("ApplyBruteDepthReject");
+                apply.Invoke(null, new object[] { query, run, true });
+                object wrong = NewEligibilityRun();
+                NUnit.Framework.Assert.Throws<TargetInvocationException>(() => apply.Invoke(null, new object[] { query, wrong, false }));
+                NUnit.Framework.Assert.Throws<TargetInvocationException>(() => EligibilityMethod("ObserveBruteDepthReject").Invoke(null, new object[] { wrong, 121 }));
+                NUnit.Framework.Assert.Throws<TargetInvocationException>(() => EligibilityMethod("CompleteBruteDepthReject").Invoke(null, new[] { wrong }));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("depthRejectRun").GetValue(null), NUnit.Framework.Is.SameAs(run));
+                NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.True);
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteDepthRejectWindow_ExternalExitRestoresOwnedFlag()
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            object candidate = Activator.CreateInstance(owner.FieldType, true);
+            owner.FieldType.GetField("bruteDepthRejectCandidate").SetValue(candidate, true);
+            owner.FieldType.GetField("phase").SetValue(candidate, "EXITING");
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, true });
+                owner.SetValue(null, candidate);
+                EligibilityMethod("OnPlayMode").Invoke(null, new object[] { PlayModeStateChange.ExitingPlayMode });
+                NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectRestored"), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { owner.SetValue(null, null); EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteDepthRejectWindow_ObservationDedupsFreshTick()
+        {
+            object run = NewEligibilityRun();
+            var query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                EligibilityMethod("ApplyBruteDepthReject").Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetDepthRejectWindowEvidence(query, true, false, 11L);
+                MethodInfo observe = EligibilityMethod("ObserveBruteDepthReject");
+                observe.Invoke(null, new object[] { run, 121 });
+                SetDepthRejectWindowEvidence(query, true, false, 99L);
+                observe.Invoke(null, new object[] { run, 121 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectObservedSamples"), NUnit.Framework.Is.EqualTo(1));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectMaximumObservedRejects"), NUnit.Framework.Is.EqualTo(11L));
+                observe.Invoke(null, new object[] { run, 122 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectObservedSamples"), NUnit.Framework.Is.EqualTo(2));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectMaximumObservedRejects"), NUnit.Framework.Is.EqualTo(99L));
+            }
+            finally { EligibilityMethod("RestoreBruteDepthReject").Invoke(null, null); }
+        }
+
+        private static void SetDepthRejectWindowEvidence(BruteForceSceneQuery query, bool applied, bool fallback, long rejects)
+        {
+            SetOrdinalPacketWindowProperty(query, "LastBruteDepthRejectAppliedForDiagnostics", applied);
+            SetOrdinalPacketWindowProperty(query, "LastBruteExactCacheFallbackForDiagnostics", fallback);
+            SetOrdinalPacketWindowProperty(query, "LastBruteDepthRejectedDirectionCountForDiagnostics", rejects);
+        }
+
+        private static void AssertDepthRejectWindowCompletionRejected(BruteForceSceneQuery query, object run)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("CompleteBruteDepthReject").Invoke(null, new[] { run })).InnerException,
+                NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+            NUnit.Framework.Assert.That(query.EnableBruteDepthRejectForDiagnostics, NUnit.Framework.Is.False);
+            NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteDepthRejectRestored"), NUnit.Framework.Is.EqualTo(true));
         }
 
         private static BruteForceSceneQuery NewOrdinalPacketWindowQuery()

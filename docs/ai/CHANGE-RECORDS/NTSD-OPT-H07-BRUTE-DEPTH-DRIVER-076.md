@@ -1,11 +1,15 @@
 <!-- CHANGE-RECORD
 id: NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076
-status: CODE_WRITTEN
+status: FOCUSED_TEST_PASS
 code-path: Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
 authority: approved H07 continuation under bounded-goal effective sections0-8; formal336 authority and original Driver order unchanged
 evidence: artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/REPORT.md
 -->
 # 第76批：深度拒绝候选完整Driver资格
+
+2026-10-08T12:20:16.4638309Z实际 Tools/Validate-ChangeLedger.ps1 exit0 / 1372Records / 当前code diff0（此前外部HEAD已收录C#，并不否定本轮实际测试）；准确git diff --check exit0，仅换行警告。末602guard0变化、8准确源副本原SHA全部保持、sourceD33345...9242/Record FOCUSED_TEST_PASS/staged空，原Editor最终Menu clean8/nonPlay/idle/noTests/CS0，validation-final-01.json保留实际命令返回。没有新增工作树清理、默认推广或Goal状态操作。76资格包收口，不是阶段完成；H07/H11 OPEN，下一scope内必要动作仍继续。
+
+2026-10-08 本批 FOCUSED_TEST_PASS / SCOPED_DRIVER_QUALIFIED / NOT_ADMITTED。用户通知原Editor空闲后：首轮job5fb35cbd21e54d379102518c0601ab3d 7/8（466.148629s，XML4ADDE4...16D5），唯一Dispersed零拒绝覆盖要求FAIL；新2纯比较守卫有效RED jobab704ddeb303466aa1faeed59e465ba0 / XML4630A1...CEEC8，修后仅失败Dispersed＋2guard job565e9dfcc7444b58bd58d00907fb047d 3/3（198.649882s，XML84F2E3...BC61）。复用首轮7共10唯一case证据，不称新跑8/8或10/10。四组最终88配对/176step声明checksum/两完整RNG/AI1000/方向一致、三prepared数组identity/三容量无增长/无fallback及旧11stage三0检查保持；Dispersed32tick NO_REJECT_COVERAGE、Combat32tick最后collection max26正例，不当性能收益。含失败复验实际120配对/240step、RED在内13case。仅Admission冷资格/覆盖要求修正，生产默认仍OFF；最终sourceD33345...9242，Query1FF48...8BD8B/Suite43ECB...83D8C/旧Ordinal段至Run及tail保持。602保护0变化、Menu/Battle原SHA/唯一Menu clean8roots/nonPlay/终CS0，原Editor74724/6402，不操作另项目、不运行Play/Profiler/GPU/M0/性能。执行中外部HEAD变06a5fe9c收录本批已有文件，本代理无add/commit且staged空，不回退或因此重跑。8源副本和全部失败/RED/终态XML独立归档，不删除。最终audit与完整命令/边界详 artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/REPORT.md、driver-qualification-audit-01.json。末合并patch重复target及向前定位metadata分别拒绝零应用，改为metadata先于标题；无覆盖或丢旧事实。55已执行、阶段4/6、H07/H11 OPEN、Goal active；无新FPS/0GC/SetPass（仍75约1995），下一独立Task按现有Suite接depth实际千人OFF/ON固定短窗，不重复已过资格；ATLAS/资源/EXT1/Mono仍未解冻。
 
 覆盖判定修正已写：两个新pure guard先经原Editor有效RED 2/2（jobab704ddeb303466aa1faeed59e465ba0，缺显式4参数，XML4630A1...CEEC8），随后仅CompareDepthRejectDriverRows新增requireDepthProof默认false和1000case按Combat强制proof，并显式归档COVERED/NO_REJECT_COVERAGE；checksum/RNG/AI/方向/数组容量/规则未改。第一轮8的真实7PASS/1FAIL保留，恢复备份09EA...67DE；GREEN只失败Dispersed＋新2guard共3，原Combat正覆盖sum26与旧case不重跑。未有新收益。
 

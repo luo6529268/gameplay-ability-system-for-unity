@@ -1,3 +1,17 @@
+> NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008 / VERIFIED（仅文档操作/只读前置）：六准确dirty备份与旧正文保持，16新鲜输入/615递归保护0变化，HEAD/staged同，diff和ChangeLedger exit0。确认阴影现有可读配置与common atlas重绑能力，无C#/资源/Unity/测试/测量或SetPass下降；79仅PLANNED/未执行。57执行/阶段4of6/H07H11 OPEN，实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/RECORD.md)。
+
+> NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008 / VERIFIED（仅文档操作/只读取证）：13对象22sheet/1超大源；4准确dirty备份与旧正文、48输入及604旧guard核同，HEAD/staged同、diff与ChangeLedger exit0。无代码/资源/Unity/测量，57执行/4of6/H07H11 OPEN不变；共享绑定实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/RECORD.md)。
+
+> NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008 / PLANNED：仅追加只读OID1显式引用与PNG尺寸取证；四dirty文档已准确备份并SHA核同，48输入已冻结。无代码/资源/Unity/性能操作，不启动SetPass实施。[Record](NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/RECORD.md)。
+
+Operation NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008 / VERIFIED（仅只读资源范围取证与文档追加）：四dirty副本同SHA、原文尾部逐字节相同；604保护与九source均保持，HEAD/staged不变、diffcheck0、Ledger0/1373/原Suite旧diff covered。确认全目录预热与全局逻辑/UI发布耦合，下一优先SetPass完整本局视觉依赖＋共享绑定准备；实施仍未获定向授权、SetPass1995未降。[Record](NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/RECORD.md)。下行PLANNED保留。
+
+Operation NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008 / PLANNED（仅只读源码取证与文档追加）：关闭全目录预热上游未知，优先SetPass定向资源绑定准备；四dirty副本核同后只追加治理说明，不改任何脚本/资源/Scene、不控制Unity、不升格ATLAS/EXT1。[Record](NTSD-OPTIMIZATION-BATCH78-SETPASS-RESOURCE-SCOPE-20261008/RECORD.md)。
+
+Operation NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008 / VERIFIED（有限接线/对比文件操作）：36有效RED→46/46＋唯一四实际千人120+180完成；604保护/7准确副本保持，normal退出归还Menu clean8。收益混合/性能仍FAIL、defaultOFF，原件全部保留。[Record](NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/RECORD.md)。下行PLANNED为事前快照。
+
+Operation NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008 / PLANNED：NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077，仅Suite冷接线＋聚焦测试→四实景120+180 OFF/ON，保护76已过资格，不推广、不资源/Scene写入。[Record](NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008/RECORD.md)。
+
 Operation NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008 / PARTIAL / SCRIPT_WRITTEN / UNITY_DRIVER_PENDING：唯一Admission新5tests→缺入口源副本→显式depth资格接线，候选OFF；602保护0变化、6before＋1tests-only SHA核同，旧case/helper保持。隔离csc exit0/0error/6既有warning，非Unity/Driver验收；用户先pure脚本/通知后再Unity，未启动测试或测量。55已执行、阶段4/6/H07H11OPEN；无默认/ATLAS/资源/Scene变化。[Record](NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/RECORD.md)。
 
 Operation NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008 / EXECUTED / VERIFIED_SCOPED_DIAGNOSTIC：原8＋修补2副本、599保护；唯一Suite新诊断，01失败原件保留、02必要修补后完成，最终30/30及一次CPU提交快照/归还lease/detach/关闭0/Scene同。根因Auto超budget回退SourceTexture2D、纹理交替分段；SetPass1995未降，无renderer/ATLAS/资源/排序/默认变更。[NTSD-OPT-H07-CENTRAL-SEGMENT-READBACK-075](NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/RECORD.md)。

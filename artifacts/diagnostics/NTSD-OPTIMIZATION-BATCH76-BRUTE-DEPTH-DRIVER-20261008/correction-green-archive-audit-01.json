@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-08T12:14:42.6008633Z",
+  "archive": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/correction-green-results-01.xml",
+  "archiveSha": "84F2E3C617E7937D78C9C92C668EC70100400F2883FE420A06F2DEA1F13DBC61",
+  "sourceSha": "84F2E3C617E7937D78C9C92C668EC70100400F2883FE420A06F2DEA1F13DBC61",
+  "result": "Passed",
+  "total": "3",
+  "passed": "3",
+  "failed": "0",
+  "duration": "198.649882",
+  "cases": [
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_CoverageContractKeepsParityGuards(False)",
+      "result": "Passed",
+      "duration": "0.026332",
+      "message": null
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_CoverageContractKeepsParityGuards(True)",
+      "result": "Passed",
+      "duration": "0.001759",
+      "message": null
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_ThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+      "result": "Passed",
+      "duration": "197.113320",
+      "message": null
+    }
+  ]
+}
