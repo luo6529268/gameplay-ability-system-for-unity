@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-08T07:43:50.9310126Z",
+  "command": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1",
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1368",
+    "  Governed code files in diff: 1"
+  ],
+  "warningCount": 4406,
+  "errors": [],
+  "warningTypes": "Historical declared code paths absent from current working diff; external commit reduced governed diff count.",
+  "warningFirst": [
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerStyle.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/BattleCentralEditorPreview.cs, which is not in the current code diff.",
+    "  WARNING: Record BATTLE-CENTRAL-EDITOR-FOOT-MARKER-PREVIEW-001 declares Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralEditorPreviewEditor.cs, which is not in the current code diff."
+  ]
+}

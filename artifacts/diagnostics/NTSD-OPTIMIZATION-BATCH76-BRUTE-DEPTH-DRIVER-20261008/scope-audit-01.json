@@ -1,0 +1,62 @@
+{
+  "utc": "2026-10-08T11:35:39.8462447Z",
+  "guardCount": 602,
+  "guardChanges": [],
+  "sourceSha": "09EA6B464281C7A4651113D9009EB37CF501D60459F52742083B0265AED467DE",
+  "originalTestsAndHelpersSame": true,
+  "originalTailMinusNewDtoFieldsSame": true,
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "88186BA3B1AEFC3F314E8459989A642B13ED403332BFB18871F2735B253EABA0"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/02-battle-optimization-progress-tracker.md",
+      "sha": "65BA436DD647B08EAD9506C25EC7827495FE8AC9979B92848012C5DF657825B4"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/03-STATE.md",
+      "sha": "97BC5125D5E1EA5BCFB4D3A268DB0C287A030B04C513BDC59D87F0C0BBAE3712"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "sha": "BD51DDDA184F9E17888A8DD5FAF11C196ABA015CF3E3D554240581047B7528EC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/05-CHANGE-LEDGER.md",
+      "sha": "1BC278DAF22BCEEF54C35C074C82C7059F9E24CD1F4F0E3B76AC5692A62C04CC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/06-INDEX.md",
+      "sha": "3C80417BFA6B0223E8309665DDC933A973B47E4452E5535B60B6E2CBFEBB58A7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before-implementation-01/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "63303A2574E279AC227149BDE37BB6087595BC921BE2C53105C2CBA1783E57AD"
+    }
+  ],
+  "compilerFiles": [
+    {
+      "path": "Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp-Editor.rsp",
+      "sha": "B4EA2BAAF8920D0EC1527DD19C780952E4D8AD061408C448E952F1F4F449624F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/static-compile-01/Assembly-CSharp-Editor.rsp",
+      "sha": "166F838A620CFB0D779CB049C0E13521C38D7468DAA437E6273A1E99CF544A27"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/static-compile-01/Assembly-CSharp-Editor.dll",
+      "sha": "FF362492997025B58852E2826CB28E26524716A6B2543728D922676F0E25DF8E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/static-compile-01/Assembly-CSharp-Editor.ref.dll",
+      "sha": "F25A86C025A111FD75A7F4064208B83359FCDD3DB2660DAE9141D93A002DBB1A"
+    }
+  ],
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "auditWrapperCorrections": [
+    "First read-only audit JSON parser saw git line-ending warning; no writes/test",
+    "Second compiler hash path array used unparenthesized PowerShell concatenation; read-only missing-path errors; explicit literal paths now successfully rechecked"
+  ]
+}

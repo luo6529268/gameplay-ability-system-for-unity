@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-08T11:31:47.7667520Z",
+  "command": "D:/Unity/HubEditor/2022.3.62f3/Editor/Data/NetCoreRuntime/dotnet.exe D:/Unity/HubEditor/2022.3.62f3/Editor/Data/DotNetSdkRoslyn/csc.dll @artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/static-compile-01/Assembly-CSharp-Editor.rsp",
+  "exitCode": 0,
+  "errorCount": 0,
+  "warningCount": 6,
+  "warningLocations": [
+    "NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs:11 CS0105",
+    "ClassFactoryWindow.cs:870 CS0219",
+    "ClassFactoryWindow.cs:972 CS0168",
+    "ProductionEntityStressEditorTests.cs:4039 CS0618",
+    "ProductionEntityStressEditorTests.cs:4916 CS0618",
+    "ProductionEntityStressEditorTests.cs:5056 CS0618"
+  ],
+  "onlyOutAndRefOutRebound": true,
+  "analyzersRetained": true,
+  "unityStarted": false,
+  "testsRun": false,
+  "performanceMeasured": false,
+  "effectiveRedRun": false,
+  "scope": "Current Editor assembly C# compile against existing Unity references; not Unity import or Driver correctness acceptance"
+}

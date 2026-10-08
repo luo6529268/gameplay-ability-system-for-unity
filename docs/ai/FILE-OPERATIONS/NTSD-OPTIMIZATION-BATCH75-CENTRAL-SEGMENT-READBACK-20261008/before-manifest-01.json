@@ -1,0 +1,135 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008",
+  "utc": "2026-10-08T10:31:22.0731463Z",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "9E07921EC8E37FBCEC31918898E1D68A2CF6614A4C2451D1E56FAEB0450F4BD4",
+      "bytes": 307783,
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/01-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backupExists": false
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha": "6A1F6EE35B83DF7F3BE59D759E532405E3A681417B8FA27BC8E3397B5077B83D",
+      "bytes": 164795,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/02-battle-optimization-progress-tracker.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha": "491D776B8463BA792DA630D7324C5D6A5D8FCBCFA310164F3135DDB09C99311A",
+      "bytes": 1622387,
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/03-STATE.md",
+      "backupExists": false
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha": "9FD5215984B5D7D01F258C6F72D09D7E67AC30686E8BF0379636E002844998F4",
+      "bytes": 1556003,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "sha": "EFEF048EFE123E8681F3026A8182CCAB528F1A8EAE38EC0CC1145E6A6F05D6D1",
+      "bytes": 718408,
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/05-CHANGE-LEDGER.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha": "4BB0F84CDC8DFCD5FC677CC998C95D1E4B0428B352223A8582458183BF6D6D4D",
+      "bytes": 107298,
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/06-INDEX.md",
+      "backupExists": false
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "sha": "696483D8FA67C63CE13305144A0E74A1C49D57DA4A228C1926F48F88A60D932F",
+      "bytes": 4404,
+      "gitStatus": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/07-Goal18_LastTestResults.xml",
+      "backupExists": false
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "sha": "6D3A8EFC082BA5C29D8E8198C6A40E35DAC28274E1F1369C1392422DC3BDB5BE",
+      "bytes": 528,
+      "gitStatus": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before/08-NTSD_ProductionEntityStress.result",
+      "backupExists": false
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008/before-manifest-01.json",
+      "sha": "DE97E693969D0F2FD5BD38D08387A2985A541D838626F9A9BF97A4AF06640A54"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008/guard-addendum-01.json",
+      "sha": "90EF84F18DAA9E1A4AB4DF5BA4B77B6C4AB1EAF23B59508A1A235B095290C739"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "docs/ai/STATE.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "1FF48CA62EE7DB21F3956D48B9FDF59D8BD96EC3936E969EE2C23A8B9758BD8B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "EE755D691AF92B396C4F0730AFBE2B45401F5ABF72F4B58E94766042FAC842AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008/cost-results-01.xml",
+      "exists": true,
+      "sha": "696483D8FA67C63CE13305144A0E74A1C49D57DA4A228C1926F48F88A60D932F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008/cost-summary-01.json",
+      "exists": true,
+      "sha": "F9584845F3CFD46992964DDCCEC730A919E9EB00D4C929D4432DC558672C1A99"
+    }
+  ],
+  "expandedGuardCount": 599
+}

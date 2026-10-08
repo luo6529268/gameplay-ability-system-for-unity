@@ -1,4 +1,23 @@
-> 第71批 Operation PLANNED / DRIVER_QUALIFICATION_PENDING：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071，准确单Editor Admission script、5新test-first＋3旧/88配对176完整tick、510guards/7dirty副本待核。70默认OFF/局部收益保留；49已执行＋71准备，阶段4/6、H07/H11 OPEN、Goal active。
+Operation NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008 / PARTIAL / SCRIPT_WRITTEN / UNITY_DRIVER_PENDING：唯一Admission新5tests→缺入口源副本→显式depth资格接线，候选OFF；602保护0变化、6before＋1tests-only SHA核同，旧case/helper保持。隔离csc exit0/0error/6既有warning，非Unity/Driver验收；用户先pure脚本/通知后再Unity，未启动测试或测量。55已执行、阶段4/6/H07H11OPEN；无默认/ATLAS/资源/Scene变化。[Record](NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/RECORD.md)。
+
+Operation NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008 / EXECUTED / VERIFIED_SCOPED_DIAGNOSTIC：原8＋修补2副本、599保护；唯一Suite新诊断，01失败原件保留、02必要修补后完成，最终30/30及一次CPU提交快照/归还lease/detach/关闭0/Scene同。根因Auto超budget回退SourceTexture2D、纹理交替分段；SetPass1995未降，无renderer/ATLAS/资源/排序/默认变更。[NTSD-OPT-H07-CENTRAL-SEGMENT-READBACK-075](NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/RECORD.md)。
+
+Operation NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008 / EXECUTED / FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / NOT_ADMITTED：43有效RED→50/50 GREEN、唯一两cost2/2 PASS；局部mean减少29.8284%/30.4847%，不是1000AI/FPS/0GC/SetPass收益，defaultOFF。9事前副本保留、公共XML经核后新增ABSENT cost归档，不覆盖历史终态；两C#本轮无再改，无render资源/排序/插件写入。 [Record](NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008/RECORD.md)。
+
+历史73（下方保留）：
+> 当前第73批 STATIC_CANDIDATE_SELECTED / IMPLEMENTATION_NOT_STARTED / PERFORMANCE_UNMEASURED：只读重扫确认现有XY粗筛未含Z，选择同普通Brute的保守深度上界负拒绝；保留原序、逐body exact与binding失效清理，不改collector/default。PairExactLoop计时还包含roster/cache重建，不能把约51ms全归内层或绑定。下一准确74候选Task READY，先聚焦正确性/局部成本再决定Driver/千人窗，不重跑72。52已执行（含73静态选择）、阶段4/6、H07/H11 OPEN、父项关闭0、Goal active；无本批C#/Unity/tests/性能收益，专项门保持。
+
+Operation NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008 / VERIFIED（仅文档）：六登记前副本6/6与587/587保护核同，HEAD/staged/Query源保持；73静态选定、74仅READY、SetPass现有四report读取未下降。治理PASSED/diff check0，无C#/Unity/tests/新测量。见 [Record](NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/RECORD.md)。
+
+历史72终态 > 第72批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL；真实结果和全部原件保留，未追加本窗或推广候选。
+
+历史72资格快照 > 第72批 FOCUSED_TEST_PASS / WINDOWS_READY / NOT_ADMITTED：新31有效RED→41/41 GREEN（新31＋旧10），旧test全文/17参数保持；source9E07921E、8副本/538保护，原Menu savedclean8/idle。下一仅四真实1000AI120warm+180sample OFF/ON，未测收益。候选默认OFF、H07/H11 OPEN、Goal active；51已执行（22—72）、阶段4/6、父项关闭0。
+
+> 当前第72批 Operation PLANNED：NTSD-OPT-H07-ORDINAL-PACKET-WINDOWS-072；仅既有Suite Editor＋同文件31新test-first/旧10=41，8准确副本/538保护；四真实1000AI120+180 OFF/ON待接入/待测。生产默认OFF，H07/H11 OPEN、Goal active，50已执行＋72准备。详见 FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH72-ORDINAL-PACKET-WINDOWS-20261008/RECORD.md。
+
+> 当前第71批 FOCUSED_TEST_PASS / DRIVER_QUALIFICATION_PASS / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071；5有效RED→8/8 GREEN（新5＋旧3），四组88配对/176完整Driver step，声明checksum/完整双RNG标量/实体数与精确计数逐tick同，两千人各32tick实际AI1000、packet真实应用/无容量fallback、数组identity与关闭三0通过。候选默认OFF，无新FPS/0GC；510保护及7副本核同，HEAD外部推进已登记、不回退。50已执行（22—71）、阶段4/6、H07/H11 OPEN、Goal active；下一准确Task四实景短窗，不重采旧资格/cost，不解冻专项。
+
+历史71事前登记 > 第71批 Operation PLANNED / DRIVER_QUALIFICATION_PENDING：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071，准确单Editor Admission script、5新test-first＋3旧/88配对176完整tick、510guards/7dirty副本待核。70默认OFF/局部收益保留；49已执行＋71准备，阶段4/6、H07/H11 OPEN、Goal active。
 
 > 当前第70批 SCOPED_CORRECTNESS_PASS / LOCAL_GAIN_SIGNAL / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-CANDIDATE-070 / FOCUSED_TEST_PASS；25有效RED→34/34 GREEN（新25＋旧9）＋唯一两cost2/2；1000participant spacing120/12局部mean减少33.6389%/13.4884%、median减少30.6225%/13.7886%，包含每次重建，不是1000AI/FPS/0GC。候选默认OFF，原顺序/binding gate/精确survivor/容量fallback保持。7副本与490保护核同、HEAD/原Menu clean8roots/CS0；49已执行（22—70）、阶段4/6、H07/H11 OPEN、Goal active。下一完整Driver资格/适用trace，再真实1000AI窗口，不重采本cost/69覆盖、不解冻专项。
 

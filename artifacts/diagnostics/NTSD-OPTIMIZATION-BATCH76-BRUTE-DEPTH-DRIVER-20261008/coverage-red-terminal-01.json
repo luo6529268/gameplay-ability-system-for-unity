@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ab704ddeb303466aa1faeed59e465ba0",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791461132795,
+      "finished_unix_ms": 1791461142980,
+      "last_update_unix_ms": 1791461142980,
+      "progress": {
+        "completed": 2,
+        "total": 10112,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791461140229,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_CoverageContractKeepsParityGuards(True)",
+        "last_finished_unix_ms": 1791461140230,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_CoverageContractKeepsParityGuards(False)",
+            "message": "  branch coverage must be an explicit requirement, separate from every-tick parity\r\n  Expected: 4\r\n  But was:  3\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_CoverageContractKeepsParityGuards(True)",
+            "message": "  branch coverage must be an explicit requirement, separate from every-tick parity\r\n  Expected: 4\r\n  But was:  3\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

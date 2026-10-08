@@ -13,6 +13,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace NTSD.Test.Editor
@@ -46,7 +47,11 @@ namespace NTSD.Test.Editor
         private const string BruteEnvelopeBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01";
         private const string RenderTextureBindingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01";
         private const string SharedRequest = "Temp/NTSD_ProductionEntityStress.request.json";
+        private const string BruteOrdinalPacketOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH72-ORDINAL-PACKET-WINDOWS-20261008/windows-01";
         private const string SharedResult = "Temp/NTSD_ProductionEntityStress.result";
+        private const string CentralSegmentReadbackOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/windows-02";
+        private static bool startingCentralSegmentReadback;
+        private static RunState centralSegmentReadbackRun;
         private static readonly Type ConfigType = typeof(ProductionEntityStressRunner).Assembly.GetType(
             "NTSD.Animation.Rendering.Editor.ProductionEntityStressConfig", true);
         private static readonly MethodInfo FromRequest = ConfigType.GetMethod("FromRequest", BindingFlags.Static | BindingFlags.NonPublic);
@@ -108,10 +113,17 @@ namespace NTSD.Test.Editor
         private static readonly string CoarseEnvelopeDriftError =
             "The owned coarse envelope flag or production defaults drifted during the fixed window.";
         private static BattleLogicTickGcObserverEditor logicGcObserver;
+        private static bool startingOrdinalPacketWindow;
+        private static BruteForceSceneQuery ordinalPacketQuery;
+        private static RunState ordinalPacketRun;
+        private static bool previousOrdinalPacket;
 
         [Serializable]
         private sealed class RunState
         {
+            public bool centralSegmentReadbackCaptured;
+            public bool centralSegmentReadbackDetached;
+            public string centralSegmentReadbackError;
             public string action;
             public int targetSamples;
             public string reportPath;
@@ -211,6 +223,45 @@ namespace NTSD.Test.Editor
             public int renderTextureBindingCameraId;
             public long renderTextureBindingBodyPrepareCount;
             public long renderTextureBindingBodyReuseCount;
+            public bool bruteOrdinalPacketEnabled;
+            public bool bruteOrdinalPacketFlagApplied;
+            public bool bruteOrdinalPacketFlagUnchanged;
+            public bool bruteOrdinalPacketRestored;
+            public bool bruteOrdinalPacketObservedApplied;
+            public bool bruteOrdinalPacketFallbackObserved;
+            public bool bruteOrdinalPacketCapacityStable;
+            public int bruteOrdinalPacketCapacityBeforePopulation;
+            public int bruteOrdinalPacketSteadyCapacity;
+            public int bruteOrdinalPacketMaximumObservedCapacity;
+            public int bruteOrdinalPacketLastObservedTick;
+            public int bruteOrdinalPacketObservedSamples;
+            public long bruteOrdinalPacketMaximumObservedRejects;
+            public long bruteOrdinalPacketMaximumObservedProofs;
+        }
+
+        [Serializable]
+        private sealed class CentralSegmentReadbackRow
+        {
+            public int index, chunk, subMesh, firstCommand, commands, firstQuad, quads;
+            public string bindingMode, textureName, textureType, textureAssetPath;
+            public int boundTextureIdentity, SourceTextureIdentity, AtlasPageIdentity, TextureArrayIdentity;
+            public int slice, pageIndex, materialIdentity, variant, shaderIdentity, shaderPassCount, renderQueue;
+            public string materialName, shaderName, shaderKeywords;
+            public int breakMaskFromPrevious;
+        }
+
+        [Serializable]
+        private sealed class CentralSegmentReadbackSnapshot
+        {
+            public string scope = "One CPU submission readback; not GPU batch, FPS gain or complete zero-GC evidence.";
+            public string utc, drawMode, drawPolicyRequested, drawPolicyEffective, drawPolicyReason;
+            public int tick, generation, cameraIdentity, sampledLogicTicks, activeAi;
+            public bool atlasInputsKnown, cpuLeaseReleased;
+            public string atlasRequested, atlasEffective, atlasReason, catalogMode, atlasDiagnostic;
+            public int plannedPageCount, sourceCommands, resolvedCommands, unresolvedCommands;
+            public int unsupportedCategories, unsupportedStates, chunks, segments;
+            public long estimatedAtlasBytes, atlasBudgetBytes;
+            public CentralSegmentReadbackRow[] rows;
         }
 
         [Serializable]
@@ -242,6 +293,8 @@ namespace NTSD.Test.Editor
             public bool bruteEnvelopeBindingEligibilityCandidate;
             public bool bruteEnvelopeBranchTimingCandidate;
             public bool renderTextureBindingCandidate;
+            public bool bruteOrdinalPacketCandidate;
+            public bool centralSegmentReadbackOnly;
             public string originalScene;
             public string originalSceneHash;
             public string battleSceneHash;
@@ -461,6 +514,39 @@ namespace NTSD.Test.Editor
             }
         }
 
+
+        [MenuItem("NTSD/Validation/Optimization/Batch72 Ordinal Packet Full Driver GC 1000 AI OFF ON")]
+        private static void BeginBruteOrdinalPacket()
+        {
+            Require(!startingOrdinalPacketWindow && ordinalPacketQuery == null && ordinalPacketRun == null,
+                "The ordinal packet window requires exclusive ownership.");
+            startingOrdinalPacketWindow = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingOrdinalPacketWindow = false;
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback")]
+        private static void BeginCentralSegmentReadback()
+        {
+            Require(!startingCentralSegmentReadback && centralSegmentReadbackRun == null,
+                "The central readback requires exclusive Editor observer ownership.");
+            startingCentralSegmentReadback = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true);
+            }
+            finally
+            {
+                startingCentralSegmentReadback = false;
+            }
+        }
+
         private static void BeginSuite(bool roleCandidate, bool roleFormalCandidate = false,
             bool pairSnapshotCandidate = false, bool emptyItrGuardCandidate = false,
             bool emptyItrRosterCandidate = false, bool bruteExactCacheCandidate = false,
@@ -471,6 +557,30 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            Require(!startingCentralSegmentReadback || bruteProductionOnly &&
+                !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
+                !emptyItrRosterCandidate && !bruteExactCacheCandidate && !bruteGeometryFirstCandidate &&
+                !cpuGcCaptureOnly && !bruteBranchTimingOnly && !bruteBranchTimingSampled &&
+                !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate && !bruteCombinedCacheCandidate &&
+                !logicGcScopeOnly && !logicGcCallsiteOnly && !labelPrewarmValidation &&
+                !startingOrdinalPacketWindow && !startingRenderTextureBindingWindow &&
+                !startingEnvelopeBranchTimingWindow && !startingEnvelopeBindingEligibilityWindow &&
+                !startingEnvelopeBindingWindow && !startingCoarseEnvelopeWindow,
+                "The central readback must use unchanged production defaults without another candidate or capture.");
+            Require(!startingOrdinalPacketWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
+                !emptyItrRosterCandidate && !bruteExactCacheCandidate && !bruteGeometryFirstCandidate &&
+                !cpuGcCaptureOnly && !bruteBranchTimingOnly && !bruteBranchTimingSampled &&
+                !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate && !bruteCombinedCacheCandidate &&
+                !logicGcCallsiteOnly && !labelPrewarmValidation && !startingCoarseEnvelopeWindow &&
+                !startingEnvelopeBindingWindow && !startingEnvelopeBindingEligibilityWindow &&
+                !startingEnvelopeBranchTimingWindow && !startingRenderTextureBindingWindow &&
+                coarseEnvelopeQuery == null && envelopeBindingQuery == null && kind5PresenceQuery == null &&
+                eligibilityReuseQuery == null && branchTimingQuery == null && !renderTextureBindingReuseOwner &&
+                !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics,
+                "The ordinal packet window requires production/calibrated scope without another mode or owner.");
+            Require(ordinalPacketQuery == null && ordinalPacketRun == null,
+                "An ordinal packet window already owns the query.");
             // Alignment contract: NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065; instrument only this explicit, owned path.
             Require(!startingRenderTextureBindingWindow || bruteProductionOnly && logicGcScopeOnly &&
                 !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow &&
@@ -541,7 +651,9 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingRenderTextureBindingWindow ? RenderTextureBindingOutputRoot :
+            string outputRoot = startingCentralSegmentReadback ? CentralSegmentReadbackOutputRoot :
+                startingOrdinalPacketWindow ? BruteOrdinalPacketOutputRoot :
+                startingRenderTextureBindingWindow ? RenderTextureBindingOutputRoot :
                 startingEnvelopeBranchTimingWindow ? BruteEnvelopeBranchTimingOutputRoot :
                 startingEnvelopeBindingEligibilityWindow ? BruteEnvelopeBindingEligibilityOutputRoot :
                 startingEnvelopeBindingWindow ? BruteEnvelopeBindingOutputRoot :
@@ -589,7 +701,9 @@ namespace NTSD.Test.Editor
                 bruteEnvelopeBindingEligibilityCandidate = startingEnvelopeBindingEligibilityWindow,
                 bruteEnvelopeBranchTimingCandidate = startingEnvelopeBranchTimingWindow,
                 renderTextureBindingCandidate = startingRenderTextureBindingWindow,
-                runs = new RunState[startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                bruteOrdinalPacketCandidate = startingOrdinalPacketWindow,
+                centralSegmentReadbackOnly = startingCentralSegmentReadback,
+                runs = new RunState[startingCentralSegmentReadback ? 1 : startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -671,6 +785,10 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.centralSegmentReadbackOnly)
+                return BuildCentralSegmentReadbackRequest(index);
+            if (state.bruteOrdinalPacketCandidate)
+                return BuildBruteOrdinalPacketRequest(index);
             if (state.renderTextureBindingCandidate)
                 return BuildRenderTextureBindingRequest(index);
             if (state.bruteEnvelopeBranchTimingCandidate)
@@ -792,6 +910,16 @@ namespace NTSD.Test.Editor
             return request;
         }
 
+        private static ProductionEntityStressRequest BuildBruteOrdinalPacketRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.outputPath = BruteOrdinalPacketOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-packet-off" : "-packet-on") + "/report.json";
+            return request;
+        }
+
         private static ProductionEntityStressRequest BuildBruteEnvelopeBranchTimingRequest(int index)
         {
             if (index < 0 || index >= 4)
@@ -849,6 +977,15 @@ namespace NTSD.Test.Editor
             ProductionEntityStressRequest request = BuildRequest(index);
             request.outputPath = BruteProductionOutputRoot + "/" + index.ToString("D2") + "-" +
                 request.action + "-smoke/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildCentralSegmentReadbackRequest(int index)
+        {
+            if (index != 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(1);
+            request.outputPath = CentralSegmentReadbackOutputRoot + "/00-combat1000-readback/report.json";
             return request;
         }
 
@@ -973,6 +1110,14 @@ namespace NTSD.Test.Editor
                     return;
                 }
                 run.terminalStatus = currentReport.status;
+                if (state.centralSegmentReadbackOnly)
+                {
+                    RestoreCentralSegmentReadback();
+                    Require(run.centralSegmentReadbackCaptured && string.IsNullOrEmpty(run.centralSegmentReadbackError) &&
+                        run.centralSegmentReadbackDetached, "The fixed window requires one valid central segment readback.");
+                }
+                if (state.bruteOrdinalPacketCandidate)
+                    CompleteBruteOrdinalPacket(run);
                 if (state.renderTextureBindingCandidate)
                     CompleteRenderTextureBindingReuse(run);
                 if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1084,6 +1229,7 @@ namespace NTSD.Test.Editor
                       run.renderTextureBindingBodyReuseCount >= 0 &&
                       (run.renderTextureBindingReuseEnabled || run.renderTextureBindingBodyReuseCount == 0))) &&
                     (!state.bruteCoarseEnvelopeCandidate || CoarseEnvelopeObservationValid(run)) &&
+                    (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingCandidate || EnvelopeBindingObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingEligibilityCandidate || EnvelopeBindingEligibilityObservationValid(run)) &&
                     (!state.bruteEnvelopeBranchTimingCandidate || EnvelopeBranchTimingObservationValid(run)) &&
@@ -1157,6 +1303,20 @@ namespace NTSD.Test.Editor
                 run.bruteExactCacheAppliedBaseline = productionQuery.TotalBruteExactCacheAppliedForDiagnostics;
                 run.bruteExactCacheFallbackBaseline = productionQuery.TotalBruteExactCacheFallbackForDiagnostics;
                 run.bruteGeometryFirstAppliedBaseline = productionQuery.TotalBruteGeometryFirstCollectionAppliedForDiagnostics;
+            }
+            if (state.centralSegmentReadbackOnly)
+            {
+                Require(centralSegmentReadbackRun == null && OrdinalPacketQueryDefaultsValid(productionQuery) &&
+                    !productionQuery.EnableBruteOrdinalPacketForDiagnostics &&
+                    !productionQuery.EnableBruteDepthRejectForDiagnostics,
+                    "The readback requires all independent candidates off and an unowned observer.");
+                centralSegmentReadbackRun = state.runs[state.runIndex];
+                RenderPipelineManager.endCameraRendering += ObserveCentralSegmentReadback;
+            }
+            if (state.bruteOrdinalPacketCandidate)
+            {
+                Require(currentReport.logicTicksExecuted == 0, "The ordinal packet flag must be applied before any tick.");
+                ApplyBruteOrdinalPacket(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
             }
             if (state.renderTextureBindingCandidate)
             {
@@ -1305,6 +1465,8 @@ namespace NTSD.Test.Editor
             run.minimumObservedActiveAi = Math.Min(run.minimumObservedActiveAi, report.baseAiActiveCount);
             run.minimumObservedBaseRoster = Math.Min(run.minimumObservedBaseRoster, report.baseRosterActiveCount);
             run.observedSampleWindows++;
+            if (state.bruteOrdinalPacketCandidate)
+                ObserveBruteOrdinalPacket(run, report.logicTicksExecuted);
             if (state.bruteCoarseEnvelopeCandidate)
                 ObserveBruteCoarseEnvelope(run);
             if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1360,6 +1522,8 @@ namespace NTSD.Test.Editor
 
         private static void ShutdownAndExit()
         {
+            RestoreCentralSegmentReadback();
+            Require(RestoreBruteOrdinalPacket(), "The owned ordinal packet flag must be restored before shutdown.");
             Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
             Require(RestoreBruteEnvelopeBindingForExit(), EnvelopeBindingOwnerError);
             if (logicGcObserver != null)
@@ -1411,6 +1575,10 @@ namespace NTSD.Test.Editor
         {
             if (state == null)
                 return;
+            if (change == PlayModeStateChange.ExitingPlayMode)
+                RestoreCentralSegmentReadback();
+            if (state.bruteOrdinalPacketCandidate && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreBruteOrdinalPacket(), "The owned ordinal packet flag must be restored on Play exit.");
             if (state.renderTextureBindingCandidate && change == PlayModeStateChange.ExitingPlayMode)
                 Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
             if ((state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
@@ -1529,6 +1697,8 @@ namespace NTSD.Test.Editor
             string envelopeBindingEligibilityOwnerRoot = PathFor(BruteEnvelopeBindingEligibilityOutputRoot) + Path.DirectorySeparatorChar;
             string envelopeBranchTimingOwnerRoot = PathFor(BruteEnvelopeBranchTimingOutputRoot) + Path.DirectorySeparatorChar;
             string renderTextureBindingOwnerRoot = PathFor(RenderTextureBindingOutputRoot) + Path.DirectorySeparatorChar;
+            string ordinalPacketOwnerRoot = PathFor(BruteOrdinalPacketOutputRoot) + Path.DirectorySeparatorChar;
+            string centralReadbackOwnerRoot = PathFor("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008") + Path.DirectorySeparatorChar;
             return lines.Length >= 2 && (lines[0] == "PASS" || lines[0] == "FAIL") &&
                 (PathFor(lines[1]).StartsWith(ownerRoot, StringComparison.OrdinalIgnoreCase) ||
                  PathFor(lines[1]).StartsWith(currentOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
@@ -1553,7 +1723,9 @@ namespace NTSD.Test.Editor
                    PathFor(lines[1]).StartsWith(envelopeBindingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                    PathFor(lines[1]).StartsWith(envelopeBindingEligibilityOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                    PathFor(lines[1]).StartsWith(envelopeBranchTimingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
-                   PathFor(lines[1]).StartsWith(renderTextureBindingOwnerRoot, StringComparison.OrdinalIgnoreCase));
+                    PathFor(lines[1]).StartsWith(renderTextureBindingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(ordinalPacketOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(centralReadbackOwnerRoot, StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool EnvelopeBindingQueryDefaultsValid(BruteForceSceneQuery query) =>
@@ -1903,6 +2075,232 @@ namespace NTSD.Test.Editor
             return restored;
         }
 
+
+        private static int CentralSegmentBreakMask(
+            BattleCentralRenderSegment previous, BattleCentralRenderSegment next, BattleCentralDrawMode drawMode)
+        {
+            // Alignment contract: NTSD-OPT-H07-CENTRAL-SEGMENT-READBACK-075; mirrors only observed CPU split conditions.
+            int mask = drawMode == BattleCentralDrawMode.StrictOrderedDraw ? 1 : 0;
+            if (previous.ChunkIndex != next.ChunkIndex) mask |= 2;
+            if (!ReferenceEquals(previous.Texture, next.Texture)) mask |= 4;
+            if (!ReferenceEquals(previous.Material, next.Material)) mask |= 8;
+            if (previous.MaterialVariant != next.MaterialVariant) mask |= 16;
+            if (previous.BindingMode != next.BindingMode) mask |= 32;
+            if (next.BindingMode == BattleSpriteCentralBindingMode.AtlasPageTexture2D &&
+                previous.AtlasPageIndex != next.AtlasPageIndex) mask |= 64;
+            if (next.BindingMode != BattleSpriteCentralBindingMode.AtlasTextureArray &&
+                previous.AtlasSlice != next.AtlasSlice) mask |= 128;
+            if (previous.FirstCommandIndex + previous.CommandCount != next.FirstCommandIndex) mask |= 256;
+            if (previous.ChunkIndex == next.ChunkIndex &&
+                previous.FirstQuad + previous.QuadCount != next.FirstQuad) mask |= 512;
+            return mask;
+        }
+
+        private static bool CentralSegmentReadbackPending(RunState run) =>
+            run != null && !run.centralSegmentReadbackCaptured && string.IsNullOrEmpty(run.centralSegmentReadbackError);
+
+        private static void ObserveCentralSegmentReadback(ScriptableRenderContext context, Camera camera)
+        {
+            RunState run = centralSegmentReadbackRun;
+            if (!CentralSegmentReadbackPending(run) ||
+                !Application.isPlaying || camera == null || camera.cameraType != CameraType.Game ||
+                currentReport == null || currentReport.status != "Running" ||
+                currentReport.warmupTicksCompleted < 120 || currentReport.sampledLogicTicks < 8)
+                return;
+            CameraRenderType renderType = camera.TryGetComponent(out UniversalAdditionalCameraData cameraData)
+                ? cameraData.renderType : CameraRenderType.Base;
+            if (!BattleCentralRenderSystem.TryAcquireSubmissionForSelfCheck(
+                    camera, renderType, camera.cameraType, true, out BattleCentralSubmission.BattleCentralSubmissionLease lease))
+                return;
+            CentralSegmentReadbackSnapshot snapshot = null;
+            try
+            {
+                try
+                {
+                    Require(OrdinalPacketQueryDefaultsValid(productionQuery) &&
+                        !productionQuery.EnableBruteOrdinalPacketForDiagnostics &&
+                        !productionQuery.EnableBruteDepthRejectForDiagnostics, "A diagnostic candidate drifted during readback.");
+                    BattleDynamicMeshBackend backend = lease.Backend;
+                    BattleCentralBuildDiagnostics diagnostics = backend.Diagnostics;
+                    BattleDrawPolicyDecision draw = BattleCentralRenderSystem.DrawPolicyDecision;
+                    snapshot = new CentralSegmentReadbackSnapshot
+                    {
+                        utc = DateTime.UtcNow.ToString("o"), tick = lease.TickIndex, generation = lease.Generation,
+                        cameraIdentity = camera.GetInstanceID(), sampledLogicTicks = currentReport.sampledLogicTicks,
+                        activeAi = currentReport.baseAiActiveCount,
+                        drawMode = diagnostics.DrawMode.ToString(), drawPolicyRequested = draw.RequestedMode.ToString(),
+                        drawPolicyEffective = draw.EffectiveMode.ToString(), drawPolicyReason = draw.FallbackOrRefusalReason,
+                        sourceCommands = diagnostics.SourceCommandCount, resolvedCommands = diagnostics.ResolvedCommandCount,
+                        unresolvedCommands = diagnostics.UnresolvedCommandCount,
+                        unsupportedCategories = diagnostics.UnsupportedCategoryCount,
+                        unsupportedStates = diagnostics.UnsupportedRenderStateCount,
+                        chunks = backend.ActiveChunkCount, segments = backend.SegmentCount,
+                        rows = new CentralSegmentReadbackRow[backend.SegmentCount],
+                    };
+                    CharacterAnimtorManager manager = CharacterAnimtorManager.TryGetInstance();
+                    if (manager != null)
+                    {
+                        BattleAtlasDiagnosticInputs atlas = manager.LastAtlasDiagnosticInputs;
+                        snapshot.atlasDiagnostic = manager.LastAtlasDiagnostic;
+                        if (atlas != null)
+                        {
+                            snapshot.atlasInputsKnown = true;
+                            snapshot.atlasRequested = atlas.Decision.RequestedMode.ToString();
+                            snapshot.atlasEffective = atlas.Decision.EffectiveMode.ToString();
+                            snapshot.atlasReason = atlas.Decision.FallbackOrRefusalReason;
+                            snapshot.catalogMode = atlas.CatalogResourceMode.ToString();
+                            snapshot.plannedPageCount = atlas.PlannedPageCount;
+                            snapshot.estimatedAtlasBytes = atlas.EstimatedAtlasBytes;
+                            snapshot.atlasBudgetBytes = atlas.Capabilities.AtlasMemoryBudgetBytes;
+                        }
+                    }
+                    for (int index = 0; index < backend.SegmentCount; index++)
+                    {
+                        BattleCentralRenderSegment segment = backend.GetSegment(index);
+                        Texture texture = segment.Texture;
+                        Material material = segment.Material;
+                        Shader shader = material == null ? null : material.shader;
+                        int textureId = texture == null ? 0 : texture.GetInstanceID();
+                        snapshot.rows[index] = new CentralSegmentReadbackRow
+                        {
+                            index = index, chunk = segment.ChunkIndex, subMesh = segment.SubMeshIndex,
+                            firstCommand = segment.FirstCommandIndex, commands = segment.CommandCount,
+                            firstQuad = segment.FirstQuad, quads = segment.QuadCount,
+                            bindingMode = segment.BindingMode.ToString(), boundTextureIdentity = textureId,
+                            SourceTextureIdentity = segment.BindingMode == BattleSpriteCentralBindingMode.SourceTexture2D ? textureId : 0,
+                            AtlasPageIdentity = segment.BindingMode == BattleSpriteCentralBindingMode.AtlasPageTexture2D ? textureId : 0,
+                            TextureArrayIdentity = segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray ? textureId : 0,
+                            textureName = texture == null ? null : texture.name,
+                            textureType = texture == null ? null : texture.GetType().Name,
+                            textureAssetPath = texture == null ? null : AssetDatabase.GetAssetPath(texture),
+                            slice = segment.AtlasSlice, pageIndex = segment.AtlasPageIndex,
+                            materialIdentity = material == null ? 0 : material.GetInstanceID(), variant = segment.MaterialVariant,
+                            materialName = material == null ? null : material.name,
+                            shaderIdentity = shader == null ? 0 : shader.GetInstanceID(),
+                            shaderName = shader == null ? null : shader.name,
+                            shaderPassCount = material == null ? 0 : material.passCount,
+                            renderQueue = material == null ? 0 : material.renderQueue,
+                            shaderKeywords = material == null ? null : string.Join(",", material.shaderKeywords),
+                            breakMaskFromPrevious = index == 0 ? 0 : CentralSegmentBreakMask(
+                                backend.GetSegment(index - 1), segment, diagnostics.DrawMode),
+                        };
+                    }
+                }
+                finally
+                {
+                    lease.Dispose();
+                }
+                snapshot.cpuLeaseReleased = lease.Submission.ReadLeaseCount == 0;
+                Require(snapshot.cpuLeaseReleased, "The readback CPU lease must be returned in the same callback.");
+                SaveNew(run.reportPath + ".central-segments.json", JsonUtility.ToJson(snapshot, true));
+                run.centralSegmentReadbackCaptured = true;
+            }
+            catch (Exception exception)
+            {
+                run.centralSegmentReadbackError = exception.ToString();
+            }
+            finally
+            {
+                RestoreCentralSegmentReadback();
+            }
+        }
+
+        private static bool RestoreCentralSegmentReadback()
+        {
+            RenderPipelineManager.endCameraRendering -= ObserveCentralSegmentReadback;
+            if (centralSegmentReadbackRun != null)
+                centralSegmentReadbackRun.centralSegmentReadbackDetached = true;
+            centralSegmentReadbackRun = null;
+            return true;
+        }
+
+        private static bool OrdinalPacketQueryDefaultsValid(BruteForceSceneQuery query) =>
+            query != null && query.FormalCollectorMode == CollisionFormalCollectorMode.ForceBruteForce &&
+            ProductionDefaultsEnabled(query) && !query.EnableBruteKind5PresenceForDiagnostics &&
+            !query.EnableBruteEligibilityReuseForDiagnostics && !query.EnableBruteCoarseEnvelopeForDiagnostics &&
+            !query.EnableBruteRejectedBindingReuseForDiagnostics && !query.EnableBruteCoarseDispatchForDiagnostics &&
+            !query.EnableBruteCoarseProofReuseForDiagnostics && !query.EnableBruteBranchTimingForDiagnostics &&
+            !query.EnableBruteEnvelopeBranchTimingForDiagnostics &&
+            !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics;
+
+        private static void ApplyBruteOrdinalPacket(BruteForceSceneQuery query, RunState run, bool enabled)
+        {
+            // Alignment contract: NTSD-OPT-H07-ORDINAL-PACKET-WINDOWS-072; cold flag ownership, not production admission.
+            Require(run != null && ordinalPacketQuery == null && ordinalPacketRun == null &&
+                coarseEnvelopeQuery == null && envelopeBindingQuery == null && kind5PresenceQuery == null &&
+                eligibilityReuseQuery == null && branchTimingQuery == null && !renderTextureBindingReuseOwner &&
+                OrdinalPacketQueryDefaultsValid(query) && !query.EnableBruteOrdinalPacketForDiagnostics,
+                "The ordinal packet window requires exclusive query/run ownership, four production defaults and no other candidate.");
+            ordinalPacketQuery = query;
+            ordinalPacketRun = run;
+            previousOrdinalPacket = query.EnableBruteOrdinalPacketForDiagnostics;
+            run.bruteOrdinalPacketEnabled = enabled;
+            run.bruteOrdinalPacketCapacityBeforePopulation = query.BruteOrdinalPacketCapacityForDiagnostics;
+            run.bruteOrdinalPacketCapacityStable = true;
+            query.EnableBruteOrdinalPacketForDiagnostics = enabled;
+            run.bruteOrdinalPacketFlagApplied = query.EnableBruteOrdinalPacketForDiagnostics == enabled;
+            run.bruteOrdinalPacketFlagUnchanged = run.bruteOrdinalPacketFlagApplied;
+        }
+
+        private static void ObserveBruteOrdinalPacket(RunState run, int logicTick)
+        {
+            Require(run != null && ordinalPacketQuery != null && ReferenceEquals(ordinalPacketRun, run),
+                "The ordinal packet window observation requires its owned run.");
+            run.bruteOrdinalPacketFlagUnchanged &= OrdinalPacketQueryDefaultsValid(ordinalPacketQuery) &&
+                ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics == run.bruteOrdinalPacketEnabled;
+            if (logicTick <= 0 || logicTick <= run.bruteOrdinalPacketLastObservedTick)
+                return;
+            int capacity = ordinalPacketQuery.BruteOrdinalPacketCapacityForDiagnostics;
+            if (run.bruteOrdinalPacketObservedSamples == 0)
+                run.bruteOrdinalPacketSteadyCapacity = capacity;
+            run.bruteOrdinalPacketCapacityStable &= capacity > 0 && capacity == run.bruteOrdinalPacketSteadyCapacity;
+            run.bruteOrdinalPacketMaximumObservedCapacity = Math.Max(run.bruteOrdinalPacketMaximumObservedCapacity, capacity);
+            run.bruteOrdinalPacketLastObservedTick = logicTick;
+            run.bruteOrdinalPacketObservedSamples++;
+            run.bruteOrdinalPacketObservedApplied |= ordinalPacketQuery.LastBruteOrdinalPacketAppliedForDiagnostics;
+            run.bruteOrdinalPacketFallbackObserved |= ordinalPacketQuery.LastBruteOrdinalPacketFallbackForDiagnostics;
+            run.bruteOrdinalPacketMaximumObservedRejects = Math.Max(run.bruteOrdinalPacketMaximumObservedRejects,
+                ordinalPacketQuery.LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics);
+            run.bruteOrdinalPacketMaximumObservedProofs = Math.Max(run.bruteOrdinalPacketMaximumObservedProofs,
+                ordinalPacketQuery.LastBruteOrdinalPacketProofCountForDiagnostics);
+        }
+
+        private static void CompleteBruteOrdinalPacket(RunState run)
+        {
+            Require(run != null && ordinalPacketQuery != null && ReferenceEquals(ordinalPacketRun, run),
+                "The ordinal packet window completion requires its owned run.");
+            run.bruteOrdinalPacketFlagUnchanged &= OrdinalPacketQueryDefaultsValid(ordinalPacketQuery) &&
+                ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics == run.bruteOrdinalPacketEnabled;
+            // Restore even when evidence is invalid; a wrong run never reaches this release.
+            run.bruteOrdinalPacketRestored = RestoreBruteOrdinalPacket();
+            Require(OrdinalPacketObservationValid(run),
+                "The ordinal packet window requires fresh application evidence, unchanged flags/capacity and no observed fallback.");
+        }
+
+        private static bool OrdinalPacketObservationValid(RunState run) =>
+            run != null && run.bruteOrdinalPacketFlagApplied && run.bruteOrdinalPacketFlagUnchanged &&
+            run.bruteOrdinalPacketRestored && run.bruteOrdinalPacketObservedSamples > 0 &&
+            run.bruteOrdinalPacketCapacityStable && run.bruteOrdinalPacketSteadyCapacity > 0 &&
+            !run.bruteOrdinalPacketFallbackObserved &&
+            (run.bruteOrdinalPacketEnabled
+                ? run.bruteOrdinalPacketObservedApplied && run.bruteOrdinalPacketMaximumObservedRejects > 0 &&
+                    run.bruteOrdinalPacketMaximumObservedProofs > 0
+                : !run.bruteOrdinalPacketObservedApplied && run.bruteOrdinalPacketMaximumObservedRejects == 0 &&
+                    run.bruteOrdinalPacketMaximumObservedProofs == 0);
+
+        private static bool RestoreBruteOrdinalPacket()
+        {
+            if (ordinalPacketQuery == null)
+                return true;
+            ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics = previousOrdinalPacket;
+            bool restored = ordinalPacketQuery.EnableBruteOrdinalPacketForDiagnostics == previousOrdinalPacket;
+            if (ordinalPacketRun != null)
+                ordinalPacketRun.bruteOrdinalPacketRestored = restored;
+            ordinalPacketQuery = null;
+            ordinalPacketRun = null;
+            return restored;
+        }
+
         private static void ApplyBruteCoarseEnvelope(BruteForceSceneQuery query, RunState run, bool enabled)
         {
             Require(coarseEnvelopeQuery == null && CoarseEnvelopeQueryDefaultsValid(query) &&
@@ -2090,6 +2488,518 @@ namespace NTSD.Test.Editor
 #if UNITY_INCLUDE_TESTS
     public sealed class BattleOptimizationWindowsAiSuiteRequestTests
     {
+        [NUnit.Framework.TestCase(null)]
+        [NUnit.Framework.TestCase("")]
+        public void CentralSegmentReadback_ErrorSessionRoundTrip(string error)
+        {
+            object run = NewEligibilityRun();
+            run.GetType().GetField("centralSegmentReadbackError").SetValue(run, error);
+            object restored = JsonUtility.FromJson(JsonUtility.ToJson(run), run.GetType());
+            NUnit.Framework.Assert.That(EligibilityMethod("CentralSegmentReadbackPending")
+                .Invoke(null, new[] { restored }), NUnit.Framework.Is.EqualTo(true));
+        }
+
+        [NUnit.Framework.Test]
+        public void CentralSegmentReadback_RequestOnlyOutput()
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildCentralSegmentReadbackRequest")
+                .Invoke(null, new object[] { 0 });
+            ProductionEntityStressRequest expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(1);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/windows-02/00-combat1000-readback/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(1)]
+        public void CentralSegmentReadback_OutsideMatrix(int index)
+        {
+            MethodInfo method = EligibilityMethod("BuildCentralSegmentReadbackRequest");
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.TestCase("strict", 1)]
+        [NUnit.Framework.TestCase("chunk", 2)]
+        [NUnit.Framework.TestCase("texture", 4)]
+        [NUnit.Framework.TestCase("material", 8)]
+        [NUnit.Framework.TestCase("variant", 16)]
+        [NUnit.Framework.TestCase("binding", 32)]
+        [NUnit.Framework.TestCase("page", 64)]
+        [NUnit.Framework.TestCase("slice", 128)]
+        [NUnit.Framework.TestCase("commandGap", 256)]
+        [NUnit.Framework.TestCase("quadGap", 512)]
+        [NUnit.Framework.TestCase("equal", 0)]
+        public void CentralSegmentReadback_BreakMask(string change, int expected)
+        {
+            MethodInfo method = EligibilityMethod("CentralSegmentBreakMask");
+            Shader shader = Shader.Find("NTSD/BattleCentralTransparent");
+            NUnit.Framework.Assert.That(shader, NUnit.Framework.Is.Not.Null);
+            Texture2D firstTexture = new Texture2D(1, 1);
+            Texture2D otherTexture = new Texture2D(1, 1);
+            Material firstMaterial = new Material(shader);
+            Material otherMaterial = new Material(shader);
+            try
+            {
+                var previous = new BattleCentralRenderSegment(0, 0, 0, 1, 0, 1, firstTexture,
+                    firstMaterial, 2, 0, BattleSpriteCentralBindingMode.AtlasPageTexture2D, 0);
+                var next = new BattleCentralRenderSegment(change == "chunk" ? 1 : 0, 1,
+                    change == "commandGap" ? 2 : 1, 1, change == "quadGap" ? 2 : 1, 1,
+                    change == "texture" ? otherTexture : firstTexture,
+                    change == "material" ? otherMaterial : firstMaterial, change == "variant" ? 3 : 2,
+                    change == "slice" ? 1 : 0,
+                    change == "binding" ? BattleSpriteCentralBindingMode.SourceTexture2D :
+                        BattleSpriteCentralBindingMode.AtlasPageTexture2D, change == "page" ? 1 : 0);
+                int actual = (int)method.Invoke(null, new object[] { previous, next,
+                    change == "strict" ? BattleCentralDrawMode.StrictOrderedDraw : BattleCentralDrawMode.OrderedChunks });
+                NUnit.Framework.Assert.That(actual, NUnit.Framework.Is.EqualTo(expected));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(firstMaterial);
+                UnityEngine.Object.DestroyImmediate(otherMaterial);
+                UnityEngine.Object.DestroyImmediate(firstTexture);
+                UnityEngine.Object.DestroyImmediate(otherTexture);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void CentralSegmentReadback_ArraySliceIsNotArrayIdentity()
+        {
+            MethodInfo method = EligibilityMethod("CentralSegmentBreakMask");
+            var previous = new BattleCentralRenderSegment(0, 0, 0, 1, 0, 1, null,
+                null, 0, 2, BattleSpriteCentralBindingMode.AtlasTextureArray);
+            var next = new BattleCentralRenderSegment(0, 1, 1, 1, 1, 1, null,
+                null, 0, 7, BattleSpriteCentralBindingMode.AtlasTextureArray);
+            NUnit.Framework.Assert.That(method.Invoke(null, new object[] { previous, next,
+                BattleCentralDrawMode.OrderedChunks }), NUnit.Framework.Is.EqualTo(0));
+        }
+
+        [NUnit.Framework.Test]
+        public void CentralSegmentReadback_SourcePageIndexIsNotBoundPageIdentity()
+        {
+            MethodInfo method = EligibilityMethod("CentralSegmentBreakMask");
+            var previous = new BattleCentralRenderSegment(0, 0, 0, 1, 0, 1, null,
+                null, 0, 0, BattleSpriteCentralBindingMode.SourceTexture2D, 1);
+            var next = new BattleCentralRenderSegment(0, 1, 1, 1, 1, 1, null,
+                null, 0, 0, BattleSpriteCentralBindingMode.SourceTexture2D, 8);
+            NUnit.Framework.Assert.That(method.Invoke(null, new object[] { previous, next,
+                BattleCentralDrawMode.OrderedChunks }), NUnit.Framework.Is.EqualTo(0));
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void CentralSegmentReadback_DetachIdempotent(bool ownsRun)
+        {
+            MethodInfo restore = EligibilityMethod("RestoreCentralSegmentReadback");
+            FieldInfo owner = CoarseEnvelopeStaticField("centralSegmentReadbackRun");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            object run = ownsRun ? NewEligibilityRun() : null;
+            try
+            {
+                owner.SetValue(null, run);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                if (run != null)
+                    NUnit.Framework.Assert.That(EligibilityRunField(run, "centralSegmentReadbackDetached"),
+                        NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteOrdinalPacketWindow_RequestOnlyOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildBruteOrdinalPacketRequest")
+                .Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected =
+                BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH72-ORDINAL-PACKET-WINDOWS-20261008/windows-01/" +
+                index.ToString("D2") + "-" + expected.action +
+                (index % 2 == 0 ? "-packet-off" : "-packet-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void BruteOrdinalPacketWindow_OutsideMatrix(int index)
+        {
+            MethodInfo method = EligibilityMethod("BuildBruteOrdinalPacketRequest");
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_MenuKeepsLegacy17AndColdOwner()
+        {
+            MethodInfo menu = EligibilityMethod("BeginBruteOrdinalPacket");
+            var attributes = menu.GetCustomAttributes(typeof(MenuItem), false);
+            NUnit.Framework.Assert.That(attributes.Length, NUnit.Framework.Is.EqualTo(1));
+            NUnit.Framework.Assert.That(((MenuItem)attributes[0]).menuItem, NUnit.Framework.Is.EqualTo(
+                "NTSD/Validation/Optimization/Batch72 Ordinal Packet Full Driver GC 1000 AI OFF ON"));
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("startingOrdinalPacketWindow").GetValue(null),
+                NUnit.Framework.Is.EqualTo(false));
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketQuery").GetValue(null), NUnit.Framework.Is.Null);
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketRun").GetValue(null), NUnit.Framework.Is.Null);
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_StateDefaultsFalseAndRoutesFourBeforeGc()
+        {
+            EligibilityMethod("BuildBruteOrdinalPacketRequest");
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            Type type = owner.FieldType;
+            FieldInfo mode = type.GetField("bruteOrdinalPacketCandidate");
+            NUnit.Framework.Assert.That(mode, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(mode.GetValue(JsonUtility.FromJson("{\"logicGcScopeOnly\":true}", type)),
+                NUnit.Framework.Is.EqualTo(false));
+            object candidate = Activator.CreateInstance(type, true);
+            mode.SetValue(candidate, true);
+            type.GetField("bruteProductionOnly").SetValue(candidate, true);
+            type.GetField("logicGcScopeOnly").SetValue(candidate, true);
+            try
+            {
+                owner.SetValue(null, candidate);
+                for (int index = 0; index < 4; index++)
+                {
+                    object actual = EligibilityMethod("BuildCurrentRequest").Invoke(null, new object[] { index });
+                    object expected = EligibilityMethod("BuildBruteOrdinalPacketRequest").Invoke(null, new object[] { index });
+                    NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+                }
+            }
+            finally { owner.SetValue(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteOrdinalPacketWindow_ModeRejectsBeforeState(int defect)
+        {
+            EligibilityMethod("BeginBruteOrdinalPacket");
+            FieldInfo startup = CoarseEnvelopeStaticField("startingOrdinalPacketWindow");
+            FieldInfo oldStartup = CoarseEnvelopeStaticField("startingCoarseEnvelopeWindow");
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            object previous = startup.GetValue(null);
+            object previousOld = oldStartup.GetValue(null);
+            MethodInfo begin = EligibilityMethod("BeginSuite");
+            ParameterInfo[] parameters = begin.GetParameters();
+            object[] arguments = new object[parameters.Length];
+            for (int index = 0; index < arguments.Length; index++)
+                arguments[index] = parameters[index].Name == "bruteProductionOnly" && defect != 0 ||
+                    parameters[index].Name == "logicGcScopeOnly" && defect != 1 ||
+                    parameters[index].Name == "bruteBranchTimingOnly" && defect == 2;
+            try
+            {
+                startup.SetValue(null, true);
+                oldStartup.SetValue(null, defect == 3);
+                var error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() => begin.Invoke(null, arguments));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(error.InnerException.Message, NUnit.Framework.Does.Contain("ordinal packet window"));
+                NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally
+            {
+                startup.SetValue(null, previous);
+                oldStartup.SetValue(null, previousOld);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteOrdinalPacketWindow_ApplyObserveCompleteRestores(bool enabled)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object run = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, enabled });
+                NUnit.Framework.Assert.That(query.BruteOrdinalPacketCapacityForDiagnostics, NUnit.Framework.Is.EqualTo(0),
+                    "Population has not completed; zero cold capacity is legal before the allocation seal.");
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetOrdinalPacketWindowEvidence(query, enabled, false, enabled ? 11L : 0L, enabled ? 5L : 0L);
+                EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 121 });
+                EligibilityMethod("CompleteBruteOrdinalPacket").Invoke(null, new object[] { run });
+                NUnit.Framework.Assert.That(EligibilityMethod("OrdinalPacketObservationValid").Invoke(null, new[] { run }),
+                    NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketCapacityBeforePopulation"),
+                    NUnit.Framework.Is.EqualTo(0));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketSteadyCapacity"),
+                    NUnit.Framework.Is.EqualTo(2));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketQuery").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_RejectSecondOwnerKeepsFirst()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object first = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, first, true });
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { query, NewEligibilityRun(), false })).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketRun").GetValue(null), NUnit.Framework.Is.SameAs(first));
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.True);
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        [NUnit.Framework.TestCase(5)]
+        public void BruteOrdinalPacketWindow_RejectQueryScope(int defect)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            if (defect == 0) query.EnableBruteOrdinalPacketForDiagnostics = true;
+            if (defect == 1) query.EnableBruteGeometryFirstForDiagnostics = false;
+            if (defect == 2) query.EnableBruteKind5PresenceForDiagnostics = true;
+            if (defect == 3) query.EnableBruteCoarseEnvelopeForDiagnostics = true;
+            if (defect == 4) query.EnableBruteBranchTimingForDiagnostics = true;
+            if (defect == 5) query.EnableBruteCoarseProofReuseForDiagnostics = true;
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                apply.Invoke(null, new object[] { query, NewEligibilityRun(), true })).InnerException,
+                NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketQuery").GetValue(null), NUnit.Framework.Is.Null);
+            NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.EqualTo(defect == 0));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        public void BruteOrdinalPacketWindow_DriftLatchesUntilComplete(int defect)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object run = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetOrdinalPacketWindowEvidence(query, true, false, 11L, 5L);
+                if (defect == 0) query.EnableBruteOrdinalPacketForDiagnostics = false;
+                else query.EnableBruteGeometryFirstForDiagnostics = false;
+                EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 121 });
+                query.EnableBruteOrdinalPacketForDiagnostics = true;
+                query.EnableBruteGeometryFirstForDiagnostics = true;
+                EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 122 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketFlagUnchanged"), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("CompleteBruteOrdinalPacket").Invoke(null, new[] { run })).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketRestored"), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_ObservationDedupsFreshTick()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object run = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetOrdinalPacketWindowEvidence(query, true, false, 11L, 5L);
+                MethodInfo observe = EligibilityMethod("ObserveBruteOrdinalPacket");
+                observe.Invoke(null, new object[] { run, 121 });
+                SetOrdinalPacketWindowEvidence(query, true, false, 99L, 98L);
+                observe.Invoke(null, new object[] { run, 121 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketObservedSamples"), NUnit.Framework.Is.EqualTo(1));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketMaximumObservedRejects"), NUnit.Framework.Is.EqualTo(11L));
+                observe.Invoke(null, new object[] { run, 122 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketObservedSamples"), NUnit.Framework.Is.EqualTo(2));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketMaximumObservedRejects"), NUnit.Framework.Is.EqualTo(99L));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketMaximumObservedProofs"), NUnit.Framework.Is.EqualTo(98L));
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_RejectSteadyCapacityGrowth()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object run = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                PrepareOrdinalPacketWindowQuery(query, 32);
+                SetOrdinalPacketWindowEvidence(query, true, false, 11L, 5L);
+                EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 121 });
+                PrepareOrdinalPacketWindowQuery(query, 64);
+                EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 122 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketCapacityStable"), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("CompleteBruteOrdinalPacket").Invoke(null, new[] { run })).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.False);
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteOrdinalPacketWindow_InvalidEvidenceMissingOrFallback(bool fallback)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            object run = NewEligibilityRun();
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                if (fallback)
+                {
+                    PrepareOrdinalPacketWindowQuery(query, 32);
+                    SetOrdinalPacketWindowEvidence(query, true, true, 11L, 5L);
+                    EligibilityMethod("ObserveBruteOrdinalPacket").Invoke(null, new object[] { run, 121 });
+                }
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("CompleteBruteOrdinalPacket").Invoke(null, new[] { run })).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketRun").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteOrdinalPacketWindow_RestorePreviousIdempotent(bool previous)
+        {
+            MethodInfo restore = EligibilityMethod("RestoreBruteOrdinalPacket");
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            FieldInfo owner = CoarseEnvelopeStaticField("ordinalPacketQuery");
+            FieldInfo runOwner = CoarseEnvelopeStaticField("ordinalPacketRun");
+            FieldInfo oldFlag = CoarseEnvelopeStaticField("previousOrdinalPacket");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            object saved = oldFlag.GetValue(null);
+            object run = NewEligibilityRun();
+            try
+            {
+                owner.SetValue(null, query);
+                runOwner.SetValue(null, run);
+                oldFlag.SetValue(null, previous);
+                query.EnableBruteOrdinalPacketForDiagnostics = !previous;
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.EqualTo(previous));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(runOwner.GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketRestored"), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                oldFlag.SetValue(null, saved);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_WrongRunCannotReleaseOwner()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            object run = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                object wrong = NewEligibilityRun();
+                foreach (string name in new[] { "CompleteBruteOrdinalPacket", "ObserveBruteOrdinalPacket" })
+                {
+                    MethodInfo method = EligibilityMethod(name);
+                    object[] args = name == "CompleteBruteOrdinalPacket" ? new[] { wrong } : new object[] { wrong, 121 };
+                    NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        method.Invoke(null, args)).InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                    NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketRun").GetValue(null), NUnit.Framework.Is.SameAs(run));
+                    NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.True);
+                }
+            }
+            finally { EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteOrdinalPacketWindow_ExternalExitRestoresOwnedFlag()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteOrdinalPacket");
+            BruteForceSceneQuery query = NewOrdinalPacketWindowQuery();
+            object run = NewEligibilityRun();
+            FieldInfo stateOwner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(stateOwner.GetValue(null), NUnit.Framework.Is.Null);
+            object candidate = Activator.CreateInstance(stateOwner.FieldType, true);
+            stateOwner.FieldType.GetField("bruteOrdinalPacketCandidate").SetValue(candidate, true);
+            stateOwner.FieldType.GetField("phase").SetValue(candidate, "EXITING");
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                stateOwner.SetValue(null, candidate);
+                EligibilityMethod("OnPlayMode").Invoke(null, new object[] { PlayModeStateChange.ExitingPlayMode });
+                NUnit.Framework.Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteOrdinalPacketRestored"), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("ordinalPacketRun").GetValue(null), NUnit.Framework.Is.Null);
+            }
+            finally
+            {
+                stateOwner.SetValue(null, null);
+                EligibilityMethod("RestoreBruteOrdinalPacket").Invoke(null, null);
+            }
+        }
+
+        private static BruteForceSceneQuery NewOrdinalPacketWindowQuery()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+            return query;
+        }
+
+        private static void PrepareOrdinalPacketWindowQuery(BruteForceSceneQuery query, int capacity)
+        {
+            MethodInfo prepare = typeof(BruteForceSceneQuery).GetMethod("PrepareBattleCapacity",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(prepare, NUnit.Framework.Is.Not.Null);
+            prepare.Invoke(query, new object[] { capacity, 1, 1 });
+        }
+
+        private static void SetOrdinalPacketWindowEvidence(BruteForceSceneQuery query, bool applied,
+            bool fallback, long rejects, long proofs)
+        {
+            SetOrdinalPacketWindowProperty(query, "LastBruteOrdinalPacketAppliedForDiagnostics", applied);
+            SetOrdinalPacketWindowProperty(query, "LastBruteOrdinalPacketFallbackForDiagnostics", fallback);
+            SetOrdinalPacketWindowProperty(query, "LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics", rejects);
+            SetOrdinalPacketWindowProperty(query, "LastBruteOrdinalPacketProofCountForDiagnostics", proofs);
+        }
+
+        private static void SetOrdinalPacketWindowProperty(BruteForceSceneQuery query, string name, object value)
+        {
+            PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            NUnit.Framework.Assert.That(property, NUnit.Framework.Is.Not.Null);
+            property.GetSetMethod(true).Invoke(query, new[] { value });
+        }
+
 
         [NUnit.Framework.TestCase(false)]
         [NUnit.Framework.TestCase(true)]

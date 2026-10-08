@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-08T10:27:10.8868475Z",
+  "protectedCount": 597,
+  "protectedChangedCount": 0,
+  "backupCount": 9,
+  "backupsAllShaEqual": true,
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "querySha": "1FF48CA62EE7DB21F3956D48B9FDF59D8BD96EC3936E969EE2C23A8B9758BD8B",
+  "testsSha": "EE755D691AF92B396C4F0730AFBE2B45401F5ABF72F4B58E94766042FAC842AA",
+  "publicXmlAndCostArchiveSha": "696483D8FA67C63CE13305144A0E74A1C49D57DA4A228C1926F48F88A60D932F",
+  "cost": {
+    "job": "8c2a8a20b6744381934b45837bc6f6e0",
+    "actualCases": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "editor": {
+    "port": 6402,
+    "scene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "dirty": false,
+    "roots": 8,
+    "playing": false,
+    "compiling": false,
+    "testsRunning": false,
+    "filteredCsErrors": 0
+  },
+  "validation": {
+    "exit": 0,
+    "records": 1370,
+    "governedCodeDiffs": 4,
+    "historicalWarnings": 4323,
+    "diffCheckExit": 0
+  },
+  "note": "Only latest cost result governance updated; no source/render/resource/plugin changes in this continuation; local gain not production admission."
+}

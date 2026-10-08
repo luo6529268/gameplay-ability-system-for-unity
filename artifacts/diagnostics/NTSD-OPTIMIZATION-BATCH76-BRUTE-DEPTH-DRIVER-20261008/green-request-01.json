@@ -1,0 +1,11 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "groupNames": [
+      "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.(DepthRejectDriver_DefaultOffAndExplicitQualificationOnly|DepthRejectDriver_PreservesApplicableFormalRootAndEveryTick|DepthRejectDriver_ThousandCanonicalAiPreservesEveryTick|OrdinaryBruteDefaultsEnableAdmittedFastPath|ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate)(\\(|$)"
+    ],
+    "includeDetails": true,
+    "includeFailedTests": true
+  }
+}

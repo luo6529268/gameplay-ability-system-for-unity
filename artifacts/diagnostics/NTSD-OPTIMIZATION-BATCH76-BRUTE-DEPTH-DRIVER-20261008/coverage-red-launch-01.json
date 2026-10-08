@@ -1,0 +1,27 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.DepthRejectDriver_CoverageContractKeepsParityGuards\\("
+      ],
+      "includeDetails": true,
+      "includeFailedTests": true
+    }
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "ab704ddeb303466aa1faeed59e465ba0",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": true
+      }
+    }
+  }
+}

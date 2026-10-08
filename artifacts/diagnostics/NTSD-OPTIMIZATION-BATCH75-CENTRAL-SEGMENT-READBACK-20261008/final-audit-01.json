@@ -1,0 +1,98 @@
+{
+  "utc": "2026-10-08T11:03:46.5907298Z",
+  "protectedCount": 599,
+  "changedCount": 0,
+  "changed": [],
+  "allEightBackupsSame": true,
+  "repairSourceSame": true,
+  "repairTerminalSame": true,
+  "postSourceSha": "43ECB5B1FA0570A6E5B413CE8FB28EC371B8255879978E0B5B2EC10254883D8C",
+  "publicTestXmlSha": "9D8A55ABD78F3F41AE3DDCE7E82CE8C58778FFD45D3D9F0023A3E2812BC7F598",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "validation": {
+    "exit": 0,
+    "records": 1371,
+    "governedCodeDiffs": 4,
+    "historicalWarnings": 4323,
+    "diffCheckExit": 0
+  },
+  "editor": {
+    "schema_version": "unity-mcp/editor_state@2",
+    "observed_at_unix_ms": 1791457242431,
+    "sequence": 8,
+    "unity": {
+      "instance_id": null,
+      "unity_version": "2022.3.62f3",
+      "project_id": null,
+      "platform": "WindowsEditor",
+      "is_batch_mode": false
+    },
+    "editor": {
+      "is_focused": false,
+      "play_mode": {
+        "is_playing": false,
+        "is_paused": false,
+        "is_changing": false
+      },
+      "active_scene": {
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "guid": "132c934aff207b048833ab33c1961278",
+        "name": "NTSD_Menu"
+      }
+    },
+    "activity": {
+      "phase": "idle",
+      "since_unix_ms": 1791456996857,
+      "reasons": [
+        "tick"
+      ]
+    },
+    "compilation": {
+      "is_compiling": false,
+      "is_domain_reload_pending": false,
+      "last_compile_started_unix_ms": null,
+      "last_compile_finished_unix_ms": null,
+      "last_domain_reload_before_unix_ms": null,
+      "last_domain_reload_after_unix_ms": 1791456834719
+    },
+    "assets": {
+      "is_updating": false,
+      "external_changes_dirty": false,
+      "external_changes_last_seen_unix_ms": null,
+      "external_changes_dirty_since_unix_ms": null,
+      "external_changes_last_cleared_unix_ms": null,
+      "refresh": {
+        "is_refresh_in_progress": false,
+        "last_refresh_requested_unix_ms": null,
+        "last_refresh_finished_unix_ms": null
+      }
+    },
+    "tests": {
+      "is_running": false,
+      "mode": null,
+      "current_job_id": null,
+      "started_unix_ms": null,
+      "started_by": "unknown",
+      "last_run": null
+    },
+    "transport": {
+      "unity_bridge_connected": null,
+      "last_message_unix_ms": null
+    },
+    "settings": {
+      "batch_execute_max_commands": 25
+    }
+  },
+  "activeScene": {
+    "name": "NTSD_Menu",
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "buildIndex": 0,
+    "isDirty": false,
+    "isLoaded": true,
+    "rootCount": 8
+  },
+  "filteredCsErrors": 0,
+  "readonlyDiagnosticOnly": true,
+  "goalStageComplete": false
+}

@@ -1,0 +1,123 @@
+{
+  "utc": "2026-10-08T07:38:53.6510377Z",
+  "beforeUtc": "2026-10-08T07:13:18.0840372Z",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "headMatches": false,
+  "guardCount": 510,
+  "guardDifferences": [],
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "391A7973AF7D52A66D33F3A6A1ED62CCC546172F40BA392B7F3225454F8A2B55",
+      "expectedCopiedSha": "391A7973AF7D52A66D33F3A6A1ED62CCC546172F40BA392B7F3225454F8A2B55",
+      "match": true,
+      "originalManifestSha": "391A7973AF7D52A66D33F3A6A1ED62CCC546172F40BA392B7F3225454F8A2B55",
+      "indexBootstrapDelta": false
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/02-CHANGE-LEDGER.md",
+      "sha": "4027ABD261FE7C68BD65F3F540C4FB74FD59B57CDE8956A10EE320F643ECED24",
+      "expectedCopiedSha": "4027ABD261FE7C68BD65F3F540C4FB74FD59B57CDE8956A10EE320F643ECED24",
+      "match": true,
+      "originalManifestSha": "4027ABD261FE7C68BD65F3F540C4FB74FD59B57CDE8956A10EE320F643ECED24",
+      "indexBootstrapDelta": false
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/03-STATE.md",
+      "sha": "5903D944502F8B29E0F2E91DE3B8B84C3E346D72E2514445BB64BCADF21D166C",
+      "expectedCopiedSha": "5903D944502F8B29E0F2E91DE3B8B84C3E346D72E2514445BB64BCADF21D166C",
+      "match": true,
+      "originalManifestSha": "5903D944502F8B29E0F2E91DE3B8B84C3E346D72E2514445BB64BCADF21D166C",
+      "indexBootstrapDelta": false
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "sha": "FB811DAE21343F6823C4BFCD8DF5C5F5FAAB96B9BDF0B911C240DD0319E5906D",
+      "expectedCopiedSha": "FB811DAE21343F6823C4BFCD8DF5C5F5FAAB96B9BDF0B911C240DD0319E5906D",
+      "match": true,
+      "originalManifestSha": "FB811DAE21343F6823C4BFCD8DF5C5F5FAAB96B9BDF0B911C240DD0319E5906D",
+      "indexBootstrapDelta": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/05-INDEX.md",
+      "sha": "BED4BDF2D8143920654BB640B0ABE7E7215582D83E7CB298BF34EDA5E82F098A",
+      "expectedCopiedSha": "BED4BDF2D8143920654BB640B0ABE7E7215582D83E7CB298BF34EDA5E82F098A",
+      "match": true,
+      "originalManifestSha": "43BDCF9D941B94A24CE97D85646EEF34AEDC946A83ECA70062BA4EE3F0318D62",
+      "indexBootstrapDelta": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/06-battle-optimization-progress-tracker.md",
+      "sha": "93F99E4934B414908BE507DD97CA95A7922EA27C386ADE498989E94011FBAF14",
+      "expectedCopiedSha": "93F99E4934B414908BE507DD97CA95A7922EA27C386ADE498989E94011FBAF14",
+      "match": true,
+      "originalManifestSha": "93F99E4934B414908BE507DD97CA95A7922EA27C386ADE498989E94011FBAF14",
+      "indexBootstrapDelta": false
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/07-Goal18_LastTestResults.xml",
+      "sha": "2EEBBD6778896727890464B894703C78F8EFFCBE4E6A2AFDE62B0D0149C03302",
+      "expectedCopiedSha": "2EEBBD6778896727890464B894703C78F8EFFCBE4E6A2AFDE62B0D0149C03302",
+      "match": true,
+      "originalManifestSha": "2EEBBD6778896727890464B894703C78F8EFFCBE4E6A2AFDE62B0D0149C03302",
+      "indexBootstrapDelta": false
+    }
+  ],
+  "sourceSha": "88186BA3B1AEFC3F314E8459989A642B13ED403332BFB18871F2735B253EABA0",
+  "gitStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 2]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/RECORD.md",
+    " M docs/ai/STATE.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/driver-qualification-01/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/driver-qualification-audit-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/green-archive-audit-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/green-launch-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/green-results-01.xml",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/green-terminal-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/red-archive-audit-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/red-launch-01.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/red-results-01.xml",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/red-terminal-01.json",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl"
+  ],
+  "staged": [],
+  "whitespace": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/RECORD.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "whitespaceExit": 0,
+  "sourceBeforeRelativeWhitespace": [
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/before/01-BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "sourceBeforeRelativeExit": 1,
+  "headNote": "HEAD advanced externally from 527350afa08633357ba20e7453a9d260eaa2b97c to 0e580f7bf94a7d645958f8dbace80a9abf9a4ae1; commit date 2026-10-08T15:16:54+08:00. This agent ran no add/commit/reset/checkout/clean. All 510 protected file bytes and 7 backups match; no rollback performed. Source evidence is before-relative, not HEAD-relative."
+}

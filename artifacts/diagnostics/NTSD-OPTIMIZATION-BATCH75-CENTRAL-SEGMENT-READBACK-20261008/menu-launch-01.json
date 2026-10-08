@@ -1,0 +1,17 @@
+{
+  "request": {
+    "type": "execute_menu_item",
+    "params": {
+      "menuPath": "NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback"
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback'. Check Unity logs for confirmation or errors."
+    }
+  },
+  "sourceSha": "004EC684EDD7A6F655680A5641C86A8CCF9DA49D0A0B438CD430CE550060DF11",
+  "note": "Menu attempt accepted; actual startup/complete require generated suite files, not inferred from this response."
+}

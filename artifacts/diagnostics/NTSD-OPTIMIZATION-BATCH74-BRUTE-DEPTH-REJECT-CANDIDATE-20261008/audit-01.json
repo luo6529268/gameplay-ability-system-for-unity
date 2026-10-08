@@ -1,0 +1,72 @@
+{
+  "utc": "2026-10-08T10:05:12.3643140Z",
+  "checked": 597,
+  "changedCount": 0,
+  "changed": [],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "backupMatches": true,
+      "afterSha": "1FF48CA62EE7DB21F3956D48B9FDF59D8BD96EC3936E969EE2C23A8B9758BD8B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "backupMatches": true,
+      "afterSha": "EE755D691AF92B396C4F0730AFBE2B45401F5ABF72F4B58E94766042FAC842AA"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH74-BRUTE-DEPTH-REJECT-CANDIDATE-20261008.md",
+      "backupMatches": true,
+      "afterSha": "F4B06C75552843F2A58ADFC589BCAE965F03E4BC60B50F7B80FAC316BE4CD959"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupMatches": true,
+      "afterSha": "FF70788219D5E6B3BB22B7B5D2B2EEBA1073BEAE99DF180A387EC0F19A90D968"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backupMatches": true,
+      "afterSha": "6E0AB3BFA702C78A45699C665E6000BFF188246EFC37BB4055ED042338A6BF32"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupMatches": true,
+      "afterSha": "4E1140A1854F9A54E124AD489861CEA3DFD4AB24BD66B855038F4225C0BD38D1"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backupMatches": true,
+      "afterSha": "9D51749532CE838AA15274C3A07F19E7AA1F9C9EC51D9197A5D6762B2A5B19D3"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupMatches": true,
+      "afterSha": "8292DEA95874678B27BFABF0EF775152CEC57E2AC690E3D7C4F113245E2AFCDC"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backupMatches": true,
+      "afterSha": "BD8216B83B8A02341A18B3075C7DC5BF4B2B0A9803BCD30C47D05FA21973379D"
+    }
+  ],
+  "note": "Read-only source/protection audit; docs were subsequently updated only within declared governance scope; no cost test, Play, Profiler, GPU capture, or renderer mutation.",
+  "validation": {
+    "changeLedgerExit": 0,
+    "records": 1370,
+    "governedCodeFilesInDiff": 4,
+    "diffCheckExit": 0,
+    "legacyWarningsPresent": true,
+    "legacyWarningCount": "not recounted"
+  },
+  "correctness": {
+    "redCases": 43,
+    "greenPassed": 50,
+    "greenFailed": 0,
+    "newCases": 43,
+    "affectedLegacyCases": 7,
+    "greenJob": "1165145f85884db2854bf464bb8e7f6e",
+    "costExecuted": false,
+    "productionAdmitted": false
+  }
+}

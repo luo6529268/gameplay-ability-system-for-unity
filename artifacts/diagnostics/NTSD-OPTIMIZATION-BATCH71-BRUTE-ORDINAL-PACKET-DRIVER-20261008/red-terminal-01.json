@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "478131a035a64680b1307f734399f522",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791443834717,
+      "finished_unix_ms": 1791443846030,
+      "last_update_unix_ms": 1791443846030,
+      "progress": {
+        "completed": 5,
+        "total": 10009,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791443843799,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "last_finished_unix_ms": 1791443843799,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_DefaultOffAndExplicitQualificationOnly",
+            "message": "  the explicit ordinal packet Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_PreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+            "message": "  the explicit ordinal packet Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_PreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+            "message": "  the explicit ordinal packet Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+            "message": "  the explicit ordinal packet Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(Combat1000)",
+            "message": "  the explicit ordinal packet Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

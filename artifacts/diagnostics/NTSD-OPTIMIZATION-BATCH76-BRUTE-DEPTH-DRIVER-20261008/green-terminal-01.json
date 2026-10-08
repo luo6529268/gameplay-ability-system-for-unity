@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5fb35cbd21e54d379102518c0601ab3d",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791460365631,
+      "finished_unix_ms": 1791460853603,
+      "last_update_unix_ms": 1791460853603,
+      "progress": {
+        "completed": 8,
+        "total": 10110,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791460843411,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+        "last_finished_unix_ms": 1791460843412,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.DepthRejectDriver_ThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+            "message": "  canonical AI must exercise an actual depth negative proof\r\n  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

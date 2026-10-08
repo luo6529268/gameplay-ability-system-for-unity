@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-08T07:45:17.0173220Z",
+  "guards": 510,
+  "guardDifferences": [],
+  "sourceSha": "88186BA3B1AEFC3F314E8459989A642B13ED403332BFB18871F2735B253EABA0",
+  "greenArchiveSha": "6CE444C70A46B42C27ACCFA80847A91842E9EEA72C9169950CB79D0FDD37F03E",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "globalDiffCheckExit": 0,
+  "globalDiffCheck": [],
+  "beforeRelative": [
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exit": 1,
+      "violations": []
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exit": 1,
+      "violations": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exit": 1,
+      "violations": []
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exit": 1,
+      "violations": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exit": 1,
+      "violations": []
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+{
+  "probe": {
+    "utc": "2026-10-08T07:35:49.0721446Z",
+    "xmlUtc": "2026-10-08T07:30:37.5742725Z",
+    "xmlSha": "6CE444C70A46B42C27ACCFA80847A91842E9EEA72C9169950CB79D0FDD37F03E",
+    "suites": [
+      {
+        "name": "NTSD",
+        "total": "8",
+        "passed": "8",
+        "failed": "0",
+        "skipped": "0",
+        "duration": "486.384473",
+        "result": "Passed"
+      },
+      {
+        "name": "Assembly-CSharp-Editor.dll",
+        "total": "8",
+        "passed": "8",
+        "failed": "0",
+        "skipped": "0",
+        "duration": "486.216505",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD",
+        "total": "8",
+        "passed": "8",
+        "failed": "0",
+        "skipped": "0",
+        "duration": "486.092830",
+        "result": "Passed"
+      },
+      {
+        "name": "Test",
+        "total": "8",
+        "passed": "8",
+        "failed": "0",
+        "skipped": "0",
+        "duration": "485.965226",
+        "result": "Passed"
+      }
+    ],
+    "count": 8,
+    "cases": [
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_DefaultOffAndExplicitQualificationOnly",
+        "result": "Passed",
+        "duration": "0.028201"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_PreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+        "result": "Passed",
+        "duration": "84.400197"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_PreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+        "result": "Passed",
+        "duration": "77.808324"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+        "result": "Passed",
+        "duration": "158.347364"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "result": "Passed",
+        "duration": "164.550258"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+        "result": "Passed",
+        "duration": "0.000808"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(0)",
+        "result": "Passed",
+        "duration": "0.001930"
+      },
+      {
+        "fullname": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+        "result": "Passed",
+        "duration": "0.000230"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "Combat1000-ordinal-packet-parity-d32c1f3fc6854889a1589276fb83aa41.json",
+        "sha": "EE7E2E9C4AA7DA72BD08A827D43EB217D031229921A64D11947AD76BE04DA5B0",
+        "utc": "2026-10-08T07:30:27.2973890Z",
+        "baseline": 32,
+        "candidate": 32,
+        "fields": [
+          "tick",
+          "entities",
+          "extendedHashes",
+          "lockstepHashes",
+          "nativeCalls",
+          "legacyCalls",
+          "cacheApplied",
+          "fallback",
+          "kind5PresenceApplied",
+          "kind5ScansSkipped",
+          "eligibilityReuseApplied",
+          "coarseEnvelopeEnabled",
+          "coarseEnvelopeDirections",
+          "coarseEnvelopeRejects",
+          "bindingReuseApplied",
+          "bindingFirstProbes",
+          "bindingReuses",
+          "ordinalPacketApplied",
+          "ordinalPacketFallback",
+          "ordinalPacketRejects",
+          "ordinalPacketProofs",
+          "nativeScalarState",
+          "legacyScalarState",
+          "bruteExactDirections",
+          "bruteGeometryRejects",
+          "actualAi"
+        ]
+      },
+      {
+        "name": "Dispersed1000-ordinal-packet-parity-4fae02f378874d53b0530022d49c88d9.json",
+        "sha": "F32ED3570B5C84B6DBE589342A3F14CA4608A22FED48D8E96E57E032D1DAF68F",
+        "utc": "2026-10-08T07:27:42.7448244Z",
+        "baseline": 32,
+        "candidate": 32,
+        "fields": [
+          "tick",
+          "entities",
+          "extendedHashes",
+          "lockstepHashes",
+          "nativeCalls",
+          "legacyCalls",
+          "cacheApplied",
+          "fallback",
+          "kind5PresenceApplied",
+          "kind5ScansSkipped",
+          "eligibilityReuseApplied",
+          "coarseEnvelopeEnabled",
+          "coarseEnvelopeDirections",
+          "coarseEnvelopeRejects",
+          "bindingReuseApplied",
+          "bindingFirstProbes",
+          "bindingReuses",
+          "ordinalPacketApplied",
+          "ordinalPacketFallback",
+          "ordinalPacketRejects",
+          "ordinalPacketProofs",
+          "nativeScalarState",
+          "legacyScalarState",
+          "bruteExactDirections",
+          "bruteGeometryRejects",
+          "actualAi"
+        ]
+      },
+      {
+        "name": "left-x350-ordinal-packet-parity-946ad34d112c4bc08ae66fb43567d46b.json",
+        "sha": "424B12DBDB16885F6CAB5011ABE95E4C9400F1E9810FEC935F0B158D8395D17B",
+        "utc": "2026-10-08T07:25:04.3092222Z",
+        "baseline": 12,
+        "candidate": 12,
+        "fields": [
+          "tick",
+          "entities",
+          "extendedHashes",
+          "lockstepHashes",
+          "nativeCalls",
+          "legacyCalls",
+          "cacheApplied",
+          "fallback",
+          "kind5PresenceApplied",
+          "kind5ScansSkipped",
+          "eligibilityReuseApplied",
+          "coarseEnvelopeEnabled",
+          "coarseEnvelopeDirections",
+          "coarseEnvelopeRejects",
+          "bindingReuseApplied",
+          "bindingFirstProbes",
+          "bindingReuses",
+          "ordinalPacketApplied",
+          "ordinalPacketFallback",
+          "ordinalPacketRejects",
+          "ordinalPacketProofs",
+          "nativeScalarState",
+          "legacyScalarState",
+          "bruteExactDirections",
+          "bruteGeometryRejects",
+          "actualAi"
+        ]
+      },
+      {
+        "name": "right-x550-ordinal-packet-parity-9b1dbdeec5ed43e6b8cf8855626ed474.json",
+        "sha": "E7988DD2E687AB32165DE1DB1BF45780F4C106B6DE8BC9F7183E01B29829AD93",
+        "utc": "2026-10-08T07:23:46.4993999Z",
+        "baseline": 12,
+        "candidate": 12,
+        "fields": [
+          "tick",
+          "entities",
+          "extendedHashes",
+          "lockstepHashes",
+          "nativeCalls",
+          "legacyCalls",
+          "cacheApplied",
+          "fallback",
+          "kind5PresenceApplied",
+          "kind5ScansSkipped",
+          "eligibilityReuseApplied",
+          "coarseEnvelopeEnabled",
+          "coarseEnvelopeDirections",
+          "coarseEnvelopeRejects",
+          "bindingReuseApplied",
+          "bindingFirstProbes",
+          "bindingReuses",
+          "ordinalPacketApplied",
+          "ordinalPacketFallback",
+          "ordinalPacketRejects",
+          "ordinalPacketProofs",
+          "nativeScalarState",
+          "legacyScalarState",
+          "bruteExactDirections",
+          "bruteGeometryRejects",
+          "actualAi"
+        ]
+      }
+    ]
+  },
+  "job": "0f10d2e075f7471aa7ff02e285584709",
+  "jobStartedUtc": "2026-10-08T07:22:11.427Z",
+  "jobFinishedUtc": "2026-10-08T07:30:37.576Z",
+  "archive": {
+    "utc": "2026-10-08T07:36:10.4035362Z",
+    "source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+    "archive": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008\\green-results-01.xml",
+    "sourceSha": "6CE444C70A46B42C27ACCFA80847A91842E9EEA72C9169950CB79D0FDD37F03E",
+    "archiveSha": "6CE444C70A46B42C27ACCFA80847A91842E9EEA72C9169950CB79D0FDD37F03E",
+    "targetPreviouslyAbsent": true,
+    "force": false
+  }
+}

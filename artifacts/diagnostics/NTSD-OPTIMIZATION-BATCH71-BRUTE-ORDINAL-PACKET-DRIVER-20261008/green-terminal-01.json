@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "0f10d2e075f7471aa7ff02e285584709",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791444131427,
+      "finished_unix_ms": 1791444637576,
+      "last_update_unix_ms": 1791444637576,
+      "progress": {
+        "completed": 8,
+        "total": 10009,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791444627329,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+        "last_finished_unix_ms": 1791444627329,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 486.3844733,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

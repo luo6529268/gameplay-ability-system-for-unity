@@ -258,6 +258,9 @@ namespace NTSD.Animation
         public bool EnableBruteEmptyItrRosterForDiagnostics { get; set; } = true;
         public bool EnableBruteExactCacheForDiagnostics { get; set; } = true;
         public bool EnableBruteGeometryFirstForDiagnostics { get; set; } = true;
+        public bool EnableBruteDepthRejectForDiagnostics { get; set; }
+        public bool LastBruteDepthRejectAppliedForDiagnostics { get; private set; }
+        public long LastBruteDepthRejectedDirectionCountForDiagnostics { get; private set; }
         public bool EnableBruteOrdinalPacketForDiagnostics { get; set; }
         public bool LastBruteOrdinalPacketAppliedForDiagnostics { get; private set; }
         public bool LastBruteOrdinalPacketFallbackForDiagnostics { get; private set; }
@@ -1710,6 +1713,8 @@ namespace NTSD.Animation
                 LastBruteRejectedBindingReuseCountForDiagnostics = 0;
                 LastBruteEligibilityReuseAppliedForDiagnostics = false;
                 LastBruteOrdinalPacketAppliedForDiagnostics = false;
+                LastBruteDepthRejectAppliedForDiagnostics = false;
+                LastBruteDepthRejectedDirectionCountForDiagnostics = 0;
                 LastBruteOrdinalPacketFallbackForDiagnostics = false;
                 LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics = 0;
                 LastBruteOrdinalPacketProofCountForDiagnostics = 0;
@@ -2398,6 +2403,7 @@ namespace NTSD.Animation
                     TryBuildBruteEmptyItrRoster(currentTick);
                 bool useExactCache = EnableBruteExactCacheForDiagnostics &&
                     useEmptyItrRoster && TryBuildBruteExactCache(currentTick);
+                LastBruteDepthRejectAppliedForDiagnostics = useExactCache && CanUseBruteDepthReject();
                 if (useExactCache && EnableBruteGeometryFirstForDiagnostics)
                     TotalBruteGeometryFirstCollectionAppliedForDiagnostics++;
                 LastBruteKind5PresenceAppliedForDiagnostics = useExactCache &&
@@ -2474,6 +2480,19 @@ namespace NTSD.Animation
                         BattleTickDetailPhase.CandidateCollectPairExactLoop);
                 }
             }
+        }
+
+        private bool CanUseBruteDepthReject()
+        {
+            return EnableBruteDepthRejectForDiagnostics &&
+                   EnableEmptyItrPairGuardForDiagnostics && EnableBruteEmptyItrRosterForDiagnostics &&
+                   EnableBruteExactCacheForDiagnostics && EnableBruteGeometryFirstForDiagnostics &&
+                   ResolveFormalCollectorMode() == CollisionFormalCollectorMode.ForceBruteForce &&
+                   !EnableBruteOrdinalPacketForDiagnostics && !EnableBruteKind5PresenceForDiagnostics &&
+                   !EnableBruteEligibilityReuseForDiagnostics && !EnableBruteCoarseDispatchForDiagnostics &&
+                   !EnableBruteCoarseEnvelopeForDiagnostics && !EnableBruteCoarseProofReuseForDiagnostics &&
+                   !EnableBruteRejectedBindingReuseForDiagnostics && !EnableBruteBranchTimingForDiagnostics &&
+                   !EnableBruteEnvelopeBranchTimingForDiagnostics;
         }
 
         private bool CanUseBruteOrdinalPacket()
@@ -2691,6 +2710,7 @@ namespace NTSD.Animation
                                            EnableBruteGeometryFirstForDiagnostics &&
                                            (!EnableBruteBranchTimingForDiagnostics ||
                                             EnableBruteEnvelopeBranchTimingForDiagnostics));
+                bool buildDepthBounds = CanUseBruteDepthReject();
                 for (int i = 0; i < count; i++)
                 {
                     ref RoleAwareFormalParticipant participant = ref _roleFormalParticipants[i];
@@ -2698,8 +2718,8 @@ namespace NTSD.Animation
                         continue;
                     if (!BuildRoleAwareFormalExactCommonCache(ref participant))
                         return false;
-                    BuildRoleAwareFormalExactAttackCache(ref participant, buildCoarseEnvelope);
-                    BuildRoleAwareFormalExactBodyCache(ref participant);
+                    BuildRoleAwareFormalExactAttackCache(ref participant, buildCoarseEnvelope, buildDepthBounds);
+                    BuildRoleAwareFormalExactBodyCache(ref participant, buildDepthBounds);
                     LastBruteExactCacheBuildCountForDiagnostics++;
                 }
                 LastBruteExactCacheAppliedForDiagnostics = true;
@@ -2729,6 +2749,25 @@ namespace NTSD.Animation
             _lastPairCollectionGateCallCount++;
 #endif
             LastBruteExactCacheDirectionCountForDiagnostics++;
+            if (LastBruteDepthRejectAppliedForDiagnostics &&
+                attackerParticipant.Entity != null && targetParticipant.Entity != null &&
+                attackerParticipant.Entity != targetParticipant.Entity &&
+                attackerParticipant.HasExactCommonCache && targetParticipant.HasExactCommonCache &&
+                attackerParticipant.HasExactAttackCache && targetParticipant.HasExactBodyCache &&
+                attackerParticipant.ExactItrRectCount > 0 && targetParticipant.ExactBodyRectCount > 0)
+            {
+                // Alignment contract: NTSD-OPT-H07-BRUTE-DEPTH-REJECT-074; equality still uses the exact predicate.
+                long delta = (long)targetParticipant.CollisionZ - attackerParticipant.CollisionZ;
+                long radius = (long)attackerParticipant.BruteMaximumItrDepth + targetParticipant.BruteMaximumBodyDepth;
+                if (delta > radius || delta < -radius)
+                {
+                    _lastRoleAwareExactDirectionCount++;
+                    PreserveBruteRejectedBinding(in attackerParticipant, in targetParticipant, targetOrdinal);
+                    LastBruteDepthRejectedDirectionCountForDiagnostics++;
+                    LastBruteGeometryFirstRejectCountForDiagnostics++;
+                    return;
+                }
+            }
             if (coarseRejectedByPacket)
             {
                 _lastRoleAwareExactDirectionCount++;
@@ -4601,7 +4640,8 @@ namespace NTSD.Animation
 
         private void BuildRoleAwareFormalExactAttackCache(
             ref RoleAwareFormalParticipant participant,
-            bool buildBruteCoarseEnvelope = false)
+            bool buildBruteCoarseEnvelope = false,
+            bool buildBruteDepthBounds = false)
         {
             if (participant.HasExactAttackCache)
                 return;
@@ -4612,6 +4652,7 @@ namespace NTSD.Animation
             participant.ExactItrRectOffset = _roleFormalExactItrRects.Count;
             participant.ExactItrRectCount = 0;
             participant.HasExactKind5Itr = false;
+            participant.BruteMaximumItrDepth = 0;
             List<InteractionArea> itrs = collisionFrame?.itrs;
             if (itrs != null)
             {
@@ -4622,6 +4663,10 @@ namespace NTSD.Animation
                     InteractionArea itr = itrs[itrIndex];
                     if (itr == null)
                         continue;
+
+                    if (buildBruteDepthBounds)
+                        participant.BruteMaximumItrDepth = Math.Max(
+                            participant.BruteMaximumItrDepth, itr.zwidth > 0 ? itr.zwidth : 15);
 
                     if (itr.kind == 5)
                         participant.HasExactKind5Itr = true;
@@ -4694,7 +4739,8 @@ namespace NTSD.Animation
         }
 
         private void BuildRoleAwareFormalExactBodyCache(
-            ref RoleAwareFormalParticipant participant)
+            ref RoleAwareFormalParticipant participant,
+            bool buildBruteDepthBounds = false)
         {
             if (participant.HasExactBodyCache)
                 return;
@@ -4703,6 +4749,7 @@ namespace NTSD.Animation
             LF2FrameData collisionFrame = participant.CollisionFrame;
             participant.ExactBodyRectOffset = _roleFormalExactBodyRects.Count;
             participant.ExactBodyRectCount = 0;
+            participant.BruteMaximumBodyDepth = 0;
             List<BattleBodyBoxValue> bodies = collisionFrame?.bodies;
             if (bodies != null)
             {
@@ -4711,6 +4758,10 @@ namespace NTSD.Animation
                     BattleBodyBoxValue body = bodies[bodyIndex];
                     if (!IsReleaseBody(body))
                         continue;
+
+                    if (buildBruteDepthBounds)
+                        participant.BruteMaximumBodyDepth = Math.Max(
+                            participant.BruteMaximumBodyDepth, Math.Max(0, body.ZWidth));
 
                     _roleFormalExactBodyRects.Add(
                         new RoleAwareFormalExactBodyRectEntry(
@@ -8915,6 +8966,8 @@ namespace NTSD.Animation
             BruteCoarseEnvelopeWorld = default;
             HasExactBodyCache = false;
             HasBruteRejectedBindingProbe = false;
+            BruteMaximumItrDepth = 0;
+            BruteMaximumBodyDepth = 0;
         }
 
         public LF2Entity Entity { get; }
@@ -8935,6 +8988,8 @@ namespace NTSD.Animation
         public bool HasBruteCoarseEnvelope { get; set; }
         public WorldRect BruteCoarseEnvelopeWorld { get; set; }
         public bool HasBruteRejectedBindingProbe { get; set; }
+        public int BruteMaximumItrDepth { get; set; }
+        public int BruteMaximumBodyDepth { get; set; }
         public WorldRect OrdinaryItrUnionWorld { get; set; }
         public int CollisionX { get; set; }
         public int CollisionY { get; set; }

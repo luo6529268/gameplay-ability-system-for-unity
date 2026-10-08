@@ -1,0 +1,133 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.CentralSegmentReadback_"
+      ],
+      "includeFailedTests": true,
+      "initTimeout": 15000
+    }
+  },
+  "launch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "d2cf9f81d0764b8aa92cec6606c90985",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "terminal": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "d2cf9f81d0764b8aa92cec6606c90985",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791455692885,
+        "finished_unix_ms": 1791455704730,
+        "last_update_unix_ms": 1791455704730,
+        "progress": {
+          "completed": 18,
+          "total": 10103,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791455702203,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_SourcePageIndexIsNotBoundPageIdentity",
+          "last_finished_unix_ms": 1791455702204,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_ArraySliceIsNotArrayIdentity",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"strict\",1)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"chunk\",2)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"texture\",4)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"material\",8)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"variant\",16)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"binding\",32)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"page\",64)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"slice\",128)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"commandGap\",256)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"quadGap\",512)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_BreakMask(\"equal\",0)",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_DetachIdempotent(False)",
+              "message": "  RestoreCentralSegmentReadback required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_DetachIdempotent(True)",
+              "message": "  RestoreCentralSegmentReadback required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_OutsideMatrix(-1)",
+              "message": "  BuildCentralSegmentReadbackRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_OutsideMatrix(1)",
+              "message": "  BuildCentralSegmentReadbackRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_RequestOnlyOutput",
+              "message": "  BuildCentralSegmentReadbackRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.CentralSegmentReadback_SourcePageIndexIsNotBoundPageIdentity",
+              "message": "  CentralSegmentBreakMask required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  },
+  "actualXmlCases": 18,
+  "actualFailed": 18,
+  "note": "Missing methods in real pre-implementation fixture; catalogue total10103 is not actual run count."
+}

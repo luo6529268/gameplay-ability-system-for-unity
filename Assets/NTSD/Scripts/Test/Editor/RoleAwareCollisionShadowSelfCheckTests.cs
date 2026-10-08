@@ -441,6 +441,395 @@ namespace NTSD.Test
     [Category("U6RoleAwareFormal")]
     public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
     {
+
+        [Test]
+        public void BruteDepthReject_DefaultOffPreservesProductionDefaults()
+        {
+            var query = new BruteForceSceneQuery(new SimulationWorld());
+            Assert.That(RequireBruteDepthReject().GetValue(query), Is.EqualTo(false));
+            Assert.That(query.EnableEmptyItrPairGuardForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteEmptyItrRosterForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteExactCacheForDiagnostics, Is.True);
+            Assert.That(query.EnableBruteGeometryFirstForDiagnostics, Is.True);
+        }
+
+        [TestCase(-16, 15, 0, true)]
+        [TestCase(16, 15, 0, true)]
+        [TestCase(-15, 15, 0, false)]
+        [TestCase(15, 15, 0, false)]
+        [TestCase(-14, 15, 0, false)]
+        [TestCase(14, 15, 0, false)]
+        [TestCase(int.MaxValue, 15, 0, true)]
+        [TestCase(int.MinValue, 15, 0, true)]
+        [TestCase(99, 0, 90, false)]
+        [TestCase(-99, -1, 90, false)]
+        [TestCase(20, 15, -10, true)]
+        [TestCase(20, int.MaxValue, int.MaxValue, false)]
+        public void BruteDepthReject_BoundaryAndWidths(int z, int itrWidth, int bodyWidth, bool rejected)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            attacker.GetCollisionFrameData().itrs[0].zwidth = itrWidth;
+            attacker.GetCollisionFrameData().itrs[1].zwidth = itrWidth;
+            target.GetCollisionFrameData().bodies.Clear();
+            target.GetCollisionFrameData().bodies.Add(new BattleBodyBoxValue(-10, -10, 20, 20, bodyWidth));
+            SetBruteDepthPosition(target, z);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetBruteDepthReject(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteDepthRejectAppliedForDiagnostics"), Is.EqualTo(true));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"),
+                Is.EqualTo(rejected ? 1 : 0));
+        }
+
+        [TestCase(0)]
+        [TestCase(4)]
+        [TestCase(5)]
+        public void BruteDepthReject_WideBodyAndItrKeepOriginalExact(int kind)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(kind, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            target.GetCollisionFrameData().bodies.Add(new BattleBodyBoxValue(-10, -10, 20, 20, 30));
+            SetBruteDepthPosition(target, 39);
+            CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+            attacker.GetCollisionFrameData().itrs[0].zwidth = 200;
+            SetBruteDepthPosition(target, 100);
+            CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteDepthReject_GapFalsePositiveStillUsesEachBody()
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            target.GetCollisionFrameData().bodies.Add(new BattleBodyBoxValue(1000, -10, 20, 20, 100));
+            SetBruteDepthPosition(target, 50);
+            CandidateRun candidate = CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteDepthReject_BothDirectionsUseIndependentDepth()
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            attacker.GetCollisionFrameData().bodies.Add(new BattleBodyBoxValue(-10, -10, 20, 20));
+            target.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 0, x = -20, y = -10, w = 80, h = 20, zwidth = 15, vrest = 1,
+            });
+            SetBruteDepthPosition(attacker, int.MinValue);
+            SetBruteDepthPosition(target, int.MaxValue);
+            CompareBruteDepthRuns(world, query, attacker, target);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.EqualTo(2));
+        }
+
+        [TestCase("guard")]
+        [TestCase("roster")]
+        [TestCase("exact")]
+        [TestCase("geometry")]
+        [TestCase("packet")]
+        [TestCase("kind5")]
+        [TestCase("eligibility")]
+        [TestCase("dispatch")]
+        [TestCase("envelope")]
+        [TestCase("proof")]
+        [TestCase("binding")]
+        [TestCase("timing")]
+        [TestCase("envelopeTiming")]
+        [TestCase("role")]
+        public void BruteDepthReject_InactiveGateKeepsOriginalPath(string gate)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            SetBruteDepthPosition(target, 1000);
+            if (gate == "guard") query.EnableEmptyItrPairGuardForDiagnostics = false;
+            if (gate == "roster") query.EnableBruteEmptyItrRosterForDiagnostics = false;
+            if (gate == "exact") query.EnableBruteExactCacheForDiagnostics = false;
+            if (gate == "geometry") query.EnableBruteGeometryFirstForDiagnostics = false;
+            if (gate == "packet") query.EnableBruteOrdinalPacketForDiagnostics = true;
+            if (gate == "kind5") query.EnableBruteKind5PresenceForDiagnostics = true;
+            if (gate == "eligibility") query.EnableBruteEligibilityReuseForDiagnostics = true;
+            if (gate == "dispatch") query.EnableBruteCoarseDispatchForDiagnostics = true;
+            if (gate == "envelope") query.EnableBruteCoarseEnvelopeForDiagnostics = true;
+            if (gate == "proof") query.EnableBruteCoarseProofReuseForDiagnostics = true;
+            if (gate == "binding") query.EnableBruteRejectedBindingReuseForDiagnostics = true;
+            if (gate == "timing") query.EnableBruteBranchTimingForDiagnostics = true;
+            if (gate == "envelopeTiming") query.EnableBruteEnvelopeBranchTimingForDiagnostics = true;
+            CollisionFormalCollectorMode mode = gate == "role"
+                ? CollisionFormalCollectorMode.ForceRoleAware : CollisionFormalCollectorMode.ForceBruteForce;
+            CandidateRun baseline = RunCollection(world, query, mode, attacker);
+            SetBruteDepthReject(query, true);
+            CandidateRun candidate = RunCollection(world, query, mode, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteDepthRejectAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void BruteDepthReject_StaleBindingKeepsBaseGate(bool exempt)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            SetBruteDepthPosition(target, 1000);
+            attacker.AttackExempt = exempt ? 1 : 0;
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var storeField = typeof(LF2ItrRestTracker).GetField("_boundStore", flags);
+            var handleField = typeof(LF2ItrRestTracker).GetField("_bindingHandle", flags);
+            var store = (RuntimeRestStore)storeField.GetValue(target.ItrRest);
+            int slot = target.Runtime.SlotIndex;
+            Action invalidate = () => Assert.That(store.ReleaseBinding(
+                (RuntimeRestBindingHandle)handleField.GetValue(target.ItrRest)), Is.True);
+            CandidateRun baseline = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(target.ItrRest.Bind(store, slot, false), Is.True);
+            SetBruteDepthReject(query, true);
+            CandidateRun candidate = RunCollectionWithCollisionSnapshotOverride(world, query,
+                CollisionFormalCollectorMode.ForceBruteForce, CollectionSeed, invalidate, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(storeField.GetValue(target.ItrRest), exempt ? Is.SameAs(store) : Is.Null);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void BruteDepthReject_RebuildsSameTickDepthAndFrames()
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            foreach (int z in new[] { 1000, 0, 100, 0 })
+            {
+                SetBruteDepthPosition(target, z);
+                attacker.GetCollisionFrameData().itrs[0].zwidth = z == 100 ? 200 : 15;
+                attacker.GetCollisionFrameData().itrs[0].kind = z == 100 ? 5 : 0;
+                CandidateRun candidate = CompareBruteDepthRuns(world, query, attacker);
+                Assert.That(candidate.Counts[0], z == 1000 ? Is.Zero : Is.GreaterThan(0));
+            }
+        }
+
+        [TestCase("participant")]
+        [TestCase("body")]
+        public void BruteDepthReject_CapacityFallbackKeepsPreparedOwners(string capacity)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            object[] arrays = ReadBruteDepthPreparedArrays(query);
+            typeof(BruteForceSceneQuery).GetField(
+                capacity == "participant" ? "_bruteExactParticipantCapacity" : "_bruteExactBodyCapacity",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(query, 1);
+            SetBruteDepthReject(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadBruteRosterValue(query, "LastBruteDepthRejectAppliedForDiagnostics"), Is.EqualTo(false));
+            Assert.That(query.LastBruteExactCacheFallbackForDiagnostics, Is.True);
+            AssertBruteDepthPreparedArrays(query, arrays);
+        }
+
+        [TestCase("empty")]
+        [TestCase("null")]
+        [TestCase("control")]
+        public void BruteDepthReject_EmptyNullAndControlRemainConservative(string kind)
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            attacker.GetCollisionFrameData().itrs.Clear();
+            if (kind == "null") attacker.GetCollisionFrameData().itrs.Add(null);
+            if (kind == "control") attacker.GetCollisionFrameData().itrs.Add(new InteractionArea
+            {
+                kind = 8, x = -20, y = -10, w = 80, h = 20, zwidth = 1000, hasGeometry = false,
+            });
+            SetBruteDepthPosition(target, 500);
+            CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void BruteDepthReject_PendingAndSuppressedRemainExcluded()
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            LF2Character pending = CreateCharacter("Depth_Pending", 9702, MakePairSnapshotReuseFrame(true, 0));
+            LF2Character suppressed = CreateCharacter("Depth_Suppressed", 9703, MakePairSnapshotReuseFrame(true, 0));
+            Register(world, pending, 2, 3, 0);
+            Register(world, suppressed, 3, 4, 0);
+            pending.Runtime.PendingFlushDestroy = true;
+            suppressed.Runtime.SuppressCollisionCandidateUntilTick = 1000;
+            PrepareBruteGeometryFirst(query, 4);
+            CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(query.LastBruteExactCacheBuildCountForDiagnostics, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void BruteDepthReject_TwentyLimitAndSourceOrder()
+        {
+            RequireBruteDepthReject();
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            LF2Character attacker = CreateCharacter("Depth_Limit_Attacker", 9800, MakePairSnapshotReuseFrame(true, 0));
+            Register(world, attacker, 0, 1, 0);
+            for (int i = 1; i <= 30; i++)
+            {
+                LF2Character target = CreateCharacter("Depth_Limit_" + i, 9800 + i, MakePairSnapshotReuseFrame(false, 0));
+                Register(world, target, i, 2, 0);
+                SetBruteDepthPosition(target, i > 25 ? 1000 : 0);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 31);
+            SetBruteGeometryFirst(query, true);
+            CandidateRun candidate = CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(candidate.Counts[0], Is.EqualTo(20));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.EqualTo(5));
+        }
+
+        [Test]
+        public void BruteDepthReject_ReusedSlotRebuildsHandleAndDepth()
+        {
+            RequireBruteDepthReject();
+            CreateBruteDepthFixture(0, out SimulationWorld world, out BruteForceSceneQuery query,
+                out LF2Character attacker, out LF2Character target);
+            world.TryGetCurrentRuntimeHandleForDiagnostics(1, target, out RuntimeEntityHandle oldHandle);
+            SetBruteDepthPosition(target, 1000);
+            CompareBruteDepthRuns(world, query, attacker);
+            world.Unregister(target);
+            LF2Character replacement = CreateCharacter("Depth_Replacement", 9901, MakePairSnapshotReuseFrame(false, 0));
+            Register(world, replacement, 1, 2, 0);
+            world.TryGetCurrentRuntimeHandleForDiagnostics(1, replacement, out RuntimeEntityHandle newHandle);
+            Assert.That(newHandle, Is.Not.EqualTo(oldHandle));
+            CandidateRun candidate = CompareBruteDepthRuns(world, query, attacker);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(candidate.TargetHandles[0], Has.All.EqualTo(newHandle));
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(NTSD.Animation.Rendering.Editor.ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(NTSD.Animation.Rendering.Editor.ProductionEntityStressMode.Combat1000)]
+        public void BruteDepthReject_1000ParticipantsBalancedCostAndFullSequence(
+            NTSD.Animation.Rendering.Editor.ProductionEntityStressMode mode)
+        {
+            RequireBruteDepthReject();
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var attackers = new LF2Entity[40];
+            for (int i = 0; i < 1000; i++)
+            {
+                bool attack = i % 25 == 0;
+                LF2Character participant = CreateCharacter("Depth_Cost_" + i, 10000 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Vector3 position = NTSD.Animation.Rendering.Editor.ProductionEntityStressRunner.BuildSpawnPosition(mode, i, 1000);
+                Register(world, participant, i, attack ? 1 : 2, (int)position.x);
+                participant.Runtime.SetPosition(position.x, 0, position.z);
+                participant.Runtime.SyncIntegerPosition();
+                if (attack) attackers[i / 25] = participant;
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 1000);
+            SetBruteGeometryFirst(query, true);
+            CompareBruteDepthRuns(world, query, attackers);
+            Assert.That(ReadBruteRosterCount(query, "LastBruteDepthRejectedDirectionCountForDiagnostics"), Is.GreaterThan(0));
+            object[] arrays = ReadBruteDepthPreparedArrays(query);
+            var off = new List<double>(8);
+            var on = new List<double>(8);
+            for (int iteration = -4; iteration < 8; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetBruteDepthReject(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long start = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - start) * 1000d /
+                        System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration >= 0) (enabled ? on : off).Add(ms);
+                    AssertBruteDepthPreparedArrays(query, arrays);
+                    Assert.That(ReadBruteRosterValue(query, "LastBruteDepthRejectAppliedForDiagnostics"), Is.EqualTo(enabled));
+                }
+            }
+            TestContext.WriteLine("BRUTE_DEPTH_REJECT_COST participants=1000 warmup=4 sample=8 mode=" + mode +
+                " offSamples=" + string.Join(",", off) + " onSamples=" + string.Join(",", on) +
+                " scope=capture_cache_collect_end_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static System.Reflection.PropertyInfo RequireBruteDepthReject()
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty("EnableBruteDepthRejectForDiagnostics");
+            Assert.That(property, Is.Not.Null, "Conservative depth reject must exist as explicit default-OFF opt-in.");
+            return property;
+        }
+
+        private static void SetBruteDepthReject(BruteForceSceneQuery query, bool enabled)
+        {
+            RequireBruteDepthReject().SetValue(query, enabled);
+        }
+
+        private static void CreateBruteDepthFixture(int kind, out SimulationWorld world,
+            out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target)
+        {
+            world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 64);
+            attacker = CreateCharacter("Depth_Attacker", 9700, MakePairSnapshotReuseFrame(true, kind));
+            target = CreateCharacter("Depth_Target", 9701, MakePairSnapshotReuseFrame(false, kind));
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, 2, 0);
+            attacker.Runtime.EnvironmentState320 = 1;
+            query = GetQuery(world);
+            PrepareBruteGeometryFirst(query, 2);
+            SetBruteGeometryFirst(query, true);
+        }
+
+        private static void SetBruteDepthPosition(LF2Entity entity, int z)
+        {
+            entity.Runtime.SetPosition(0, 0, z);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private static CandidateRun CompareBruteDepthRuns(SimulationWorld world,
+            BruteForceSceneQuery query, params LF2Entity[] attackers)
+        {
+            SetBruteDepthReject(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            SetBruteDepthReject(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attackers);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            return candidate;
+        }
+
+        private static object[] ReadBruteDepthPreparedArrays(BruteForceSceneQuery query)
+        {
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var arrays = new object[3];
+            object owner = typeof(BruteForceSceneQuery).GetField("_roleFormalParticipants", flags).GetValue(query);
+            arrays[0] = owner.GetType().GetField("items", flags).GetValue(owner);
+            for (int i = 1; i < 3; i++)
+            {
+                object list = typeof(BruteForceSceneQuery).GetField(
+                    i == 1 ? "_roleFormalExactItrRects" : "_roleFormalExactBodyRects", flags).GetValue(query);
+                arrays[i] = list.GetType().GetField("_items", flags).GetValue(list);
+            }
+            return arrays;
+        }
+
+        private static void AssertBruteDepthPreparedArrays(BruteForceSceneQuery query, object[] expected)
+        {
+            object[] actual = ReadBruteDepthPreparedArrays(query);
+            for (int i = 0; i < expected.Length; i++)
+                Assert.That(actual[i], Is.SameAs(expected[i]));
+        }
         [Test]
         public void BruteOrdinalPacket_DefaultOffPreservesProductionDefaults()
         {

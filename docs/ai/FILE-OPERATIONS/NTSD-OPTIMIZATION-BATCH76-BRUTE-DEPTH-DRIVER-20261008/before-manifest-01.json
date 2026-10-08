@@ -1,0 +1,134 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008",
+  "utc": "2026-10-08T11:22:49.4847296Z",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "88186BA3B1AEFC3F314E8459989A642B13ED403332BFB18871F2735B253EABA0",
+      "bytes": 84096,
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "backupExists": false
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "65BA436DD647B08EAD9506C25EC7827495FE8AC9979B92848012C5DF657825B4",
+      "bytes": 166375,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/02-battle-optimization-progress-tracker.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "97BC5125D5E1EA5BCFB4D3A268DB0C287A030B04C513BDC59D87F0C0BBAE3712",
+      "bytes": 1623169,
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/03-STATE.md",
+      "backupExists": false
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "BD51DDDA184F9E17888A8DD5FAF11C196ABA015CF3E3D554240581047B7528EC",
+      "bytes": 1556785,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "1BC278DAF22BCEEF54C35C074C82C7059F9E24CD1F4F0E3B76AC5692A62C04CC",
+      "bytes": 719190,
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/05-CHANGE-LEDGER.md",
+      "backupExists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "70047202305C6A38031590BEDE2465A7F8096337E7BCFA94CA9CE9033F2DDFCD",
+      "bytes": 107843,
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/06-INDEX.md",
+      "backupExists": false
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": false,
+      "sha": null,
+      "bytes": 0,
+      "gitStatus": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/before/07-Goal18_LastTestResults.xml",
+      "backupExists": false
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/before-manifest-01.json",
+      "sha": "D76D99AD66FC33F0AB422841B5E652BAC5A1465A6C891F073E1D4D127C7353FC"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "docs/ai/STATE.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "43ECB5B1FA0570A6E5B413CE8FB28EC371B8255879978E0B5B2EC10254883D8C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/windows-02/00-combat1000-readback/report.json.central-segments.json",
+      "exists": true,
+      "sha": "2F6DAAB62A774DC847ACC8A8A764C11873477BF73F9920AC6056D6A94269DE33"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/REPORT.md",
+      "exists": true,
+      "sha": "EDD840B643AB531C7066EB12A0F91909B2887979A19297849014594817A5A5CC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/readback-summary-01.json",
+      "exists": true,
+      "sha": "A40506525AE27087C5FBECB159BC9561656C9B3CD714ED83322B99614F75AD94"
+    }
+  ],
+  "expandedGuardCount": 602,
+  "editorObservation": {
+    "unityCount": 0,
+    "port6402": 0,
+    "connection": "refused; no test started"
+  },
+  "missingPublicXml": "Observed absent before this operation; no restore, delete or attribution; prior archived test XML remains protected"
+}

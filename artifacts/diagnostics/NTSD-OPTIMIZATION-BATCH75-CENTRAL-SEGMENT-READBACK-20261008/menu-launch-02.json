@@ -1,0 +1,18 @@
+{
+  "request": {
+    "type": "execute_menu_item",
+    "params": {
+      "menuPath": "NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback"
+    }
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch75 Central Segment Binding Readback'. Check Unity logs for confirmation or errors."
+    }
+  },
+  "sourceSha": "43ECB5B1FA0570A6E5B413CE8FB28EC371B8255879978E0B5B2EC10254883D8C",
+  "window": "windows-02",
+  "note": "Necessary rerun after actual diagnostic SessionState-string defect; prior failed window preserved. Only output root differs from workload01."
+}

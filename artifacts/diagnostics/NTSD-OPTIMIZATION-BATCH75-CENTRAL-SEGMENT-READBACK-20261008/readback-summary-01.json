@@ -1,0 +1,72 @@
+{
+  "snapshotSha": "2F6DAAB62A774DC847ACC8A8A764C11873477BF73F9920AC6056D6A94269DE33",
+  "sourceOid": 1,
+  "rowCount": 2024,
+  "sumQuads": 2026,
+  "maskHistogram": [
+    {
+      "Name": "4",
+      "Count": 2023
+    }
+  ],
+  "materials": [
+    37568
+  ],
+  "variants": [
+    1
+  ],
+  "shaderNames": [
+    "NTSD/BattleCentralTransparent"
+  ],
+  "finalBytesEqualBaseline": true,
+  "finalSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+  "baselineSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+  "status": "MEASUREMENTS_COMPLETED",
+  "completed": 1,
+  "shutdown": true,
+  "objects": 0,
+  "slots": 0,
+  "borrowers": 0,
+  "sceneSame": true,
+  "menuRestored": true,
+  "windowSetPassMean": 1995,
+  "windowSegmentMean": 1990.4943820224719,
+  "windowDrawMean": 1991.4943820224719,
+  "gcScope": "Not a full 0GC/FPS gain acceptance; one readback has cold Editor allocation/IO",
+  "noGpuCapture": true,
+  "snapshot": {
+    "tick": 128,
+    "sampledLogicTicks": 8,
+    "activeAI": 1000,
+    "sourceCommands": 2026,
+    "resolvedCommands": 2026,
+    "physicalSegments": 2024,
+    "chunks": 1,
+    "drawMode": "OrderedChunks",
+    "atlasRequested": "Auto",
+    "atlasEffective": "SourceTexture2D",
+    "plannedAtlasPages": 145,
+    "estimatedAtlasBytes": 2432696320,
+    "budgetBytes": 536870912,
+    "textureGroups": [
+      {
+        "name": "s",
+        "segments": 991,
+        "identity": 40780
+      },
+      {
+        "name": "saku",
+        "segments": 991,
+        "identity": -191750
+      },
+      {
+        "name": "SPARK_native",
+        "segments": 42,
+        "identity": -244190
+      }
+    ],
+    "breakMask4Count": 2023,
+    "cpuLeaseReleased": true
+  },
+  "note": "Measured central binding cause only; planned footprint is not actual process memory; no new rendering fix, GPU capture, budget override or instancing."
+}

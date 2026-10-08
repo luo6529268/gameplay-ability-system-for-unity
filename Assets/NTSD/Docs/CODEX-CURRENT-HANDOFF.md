@@ -1,3 +1,32 @@
+> 当前第76批 CODE_WRITTEN / ISOLATED_CSHARP_COMPILE_PASS / UNITY_DRIVER_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076；用户要求先pure脚本、通知后再Unity，本批只Admission显式depth资格/新5tests/三prepared数组与容量保护，74候选仍OFF。Unity随附csc隔离编译exit0/0error/6既有warning，非Unity导入或Driver/性能通过；actual RED/8case/88配对tick均未运行。旧case/helpers保持、602保护0变化、7准确源副本核同；validator1372records/4diff全covered/exit0、diffcheck0。55已执行（本批仅脚本）、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。SetPass最新1995未降；资源/ATLAS定向修复仍待准确授权，不解冻EXT1/Mono，不主动操作Editor或重复催问。
+
+历史第76批纯脚本准备快照（下方保留）：
+> 当前第76批 IN_PROGRESS / SCRIPT_ONLY / TEST_FIRST_PENDING / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-DRIVER-076；用户要求先处理纯脚本、待其通知再操作Unity。本批只Admission显式depth Driver资格及新5测试，保留旧case/default/Run最后compose参数，74候选仍OFF。6当前dirty准确副本核同（Index含bootstrap登记），602保护；原Editor已关闭/6402拒绝，无本批测试作业。先保存测试缺入口源状态，再纯C#接线；实际RED/编译/Driver/千人性能均待验证，不伪造PASS。54执行＋76准备（累计55）、阶段4/6、H07/H11 OPEN、父关闭0、Goal active；SetPass1995未降，资源/ATLAS定向修复仍未授权。
+
+> 当前第75批 VERIFIED（仅中央分段诊断）/ SETPASS_STILL_HIGH：NTSD-OPT-H07-CENTRAL-SEGMENT-READBACK-075；02真实OID1/1000AI120+180完成，tick128实际OrderedChunks/1chunk/2024段/2023断点全纹理身份，单material+variant+shader。Auto145页计划2320MiB超512MiB回退SourceTexture2D，shadow s/body saku/spark三源纹理交替，89显示帧SetPass1995未降。原01诊断字符串恢复缺陷失败保留、最终30/30；lease归还/detach/关闭0/双Scene同/Menu clean8/CS0，末tick300完整bytes同72baseline。仅Editor Suite诊断，不改renderer/预算/排序/资源；本局完整依赖及共享绑定修复需另授权，EXT-1/ATLAS仍冻结，其他已有H07/H11工作继续。54执行、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。
+
+> 当前第74批 FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-REJECT-074；新43有效RED→最终50/50 GREEN，唯一两局部cost实际2/2 PASS。Dispersed1000局部mean27.8522→19.5443ms（-29.8284%），Combat1000 28.3253→19.6904ms（-30.4847%）；只1000合成参与者capture/cache/collect/end，不是完整Driver/1000AI/FPS/0GC或SetPass收益。候选默认OFF；原失败原件保留。53已执行、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。中央单chunk约1990segment/DrawMesh碎片化已观察，当前实际绑定/模式断点仍待取证；原Editor只读动态取值工具在编译snippet前被CodeDom命令长度拒绝，不推定运行值、不改插件。下一优先实际中央分段取证，不解冻EXT-1/ATLAS/排序或切生产默认。
+
+历史第74批正确性终态、局部cost待执行快照（由上方当前状态覆盖）：
+> 当前第74批 FOCUSED_TEST_PASS / COST_PENDING / PERFORMANCE_UNMEASURED / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-REJECT-074；新43有效RED后最终50/50 GREEN（新43＋旧7），先前fixture漏geometry开关的16FAIL原件保留，只修新fixture。候选默认OFF、两局部cost未运行，不声称收益/完整0GC/千人达标。9事前副本及597保护核同，原EditorMenu savedclean8/idle/CS0；53已执行、阶段4/6、H07/H11 OPEN、父关闭0、Goal active。响应用户SetPass质疑，只读重扫72窗口及中央代码：单chunk约1990segment/DrawMesh，合批碎片化已观察，实际绑定/模式断点原因未闭合；不把CPU draw等同GPU batch、不解冻EXT-1/ATLAS或改排序。
+
+历史74准备（下方保留）：
+> 当前第74批 IN_PROGRESS / TEST_FIRST_PENDING / PERFORMANCE_UNMEASURED / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-DEPTH-REJECT-074；只普通Brute默认OFF深度负拒绝及窄test-first/cost，9准确副本已核，597保护（manifest593＋addendum4），原EditorMenu savedclean8/idle；53执行/阶段4of6/H07H11 OPEN/父关闭0/Goal active。无收益或实景结论，SetPass最近1994/1995未降，专项门保持。
+
+历史73（下方保留）：
+> 当前第73批 STATIC_CANDIDATE_SELECTED / IMPLEMENTATION_NOT_STARTED / PERFORMANCE_UNMEASURED：只读重扫确认现有XY粗筛未含Z，选择同普通Brute的保守深度上界负拒绝；保留原序、逐body exact与binding失效清理，不改collector/default。PairExactLoop计时还包含roster/cache重建，不能把约51ms全归内层或绑定。下一准确74候选Task READY，先聚焦正确性/局部成本再决定Driver/千人窗，不重跑72。52已执行（含73静态选择）、阶段4/6、H07/H11 OPEN、父项关闭0、Goal active；无本批C#/Unity/tests/性能收益，专项门保持。
+
+详[73静态报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/REPORT.md)。72原测量/FAIL不改；当前Profiler SetPass两场平均1994.3146/1995，候选OFF/ON同，没有下降，不等同CPU DrawMesh或GPU capture batch。
+
+历史72终态（本段非最新实施状态）：
+> 当前第72批 SCOPED_WINDOWS_COMPLETED / MIXED_RESULT / NOT_ADMITTED / PERFORMANCE_FAIL：41/41＋唯一四actual1000AI120+180完成；分散平均仅-0.5496%、P95+37.4236%，混战平均-6.6485%，ON P95139.546/104.539ms、drop875/678仍FAIL。65request/24终态/完整snapshot配对同，四可靠fullLogic steady0event、容量观察66稳定、ownedflag恢复/11stage三0/Menu clean同。候选默认OFF，不重复packet微调/资格/cost/四窗，不追加1800刷证书；下一73只读选择已确认PairExactLoop ON约51ms的有效动作。51已执行（22—72）、阶段4/6、H07/H11 OPEN、父项关闭0、Goal active；专项门不解冻。
+
+历史72资格快照 > 第72批 FOCUSED_TEST_PASS / WINDOWS_READY / NOT_ADMITTED：新31有效RED→41/41 GREEN（新31＋旧10），旧test全文/17参数保持；source9E07921E、8副本/538保护，原Menu savedclean8/idle。下一仅四真实1000AI120warm+180sample OFF/ON，未测收益。候选默认OFF、H07/H11 OPEN、Goal active；51已执行（22—72）、阶段4/6、父项关闭0。
+
+> 第72批 IN_PROGRESS / TEST_FIRST_PENDING / WINDOWS_NOT_STARTED：NTSD-OPT-H07-ORDINAL-PACKET-WINDOWS-072；仅Suite Editor＋新31/旧10窄矩阵，8准确副本和538保护已核，真实四短窗待测。候选默认OFF，H07/H11 OPEN、Goal active，50已执行＋72接入；不重跑71资格/70cost，不因批数停止。
+
+> 当前第71批 FOCUSED_TEST_PASS / DRIVER_QUALIFICATION_PASS / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-DRIVER-071；5有效RED→8/8 GREEN（新5＋旧3），四组88配对/176完整Driver step，声明checksum/完整双RNG标量/实体数与精确计数逐tick同，两千人各32tick实际AI1000、packet真实应用/无容量fallback、数组identity与关闭三0通过。候选默认OFF，无新FPS/0GC；510保护及7副本核同，HEAD外部推进已登记、不回退。50已执行（22—71）、阶段4/6、H07/H11 OPEN、Goal active；下一准确Task四实景短窗，不重采旧资格/cost，不解冻专项。
+
 > 当前第70批 SCOPED_CORRECTNESS_PASS / LOCAL_GAIN_SIGNAL / NOT_ADMITTED：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-CANDIDATE-070 / FOCUSED_TEST_PASS；25有效RED→34/34 GREEN（新25＋旧9）＋唯一两cost2/2；1000participant spacing120/12局部mean减少33.6389%/13.4884%、median减少30.6225%/13.7886%，包含每次重建，不是1000AI/FPS/0GC。候选默认OFF，原顺序/binding gate/精确survivor/容量fallback保持。7副本与490保护核同、HEAD/原Menu clean8roots/CS0；49已执行（22—70）、阶段4/6、H07/H11 OPEN、Goal active。下一完整Driver资格/适用trace，再真实1000AI窗口，不重采本cost/69覆盖、不解冻专项。
 
 历史第70批事前 > 当前第70批 PLANNED / ORDINAL_PACKET_CANDIDATE_PENDING：NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-CANDIDATE-070 / PLANNED；两准确C#仅同普通Brute原序16-packet负证明，保留binding清理/计数/顺序，复用既有envelope字段，candidate默认OFF；25聚焦test-first＋旧9受影响检查，资格过后仅两1000participant局部cost，不是AI/FPS/0GC。7当前dirty副本及490去重保护待核，原Editor78296/6402 Menu clean/idle。48已执行＋70准备、阶段4/6、H07/H11 OPEN、Goal active，不解冻专项或重采69。

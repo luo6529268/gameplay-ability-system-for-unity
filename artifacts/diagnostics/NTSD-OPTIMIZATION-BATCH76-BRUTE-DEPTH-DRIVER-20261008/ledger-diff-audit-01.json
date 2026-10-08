@@ -1,0 +1,11 @@
+{
+  "exitCode": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1372",
+    "  Governed code files in diff: 4"
+  ],
+  "warnings": 4323,
+  "diffCheckExit": 0,
+  "scope": "Current script/governance diff; not runtime acceptance"
+}

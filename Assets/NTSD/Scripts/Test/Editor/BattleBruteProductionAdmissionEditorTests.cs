@@ -32,6 +32,245 @@ namespace NTSD.Test.Editor
 
         private const string EnvelopeBindingEligibilityOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-qualification-01/";
 
+        private const string OrdinalPacketDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/driver-qualification-01/";
+
+        private const string DepthRejectDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/driver-qualification-01/";
+
+        [Test]
+        public void DepthRejectDriver_DefaultOffAndExplicitQualificationOnly()
+        {
+            RequireDepthRejectDriver();
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(query.EnableBruteDepthRejectForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteCoarseProofReuseForDiagnostics, Is.False);
+            Assert.That(query.EnableBruteEnvelopeBranchTimingForDiagnostics, Is.False);
+            CoarseEnvelopeQualificationDoesNotPromoteAnyCandidateDefault();
+            OrdinaryBruteDefaultsEnableAdmittedFastPath();
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void DepthRejectDriver_PreservesApplicableFormalRootAndEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            RequireDepthRejectDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] candidate = InvokeDepthRejectDriver(scenario, false,
+                ProductionEntityStressMode.Combat1000, 12, native, true);
+            TickRow[] baseline = InvokeDepthRejectDriver(scenario, false,
+                ProductionEntityStressMode.Combat1000, 12, native, false);
+            CompareDepthRejectDriverRows(baseline, candidate, false);
+            SaveNew(side + "-depth-reject-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, DepthRejectDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void DepthRejectDriver_ThousandCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            RequireDepthRejectDriver();
+            string scenario = ScenarioRoot + "unity-scenario-right-x550.json";
+            TickRow[] candidate = InvokeDepthRejectDriver(scenario, true, mode, 32, null, true);
+            TickRow[] baseline = InvokeDepthRejectDriver(scenario, true, mode, 32, null, false);
+            bool requireDepthProof = mode == ProductionEntityStressMode.Combat1000;
+            CompareDepthRejectDriverRows(baseline, candidate, true, requireDepthProof);
+            SaveNew(mode + "-depth-reject-parity.json",
+                new
+                {
+                    baseline, candidate, requireDepthProof,
+                    depthRejectCoverage = candidate.Any(row => row.depthRejects > 0)
+                        ? "COVERED" : "NO_REJECT_COVERAGE",
+                    performanceEvidence = false,
+                }, DepthRejectDriverOutput);
+        }
+
+        private static MethodInfo RequireDepthRejectDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunDepthRejectDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "the explicit depth reject Driver qualification entry is missing");
+            return method;
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void DepthRejectDriver_CoverageContractKeepsParityGuards(bool requireProof)
+        {
+            MethodInfo compare = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "CompareDepthRejectDriverRows", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(compare, Is.Not.Null);
+            Assert.That(compare.GetParameters().Length, Is.EqualTo(4),
+                "branch coverage must be an explicit requirement, separate from every-tick parity");
+            var baseline = new[] { new TickRow
+            {
+                tick = 1, entities = 1000, actualAi = 1000,
+                extendedHashes = "same-comparer-fixture", lockstepHashes = "same-comparer-fixture",
+                nativeScalarState = "same-comparer-fixture",
+            } };
+            var candidate = new[] { new TickRow
+            {
+                tick = 1, entities = 1000, actualAi = 1000, depthRejectApplied = true,
+                extendedHashes = "same-comparer-fixture", lockstepHashes = "same-comparer-fixture",
+                nativeScalarState = "same-comparer-fixture",
+            } };
+            Action invoke = () => compare.Invoke(null, new object[] { baseline, candidate, true, requireProof });
+            if (requireProof)
+                Assert.That(Assert.Throws<TargetInvocationException>(() => invoke()).InnerException,
+                    Is.TypeOf<AssertionException>());
+            else
+                Assert.DoesNotThrow(() => invoke());
+            candidate[0].depthRejects = 1;
+            Assert.DoesNotThrow(() => invoke());
+            candidate[0].extendedHashes = "changed-comparer-fixture";
+            Assert.That(Assert.Throws<TargetInvocationException>(() => invoke()).InnerException,
+                Is.TypeOf<AssertionException>());
+            candidate[0].extendedHashes = baseline[0].extendedHashes;
+            candidate[0].nativeScalarState = "changed-comparer-fixture";
+            Assert.That(Assert.Throws<TargetInvocationException>(() => invoke()).InnerException,
+                Is.TypeOf<AssertionException>());
+            candidate[0].nativeScalarState = baseline[0].nativeScalarState;
+            candidate[0].actualAi = 999;
+            Assert.That(Assert.Throws<TargetInvocationException>(() => invoke()).InnerException,
+                Is.TypeOf<AssertionException>());
+        }
+
+        private static TickRow[] InvokeDepthRejectDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            return (TickRow[])RequireDepthRejectDriver().Invoke(null,
+                new object[] { scenario, thousand, mode, ticks, native, enabled });
+        }
+
+        private static void CompareDepthRejectDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand,
+            bool requireDepthProof = false)
+        {
+            CompareEveryTick(baseline, candidate);
+            for (int i = 0; i < baseline.Length; i++)
+            {
+                JObject a = JObject.FromObject(baseline[i]), b = JObject.FromObject(candidate[i]);
+                string label = "depth reject first-difference tick=" + (i + 1);
+                Assert.That((string)a["nativeScalarState"], Is.Not.Null.And.Not.Empty, label);
+                Assert.That((string)b["nativeScalarState"], Is.EqualTo((string)a["nativeScalarState"]), label);
+                Assert.That((uint)b["legacyScalarState"], Is.EqualTo((uint)a["legacyScalarState"]), label);
+                Assert.That((long)b["bruteExactDirections"], Is.EqualTo((long)a["bruteExactDirections"]), label);
+                Assert.That((int)b["actualAi"], Is.EqualTo((int)a["actualAi"]), label);
+                Assert.That((bool)a["depthRejectApplied"], Is.False, label);
+                Assert.That((long)a["depthRejects"], Is.Zero, label);
+                Assert.That((bool)b["depthRejectApplied"], Is.True, label);
+                if (thousand)
+                    Assert.That((int)b["actualAi"], Is.EqualTo(1000), label);
+            }
+            if (requireDepthProof)
+                Assert.That(candidate.Any(row => (long)JObject.FromObject(row)["depthRejects"] > 0),
+                    Is.True, "canonical AI must exercise an actual depth negative proof");
+        }
+
+        [Test]
+        public void OrdinalPacketDriver_DefaultOffAndExplicitQualificationOnly()
+        {
+            RequireOrdinalPacketDriver();
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, Is.False);
+            CoarseEnvelopeQualificationDoesNotPromoteAnyCandidateDefault();
+            OrdinaryBruteDefaultsEnableAdmittedFastPath();
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void OrdinalPacketDriver_PreservesApplicableFormalRootAndEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            RequireOrdinalPacketDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] candidate = InvokeOrdinalPacketDriver(scenario, false,
+                ProductionEntityStressMode.Combat1000, 12, native, true);
+            TickRow[] baseline = InvokeOrdinalPacketDriver(scenario, false,
+                ProductionEntityStressMode.Combat1000, 12, native, false);
+            CompareOrdinalPacketDriverRows(baseline, candidate, false);
+            SaveNew(side + "-ordinal-packet-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, OrdinalPacketDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void OrdinalPacketDriver_ThousandCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            RequireOrdinalPacketDriver();
+            string scenario = ScenarioRoot + "unity-scenario-right-x550.json";
+            TickRow[] candidate = InvokeOrdinalPacketDriver(scenario, true, mode, 32, null, true);
+            TickRow[] baseline = InvokeOrdinalPacketDriver(scenario, true, mode, 32, null, false);
+            CompareOrdinalPacketDriverRows(baseline, candidate, true);
+            SaveNew(mode + "-ordinal-packet-parity.json",
+                new { baseline, candidate, performanceEvidence = false }, OrdinalPacketDriverOutput);
+        }
+
+        private static MethodInfo RequireOrdinalPacketDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunOrdinalPacketDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "the explicit ordinal packet Driver qualification entry is missing");
+            return method;
+        }
+
+        private static TickRow[] InvokeOrdinalPacketDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            return (TickRow[])RequireOrdinalPacketDriver().Invoke(null,
+                new object[] { scenario, thousand, mode, ticks, native, enabled });
+        }
+
+        private static void CompareOrdinalPacketDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand)
+        {
+            CompareEveryTick(baseline, candidate);
+            for (int i = 0; i < baseline.Length; i++)
+            {
+                JObject a = JObject.FromObject(baseline[i]), b = JObject.FromObject(candidate[i]);
+                string label = "ordinal packet first-difference tick=" + (i + 1);
+                Assert.That((string)a["nativeScalarState"], Is.Not.Null.And.Not.Empty, label);
+                Assert.That((string)b["nativeScalarState"], Is.EqualTo((string)a["nativeScalarState"]), label);
+                Assert.That((uint)b["legacyScalarState"], Is.EqualTo((uint)a["legacyScalarState"]), label);
+                Assert.That((long)b["bruteExactDirections"], Is.EqualTo((long)a["bruteExactDirections"]), label);
+                Assert.That((long)b["bruteGeometryRejects"], Is.EqualTo((long)a["bruteGeometryRejects"]), label);
+                Assert.That((int)b["actualAi"], Is.EqualTo((int)a["actualAi"]), label);
+                Assert.That((bool)a["ordinalPacketApplied"], Is.False, label);
+                Assert.That((long)a["ordinalPacketRejects"], Is.Zero, label);
+                Assert.That((long)a["ordinalPacketProofs"], Is.Zero, label);
+                Assert.That((bool)b["ordinalPacketApplied"], Is.True, label);
+                Assert.That((bool)b["ordinalPacketFallback"], Is.False, label);
+                if (thousand)
+                    Assert.That((int)b["actualAi"], Is.EqualTo(1000), label);
+            }
+            if (thousand)
+            {
+                Assert.That(candidate.Any(row => (long)JObject.FromObject(row)["ordinalPacketRejects"] > 0),
+                    Is.True, "canonical AI must exercise an actual packet negative proof");
+                Assert.That(candidate.Any(row => (long)JObject.FromObject(row)["ordinalPacketProofs"] > 0), Is.True);
+            }
+        }
+
         [TestCase("far", 1)]
         [TestCase("edge", 1)]
         [TestCase("near", 0)]
@@ -966,10 +1205,48 @@ namespace NTSD.Test.Editor
             return rows;
         }
 
+        private static TickRow[] RunOrdinalPacketDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            TickRow[] rows = Run(scenario, true, thousand, mode, ticks, native, ordinalPacket: enabled);
+            Assert.That(rows.All(row => row.ordinalPacketApplied == enabled && !row.ordinalPacketFallback &&
+                row.cacheApplied && !row.fallback && !row.kind5PresenceApplied &&
+                !row.eligibilityReuseApplied && !row.coarseEnvelopeEnabled && !row.bindingReuseApplied), Is.True,
+                "only the explicitly requested ordinal packet mode may change on the admitted baseline");
+            return rows;
+        }
+
+        private static TickRow[] RunDepthRejectDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            TickRow[] rows = Run(scenario, true, thousand, mode, ticks, native, depthReject: enabled);
+            Assert.That(rows.All(row => row.depthRejectApplied == enabled && row.cacheApplied &&
+                !row.fallback && !row.ordinalPacketApplied && !row.kind5PresenceApplied &&
+                !row.eligibilityReuseApplied && !row.coarseEnvelopeEnabled && !row.bindingReuseApplied), Is.True,
+                "only the explicitly requested depth mode may change on the admitted baseline");
+            return rows;
+        }
+
+        private static object[] ReadDepthRejectPreparedArrays(BruteForceSceneQuery query)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var arrays = new object[3];
+            object owner = typeof(BruteForceSceneQuery).GetField("_roleFormalParticipants", flags).GetValue(query);
+            arrays[0] = owner.GetType().GetField("items", flags).GetValue(owner);
+            for (int i = 1; i < arrays.Length; i++)
+            {
+                object list = typeof(BruteForceSceneQuery).GetField(
+                    i == 1 ? "_roleFormalExactItrRects" : "_roleFormalExactBodyRects", flags).GetValue(query);
+                arrays[i] = list.GetType().GetField("_items", flags).GetValue(list);
+            }
+            return arrays;
+        }
+
         private static TickRow[] Run(string scenario, bool enabled, bool thousand,
             ProductionEntityStressMode mode, int ticks, JObject[] native,
             bool? kind5Presence = null, bool? eligibilityReuse = null, bool? coarseEnvelope = null,
-            bool? rejectedBindingReuse = null, bool composeEnvelopeBindingEligibility = false)
+            bool? rejectedBindingReuse = null, bool? ordinalPacket = null, bool? depthReject = null,
+            bool composeEnvelopeBindingEligibility = false)
         {
             Assert.That(!composeEnvelopeBindingEligibility || enabled && !kind5Presence.HasValue &&
                 eligibilityReuse.HasValue && coarseEnvelope == true && rejectedBindingReuse == true, Is.True,
@@ -1043,8 +1320,52 @@ namespace NTSD.Test.Editor
                         Assert.That(query.EnableBruteBranchTimingForDiagnostics, Is.False);
                         query.EnableBruteRejectedBindingReuseForDiagnostics = rejectedBindingReuse.Value;
                     }
+                    if (ordinalPacket.HasValue)
+                    {
+                        Assert.That(enabled && !composeEnvelopeBindingEligibility && !kind5Presence.HasValue &&
+                            !eligibilityReuse.HasValue && !coarseEnvelope.HasValue && !rejectedBindingReuse.HasValue,
+                            Is.True, "ordinal packet qualification may not inherit untested compositions");
+                        Assert.That(query.EnableBruteOrdinalPacketForDiagnostics, Is.False);
+                        Assert.That(query.EnableBruteKind5PresenceForDiagnostics ||
+                            query.EnableBruteEligibilityReuseForDiagnostics || query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                            query.EnableBruteCoarseProofReuseForDiagnostics || query.EnableBruteRejectedBindingReuseForDiagnostics ||
+                            query.EnableBruteCoarseDispatchForDiagnostics || query.EnableBruteBranchTimingForDiagnostics ||
+                            query.EnableBruteEnvelopeBranchTimingForDiagnostics, Is.False);
+                        query.EnableBruteOrdinalPacketForDiagnostics = ordinalPacket.Value;
+                    }
+                    if (depthReject.HasValue)
+                    {
+                        Assert.That(enabled && !composeEnvelopeBindingEligibility && !kind5Presence.HasValue &&
+                            !eligibilityReuse.HasValue && !coarseEnvelope.HasValue && !rejectedBindingReuse.HasValue &&
+                            !ordinalPacket.HasValue, Is.True,
+                            "depth qualification may not inherit untested compositions");
+                        Assert.That(query.EnableBruteDepthRejectForDiagnostics, Is.False);
+                        Assert.That(query.EnableBruteOrdinalPacketForDiagnostics || query.EnableBruteKind5PresenceForDiagnostics ||
+                            query.EnableBruteEligibilityReuseForDiagnostics || query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                            query.EnableBruteCoarseProofReuseForDiagnostics || query.EnableBruteRejectedBindingReuseForDiagnostics ||
+                            query.EnableBruteCoarseDispatchForDiagnostics || query.EnableBruteBranchTimingForDiagnostics ||
+                            query.EnableBruteEnvelopeBranchTimingForDiagnostics, Is.False);
+                        query.EnableBruteDepthRejectForDiagnostics = depthReject.Value;
+                    }
                     if (thousand)
                         PrepareThousandAi(world, mode);
+                    object[] depthArrays = depthReject.HasValue ? ReadDepthRejectPreparedArrays(query) : null;
+                    int[] depthCapacities = depthReject.HasValue ? new[]
+                    {
+                        query.BruteExactParticipantCapacityForDiagnostics,
+                        query.BruteExactItrCapacityForDiagnostics,
+                        query.BruteExactBodyCapacityForDiagnostics,
+                    } : null;
+                    FieldInfo packetArrayField = ordinalPacket.HasValue ? typeof(BruteForceSceneQuery).GetField(
+                        "_bruteOrdinalPackets", BindingFlags.Instance | BindingFlags.NonPublic) : null;
+                    object packetArray = packetArrayField?.GetValue(query);
+                    int packetCapacity = query.BruteOrdinalPacketCapacityForDiagnostics;
+                    if (ordinalPacket.HasValue)
+                    {
+                        Assert.That(packetArrayField, Is.Not.Null);
+                        Assert.That(packetArray, Is.Not.Null);
+                        Assert.That(packetCapacity, Is.GreaterThanOrEqualTo((world.ObjectCount + 15) / 16));
+                    }
                     ulong before = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
                     for (int tick = 1; tick <= ticks; tick++)
                     {
@@ -1054,6 +1375,22 @@ namespace NTSD.Test.Editor
                             CompareRoot(world, native[tick - 1], tick);
                         Assert.That(world.AiUnifiedSnapshotExecutionPostCommitHardBreachCountForDiagnostics,
                             Is.Zero, "AI post-commit tick=" + tick);
+                        if (ordinalPacket.HasValue)
+                        {
+                            Assert.That(packetArrayField.GetValue(query), Is.SameAs(packetArray), "packet array tick=" + tick);
+                            Assert.That(query.BruteOrdinalPacketCapacityForDiagnostics, Is.EqualTo(packetCapacity));
+                        }
+                        if (depthReject.HasValue)
+                        {
+                            object[] actualArrays = ReadDepthRejectPreparedArrays(query);
+                            for (int index = 0; index < depthArrays.Length; index++)
+                                Assert.That(actualArrays[index], Is.SameAs(depthArrays[index]),
+                                    "depth prepared array=" + index + ", tick=" + tick);
+                            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(depthCapacities[0]));
+                            Assert.That(query.BruteExactItrCapacityForDiagnostics, Is.EqualTo(depthCapacities[1]));
+                            Assert.That(query.BruteExactBodyCapacityForDiagnostics, Is.EqualTo(depthCapacities[2]));
+                            Assert.That(query.LastBruteDepthRejectAppliedForDiagnostics, Is.EqualTo(depthReject.Value));
+                        }
                         object completeHashes = thousand
                             ? world.CaptureExtendedChecksumSnapshot(tick, inputs[tick - 1]).Hashes
                             : world.CaptureParityFrameSnapshot(tick, inputs[tick - 1],
@@ -1078,6 +1415,22 @@ namespace NTSD.Test.Editor
                             bindingReuseApplied = query.LastBruteRejectedBindingReuseAppliedForDiagnostics,
                             bindingFirstProbes = query.LastBruteRejectedBindingProbeCountForDiagnostics,
                             bindingReuses = query.LastBruteRejectedBindingReuseCountForDiagnostics,
+                            ordinalPacketApplied = ordinalPacket.HasValue && query.LastBruteOrdinalPacketAppliedForDiagnostics,
+                            ordinalPacketFallback = ordinalPacket.HasValue && query.LastBruteOrdinalPacketFallbackForDiagnostics,
+                            ordinalPacketRejects = ordinalPacket.HasValue ? query.LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics : 0,
+                            ordinalPacketProofs = ordinalPacket.HasValue ? query.LastBruteOrdinalPacketProofCountForDiagnostics : 0,
+                            nativeScalarState = ordinalPacket.HasValue || depthReject.HasValue
+                                ? JsonConvert.SerializeObject(world.NativeRandom.CaptureScalarState()) : null,
+                            legacyScalarState = ordinalPacket.HasValue || depthReject.HasValue ? world.Rng.State : 0,
+                            bruteExactDirections = ordinalPacket.HasValue || depthReject.HasValue
+                                ? query.LastBruteExactCacheDirectionCountForDiagnostics : 0,
+                            bruteGeometryRejects = ordinalPacket.HasValue || depthReject.HasValue
+                                ? query.LastBruteGeometryFirstRejectCountForDiagnostics : 0,
+                            actualAi = ordinalPacket.HasValue || depthReject.HasValue
+                                ? Enumerable.Range(0, 1000).Select(world.FindEntityByRuntimeSlotForQuery)
+                                .OfType<LF2Character>().Count(character => character.AiControlled) : 0,
+                            depthRejectApplied = depthReject.HasValue && query.LastBruteDepthRejectAppliedForDiagnostics,
+                            depthRejects = depthReject.HasValue ? query.LastBruteDepthRejectedDirectionCountForDiagnostics : 0,
                         });
                         if (kind5Presence.HasValue)
                         {
@@ -1212,6 +1565,17 @@ namespace NTSD.Test.Editor
             public bool bindingReuseApplied;
             public long bindingFirstProbes;
             public long bindingReuses;
+            public bool ordinalPacketApplied;
+            public bool ordinalPacketFallback;
+            public long ordinalPacketRejects;
+            public long ordinalPacketProofs;
+            public string nativeScalarState;
+            public uint legacyScalarState;
+            public long bruteExactDirections;
+            public long bruteGeometryRejects;
+            public int actualAi;
+            public bool depthRejectApplied;
+            public long depthRejects;
         }
     }
 }

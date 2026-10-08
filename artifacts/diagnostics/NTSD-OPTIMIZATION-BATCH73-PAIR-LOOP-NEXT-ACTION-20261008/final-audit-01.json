@@ -1,0 +1,52 @@
+{
+  "utc": "2026-10-08T09:15:07.5402170Z",
+  "head": "0e580f7bf94a7d645958f8dbace80a9abf9a4ae1",
+  "staged": [],
+  "guardCount": 587,
+  "changedGuards": [],
+  "backups": [
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/01-NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008.md",
+      "matches": true,
+      "after": "1F3280C33DC421949136B8A327480CF9EA0F107A8A6D7853FAEEBC5553CEF51B"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/02-battle-optimization-progress-tracker.md",
+      "matches": true,
+      "after": "9BDC9F358D9554AA9D98207D2A5D04724A62F03A74FCEE8701922F362DB7DE2D"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/03-STATE.md",
+      "matches": true,
+      "after": "006CABFFFD09E5A71A3978CBC6900422FFE831649F5E2E196D1DFB1E72096F5A"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "matches": true,
+      "after": "FCC64E59DC3CAC339D08FCC68CC5E75E81EB39BA78D0CBF7723690BAEB83BFA6"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/05-CHANGE-LEDGER.md",
+      "matches": true,
+      "after": "430649529E24B8E0D8B10EA69A3C0D9851215D7096739ABC3ED09B9798168D4F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH73-PAIR-LOOP-NEXT-ACTION-20261008/before/06-INDEX.md",
+      "matches": true,
+      "after": "1D99F2599629B83476D780BD9C752860422580ED75F90EAF3DA4CF28D383CD22"
+    }
+  ],
+  "sourceSha": "394EF397D3A5C8C66635855D3D8CC98A0854C1EE9F80BED533C5699DEC33FAD8",
+  "unityTestsStarted": false,
+  "performanceRunsStarted": false,
+  "editorInspectedThisTurn": false,
+  "sceneSaved": false,
+  "gitWrite": false
+}
+

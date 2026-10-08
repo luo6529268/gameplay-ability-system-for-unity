@@ -1,0 +1,65 @@
+{
+  "source": "cost-results-01.xml",
+  "costs": [
+    {
+      "mode": "Dispersed1000",
+      "off": [
+        27.2508,
+        26.8904,
+        27.2948,
+        27.7884,
+        28.1487,
+        30.4286,
+        27.5997,
+        27.4159
+      ],
+      "on": [
+        19.6948,
+        19.1737,
+        19.0864,
+        19.4484,
+        19.602,
+        19.9068,
+        20.1508,
+        19.2915
+      ],
+      "offMean": 27.852162499999995,
+      "onMean": 19.5443,
+      "offMedian": 27.5078,
+      "onMedian": 19.525199999999998,
+      "meanReductionPercent": 29.828428941558837,
+      "medianReductionPercent": 29.0194054050124,
+      "scope": "local capture/cache/collect/end; 1000 synthetic participants; not AI/FPS/GC certificate"
+    },
+    {
+      "mode": "Combat1000",
+      "off": [
+        28.4769,
+        28.7656,
+        29.3324,
+        28.2925,
+        28.1626,
+        27.775,
+        27.6686,
+        28.1286
+      ],
+      "on": [
+        19.3855,
+        19.491,
+        19.1178,
+        21.1158,
+        20.0973,
+        19.2498,
+        19.6102,
+        19.4557
+      ],
+      "offMean": 28.325275,
+      "onMean": 19.6903875,
+      "offMedian": 28.22755,
+      "onMedian": 19.47335,
+      "meanReductionPercent": 30.48474374917808,
+      "medianReductionPercent": 31.012964284891886,
+      "scope": "local capture/cache/collect/end; 1000 synthetic participants; not AI/FPS/GC certificate"
+    }
+  ]
+}
