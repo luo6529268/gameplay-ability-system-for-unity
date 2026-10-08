@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-08T04:42:58.4944444Z",
+  "exitCode": 0,
+  "records": 1364,
+  "governedCodeFilesInDiff": 6,
+  "warningCount": 4314,
+  "errorCount": 0,
+  "fullStdoutPersisted": false,
+  "correction": "initial warning summary regex missed indentation; corrected anchored whitespace regex used"
+}

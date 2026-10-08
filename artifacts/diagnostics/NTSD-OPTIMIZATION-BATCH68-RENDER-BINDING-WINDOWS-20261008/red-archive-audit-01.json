@@ -1,0 +1,185 @@
+{
+  "utc": "2026-10-08T05:08:53.1340243Z",
+  "jobId": "7349568f6ac540dea06456ecf06a117e",
+  "source": "Temp/Goal18_LastTestResults.xml",
+  "destination": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/red-results-01.xml",
+  "sourceSha": "A3E7E08A405D21A39586771E89026DC3D61D880ACEDCB65B8650CBE4855D5AD5",
+  "copySha": "A3E7E08A405D21A39586771E89026DC3D61D880ACEDCB65B8650CBE4855D5AD5",
+  "sourceBytes": 34621,
+  "rootAttributes": [
+    {
+      "name": "type",
+      "value": "TestSuite"
+    },
+    {
+      "name": "id",
+      "value": "24004"
+    },
+    {
+      "name": "name",
+      "value": "NTSD"
+    },
+    {
+      "name": "fullname",
+      "value": "NTSD"
+    },
+    {
+      "name": "runstate",
+      "value": "Runnable"
+    },
+    {
+      "name": "testcasecount",
+      "value": "9963"
+    },
+    {
+      "name": "result",
+      "value": "Failed"
+    },
+    {
+      "name": "site",
+      "value": "Child"
+    },
+    {
+      "name": "start-time",
+      "value": "2026-10-08 05:07:43Z"
+    },
+    {
+      "name": "end-time",
+      "value": "2026-10-08 05:07:44Z"
+    },
+    {
+      "name": "duration",
+      "value": "1.345236"
+    },
+    {
+      "name": "total",
+      "value": "20"
+    },
+    {
+      "name": "passed",
+      "value": "0"
+    },
+    {
+      "name": "failed",
+      "value": "20"
+    },
+    {
+      "name": "inconclusive",
+      "value": "0"
+    },
+    {
+      "name": "skipped",
+      "value": "0"
+    },
+    {
+      "name": "asserts",
+      "value": "0"
+    }
+  ],
+  "caseCount": 20,
+  "failedCount": 20,
+  "passedCount": 0,
+  "cases": [
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(False)",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(True)",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(False)",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(True)",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,8,True)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,10L,73,73,2,8,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,9L,73,73,2,8,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,74,2,8,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,0,0,2,8,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,0,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,8,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,-1,False)",
+      "result": "Failed",
+      "message": "  IsRenderTextureBindingObservationFresh required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RejectsSecondOwnerWithoutChangingFirst",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RejectsUnownedNondefaultFlag",
+      "result": "Failed",
+      "message": "  ApplyRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(0)",
+      "result": "Failed",
+      "message": "  BuildRenderTextureBindingRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(1)",
+      "result": "Failed",
+      "message": "  BuildRenderTextureBindingRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(2)",
+      "result": "Failed",
+      "message": "  BuildRenderTextureBindingRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(3)",
+      "result": "Failed",
+      "message": "  BuildRenderTextureBindingRequest required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(False)",
+      "result": "Failed",
+      "message": "  RestoreRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    },
+    {
+      "fullname": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(True)",
+      "result": "Failed",
+      "message": "  RestoreRenderTextureBindingReuse required for the candidate family.\n  Expected: not null\n  But was:  null\n"
+    }
+  ],
+  "command": "Copy-Item -LiteralPath Temp/Goal18_LastTestResults.xml -Destination unique red-results-01.xml after XML family/count validation, reject existing destination, source/copy SHA256 identical"
+}

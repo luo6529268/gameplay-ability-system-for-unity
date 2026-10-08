@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-08T04:41:21.4008719Z",
+  "exitCode": 0,
+  "first": [
+    "Change ledger validation PASSED.",
+    "  Records: 1364",
+    "  Governed code files in diff: 6"
+  ],
+  "warningCount": 0,
+  "errorLines": [],
+  "tail": [
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationTickDriver.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Simulation/SimulationWorld.Registry.partial.cs, which is not in the current code diff.",
+    "  WARNING: Record WORKER-UNITY-BOUNDARY-001 declares Assets/NTSD/Scripts/Test/Editor/BattleSimulationWorkerBoundaryEditorTests.cs, which is not in the current code diff."
+  ],
+  "fullStdoutPersisted": false
+}

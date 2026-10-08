@@ -1,0 +1,2654 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008",
+  "phase": "TESTS_ONLY_PREPARATION",
+  "utc": "2026-10-08T04:56:03.8653920Z",
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "editorProcessCount": 1,
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "bytes": 245136,
+      "sha": "48E580E9246F71F93757E66EB953FAE678C58656932E7D07433656B20D9C9471",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/01-BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 709278,
+      "sha": "B56529D650D34D955268F50A80A4893E39C2D871F423C395B20BDB9B26D8DD17",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/02-CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "bytes": 1613563,
+      "sha": "06B5C9EBBC262402F0E791475BDA4A3CA6BC1DBF2ECECF9CA9AFBDBADE86D1DF",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/03-STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1547176,
+      "sha": "1C157E66248E4DDCA051FCA98C13F8E59A132DDB75FB9D7159E758A40AF78E1E",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/04-CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "bytes": 99290,
+      "sha": "C0E5604729AD6E83A9909F4BE38158BF943C6D69FA464DC96CECA91FAE9E2279",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/05-INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 149031,
+      "sha": "DB8BAAA3F597225687909EADBE719CE87ED0D9F379182BB89D1B5DDC87865701",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/06-battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md",
+      "exists": true,
+      "bytes": 5451,
+      "sha": "D4F381C220784E01A250CCF0F78D603FFD61302753DFCC976AFECAAE0645355D",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/07-NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md"
+    }
+  ],
+  "guards": [
+    {
+      "path": "../NTSD_Server/packages/com.ntsd.battle-kernel/Runtime/Core/RuntimeRestStore.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\NTSD_Server\\packages\\com.ntsd.battle-kernel\\Runtime\\Core\\RuntimeRestStore.cs",
+      "exists": true,
+      "bytes": 52426,
+      "sha": "5F5CD4341DC42CCE4FFB704FA212D4623B363B8179A21425AAC30025FADEA745"
+    },
+    {
+      "path": "AGENTS.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\AGENTS.md",
+      "exists": true,
+      "bytes": 35985,
+      "sha": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007\\camera-02\\cpu-gc.raw",
+      "exists": true,
+      "bytes": 23907522,
+      "sha": "D1D40060948EF8167EDF912B81B8B90C7B831C4294829BC367E29956C775F555"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH43-FOOT-TEXTURE-READINESS-20261007\\REPORT.md",
+      "exists": true,
+      "bytes": 6306,
+      "sha": "FA0304C2D67295583105AD5C7D32E113A9C0D5FA64B75FDC7B674A8C1D535E76"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007\\REPORT.md",
+      "exists": true,
+      "bytes": 5986,
+      "sha": "F42EED845714FF6513611AB357249DA8913B9A13F956C33CB1E3C9859626D2F4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007\\REPORT.md",
+      "exists": true,
+      "bytes": 7705,
+      "sha": "EAB5FB84FA9AC10FF6878D9F2AF0A491D9125811178D202F84D6F95F27A49075"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007\\REPORT.md",
+      "exists": true,
+      "bytes": 5909,
+      "sha": "4D48680D5AE305A6387B9EBE74E613248CEC58ADE01615F33833712945818B18"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 4164,
+      "sha": "5E75BE46D12F8DCC7258F01AC849A6036A8180CB120245566BE624C8C0427D2E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 5507,
+      "sha": "3B9F194A747F02BC7BE795E99C20CC16C9C4EB8E3487D3F0F8CEDE783FFC6ECB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\00-dispersed1000\\report.json",
+      "exists": true,
+      "bytes": 144581,
+      "sha": "DA6802D9EB6519BCE03CD92423CB15E35B2077CA57C1C63291DFDC49F34195D5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\00-dispersed1000\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4210038,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/00-dispersed1000/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\00-dispersed1000\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1915,
+      "sha": "33BAABF0CB76B9ECF15BD33F04771FD9DC2D9BC8951430CAB2315FF190FB77E2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\01-combat1000\\report.json",
+      "exists": true,
+      "bytes": 144354,
+      "sha": "50F35D4F736B87CF8FE63C1D0597ED7DFE04998DD7E44451B60DBC3CF5A9C199"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\01-combat1000\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4208480,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008/windows-01/01-combat1000/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH54-LOGIC-GC-SCOPE-20261008\\windows-01\\01-combat1000\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1924,
+      "sha": "CB790793173FCE63CFE9F11F92770FEE8B5391180AFDA95F157E1E5249C9FDE9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\cpu-gc-samples.json",
+      "exists": true,
+      "bytes": 115,
+      "sha": "CBE21260FDDB7A1D0014021E2735D9823E480806C92B9841C16AAD17E2859591"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-state.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\cpu-gc-state.json",
+      "exists": true,
+      "bytes": 1941,
+      "sha": "04C8EBD2C8C3390595D6C9D775D628B9E485B2A0AA761B22F162A5B4C347F2AC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\cpu-gc.raw",
+      "exists": true,
+      "bytes": 1040390105,
+      "sha": "695BCB882892D1CF585B471F2F1937EAAB560CD922BF5941ED7B1AD4194E19BE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/prior-history.raw",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008\\windows-01\\prior-history.raw",
+      "exists": true,
+      "bytes": 35640372,
+      "sha": "6EC0313E1FD6001AD95C0470435620A173CDB0B36DD932169581B064257C4241"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008/windows-01/suite-result.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008\\windows-01\\suite-result.json",
+      "exists": true,
+      "bytes": 14161,
+      "sha": "29B5E6C767FEAA753483F5FECB83819FC26ECB8DE1F4B45B7CC4F8FC17770094"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008/windows-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008\\windows-audit-01.json",
+      "exists": true,
+      "bytes": 29568,
+      "sha": "54CA99C2BF4C57098B934C37D85FEA93005F7A4F59024AE8AFFF1AC9357EC1BA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 5143,
+      "sha": "C39386EBC9A76937F59A33117DF1C1F2822038E180F1F59A8DB59D8D6B0B5B46"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008/terminal-source-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH58-BRUTE-COARSE-ENVELOPE-20261008\\terminal-source-audit-01.json",
+      "exists": true,
+      "bytes": 20919,
+      "sha": "7017E0CADCE5F0733C1CD21A7D4A566C6B6CFFD5838529FB27BB592EBA05B43D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/documentation-terminal-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008\\documentation-terminal-audit-01.json",
+      "exists": true,
+      "bytes": 33911,
+      "sha": "662CE18E665055EF4C1D51C445E8D8E0AA04D8A7D2BB951D23D1E3A6E72474D8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/qualification-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008\\qualification-summary-01.json",
+      "exists": true,
+      "bytes": 5560,
+      "sha": "8A72F2E290A29E7B0B9F447697CC351D4FEA3E8C2A0F4CF4E324B2E0ED9802F6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 6463,
+      "sha": "84C152F023C7D40908177DE0825C1A11C1905B6FA73F4F4DAC6FADF7CDFC7DF8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/test-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008\\test-green-original-01.xml",
+      "exists": true,
+      "bytes": 7193758,
+      "sha": "F4AB092E77B94B76CBC3F90CA5839A1342FC2669D68942EA358B8D5D2A3111B3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 5437,
+      "sha": "C87E91AE6A57226232A321A1F854037DBE7DE7AF9F1B4108BC1F9C1C58A5D48E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH61-COARSE-ENVELOPE-BUDGET-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH61-COARSE-ENVELOPE-BUDGET-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 6243,
+      "sha": "BFC16E6CE5A9AA42DC4DDD686418314D0F370B64081FAE06C28A77BE5A8A666C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008/driver-qualification-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008\\driver-qualification-summary-01.json",
+      "exists": true,
+      "bytes": 3637,
+      "sha": "A5F7F9DCE477846ED62EA2B0A1F11D11F422C1886E4D579CFB82577C8F848623"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 5902,
+      "sha": "6BC05642A0BB0BEF501E6B8A8D872725CDAE72C6F0DACB70C65954E248D19150"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008/test-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008\\test-green-original-01.xml",
+      "exists": true,
+      "bytes": 7193881,
+      "sha": "2658642E7F5A09A943AA513AECC3AF43189C782BD8A51571AD7813F59C974A9B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 6616,
+      "sha": "9BB51545F017F01F1800990CDE69876D2E31CF52E35762A9D3268DE5A6D5F3EE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/test-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\test-green-original-01.xml",
+      "exists": true,
+      "bytes": 63657,
+      "sha": "15031FC32202ED7236EB5EAA960F668F5C68F106FFF72B23C5B9E6BC4666097D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/validation-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\validation-final-01.json",
+      "exists": true,
+      "bytes": 2130,
+      "sha": "12D1FDBB3532521640162802F7C4CDA1091DED6935944B0793AA862170C9E9E5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/validation-final-02.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\validation-final-02.json",
+      "exists": true,
+      "bytes": 1306,
+      "sha": "9F2B682AF56A4EACBA1F4364D968AD60DA95A61DB4E46AB98066B90FD4C10D08"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/windows-final-comparison-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-final-comparison-01.json",
+      "exists": true,
+      "bytes": 3706,
+      "sha": "A76CAC0E2A55868D4E41304CFAB584F426A9988F01457AB5BA40EB2A0FF7B96D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/windows-final-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\windows-final-summary-01.json",
+      "exists": true,
+      "bytes": 23877,
+      "sha": "C3DDC3923F6AC5CB7952726FDAD192B7C9F38877B15C5D2D5D3F66BBDF74E270"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-green-launch-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-green-launch-01.json",
+      "exists": true,
+      "bytes": 377,
+      "sha": "099A03EF2128185C7117F6A1E3881789863D1A0F5676B9581733ADF39570D9FA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-green-original-01.xml",
+      "exists": true,
+      "bytes": 7193411,
+      "sha": "70EC7E3F986D35773A8AA83BF5C92B25118773A97F2D3E1DD94CACBE54E2F8E8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-green-request-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-green-request-01.json",
+      "exists": true,
+      "bytes": 2819,
+      "sha": "270B1686E8DFEAD8883892A48758C50AFDE6DF07FA22DB0EB25BB953FCB54D1F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-green-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-green-summary-01.json",
+      "exists": true,
+      "bytes": 7464,
+      "sha": "F00A70506355D9C3283820F7A68139DA8C0661984605925E0FA4B2E83D73F276"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-qualification-01/Combat1000-envelope-binding-eligibility-parity-a63fa514a09d4d60ab9ea44b4be7471f.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-qualification-01\\Combat1000-envelope-binding-eligibility-parity-a63fa514a09d4d60ab9ea44b4be7471f.json",
+      "exists": true,
+      "bytes": 137919,
+      "sha": "3553AB4BC13AD9FAA61A005D34F874AB208D0182F91756F61D21A7417DEEAFBF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-qualification-01/Dispersed1000-envelope-binding-eligibility-parity-a0e5429613ad44388dd010b9bb594a35.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-qualification-01\\Dispersed1000-envelope-binding-eligibility-parity-a0e5429613ad44388dd010b9bb594a35.json",
+      "exists": true,
+      "bytes": 137915,
+      "sha": "0BCA8A9A259F7D52902A80432A7B0B4B9E03F97F0932FD8ABAAA3A017D21BEA6"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-qualification-01/left-x350-envelope-binding-eligibility-parity-17623ae59cec4b758a0eb0ea14158157.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-qualification-01\\left-x350-envelope-binding-eligibility-parity-17623ae59cec4b758a0eb0ea14158157.json",
+      "exists": true,
+      "bytes": 49461,
+      "sha": "1489B16A67F243B9250A989E0BF7A344062240EAD4C888FA3C7F66A24E8877AD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-qualification-01/right-x550-envelope-binding-eligibility-parity-997c92f5ebe3460a9cdb10dde28113ad.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-qualification-01\\right-x550-envelope-binding-eligibility-parity-997c92f5ebe3460a9cdb10dde28113ad.json",
+      "exists": true,
+      "bytes": 49461,
+      "sha": "1270FA30050163B717158BC84CF9057982256BEA6A1F18A08F1F985EEFE3309C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/editor-before-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\editor-before-01.json",
+      "exists": true,
+      "bytes": 2050,
+      "sha": "90DD70B5CF5F56DA19CCCB1D31782480F02B391A8F2E3712FDA9EED7079EC17B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/final-integrity-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\final-integrity-01.json",
+      "exists": true,
+      "bytes": 4717,
+      "sha": "8A74CB63366A1AE12353710E5DA2BA424B5C8466A468D4BC3A460373E92617F8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/label-guard-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\label-guard-original-01.xml",
+      "exists": true,
+      "bytes": 4484,
+      "sha": "06A74E368A1EFD14BF66AF697BCC52E793484F1D44ECE4A75C8DF442D11376F3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/NEXT-ACTION-FINDINGS.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\NEXT-ACTION-FINDINGS.md",
+      "exists": true,
+      "bytes": 3707,
+      "sha": "824F743E4BEBE335C0FF330C5DDF0DAB2AEBA889171145A8566118F5220DAFEE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/post-document-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\post-document-audit-01.json",
+      "exists": true,
+      "bytes": 1945,
+      "sha": "EB3C9E2D59A6CD1A040D5EC074F7DE8E1B969BC0E38DE0E7109460D52E59800D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/post-final-validation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\post-final-validation-01.json",
+      "exists": true,
+      "bytes": 1041,
+      "sha": "6E57476298E49905BC24D7F1A7622D22A2C91994CCEA2A095D5C8D86C84153E8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 7680,
+      "sha": "099660551B26C1DD714895F2A134723428029248381126B74287622A0547651E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/request-comparison-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\request-comparison-01.json",
+      "exists": true,
+      "bytes": 3189,
+      "sha": "2F4B0AA4E737E0478C9C1D3E9BA6FF678892946B03ACB6B8DD8BDD62C0DA0938"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-green-original-01.xml",
+      "exists": true,
+      "bytes": 46020,
+      "sha": "5C75523D5185CACEE9DF99F60AD022432C97C1F749C867426A454605C5490533"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-green-request-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-green-request-01.json",
+      "exists": true,
+      "bytes": 3003,
+      "sha": "F57A07D4ACBE337776EF197DF7B6020C07E2BD48917714E8B608DDB7AD6F9E8E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-green-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-green-summary-01.json",
+      "exists": true,
+      "bytes": 14611,
+      "sha": "1BD22964209547301AB41CCCF3C7A45C2BFC785B712CDF42355377E3B701BA9A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-red-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-red-original-01.xml",
+      "exists": true,
+      "bytes": 25587,
+      "sha": "40679A3EF4A0893F5157E7E82E371967F328E3156BCF1D402C806E2098220EAF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-red-request-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-red-request-01.json",
+      "exists": true,
+      "bytes": 2548,
+      "sha": "1DB82F0F3A740DD75B0504BDBCCE50A101553D9CC78E88734D47C4722CC388B5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-red-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\suite-red-summary-01.json",
+      "exists": true,
+      "bytes": 6463,
+      "sha": "FE03FB018100CC1D8DEC15B1E2F8886BD314E8CD61D511381CE5CF25585AB3CD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/test-red-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\test-red-original-01.xml",
+      "exists": true,
+      "bytes": 12065,
+      "sha": "156EE820C372B60B56B194E732FF11DF9A5C381C931F3F5412E2F69A38802849"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/test-red-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\test-red-summary-01.json",
+      "exists": true,
+      "bytes": 5471,
+      "sha": "069309FDECAF2EBDAE1187B75615885DBD51A9A415531A61BDE11FF9388779F7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/validation-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\validation-final-01.json",
+      "exists": true,
+      "bytes": 2076,
+      "sha": "EDB51A3EB8D8CB214685B4F8B052D28926814FE067B62B9F95370ACE6EFF8707"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json",
+      "exists": true,
+      "bytes": 144193,
+      "sha": "17B6B3F9C9BC1DD2FAAD1DCEF961E150C5EA9EA9F29792F108F794D8DC6F6EDE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4210038,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1915,
+      "sha": "87960E2C92F2CCC11D5F0D813DB6B65FB4CCE7E457F259C8D8DA6585A906C634"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6165,
+      "sha": "723866318CA54DE6E8DF0C9E3C97B01F658C4D91DB1C31A445B44E8712908604"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json.request.json",
+      "exists": true,
+      "bytes": 2759,
+      "sha": "1A35F43AF33D88847697A422210FD7C0783D58E0D73ACF9BCFCE8DE66A40709A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\00-dispersed1000-eligibility-off\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 544,
+      "sha": "792B81AE3711E005E74D373FAEA251DAAE1061554A992D934FE1DB4272340F94"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json",
+      "exists": true,
+      "bytes": 144536,
+      "sha": "BA37BD1EF070D5349272B029C1B6EF1190E2C029A371DB6434EB7E2B35532E98"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4210038,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "640E13AE42F52CB0BD9EF08459C85E0E58E976EBF876D93FC98F2F07F37D8F8D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6163,
+      "sha": "456F68504C69CDAB7B120AD6F9D159CBA088CAB917DB1D5B3D3F3AAD5A74F1AB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json.request.json",
+      "exists": true,
+      "bytes": 2758,
+      "sha": "0EC2681FBF93CC12B7D8E7693B0E2E4CFE0D5DA4CA70B9D9113D766CCBBB0D87"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\01-dispersed1000-eligibility-on\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 542,
+      "sha": "B72A4F983322B49E15CA8D47FA5F7FA741BF0EDB36CA0C39E10999A8A7D4C0EC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json",
+      "exists": true,
+      "bytes": 144520,
+      "sha": "431AC3B9FEA64FDBD2290E5B3F5FF448DE4FCE6B1920214B68F339E333845A1D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4208480,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "6D6A1F09772E933460FC4A55DE6DCD2BABCD927AF669437A6C3AF03EF94E2351"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6158,
+      "sha": "88601E34D189DC753854AB81DACB4E3F71F1847BB5EE9E6EE99E2572356F5D4F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json.request.json",
+      "exists": true,
+      "bytes": 2753,
+      "sha": "E45FAFF4C11DC543C2A6A731301D8A8C64C59A76113A9BB590101955B23F0A6A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\02-combat1000-eligibility-off\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 540,
+      "sha": "9B4662510EF368AB38952B7178FF9D1604CE4DEDBED921C28C51DCB23D0E5C14"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json",
+      "exists": true,
+      "bytes": 144637,
+      "sha": "FCE24258D2C328EA3CEABF61CDBDEFA31D8EC636E386C3F5EF3CB88CEC99C5FD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4208480,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "FBEED87998049EF6AAE2816BF8A5BDD42888AC43325276E6796E6A6B97F5672F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6156,
+      "sha": "4723E4BB4AB99BA52C720BAB027E58A09F65538FBB2CC72CB5DD01A4BB6F62FC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json.request.json",
+      "exists": true,
+      "bytes": 2752,
+      "sha": "A3E4E037041231ACC539B7762551E413D83A82F320FD689BF62616DA4296D702"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\03-combat1000-eligibility-on\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 539,
+      "sha": "626A4BA021CE4BF64AD77FFC75164152E6E8EFB3C4F5909FFBFA4848AAE6C7AC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0000.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0000.json",
+      "exists": true,
+      "bytes": 6039,
+      "sha": "1A3A7759F6106B63FF8C2733A6E05F1169CBDED55BFD555166353F84A874AA8B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0001.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0001.json",
+      "exists": true,
+      "bytes": 6087,
+      "sha": "8206DD150448FCB297B1C36B58E2D43E8D7177E78F7A6C10BCA05A6B492D7D70"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0002.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0002.json",
+      "exists": true,
+      "bytes": 6037,
+      "sha": "273752CDA6E09BA6E6925BB774EBA9895AE866B5958A62C5A74C2083FBDDB251"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0003.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0003.json",
+      "exists": true,
+      "bytes": 6086,
+      "sha": "1970264F7BAAE2C87A3C1484ED4D15F7CB577E54628393406060857F3EFEA3B0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0004.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0004.json",
+      "exists": true,
+      "bytes": 6033,
+      "sha": "6F0E1F542A18EC9A2D9FE7AD1DD50BB2F4D574035BD56E374E2A53785BC03563"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0005.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0005.json",
+      "exists": true,
+      "bytes": 6084,
+      "sha": "D7F2C509FD240B7A2C9109F4552D0059CC88C0BB931B46A622F1ADFBE60B4F33"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0006.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0006.json",
+      "exists": true,
+      "bytes": 6031,
+      "sha": "DAB66F27DE91AAB481E78684A087C7B98B2DE9C345E075ED6BC96D66C458E5BB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/progress-0007.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\progress-0007.json",
+      "exists": true,
+      "bytes": 6080,
+      "sha": "0F484E430BC16298FE172F7CDD0DF05A59FBE61F7FE0E14343C4424797D8D714"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/suite-result.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-01\\suite-result.json",
+      "exists": true,
+      "bytes": 31503,
+      "sha": "6F22DD46B9415E475209572ED4C060899322B83BB60884A4A10DF594477389CA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-comparison-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-comparison-01.json",
+      "exists": true,
+      "bytes": 2569,
+      "sha": "159BD7308FF7FD301479BA5DD23B824E0D35EDC5DBDE9EB707A74AE41134C05C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-final-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-final-summary-01.json",
+      "exists": true,
+      "bytes": 35003,
+      "sha": "7E49300F105754F8103C669CA92C77CAA7E5D9CB14ABD28699CE3E6AA84A9DB0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-launch-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-launch-01.json",
+      "exists": true,
+      "bytes": 687,
+      "sha": "C6BBC0D233F81E410213B6ED2A93E4DAFD0AA1AC54A7D3A11FF9104141FEEA4B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-preflight-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\windows-preflight-01.json",
+      "exists": true,
+      "bytes": 7262,
+      "sha": "E9BD0D3B3AF8B16F30EB683C6FDACA039DD736BD4B704866F3C29044A01D494E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/integrity-after-window-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\integrity-after-window-01.json",
+      "exists": true,
+      "bytes": 3621,
+      "sha": "E2E1FA4F1872B20585D38DE1150B82215EA5F7D1B17B4BA984E2C38301676D99"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/integrity-before-window-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\integrity-before-window-01.json",
+      "exists": true,
+      "bytes": 811,
+      "sha": "D9A1C2D76DB314393880EFA94AF97C5764A7D47AF72073E6EBCAD95BB59A01E0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/NEXT-ACTION-FINDINGS.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\NEXT-ACTION-FINDINGS.md",
+      "exists": true,
+      "bytes": 2964,
+      "sha": "F87C6B80F24AFB9D37D753C145A3E37D4C5EA6BE2941830CEE999C7ED7736E06"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/post-document-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\post-document-audit-01.json",
+      "exists": true,
+      "bytes": 697,
+      "sha": "8B809439F6A316A5AAFADFBFA496DFDC82D5FBABE643A2FCD3B738AAD7C438ED"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/qualification-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\qualification-summary-01.json",
+      "exists": true,
+      "bytes": 6839,
+      "sha": "DC2AD8B9247CF1988C3A2E919DA992F2F45BDD85FB44C5F121305262AEE9EB5A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/query-capacity-fix-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\query-capacity-fix-original-01.xml",
+      "exists": true,
+      "bytes": 3671,
+      "sha": "7C01A00232A7541EAA97B49E7E53501308E8E41665E826540B1AE467E50721BF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/query-green-failed-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\query-green-failed-original-01.xml",
+      "exists": true,
+      "bytes": 38928,
+      "sha": "4E11CCA7D2A1FCF8974ED5CA81A6C97032CD6F7451530A31704863DC2CD84F1F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/query-red-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\query-red-original-01.xml",
+      "exists": true,
+      "bytes": 30726,
+      "sha": "F70920C868D03CF51890C1EB65915BBB68889C39027CAB22E09DE6DBA616D140"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/query-selection-empty-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\query-selection-empty-original-01.xml",
+      "exists": true,
+      "bytes": 311,
+      "sha": "AC092E078C41F58A240900B060D5B562EBA7B5B99F8C9F6F6F3ED90E25E2EC1E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 8870,
+      "sha": "67E9A0A95B4F994F37D80842EC1CA9AF29064348E1823AF053406BD828A2F53A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/suite-green-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\suite-green-original-01.xml",
+      "exists": true,
+      "bytes": 57902,
+      "sha": "B1A651885AEEF9CEA1FF231C13C5B674B55A185BBEBA9D9136FE2AEE3C65854F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/suite-red-original-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\suite-red-original-01.xml",
+      "exists": true,
+      "bytes": 21342,
+      "sha": "52998E34698BAD9DAA7BAECF4F360B8C20AA8DAC27BFF3CD3BDF7871185E04DB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/validation-before-window-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\validation-before-window-01.json",
+      "exists": true,
+      "bytes": 206,
+      "sha": "489D953E9061BAC583D0BA991D930EB38984DDB18CFC505E9C1A9EF13C2735DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/validation-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\validation-final-01.json",
+      "exists": true,
+      "bytes": 1219,
+      "sha": "4032BE9C51CCF28C86F1B54A0A72620E31BEEF05A4CE5B6B197843A92EC77258"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json",
+      "exists": true,
+      "bytes": 144541,
+      "sha": "013805243C3D5065484D4FF7C7830CAE5E3D7B7B2A4CF3C8137883435BAA2E4F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4210038,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1915,
+      "sha": "2B6FFCA6559B91B3494FADE5EF58CAB4C2B4EC32A265FE079F6EF9A0705E6890"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6516,
+      "sha": "CF4AA0F6C739B0D16395852073D76D9D189C0B8156243EE95AC198F5D2231CDF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.request.json",
+      "exists": true,
+      "bytes": 2753,
+      "sha": "3232DCE5AD9D69760A3746A36ACA9EF77259FE709D3F18E84373D070F1D4CD42"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 538,
+      "sha": "092A804073D200882A426B22565E1920657779355809604E011CA1A7F28F0CB5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json",
+      "exists": true,
+      "bytes": 144339,
+      "sha": "A5EDBA202ACAB8AC405B114CCD584967AD0C1BAFEDED1D0C00A3E53DF93A78AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4210038,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "A02F52FBB01A4891833536BF422CBC05375E923B34A24CA4A6018F6C93C958EB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6558,
+      "sha": "7CDF7C23E56662F1C6B60CA37C56F98EF5EB994CD92242813AD5286491C11D91"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.request.json",
+      "exists": true,
+      "bytes": 2752,
+      "sha": "1CFF940F82125913D7FCA13BDFB5858A85A19C42286A1D4EE0F9163D116E42A0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 536,
+      "sha": "3842EAD443F0BF943AD9F55732BC1D52B24F5A092E1328A0B7CEB86E6123E93F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json",
+      "exists": true,
+      "bytes": 144032,
+      "sha": "43AE5BE1849F1104D6E382B4119E4F09A50A5E0C194B66B269C72324F3D60FCE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4208480,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "640E13AE42F52CB0BD9EF08459C85E0E58E976EBF876D93FC98F2F07F37D8F8D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6509,
+      "sha": "647BFED7D94B3A49A044D46E8CC9FB249745B9636B44930549AC6616C68F7EC8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.request.json",
+      "exists": true,
+      "bytes": 2747,
+      "sha": "573952BC704AB67394D5123049BC1610208539F4C45B056E3AE01D9F5FD330BF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 534,
+      "sha": "2F12129C874CEA8A9220BACF8303E62A212D74A4BE4947A11CE29D169AFBB7F3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json",
+      "exists": true,
+      "bytes": 144614,
+      "sha": "FE1FC0F2D14F4E9F775EDA516FF70A215E63894922ED9B6E92CA96524F84901E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json.final-checksum.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.final-checksum.json",
+      "exists": true,
+      "bytes": 4208480,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json.logic-gc.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.logic-gc.json",
+      "exists": true,
+      "bytes": 1914,
+      "sha": "10162010B90E92BC105354D993D8F9A0659520A07E1295F39EB2DA59F5DBE34B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json.observation.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.observation.json",
+      "exists": true,
+      "bytes": 6552,
+      "sha": "C28E183739E2287D180505BC85E3E410ECD1FAD2540B37536907E65A6B5EA78E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.request.json",
+      "exists": true,
+      "bytes": 2746,
+      "sha": "BF25DC1775E098E8C8C06D4A97DBF115640D7A31A5CF981BC39915D842C6E75E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json.terminal.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.terminal.txt",
+      "exists": true,
+      "bytes": 533,
+      "sha": "D3980E4AD414AB6F3E22780B08D0DC63B195A6809361759D9EEC737376347EAB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0000.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0000.json",
+      "exists": true,
+      "bytes": 6273,
+      "sha": "334AADFC1C7ABC9EA117F821DFEFD220E325A443095A63C47372BB926CF0AA16"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0001.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0001.json",
+      "exists": true,
+      "bytes": 6322,
+      "sha": "74497939B731958CDF47A17A6A25456557D7B5771A1ED990267DC57FD301AC79"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0002.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0002.json",
+      "exists": true,
+      "bytes": 6271,
+      "sha": "AC126427BD31EEB84A910827407EC4EFD90D7FA532B0E2DB92474260B536FA37"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0003.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0003.json",
+      "exists": true,
+      "bytes": 6322,
+      "sha": "FDA19FA485F25B66584551B8481DD7105FE4A9D641FE15E5FA8EE1681D6D1FF9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0004.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0004.json",
+      "exists": true,
+      "bytes": 6267,
+      "sha": "93B5C4FEE7F4AE9C9FC2968F32DEB2A8C7DA0A84347D6918D2CF37C918653784"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0005.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0005.json",
+      "exists": true,
+      "bytes": 6318,
+      "sha": "18D70F96D87697A787180346A3E1EBDD572FAFA238F42FE0CDF69A109913C63A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0006.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0006.json",
+      "exists": true,
+      "bytes": 6265,
+      "sha": "51F5C300C0B068CAEA5272108CF67BDB54AC1602B6232F4554CB6EAF8CACFC37"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/progress-0007.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\progress-0007.json",
+      "exists": true,
+      "bytes": 6316,
+      "sha": "4B2E0C7CBB710B42C5F15EC3F10E7F47F8638AD4ACDCC1D0A41741409DCAAAFE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/suite-result.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\suite-result.json",
+      "exists": true,
+      "bytes": 33204,
+      "sha": "875855E16CC167EC6DCF122DBCCD091D37CA56CA3B03E3620B4113318579C23E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-final-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-final-audit-01.json",
+      "exists": true,
+      "bytes": 10706,
+      "sha": "F609966127B52C240F9DB0B807AD62C4B41A57D10ADC748629629BA1AAE6F0F9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-launch-actual-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-launch-actual-01.json",
+      "exists": true,
+      "bytes": 9872,
+      "sha": "B89AC6C96632617DD83EB54AB2F400AE4537FBEF9275B20BC9C941B4F802CFCA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-launch-intent-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-launch-intent-01.json",
+      "exists": true,
+      "bytes": 4796,
+      "sha": "B74596DB27E263E3DE50C17B1F20AD0062336D68B1F1B6B9C12D302CC7FDF4BE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/cost-job-terminal-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\cost-job-terminal-01.json",
+      "exists": true,
+      "bytes": 877,
+      "sha": "7C37EA957E5E1A6360762082B0351E4DB6DABF868CC353E7391F875B39BBB018"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/cost-tests-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\cost-tests-01.xml",
+      "exists": true,
+      "bytes": 4582,
+      "sha": "6C0508A60DAAB806E7B21377668CEB2D5B94828CF098A61F540AB093B16B57C5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/editor-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\editor-final-01.json",
+      "exists": true,
+      "bytes": 1469,
+      "sha": "40DC5841665F90D0927E35B11CF993BE5CA238C4B876ADCCA83944797AAE14EE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/green-job-failure-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\green-job-failure-01.json",
+      "exists": true,
+      "bytes": 922,
+      "sha": "BCA6DAEAF8862FF381977433187170294D8C19F208881F75419CCD64B6CC30C4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/green-job-repair-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\green-job-repair-01.json",
+      "exists": true,
+      "bytes": 862,
+      "sha": "47EF3CB15F538ADDCA40D783D0B4DE620B556E3C6B1F92DE6512E6FDE4B4569F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/green-tests-failure-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\green-tests-failure-01.xml",
+      "exists": true,
+      "bytes": 47570,
+      "sha": "415AF5900F6D6F0D9B3DDD4C80DDDF914394F7EA211E15ED4504E1F69F3C0D9E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/green-tests-repair-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\green-tests-repair-01.xml",
+      "exists": true,
+      "bytes": 2603,
+      "sha": "7438C6276EF9FC6BA0D01C8C175DCC30A8C6FA8510D51CDB82F091F912EDF351"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/NEXT-ACTION-FINDINGS.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\NEXT-ACTION-FINDINGS.md",
+      "exists": true,
+      "bytes": 2469,
+      "sha": "3A5BED6D6890542DA4BB99973665D5B0713F40B71E44A132CCCCCA557B52F1B1"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/red-job-terminal-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\red-job-terminal-01.json",
+      "exists": true,
+      "bytes": 655,
+      "sha": "9476B0EE27AB04DA5DF6058DBBE21179A29FE9BE306B8635CC9D8D05A804F6F1"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/red-tests-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\red-tests-01.xml",
+      "exists": true,
+      "bytes": 50609,
+      "sha": "6AC76E16376EAF568A43105BC4BD8BA150FF4A839977C4646A92771E58C6371F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 6065,
+      "sha": "4A43C0F4767027EE22EB2EC6B70F0093417052EDFB41116434EF35A2DF73B0BB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/scene-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\scene-final-01.json",
+      "exists": true,
+      "bytes": 239,
+      "sha": "C4B822FC8774CD38709C4678FD5F6B495A7357B255EFFCDAE69124B500BB14F4"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/terminal-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\terminal-audit-01.json",
+      "exists": true,
+      "bytes": 4048,
+      "sha": "C8CA35CFC26985AC47273E9061BA09CF4D791E2B0C284F85E1CCEC762898B3AB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/terminal-audit-02.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\terminal-audit-02.json",
+      "exists": true,
+      "bytes": 4004,
+      "sha": "BA7929372E7B7B7026E735A1ADE61C648CAF1D5D09CFD9916E1BD896A5B4C932"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/validation-final-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\validation-final-01.json",
+      "exists": true,
+      "bytes": 1576,
+      "sha": "653843FA0C32CC0F5AD635583063B9CE65FDA6FD1F2C0D305600787FDCDD20B5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/before-green-guard-audit-02.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\before-green-guard-audit-02.json",
+      "exists": true,
+      "bytes": 511,
+      "sha": "AD6F6A677A71DB42D685EFC95FDE0492626BA80D434A402023163DACCA270BCC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/candidate-import-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\candidate-import-01.json",
+      "exists": true,
+      "bytes": 509,
+      "sha": "771A02D2B8B6D606A83F6B9AE1EBAD8EA124DDE2DDDEC63E5191E8D057C80A21"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-request-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-request-01.json",
+      "exists": true,
+      "bytes": 290,
+      "sha": "04AE3729EF68947BA0D792D1A67C065A10367900FE39894107CD49AADB5CAEC9"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-results-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-results-01.xml",
+      "exists": true,
+      "bytes": 4857,
+      "sha": "FF445A47B66895526B5D65010AE7564205ECF11F759964532C0F8C6B99C1BCFA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-start-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-start-01.json",
+      "exists": true,
+      "bytes": 219,
+      "sha": "71652CD4FAC7594DDAF7AC0FDFD404A409F0DE7E13F14A873C4FBE551465D78B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-summary-01.json",
+      "exists": true,
+      "bytes": 1189,
+      "sha": "12DB26BC2FED903488A4F1F5A6552250AE0CA6A19D653819ED89B7E5E3A32B7A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-terminal-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-terminal-01.json",
+      "exists": true,
+      "bytes": 864,
+      "sha": "C768AD2650C140A30892AF0D4FFF0754476DD8ACCAEB7DC32422551A45614835"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-xml-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\cost-xml-audit-01.json",
+      "exists": true,
+      "bytes": 1474,
+      "sha": "1B1D0F260706B795BAD82E829D22F8020152D1DB289B97F2E590D4311A8A1D0B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/editor-ready-before-green-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\editor-ready-before-green-01.json",
+      "exists": true,
+      "bytes": 1395,
+      "sha": "66F8F87B5304E0DC42B4FBE02C7BB61123686ADA18F5C4B0214F40520CBE7722"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/editor-ready-before-red-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\editor-ready-before-red-01.json",
+      "exists": true,
+      "bytes": 1396,
+      "sha": "43784255511CD13B4368B3BE66C99AF0162EC485B81C62434F39009D47550CA3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/green-results-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\green-results-01.xml",
+      "exists": true,
+      "bytes": 20219,
+      "sha": "E0A36E30B2BF98E0A5A6A50A23B92C52D7FBB6EBB4407605F72C658D5437C069"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/green-start-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\green-start-01.json",
+      "exists": true,
+      "bytes": 219,
+      "sha": "D1006EC9662E0A2BBCD43A5F2BD3D001469B264023603DABBEDDFFA255E21700"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/green-terminal-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\green-terminal-01.json",
+      "exists": true,
+      "bytes": 884,
+      "sha": "60F4E62910A2A5668154F8E1DA7AE1B99A0768201B0B744BFFA931202E75D16D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/green-xml-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\green-xml-audit-01.json",
+      "exists": true,
+      "bytes": 3030,
+      "sha": "8E74CC7F8D44CA414AB758F19E693B83698F0D05BBF5AD6CFCCB700D21C2949C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\changed-0.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\changed-1.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\changed-reference.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1377,
+      "sha": "4D21F309BEDF63F8FD80D929602A84B2E7FD549AF3A7BE63FB7EA5D5FA186773"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\same-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\same-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\same-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-0-2e5c226ca6e84529839bbd90bfdbc95c\\same-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\changed-0.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\changed-1.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\changed-reference.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1377,
+      "sha": "4D21F309BEDF63F8FD80D929602A84B2E7FD549AF3A7BE63FB7EA5D5FA186773"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\same-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\same-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\same-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-0-1-d844644ae59a49769581f6edd3571c83/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-0-1-d844644ae59a49769581f6edd3571c83\\same-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\changed-0.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\changed-1.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\changed-reference.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1377,
+      "sha": "4D21F309BEDF63F8FD80D929602A84B2E7FD549AF3A7BE63FB7EA5D5FA186773"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\same-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\same-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\same-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-0-f5b5bebf7a0142b69eb45ee980e57288\\same-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\changed-0.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\changed-1.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\changed-reference.png",
+      "exists": true,
+      "bytes": 1352,
+      "sha": "7679BF13574F978BD69612F1F604BBF827FE16B78F27B72AF1699EFDE0B21FCD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1377,
+      "sha": "4D21F309BEDF63F8FD80D929602A84B2E7FD549AF3A7BE63FB7EA5D5FA186773"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\same-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\same-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\same-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-1-1-a95b7ce42df347eea38c7ef641e3bad0\\same-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\changed-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\changed-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\changed-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\same-0.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\same-1.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\same-reference.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-0-b78a8a6832cc40c8b3f82b1c5386e2f3\\same-reverse.png",
+      "exists": true,
+      "bytes": 1384,
+      "sha": "8F37E110292AC0FDE61824166B03441B6C9E355DB7939E07F1CE5D73BB5F6BCB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/changed-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\changed-0.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/changed-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\changed-1.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/changed-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\changed-reference.png",
+      "exists": true,
+      "bytes": 1351,
+      "sha": "AED2988F722C7C4E3283C996DEAB2F0D66DDA24A2F416ABA3F5C4E2937D15871"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/changed-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\changed-reverse.png",
+      "exists": true,
+      "bytes": 1361,
+      "sha": "D0185979780F1E115079AFD5569AF3711EFF168A05F29BCA9B457590BC80BA2A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/same-0.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\same-0.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/same-1.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\same-1.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/same-reference.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\same-reference.png",
+      "exists": true,
+      "bytes": 1353,
+      "sha": "507BA4BB97CF9F71BB5E56BFE6C13DA11582FD257496F90D152ED218CA8855DD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/pixels-2-1-7ae3db066633444d9ea1a28cb54204db/same-reverse.png",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\pixels-2-1-7ae3db066633444d9ea1a28cb54204db\\same-reverse.png",
+      "exists": true,
+      "bytes": 1384,
+      "sha": "8F37E110292AC0FDE61824166B03441B6C9E355DB7939E07F1CE5D73BB5F6BCB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/post-tests-console-observation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\post-tests-console-observation-01.json",
+      "exists": true,
+      "bytes": 177,
+      "sha": "B7B24316FD6E15353E927A7AAD81BED20B536B70596BE18C0CE35E33CA575B3F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/post-tests-editor-observation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\post-tests-editor-observation-01.json",
+      "exists": true,
+      "bytes": 177,
+      "sha": "B7B24316FD6E15353E927A7AAD81BED20B536B70596BE18C0CE35E33CA575B3F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/post-tests-log-tail-observation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\post-tests-log-tail-observation-01.json",
+      "exists": true,
+      "bytes": 141,
+      "sha": "A972E5DCB03265117C6154367294D9289AC8C18286DED03C3A38BA24FA1ABB58"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/post-tests-scene-observation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\post-tests-scene-observation-01.json",
+      "exists": true,
+      "bytes": 177,
+      "sha": "B7B24316FD6E15353E927A7AAD81BED20B536B70596BE18C0CE35E33CA575B3F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/red-request-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\red-request-01.json",
+      "exists": true,
+      "bytes": 294,
+      "sha": "128A5FB3D6F1D5137B1EAD9C0B23778E4E5E6E3B44EF559BABA3CCE429C75DDA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/red-results-01.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\red-results-01.xml",
+      "exists": true,
+      "bytes": 36949,
+      "sha": "9A5C4C7EE713AD176D7CA4970AD065966E2ACBB269C1592980B895B6CDD07086"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/red-start-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\red-start-01.json",
+      "exists": true,
+      "bytes": 219,
+      "sha": "FA23FFD3D6744738C25EA3F317919D90F059474DADFDE7A1D81685F0338F5B76"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/red-terminal-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\red-terminal-01.json",
+      "exists": true,
+      "bytes": 6852,
+      "sha": "DAEA53B449E284818D8ABDBA18D2F74585BCE549FB034C84B545037DBF8D6B77"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/red-xml-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\red-xml-audit-01.json",
+      "exists": true,
+      "bytes": 526,
+      "sha": "FEA68AF5E591EF6551F2C7E1C34E73635176DD3020D63DA684A8330DD64B951E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/REPORT.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\REPORT.md",
+      "exists": true,
+      "bytes": 8328,
+      "sha": "AC8872479B04E34849E63A9F5A5F4D4057E5E99B3C8EBC891950029879741819"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/terminal-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\terminal-audit-01.json",
+      "exists": true,
+      "bytes": 5114,
+      "sha": "6EC96A1AF4584EA825868CDB2A30BFBAB76EBFDE93984149CFC66D25ABBCBA95"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/test-discovery-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\test-discovery-01.json",
+      "exists": true,
+      "bytes": 11868,
+      "sha": "8A767CEE8F9E9203717465D1DB6993F46341F232BADC928BB4127279BC028FFE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/test-import-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\test-import-01.json",
+      "exists": true,
+      "bytes": 574,
+      "sha": "3022086F3FA0365F6905A76F59BFC4E59E5B3CDB83A954B00B0E6CF75E00109D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/validation-summary-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\validation-summary-01.json",
+      "exists": true,
+      "bytes": 769,
+      "sha": "F3FCE37EAA13E2961EFEE0A14C079D018631482F986CE08287DCC5624519493A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/validation-summary-02.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\validation-summary-02.json",
+      "exists": true,
+      "bytes": 297,
+      "sha": "11670F19BDCEF11C7C916A26F98D02CDC5A813150CBAF128A12A7E16C1980FD7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/left-x350-root-v2-trace.jsonl",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\left-x350-root-v2-trace.jsonl",
+      "exists": true,
+      "bytes": 552792,
+      "sha": "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001/right-x550-root-v1-trace.jsonl",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\right-x550-root-v1-trace.jsonl",
+      "exists": true,
+      "bytes": 556054,
+      "sha": "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-left-x350.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-UNITY-DRIVER-001\\unity-scenario-left-x350.json",
+      "exists": true,
+      "bytes": 717,
+      "sha": "8A9A59275A7CB09685A33DCE4C4E764DEA13F9CCD29474C63D2BBBD258DA3627"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-right-x550.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-UNITY-DRIVER-001\\unity-scenario-right-x550.json",
+      "exists": true,
+      "bytes": 717,
+      "sha": "C2CA6F31380366CD49F9278A679282F203929AE38691AB4428AA6811D05834C8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-atlas-memory-lowend-roadmap-plan.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-atlas-memory-lowend-roadmap-plan.md",
+      "exists": true,
+      "bytes": 24069,
+      "sha": "E1CB740369B8383C617030C71215C7E612EB97696D59553B55AF4D9956EE42B8"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-proposals-index.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-proposals-index.md",
+      "exists": true,
+      "bytes": 28102,
+      "sha": "DE327708E00ED58291F66626B712488A84BB7BAE26452D996F4E4EC1208BB234"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-performance-stats120-roadmap-plan.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-performance-stats120-roadmap-plan.md",
+      "exists": true,
+      "bytes": 27269,
+      "sha": "DF690ADD030B272819BDC2746F852815D1ADC6397EECEB7DE11EBDB257CB6956"
+    },
+    {
+      "path": "Assets/NTSD/Docs/simulation-mono-nonmono-boundary-refactor-plan.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\simulation-mono-nonmono-boundary-refactor-plan.md",
+      "exists": true,
+      "bytes": 43193,
+      "sha": "152E1916A0533136605746B4F501EA54BD39412146C6273329657F67CB88E844"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\MoreMountains\\MMTools\\Demos\\MMTween\\Fonts\\Lato\\SDF\\JifengBladeArtSC-3500-Plus SDF.asset",
+      "exists": true,
+      "bytes": 2127152,
+      "sha": "B1F4AD549E8EA39D2844E3CFAB39D80FDA148C15A323D3517FD6D7FB8B6C09FE"
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\New Universal Render Pipeline Asset.asset",
+      "exists": true,
+      "bytes": 3668,
+      "sha": "840F258640E8AD7457527ABFA304F3464E5EC0AD5B4A51435DA6331E730610C2"
+    },
+    {
+      "path": "Assets/NTSD/New Universal Render Pipeline Asset.asset.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\New Universal Render Pipeline Asset.asset.meta",
+      "exists": true,
+      "bytes": 197,
+      "sha": "4BD281B071C1331E1C62CFF837C86A7D2D08BC0F1C3E1B0BD643CB0DFCD56343"
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Resources\\ProjectBattleModeConfig.asset",
+      "exists": true,
+      "bytes": 1308,
+      "sha": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+      "exists": true,
+      "bytes": 109282,
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scene\\NTSD_Menu.unity",
+      "exists": true,
+      "bytes": 652229,
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "bytes": 376200,
+      "sha": "1534E0BF9429AE1D3987D823684AF32B65F17B6C3BBCE0BC3086614528A72105"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ItrRestTracker.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\LF2ItrRestTracker.cs",
+      "exists": true,
+      "bytes": 11165,
+      "sha": "8B5BFED71E3FA3843431703C3619431EE7C6D78CFB02219EF8BE84E1395236CD"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Manager\\CharacterAnimtorManager.cs",
+      "exists": true,
+      "bytes": 186337,
+      "sha": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleCentralRenderSystem.cs",
+      "exists": true,
+      "bytes": 112256,
+      "sha": "247BD7E73DFA8D4F004968E0E7E0D93917E28EB39FE8E26D6A361602D0CB118D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleFootMarkerBatchBackend.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleFootMarkerBatchBackend.cs",
+      "exists": true,
+      "bytes": 17264,
+      "sha": "339C2C9ECF017C50BC579E2181361ECD6CDD327E84DD98A2F10131BFA83DDE13"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderFeature.cs",
+      "exists": true,
+      "bytes": 16495,
+      "sha": "F5F1173E63B18A2F90F9073B87AA933FBDC83731822487DEE38DE336587FB6C2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressDetailTimingEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\ProductionEntityStressDetailTimingEditorTests.cs",
+      "exists": true,
+      "bytes": 32120,
+      "sha": "54BD92351D74AF7E6098DD618964E9A0143A7AAF53E0FA6CDA506097A258C037"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\ProductionEntityStressEditorTests.cs",
+      "exists": true,
+      "bytes": 349782,
+      "sha": "92E597D3A2FA9152EAB5DEAD667F8E708BDD9769E88D0A3A36CB6CEA978C68EF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+      "exists": true,
+      "bytes": 554934,
+      "sha": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\GameConfig.cs",
+      "exists": true,
+      "bytes": 9636,
+      "sha": "96AB6F0403AF05A278C1ED2BE78754E354650C7D1D7CE1FACDB27A6A52F73D1A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Diagnostics\\SimulationWorld.DetailTimingDiagnostics.cs",
+      "exists": true,
+      "bytes": 39905,
+      "sha": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDirectSpawnWriter.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleNativeDirectSpawnWriter.cs",
+      "exists": true,
+      "bytes": 2772,
+      "sha": "891A57C8178C538B01276A68028629A3E065512DE1E8FFD254EBDBB7F6AF796A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+      "exists": true,
+      "bytes": 122454,
+      "sha": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattleKnockoutFeedRowProjection.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattleKnockoutFeedRowProjection.cs",
+      "exists": true,
+      "bytes": 17759,
+      "sha": "D338303119F02F8912735C84F6029AE2A989170BA04AA1C9E68024411D420593"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Presentation\\BattlePresentationShadowBuild.cs",
+      "exists": true,
+      "bytes": 175639,
+      "sha": "200816F8ACBD15CF2C7920071C8D2AAF2E1106F8225A121AF15E4AA0A764D5B5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeDataCatalog.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Runtime\\BattleRuntimeDataCatalog.cs",
+      "exists": true,
+      "bytes": 10144,
+      "sha": "4741563E9A275D72D125A8D522E34A90B62A13FA32349325029BE99D2BE8C4A9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "bytes": 53559,
+      "sha": "214B2B28C674F592A5B793DE773D6F1A55295EC428FD0DEF20813B9B587B1BD4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleBruteProductionAdmissionEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 243,
+      "sha": "C2B22C76704DE14E6D6533282942195B143D255E3197A424F893BAFCDD02C4CF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCameraGcCallstackCaptureEditorTests.cs",
+      "exists": true,
+      "bytes": 10579,
+      "sha": "63018018DB4D9397A959B0FE77181982248397908BFA71DC6978EF1D552C51A2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "C36C4ABEE086104A13BDE5363322C3BC777AEF766D83A3EEB49794761263602D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "exists": true,
+      "bytes": 105171,
+      "sha": "351937511B65C91E951626FF375C188EBC33EF30F43FCF1D54ACBACCA3ED1AA7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "exists": true,
+      "bytes": 240,
+      "sha": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralSameSamplePixelEditorTests.cs",
+      "exists": true,
+      "bytes": 44553,
+      "sha": "2EA04B0CBDB01F3E7ABF5431B03C6FCB4AF2FEA639341CF274FB5330CD3FAA85"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleKnockoutLabelPrewarmEditorTests.cs",
+      "exists": true,
+      "bytes": 15780,
+      "sha": "69B0EC20F814E8E322CDF4FA4C02D9DD658212C8ADD28322FE47BF3E42F2279E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelPrewarmEditorTests.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleKnockoutLabelPrewarmEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "6F62ECD41AFA101BD77033108D3B7D9DD2252DDB8BA94D428142ED75351DADC1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleKnockoutLabelWindowEditorTests.cs",
+      "exists": true,
+      "bytes": 7334,
+      "sha": "8CE190A95FFA3A7A7F0BD9F04C41A3BC39201177B725CC88FD2757A54ACA6404"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleKnockoutLabelWindowEditorTests.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleKnockoutLabelWindowEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "BEEC83A26525EE5BA40162A638C8F80FC2A410766AA3325DAC0E9A3B5CDE6D91"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleLogicGcCallsiteWindowEditorTests.cs",
+      "exists": true,
+      "bytes": 6788,
+      "sha": "E6C99D13964A441AA143F8B42752993D8D1CAD0CC3583646BD85B8BBA56F6F54"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicGcCallsiteWindowEditorTests.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleLogicGcCallsiteWindowEditorTests.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "AAF467A87589D7C6780283FE5AF0CFD4C607D03EA312D07ABB7C3A64C0515F97"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleLogicTickGcObserverEditor.cs",
+      "exists": true,
+      "bytes": 25600,
+      "sha": "F2DC9B547B94C4B7949E3220A8536ED7687125912F4073AB7A826B1D98B26993"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleLogicTickGcObserverEditor.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "DC295B149A9D40DD46436117C4E50C9CAD321C662AF11099D2AB5BF7444898C1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs",
+      "exists": true,
+      "bytes": 54759,
+      "sha": "3838B133247C5835A8DE71EAD2BABCA75720475E88D9E01D342B913B6C1ACE25"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "exists": true,
+      "bytes": 60,
+      "sha": "D630B6A08824D4C4F621BAAFF242896322C2CBAA56CAF542DE7C53217694336F"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleScopedGcAllocationRecorder.cs",
+      "exists": true,
+      "bytes": 11804,
+      "sha": "5D53AEE14BAEFDD7AF8E9971DE5182E8C2B860A00EE8C9258229CD9A08B82336"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleSpawnAdmissionAllocationEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleSpawnAdmissionAllocationEditorTests.cs",
+      "exists": true,
+      "bytes": 16476,
+      "sha": "38E6CB023BFA12EBF6BA1487BDBF6B96905C6AD39A790D519B900E9EC63E9A37"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NativeImpactAtomicIntegrationEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B6NativeImpactAtomicIntegrationEditorTests.cs",
+      "exists": true,
+      "bytes": 26001,
+      "sha": "D9806E371AAD7CCD52C5C06B2B4E8898A512CFE913EBD2D0C9F585AE127AEA39"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KnockoutFeedRowSnapshotEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q09KnockoutFeedRowSnapshotEditorTests.cs",
+      "exists": true,
+      "bytes": 10879,
+      "sha": "DC8ABD9E1B35970C572A663ED877255675E90BDD9F96FD637881DE8049DD36A6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28UnityRawCaptureEditor.cs",
+      "exists": true,
+      "bytes": 150720,
+      "sha": "4100394C9BD4A0AC6A5C53C9B6553F9C291FC6BC40E0F34442F3444B5FDA5D6A"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "bytes": 372961,
+      "sha": "2759690A0A5E77C654B40506A43E242B32CA63163AE638BE8BD994660182E791"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049.md",
+      "exists": true,
+      "bytes": 6605,
+      "sha": "257CB77C702D26C7C11568B160B0A33035057F471A4C27B4D9D2BEDEB2041799"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048.md",
+      "exists": true,
+      "bytes": 3360,
+      "sha": "D0C31222AF942A717C565AFA3C7DEB2575FC624FE4A71BCC1BCC51949C82FF32"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COARSE-ENVELOPE-BUDGET-061.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COARSE-ENVELOPE-BUDGET-061.md",
+      "exists": true,
+      "bytes": 9112,
+      "sha": "279872A885EC51209366AE06EBD6E3EA0A5325A3795342E8B34C64ED766560BB"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COARSE-ENVELOPE-DRIVER-059.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COARSE-ENVELOPE-DRIVER-059.md",
+      "exists": true,
+      "bytes": 5639,
+      "sha": "3F2C1FA173465B8A5B9290581D71BDE6938B554DAA636146A21B124F28098C96"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COARSE-ENVELOPE-WINDOWS-060.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COARSE-ENVELOPE-WINDOWS-060.md",
+      "exists": true,
+      "bytes": 8889,
+      "sha": "2CA4B9FD6ECC1CE61F88EF77028C7C1397D531672B55BE5B3C09DF343870828B"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COARSE-PROOF-REUSE-066.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COARSE-PROOF-REUSE-066.md",
+      "exists": true,
+      "bytes": 9924,
+      "sha": "D7D3299EC5F446F2BE862E50134E93FC5EFBA51FE0FCF81DFFCD7F6ECB8B21D3"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051.md",
+      "exists": true,
+      "bytes": 4296,
+      "sha": "F50A252573919A11E73AD8DA672EC4D63649828580BEA7CC226F9FBA0C8AFCCD"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md",
+      "exists": true,
+      "bytes": 4474,
+      "sha": "BD89A2BA0150C9595AEFFCA8C4FC7621C85A66D423D80BF0B6B9EF3009D9FEA4"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050.md",
+      "exists": true,
+      "bytes": 6005,
+      "sha": "9D327F4988102EDFA00590E5F9C8F9A0ED06A9014ECDFE58B13BED336EE8065B"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-BINDING-DRIVER-062.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ENVELOPE-BINDING-DRIVER-062.md",
+      "exists": true,
+      "bytes": 7849,
+      "sha": "A8249FFE43E45A58A820A781C57517A20EE739FC0A1922B61AAE62F68C9145BE"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064.md",
+      "exists": true,
+      "bytes": 13476,
+      "sha": "51BE59A3BE662CC8BC4A5BC30C07DE8A5F6B8BF56CDC0D238E50885F96704088"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-BINDING-WINDOWS-063.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ENVELOPE-BINDING-WINDOWS-063.md",
+      "exists": true,
+      "bytes": 10272,
+      "sha": "9D48DF93CF181F004B77BE94C3A963D4343E2E398B1E205C291E0D789134696E"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065.md",
+      "exists": true,
+      "bytes": 9505,
+      "sha": "C1ACCE4FE9108BF66A3200FBA3FCA1339C735CC02B7224C13D9D3FFD58F535AB"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-RENDER-TEXTURE-BINDING-REUSE-067.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-RENDER-TEXTURE-BINDING-REUSE-067.md",
+      "exists": true,
+      "bytes": 9934,
+      "sha": "BF23BE5600DF04D0953B0761F16B59D7BDC8FA81B62220019AC54D014D3AB7FF"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "exists": true,
+      "bytes": 371096,
+      "sha": "A531F72B08F8D5AC1379C094218D071A35B20AFB213D77CED6AC4E435899E0BD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 5329,
+      "sha": "96080AF8E966B1EE31ABE161F1DAEEFF79CF2013E4A6FC52A7EDEF95A530BCB5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 5045,
+      "sha": "AB3FAD0B537978F2C7810A45657E6021B2BE3BDA5769EA471E4518C21C724985"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 6141,
+      "sha": "5F7670886FD46EF880B2BE238B0E4AB5413A07F58780535D5CDA97393DCC31F7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backup-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backup-audit-01.json",
+      "exists": true,
+      "bytes": 5476,
+      "sha": "F72103281260968F283D29C855038CB596B39F94F3F3DFC0C5487728F8483B6B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/01-BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\01-BruteForceSceneQuery.cs",
+      "exists": true,
+      "bytes": 374992,
+      "sha": "ED518287DFFB8F870D774AD4E168833DD1D743AA99F2B968DF5CDBA7FF6A0DEC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "bytes": 352135,
+      "sha": "9282999F1126173495C3C29E98DF7A60AC184CCEFE3C09EC8D216F9F7A61E97D"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\03-CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 707854,
+      "sha": "A81F63ACF8117AC093EB45964A26DD73D9F3E89C1664E59817E35AE8FC5B0DEC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/04-STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\04-STATE.md",
+      "exists": true,
+      "bytes": 1612139,
+      "sha": "A3371B44E18B6C98611087E9A002AB0F774DB0887D6B38DED29891CC75C4CEC0"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\05-CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1545752,
+      "sha": "FF1DC7AC804D1E881079D79115442F5C1CE9AC029D9D8C46186361BD12DC49F8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/06-INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\06-INDEX.md",
+      "exists": true,
+      "bytes": 96611,
+      "sha": "97B3ECD7301C102A71E2EAA5C9EE1964C4ACF5BCB638AC775E31C50C75558DE3"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\07-battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 145413,
+      "sha": "9E934192D1785C5A960EB62F319B8C07D2157AD55E2DE58C4CAC48A64897173A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\08-NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008.md",
+      "exists": true,
+      "bytes": 5177,
+      "sha": "EE69A4F63B93E5BD88E1D81838338B63D7D73C4CB61242AE8FAEB2F2DEB7419B"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/09-Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\09-Goal18_LastTestResults.xml",
+      "exists": true,
+      "bytes": 57902,
+      "sha": "B1A651885AEEF9CEA1FF231C13C5B674B55A185BBEBA9D9136FE2AEE3C65854F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/10-NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\backups-01\\10-NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "bytes": 533,
+      "sha": "D3980E4AD414AB6F3E22780B08D0DC63B195A6809361759D9EEC737376347EAB"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/before-manifest-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\before-manifest-01.json",
+      "exists": true,
+      "bytes": 63775,
+      "sha": "8B274EFD3DEE2201C4A774BBFB719128A6BF6D705FC6824ABB487EF9155B95F2"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 4075,
+      "sha": "5FE8CA5DD139EA27FAE87A19217157AFDF8CC0CB5BBA546BD727591C93DA9BF5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-POSTEDITOR-PROTECTION-DRIFT-20261008/observation-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-POSTEDITOR-PROTECTION-DRIFT-20261008\\observation-01.json",
+      "exists": true,
+      "bytes": 1315,
+      "sha": "B6B76849F028394674EEE1AB5C748119C2399ADB34F5BEF6C20868D6218692F2"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-POSTEDITOR-PROTECTION-DRIFT-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-POSTEDITOR-PROTECTION-DRIFT-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 2488,
+      "sha": "976259C30E55DDA91B02C884434AD872E2F67DAF0A0F8B870810C74DE0D55ED7"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backup-audit-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backup-audit-01.json",
+      "exists": true,
+      "bytes": 4701,
+      "sha": "EBB2C91AA91F313821E0D40867791521F4A7A095178D56C279EBFBB0A1A8D4AD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/01-BattleRenderFeature.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\01-BattleRenderFeature.cs",
+      "exists": true,
+      "bytes": 14690,
+      "sha": "43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/02-BattleCentralSameSamplePixelEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\02-BattleCentralSameSamplePixelEditorTests.cs",
+      "exists": true,
+      "bytes": 19065,
+      "sha": "37C061B74FDC0F6EB5266233D5CF882F30EAE30D832CD0FC0ABE1DFC2EDEDD3E"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\03-CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 708514,
+      "sha": "16B50EE1A8AF3B134477B1A66BFA1FC788736344CF33466BD9094FFF71A088AB"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/04-STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\04-STATE.md",
+      "exists": true,
+      "bytes": 1612799,
+      "sha": "EF00914FB493B130BC46F72116117FC4B8E965F9EFB038AE871E803AC6D55A30"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\05-CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1546412,
+      "sha": "FF5A0B22B9C8401AE68327E173D985953B35351B3866B28A2065E1CB8ADB44C5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/06-INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\06-INDEX.md",
+      "exists": true,
+      "bytes": 97646,
+      "sha": "623A9D8BCAFF64EC9113F006A45390C04F9AD641AF9242673A8DF6EC089B9CBF"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\07-battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 146071,
+      "sha": "AB90B2D7FA28F8F60331C4E9269A594B1485A29EFEF86AFDF75D13914682C0BF"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\08-NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008.md",
+      "exists": true,
+      "bytes": 4728,
+      "sha": "EE64989702B513B6DF1E6B604FE4E21DFCD9211F8D2A5751F351CB42ACDB86AD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/backups-01/09-Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\backups-01\\09-Goal18_LastTestResults.xml",
+      "exists": true,
+      "bytes": 4582,
+      "sha": "6C0508A60DAAB806E7B21377668CEB2D5B94828CF098A61F540AB093B16B57C5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/before-manifest-01.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\before-manifest-01.json",
+      "exists": true,
+      "bytes": 71035,
+      "sha": "0735CA16A87E9482C161B5DD73736583CD4D0E14CA4450CFC9548F74D80FF126"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 4729,
+      "sha": "80A0E56AA4C0F3912CCC326CA4641E0668B824A1FC4ADD534A5139B37C685371"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH48-BRUTE-REJECTED-BINDING-REUSE-20261007.md",
+      "exists": true,
+      "bytes": 5318,
+      "sha": "A86826BC9976C73E9B7BD2FC2BC3A0CC8CFF97CC5A0FBA130D77A3347DEF5179"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH49-BRUTE-ELIGIBILITY-REUSE-20261007.md",
+      "exists": true,
+      "bytes": 6036,
+      "sha": "67C52E63D4B6485734DC8B0B0896663BFFDB2EE02672D46D74D3288E7C769065"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH50-ELIGIBILITY-WINDOWS-20261007.md",
+      "exists": true,
+      "bytes": 5960,
+      "sha": "F4AD612FE677182CDCF09167CE4648073C99B0EBE2F2509256F0A6E5ACA56C8A"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH51-COMBINED-CACHE-ADMISSION-20261008.md",
+      "exists": true,
+      "bytes": 3481,
+      "sha": "F2DC52B8061828E69D32FBDAF3895B9058DF5971F94B9BC4F97FD85D84039A10"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH52-COMBINED-CACHE-WINDOWS-20261008.md",
+      "exists": true,
+      "bytes": 4645,
+      "sha": "60CF6F0D7DEDB5D67B84F3D75508003B2B1400A7A04994CC659F5086EFA8A6EF"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008.md",
+      "exists": true,
+      "bytes": 4806,
+      "sha": "82DD00198DC97A8EE87A6012A2F3D4E581FD37AC0B058CF36F6D773BBC47DE05"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH61-COARSE-ENVELOPE-BUDGET-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH61-COARSE-ENVELOPE-BUDGET-20261008.md",
+      "exists": true,
+      "bytes": 3025,
+      "sha": "D16349AB204836EA404D610F2A6CCBFC1FB3E0CF7D764FC0BD02FFD5C39AB179"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH62-ENVELOPE-BINDING-DRIVER-20261008.md",
+      "exists": true,
+      "bytes": 4274,
+      "sha": "5ED1773AD8797CAAAE2AA2A839856EED5B509920C3FB66080CB7E658066F76D1"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008.md",
+      "exists": true,
+      "bytes": 4754,
+      "sha": "725CE76FC89C2EED5BF9D13B2AD67BB994E8D0F96217A95E507281A05599449A"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "exists": true,
+      "bytes": 9671,
+      "sha": "4DF1ABA23EAF6EFDDCCCFE59796025FA5B8A61A43431A846FD76038F93079A60"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008.md",
+      "exists": true,
+      "bytes": 8687,
+      "sha": "5C86D8FF7FAE138B8238B62AB7A14DE62DB777736DB750C28CD4DA2DBED33307"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008.md",
+      "exists": true,
+      "bytes": 5766,
+      "sha": "441474769759A5F68A92A504D712DE7938BF9347B61EA5D3D34A7E4D1538C814"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008.md",
+      "exists": true,
+      "bytes": 5335,
+      "sha": "503640294285CD6018266C20266CA08974223AA9A85B347BDA81EB6689095B5B"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "bytes": 42590,
+      "sha": "47531885C4D94017D0B91F8F01D38A7E9E860FD81BE0CFB3CA904F466180D989"
+    },
+    {
+      "path": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+      "absolute": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/NTSD2.8-Logan.exe",
+      "exists": true,
+      "bytes": 5469312,
+      "sha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Packages\\manifest.json",
+      "exists": true,
+      "bytes": 2923,
+      "sha": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Packages\\packages-lock.json",
+      "exists": true,
+      "bytes": 18893,
+      "sha": "69EBC824CB81E829118EFC75B26298E64F997E0AA44A5D4DDE4FCE28942E2203"
+    },
+    {
+      "path": "ProjectSettings/GraphicsSettings.asset",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\ProjectSettings\\GraphicsSettings.asset",
+      "exists": true,
+      "bytes": 2574,
+      "sha": "0BB72B6E867143CC6795BBD865D319FFAB96661CC89340AD8AA0A492DCC2A60D"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\ProjectSettings\\ProjectVersion.txt",
+      "exists": true,
+      "bytes": 87,
+      "sha": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": false,
+      "bytes": null,
+      "sha": null
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.request.json",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.request.json",
+      "exists": false,
+      "bytes": null,
+      "sha": null
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "exists": false,
+      "bytes": null,
+      "sha": null
+    }
+  ],
+  "rootStatus": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M \"Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset\"",
+    " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    " M Assets/TextMeshPro/Scripts/TextMeshProUV.cs",
+    " M Assets/TextMeshPro/Shaders/TMP_SDF.shader",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/STATE.md",
+    " M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+    "?? Assets/TextMeshPro/Resources/TextMeshPro/VertexEffectsMaterial.mat",
+    "?? Assets/TextMeshPro/Resources/TextMeshPro/VertexEffectsMaterial.mat.meta",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? artifacts/diagnostics/TMP-VERTEX-EFFECTS-SHARED-20261008/",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COARSE-PROOF-REUSE-066.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-RENDER-TEXTURE-BINDING-REUSE-067.md",
+    "?? docs/ai/CHANGE-RECORDS/TMP-VERTEX-EFFECTS-SHARED-20261008.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-POSTEDITOR-PROTECTION-DRIFT-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/TMP-VERTEX-EFFECTS-SHARED-20261008/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md"
+  ],
+  "recordExists": false,
+  "operationExists": false,
+  "note": "Rebaseline current preserved SDF asset and absent shared Temp files; preserve Batch67 UNKNOWN_CAUSE incident. Feature protected in this tests-only phase."
+}

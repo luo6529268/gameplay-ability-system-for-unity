@@ -1,0 +1,37 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteEnvelopeBindingEligibility_"
+      ],
+      "initTimeout": 180000,
+      "includeDetails": false,
+      "includeFailedTests": true
+    }
+  },
+  "launch": {
+    "chunk_id": "7bc03b",
+    "wall_time_seconds": 2.9070709,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"569cab601b7b428c99a650c25e60d6a4\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":false,\"include_failed_tests\":true}}}\r\n"
+  },
+  "terminal": {
+    "chunk_id": "b73bcc",
+    "wall_time_seconds": 0.3305379,
+    "exit_code": 0,
+    "original_token_count": 1249,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job status retrieved.\",\"data\":{\"job_id\":\"569cab601b7b428c99a650c25e60d6a4\",\"status\":\"failed\",\"mode\":\"EditMode\",\"started_unix_ms\":1791423436753,\"finished_unix_ms\":1791423462689,\"last_update_unix_ms\":1791423462689,\"progress\":{\"completed\":15,\"total\":9853,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791423458263,\"last_finished_test_full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestRejectsOutsideMatrix\",\"last_finished_unix_ms\":1791423458264,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ApplyScopeCompleteRestoresThree(False)\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ApplyScopeCompleteRestoresThree(True)\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ColdApplyRejectsUnownedCandidateWithoutMutation\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_DriftLatchesAndRestorationStillWorks\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ExitRestoresThreeAndOnlyCurrentRun(False)\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ExitRestoresThreeAndOnlyCurrentRun(True)\",\"message\":\"  ApplyBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ModeIsExplicitAndRoutesBeforeScope\",\"message\":\"  BeginBruteEnvelopeBindingEligibility required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ModeRejectsMissingScopeAndOtherModes\",\"message\":\"  startingEnvelopeBindingEligibilityWindow\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ObservationRequiresActualDeltaAndThreeRestored(False)\",\"message\":\"  EnvelopeBindingEligibilityObservationValid required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ObservationRequiresActualDeltaAndThreeRestored(True)\",\"message\":\"  EnvelopeBindingEligibilityObservationValid required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(0)\",\"message\":\"  BuildBruteEnvelopeBindingEligibilityRequest required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(1)\",\"message\":\"  BuildBruteEnvelopeBindingEligibilityRequest required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(2)\",\"message\":\"  BuildBruteEnvelopeBindingEligibilityRequest required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(3)\",\"message\":\"  BuildBruteEnvelopeBindingEligibilityRequest required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"},{\"full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestRejectsOutsideMatrix\",\"message\":\"  BuildBruteEnvelopeBindingEligibilityRequest required for the candidate family.\\r\\n  Expected: not null\\r\\n  But was:  null\\r\\n\"}],\"failures_capped\":false},\"error\":null,\"result\":null}}}\r\n"
+  },
+  "originalXml": {
+    "path": "suite-red-original-01.xml",
+    "bytes": 25587,
+    "sha256": "40679A3EF4A0893F5157E7E82E371967F328E3156BCF1D402C806E2098220EAF",
+    "total": 15,
+    "passed": 0,
+    "failed": 15
+  },
+  "scope": "All missing new interfaces, no compiler failure; not production evidence."
+}

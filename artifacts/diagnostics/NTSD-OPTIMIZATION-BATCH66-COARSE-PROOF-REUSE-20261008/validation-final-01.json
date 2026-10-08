@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-08T04:00:32.6696129Z",
+  "validatorExit": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1363",
+    "  Governed code files in diff: 4"
+  ],
+  "warningCount": 4320,
+  "errors": [],
+  "fullStdoutPersisted": false,
+  "scopedDiffExit": 2,
+  "scopedDiffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md:5740: new blank line at EOF.",
+    "docs/ai/CHANGE-LEDGER.md:2104: new blank line at EOF.",
+    "docs/ai/FILE-OPERATIONS/INDEX.md:493: new blank line at EOF.",
+    "docs/ai/STATE.md:6576: new blank line at EOF."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-08T05:24:31.5842169Z",
+  "suiteSha": "71B7C59B74532707D02FE1E90146EC76F67FD73638ECB3A6F3BBC04905D4EB14",
+  "featureSha": "F1649C0F78F1B897FF0E7846F3F5E7FBEF63B3283E1A3BC1E95F6B3AEB99A58B",
+  "allPriorAndCurrent20TestsTextUnchanged": true,
+  "scopedScriptDiffExitCode": 0,
+  "scopedScriptDiffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c"
+}

@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-08T06:31:23.6834972Z",
+  "validator": {
+    "command": "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1",
+    "exit": 0,
+    "header": [
+      "Change ledger validation PASSED.",
+      "  Records: 1366",
+      "  Governed code files in diff: 6"
+    ],
+    "warningCount": 4314,
+    "errors": []
+  },
+  "sourceDiff": {
+    "command": "git diff --check -- exact Admission source",
+    "exit": 0,
+    "messages": [
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it"
+    ]
+  },
+  "beforeRelative": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exit": 1,
+      "whitespaceErrors": [],
+      "warnings": 2
+    }
+  ]
+}

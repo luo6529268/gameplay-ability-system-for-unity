@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-08T02:07:36.9797581Z",
+  "source": "fresh scan of Batch64 suite-result.json and four report.json; no new measurement",
+  "comparisons": [
+    {
+      "action": "dispersed1000",
+      "baseline": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/00-dispersed1000-eligibility-off/report.json",
+      "candidate": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/01-dispersed1000-eligibility-on/report.json",
+      "logicMeanChangePercent": 4.472296001614384,
+      "logicP95PassBaseline": false,
+      "logicP95PassCandidate": false,
+      "droppedTickPassBaseline": false,
+      "droppedTickPassCandidate": false,
+      "pairLoopMeanChangePercent": -4.566921701225157,
+      "terminalDeclaredHashCount": 20,
+      "terminalHashDifferences": [],
+      "snapshotBytesHashEqual": true,
+      "fullDriverGcBothZero": true,
+      "eligibilityAppliedDeltas": [
+        0,
+        300
+      ],
+      "threeFlagRestored": true,
+      "classification": "MIXED_RESULT / PERFORMANCE_FAIL / NOT_ADMITTED"
+    },
+    {
+      "action": "combat1000",
+      "baseline": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/02-combat1000-eligibility-off/report.json",
+      "candidate": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/03-combat1000-eligibility-on/report.json",
+      "logicMeanChangePercent": -3.7752607668453897,
+      "logicP95PassBaseline": false,
+      "logicP95PassCandidate": false,
+      "droppedTickPassBaseline": false,
+      "droppedTickPassCandidate": false,
+      "pairLoopMeanChangePercent": -10.532938522777524,
+      "terminalDeclaredHashCount": 20,
+      "terminalHashDifferences": [],
+      "snapshotBytesHashEqual": true,
+      "fullDriverGcBothZero": true,
+      "eligibilityAppliedDeltas": [
+        0,
+        300
+      ],
+      "threeFlagRestored": true,
+      "classification": "MIXED_RESULT / PERFORMANCE_FAIL / NOT_ADMITTED"
+    }
+  ],
+  "admitted": false,
+  "productionDefaultsChanged": false,
+  "H07": "OPEN / PERFORMANCE_FAIL",
+  "H11": "OPEN; full presentation scope not covered by logic GC",
+  "formal1800Run": false,
+  "centralIndependentUnresolvedStaleGate": "not proven by aggregate source/resolved counts",
+  "memoryByteBudget": "UNKNOWN; Batch61 invalid byte measurement retained",
+  "scope": "single sequential OFF/ON short-window pair per workload; no stable/causal gain claim; no Android/120FPS/GPU batch certificate"
+}

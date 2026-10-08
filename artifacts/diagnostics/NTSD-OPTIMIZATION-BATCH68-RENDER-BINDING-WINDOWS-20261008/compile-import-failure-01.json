@@ -1,0 +1,23 @@
+{
+  "phase": "FIRST_IMPORT_FAILED_NOT_RED",
+  "suiteSha": "996ADF3EC6A6837A511CFAF8150411151F4B1EF6A200CE3F297AC1C2B26281A6",
+  "error": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 10 log entries.",
+      "data": [
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1927,26): error CS0234: The type or namespace name 'NonParallelizableAttribute' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1927,26): error CS0234: The type or namespace name 'NonParallelizable' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1963,26): error CS0234: The type or namespace name 'NonParallelizableAttribute' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1963,26): error CS0234: The type or namespace name 'NonParallelizable' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1994,26): error CS0234: The type or namespace name 'NonParallelizableAttribute' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(1994,26): error CS0234: The type or namespace name 'NonParallelizable' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(2019,26): error CS0234: The type or namespace name 'NonParallelizableAttribute' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(2019,26): error CS0234: The type or namespace name 'NonParallelizable' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(2056,26): error CS0234: The type or namespace name 'NonParallelizableAttribute' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)",
+        "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs(2056,26): error CS0234: The type or namespace name 'NonParallelizable' does not exist in the namespace 'NUnit.Framework' (are you missing an assembly reference?)"
+      ]
+    }
+  }
+}

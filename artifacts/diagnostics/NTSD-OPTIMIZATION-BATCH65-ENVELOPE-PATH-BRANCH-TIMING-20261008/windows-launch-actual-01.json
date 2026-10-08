@@ -1,0 +1,251 @@
+{
+  "utc": "2026-10-08T03:04:30Z",
+  "launchReturn": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch65 Envelope Branch Timing Full Driver GC 1000 AI'. Check Unity logs for confirmation or errors."
+    }
+  },
+  "firstObservationReturn": {
+    "status": "observation_error",
+    "message": "Exception calling \"Connect\" with \"2\" argument(s): \"由于目标计算机积极拒绝，无法连接。 [::ffff:127.0.0.1]:6402\""
+  },
+  "sameEditorPid": 19040,
+  "requestArtifactsCreatedUtc": "2026-10-08T03:04:16.7946887Z",
+  "actualRequests": {
+    "fieldCount": 65,
+    "keys": [
+      "action",
+      "inputMode",
+      "entityCount",
+      "warmupTicks",
+      "sampleTicks",
+      "spawnBatchSize",
+      "maxCatchUpTicksPerFrame",
+      "maxBacklogTicks",
+      "catchUpCpuBudgetMs",
+      "maxSaturationDrainTicks",
+      "enablePhaseTiming",
+      "enablePresentationTiming",
+      "enableDetailPhaseTiming",
+      "enableFrameTiming",
+      "enableCollisionCandidateStoreShadow",
+      "enableCollisionCandidateStoreAuthority",
+      "enableCollisionRoleZeroItrFastPath",
+      "legacyOracleInterval",
+      "simulationOnly",
+      "useDedicatedSimulationWorker",
+      "soundPresentationMode",
+      "skipLateRendererUpdate",
+      "autoStopWhenSampled",
+      "requireZeroGcAfterWarmup",
+      "requireU6ProductionOwnershipAudit",
+      "seed",
+      "aiExecutionProfile",
+      "aiSensingMode",
+      "lateRuntimeSnapshotMode",
+      "allowUnsafeAiSoACandidate",
+      "enableAiSoADecisionRemainder",
+      "enableAiDecisionSoAShadow",
+      "enableAiDecisionSharedShadow",
+      "aiDecisionExecutionMode",
+      "aiDecisionFullOracleSampleInterval",
+      "enableUnifiedAiSnapshotShadow",
+      "aiUnifiedSnapshotExecutionMode",
+      "writeFinalParitySnapshotJson",
+      "formalCollectorMode",
+      "forceRoleAwareDirect",
+      "forceRoleAwareTree",
+      "forceRoleAwareNestedDirect",
+      "forceRoleAwareSweepDirect",
+      "forceLegacyFormalSlotMap",
+      "forceLegacyCollisionSnapshotRoleRoster",
+      "forceLegacyRoleBodyBuild",
+      "forceLegacyFormalItrWorldRectReuse",
+      "forceFullCharacterInputPostRefresh",
+      "forceFullAiUnifiedSnapshotRebuild",
+      "forceLegacyEmptyCharacterHitConsume",
+      "forceLegacyCharacterRuntimeCandidateCountGate",
+      "forceLegacyEmptyObjectHitConsume",
+      "forceLegacyPerPassStageRefresh",
+      "characterPreFrameBoundsMode",
+      "forceLegacyPreInteraction",
+      "forceLegacyPreInteractionCrossPassProof",
+      "forceLegacyPreInteractionParticipantFiltering",
+      "forceLegacyLateTailNoOp",
+      "forceLegacyLateCommonNoOpGates",
+      "forceLegacyPostFrameRuntimeSnapshot",
+      "characterInputPassMode",
+      "characterFrameTickMode",
+      "characterPostFrameTailMode",
+      "hitExecutionPlanMode",
+      "outputPath"
+    ],
+    "firstRequest": {
+      "action": "dispersed1000",
+      "inputMode": "ai",
+      "entityCount": 1000,
+      "warmupTicks": 120,
+      "sampleTicks": 180,
+      "spawnBatchSize": 25,
+      "maxCatchUpTicksPerFrame": 2,
+      "maxBacklogTicks": 2,
+      "catchUpCpuBudgetMs": 0,
+      "maxSaturationDrainTicks": 300,
+      "enablePhaseTiming": true,
+      "enablePresentationTiming": true,
+      "enableDetailPhaseTiming": true,
+      "enableFrameTiming": true,
+      "enableCollisionCandidateStoreShadow": false,
+      "enableCollisionCandidateStoreAuthority": false,
+      "enableCollisionRoleZeroItrFastPath": false,
+      "legacyOracleInterval": 1,
+      "simulationOnly": false,
+      "useDedicatedSimulationWorker": false,
+      "soundPresentationMode": "dispatch",
+      "skipLateRendererUpdate": false,
+      "autoStopWhenSampled": true,
+      "requireZeroGcAfterWarmup": true,
+      "requireU6ProductionOwnershipAudit": false,
+      "seed": 1314149188,
+      "aiExecutionProfile": "DataOrientedCanonical",
+      "aiSensingMode": "legacy",
+      "lateRuntimeSnapshotMode": "consolidated-final",
+      "allowUnsafeAiSoACandidate": false,
+      "enableAiSoADecisionRemainder": false,
+      "enableAiDecisionSoAShadow": false,
+      "enableAiDecisionSharedShadow": false,
+      "aiDecisionExecutionMode": "legacy",
+      "aiDecisionFullOracleSampleInterval": 0,
+      "enableUnifiedAiSnapshotShadow": false,
+      "aiUnifiedSnapshotExecutionMode": "legacy",
+      "writeFinalParitySnapshotJson": true,
+      "formalCollectorMode": "brute",
+      "forceRoleAwareDirect": false,
+      "forceRoleAwareTree": false,
+      "forceRoleAwareNestedDirect": false,
+      "forceRoleAwareSweepDirect": false,
+      "forceLegacyFormalSlotMap": false,
+      "forceLegacyCollisionSnapshotRoleRoster": false,
+      "forceLegacyRoleBodyBuild": false,
+      "forceLegacyFormalItrWorldRectReuse": false,
+      "forceFullCharacterInputPostRefresh": false,
+      "forceFullAiUnifiedSnapshotRebuild": false,
+      "forceLegacyEmptyCharacterHitConsume": false,
+      "forceLegacyCharacterRuntimeCandidateCountGate": false,
+      "forceLegacyEmptyObjectHitConsume": false,
+      "forceLegacyPerPassStageRefresh": false,
+      "characterPreFrameBoundsMode": "data-oriented",
+      "forceLegacyPreInteraction": false,
+      "forceLegacyPreInteractionCrossPassProof": false,
+      "forceLegacyPreInteractionParticipantFiltering": false,
+      "forceLegacyLateTailNoOp": true,
+      "forceLegacyLateCommonNoOpGates": false,
+      "forceLegacyPostFrameRuntimeSnapshot": false,
+      "characterInputPassMode": "data-oriented",
+      "characterFrameTickMode": "data-oriented",
+      "characterPostFrameTailMode": "legacy",
+      "hitExecutionPlanMode": "disabled",
+      "outputPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json"
+    },
+    "requests": [
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\00-dispersed1000-timing-off\\report.json.request.json",
+        "sha": "3232DCE5AD9D69760A3746A36ACA9EF77259FE709D3F18E84373D070F1D4CD42",
+        "writeUtc": "2026-10-08T03:04:16.7946887Z"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\01-dispersed1000-timing-on\\report.json.request.json",
+        "sha": "1CFF940F82125913D7FCA13BDFB5858A85A19C42286A1D4EE0F9163D116E42A0",
+        "writeUtc": "2026-10-08T03:04:16.7956884Z"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\02-combat1000-timing-off\\report.json.request.json",
+        "sha": "573952BC704AB67394D5123049BC1610208539F4C45B056E3AE01D9F5FD330BF",
+        "writeUtc": "2026-10-08T03:04:16.7976893Z"
+      },
+      {
+        "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008\\windows-01\\03-combat1000-timing-on\\report.json.request.json",
+        "sha": "BF25DC1775E098E8C8C06D4A97DBF115640D7A31A5CF981BC39915D842C6E75E",
+        "writeUtc": "2026-10-08T03:04:16.7996893Z"
+      }
+    ]
+  },
+  "liveEditor": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791428716553,
+        "sequence": 4,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": true,
+          "play_mode": {
+            "is_playing": true,
+            "is_paused": false,
+            "is_changing": true
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "guid": "9a044b4462e171548a6466aaa64f92e5",
+            "name": "NTSD_Battle"
+          }
+        },
+        "activity": {
+          "phase": "playmode_transition",
+          "since_unix_ms": 1791428716553,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791428697261
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "performanceConclusion": "PENDING_NO_REPORT_YET",
+  "note": "Menu acknowledgment is not a completed verdict; fresh four request artifacts and original process are confirmed. Transient Connect refused during scene/Play reload is not terminal; observe same suite only."
+}

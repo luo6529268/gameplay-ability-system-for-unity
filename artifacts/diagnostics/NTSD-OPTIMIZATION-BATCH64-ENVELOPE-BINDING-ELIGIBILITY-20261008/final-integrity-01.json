@@ -1,0 +1,114 @@
+{
+  "utc": "2026-10-08T02:08:47.7230059Z",
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "guards": 116,
+  "guardDiffs": [],
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "match": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/02-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "match": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "match": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/04-STATE.md",
+      "match": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "match": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/06-INDEX.md",
+      "match": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "match": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "match": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/09-Goal18_LastTestResults.xml",
+      "match": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/10-NTSD_ProductionEntityStress.result",
+      "match": true
+    }
+  ],
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 216123,
+      "sha": "4DBE1189D17AC11FD5CDE62CD526C2065C3075F5FD6E9B83C8CF47AE039119E1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "bytes": 53559,
+      "sha": "214B2B28C674F592A5B793DE773D6F1A55295EC428FD0DEF20813B9B587B1BD4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "bytes": 372382,
+      "sha": "2EAF124DCC51EA10D752F64CDFA34CD7CADDAD0CDB9F187E4B95DC3FD9D11970"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "bytes": 554934,
+      "sha": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs",
+      "bytes": 25600,
+      "sha": "F2DC9B547B94C4B7949E3220A8536ED7687125912F4073AB7A826B1D98B26993"
+    }
+  ],
+  "tests": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/driver-green-original-01.xml",
+      "sha": "70EC7E3F986D35773A8AA83BF5C92B25118773A97F2D3E1DD94CACBE54E2F8E8",
+      "result": "Passed",
+      "total": "8",
+      "passed": "8",
+      "failed": "0",
+      "skipped": "0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/suite-green-original-01.xml",
+      "sha": "5C75523D5185CACEE9DF99F60AD022432C97C1F749C867426A454605C5490533",
+      "result": "Passed",
+      "total": "60",
+      "passed": "60",
+      "failed": "0",
+      "skipped": "0"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/label-guard-original-01.xml",
+      "sha": "06A74E368A1EFD14BF66AF697BCC52E793484F1D44ECE4A75C8DF442D11376F3",
+      "result": "Passed",
+      "total": "3",
+      "passed": "3",
+      "failed": "0",
+      "skipped": "0"
+    }
+  ]
+}

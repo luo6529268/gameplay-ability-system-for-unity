@@ -1,0 +1,12 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "groupNames": [
+      "^NTSD\\.Test\\.Editor\\.BattleCentralSameSamplePixelEditorTests\\.SegmentTextureBindingReuse_Cost_"
+    ],
+    "initTimeout": 180000,
+    "includeDetails": false,
+    "includeFailedTests": true
+  }
+}

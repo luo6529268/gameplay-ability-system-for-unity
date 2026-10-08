@@ -1,5 +1,21 @@
 # 第64批：既有包络＋绑定复用基线上，参与资格复用的组合资格与真实收益
 
+最终治理/保护追加：pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 实际exit0、1361Records、4373WARNING/0ERROR（非零warning保留，完整stdout未持久化，仅摘要）。全工作树git diff --check exit2：四共享治理文档在并行TMP新增尾段有EOF空行，未改动或归因；本批两C#＋总表＋Task64范围exit0，仅4CRLF提示。UTC02:22:01.9699666Z/HEAD527350afa08633357ba20e7453a9d260eaa2b97c、116guards零差，四原report/完整snapshot及suite SHA仍同；派生三Markdown无尾部空白，validation-final/post-document-audit-01.json留实际结果。
+
+当前后继已取证：[65当前包络路径分支证据](NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008.md)仅READY，原branch timing绕过包络构建/入口，不可复跑45解释64残余cost；当前两处guard及旧timing case已有证据，下一保路径opt-in最小诊断，不扩大规则或专项。
+
+当前收口：SCOPED_WINDOWS_AB_COMPLETED / MIXED_RESULT / PERFORMANCE_FAIL / NOT_ADMITTED；Change VERIFIED仅诊断接线。四actual1000AI120+180/完整300Driver均有效，分散平均增加4.4723%、混战减少3.7753%，ON P95111.140/97.747ms/drop672/866仍FAIL；三flag恢复、完整logic校准steady0events、20终态hash/末snapshot同、capacity/11stage关闭0/Scene同。116guards/10副本/5源/HEAD及71原XML已重核；新windows-final-summary/comparison/final-integrity-01.json与REPORT留痕。H07/H11 OPEN、阶段4/6、43已执行、Goal active；不得以本批结束停Goal，不推广、不复跑同窗找PASS或追加1800刷证书。下一审查当前Brute残余PairExactLoop及已存分支证据，必要新动作另准确声明。下方WINDOWS_LAUNCHED等为当时快照。
+
+当前追加：WINDOWS_LAUNCHED / RUNTIME_PENDING。唯一菜单已执行、四实际requests建成，原Editor Battle Play/transition；实际采样/三flag配置恢复/logicGC/终态hash/关闭仍待。仅observe同一Suite，不重复launch，不凭超时判停止或从菜单success判完成；旧READY/未测代码描述为历史。
+
+当前追加：FOCUSED_TEST_PASS / WINDOWS_READY；8＋60＋3共71实际case通过，源/guard及原Menu clean/idle已核，四窗尚未launch。driver-green/suite-green/label原XML均freshcopy，有效RED原件保持；实际性能、完整GC/关闭结果只由新四窗裁定，不由测试数推定。接线C#已写，不再采用下方历史未开始状态。
+
+当前追加：DRIVER_QUALIFICATION_PASS / SUITE_PLANNED；原Editor新5＋旧纯3实际8/8，88paired tick声明字段一致、三机制实际应用无fallback。准确Suite符号/owner/冷态容量与三flag恢复/test-first矩阵已事前写入本Change Record，不重跑旧Driver。下一只声明Suite新mode接线及最窄pure RED→GREEN，然后同包四120+180；没有本批收益，H07/H11/Goal保持开放。
+
+当前：IN_PROGRESS / DRIVER_GREEN_RUNNING。Admission新5有效缺入口RED后已实现组合入口；原Editor唯一修后job 8bad57e0cb8e4974976bf619a0672abc已启动，终态待。Suite尚未修改、无本批实景收益；43已执行、阶段4/6、H07/H11 OPEN、Goal active。下方READY/未开始为保留的事前快照，不能作为当前状态。
+
+实施事前追加：PLANNED / COMBINATION_PENDING，独立Change NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064与Operation已登记；10准确current-dirty副本/116guards/新HEAD已先核，原Menu idle。只有准确留痕，尚无本批代码、测试或收益；下文READY是事前快照。
+
 状态：READY / EXECUTION_NOT_STARTED。没有本批脚本修改、测试或实际收益；尚不计入已执行42批。用户六项继续授权及有效Goal合同第0—8节覆盖既有普通Brute路径，不是新collector/backend、规则或专项变更授权。
 
 ## 依据与新问题

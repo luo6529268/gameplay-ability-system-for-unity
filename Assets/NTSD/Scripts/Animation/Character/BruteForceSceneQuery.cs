@@ -50,6 +50,15 @@ namespace NTSD.Animation
         private readonly List<SceneQueryHit> _tmpHitResult = new List<SceneQueryHit>(16);
         private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
         private int[] _bruteEmptyItrNextAttackerOrdinals = Array.Empty<int>();
+        private const int BruteOrdinalPacketWidth = 16;
+        private BruteOrdinalPacket[] _bruteOrdinalPackets = Array.Empty<BruteOrdinalPacket>();
+        private struct BruteOrdinalPacket
+        {
+            public bool HasAttackEnvelope;
+            public bool HasBodyUnion;
+            public WorldRect AttackEnvelope;
+            public WorldRect BodyUnion;
+        }
         private int _bruteExactParticipantCapacity;
         private int _bruteExactBodyCapacity;
         private int _bruteExactItrCapacity;
@@ -249,6 +258,12 @@ namespace NTSD.Animation
         public bool EnableBruteEmptyItrRosterForDiagnostics { get; set; } = true;
         public bool EnableBruteExactCacheForDiagnostics { get; set; } = true;
         public bool EnableBruteGeometryFirstForDiagnostics { get; set; } = true;
+        public bool EnableBruteOrdinalPacketForDiagnostics { get; set; }
+        public bool LastBruteOrdinalPacketAppliedForDiagnostics { get; private set; }
+        public bool LastBruteOrdinalPacketFallbackForDiagnostics { get; private set; }
+        public long LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics { get; private set; }
+        public long LastBruteOrdinalPacketProofCountForDiagnostics { get; private set; }
+        public int BruteOrdinalPacketCapacityForDiagnostics => _bruteOrdinalPackets.Length;
         public bool EnableBruteKind5PresenceForDiagnostics { get; set; }
         public bool EnableBruteEligibilityReuseForDiagnostics { get; set; }
         public bool EnableBruteCoarseDispatchForDiagnostics { get; set; }
@@ -257,6 +272,9 @@ namespace NTSD.Animation
         public bool EnableBruteCoarseEnvelopeForDiagnostics { get; set; }
         public long LastBruteCoarseEnvelopeDirectionCountForDiagnostics { get; private set; }
         public long LastBruteCoarseEnvelopeRejectCountForDiagnostics { get; private set; }
+        public bool EnableBruteCoarseProofReuseForDiagnostics { get; set; }
+        public long LastBruteCoarseProofReuseCountForDiagnostics { get; private set; }
+        public long TotalBruteCoarseProofReuseCountForDiagnostics { get; private set; }
         public bool LastBruteEligibilityReuseAppliedForDiagnostics { get; private set; }
         public long TotalBruteEligibilityReuseCollectionAppliedForDiagnostics { get; private set; }
         public bool EnableBruteRejectedBindingReuseForDiagnostics { get; set; }
@@ -267,6 +285,8 @@ namespace NTSD.Animation
         public long LastBruteKind5ScanSkippedForDiagnostics { get; private set; }
         public long TotalBruteKind5PresenceCollectionAppliedForDiagnostics { get; private set; }
         public bool EnableBruteBranchTimingForDiagnostics { get; set; }
+        // Alignment contract: NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065; diagnostic only, retain the old gate by default.
+        public bool EnableBruteEnvelopeBranchTimingForDiagnostics { get; set; }
         public int BruteBranchTimingSampleStrideForDiagnostics
         {
             get => _bruteBranchTimingSampleStride;
@@ -986,6 +1006,9 @@ namespace NTSD.Animation
             {
                 Array.Resize(ref _bruteEmptyItrNextAttackerOrdinals, bruteRosterCapacity);
             }
+            int brutePacketCapacity = (entityCapacity - 1) / BruteOrdinalPacketWidth + 1;
+            if (_bruteOrdinalPackets.Length < brutePacketCapacity)
+                Array.Resize(ref _bruteOrdinalPackets, brutePacketCapacity);
             EnsureListCapacity(_collisionSnapshotAllEntities, entityCapacity);
             EnsureListCapacity(_collisionSnapshotRoleEntities, entityCapacity);
             _candidateCache.EnsureCapacity(entityCapacity);
@@ -1605,6 +1628,7 @@ namespace NTSD.Animation
         public void CollectCollisionCandidates()
         {
             _lastBruteBranchTimingCoverage = default;
+            LastBruteCoarseProofReuseCountForDiagnostics = 0;
             // Alignment contract: NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001.
             foreach (LF2Entity entity in _world.ActiveEntitiesByRuntimeSlotForModule)
             {
@@ -1685,6 +1709,10 @@ namespace NTSD.Animation
                 LastBruteRejectedBindingProbeCountForDiagnostics = 0;
                 LastBruteRejectedBindingReuseCountForDiagnostics = 0;
                 LastBruteEligibilityReuseAppliedForDiagnostics = false;
+                LastBruteOrdinalPacketAppliedForDiagnostics = false;
+                LastBruteOrdinalPacketFallbackForDiagnostics = false;
+                LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics = 0;
+                LastBruteOrdinalPacketProofCountForDiagnostics = 0;
 #if UNITY_INCLUDE_TESTS
                 _lastRoleAwareCachedPairSnapshotCaptureCount = 0;
                 _lastEmptyItrGuardRejectCount = 0;
@@ -2391,6 +2419,16 @@ namespace NTSD.Animation
                     CollectBruteExactPairsWithCachedEligibility();
                     return;
                 }
+                if (useExactCache && CanUseBruteOrdinalPacket())
+                {
+                    if (TryBuildBruteOrdinalPackets())
+                    {
+                        LastBruteOrdinalPacketAppliedForDiagnostics = true;
+                        CollectBruteExactPairsWithOrdinalPackets(currentTick);
+                        return;
+                    }
+                    LastBruteOrdinalPacketFallbackForDiagnostics = true;
+                }
                 for (int i = 0; i < _tmpAllObjects.Count; i++)
                 {
                     LF2Entity a = _tmpAllObjects[i];
@@ -2434,6 +2472,103 @@ namespace NTSD.Animation
                 {
                     pairLoopDiagnostics.EndPhase(
                         BattleTickDetailPhase.CandidateCollectPairExactLoop);
+                }
+            }
+        }
+
+        private bool CanUseBruteOrdinalPacket()
+        {
+            return EnableBruteOrdinalPacketForDiagnostics &&
+                   EnableBruteGeometryFirstForDiagnostics &&
+                   ResolveFormalCollectorMode() == CollisionFormalCollectorMode.ForceBruteForce &&
+                   !EnableBruteKind5PresenceForDiagnostics &&
+                   !EnableBruteEligibilityReuseForDiagnostics &&
+                   !EnableBruteCoarseDispatchForDiagnostics &&
+                   !EnableBruteCoarseEnvelopeForDiagnostics &&
+                   !EnableBruteCoarseProofReuseForDiagnostics &&
+                   !EnableBruteRejectedBindingReuseForDiagnostics &&
+                   !EnableBruteBranchTimingForDiagnostics &&
+                   !EnableBruteEnvelopeBranchTimingForDiagnostics;
+        }
+
+        private bool TryBuildBruteOrdinalPackets()
+        {
+            int count = _tmpAllObjects.Count;
+            int packetCount = count == 0 ? 0 : (count - 1) / BruteOrdinalPacketWidth + 1;
+            if (packetCount > _bruteOrdinalPackets.Length)
+                return false;
+
+            for (int i = 0; i < packetCount; i++)
+                _bruteOrdinalPackets[i] = default;
+            for (int i = 0; i < count; i++)
+            {
+                ref readonly RoleAwareFormalParticipant participant = ref _roleFormalParticipants[i];
+                ref BruteOrdinalPacket packet = ref _bruteOrdinalPackets[i / BruteOrdinalPacketWidth];
+                if (participant.HasBruteCoarseEnvelope)
+                {
+                    packet.AttackEnvelope = packet.HasAttackEnvelope
+                        ? UnionBruteCoarseEnvelope(packet.AttackEnvelope, participant.BruteCoarseEnvelopeWorld)
+                        : participant.BruteCoarseEnvelopeWorld;
+                    packet.HasAttackEnvelope = true;
+                }
+                if (participant.HasCollisionReleaseBody && participant.HasBodyUnion)
+                {
+                    packet.BodyUnion = packet.HasBodyUnion
+                        ? UnionBruteCoarseEnvelope(packet.BodyUnion, participant.BodyUnionWorld)
+                        : participant.BodyUnionWorld;
+                    packet.HasBodyUnion = true;
+                }
+            }
+            return true;
+        }
+
+        private void CollectBruteExactPairsWithOrdinalPackets(int currentTick)
+        {
+            // Alignment contract: NTSD-OPT-H07-BRUTE-ORDINAL-PACKET-CANDIDATE-070.
+            // Negative geometry only; retain ordinal/direction order and the original binding gate.
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2Entity a = _tmpAllObjects[i];
+                if (a == null || a.PS == null || IsPendingFlushDestroy(a))
+                    continue;
+                if (IsCollisionCandidateSuppressed(a, currentTick))
+                    continue;
+
+                ref readonly RoleAwareFormalParticipant first = ref _roleFormalParticipants[i];
+                bool skipInertTargets = _bruteEmptyItrNextAttackerOrdinals[i] != i;
+                int firstFullPacketStart = (i / BruteOrdinalPacketWidth + 1) * BruteOrdinalPacketWidth;
+                int previousPacket = -1;
+                bool rejectForward = false;
+                bool rejectReverse = false;
+                for (int j = skipInertTargets ? _bruteEmptyItrNextAttackerOrdinals[i + 1] : i + 1;
+                     j < _tmpAllObjects.Count;
+                     j = skipInertTargets ? _bruteEmptyItrNextAttackerOrdinals[j + 1] : j + 1)
+                {
+                    LF2Entity b = _tmpAllObjects[j];
+                    if (b == null || b.PS == null || IsPendingFlushDestroy(b))
+                        continue;
+                    if (IsCollisionCandidateSuppressed(b, currentTick))
+                        continue;
+
+                    if (j >= firstFullPacketStart)
+                    {
+                        int packetOrdinal = j / BruteOrdinalPacketWidth;
+                        if (packetOrdinal != previousPacket)
+                        {
+                            ref readonly BruteOrdinalPacket packet = ref _bruteOrdinalPackets[packetOrdinal];
+                            rejectForward = !first.HasBruteCoarseEnvelope || !packet.HasBodyUnion ||
+                                !Overlap(first.BruteCoarseEnvelopeWorld, packet.BodyUnion);
+                            rejectReverse = !packet.HasAttackEnvelope ||
+                                !first.HasCollisionReleaseBody || !first.HasBodyUnion ||
+                                !Overlap(packet.AttackEnvelope, first.BodyUnionWorld);
+                            LastBruteOrdinalPacketProofCountForDiagnostics += 2;
+                            previousPacket = packetOrdinal;
+                        }
+                    }
+                    LastBruteEmptyItrRosterVisitedPairCountForDiagnostics++;
+                    ref readonly RoleAwareFormalParticipant second = ref _roleFormalParticipants[j];
+                    CollectCandidatesForBruteExactDirection(in first, in second, j, rejectForward);
+                    CollectCandidatesForBruteExactDirection(in second, in first, i, rejectReverse);
                 }
             }
         }
@@ -2551,9 +2686,11 @@ namespace NTSD.Animation
 
                 // Alignment contract: NTSD-OPT-H07-BRUTE-EXACT-CACHE-036.
                 // Ordinary collection only; keep pair order and rebuild per call.
-                bool buildCoarseEnvelope = EnableBruteCoarseEnvelopeForDiagnostics &&
+                bool buildCoarseEnvelope = CanUseBruteOrdinalPacket() ||
+                                           (EnableBruteCoarseEnvelopeForDiagnostics &&
                                            EnableBruteGeometryFirstForDiagnostics &&
-                                           !EnableBruteBranchTimingForDiagnostics;
+                                           (!EnableBruteBranchTimingForDiagnostics ||
+                                            EnableBruteEnvelopeBranchTimingForDiagnostics));
                 for (int i = 0; i < count; i++)
                 {
                     ref RoleAwareFormalParticipant participant = ref _roleFormalParticipants[i];
@@ -2578,7 +2715,8 @@ namespace NTSD.Animation
         private void CollectCandidatesForBruteExactDirection(
             in RoleAwareFormalParticipant attackerParticipant,
             in RoleAwareFormalParticipant targetParticipant,
-            int targetOrdinal)
+            int targetOrdinal,
+            bool coarseRejectedByPacket = false)
         {
             if (attackerParticipant.CollisionItrCount == 0)
             {
@@ -2591,9 +2729,21 @@ namespace NTSD.Animation
             _lastPairCollectionGateCallCount++;
 #endif
             LastBruteExactCacheDirectionCountForDiagnostics++;
+            if (coarseRejectedByPacket)
+            {
+                _lastRoleAwareExactDirectionCount++;
+                PreserveBruteRejectedBinding(in attackerParticipant, in targetParticipant, targetOrdinal);
+                LastBruteGeometryFirstRejectCountForDiagnostics++;
+                LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics++;
+                return;
+            }
+            BattleTickDetailPhaseDiagnostics envelopeBranchDiagnostics = null;
+            bool envelopeBranchTiming = false;
+            bool coarseProofPassed = false;
             if (EnableBruteCoarseEnvelopeForDiagnostics &&
                 EnableBruteGeometryFirstForDiagnostics &&
-                !EnableBruteBranchTimingForDiagnostics)
+                (!EnableBruteBranchTimingForDiagnostics ||
+                 EnableBruteEnvelopeBranchTimingForDiagnostics))
             {
                 LastBruteCoarseEnvelopeDirectionCountForDiagnostics++;
                 LF2Entity attacker = attackerParticipant.Entity;
@@ -2604,17 +2754,50 @@ namespace NTSD.Animation
                     return;
                 }
                 // Alignment contract: NTSD-OPT-H07-BRUTE-COARSE-ENVELOPE-058.
-                // An overlapping envelope is not acceptance; retain the original coarse test.
-                if (!attackerParticipant.HasBruteCoarseEnvelope ||
+                // Envelope overlap alone is not acceptance; only an identical ordinary proof may be reused.
+                envelopeBranchDiagnostics = SelectBruteBranchTiming(true, out envelopeBranchTiming);
+                long envelopeStart = envelopeBranchTiming ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
+                bool envelopeRejected = !attackerParticipant.HasBruteCoarseEnvelope ||
                     !targetParticipant.HasCollisionReleaseBody ||
                     !targetParticipant.HasBodyUnion ||
-                    !Overlap(attackerParticipant.BruteCoarseEnvelopeWorld, targetParticipant.BodyUnionWorld))
+                    !Overlap(attackerParticipant.BruteCoarseEnvelopeWorld, targetParticipant.BodyUnionWorld);
+                if (envelopeBranchTiming)
+                    envelopeBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectBruteCoarse,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - envelopeStart);
+                if (envelopeRejected)
                 {
                     _lastRoleAwareExactDirectionCount++;
+                    if (envelopeBranchDiagnostics != null)
+                    {
+                        _lastBruteBranchTimingCoverage.rejectedBindingVisits++;
+                        _totalBruteBranchTimingCoverage.rejectedBindingVisits++;
+                        if (envelopeBranchTiming)
+                        {
+                            _lastBruteBranchTimingCoverage.rejectedBindingTimed++;
+                            _totalBruteBranchTimingCoverage.rejectedBindingTimed++;
+                        }
+                    }
+                    long bindingStart = envelopeBranchTiming ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
                     PreserveBruteRejectedBinding(in attackerParticipant, in targetParticipant, targetOrdinal);
+                    if (envelopeBranchTiming)
+                        envelopeBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectBruteRejectedBinding,
+                            System.Diagnostics.Stopwatch.GetTimestamp() - bindingStart);
                     LastBruteGeometryFirstRejectCountForDiagnostics++;
                     LastBruteCoarseEnvelopeRejectCountForDiagnostics++;
                     return;
+                }
+                // Alignment contract: NTSD-OPT-H07-COARSE-PROOF-REUSE-066.
+                // With no kind5, the built envelope is exactly the ordinary union tested by coarse.
+                if (EnableBruteCoarseProofReuseForDiagnostics &&
+                    !EnableBruteCoarseDispatchForDiagnostics &&
+                    attackerParticipant.HasExactAttackCache &&
+                    attackerParticipant.CollisionFrame?.itrs != null &&
+                    attackerParticipant.HasOrdinaryItrUnion &&
+                    !attackerParticipant.HasExactKind5Itr)
+                {
+                    coarseProofPassed = true;
+                    LastBruteCoarseProofReuseCountForDiagnostics++;
+                    TotalBruteCoarseProofReuseCountForDiagnostics++;
                 }
             }
             if (EnableBruteCoarseDispatchForDiagnostics &&
@@ -2653,7 +2836,10 @@ namespace NTSD.Animation
                 in attackerParticipant, in targetParticipant,
                 EnableBruteGeometryFirstForDiagnostics,
                 LastBruteKind5PresenceAppliedForDiagnostics,
-                targetOrdinal);
+                targetOrdinal,
+                coarseFilterPassed: coarseProofPassed,
+                envelopeBranchDiagnostics: envelopeBranchDiagnostics,
+                envelopeBranchTiming: envelopeBranchTiming);
         }
 
         private bool TryCollectCollisionCandidatesLoose(int currentTick)
@@ -5942,13 +6128,36 @@ namespace NTSD.Animation
                 in targetParticipant);
         }
 
+        private BattleTickDetailPhaseDiagnostics SelectBruteBranchTiming(bool geometryFirst, out bool timing)
+        {
+            timing = false;
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                geometryFirst && EnableBruteBranchTimingForDiagnostics
+                    ? _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics
+                    : null;
+            if (diagnostics == null || !diagnostics.Enabled)
+                return null;
+            _lastBruteBranchTimingCoverage.eligibleDirections++;
+            _totalBruteBranchTimingCoverage.eligibleDirections++;
+            timing = ((_lastBruteBranchTimingCoverage.eligibleDirections - 1 +
+                _bruteBranchTimingSampleOffset) & (_bruteBranchTimingSampleStride - 1)) == 0;
+            if (timing)
+            {
+                _lastBruteBranchTimingCoverage.timedDirections++;
+                _totalBruteBranchTimingCoverage.timedDirections++;
+            }
+            return diagnostics;
+        }
+
         private void CollectCandidatesForPairCached(
             in RoleAwareFormalParticipant attackerParticipant,
             in RoleAwareFormalParticipant targetParticipant,
             bool geometryFirst = false,
             bool kind5Presence = false,
             int bruteTargetOrdinal = -1,
-            bool coarseFilterPassed = false)
+            bool coarseFilterPassed = false,
+            BattleTickDetailPhaseDiagnostics envelopeBranchDiagnostics = null,
+            bool envelopeBranchTiming = false)
         {
             _lastRoleAwareExactDirectionCount++;
             LF2Entity attacker = attackerParticipant.Entity;
@@ -5956,24 +6165,11 @@ namespace NTSD.Animation
 
             if (attacker == null || target == null || attacker == target)
                 return;
-            BattleTickDetailPhaseDiagnostics branchDiagnostics =
-                geometryFirst && EnableBruteBranchTimingForDiagnostics
-                    ? _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics
-                    : null;
-            bool diagnosing = branchDiagnostics != null && branchDiagnostics.Enabled;
-            bool timing = false;
-            if (diagnosing)
-            {
-                _lastBruteBranchTimingCoverage.eligibleDirections++;
-                _totalBruteBranchTimingCoverage.eligibleDirections++;
-                timing = ((_lastBruteBranchTimingCoverage.eligibleDirections - 1 +
-                    _bruteBranchTimingSampleOffset) & (_bruteBranchTimingSampleStride - 1)) == 0;
-                if (timing)
-                {
-                    _lastBruteBranchTimingCoverage.timedDirections++;
-                    _totalBruteBranchTimingCoverage.timedDirections++;
-                }
-            }
+            // Reuse the envelope entry's sample for survivors; never count or select the direction twice.
+            bool timing = envelopeBranchTiming;
+            BattleTickDetailPhaseDiagnostics branchDiagnostics = envelopeBranchDiagnostics ??
+                SelectBruteBranchTiming(geometryFirst, out timing);
+            bool diagnosing = branchDiagnostics != null;
             bool coarseRejected = false;
             if (geometryFirst && !coarseFilterPassed)
             {

@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-08T06:23:43.0258614Z",
+  "job": "031b3f2b93dd4507af68f12da8e98c13",
+  "xml": {
+    "source": "Temp/Goal18_LastTestResults.xml",
+    "archive": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/green-results-01.xml",
+    "sha": "7FA873475296A3B1A55CD6ACA53F484F588B9621CD07762531F7C1EEDC096A47",
+    "passed": "17",
+    "failed": "0",
+    "skipped": "0",
+    "duration": "266.519174"
+  },
+  "results": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\probe-01\\Combat1000-packet-coverage-afb5792445a442939e475bc048b16335.json",
+      "sha": "81E6B7AF012EAE018C3E763199D1B1169E1DB63B57F127E02DFC36EB3662A7F5",
+      "mode": "Combat1000",
+      "sampleCount": 32,
+      "minimumActualAi": 1000,
+      "directionChecks": 16691292,
+      "packetRejectedDirections": 8043056,
+      "packetRejectedFraction": 0.4818713853906576,
+      "idealEnvelopeTests": 10598760,
+      "idealEnvelopeTestReductionFraction": 0.3650126065735355,
+      "falseRejectedDirections": 0,
+      "observedMutationCount": 0,
+      "baseGatedRejectedDirections": 5616427,
+      "thresholdQualified": true,
+      "performanceEvidence": false,
+      "bindingCleanupRemoved": false,
+      "packetWidth": 16
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\probe-01\\Dispersed1000-packet-coverage-eeabff1f10a64b0fa0c63cea82d955a6.json",
+      "sha": "7A379DE48798DC9DC9A732B9182B74440EE9474094D0EFFF395F970B484C3FA5",
+      "mode": "Dispersed1000",
+      "sampleCount": 32,
+      "minimumActualAi": 1000,
+      "directionChecks": 19237743,
+      "packetRejectedDirections": 7867611,
+      "packetRejectedFraction": 0.4089674656741178,
+      "idealEnvelopeTests": 13352372,
+      "idealEnvelopeTestReductionFraction": 0.30592835136637386,
+      "falseRejectedDirections": 0,
+      "observedMutationCount": 0,
+      "baseGatedRejectedDirections": 5068201,
+      "thresholdQualified": true,
+      "performanceEvidence": false,
+      "bindingCleanupRemoved": false,
+      "packetWidth": 16
+    }
+  ]
+}

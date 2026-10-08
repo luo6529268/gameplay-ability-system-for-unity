@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-08T04:31:03.3976290Z",
+  "total": "25",
+  "passed": "25",
+  "failed": "0",
+  "cases": 25,
+  "outputs": [
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(0,OrderedChunks)",
+      "output": "BINDING_REUSE_PIXELS mode=0 drawMode=OrderedChunks distinct=False segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=0 drawMode=OrderedChunks distinct=True segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(1,OrderedChunks)",
+      "output": "BINDING_REUSE_PIXELS mode=1 drawMode=OrderedChunks distinct=False segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=1 drawMode=OrderedChunks distinct=True segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(2,OrderedChunks)",
+      "output": "BINDING_REUSE_PIXELS mode=2 drawMode=OrderedChunks distinct=False segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=2 drawMode=OrderedChunks distinct=True segments=2 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(0,StrictOrderedDraw)",
+      "output": "BINDING_REUSE_PIXELS mode=0 drawMode=StrictOrderedDraw distinct=False segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=0 drawMode=StrictOrderedDraw distinct=True segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(1,StrictOrderedDraw)",
+      "output": "BINDING_REUSE_PIXELS mode=1 drawMode=StrictOrderedDraw distinct=False segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=1 drawMode=StrictOrderedDraw distinct=True segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_PixelsMatchIndependentQuadOracle(2,StrictOrderedDraw)",
+      "output": "BINDING_REUSE_PIXELS mode=2 drawMode=StrictOrderedDraw distinct=False segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\nBINDING_REUSE_PIXELS mode=2 drawMode=StrictOrderedDraw distinct=True segments=4 content=1147 maximumChannelError=0 reverseDifferent=810\n"
+    }
+  ],
+  "copySha": "E0A36E30B2BF98E0A5A6A50A23B92C52D7FBB6EBB4407605F72C658D5437C069",
+  "sourceSha": "E0A36E30B2BF98E0A5A6A50A23B92C52D7FBB6EBB4407605F72C658D5437C069"
+}

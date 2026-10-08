@@ -1,0 +1,280 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteEnvelopeBindingEligibility_",
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteEnvelopeBinding(?:_|Request_)",
+        "^NTSD\\.Test\\.Editor\\.BattleOptimizationWindowsAiSuiteRequestTests\\.BruteCoarseEnvelope_(?:Menu|Mode)"
+      ],
+      "initTimeout": 180000,
+      "includeDetails": false,
+      "includeFailedTests": true
+    }
+  },
+  "launch": {
+    "chunk_id": "d49420",
+    "wall_time_seconds": 2.2866822,
+    "exit_code": 0,
+    "original_token_count": 55,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job started.\",\"data\":{\"job_id\":\"8a328e6863374f509230a300c7e55982\",\"status\":\"running\",\"mode\":\"EditMode\",\"include_details\":false,\"include_failed_tests\":true}}}\r\n"
+  },
+  "terminal": {
+    "chunk_id": "6afbfe",
+    "wall_time_seconds": 0.5608495,
+    "exit_code": 0,
+    "original_token_count": 216,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Test job status retrieved.\",\"data\":{\"job_id\":\"8a328e6863374f509230a300c7e55982\",\"status\":\"succeeded\",\"mode\":\"EditMode\",\"started_unix_ms\":1791423822183,\"finished_unix_ms\":1791423850692,\"last_update_unix_ms\":1791423850692,\"progress\":{\"completed\":60,\"total\":9853,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1791423843852,\"last_finished_test_full_name\":\"NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_RejectsOutsideFixedMatrix\",\"last_finished_unix_ms\":1791423843852,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"EditMode\",\"summary\":{\"total\":60,\"passed\":60,\"failed\":0,\"skipped\":0,\"durationSeconds\":5.3404203,\"resultState\":\"Passed\"},\"results\":[]}}}}\r\n"
+  },
+  "evidence": {
+    "xmlSha": "5C75523D5185CACEE9DF99F60AD022432C97C1F749C867426A454605C5490533",
+    "xmlBytes": 46020,
+    "total": "60",
+    "passed": "60",
+    "failed": "0",
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_MenuPreservesLegacySignatureAndColdOwnership",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeDefaultsFalseAndRoutesFourRequestsBeforeScope",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(0)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(1)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(2)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteCoarseEnvelope_ModeRejectsMissingScopeOrOtherCandidateBeforeState(3)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ApplyCompleteRestoresBothAndPreservesDefaults(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ApplyCompleteRestoresBothAndPreservesDefaults(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteCoarseEnvelopeForDiagnostics\",False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteRejectedBindingReuseForDiagnostics\",False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteExactCacheForDiagnostics\",False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_CompleteRejectsDriftAndRestoreStillWorks(\"EnableBruteKind5PresenceForDiagnostics\",True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ExitRestoresAndRecordsOnlyCurrentRun(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ExitRestoresAndRecordsOnlyCurrentRun(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_MenuPreservesLegacySignatureAndColdOwnership",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeDefaultsFalseAndRoutesBeforeScope",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(0)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(1)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(2)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(3)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ModeRejectsMissingScopeOrOtherOwnerBeforeState(4)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRecordsMaximumAndLatchesDrift",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(False,False,0L,0L,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,False,0L,0L,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,True,12L,3L,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,True,12L,0L,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(False,False,12L,0L,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_ObservationRequiresRealActivityAndBothRestored(True,False,12L,3L,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteKind5PresenceForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteEligibilityReuseForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseDispatchForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteBranchTimingForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteCoarseEnvelopeForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsOtherCandidateOrUnownedEnable(\"EnableBruteRejectedBindingReuseForDiagnostics\")",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsSecondOrOldOwnerWithoutChangingFlags(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RejectsSecondOrOldOwnerWithoutChangingFlags(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(False,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(False,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(True,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBinding_RestoreBothPriorValuesReleasesOwnerAndIsIdempotent(True,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ApplyScopeCompleteRestoresThree(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ApplyScopeCompleteRestoresThree(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ColdApplyRejectsUnownedCandidateWithoutMutation",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_DriftLatchesAndRestorationStillWorks",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ExitRestoresThreeAndOnlyCurrentRun(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ExitRestoresThreeAndOnlyCurrentRun(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ModeIsExplicitAndRoutesBeforeScope",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ModeRejectsMissingScopeAndOtherModes",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ObservationRequiresActualDeltaAndThreeRestored(False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_ObservationRequiresActualDeltaAndThreeRestored(True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(0)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(1)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(2)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(3)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingEligibility_RequestRejectsOutsideMatrix",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(0)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(1)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(2)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_OnlyChangesOutputFromProductionSmoke(3)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.BruteEnvelopeBindingRequest_RejectsOutsideFixedMatrix",
+        "result": "Passed"
+      }
+    ],
+    "suiteSha": "4DBE1189D17AC11FD5CDE62CD526C2065C3075F5FD6E9B83C8CF47AE039119E1"
+  }
+}

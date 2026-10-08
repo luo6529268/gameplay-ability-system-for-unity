@@ -1,0 +1,68 @@
+{
+    "scope": "Entire synchronous main-thread SimulationTickDriver.StepOneTick; original final steady-sample policy",
+    "marker": "GC.Alloc",
+    "unit": "TimeNanoseconds",
+    "capacity": 256,
+    "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 400
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "begunTicks": 300,
+    "endedTicks": 300,
+    "acceptedTicks": 300,
+    "steadyScopes": 180,
+    "nonsteadyScopes": 120,
+    "invalidScopes": 0,
+    "rejectedTicks": 0,
+    "sequenceErrors": 0,
+    "steadyAllocationEvents": 0,
+    "nonsteadyAllocationEvents": 12,
+    "steadyRawValue": 0,
+    "provenSteadyAllocatedBytes": 0,
+    "firstNonzeroSteadyTick": 0,
+    "expectedTicks": 300,
+    "expectedSamples": 180,
+    "coverageValid": true,
+    "zeroAllocationPassed": true,
+    "status": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS"
+}

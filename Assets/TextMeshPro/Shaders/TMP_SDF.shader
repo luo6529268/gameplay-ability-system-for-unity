@@ -1,6 +1,7 @@
 Shader "TextMeshPro/Distance Field" {
 
 Properties {
+	[HideInInspector] _TMPVertexEffects ("TMP Vertex Effects", Float) = 1
 	_FaceTex			("Face Texture", 2D) = "white" {}
 	_FaceUVSpeedX		("Face UV Speed X", Range(-5, 5)) = 0.0
 	_FaceUVSpeedY		("Face UV Speed Y", Range(-5, 5)) = 0.0
@@ -112,7 +113,6 @@ SubShader {
 	ColorMask [_ColorMask]
 
 	Pass {
-		Tags{"LightMode"="SRPDefaultUnlit"}
 
 		CGPROGRAM
 		#pragma target 3.0

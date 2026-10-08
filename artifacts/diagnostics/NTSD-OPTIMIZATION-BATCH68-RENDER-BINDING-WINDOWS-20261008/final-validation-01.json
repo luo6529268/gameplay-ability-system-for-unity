@@ -1,0 +1,102 @@
+{
+  "utc": "2026-10-08T05:52:35.8760657Z",
+  "guards": 402,
+  "guardFailures": [],
+  "backupCount": 9,
+  "backupFailures": [],
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "validatorExit": 0,
+  "validatorWarningCount": 4314,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1365",
+    "  Governed code files in diff: 6"
+  ],
+  "scriptDiffExit": 0,
+  "scriptDiffOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "beforeRelative": [
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/01-CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/02-STATE.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/03-CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/04-INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/05-battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/06-NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/07-NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/RECORD.md",
+      "exit": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/08-RECORD.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\RECORD.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/REPORT.md",
+      "exit": 3,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-04/09-REPORT.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\REPORT.md', LF will be replaced by CRLF the next time Git touches it",
+        "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\REPORT.md:53: new blank line at EOF."
+      ]
+    }
+  ],
+  "requestFieldCount": [
+    65,
+    65,
+    65,
+    65
+  ],
+  "correction": "First request audit fields was a member Count vector, actual65 fields verified. Only outputPath differs per pair. Original audit retained."
+}

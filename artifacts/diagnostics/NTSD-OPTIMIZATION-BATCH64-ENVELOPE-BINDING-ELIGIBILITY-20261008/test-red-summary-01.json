@@ -1,0 +1,117 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.EnvelopeBindingEligibility"
+      ],
+      "initTimeout": 180000,
+      "includeDetails": false,
+      "includeFailedTests": true
+    }
+  },
+  "launch": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "b92558e47e594cd0b15276a4ee7d401a",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": true
+      }
+    }
+  },
+  "terminal": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "b92558e47e594cd0b15276a4ee7d401a",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791421919364,
+        "finished_unix_ms": 1791421937613,
+        "last_update_unix_ms": 1791421937613,
+        "progress": {
+          "completed": 5,
+          "total": 9838,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791421935264,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Combat1000)",
+          "last_finished_unix_ms": 1791421935264,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+              "message": "  the explicit three-mechanism Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+              "message": "  the explicit three-mechanism Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityQualificationDoesNotPromoteDefaults",
+              "message": "  the explicit three-mechanism Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+              "message": "  the explicit three-mechanism Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Combat1000)",
+              "message": "  the explicit three-mechanism Driver qualification entry is missing\r\n  Expected: not null\r\n  But was:  null\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  },
+  "xml": {
+    "utc": "2026-10-08T01:13:25.0276229Z",
+    "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/test-red-original-01.xml",
+    "bytes": 12065,
+    "sha": "156EE820C372B60B56B194E732FF11DF9A5C381C931F3F5412E2F69A38802849",
+    "total": "5",
+    "passed": "0",
+    "failed": "5",
+    "skipped": "0",
+    "duration": "3.034455",
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+        "result": "Failed",
+        "failureMessage": "System.Xml.XmlElement"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+        "result": "Failed",
+        "failureMessage": "System.Xml.XmlElement"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityQualificationDoesNotPromoteDefaults",
+        "result": "Failed",
+        "failureMessage": "System.Xml.XmlElement"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+        "result": "Failed",
+        "failureMessage": "System.Xml.XmlElement"
+      },
+      {
+        "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Combat1000)",
+        "result": "Failed",
+        "failureMessage": "System.Xml.XmlElement"
+      }
+    ]
+  }
+}

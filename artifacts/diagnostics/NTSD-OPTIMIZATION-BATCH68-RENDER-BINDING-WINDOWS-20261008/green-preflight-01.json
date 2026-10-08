@@ -1,0 +1,270 @@
+{
+  "utc": "2026-10-08T05:31:01.6424965Z",
+  "state": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791437460713,
+        "sequence": 4,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791437117390,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791437116034
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "scenes": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "1 scene(s) loaded.",
+      "data": {
+        "scenes": [
+          {
+            "name": "NTSD_Menu",
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "buildIndex": 0,
+            "isLoaded": true,
+            "isDirty": false,
+            "isActive": true,
+            "rootCount": 8
+          }
+        ]
+      }
+    }
+  },
+  "tests": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 20 of 20 tests matching 'RenderTextureBindingWindow_' (cursor 0)",
+      "data": {
+        "items": [
+          {
+            "name": "RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag/RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(True)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(True)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag/RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(True)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent/RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(True)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(True)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent/RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(True)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,8,True)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,8,True)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,8,True)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,10L,73,73,2,8,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,10L,73,73,2,8,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,10L,73,73,2,8,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,9L,73,73,2,8,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,9L,73,73,2,8,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,9L,73,73,2,8,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,74,2,8,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,74,2,8,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,74,2,8,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,0,0,2,8,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,0,0,2,8,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,0,0,2,8,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,0,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,0,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,0,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,8,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,8,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,0,8,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,-1,False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,-1,False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute/RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(10L,11L,73,73,2,-1,False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RejectsSecondOwnerWithoutChangingFirst",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RejectsSecondOwnerWithoutChangingFirst",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RejectsSecondOwnerWithoutChangingFirst",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RejectsUnownedNondefaultFlag",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RejectsUnownedNondefaultFlag",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RejectsUnownedNondefaultFlag",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(0)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(0)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(0)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(1)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(1)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(1)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(2)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(2)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(2)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(3)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(3)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput/RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(3)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(False)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(False)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag/RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(False)",
+            "mode": "EditMode"
+          },
+          {
+            "name": "RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(True)",
+            "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(True)",
+            "path": "NTSD/Assembly-CSharp-Editor.dll/NTSD/Test/Editor/BattleOptimizationWindowsAiSuiteRequestTests/RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag/RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(True)",
+            "mode": "EditMode"
+          }
+        ],
+        "cursor": 0,
+        "nextCursor": null,
+        "totalCount": 20,
+        "pageSize": 40,
+        "hasMore": false
+      }
+    }
+  },
+  "compilerConsole": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved 0 log entries.",
+      "data": []
+    }
+  },
+  "process": [
+    {
+      "pid": 98492,
+      "executable": "D:\\Unity\\HubEditor\\2022.3.62f3\\Editor\\Unity.exe",
+      "created": "2026-10-08T12:55:29.09725+08:00",
+      "projectMatches": true
+    }
+  ],
+  "manifestKeys": [
+    "utc",
+    "phase",
+    "head",
+    "editorPid",
+    "bridgePort",
+    "writes",
+    "guards",
+    "greenCallbackAlreadyArchivedSha",
+    "note"
+  ],
+  "source": [
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\BattleRenderFeature.cs",
+      "Hash": "F1649C0F78F1B897FF0E7846F3F5E7FBEF63B3283E1A3BC1E95F6B3AEB99A58B"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "Hash": "71B7C59B74532707D02FE1E90146EC76F67FD73638ECB3A6F3BBC04905D4EB14"
+    }
+  ]
+}

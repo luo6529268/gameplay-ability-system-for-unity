@@ -123,7 +123,7 @@ Material:
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 1
-    - _ScaleRatioB: 0.73125
+    - _ScaleRatioB: 0.64125
     - _ScaleRatioC: 1
     - _ScaleX: 1
     - _ScaleY: 1
@@ -135,6 +135,7 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _TMPVertexEffects: 1
     - _TextureHeight: 1024
     - _TextureWidth: 1024
     - _UnderlayDilate: 0

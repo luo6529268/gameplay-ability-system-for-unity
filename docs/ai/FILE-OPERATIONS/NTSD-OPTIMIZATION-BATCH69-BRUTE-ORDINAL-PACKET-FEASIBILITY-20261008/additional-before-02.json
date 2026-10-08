@@ -1,0 +1,7 @@
+{
+  "utc": "2026-10-08T06:24:28.3496031Z",
+  "source": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+  "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/08-Admission-qualified-source.cs",
+  "sha": "3898B969A1256991A46A89F30B0DBBA869BEB01D43C0AB7B3D0671ABE9B07B81",
+  "reason": "Add explicit null-input assertion already required in Task; analyzer/Driver helper unchanged; retain17GREEN qualified source and evidence; rerun onlyone pure case"
+}

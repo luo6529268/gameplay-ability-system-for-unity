@@ -1,0 +1,87 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "31288520fbcd4350b362062427b8f1cf",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791440007566,
+      "finished_unix_ms": 1791440016427,
+      "last_update_unix_ms": 1791440016427,
+      "progress": {
+        "completed": 14,
+        "total": 9977,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791440014119,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_EmptyInputAndMissingCacheFailClosed",
+        "last_finished_unix_ms": 1791440014120,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_CanonicalThousandAiReadOnlyCoverage(Dispersed1000)",
+            "message": "  the test-only ordinal packet qualification entry is missing: RunOrdinalPacketCoverageProbe\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_CanonicalThousandAiReadOnlyCoverage(Combat1000)",
+            "message": "  the test-only ordinal packet qualification entry is missing: RunOrdinalPacketCoverageProbe\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"far\",1)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"edge\",1)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"near\",0)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"wide\",0)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"negative\",1)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"extreme\",1)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"inverted\",0)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"no-body\",1)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"no-attack\",0)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_ConservativeBothDirectionProof(\"mixed-block\",0)",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_DoesNotPromoteAnyProductionDefault",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_EmptyInputAndMissingCacheFailClosed",
+            "message": "  the test-only ordinal packet qualification entry is missing: AnalyzeOrdinalPacketGeometry\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

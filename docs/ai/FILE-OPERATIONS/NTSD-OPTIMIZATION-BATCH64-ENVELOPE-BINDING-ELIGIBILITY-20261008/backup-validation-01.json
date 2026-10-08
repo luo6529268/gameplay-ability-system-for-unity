@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-08T01:07:17.5093939Z",
+  "copies": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "DCD8031ADC0E9B5094F0C900431AFD39604F603D07366693F1EEB3E573AF565B",
+      "matched": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/02-BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/03-CHANGE-LEDGER.md",
+      "sha": "EB7C5664ABAA3F888C425113B2EAD70ACE544EFB2CFA10CE65BAB1DDBE99F8B1",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/04-STATE.md",
+      "sha": "DC8056B52EE6850E084F9629293D13ABB02DE69881120B244E3D98F961AA0850",
+      "matched": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/05-CODEX-CURRENT-HANDOFF.md",
+      "sha": "5D99840D8CBBF4B2CC0AD85C95FE3C7FDAF9C20F8FC31BF83BA6BB7AE1B06FE5",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/06-INDEX.md",
+      "sha": "2BB928271E79375E3655BD66DE05642CEE704DEC1058B391AAA3EE36E81C9571",
+      "matched": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/07-battle-optimization-progress-tracker.md",
+      "sha": "A5E8C0BE6AF17FECE24DAEAFE3135467CF6190F56A4DF744FEC2CDAEA028626C",
+      "matched": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/08-NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md",
+      "sha": "9A53D548548089AA744987186D30D9010065A8C89F8D5087C4307E8FCDE33F56",
+      "matched": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/09-Goal18_LastTestResults.xml",
+      "sha": "15031FC32202ED7236EB5EAA960F668F5C68F106FFF72B23C5B9E6BC4666097D",
+      "matched": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/backups-01/10-NTSD_ProductionEntityStress.result",
+      "sha": "856B10103EC55C803ED7F5BD9E32C910E214CE293DBD6FAC3A63F044E27C1C76",
+      "matched": true
+    }
+  ]
+}

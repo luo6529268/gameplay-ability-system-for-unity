@@ -1,0 +1,17 @@
+# 第66批后继判据（本次只读重扫）
+
+## 已解决的候选判断
+
+普通包络成功证明复用实际触发960/7643方向，65去重聚焦case均有通过证据，但唯一两局部对照均未观察到收益（mean +0.2106%/+0.6853%）。因此本候选NO_GAIN_OBSERVED / NOT_ADMITTED，默认false，不继续Driver资格或新千人窗口、不重复本cost找PASS。该结果不证明H07无可行路线，也不关闭H07/H11。
+
+## 当前残余事实与边界
+
+- Query当前CollectCollisionCandidatesBruteForce:2353起仍保留原slot/pair顺序和Brute主循环；原计时覆盖整个PairExactLoop。第65批真实千人计时OFF该循环平均42.118/44.256ms，逻辑P95仍84.519/94.257ms；局部collector不是实际AI或显示FPS。不要再由stride64分支片段乘64推完整成本。
+- 已有49/52/64eligibility/kind5组合及53dispatch结果不因本轮而变成已准入；不换Role-aware默认，不重开H06四形状评估或四个已完成阶段。
+- H11原43有效12event仍UNKNOWN，47自然窗口0event不能消去；本次重读现有BattleScopedGcAllocationRecorder确认CollectOnlyOnCurrentThread/Begin Reset+Start/End Stop+逐sampleCount、正负校准，未发现足以推翻旧FAIL的计数合同错误。本轮不复跑无事件长窗、不猜MCP原因或修改未知分配分支。
+
+## 不引入新架构的后继资格
+
+本次重新扫描BattleRenderFeature.cs:234—338实际中央RenderPass：每有效physical segment在277—281无条件Clear+SetTexture，再在282—288原DrawMesh；纹理键是_MainTex或_MainTexArray与实际Texture引用。segment/DrawMesh次序和每draw绑定不能删除，但在连续相同属性绑定时重复准备同一MaterialPropertyBlock是可单独验证的CPU操作。当前文件SHA43C2A3FA6D06476D60E062CCB9D7B5EF24E3B74C76F44324413A3EC10D9C6419，未修改。
+
+下一67仅准备现有中央RenderPass“相同texture property绑定的准备复用”资格：不减少/合并segment或DrawMesh，不改变材质/UV/slice/透明顺序，不做GPU instancing、bank/格式变更或EXT1专项M0。该重复操作的独立CPU成本与实际连续命中率尚未测，不能把源码重复当高收益或逻辑P95已改善；必须先完整属性/独立像素等价和唯一CPU录制局部对照，有收益才另声明实景接线，默认保持false。它不取代剩余Brute逻辑预算或H11完整0GC门，准确Task先行，之后独立Change/Operation/dirty副本才可动脚本。

@@ -1,0 +1,18 @@
+{
+  "comparison": {
+    "chunk_id": "10ce47",
+    "wall_time_seconds": 0.5193818,
+    "exit_code": 0,
+    "original_token_count": 609,
+    "output": "{\"utc\":\"2026-10-08T01:50:33.1849935Z\",\"requests\":[{\"newRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\\\windows-01\\\\00-dispersed1000-eligibility-off\\\\report.json.request.json\",\"oldRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\\\windows-01\\\\00-dispersed1000-binding-off\\\\report.json.request.json\",\"fieldCount\":65,\"identicalExceptOutput\":true,\"newSha\":\"1A35F43AF33D88847697A422210FD7C0783D58E0D73ACF9BCFCE8DE66A40709A\"},{\"newRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\\\windows-01\\\\01-dispersed1000-eligibility-on\\\\report.json.request.json\",\"oldRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\\\windows-01\\\\01-dispersed1000-binding-on\\\\report.json.request.json\",\"fieldCount\":65,\"identicalExceptOutput\":true,\"newSha\":\"0EC2681FBF93CC12B7D8E7693B0E2E4CFE0D5DA4CA70B9D9113D766CCBBB0D87\"},{\"newRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\\\windows-01\\\\02-combat1000-eligibility-off\\\\report.json.request.json\",\"oldRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\\\windows-01\\\\02-combat1000-binding-off\\\\report.json.request.json\",\"fieldCount\":65,\"identicalExceptOutput\":true,\"newSha\":\"E45FAFF4C11DC543C2A6A731301D8A8C64C59A76113A9BB590101955B23F0A6A\"},{\"newRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\\\windows-01\\\\03-combat1000-eligibility-on\\\\report.json.request.json\",\"oldRequest\":\"I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\artifacts\\\\diagnostics\\\\NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008\\\\windows-01\\\\03-combat1000-binding-on\\\\report.json.request.json\",\"fieldCount\":65,\"identicalExceptOutput\":true,\"newSha\":\"A3E4E037041231ACC539B7762551E413D83A82F320FD689BF62616DA4296D702\"}],\"progress\":[],\"editor\":{\"Id\":19040,\"CPU\":143389.34375,\"Responding\":true}}\r\n"
+  },
+  "editorStarted": {
+    "chunk_id": "862658",
+    "wall_time_seconds": 10.00105,
+    "session_id": 25270,
+    "original_token_count": 0,
+    "output": ""
+  },
+  "editorStartedObserved": "get_editor_state resumed session25270 result observed1791424200131 / playing true / Battle",
+  "scope": "Request fields only; flags are actual Suite owner runtime evidence pending."
+}

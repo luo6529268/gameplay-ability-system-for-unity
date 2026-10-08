@@ -1,0 +1,188 @@
+{
+  "terminal": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "8bad57e0cb8e4974976bf619a0672abc",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1791422536905,
+        "finished_unix_ms": 1791423031648,
+        "last_update_unix_ms": 1791423031648,
+        "progress": {
+          "completed": 8,
+          "total": 9838,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791423020326,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+          "last_finished_unix_ms": 1791423020327,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 8,
+            "passed": 8,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 470.2587262,
+            "resultState": "Passed"
+          },
+          "results": []
+        }
+      }
+    }
+  },
+  "evidence": {
+    "utc": "2026-10-08T01:31:42.8786970Z",
+    "xml": {
+      "total": "8",
+      "result": "Passed",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008\\driver-green-original-01.xml",
+      "sha": "70EC7E3F986D35773A8AA83BF5C92B25118773A97F2D3E1DD94CACBE54E2F8E8",
+      "bytes": 7193411,
+      "cases": [
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"right-x550\",\"right-x550-root-v1-trace.jsonl\",\"AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE\")",
+          "result": "Passed",
+          "duration": "77.292247"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityPreservesApplicableFormalRootAndEveryTick(\"left-x350\",\"left-x350-root-v2-trace.jsonl\",\"CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2\")",
+          "result": "Passed",
+          "duration": "71.743748"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityQualificationDoesNotPromoteDefaults",
+          "result": "Passed",
+          "duration": "0.005103"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Dispersed1000)",
+          "result": "Passed",
+          "duration": "159.516158"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.EnvelopeBindingEligibilityThousandCanonicalAiPreservesEveryTick(Combat1000)",
+          "result": "Passed",
+          "duration": "159.947855"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinaryBruteDefaultsEnableAdmittedFastPath",
+          "result": "Passed",
+          "duration": "0.004072"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(0)",
+          "result": "Passed",
+          "duration": "0.001725"
+        },
+        {
+          "name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate(1)",
+          "result": "Passed",
+          "duration": "0.000238"
+        }
+      ],
+      "failed": "0",
+      "skipped": "0",
+      "passed": "8"
+    },
+    "qualification": [
+      {
+        "file": "Combat1000-envelope-binding-eligibility-parity-a63fa514a09d4d60ab9ea44b4be7471f.json",
+        "sha": "3553AB4BC13AD9FAA61A005D34F874AB208D0182F91756F61D21A7417DEEAFBF",
+        "pairedTicks": 32,
+        "differences": [],
+        "baselineEligibilityApplied": 0,
+        "candidateEligibilityApplied": 32,
+        "baselineProbeTotal": 32000,
+        "candidateProbeTotal": 32000,
+        "baselineReuseTotal": 9760678,
+        "candidateReuseTotal": 9760678,
+        "baselineAllEnvelopeAndBinding": true,
+        "candidateAllEnvelopeAndBinding": true,
+        "cacheFallbackCount": 0,
+        "formalRootSha": null,
+        "traceSha": null,
+        "nativeFields": null,
+        "performanceEvidence": false
+      },
+      {
+        "file": "Dispersed1000-envelope-binding-eligibility-parity-a0e5429613ad44388dd010b9bb594a35.json",
+        "sha": "0BCA8A9A259F7D52902A80432A7B0B4B9E03F97F0932FD8ABAAA3A017D21BEA6",
+        "pairedTicks": 32,
+        "differences": [],
+        "baselineEligibilityApplied": 0,
+        "candidateEligibilityApplied": 32,
+        "baselineProbeTotal": 32000,
+        "candidateProbeTotal": 32000,
+        "baselineReuseTotal": 10928860,
+        "candidateReuseTotal": 10928860,
+        "baselineAllEnvelopeAndBinding": true,
+        "candidateAllEnvelopeAndBinding": true,
+        "cacheFallbackCount": 0,
+        "formalRootSha": null,
+        "traceSha": null,
+        "nativeFields": null,
+        "performanceEvidence": false
+      },
+      {
+        "file": "left-x350-envelope-binding-eligibility-parity-17623ae59cec4b758a0eb0ea14158157.json",
+        "sha": "1489B16A67F243B9250A989E0BF7A344062240EAD4C888FA3C7F66A24E8877AD",
+        "pairedTicks": 12,
+        "differences": [],
+        "baselineEligibilityApplied": 0,
+        "candidateEligibilityApplied": 12,
+        "baselineProbeTotal": 11,
+        "candidateProbeTotal": 11,
+        "baselineReuseTotal": 3,
+        "candidateReuseTotal": 3,
+        "baselineAllEnvelopeAndBinding": true,
+        "candidateAllEnvelopeAndBinding": true,
+        "cacheFallbackCount": 0,
+        "formalRootSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+        "traceSha": "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2",
+        "nativeFields": [
+          "oid",
+          "action",
+          "hp",
+          "vx"
+        ],
+        "performanceEvidence": false
+      },
+      {
+        "file": "right-x550-envelope-binding-eligibility-parity-997c92f5ebe3460a9cdb10dde28113ad.json",
+        "sha": "1270FA30050163B717158BC84CF9057982256BEA6A1F18A08F1F985EEFE3309C",
+        "pairedTicks": 12,
+        "differences": [],
+        "baselineEligibilityApplied": 0,
+        "candidateEligibilityApplied": 12,
+        "baselineProbeTotal": 13,
+        "candidateProbeTotal": 13,
+        "baselineReuseTotal": 3,
+        "candidateReuseTotal": 3,
+        "baselineAllEnvelopeAndBinding": true,
+        "candidateAllEnvelopeAndBinding": true,
+        "cacheFallbackCount": 0,
+        "formalRootSha": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+        "traceSha": "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE",
+        "nativeFields": [
+          "oid",
+          "action",
+          "hp",
+          "vx"
+        ],
+        "performanceEvidence": false
+      }
+    ],
+    "sourceSha": "214B2B28C674F592A5B793DE773D6F1A55295EC428FD0DEF20813B9B587B1BD4",
+    "suiteSha": "03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71"
+  }
+}

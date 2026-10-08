@@ -1,0 +1,17 @@
+{
+    "passed": false,
+    "editorMode": true,
+    "sameSharedMaterial": true,
+    "sameRendererMaterial": true,
+    "differentVertexEffects": true,
+    "parameterUpdateKeepsMaterial": false,
+    "sourceUnchanged": false,
+    "disableEnableKeepsSharedMaterial": false,
+    "duplicateKeepsSharedMaterial": false,
+    "lastUserReleasesMaterial": false,
+    "sharedMaterialId": -6710,
+    "redPixels": 0,
+    "bluePixels": 0,
+    "whitePixels": 8550,
+    "error": "System.InvalidOperationException: Rendered outline colors or white faces missing\r\n  at TMPSharedMaterialVerification.Require (System.Boolean condition, System.String message) [0x00009] in C:\\Users\\Logan\\AppData\\Local\\Temp\\PortableTMP_VertexEffects_20261008_01a0fe11\\Assets\\Editor\\TMPSharedMaterialVerification.cs:176 \r\n  at TMPSharedMaterialVerification.Run () [0x0053d] in C:\\Users\\Logan\\AppData\\Local\\Temp\\PortableTMP_VertexEffects_20261008_01a0fe11\\Assets\\Editor\\TMPSharedMaterialVerification.cs:100 "
+}

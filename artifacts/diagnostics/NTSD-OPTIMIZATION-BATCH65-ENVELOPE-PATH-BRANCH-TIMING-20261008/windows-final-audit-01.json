@@ -1,0 +1,323 @@
+{
+  "utc": "2026-10-08T03:13:57.1255877Z",
+  "status": "CURRENT_PATH_BRANCH_EVIDENCE_PASS / PERFORMANCE_FAIL / NOT_A_PERFORMANCE_CANDIDATE",
+  "suiteSha": "875855E16CC167EC6DCF122DBCCD091D37CA56CA3B03E3620B4113318579C23E",
+  "phase": "DONE",
+  "suiteStatus": "MEASUREMENTS_COMPLETED",
+  "error": "",
+  "completedRuns": 4,
+  "terminalUtc": "2026-10-08T03:09:29.033349Z",
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "originalSceneRestored": true,
+  "battleSceneUnchanged": true,
+  "runs": [
+    {
+      "index": 0,
+      "action": "dispersed1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/00-dispersed1000-timing-off/report.json",
+      "reportSha": "013805243C3D5065484D4FF7C7830CAE5E3D7B7B2A4CF3C8137883435BAA2E4F",
+      "workloadValid": true,
+      "minAi": 1000,
+      "minRoster": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "timing": false,
+      "flagsFailed": [],
+      "expectedTimingAndStride": true,
+      "coverage": {
+        "eligibleDirections": 0,
+        "timedDirections": 0,
+        "rejectedBindingVisits": 0,
+        "rejectedBindingTimed": 0,
+        "pairAllowedVisits": 0,
+        "pairAllowedTimed": 0,
+        "exactWorkVisits": 0,
+        "exactWorkTimed": 0
+      },
+      "coverageValid": true,
+      "coverageScope": "Totals include warmup and sampled collections; clocks only stride64-selected directions, not full-cost or steady-only.",
+      "gcValid": true,
+      "gcStatus": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS",
+      "acceptedTicks": 300,
+      "steadyScopes": 180,
+      "steadyEvents": 0,
+      "warmupEvents": 128,
+      "capacityValid": true,
+      "teardownValid": true,
+      "logicMean": 72.35477055555552,
+      "logicP95": 84.518855,
+      "dropped": 683,
+      "maxBacklog": 0,
+      "frameMean": 233.80218724409738,
+      "frameMax": 2371.8318939208984,
+      "pairMean": 42.11822333333332,
+      "branchSampledMilliseconds": [
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "mean": 0,
+          "p95": 0
+        }
+      ],
+      "centralAccepted": 89,
+      "centralAggregateSame": true,
+      "centralLastReason": "",
+      "centralLastRefusal": "",
+      "performancePassed": false
+    },
+    {
+      "index": 1,
+      "action": "dispersed1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/01-dispersed1000-timing-on/report.json",
+      "reportSha": "A5EDBA202ACAB8AC405B114CCD584967AD0C1BAFEDED1D0C00A3E53DF93A78AA",
+      "workloadValid": true,
+      "minAi": 1000,
+      "minRoster": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "timing": true,
+      "flagsFailed": [],
+      "expectedTimingAndStride": true,
+      "coverage": {
+        "eligibleDirections": 50284665,
+        "timedDirections": 785688,
+        "rejectedBindingVisits": 42672114,
+        "rejectedBindingTimed": 666641,
+        "pairAllowedVisits": 7612551,
+        "pairAllowedTimed": 119047,
+        "exactWorkVisits": 5323630,
+        "exactWorkTimed": 83416
+      },
+      "coverageValid": true,
+      "coverageScope": "Totals include warmup and sampled collections; clocks only stride64-selected directions, not full-cost or steady-only.",
+      "gcValid": true,
+      "gcStatus": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS",
+      "acceptedTicks": 300,
+      "steadyScopes": 180,
+      "steadyEvents": 0,
+      "warmupEvents": 12,
+      "capacityValid": true,
+      "teardownValid": true,
+      "logicMean": 74.27676666666669,
+      "logicP95": 89.603895,
+      "dropped": 657,
+      "maxBacklog": 0,
+      "frameMean": 229.0763951341311,
+      "frameMax": 782.0491194725037,
+      "pairMean": 44.70481111111114,
+      "branchSampledMilliseconds": [
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "mean": 0.09164277777777777,
+          "p95": 0.12391499999999997
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "mean": 0.11138666666666669,
+          "p95": 0.14569499999999996
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "mean": 0.036651111111111113,
+          "p95": 0.049505
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "mean": 0.1473105555555555,
+          "p95": 0.201515
+        }
+      ],
+      "centralAccepted": 89,
+      "centralAggregateSame": true,
+      "centralLastReason": "",
+      "centralLastRefusal": "",
+      "performancePassed": false
+    },
+    {
+      "index": 2,
+      "action": "combat1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/02-combat1000-timing-off/report.json",
+      "reportSha": "43AE5BE1849F1104D6E382B4119E4F09A50A5E0C194B66B269C72324F3D60FCE",
+      "workloadValid": true,
+      "minAi": 1000,
+      "minRoster": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "timing": false,
+      "flagsFailed": [],
+      "expectedTimingAndStride": true,
+      "coverage": {
+        "eligibleDirections": 0,
+        "timedDirections": 0,
+        "rejectedBindingVisits": 0,
+        "rejectedBindingTimed": 0,
+        "pairAllowedVisits": 0,
+        "pairAllowedTimed": 0,
+        "exactWorkVisits": 0,
+        "exactWorkTimed": 0
+      },
+      "coverageValid": true,
+      "coverageScope": "Totals include warmup and sampled collections; clocks only stride64-selected directions, not full-cost or steady-only.",
+      "gcValid": true,
+      "gcStatus": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS",
+      "acceptedTicks": 300,
+      "steadyScopes": 180,
+      "steadyEvents": 0,
+      "warmupEvents": 12,
+      "capacityValid": true,
+      "teardownValid": true,
+      "logicMean": 73.67323944444446,
+      "logicP95": 94.25719,
+      "dropped": 611,
+      "maxBacklog": 0,
+      "frameMean": 217.17282305161157,
+      "frameMax": 860.6920838356018,
+      "pairMean": 44.256288888888896,
+      "branchSampledMilliseconds": [
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "mean": 0,
+          "p95": 0
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "mean": 0,
+          "p95": 0
+        }
+      ],
+      "centralAccepted": 89,
+      "centralAggregateSame": true,
+      "centralLastReason": "",
+      "centralLastRefusal": "",
+      "performancePassed": false
+    },
+    {
+      "index": 3,
+      "action": "combat1000",
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/03-combat1000-timing-on/report.json",
+      "reportSha": "FE1FC0F2D14F4E9F775EDA516FF70A215E63894922ED9B6E92CA96524F84901E",
+      "workloadValid": true,
+      "minAi": 1000,
+      "minRoster": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "timing": true,
+      "flagsFailed": [],
+      "expectedTimingAndStride": true,
+      "coverage": {
+        "eligibleDirections": 46509444,
+        "timedDirections": 726703,
+        "rejectedBindingVisits": 38141115,
+        "rejectedBindingTimed": 595801,
+        "pairAllowedVisits": 8368329,
+        "pairAllowedTimed": 130902,
+        "exactWorkVisits": 5746262,
+        "exactWorkTimed": 89986
+      },
+      "coverageValid": true,
+      "coverageScope": "Totals include warmup and sampled collections; clocks only stride64-selected directions, not full-cost or steady-only.",
+      "gcValid": true,
+      "gcStatus": "CALIBRATED_FULL_DRIVER_ZERO_EVENTS",
+      "acceptedTicks": 300,
+      "steadyScopes": 180,
+      "steadyEvents": 0,
+      "warmupEvents": 12,
+      "capacityValid": true,
+      "teardownValid": true,
+      "logicMean": 79.5263694444445,
+      "logicP95": 100.60291,
+      "dropped": 668,
+      "maxBacklog": 0,
+      "frameMean": 229.82025434573492,
+      "frameMax": 859.9262237548828,
+      "pairMean": 48.78807444444448,
+      "branchSampledMilliseconds": [
+        {
+          "phase": "CandidateCollect/BruteCoarse",
+          "mean": 0.100318888888889,
+          "p95": 0.140365
+        },
+        {
+          "phase": "CandidateCollect/BruteRejectedBinding",
+          "mean": 0.11675611111111121,
+          "p95": 0.14786
+        },
+        {
+          "phase": "CandidateCollect/BrutePairAllowed",
+          "mean": 0.0433138888888889,
+          "p95": 0.06646999999999997
+        },
+        {
+          "phase": "CandidateCollect/BruteExactWork",
+          "mean": 0.16803444444444435,
+          "p95": 0.278655
+        }
+      ],
+      "centralAccepted": 89,
+      "centralAggregateSame": true,
+      "centralLastReason": "",
+      "centralLastRefusal": "",
+      "performancePassed": false
+    }
+  ],
+  "comparisons": [
+    {
+      "action": "dispersed1000",
+      "hashFieldCount": 20,
+      "hashDifferences": [],
+      "leftSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "rightSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "requestFieldCount": 65,
+      "requestDifferences": [
+        "outputPath"
+      ],
+      "logicMeanDifferencePercent": 2.6563502259127763,
+      "pairMeanDifferencePercent": 6.141255668139111
+    },
+    {
+      "action": "combat1000",
+      "hashFieldCount": 20,
+      "hashDifferences": [],
+      "leftSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "rightSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "requestFieldCount": 65,
+      "requestDifferences": [
+        "outputPath"
+      ],
+      "logicMeanDifferencePercent": 7.94471648611809,
+      "pairMeanDifferencePercent": 10.239867981098048
+    }
+  ],
+  "formal1800Started": false,
+  "h07Completed": false,
+  "h11Completed": false,
+  "branchClockScalingUsed": false,
+  "note": "Coverage totals include warmup and steady; per-tick clock phases contain only stride64-selected directions and cannot be scaled or subtracted as whole-loop costs. Sequential A/B is a diagnostic perturbation observation, not a causal hardware benchmark or optimization gain."
+}

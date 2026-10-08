@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-08T05:56:02.7633971Z",
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1365",
+    "  Governed code files in diff: 6"
+  ],
+  "historicalWarnings": 4314,
+  "guardCount": 402,
+  "guardFailures": [],
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "editorMode": {
+    "is_playing": false,
+    "is_paused": false,
+    "is_changing": false
+  },
+  "scenes": [
+    {
+      "name": "NTSD_Menu",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "buildIndex": 0,
+      "isLoaded": true,
+      "isDirty": false,
+      "isActive": true,
+      "rootCount": 8
+    }
+  ],
+  "scope": "Batch68 completed; NO_REUSE_COVERAGE / NOT_ADMITTED. H07 and H11 stage gates not achieved; goal continues active. No new test or window was launched."
+}

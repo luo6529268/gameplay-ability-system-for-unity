@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-08T04:31:41.1307031Z",
+  "total": "2",
+  "passed": "2",
+  "failed": "0",
+  "outputs": [
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_Cost_CompleteCommandRecording(False)",
+      "output": "SEGMENT_TEXTURE_BINDING_REUSE_COST pattern=constant segments=2000 drawsPerSide=2000 bytes=168000 offMeanMs=5.2033875000000007 onMeanMs=3.60085 offRawMs=8.8304000000000009,4.2749000000000006,3.9598,4.5667,10.986500000000001,3.3401,2.9007,2.7680000000000002 onRawMs=4.5923,3.0238,2.6823,2.5958,5.2539000000000007,2.9278,4.2458,3.4851 warmupPerSide=4 samplesPerSide=8 scope=command_recording_fixture_not_AI_FPS_or_GPU gc=UNKNOWN\n"
+    },
+    {
+      "name": "NTSD.Test.Editor.BattleCentralSameSamplePixelEditorTests.SegmentTextureBindingReuse_Cost_CompleteCommandRecording(True)",
+      "output": "SEGMENT_TEXTURE_BINDING_REUSE_COST pattern=alternating segments=2000 drawsPerSide=2000 bytes=168000 offMeanMs=3.9516875000000002 onMeanMs=3.9147875 offRawMs=3.0171,3.5628,3.0934,3.7493000000000003,4.4126,5.4300000000000006,4.8382000000000005,3.5101 onRawMs=3.9730000000000003,3.726,3.1343,3.6795,3.4155,4.4682,3.0116,5.9102000000000006 warmupPerSide=4 samplesPerSide=8 scope=command_recording_fixture_not_AI_FPS_or_GPU gc=UNKNOWN\n"
+    }
+  ],
+  "copySha": "FF445A47B66895526B5D65010AE7564205ECF11F759964532C0F8C6B99C1BCFA",
+  "sourceSha": "FF445A47B66895526B5D65010AE7564205ECF11F759964532C0F8C6B99C1BCFA"
+}

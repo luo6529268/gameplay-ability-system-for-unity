@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-08T02:24:14.9728743Z",
+  "ledgerExit": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1361"
+  ],
+  "warnings": 4373,
+  "errors": [],
+  "scopedDiffCheckExit": 0,
+  "scopeWarnings": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "recordStatusLine": "status: VERIFIED",
+  "nextTaskExists": true
+}

@@ -1,0 +1,119 @@
+{
+  "utc": "2026-10-08T07:05:31.5201830Z",
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "headSame": true,
+  "guardCount": 490,
+  "guardMismatches": [],
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/01-BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "1534E0BF9429AE1D3987D823684AF32B65F17B6C3BBCE0BC3086614528A72105",
+      "earlierManifestSha": "1534E0BF9429AE1D3987D823684AF32B65F17B6C3BBCE0BC3086614528A72105"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/02-RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "2759690A0A5E77C654B40506A43E242B32CA63163AE638BE8BD994660182E791",
+      "earlierManifestSha": "2759690A0A5E77C654B40506A43E242B32CA63163AE638BE8BD994660182E791"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/03-CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "F805B65FA4839F4DE0819D354B826CF284D849B8A7A4D5D633EC6FCCCE83535E",
+      "earlierManifestSha": "C45CE9BB198E7FBB8A34A8B0E79A300C63F07212AF95B0B8DC2977CF7D4BBF23"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/04-STATE.md",
+      "exists": true,
+      "sha": "956B5FB2D444773B387D320C58E4CC502FEFC5D9FC2F9384D9F3301357735D02",
+      "earlierManifestSha": "70F781A0E88E40BD33D110D5DE195C92B8FE007E3DCADA8F045029299B3A1ABF"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/05-CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "B104DD1774B8F81CBC43B1BE17E0149DFA436A75119EE387A855417D8F1952C5",
+      "earlierManifestSha": "B03F316C1B9B276B16300D1FE0379A9349978D0E61D4303DF0A0521D9AC67543"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/06-INDEX.md",
+      "exists": true,
+      "sha": "F967DC1AA227724F4A1EEA0CD321A41B63F4F27FD7824AA2AF93E23DA3E0439C",
+      "earlierManifestSha": "DF99FF6B45AF9AC7C8F1C174E1A857159083E8450EA375D40561B96F3F9DEC6F"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH70-BRUTE-ORDINAL-PACKET-CANDIDATE-20261008/before/07-battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "98043A525C7E10B047E4ACECFE029C6DD7367A0D7CB0FBC5302A4E4021A57437",
+      "earlierManifestSha": "55D9BCC5B3B927C83923101E73D1B856AECF8B97B0F3A22CD8220CE9E2D7385D"
+    }
+  ],
+  "beforeRelativeWhitespace": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exit": 1,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exit": 1,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exit": 0,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exit": 0,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exit": 0,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exit": 0,
+      "whitespaceMessages": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exit": 0,
+      "whitespaceMessages": []
+    }
+  ],
+  "querySha": "394EF397D3A5C8C66635855D3D8CC98A0854C1EE9F80BED533C5699DEC33FAD8",
+  "testsSha": "6EF06591A28B9DBD8A8969D4B6BF66D640C906D98C6E3028248B934438F7C941",
+  "oldTestsNormalizedPreserved": true,
+  "liveEditor": {
+    "pid": 78296,
+    "port": 6402,
+    "unity": "2022.3.62f3",
+    "scene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "saved": true,
+    "dirty": false,
+    "roots": 8,
+    "isPlaying": false,
+    "isCompiling": false,
+    "consoleCsErrors": 0,
+    "observedUnixMs": 1791443132009
+  },
+  "review": {
+    "defaultOff": true,
+    "originalFourAdmittedDefaultsUnchanged": true,
+    "oldLoopTextRetained": true,
+    "negativeOnly": true,
+    "bindingBaseGateUnchanged": true,
+    "capacityHotGrowth": false,
+    "activePacketPrefixRebuilt": true,
+    "packetEntityReferences": false,
+    "q06MethodRead": false,
+    "driverRun": false,
+    "actualAiWindow": false,
+    "zeroGcMeasured": false,
+    "shaderRendererSceneResourceChanged": false
+  }
+}

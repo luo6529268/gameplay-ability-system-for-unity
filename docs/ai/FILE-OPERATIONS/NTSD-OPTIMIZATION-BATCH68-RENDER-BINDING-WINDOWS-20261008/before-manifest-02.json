@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-08T05:04:05.3332446Z",
+  "phase": "EXACT_SUITE_IMPORT_AND_20_RED",
+  "editorPid": 98492,
+  "bridgePort": 6402,
+  "startedByThisTask": false,
+  "sourceSha": "996ADF3EC6A6837A511CFAF8150411151F4B1EF6A200CE3F297AC1C2B26281A6",
+  "featureSha": "F5F1173E63B18A2F90F9073B87AA933FBDC83731822487DEE38DE336587FB6C2",
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "guardCount": 362,
+  "guardMismatch": [],
+  "callbackWrite": {
+    "path": "Temp/Goal18_LastTestResults.xml",
+    "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+    "exists": false,
+    "bytes": null,
+    "sha": null,
+    "backup": null
+  },
+  "declaredCommands": [
+    "manage_asset import exact Suite source",
+    "get_tests mode EditMode filter RenderTextureBindingWindow_",
+    "run_tests EditMode anchored Suite prefix only; initTimeout180000",
+    "get_test_job same live handle until terminal",
+    "Copy-Item exact fresh callback XML to new artifacts red-results-01.xml; compare source/copy SHA"
+  ],
+  "scopeNote": "This phase authorizes only existing test callback XML creation/overwrite after backup if present; not shared stress request/result. Editor RunTests host Library/output normal; no Scene/resource changes."
+}

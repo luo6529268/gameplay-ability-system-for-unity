@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c9cb2f55f77d43228df9f78783d87deb",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791440745591,
+      "finished_unix_ms": 1791440755180,
+      "last_update_unix_ms": 1791440755180,
+      "progress": {
+        "completed": 1,
+        "total": 9977,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791440752768,
+        "last_finished_test_full_name": "NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.OrdinalPacketProbe_EmptyInputAndMissingCacheFailClosed",
+        "last_finished_unix_ms": 1791440752802,
+        "stuck_suspected": false,
+        "editor_is_focused": true,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.8856943,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-08T02:14:56.2731363Z",
+  "ledgerExit": 0,
+  "ledgerSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1361"
+  ],
+  "ledgerWarnings": 4373,
+  "ledgerErrors": [],
+  "diffCheckExit": 2,
+  "diffCheckOutput": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/TextMeshPro/Shaders/TMP_SDF.shader', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008.md', LF will be replaced by CRLF the next time Git touches it",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md:5734: new blank line at EOF.",
+    "docs/ai/CHANGE-LEDGER.md:2098: new blank line at EOF.",
+    "docs/ai/FILE-OPERATIONS/INDEX.md:483: new blank line at EOF.",
+    "docs/ai/STATE.md:6570: new blank line at EOF."
+  ],
+  "scopedDiffCheckExit": 0,
+  "globalDiffLimitation": "exit2 only four shared governance docs new blank EOF at parallel TMP appended tail; preserved, no cleanup or attribution of writer",
+  "fullValidatorStdoutPersisted": false
+}

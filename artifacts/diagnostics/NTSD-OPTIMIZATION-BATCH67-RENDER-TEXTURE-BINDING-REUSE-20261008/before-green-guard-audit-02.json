@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-08T04:29:20.0451295Z",
+  "guardCount": 266,
+  "drift": [],
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs",
+      "sha": "F5F1173E63B18A2F90F9073B87AA933FBDC83731822487DEE38DE336587FB6C2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs",
+      "sha": "2EA04B0CBDB01F3E7ABF5431B03C6FCB4AF2FEA639341CF274FB5330CD3FAA85"
+    }
+  ]
+}

@@ -10,6 +10,15 @@ namespace NTSD.Animation.Rendering
 {
     public sealed class BattleRenderFeature : ScriptableRendererFeature
     {
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
+
+        public static bool EnableSegmentTextureBindingReuseForDiagnostics { get; set; }
+        public static int LastSegmentTextureBindingPrepareCountForDiagnostics { get; private set; }
+        public static int LastSegmentTextureBindingReuseCountForDiagnostics { get; private set; }
+        public static long LastSegmentTextureBindingExecuteSequenceForDiagnostics { get; private set; }
+        public static int LastSegmentTextureBindingCameraIdForDiagnostics { get; private set; }
+
         [SerializeField] private Material material;
         [SerializeField] private Material arrayMaterial;
         [SerializeField] private BattleCentralDrawMode drawMode = BattleCentralDrawMode.OrderedChunks;
@@ -30,6 +39,54 @@ namespace NTSD.Animation.Rendering
             runtimeHealthBarStyle.WidthPixels > 0f && runtimeHealthBarStyle.HeightPixels > 0f
                 ? runtimeHealthBarStyle
                 : BattleHealthBarStyle.Default;
+
+        internal static int AppendSegmentDrawCommands(
+            CommandBuffer commandBuffer,
+            BattleDynamicMeshBackend backend,
+            MaterialPropertyBlock propertyBlock,
+            bool reuseTextureBindings,
+            out int prepareCount,
+            out int reuseCount)
+        {
+            prepareCount = 0;
+            reuseCount = 0;
+            int drawCount = 0;
+            Texture previousTexture = null;
+            BattleSpriteCentralBindingMode previousMode = default;
+            bool prepared = false;
+            for (int index = 0; index < backend.SegmentCount; index++)
+            {
+                BattleCentralRenderSegment segment = backend.GetSegment(index);
+                if (segment.Material == null || segment.Texture == null)
+                    continue;
+                if (reuseTextureBindings && prepared &&
+                    ReferenceEquals(previousTexture, segment.Texture) && previousMode == segment.BindingMode)
+                {
+                    reuseCount++;
+                }
+                else
+                {
+                    propertyBlock.Clear();
+                    if (segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray)
+                        propertyBlock.SetTexture(MainTexArrayId, segment.Texture);
+                    else
+                        propertyBlock.SetTexture(MainTexId, segment.Texture);
+                    previousTexture = segment.Texture;
+                    previousMode = segment.BindingMode;
+                    prepared = true;
+                    prepareCount++;
+                }
+                commandBuffer.DrawMesh(
+                    backend.GetChunkMesh(segment.ChunkIndex),
+                    Matrix4x4.identity,
+                    segment.Material,
+                    segment.SubMeshIndex,
+                    0,
+                    propertyBlock);
+                drawCount++;
+            }
+            return drawCount;
+        }
 
         public void Configure(Material value, BattleCentralDrawMode mode)
         {
@@ -214,8 +271,6 @@ namespace NTSD.Animation.Rendering
 
         private sealed class BattleRenderPass : ScriptableRenderPass
         {
-            private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
-            private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
             private static readonly ProfilerMarker ExecuteCommandBufferMarker =
                 new ProfilerMarker("NTSD.BattlePresentation.ExecuteCommandBuffer");
             private readonly MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
@@ -233,6 +288,9 @@ namespace NTSD.Animation.Rendering
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
+                LastSegmentTextureBindingPrepareCountForDiagnostics = 0;
+                LastSegmentTextureBindingReuseCountForDiagnostics = 0;
+                LastSegmentTextureBindingCameraIdForDiagnostics = 0;
                 BattleCentralSubmission.BattleCentralSubmissionLease lease = submissionLease;
                 submissionLease = default;
                 try
@@ -269,25 +327,15 @@ namespace NTSD.Animation.Rendering
                                 drawCount++;
                             }
                         }
-                        for (int index = 0; index < backend.SegmentCount; index++)
-                        {
-                            BattleCentralRenderSegment segment = backend.GetSegment(index);
-                            if (segment.Material == null || segment.Texture == null)
-                                continue;
-                            propertyBlock.Clear();
-                            if (segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray)
-                                propertyBlock.SetTexture(MainTexArrayId, segment.Texture);
-                            else
-                                propertyBlock.SetTexture(MainTexId, segment.Texture);
-                            commandBuffer.DrawMesh(
-                                backend.GetChunkMesh(segment.ChunkIndex),
-                                Matrix4x4.identity,
-                                segment.Material,
-                                segment.SubMeshIndex,
-                                0,
-                                propertyBlock);
-                            drawCount++;
-                        }
+                        drawCount += AppendSegmentDrawCommands(
+                            commandBuffer,
+                            backend,
+                            propertyBlock,
+                            EnableSegmentTextureBindingReuseForDiagnostics,
+                            out int prepareCount,
+                            out int reuseCount);
+                        LastSegmentTextureBindingPrepareCountForDiagnostics = prepareCount;
+                        LastSegmentTextureBindingReuseCountForDiagnostics = reuseCount;
                         BattleHealthBarBatchBackend healthBackend = lease.HealthBackend;
                         if (healthBackend != null && healthBackend.ActiveBarCount > 0 &&
                             healthBackend.Mesh != null && fallbackMaterial != null)
@@ -331,6 +379,14 @@ namespace NTSD.Animation.Rendering
                         CommandBufferPool.Release(commandBuffer);
                     }
                     BattleCentralRenderSystem.RecordSubmission(lease, drawCount);
+                    // Alignment contract: NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068; CPU recording identity, not GPU completion.
+                    if (LastSegmentTextureBindingPrepareCountForDiagnostics > 0 &&
+                        renderingData.cameraData.camera != null &&
+                        LastSegmentTextureBindingExecuteSequenceForDiagnostics < long.MaxValue)
+                    {
+                        LastSegmentTextureBindingCameraIdForDiagnostics = renderingData.cameraData.camera.GetInstanceID();
+                        LastSegmentTextureBindingExecuteSequenceForDiagnostics++;
+                    }
                 }
                 finally
                 {

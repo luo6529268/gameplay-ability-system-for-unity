@@ -1,0 +1,845 @@
+{
+  "utc": "2026-10-08T05:46:55.1611422Z",
+  "status": "SCOPED_WINDOWS_COMPLETED / NO_REUSE_COVERAGE / NO_CAUSAL_GAIN / NOT_ADMITTED / PERFORMANCE_FAIL",
+  "rows": [
+    {
+      "action": "dispersed1000",
+      "bindingEnabled": false,
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01/00-dispersed1000-binding-off/report.json",
+      "reportSha": "0EB1A6E1174CDF5EEDC71BC32A734314E14CC37450942B66823669AEA37578CE",
+      "actualAi": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "workloadValid": true,
+      "harnessValidity": true,
+      "teardownRestored": true,
+      "flagApplied": true,
+      "flagUnchanged": true,
+      "flagRestored": true,
+      "camera": 44876,
+      "acceptedCameraSamples": 89,
+      "prepare": 177135,
+      "reuse": 0,
+      "logicMeanMs": 83.6005888888889,
+      "logicP95Ms": 133.9014749999999,
+      "unityFrameMeanMs": 251.93173468112946,
+      "unityFrameP95Ms": 565.2413517236703,
+      "displayFpsEstimate": 3.969329236214335,
+      "droppedTicks": 772,
+      "maximumBacklogTicks": 0,
+      "logicGcCoverage": true,
+      "logicGcSteadyEvents": 0,
+      "logicGcPassed": true,
+      "capacityReject": [
+        {
+          "name": "sampleRejectedForIncompleteBaseRoster",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForRosterMutation",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForPoolExpansion",
+          "value": 0
+        }
+      ],
+      "centralSegment": {
+        "available": true,
+        "samples": 89,
+        "mean": 1990.2808988764045,
+        "p95": 2023.4
+      },
+      "centralCpuDraw": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2808988764045,
+        "p95": 2024.4
+      },
+      "centralSource": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2022471910113,
+        "p95": 2023.4
+      },
+      "centralResolved": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2022471910113,
+        "p95": 2023.4
+      },
+      "centralRefusal": "",
+      "centralReason": "",
+      "cpuFrame": {
+        "available": true,
+        "samples": 89,
+        "mean": 206.05818202247193,
+        "p95": 316.6339199999996
+      },
+      "mainThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 187.23249213483138,
+        "p95": 288.1564999999997
+      },
+      "renderThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 0.5398258426966294,
+        "p95": 0.6587599999999999
+      },
+      "gpuFrame": {
+        "available": true,
+        "samples": 81,
+        "mean": 0.7164460246913583,
+        "p95": 1.892352
+      },
+      "detailTimings": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 53.165696666666676,
+          "p95Ms": 88.88547,
+          "samples": 180
+        }
+      ],
+      "finalSnapshot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\00-dispersed1000-binding-off\\report.json.final-checksum.json",
+      "finalSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "declaredFinal": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalLockstepSchema",
+          "value": "ntsd-lockstep-core-checksum-v4"
+        },
+        {
+          "name": "finalLockstepTick",
+          "value": 300
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+        }
+      ]
+    },
+    {
+      "action": "dispersed1000",
+      "bindingEnabled": true,
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01/01-dispersed1000-binding-on/report.json",
+      "reportSha": "212E31253EEFB8E8C0FC236D0380AF74A4484620EF2833CD08D1D86B34A7CE9F",
+      "actualAi": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "workloadValid": true,
+      "harnessValidity": true,
+      "teardownRestored": true,
+      "flagApplied": true,
+      "flagUnchanged": true,
+      "flagRestored": true,
+      "camera": 44876,
+      "acceptedCameraSamples": 89,
+      "prepare": 177135,
+      "reuse": 0,
+      "logicMeanMs": 83.31349277777782,
+      "logicP95Ms": 123.04024999999986,
+      "unityFrameMeanMs": 254.60164467493692,
+      "unityFrameP95Ms": 622.3874032497403,
+      "displayFpsEstimate": 3.9277043998547287,
+      "droppedTicks": 787,
+      "maximumBacklogTicks": 0,
+      "logicGcCoverage": true,
+      "logicGcSteadyEvents": 0,
+      "logicGcPassed": true,
+      "capacityReject": [
+        {
+          "name": "sampleRejectedForIncompleteBaseRoster",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForRosterMutation",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForPoolExpansion",
+          "value": 0
+        }
+      ],
+      "centralSegment": {
+        "available": true,
+        "samples": 89,
+        "mean": 1990.2808988764045,
+        "p95": 2023.4
+      },
+      "centralCpuDraw": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2808988764045,
+        "p95": 2024.4
+      },
+      "centralSource": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2022471910113,
+        "p95": 2023.4
+      },
+      "centralResolved": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.2022471910113,
+        "p95": 2023.4
+      },
+      "centralRefusal": "",
+      "centralReason": "",
+      "cpuFrame": {
+        "available": true,
+        "samples": 89,
+        "mean": 205.63331797752807,
+        "p95": 294.19175999999953
+      },
+      "mainThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 186.6089932584269,
+        "p95": 265.3637599999997
+      },
+      "renderThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 0.5294000000000002,
+        "p95": 0.6269199999999999
+      },
+      "gpuFrame": {
+        "available": true,
+        "samples": 85,
+        "mean": 0.7468453647058823,
+        "p95": 1.8737152
+      },
+      "detailTimings": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 53.093782222222195,
+          "p95Ms": 78.23783499999992,
+          "samples": 180
+        }
+      ],
+      "finalSnapshot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\01-dispersed1000-binding-on\\report.json.final-checksum.json",
+      "finalSnapshotSha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "declaredFinal": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "7e338c835aa97563dbe2d90b330f4d0f8508568d8abbe0ea2475329029e014a2"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "359107691626027dd47f2f81a736e05594e7a77af2684cdb5f5c9e33f61b8c64"
+        },
+        {
+          "name": "finalLockstepSchema",
+          "value": "ntsd-lockstep-core-checksum-v4"
+        },
+        {
+          "name": "finalLockstepTick",
+          "value": 300
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "ec113d06275c3d626460f1a14bedfad5e2f31805239e7fe42346b27f68164940"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "d34b3da2e6faec43823aff0375f22671746f1cd64d8cf0265cefc444f904e676"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "7116d2500b58af7660d2de5a5ba06b97da6f3169972bb01327ec00552ee71aec"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "5e62e57c005e978432de676bc66edf4770797c3754ed4dde4d0212aa223ec063"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "6188be1c21b72c3b4488a8aae0c2e7be9838fe5ea2eb0fc6b5fa59085acdd4b9"
+        }
+      ]
+    },
+    {
+      "action": "combat1000",
+      "bindingEnabled": false,
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01/02-combat1000-binding-off/report.json",
+      "reportSha": "E9672A384C174DFE5FB2F11BDDCF6EAA207D85DC3407ACDCF475982CA5716FB1",
+      "actualAi": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "workloadValid": true,
+      "harnessValidity": true,
+      "teardownRestored": true,
+      "flagApplied": true,
+      "flagUnchanged": true,
+      "flagRestored": true,
+      "camera": 44876,
+      "acceptedCameraSamples": 89,
+      "prepare": 177154,
+      "reuse": 0,
+      "logicMeanMs": 86.18006055555558,
+      "logicP95Ms": 119.00279499999994,
+      "unityFrameMeanMs": 250.59103478988013,
+      "unityFrameP95Ms": 470.4424038529392,
+      "displayFpsEstimate": 3.990565747248289,
+      "droppedTicks": 763,
+      "maximumBacklogTicks": 0,
+      "logicGcCoverage": true,
+      "logicGcSteadyEvents": 0,
+      "logicGcPassed": true,
+      "capacityReject": [
+        {
+          "name": "sampleRejectedForIncompleteBaseRoster",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForRosterMutation",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForPoolExpansion",
+          "value": 0
+        }
+      ],
+      "centralSegment": {
+        "available": true,
+        "samples": 89,
+        "mean": 1990.4943820224719,
+        "p95": 2025.2
+      },
+      "centralCpuDraw": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.4943820224719,
+        "p95": 2026.2
+      },
+      "centralSource": {
+        "available": true,
+        "samples": 89,
+        "mean": 1992.056179775281,
+        "p95": 2027.2
+      },
+      "centralResolved": {
+        "available": true,
+        "samples": 89,
+        "mean": 1992.056179775281,
+        "p95": 2027.2
+      },
+      "centralRefusal": "",
+      "centralReason": "",
+      "cpuFrame": {
+        "available": true,
+        "samples": 89,
+        "mean": 212.2977573033708,
+        "p95": 298.25063999999963
+      },
+      "mainThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 193.26101011235954,
+        "p95": 269.5272199999998
+      },
+      "renderThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 0.5798101123595505,
+        "p95": 0.6192
+      },
+      "gpuFrame": {
+        "available": true,
+        "samples": 81,
+        "mean": 0.7195685925925929,
+        "p95": 1.824768
+      },
+      "detailTimings": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 55.753879999999995,
+          "p95Ms": 81.22068999999999,
+          "samples": 180
+        }
+      ],
+      "finalSnapshot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\02-combat1000-binding-off\\report.json.final-checksum.json",
+      "finalSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "declaredFinal": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalLockstepSchema",
+          "value": "ntsd-lockstep-core-checksum-v4"
+        },
+        {
+          "name": "finalLockstepTick",
+          "value": 300
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+        }
+      ]
+    },
+    {
+      "action": "combat1000",
+      "bindingEnabled": true,
+      "reportPath": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01/03-combat1000-binding-on/report.json",
+      "reportSha": "A33531DC037391BC6DE351D5888042A62C45F5974C89B74D71FB986FED9B5B5C",
+      "actualAi": 1000,
+      "warmup": 120,
+      "samples": 180,
+      "workloadValid": true,
+      "harnessValidity": true,
+      "teardownRestored": true,
+      "flagApplied": true,
+      "flagUnchanged": true,
+      "flagRestored": true,
+      "camera": 44876,
+      "acceptedCameraSamples": 89,
+      "prepare": 177154,
+      "reuse": 0,
+      "logicMeanMs": 86.39400444444445,
+      "logicP95Ms": 120.43419499999997,
+      "unityFrameMeanMs": 249.74571704864502,
+      "unityFrameP95Ms": 467.7286460995669,
+      "displayFpsEstimate": 4.004072669663527,
+      "droppedTicks": 753,
+      "maximumBacklogTicks": 0,
+      "logicGcCoverage": true,
+      "logicGcSteadyEvents": 0,
+      "logicGcPassed": true,
+      "capacityReject": [
+        {
+          "name": "sampleRejectedForIncompleteBaseRoster",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForRosterMutation",
+          "value": 0
+        },
+        {
+          "name": "sampleRejectedForPoolExpansion",
+          "value": 0
+        }
+      ],
+      "centralSegment": {
+        "available": true,
+        "samples": 89,
+        "mean": 1990.4943820224719,
+        "p95": 2025.2
+      },
+      "centralCpuDraw": {
+        "available": true,
+        "samples": 89,
+        "mean": 1991.4943820224719,
+        "p95": 2026.2
+      },
+      "centralSource": {
+        "available": true,
+        "samples": 89,
+        "mean": 1992.056179775281,
+        "p95": 2027.2
+      },
+      "centralResolved": {
+        "available": true,
+        "samples": 89,
+        "mean": 1992.056179775281,
+        "p95": 2027.2
+      },
+      "centralRefusal": "",
+      "centralReason": "",
+      "cpuFrame": {
+        "available": true,
+        "samples": 89,
+        "mean": 212.57294606741564,
+        "p95": 286.34075999999976
+      },
+      "mainThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 193.66034269662924,
+        "p95": 261.9284599999998
+      },
+      "renderThread": {
+        "available": true,
+        "samples": 89,
+        "mean": 0.5335662921348312,
+        "p95": 0.60176
+      },
+      "gpuFrame": {
+        "available": true,
+        "samples": 80,
+        "mean": 0.7103488000000002,
+        "p95": 1.8863615999999999
+      },
+      "detailTimings": [
+        {
+          "phase": "CandidateCollect/PairExactLoop",
+          "meanMs": 55.77571333333332,
+          "p95Ms": 77.71232499999999,
+          "samples": 180
+        }
+      ],
+      "finalSnapshot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\03-combat1000-binding-on\\report.json.final-checksum.json",
+      "finalSnapshotSha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "declaredFinal": [
+        {
+          "name": "finalParitySnapshotSchema",
+          "value": "ntsd-unity-extended-battle-checksum-v5"
+        },
+        {
+          "name": "finalParitySnapshotTick",
+          "value": 300
+        },
+        {
+          "name": "finalParityInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalParityRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalParityMetadataHash",
+          "value": "4ad36ccb3770107b6a3bfc9f4607ab2cc99c496fda261e893e11a4e3b48510bf"
+        },
+        {
+          "name": "finalParityWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalParitySlotsHash",
+          "value": "0204b6a63644d5f766f70eb98cdfedfa9e05f5231489919bdedcf99694c87dbd"
+        },
+        {
+          "name": "finalParityARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalParityVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalParityStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalParityEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalParityOverallHash",
+          "value": "81c5ef64a203a149206e35daa18624253a3719e91d8aaf0b1cc63d906934112c"
+        },
+        {
+          "name": "finalLockstepSchema",
+          "value": "ntsd-lockstep-core-checksum-v4"
+        },
+        {
+          "name": "finalLockstepTick",
+          "value": 300
+        },
+        {
+          "name": "finalLockstepInputHash",
+          "value": "01e3c40fadb8c9ad80f77c487e9e68e18c239695b44e8d9b85dddc369ad20192"
+        },
+        {
+          "name": "finalLockstepRngHash",
+          "value": "d13f160e568ce29eb2ef6a95626f4fef798e0dc57415c30ba3d0624600158b07"
+        },
+        {
+          "name": "finalLockstepMetadataHash",
+          "value": "d76e6ef98f48df6c814fdc7e36d725d35b6d0aebc55bef5a805fbdfa8d33465c"
+        },
+        {
+          "name": "finalLockstepWorldHash",
+          "value": "6f85fdf3a56345408d81553df039bb2fde03a6705c48b25e27f65aabbb92e0cc"
+        },
+        {
+          "name": "finalLockstepSlotsHash",
+          "value": "e019b7cce3598825dcc82ec49e17f249e2fbdaa84fff2a8be5e1a0502c665364"
+        },
+        {
+          "name": "finalLockstepARestHash",
+          "value": "6f3d2e5ce017529b88b3c438eae9293f0061280393d20aaa17685844c4d8d87d"
+        },
+        {
+          "name": "finalLockstepVRestHash",
+          "value": "057c70b8b69ee88e20a2745d6deb76df4a01f509d91e870f64ed71c0f8eb7a67"
+        },
+        {
+          "name": "finalLockstepStatsHash",
+          "value": "b5621a1877256ecfdec4155f7a16dfa4e018ec4a027309b9af46c7ec2df579c9"
+        },
+        {
+          "name": "finalLockstepEventsHash",
+          "value": "0c179e4ccefa8ad0d075a0fc19fb8724ea4d152003ce3e4ba4c90473a6e7604a"
+        },
+        {
+          "name": "finalLockstepOverallHash",
+          "value": "8fb950b31dd60a4407a5e015a9d55ec080880acfb1c0a0c616f4c2d8e81081e3"
+        }
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "offIndex": 0,
+      "onIndex": 1,
+      "declaredFinalFieldCount": 24,
+      "differentFinalFields": [],
+      "fullSnapshotIdentical": true,
+      "prepareEqual": true,
+      "reuseFraction": 0,
+      "logicMeanChangePercent": -0.34341398179938976,
+      "unityFrameMeanChangePercent": 1.0597751796480814,
+      "cpuFrameMeanChangePercent": -0.20618644732948166
+    },
+    {
+      "offIndex": 2,
+      "onIndex": 3,
+      "declaredFinalFieldCount": 24,
+      "differentFinalFields": [],
+      "fullSnapshotIdentical": true,
+      "prepareEqual": true,
+      "reuseFraction": 0,
+      "logicMeanChangePercent": 0.2482521914114244,
+      "unityFrameMeanChangePercent": -0.33732960237140563,
+      "cpuFrameMeanChangePercent": 0.12962396190159264
+    }
+  ],
+  "suiteStatus": "MEASUREMENTS_COMPLETED",
+  "completedRuns": 4,
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "battleSceneUnchanged": true,
+  "originalSceneRestored": true,
+  "scope": "Actual AI1000 short120+180, not formal120+1800/Android/120FPS/H11 full presentation0GC. CPU DrawMesh not GPU batch; central unresolved/stale independent fields UNKNOWN."
+}

@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-08T03:19:24.6135821Z",
+  "exit": 0,
+  "warnings": 4320,
+  "errors": 0,
+  "summary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1362"
+  ],
+  "fullStdoutPersisted": false,
+  "scopedDiff": {
+    "exit": 0,
+    "output": "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs', LF will be replaced by CRLF the next time Git touches it\n",
+    "scope": "three declared CSharp + tracker + Tasks65/66 + Record65 + Report65 + Operation65; not a whole-tree pass"
+  },
+  "commands": [
+    "pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1",
+    "git diff --check -- <declared scope>"
+  ],
+  "newTask66IsPreparationOnly": true,
+  "globalWarningsRetained": true
+}

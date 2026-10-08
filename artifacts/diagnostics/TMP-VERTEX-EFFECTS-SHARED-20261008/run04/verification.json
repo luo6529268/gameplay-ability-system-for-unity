@@ -1,0 +1,22 @@
+{
+    "passed": true,
+    "editorMode": true,
+    "sameSharedMaterial": true,
+    "sameRendererMaterial": true,
+    "differentVertexEffects": true,
+    "parameterUpdateKeepsMaterial": true,
+    "sourceUnchanged": true,
+    "disableEnableKeepsSharedMaterial": true,
+    "duplicateKeepsSharedMaterial": true,
+    "lastUserReleasesMaterial": true,
+    "sharedMaterialId": -1282,
+    "redPixels": 481,
+    "bluePixels": 4588,
+    "whitePixels": 5722,
+    "shaderPath": "Assets/TextMeshPro/Shaders/TMP_SDF.shader",
+    "rendererShaderPath": "Assets/TextMeshPro/Shaders/TMP_SDF.shader",
+    "rendererIsShared": true,
+    "firstVertex": "(20.00, 0.92) / (0.94, 0.12, 0.12, 1.00)",
+    "secondVertex": "(91.00, 0.92) / (0.12, 0.35, 0.94, 1.00)",
+    "error": ""
+}

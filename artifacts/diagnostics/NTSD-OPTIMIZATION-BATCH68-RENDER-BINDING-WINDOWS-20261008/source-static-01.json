@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-08T05:06:54.6458290Z",
+  "beforeRelativeChecks": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/01-BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/02-CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/03-STATE.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/04-CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/05-INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/06-battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md",
+      "exitCode": 1,
+      "output": [
+        "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/backups-01/07-NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md', LF will be replaced by CRLF the next time Git touches it",
+        "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md', LF will be replaced by CRLF the next time Git touches it"
+      ]
+    }
+  ],
+  "suiteSha": "BFE0CA745229563374A92F9046A7BC67FD6890FB23676A9B27061A81C8BAD9D2",
+  "newCaseCount": 20,
+  "oldImplementationAndTestsTextUnchanged": true,
+  "featureSha": "F5F1173E63B18A2F90F9073B87AA933FBDC83731822487DEE38DE336587FB6C2"
+}

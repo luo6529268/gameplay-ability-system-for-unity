@@ -1,0 +1,29 @@
+{
+  "request": {
+    "type": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "groupNames": [
+        "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.EnvelopeBindingEligibility",
+        "^NTSD\\.Test\\.Editor\\.BattleBruteProductionAdmissionEditorTests\\.(OrdinaryBruteDefaultsEnableAdmittedFastPath|ProductionRequestDoesNotChangeFrozenWorkloadOrEnableCandidate)"
+      ],
+      "initTimeout": 180000,
+      "includeDetails": false,
+      "includeFailedTests": true
+    }
+  },
+  "sourceFreeze": {
+    "chunk_id": "9ec58e",
+    "wall_time_seconds": 0.2803728,
+    "exit_code": 0,
+    "original_token_count": 106,
+    "output": "utc\r\nhead\r\nwrites\r\nguards\r\nstatusForWrites\r\nbeforeReadNote\r\n{\"head\":\"527350afa08633357ba20e7453a9d260eaa2b97c\",\"source\":{\"Length\":53559,\"LastWriteTimeUtc\":\"2026-10-08T01:14:30.101Z\"},\"sourceSha\":\"214B2B28C674F592A5B793DE773D6F1A55295EC428FD0DEF20813B9B587B1BD4\",\"suiteSha\":\"03EECC43A5DF30130465A4EF8FB0CCE0D3150149AEB52E30BF806D0350E93F71\",\"agentsSha\":\"4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F\"}\r\n"
+  },
+  "editorReady": {
+    "chunk_id": "e02422",
+    "wall_time_seconds": 0.7426855,
+    "exit_code": 0,
+    "original_token_count": 350,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Retrieved editor state.\",\"data\":{\"schema_version\":\"unity-mcp/editor_state@2\",\"observed_at_unix_ms\":1791422498052,\"sequence\":4,\"unity\":{\"instance_id\":null,\"unity_version\":\"2022.3.62f3\",\"project_id\":null,\"platform\":\"WindowsEditor\",\"is_batch_mode\":false},\"editor\":{\"is_focused\":false,\"play_mode\":{\"is_playing\":false,\"is_paused\":false,\"is_changing\":false},\"active_scene\":{\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"guid\":\"132c934aff207b048833ab33c1961278\",\"name\":\"NTSD_Menu\"}},\"activity\":{\"phase\":\"idle\",\"since_unix_ms\":1791422131540,\"reasons\":[\"tick\"]},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_started_unix_ms\":null,\"last_compile_finished_unix_ms\":null,\"last_domain_reload_before_unix_ms\":null,\"last_domain_reload_after_unix_ms\":1791422120770},\"assets\":{\"is_updating\":false,\"external_changes_dirty\":false,\"external_changes_last_seen_unix_ms\":null,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":null,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_requested_unix_ms\":null,\"last_refresh_finished_unix_ms\":null}},\"tests\":{\"is_running\":false,\"mode\":null,\"current_job_id\":null,\"started_unix_ms\":null,\"started_by\":\"unknown\",\"last_run\":null},\"transport\":{\"unity_bridge_connected\":null,\"last_message_unix_ms\":null},\"settings\":{\"batch_execute_max_commands\":25}}}}\r\n"
+  }
+}

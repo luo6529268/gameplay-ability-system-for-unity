@@ -1,0 +1,127 @@
+{
+  "utc": "2026-10-08T02:53:27.0030114Z",
+  "query": {
+    "distinctPassed": 46,
+    "first": {
+      "job": "af081df1af564b868942c2cbf44f87bd",
+      "total": 46,
+      "passed": 45,
+      "failed": 1,
+      "original": "query-green-failed-original-01.xml",
+      "sha": "4E11CCA7D2A1FCF8974ED5CA81A6C97032CD6F7451530A31704863DC2CD84F1F"
+    },
+    "fix": {
+      "job": "1f8c4fff03964cdb842a25fe58b9f4cb",
+      "total": 2,
+      "passed": 2,
+      "failed": 0,
+      "sha": "7C01A00232A7541EAA97B49E7E53501308E8E41665E826540B1AE467E50721BF",
+      "bytes": 3671,
+      "duration": "4.102428"
+    },
+    "red": {
+      "job": "edf886a64c9745febaf2109ec864d86d",
+      "total": 18,
+      "passed": 0,
+      "failed": 18,
+      "sha": "F70920C868D03CF51890C1EB65915BBB68889C39027CAB22E09DE6DBA616D140",
+      "bytes": 30726,
+      "duration": "4.315297",
+      "failures": [
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_CapacityFallbackDoesNotGrow(1,3)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_CapacityFallbackDoesNotGrow(2,1)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_DefaultIsOff",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_InactiveTimingDoesNotCount(\"timing\")",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_InactiveTimingDoesNotCount(\"geometry\")",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_InactiveTimingDoesNotCount(\"cache\")",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_InactiveTimingDoesNotCount(\"recorder\")",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_Kind5OutsideUnionRetainsOriginalCoarse(False)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_Kind5OutsideUnionRetainsOriginalCoarse(True)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_MultiBodySequenceHandlesRngAndKind4(0,False)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_MultiBodySequenceHandlesRngAndKind4(4,False)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_MultiBodySequenceHandlesRngAndKind4(5,False)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_MultiBodySequenceHandlesRngAndKind4(0,True)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_OverlapRotationDoesNotSampleTwice",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_RejectedRotationCountsEachDirectionExactlyOnce(1)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_RejectedRotationCountsEachDirectionExactlyOnce(64)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_StaleBindingKeepsFirstReadEligibility(False)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        },
+        {
+          "name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.BruteEnvelopeBranchTiming_StaleBindingKeepsFirstReadEligibility(True)",
+          "message": "  Current envelope timing requires an explicit diagnostic opt-in.\n  Expected: not null\n  But was:  null\n"
+        }
+      ]
+    }
+  },
+  "suite": {
+    "job": "39753d42ecc44246bd0889b0f05b2fe1",
+    "total": 76,
+    "passed": 76,
+    "failed": 0,
+    "sha": "B1A651885AEEF9CEA1FF231C13C5B674B55A185BBEBA9D9136FE2AEE3C65854F",
+    "bytes": 57902,
+    "duration": "6.217289",
+    "red": {
+      "job": "31aade40d3944d71846888c889191bb6",
+      "total": 13,
+      "passed": 0,
+      "failed": 13,
+      "sha": "52998E34698BAD9DAA7BAECF4F360B8C20AA8DAC27BFF3CD3BDF7871185E04DB",
+      "bytes": 21342,
+      "duration": "2.837636"
+    }
+  },
+  "distinctTotal": 122,
+  "windowsStarted": false,
+  "performanceCertified": false
+}

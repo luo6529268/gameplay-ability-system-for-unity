@@ -1,0 +1,120 @@
+{
+  "utc": "2026-10-08T05:39:33.6953250Z",
+  "state": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791437968001,
+        "sequence": 9,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": false,
+          "play_mode": {
+            "is_playing": false,
+            "is_paused": false,
+            "is_changing": false
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "guid": "132c934aff207b048833ab33c1961278",
+            "name": "NTSD_Menu"
+          }
+        },
+        "activity": {
+          "phase": "idle",
+          "since_unix_ms": 1791437482565,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791437116034
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": 1791437470056,
+          "started_by": "unknown",
+          "last_run": {
+            "finished_unix_ms": 1791437481521,
+            "result": "unknown",
+            "counts": null
+          }
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "scenes": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "1 scene(s) loaded.",
+      "data": {
+        "scenes": [
+          {
+            "name": "NTSD_Menu",
+            "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+            "buildIndex": 0,
+            "isLoaded": true,
+            "isDirty": false,
+            "isActive": true,
+            "rootCount": 8
+          }
+        ]
+      }
+    }
+  },
+  "guardCount": 402,
+  "guardFailures": [],
+  "backupFailures": [],
+  "validatorExit": 0,
+  "validatorSummary": [
+    "Change ledger validation PASSED.",
+    "  Records: 1365",
+    "  Governed code files in diff: 6",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs -> CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-CPOINT-VALUE-SEAM-001, CLIENT-FORMAL-KERNEL-WPOINT-VALUE-SEAM-001, NTSD-OPT-H07-BRUTE-BRANCH-TIMING-044, NTSD-OPT-H07-BRUTE-COARSE-DISPATCH-053, NTSD-OPT-H07-BRUTE-COARSE-ENVELOPE-058, NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048, NTSD-OPT-H07-BRUTE-SAMPLED-TIMING-045, NTSD-OPT-H07-COARSE-PROOF-REUSE-066, NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD28-336B44-BODY-DEPTH-CANDIDATE-001, NTSD28-336B44-HITBOX-GIZMO-PROJECTION-001, NTSD28-336B44-Q07-D024-VERTICAL-PROJECTION-001, NTSD28-B5-CANDIDATE-EFFECT-TYPE-PRODUCTION-FILTER-001, NTSD28-B5-EFFECT-ELIGIBILITY-POSTACTION-AUDIT-001, NTSD28-B5-HIT-CANDIDATE-PAIR-SNAPSHOT-CARRIER-001, NTSD28-B5-HIT-GROUP-ELIGIBILITY-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-KIND4-DEAD-WEAPONCOUNT-SELECTION-RETIREMENT-001, NTSD28-B5-KIND8-ATOMIC-PRODUCTION-INTEGRATION-001, NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001, NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001, NTSD28-Q06-COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001, NTSD28-Q06-COLLISION-FRAME-UNITY-001, NTSD28-Q06-PLATFORM-TRANSACTION-001, NTSD28-Q06-UNARMORED-WEAPON-REACTION-001, NTSD28-Q07-CONTROL-ONLY-ITR-CANDIDATE-001, NTSD28-Q07-D024-PLATFORM-ITR-SOURCE-GATE-001, NTSD28-Q07-D024-SHARED-ANCHOR-CALLSITE-001, NTSD28-Q07-D024-SHARED-COLLISION-PROJECTION-001, NTSD28-Q07-KIND-DAT-COMBAT-CONSUMERS-001",
+    "  COVERED: Assets/NTSD/Scripts/Animation/Rendering/BattleRenderFeature.cs -> BATTLE-CENTRAL-EDITOR-PREVIEW-001, BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001, BATTLE-CENTRAL-RUNTIME-FOOTSELF-001, BATTLE-CENTRAL-RUNTIME-HEALTH-001, CAMERA-PLATFORM-BACKGROUND-001, NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068, NTSD-OPT-H07-RENDER-TEXTURE-BINDING-REUSE-067",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs -> NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-COARSE-ENVELOPE-BUDGET-061, NTSD-OPT-H07-COARSE-ENVELOPE-DRIVER-059, NTSD-OPT-H07-COMBINED-CACHE-ADMISSION-051, NTSD-OPT-H07-ENVELOPE-BINDING-DRIVER-062, NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064, NTSD-OPT-H07-KIND5-ADMISSION-046",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs -> NTSD-OPT-H07-RENDER-TEXTURE-BINDING-REUSE-067, NTSD-OPT-M03-SAME-SAMPLE-PIXELS-017",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs -> NTSD-OPT-H07-BRUTE-BRANCH-TIMING-044, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-BRUTE-SAMPLED-TIMING-045, NTSD-OPT-H07-COARSE-ENVELOPE-WINDOWS-060, NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052, NTSD-OPT-H07-CPU-GC-CAPTURE-039, NTSD-OPT-H07-ELIGIBILITY-WINDOWS-050, NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064, NTSD-OPT-H07-ENVELOPE-BINDING-WINDOWS-063, NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065, NTSD-OPT-H07-HARNESS-RECOVERY-026, NTSD-OPT-H07-LABEL-PREWARM-WINDOWS-057, NTSD-OPT-H07-LOGIC-GC-CALLSITE-055, NTSD-OPT-H07-LOGIC-GC-SCOPE-054, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068, NTSD-OPT-H07-ROLE-COLLECTOR-ADMISSION-029, NTSD-OPT-H07-ROLE-FORMAL-WINDOWS-030, NTSD-OPT-H07-WINDOWS-AI-SUITE-024",
+    "  COVERED: Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs -> CLIENT-FORMAL-KERNEL-BDY-VALUE-SEAM-001, NTSD-OPT-H07-BRUTE-COARSE-DISPATCH-053, NTSD-OPT-H07-BRUTE-COARSE-ENVELOPE-058, NTSD-OPT-H07-BRUTE-ELIGIBILITY-REUSE-049, NTSD-OPT-H07-BRUTE-EMPTY-ITR-GUARD-032, NTSD-OPT-H07-BRUTE-EMPTY-ITR-ROSTER-034, NTSD-OPT-H07-BRUTE-EXACT-CACHE-036, NTSD-OPT-H07-BRUTE-GEOMETRY-FIRST-037, NTSD-OPT-H07-BRUTE-KIND5-PRESENCE-038, NTSD-OPT-H07-BRUTE-PRODUCTION-ADMISSION-040, NTSD-OPT-H07-BRUTE-REJECTED-BINDING-REUSE-048, NTSD-OPT-H07-COARSE-PROOF-REUSE-066, NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065, NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031, NTSD28-B5-HIT-CANDIDATE-PAIR-SNAPSHOT-CARRIER-001, NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001, NTSD28-Q06-COLLISION-ROLE-MATRIX-ORACLE-001, NTSD28-Q06-DAMAGE-REMAINING-SPECIAL-KINDS-001"
+  ],
+  "requestAbsent": true,
+  "resultAbsent": true,
+  "outputAbsent": true,
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c"
+}

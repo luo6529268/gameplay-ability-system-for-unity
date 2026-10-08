@@ -1,0 +1,101 @@
+{
+  "utc": "2026-10-08T05:40:27.1600897Z",
+  "state": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Retrieved editor state.",
+      "data": {
+        "schema_version": "unity-mcp/editor_state@2",
+        "observed_at_unix_ms": 1791437989382,
+        "sequence": 4,
+        "unity": {
+          "instance_id": null,
+          "unity_version": "2022.3.62f3",
+          "project_id": null,
+          "platform": "WindowsEditor",
+          "is_batch_mode": false
+        },
+        "editor": {
+          "is_focused": true,
+          "play_mode": {
+            "is_playing": true,
+            "is_paused": false,
+            "is_changing": true
+          },
+          "active_scene": {
+            "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+            "guid": "9a044b4462e171548a6466aaa64f92e5",
+            "name": "NTSD_Battle"
+          }
+        },
+        "activity": {
+          "phase": "playmode_transition",
+          "since_unix_ms": 1791437989382,
+          "reasons": [
+            "tick"
+          ]
+        },
+        "compilation": {
+          "is_compiling": false,
+          "is_domain_reload_pending": false,
+          "last_compile_started_unix_ms": null,
+          "last_compile_finished_unix_ms": null,
+          "last_domain_reload_before_unix_ms": null,
+          "last_domain_reload_after_unix_ms": 1791437981737
+        },
+        "assets": {
+          "is_updating": false,
+          "external_changes_dirty": false,
+          "external_changes_last_seen_unix_ms": null,
+          "external_changes_dirty_since_unix_ms": null,
+          "external_changes_last_cleared_unix_ms": null,
+          "refresh": {
+            "is_refresh_in_progress": false,
+            "last_refresh_requested_unix_ms": null,
+            "last_refresh_finished_unix_ms": null
+          }
+        },
+        "tests": {
+          "is_running": false,
+          "mode": null,
+          "current_job_id": null,
+          "started_unix_ms": null,
+          "started_by": "unknown",
+          "last_run": null
+        },
+        "transport": {
+          "unity_bridge_connected": null,
+          "last_message_unix_ms": null
+        },
+        "settings": {
+          "batch_execute_max_commands": 25
+        }
+      }
+    }
+  },
+  "files": [
+    {
+      "FullName": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\00-dispersed1000-binding-off\\report.json.request.json",
+      "Length": 2749,
+      "LastWriteTimeUtc": "2026-10-08T05:39:34.4764724Z"
+    },
+    {
+      "FullName": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\01-dispersed1000-binding-on\\report.json.request.json",
+      "Length": 2748,
+      "LastWriteTimeUtc": "2026-10-08T05:39:34.4794721Z"
+    },
+    {
+      "FullName": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\02-combat1000-binding-off\\report.json.request.json",
+      "Length": 2743,
+      "LastWriteTimeUtc": "2026-10-08T05:39:34.4824723Z"
+    },
+    {
+      "FullName": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008\\windows-01\\03-combat1000-binding-on\\report.json.request.json",
+      "Length": 2742,
+      "LastWriteTimeUtc": "2026-10-08T05:39:34.4854723Z"
+    }
+  ],
+  "sharedRequestPresent": false,
+  "sharedResultPresent": false
+}

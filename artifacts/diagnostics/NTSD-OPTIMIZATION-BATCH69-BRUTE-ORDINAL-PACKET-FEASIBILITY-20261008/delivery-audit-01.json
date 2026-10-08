@@ -1,0 +1,229 @@
+{
+  "utc": "2026-10-08T06:44:00.4183922Z",
+  "status": "PARTIAL / EDITOR_UNAVAILABLE / TEMP_UNKNOWN_CAUSE",
+  "guardCount": 501,
+  "guardMismatches": [
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": false,
+      "sha": null,
+      "beforeExists": true,
+      "beforeSha": "5F59CEE15215C4A67F0C1D07AAD48E6A2E51993B63E7F3AE0977EEA0A5E746DA"
+    }
+  ],
+  "guardMismatchCount": 1,
+  "backupCount": 8,
+  "backups": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/01-BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "214B2B28C674F592A5B793DE773D6F1A55295EC428FD0DEF20813B9B587B1BD4",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/02-CHANGE-LEDGER.md",
+      "sha": "61609E12A15602696A327CC6BDCDE9946226AFD60DDA67E4FAC6695267B40A0A",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/03-STATE.md",
+      "sha": "9AF4AEF4C2408C7EB85C94BE970A8FC2FD86D8D886E3A94D045A8EBF8D8CB446",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/04-CODEX-CURRENT-HANDOFF.md",
+      "sha": "CBAB6D25CE51B3BF7D5F26ABE0FBD5EEB81605A30147D6A98D8976445E06ED55",
+      "matches": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/05-INDEX.md",
+      "sha": "3786EAF4ABF9FB9C71074C90D102443341854E86A5AA6DC5B8E6E7379D160792",
+      "matches": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/06-battle-optimization-progress-tracker.md",
+      "sha": "960AC3C3298DE6FF4D68FFEC07934842E46BF21D13ED4BE5F830CC89835D4C4D",
+      "matches": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/07-Goal18_LastTestResults.xml",
+      "sha": "7BDC64D54862E948A93316F3F4DC0EEFFEBFD36F2EF47F87388B84CAED994AD0",
+      "matches": true
+    },
+    {
+      "path": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008/before/08-Admission-qualified-source.cs",
+      "sha": "3898B969A1256991A46A89F30B0DBBA869BEB01D43C0AB7B3D0671ABE9B07B81",
+      "matches": true
+    }
+  ],
+  "backupMismatchCount": 0,
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "headUnchanged": true,
+  "editorProcesses": [
+    {
+      "pid": 78296,
+      "exe": "D:\\Unity\\HubEditor\\2022.3.62f3\\Editor\\Unity.exe",
+      "start": "2026-10-08T14:41:54.3995960+08:00"
+    },
+    {
+      "pid": 101812,
+      "exe": "D:\\Unity\\HubEditor\\2022.3.62f3\\Editor\\Unity.exe",
+      "start": "2026-10-08T14:42:59.9697533+08:00"
+    },
+    {
+      "pid": 103440,
+      "exe": "D:\\Unity\\HubEditor\\2022.3.62f3\\Editor\\Unity.exe",
+      "start": "2026-10-08T14:43:04.6945363+08:00"
+    }
+  ],
+  "bridgePorts": [],
+  "originalEditorPid": 98492,
+  "liveSceneAndConsole": "NOT_REVALIDATED",
+  "lastKnownLiveSceneAndConsole": "2026-10-08T06:27:41Z Menu savedclean8roots nonPlay CS0",
+  "currentLastTestOutputExists": false,
+  "sourceSha": "391A7973AF7D52A66D33F3A6A1ED62CCC546172F40BA392B7F3225454F8A2B55",
+  "archives": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\coverage-analysis-01.json",
+      "sha": "9F0BBA45D92688426C1D4F991F44EF9DA1B913739D3F521080632B1C48487B98"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\final-validation-01.json",
+      "sha": "92CD732CD9CD70C9CA22FC0089F67E03D303F97B1178520F85CF8D7959DC399D"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\green-results-01.xml",
+      "sha": "7FA873475296A3B1A55CD6ACA53F484F588B9621CD07762531F7C1EEDC096A47"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\initial-validation-summary-01.json",
+      "sha": "84B047D56C6634CA98A7FA1C5FF1DDE61B9944259ECEFD716A2E0FF5B20CF35A"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\pure-null-audit-01.json",
+      "sha": "55C44EC3EE3A4FEA481F36A74EF5B2E4C14EC876BE7E2142617DD73A239A18EB"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\pure-null-results-01.xml",
+      "sha": "7874DDEEF49D70DCEF41E727289DA331BA2977E53E7D247BCC7E48A58B13B798"
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH69-BRUTE-ORDINAL-PACKET-FEASIBILITY-20261008\\red-results-01.xml",
+      "sha": "E6F93A770A70D2C7FDFE69551DB3AF6447D2B030DA60553E50EA926D223AC7C4"
+    }
+  ],
+  "noRestartNoRestore": true,
+  "restoredEditorObservation": {
+    "utc": "2026-10-08T06:44:56.3867037Z",
+    "editor": {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Retrieved editor state.",
+        "data": {
+          "schema_version": "unity-mcp/editor_state@2",
+          "observed_at_unix_ms": 1791441895643,
+          "sequence": 6,
+          "unity": {
+            "instance_id": null,
+            "unity_version": "2022.3.62f3",
+            "project_id": null,
+            "platform": "WindowsEditor",
+            "is_batch_mode": false
+          },
+          "editor": {
+            "is_focused": true,
+            "play_mode": {
+              "is_playing": false,
+              "is_paused": false,
+              "is_changing": false
+            },
+            "active_scene": {
+              "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+              "guid": "132c934aff207b048833ab33c1961278",
+              "name": "NTSD_Menu"
+            }
+          },
+          "activity": {
+            "phase": "idle",
+            "since_unix_ms": 1791441895643,
+            "reasons": [
+              "tick"
+            ]
+          },
+          "compilation": {
+            "is_compiling": false,
+            "is_domain_reload_pending": false,
+            "last_compile_started_unix_ms": null,
+            "last_compile_finished_unix_ms": null,
+            "last_domain_reload_before_unix_ms": null,
+            "last_domain_reload_after_unix_ms": 1791441793317
+          },
+          "assets": {
+            "is_updating": false,
+            "external_changes_dirty": false,
+            "external_changes_last_seen_unix_ms": null,
+            "external_changes_dirty_since_unix_ms": null,
+            "external_changes_last_cleared_unix_ms": null,
+            "refresh": {
+              "is_refresh_in_progress": false,
+              "last_refresh_requested_unix_ms": null,
+              "last_refresh_finished_unix_ms": null
+            }
+          },
+          "tests": {
+            "is_running": false,
+            "mode": null,
+            "current_job_id": null,
+            "started_unix_ms": null,
+            "started_by": "unknown",
+            "last_run": null
+          },
+          "transport": {
+            "unity_bridge_connected": null,
+            "last_message_unix_ms": null
+          },
+          "settings": {
+            "batch_execute_max_commands": 25
+          }
+        }
+      }
+    },
+    "scenes": {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "1 scene(s) loaded.",
+        "data": {
+          "scenes": [
+            {
+              "name": "NTSD_Menu",
+              "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+              "buildIndex": 0,
+              "isLoaded": true,
+              "isDirty": false,
+              "isActive": true,
+              "rootCount": 8
+            }
+          ]
+        }
+      }
+    },
+    "compiler": {
+      "status": "success",
+      "result": {
+        "success": true,
+        "message": "Retrieved 0 log entries.",
+        "data": []
+      }
+    }
+  },
+  "note": "06:39:48 old pid98492/6402 missing; 06:44:56 new NTSD pid78296/6402 verified by sanitized projectPath/process+bridge and live Menu clean8roots CS0; agent did not start or restart Editors. Two Temp files missing cause unknown; retained independent archives."
+}

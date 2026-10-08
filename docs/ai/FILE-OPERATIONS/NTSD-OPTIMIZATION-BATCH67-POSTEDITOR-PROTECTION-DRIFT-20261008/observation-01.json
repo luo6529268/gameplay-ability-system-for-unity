@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-08T04:42:50.6038242Z",
+  "font": {
+    "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/Fonts/Lato/SDF/JifengBladeArtSC-3500-Plus SDF.asset",
+    "initialSha": "8ABE084268EA031F84C2289FB2F71F37B8A5FB025C20448F6F68EBF030EB248A",
+    "currentSha": "B1F4AD549E8EA39D2844E3CFAB39D80FDA148C15A323D3517FD6D7FB8B6C09FE",
+    "initialBytes": 2127125,
+    "currentBytes": 2127152,
+    "lastWriteUtc": "2026-10-08T04:32:20.553459Z"
+  },
+  "tempResult": {
+    "path": "Temp/NTSD_ProductionEntityStress.result",
+    "currentExists": false,
+    "initialSha": "D3980E4AD414AB6F3E22780B08D0DC63B195A6809361759D9EEC737376347EAB",
+    "retainedBackup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH66-COARSE-PROOF-REUSE-20261008/backups-01/10-NTSD_ProductionEntityStress.result",
+    "backupSha": "D3980E4AD414AB6F3E22780B08D0DC63B195A6809361759D9EEC737376347EAB",
+    "bytes": 533
+  },
+  "tempXml": {
+    "path": "Temp/Goal18_LastTestResults.xml",
+    "currentExists": false,
+    "retainedFinalArtifact": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/cost-results-01.xml",
+    "retainedFinalSha": "FF445A47B66895526B5D65010AE7564205ECF11F759964532C0F8C6B99C1BCFA"
+  },
+  "actor": "UNKNOWN",
+  "cause": "UNKNOWN",
+  "noRestorationOrDeletionByThisTask": true
+}

@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-08T02:53:27.0030114Z",
+  "head": "527350afa08633357ba20e7453a9d260eaa2b97c",
+  "guardCount": 180,
+  "changed": [],
+  "backupCount": 11,
+  "backupsChanged": [],
+  "sources": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha": "ED518287DFFB8F870D774AD4E168833DD1D743AA99F2B968DF5CDBA7FF6A0DEC",
+      "bytes": 374992
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha": "9282999F1126173495C3C29E98DF7A60AC184CCEFE3C09EC8D216F9F7A61E97D",
+      "bytes": 352135
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "48E580E9246F71F93757E66EB953FAE678C58656932E7D07433656B20D9C9471",
+      "bytes": 245136
+    }
+  ]
+}

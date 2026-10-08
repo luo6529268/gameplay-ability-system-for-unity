@@ -1,0 +1,16 @@
+{
+  "request": {
+    "type": "execute_menu_item",
+    "params": {
+      "menu_path": "NTSD/Validation/Optimization/Batch64 Envelope Binding Eligibility Full Driver GC 1000 AI"
+    }
+  },
+  "response": {
+    "chunk_id": "33bc7b",
+    "wall_time_seconds": 0.6629054,
+    "exit_code": 0,
+    "original_token_count": 58,
+    "output": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Attempted to execute menu item: 'NTSD/Validation/Optimization/Batch64 Envelope Binding Eligibility Full Driver GC 1000 AI'. Check Unity logs for confirmation or errors.\"}}\r\n"
+  },
+  "note": "Attempted menu success is not completion; actual request/runtime/progress must be checked."
+}

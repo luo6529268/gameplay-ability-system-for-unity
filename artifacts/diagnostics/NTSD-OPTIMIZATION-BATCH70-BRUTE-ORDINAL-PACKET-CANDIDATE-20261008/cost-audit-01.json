@@ -1,0 +1,75 @@
+{
+  "utc": "2026-10-08T07:03:55.5818199Z",
+  "job": "fa687171e40146c38ad6ae259d52adda",
+  "total": 2,
+  "passed": 2,
+  "failed": 0,
+  "duration": "3.985824",
+  "xmlSha": "2EEBBD6778896727890464B894703C78F8EFFCBE4E6A2AFDE62B0D0149C03302",
+  "sourceSha": "2EEBBD6778896727890464B894703C78F8EFFCBE4E6A2AFDE62B0D0149C03302",
+  "stats": [
+    {
+      "spacing": 120,
+      "offSamples": [
+        22.5308,
+        28.6502,
+        22.7466,
+        22.5501,
+        25.8961,
+        25.1604,
+        22.6971,
+        23.6141
+      ],
+      "onSamples": [
+        15.896,
+        16.1956,
+        15.821,
+        15.9797,
+        16.2445,
+        16.0725,
+        16.0914,
+        16.3373
+      ],
+      "offMean": 24.230675,
+      "onMean": 16.07975,
+      "offMedian": 23.18035,
+      "onMedian": 16.08195,
+      "meanReductionPercent": 33.63886891306165,
+      "medianReductionPercent": 30.622488443875962,
+      "localGainGate": true
+    },
+    {
+      "spacing": 12,
+      "offSamples": [
+        44.9039,
+        42.4569,
+        42.6463,
+        42.5408,
+        42.8054,
+        42.9669,
+        42.9673,
+        42.7921
+      ],
+      "onSamples": [
+        36.6314,
+        39.331,
+        36.9153,
+        36.8795,
+        37.1322,
+        36.7036,
+        37.5911,
+        36.4845
+      ],
+      "offMean": 43.009949999999996,
+      "onMean": 37.208574999999996,
+      "offMedian": 42.79875,
+      "onMedian": 36.897400000000005,
+      "meanReductionPercent": 13.488448603172055,
+      "medianReductionPercent": 13.788603639124963,
+      "localGainGate": true
+    }
+  ],
+  "overallLocalGainGate": true,
+  "scope": "collector_fixture_not_AI_or_FPS",
+  "gc": "UNKNOWN"
+}

@@ -5,12 +5,14 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using NTSD.Animation;
+using NTSD.Animation.Rendering;
 using NTSD.Animation.Rendering.Editor;
 using NTSD.App;
 using NTSD.Simulation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NTSD.Test.Editor
@@ -40,6 +42,9 @@ namespace NTSD.Test.Editor
         private const string LabelPrewarmOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH57-LABEL-PREWARM-WINDOWS-20261008/windows-01";
         private const string BruteCoarseEnvelopeOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH60-COARSE-ENVELOPE-WINDOWS-20261008/windows-01";
         private const string BruteEnvelopeBindingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH63-ENVELOPE-BINDING-WINDOWS-20261008/windows-01";
+        private const string BruteEnvelopeBindingEligibilityOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01";
+        private const string BruteEnvelopeBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01";
+        private const string RenderTextureBindingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01";
         private const string SharedRequest = "Temp/NTSD_ProductionEntityStress.request.json";
         private const string SharedResult = "Temp/NTSD_ProductionEntityStress.result";
         private static readonly Type ConfigType = typeof(ProductionEntityStressRunner).Assembly.GetType(
@@ -73,6 +78,23 @@ namespace NTSD.Test.Editor
         private static BruteForceSceneQuery envelopeBindingQuery;
         private static bool previousEnvelopeBindingEnvelope;
         private static bool previousEnvelopeBindingReuse;
+        private static bool startingEnvelopeBindingEligibilityWindow;
+        private static bool envelopeBindingEligibilityOwner;
+        private static bool previousEnvelopeBindingEligibility;
+        private static bool startingEnvelopeBranchTimingWindow;
+        private static bool envelopeBindingBranchTimingOwner;
+        private static bool previousEnvelopeBranchTiming;
+        private static bool startingRenderTextureBindingWindow;
+        private static bool renderTextureBindingReuseOwner;
+        private static bool previousRenderTextureBindingReuse;
+        private static RunState renderTextureBindingReuseRun;
+        private static long lastRenderTextureBindingExecuteSequence;
+        private static readonly string RenderTextureBindingOwnerError =
+            "The renderer texture binding window requires exclusive ownership and a default-OFF flag.";
+        private static readonly string RenderTextureBindingDriftError =
+            "The owned renderer texture binding flag drifted during the fixed window.";
+        private static readonly string RenderTextureBindingObservationError =
+            "The fixed window requires fresh valid body recordings from its selected camera.";
         private static readonly string EnvelopeBindingModeError =
             "The envelope binding window requires production defaults, calibrated scope and exclusive ownership without another capture or candidate.";
         private static readonly string EnvelopeBindingOwnerError =
@@ -172,6 +194,23 @@ namespace NTSD.Test.Editor
             public bool bruteRejectedBindingReuseObservedApplied;
             public long bruteRejectedBindingMaximumObservedProbes;
             public long bruteRejectedBindingMaximumObservedReuses;
+            public bool bruteEnvelopeBindingEligibilityMode;
+            public bool bruteEnvelopeBindingPreviousEligibility;
+            public bool bruteEligibilityReuseFlagUnchanged;
+            public bool bruteEligibilityReuseObservedApplied;
+            public bool bruteEnvelopeBranchTimingMode;
+            public bool bruteEnvelopeBranchTimingFlagApplied;
+            public bool bruteEnvelopeBranchTimingFlagUnchanged;
+            public bool bruteEnvelopeBranchTimingRestored;
+            public bool bruteBranchTimingFlagUnchanged;
+            public bool renderTextureBindingReuseEnabled;
+            public bool renderTextureBindingReuseFlagApplied;
+            public bool renderTextureBindingReuseFlagUnchanged;
+            public bool renderTextureBindingReuseRestored;
+            public int renderTextureBindingAcceptedCameraSamples;
+            public int renderTextureBindingCameraId;
+            public long renderTextureBindingBodyPrepareCount;
+            public long renderTextureBindingBodyReuseCount;
         }
 
         [Serializable]
@@ -200,6 +239,9 @@ namespace NTSD.Test.Editor
             public bool labelPrewarmValidation;
             public bool bruteCoarseEnvelopeCandidate;
             public bool bruteEnvelopeBindingCandidate;
+            public bool bruteEnvelopeBindingEligibilityCandidate;
+            public bool bruteEnvelopeBranchTimingCandidate;
+            public bool renderTextureBindingCandidate;
             public string originalScene;
             public string originalSceneHash;
             public string battleSceneHash;
@@ -343,7 +385,7 @@ namespace NTSD.Test.Editor
         [MenuItem("NTSD/Validation/Optimization/Batch60 Coarse Envelope Full Driver GC 1000 AI")]
         private static void BeginBruteCoarseEnvelope()
         {
-            Require(!startingCoarseEnvelopeWindow, CoarseEnvelopeOwnerError);
+            Require(!startingCoarseEnvelopeWindow && !startingEnvelopeBranchTimingWindow, CoarseEnvelopeOwnerError);
             startingCoarseEnvelopeWindow = true;
             try
             {
@@ -358,7 +400,8 @@ namespace NTSD.Test.Editor
         [MenuItem("NTSD/Validation/Optimization/Batch63 Envelope Binding Full Driver GC 1000 AI")]
         private static void BeginBruteEnvelopeBinding()
         {
-            Require(!startingEnvelopeBindingWindow && !startingCoarseEnvelopeWindow, EnvelopeBindingOwnerError);
+            Require(!startingEnvelopeBindingWindow && !startingCoarseEnvelopeWindow &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow, EnvelopeBindingOwnerError);
             startingEnvelopeBindingWindow = true;
             try
             {
@@ -367,6 +410,54 @@ namespace NTSD.Test.Editor
             finally
             {
                 startingEnvelopeBindingWindow = false;
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch64 Envelope Binding Eligibility Full Driver GC 1000 AI")]
+        private static void BeginBruteEnvelopeBindingEligibility()
+        {
+            Require(!startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBindingWindow &&
+                !startingCoarseEnvelopeWindow && !startingEnvelopeBranchTimingWindow, EnvelopeBindingOwnerError);
+            startingEnvelopeBindingEligibilityWindow = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingEnvelopeBindingEligibilityWindow = false;
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch65 Envelope Branch Timing Full Driver GC 1000 AI")]
+        private static void BeginBruteEnvelopeBranchTiming()
+        {
+            Require(!startingEnvelopeBranchTimingWindow && !startingEnvelopeBindingEligibilityWindow &&
+                !startingEnvelopeBindingWindow && !startingCoarseEnvelopeWindow, EnvelopeBindingOwnerError);
+            startingEnvelopeBranchTimingWindow = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingEnvelopeBranchTimingWindow = false;
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch68 Renderer Texture Binding 1000 AI OFF ON")]
+        private static void BeginRenderTextureBindingReuse()
+        {
+            Require(!startingRenderTextureBindingWindow && !renderTextureBindingReuseOwner &&
+                !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics, RenderTextureBindingOwnerError);
+            startingRenderTextureBindingWindow = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingRenderTextureBindingWindow = false;
             }
         }
 
@@ -380,8 +471,37 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            // Alignment contract: NTSD-OPT-H07-ENVELOPE-PATH-BRANCH-TIMING-065; instrument only this explicit, owned path.
+            Require(!startingRenderTextureBindingWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow &&
+                !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate &&
+                !emptyItrGuardCandidate && !emptyItrRosterCandidate && !bruteExactCacheCandidate &&
+                !bruteGeometryFirstCandidate && !cpuGcCaptureOnly && !bruteBranchTimingOnly &&
+                !bruteBranchTimingSampled && !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate &&
+                !bruteCombinedCacheCandidate && !logicGcCallsiteOnly && !labelPrewarmValidation &&
+                !renderTextureBindingReuseOwner && !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics,
+                RenderTextureBindingOwnerError);
+            Require(!startingEnvelopeBranchTimingWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBindingWindow &&
+                !startingCoarseEnvelopeWindow && !labelPrewarmValidation && !cpuGcCaptureOnly &&
+                !logicGcCallsiteOnly && !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate &&
+                !emptyItrGuardCandidate && !emptyItrRosterCandidate && !bruteExactCacheCandidate &&
+                !bruteGeometryFirstCandidate && !bruteBranchTimingOnly && !bruteBranchTimingSampled &&
+                !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate && !bruteCombinedCacheCandidate,
+                "The envelope branch timing window requires production defaults, calibrated scope and exclusive ownership.");
+            // Alignment contract: NTSD-OPT-H07-ENVELOPE-BINDING-ELIGIBILITY-064; only this explicit owner allows all three flags.
+            Require(!startingEnvelopeBindingEligibilityWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !startingEnvelopeBindingWindow && !startingCoarseEnvelopeWindow && !startingEnvelopeBranchTimingWindow && !labelPrewarmValidation &&
+                !cpuGcCaptureOnly && !logicGcCallsiteOnly && !roleCandidate && !roleFormalCandidate &&
+                !pairSnapshotCandidate && !emptyItrGuardCandidate && !emptyItrRosterCandidate &&
+                !bruteExactCacheCandidate && !bruteGeometryFirstCandidate && !bruteBranchTimingOnly &&
+                !bruteBranchTimingSampled && !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate &&
+                !bruteCombinedCacheCandidate,
+                "The envelope binding eligibility window requires production defaults, calibrated scope and exclusive ownership.");
             // Alignment contract: NTSD-OPT-H07-ENVELOPE-BINDING-WINDOWS-063; the old envelope owner stays binding-OFF only.
             Require(!startingEnvelopeBindingWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow &&
                 !startingCoarseEnvelopeWindow && !labelPrewarmValidation && !cpuGcCaptureOnly &&
                 !logicGcCallsiteOnly && !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate &&
                 !emptyItrGuardCandidate && !emptyItrRosterCandidate && !bruteExactCacheCandidate &&
@@ -390,6 +510,7 @@ namespace NTSD.Test.Editor
                 EnvelopeBindingModeError);
             // Alignment contract: NTSD-OPT-H07-COARSE-ENVELOPE-WINDOWS-060; keep the legacy 17-parameter entry intact.
             Require(!startingCoarseEnvelopeWindow || bruteProductionOnly && logicGcScopeOnly &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow &&
                 !labelPrewarmValidation && !cpuGcCaptureOnly && !logicGcCallsiteOnly &&
                 !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate &&
                 !emptyItrGuardCandidate && !emptyItrRosterCandidate && !bruteExactCacheCandidate &&
@@ -404,7 +525,8 @@ namespace NTSD.Test.Editor
                 !pairSnapshotCandidate && !emptyItrGuardCandidate && !emptyItrRosterCandidate &&
                 !bruteExactCacheCandidate && !bruteGeometryFirstCandidate && !bruteBranchTimingOnly &&
                 !bruteBranchTimingSampled && !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate &&
-                !bruteCombinedCacheCandidate && !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow,
+                !bruteCombinedCacheCandidate && !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow,
                 "The label prewarm window requires unchanged production defaults, calibrated scope and no capture or candidate.");
             Scene scene = SceneManager.GetActiveScene();
             Require(SceneManager.sceneCount == 1 && !scene.isDirty && !string.IsNullOrEmpty(scene.path),
@@ -419,7 +541,10 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingEnvelopeBindingWindow ? BruteEnvelopeBindingOutputRoot :
+            string outputRoot = startingRenderTextureBindingWindow ? RenderTextureBindingOutputRoot :
+                startingEnvelopeBranchTimingWindow ? BruteEnvelopeBranchTimingOutputRoot :
+                startingEnvelopeBindingEligibilityWindow ? BruteEnvelopeBindingEligibilityOutputRoot :
+                startingEnvelopeBindingWindow ? BruteEnvelopeBindingOutputRoot :
                 startingCoarseEnvelopeWindow ? BruteCoarseEnvelopeOutputRoot :
                 labelPrewarmValidation ? LabelPrewarmOutputRoot :
                 logicGcCallsiteOnly ? LogicCallsiteOutputRoot :
@@ -461,7 +586,10 @@ namespace NTSD.Test.Editor
                 labelPrewarmValidation = labelPrewarmValidation,
                 bruteCoarseEnvelopeCandidate = startingCoarseEnvelopeWindow,
                 bruteEnvelopeBindingCandidate = startingEnvelopeBindingWindow,
-                runs = new RunState[startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                bruteEnvelopeBindingEligibilityCandidate = startingEnvelopeBindingEligibilityWindow,
+                bruteEnvelopeBranchTimingCandidate = startingEnvelopeBranchTimingWindow,
+                renderTextureBindingCandidate = startingRenderTextureBindingWindow,
+                runs = new RunState[startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -543,6 +671,12 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.renderTextureBindingCandidate)
+                return BuildRenderTextureBindingRequest(index);
+            if (state.bruteEnvelopeBranchTimingCandidate)
+                return BuildBruteEnvelopeBranchTimingRequest(index);
+            if (state.bruteEnvelopeBindingEligibilityCandidate)
+                return BuildBruteEnvelopeBindingEligibilityRequest(index);
             if (state.bruteEnvelopeBindingCandidate)
                 return BuildBruteEnvelopeBindingRequest(index);
             if (state.bruteCoarseEnvelopeCandidate)
@@ -658,6 +792,26 @@ namespace NTSD.Test.Editor
             return request;
         }
 
+        private static ProductionEntityStressRequest BuildBruteEnvelopeBranchTimingRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.outputPath = BruteEnvelopeBranchTimingOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-timing-off" : "-timing-on") + "/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildBruteEnvelopeBindingEligibilityRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.outputPath = BruteEnvelopeBindingEligibilityOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-eligibility-off" : "-eligibility-on") + "/report.json";
+            return request;
+        }
+
         private static ProductionEntityStressRequest BuildBruteEnvelopeBindingRequest(int index)
         {
             if (index < 0 || index >= 4)
@@ -675,6 +829,16 @@ namespace NTSD.Test.Editor
             ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
             request.outputPath = BruteCoarseEnvelopeOutputRoot + "/" + index.ToString("D2") + "-" +
                 request.action + (index % 2 == 0 ? "-envelope-off" : "-envelope-on") + "/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildRenderTextureBindingRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.outputPath = RenderTextureBindingOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-binding-off" : "-binding-on") + "/report.json";
             return request;
         }
 
@@ -809,7 +973,10 @@ namespace NTSD.Test.Editor
                     return;
                 }
                 run.terminalStatus = currentReport.status;
-                if (state.bruteEnvelopeBindingCandidate)
+                if (state.renderTextureBindingCandidate)
+                    CompleteRenderTextureBindingReuse(run);
+                if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
+                    state.bruteEnvelopeBranchTimingCandidate)
                     CompleteBruteEnvelopeBinding(run);
                 if (state.bruteCoarseEnvelopeCandidate)
                     CompleteBruteCoarseEnvelope(run);
@@ -910,8 +1077,16 @@ namespace NTSD.Test.Editor
                       run.bruteKind5PresenceFlagApplied && run.bruteKind5PresenceRestored &&
                       run.bruteKind5PresenceAppliedDelta ==
                           (run.bruteKind5PresenceEnabled ? run.warmupTicks + run.sampledTicks : 0))) &&
+                    (!state.renderTextureBindingCandidate ||
+                     (run.renderTextureBindingReuseFlagApplied && run.renderTextureBindingReuseFlagUnchanged &&
+                      run.renderTextureBindingReuseRestored && run.renderTextureBindingAcceptedCameraSamples > 0 &&
+                      run.renderTextureBindingCameraId != 0 && run.renderTextureBindingBodyPrepareCount > 0 &&
+                      run.renderTextureBindingBodyReuseCount >= 0 &&
+                      (run.renderTextureBindingReuseEnabled || run.renderTextureBindingBodyReuseCount == 0))) &&
                     (!state.bruteCoarseEnvelopeCandidate || CoarseEnvelopeObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingCandidate || EnvelopeBindingObservationValid(run)) &&
+                    (!state.bruteEnvelopeBindingEligibilityCandidate || EnvelopeBindingEligibilityObservationValid(run)) &&
+                    (!state.bruteEnvelopeBranchTimingCandidate || EnvelopeBranchTimingObservationValid(run)) &&
                     (!(state.bruteProductionOnly || state.bruteBranchTimingOnly) ||
                      (run.bruteProductionDefaultsObserved && run.bruteProductionDefaultsUnchanged &&
                       run.emptyItrRosterObservedApplied && !run.emptyItrRosterFallbackObserved &&
@@ -950,6 +1125,7 @@ namespace NTSD.Test.Editor
             {
                 state.status = "PARTIAL";
                 state.error = exception.ToString();
+                Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
                 if (ProductionEntityStressRunner.Active != null)
                     StopRun.Invoke(ProductionEntityStressRunner.Active, new object[] { "finite-suite-abort", false });
                 ShutdownAndExit();
@@ -982,6 +1158,22 @@ namespace NTSD.Test.Editor
                 run.bruteExactCacheFallbackBaseline = productionQuery.TotalBruteExactCacheFallbackForDiagnostics;
                 run.bruteGeometryFirstAppliedBaseline = productionQuery.TotalBruteGeometryFirstCollectionAppliedForDiagnostics;
             }
+            if (state.renderTextureBindingCandidate)
+            {
+                Require(currentReport.logicTicksExecuted == 0 && productionQuery != null &&
+                    !productionQuery.EnableBruteCoarseEnvelopeForDiagnostics &&
+                    !productionQuery.EnableBruteKind5PresenceForDiagnostics &&
+                    !productionQuery.EnableBruteEligibilityReuseForDiagnostics &&
+                    !productionQuery.EnableBruteRejectedBindingReuseForDiagnostics &&
+                    !productionQuery.EnableBruteBranchTimingForDiagnostics &&
+                    !productionQuery.EnableBruteEnvelopeBranchTimingForDiagnostics &&
+                    !productionQuery.EnableBruteCoarseDispatchForDiagnostics, RenderTextureBindingOwnerError);
+                ApplyRenderTextureBindingReuse(state.runs[state.runIndex], state.runIndex % 2 != 0);
+            }
+            if (state.bruteEnvelopeBranchTimingCandidate)
+                ApplyBruteEnvelopeBranchTiming(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
+            if (state.bruteEnvelopeBindingEligibilityCandidate)
+                ApplyBruteEnvelopeBindingEligibility(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
             if (state.bruteCoarseEnvelopeCandidate)
                 ApplyBruteCoarseEnvelope(productionQuery, state.runs[state.runIndex], state.runIndex % 2 != 0);
             if (state.bruteEnvelopeBindingCandidate)
@@ -1087,12 +1279,18 @@ namespace NTSD.Test.Editor
             {
                 Require(currentReport.logicTicksExecuted == 0 && productionQuery != null &&
                     !productionQuery.EnableBruteKind5PresenceForDiagnostics &&
-                    (state.bruteEnvelopeBindingCandidate
-                        ? EnvelopeBindingScopeValid(productionQuery, state.runs[state.runIndex])
-                        : !productionQuery.EnableBruteRejectedBindingReuseForDiagnostics) &&
-                    !productionQuery.EnableBruteEligibilityReuseForDiagnostics &&
+                    (state.bruteEnvelopeBranchTimingCandidate
+                        ? EnvelopeBranchTimingScopeValid(productionQuery, state.runs[state.runIndex])
+                        : (state.bruteEnvelopeBindingEligibilityCandidate
+                        ? EnvelopeBindingEligibilityScopeValid(productionQuery, state.runs[state.runIndex])
+                        : (state.bruteEnvelopeBindingCandidate
+                            ? EnvelopeBindingScopeValid(productionQuery, state.runs[state.runIndex])
+                            : !productionQuery.EnableBruteRejectedBindingReuseForDiagnostics) &&
+                            !productionQuery.EnableBruteEligibilityReuseForDiagnostics) &&
+                            !productionQuery.EnableBruteBranchTimingForDiagnostics &&
+                            !productionQuery.EnableBruteEnvelopeBranchTimingForDiagnostics) &&
                     !productionQuery.EnableBruteCoarseDispatchForDiagnostics &&
-                    !productionQuery.EnableBruteBranchTimingForDiagnostics && logicGcObserver == null,
+                    logicGcObserver == null,
                     "The calibrated scope requires the existing production path before the first tick.");
                 logicGcObserver = new BattleLogicTickGcObserverEditor();
                 logicGcObserver.Attach(runner);
@@ -1109,7 +1307,8 @@ namespace NTSD.Test.Editor
             run.observedSampleWindows++;
             if (state.bruteCoarseEnvelopeCandidate)
                 ObserveBruteCoarseEnvelope(run);
-            if (state.bruteEnvelopeBindingCandidate)
+            if (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
+                state.bruteEnvelopeBranchTimingCandidate)
                 ObserveBruteEnvelopeBinding(run);
             BruteForceSceneQuery query = run.bruteProductionDefaultsObserved ? productionQuery : emptyItrGuardQuery;
             if (run.bruteKind5PresenceFlagApplied && query != null)
@@ -1161,6 +1360,7 @@ namespace NTSD.Test.Editor
 
         private static void ShutdownAndExit()
         {
+            Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
             Require(RestoreBruteEnvelopeBindingForExit(), EnvelopeBindingOwnerError);
             if (logicGcObserver != null)
                 FinishLogicGcRun(state.runs[state.runIndex], true);
@@ -1211,7 +1411,11 @@ namespace NTSD.Test.Editor
         {
             if (state == null)
                 return;
-            if (state.bruteEnvelopeBindingCandidate && change == PlayModeStateChange.ExitingPlayMode)
+            if (state.renderTextureBindingCandidate && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreRenderTextureBindingReuse(), RenderTextureBindingOwnerError);
+            if ((state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
+                state.bruteEnvelopeBranchTimingCandidate) &&
+                change == PlayModeStateChange.ExitingPlayMode)
                 Require(RestoreBruteEnvelopeBindingForExit(), EnvelopeBindingOwnerError);
             if (state.logicGcScopeOnly && change == PlayModeStateChange.ExitingPlayMode && logicGcObserver != null)
                 FinishLogicGcRun(state.runs[state.runIndex], true);
@@ -1322,6 +1526,9 @@ namespace NTSD.Test.Editor
             string labelPrewarmOwnerRoot = PathFor(LabelPrewarmOutputRoot) + Path.DirectorySeparatorChar;
             string coarseEnvelopeOwnerRoot = PathFor(BruteCoarseEnvelopeOutputRoot) + Path.DirectorySeparatorChar;
             string envelopeBindingOwnerRoot = PathFor(BruteEnvelopeBindingOutputRoot) + Path.DirectorySeparatorChar;
+            string envelopeBindingEligibilityOwnerRoot = PathFor(BruteEnvelopeBindingEligibilityOutputRoot) + Path.DirectorySeparatorChar;
+            string envelopeBranchTimingOwnerRoot = PathFor(BruteEnvelopeBranchTimingOutputRoot) + Path.DirectorySeparatorChar;
+            string renderTextureBindingOwnerRoot = PathFor(RenderTextureBindingOutputRoot) + Path.DirectorySeparatorChar;
             return lines.Length >= 2 && (lines[0] == "PASS" || lines[0] == "FAIL") &&
                 (PathFor(lines[1]).StartsWith(ownerRoot, StringComparison.OrdinalIgnoreCase) ||
                  PathFor(lines[1]).StartsWith(currentOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
@@ -1343,22 +1550,86 @@ namespace NTSD.Test.Editor
                   PathFor(lines[1]).StartsWith(logicCallsiteOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                   PathFor(lines[1]).StartsWith(labelPrewarmOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                    PathFor(lines[1]).StartsWith(coarseEnvelopeOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
-                   PathFor(lines[1]).StartsWith(envelopeBindingOwnerRoot, StringComparison.OrdinalIgnoreCase));
+                   PathFor(lines[1]).StartsWith(envelopeBindingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                   PathFor(lines[1]).StartsWith(envelopeBindingEligibilityOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                   PathFor(lines[1]).StartsWith(envelopeBranchTimingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                   PathFor(lines[1]).StartsWith(renderTextureBindingOwnerRoot, StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool EnvelopeBindingQueryDefaultsValid(BruteForceSceneQuery query) =>
             query != null && ProductionDefaultsEnabled(query) &&
             !query.EnableBruteKind5PresenceForDiagnostics && !query.EnableBruteEligibilityReuseForDiagnostics &&
-            !query.EnableBruteCoarseDispatchForDiagnostics && !query.EnableBruteBranchTimingForDiagnostics;
+            !query.EnableBruteCoarseDispatchForDiagnostics && !query.EnableBruteBranchTimingForDiagnostics &&
+            !query.EnableBruteEnvelopeBranchTimingForDiagnostics;
 
         private static bool EnvelopeBindingScopeValid(BruteForceSceneQuery query, RunState run) =>
+            !envelopeBindingEligibilityOwner && !envelopeBindingBranchTimingOwner &&
             query == envelopeBindingQuery && EnvelopeBindingQueryDefaultsValid(query) &&
             query.EnableBruteCoarseEnvelopeForDiagnostics &&
             query.EnableBruteRejectedBindingReuseForDiagnostics == run.bruteRejectedBindingReuseEnabled;
 
+        private static bool EnvelopeBindingEligibilityScopeValid(BruteForceSceneQuery query, RunState run) =>
+            envelopeBindingEligibilityOwner && !envelopeBindingBranchTimingOwner &&
+            run.bruteEnvelopeBindingEligibilityMode && query != null &&
+            query == envelopeBindingQuery && ProductionDefaultsEnabled(query) &&
+            !query.EnableBruteKind5PresenceForDiagnostics && !query.EnableBruteCoarseDispatchForDiagnostics &&
+            !query.EnableBruteBranchTimingForDiagnostics && !query.EnableBruteEnvelopeBranchTimingForDiagnostics &&
+            query.EnableBruteCoarseEnvelopeForDiagnostics &&
+            query.EnableBruteRejectedBindingReuseForDiagnostics && run.bruteRejectedBindingReuseEnabled &&
+            run.bruteEligibilityReuseFlagApplied &&
+            query.EnableBruteEligibilityReuseForDiagnostics == run.bruteEligibilityReuseEnabled;
+
+        private static bool EnvelopeBranchTimingScopeValid(BruteForceSceneQuery query, RunState run) =>
+            envelopeBindingBranchTimingOwner && !envelopeBindingEligibilityOwner &&
+            run.bruteEnvelopeBranchTimingMode && query != null && query == envelopeBindingQuery &&
+            ProductionDefaultsEnabled(query) && !query.EnableBruteKind5PresenceForDiagnostics &&
+            !query.EnableBruteEligibilityReuseForDiagnostics && !query.EnableBruteCoarseDispatchForDiagnostics &&
+            query.EnableBruteCoarseEnvelopeForDiagnostics && query.EnableBruteRejectedBindingReuseForDiagnostics &&
+            query.EnableBruteEnvelopeBranchTimingForDiagnostics && run.bruteEnvelopeBranchTimingFlagApplied &&
+            run.bruteBranchTimingFlagApplied && query.EnableBruteBranchTimingForDiagnostics == run.bruteBranchTimingEnabled &&
+            query.BruteBranchTimingSampleStrideForDiagnostics == run.bruteBranchTimingSampleStride &&
+            run.bruteBranchTimingSampleStride == 64;
+
+        private static void ApplyBruteEnvelopeBranchTiming(BruteForceSceneQuery query, RunState run, bool enabled)
+        {
+            ApplyBruteEnvelopeBinding(query, run, true);
+            previousEnvelopeBranchTiming = query.EnableBruteEnvelopeBranchTimingForDiagnostics;
+            previousBranchTiming = query.EnableBruteBranchTimingForDiagnostics;
+            previousBranchTimingSampleStride = query.BruteBranchTimingSampleStrideForDiagnostics;
+            envelopeBindingBranchTimingOwner = true;
+            run.bruteEnvelopeBranchTimingMode = true;
+            run.bruteBranchTimingEnabled = enabled;
+            run.bruteBranchTimingSampleStride = 64;
+            query.EnableBruteEnvelopeBranchTimingForDiagnostics = true;
+            query.BruteBranchTimingSampleStrideForDiagnostics = 64;
+            query.EnableBruteBranchTimingForDiagnostics = enabled;
+            run.bruteEnvelopeBranchTimingFlagApplied = query.EnableBruteEnvelopeBranchTimingForDiagnostics;
+            run.bruteEnvelopeBranchTimingFlagUnchanged = run.bruteEnvelopeBranchTimingFlagApplied;
+            run.bruteBranchTimingFlagApplied = query.EnableBruteBranchTimingForDiagnostics == enabled &&
+                query.BruteBranchTimingSampleStrideForDiagnostics == 64;
+            run.bruteBranchTimingFlagUnchanged = run.bruteBranchTimingFlagApplied;
+            Require(EnvelopeBranchTimingScopeValid(query, run), EnvelopeBindingOwnerError);
+        }
+
+        private static void ApplyBruteEnvelopeBindingEligibility(BruteForceSceneQuery query, RunState run, bool enabled)
+        {
+            ApplyBruteEnvelopeBinding(query, run, true);
+            previousEnvelopeBindingEligibility = query.EnableBruteEligibilityReuseForDiagnostics;
+            envelopeBindingEligibilityOwner = true;
+            run.bruteEnvelopeBindingEligibilityMode = true;
+            run.bruteEnvelopeBindingPreviousEligibility = previousEnvelopeBindingEligibility;
+            run.bruteEligibilityReuseEnabled = enabled;
+            run.bruteEligibilityReuseAppliedBaseline = query.TotalBruteEligibilityReuseCollectionAppliedForDiagnostics;
+            query.EnableBruteEligibilityReuseForDiagnostics = enabled;
+            run.bruteEligibilityReuseFlagApplied = query.EnableBruteEligibilityReuseForDiagnostics == enabled;
+            run.bruteEligibilityReuseFlagUnchanged = run.bruteEligibilityReuseFlagApplied;
+            Require(EnvelopeBindingEligibilityScopeValid(query, run), EnvelopeBindingOwnerError);
+        }
+
         private static void ApplyBruteEnvelopeBinding(BruteForceSceneQuery query, RunState run, bool enabled)
         {
-            Require(envelopeBindingQuery == null && coarseEnvelopeQuery == null &&
+            Require(!envelopeBindingEligibilityOwner && !envelopeBindingBranchTimingOwner &&
+                envelopeBindingQuery == null && coarseEnvelopeQuery == null &&
                 eligibilityReuseQuery == null && branchTimingQuery == null && kind5PresenceQuery == null &&
                 emptyItrGuardQuery == null && EnvelopeBindingQueryDefaultsValid(query) &&
                 !query.EnableBruteCoarseEnvelopeForDiagnostics && !query.EnableBruteRejectedBindingReuseForDiagnostics,
@@ -1385,9 +1656,30 @@ namespace NTSD.Test.Editor
             {
                 run.bruteCoarseEnvelopeFlagUnchanged = false;
                 run.bruteRejectedBindingReuseFlagUnchanged = false;
+                if (run.bruteEnvelopeBindingEligibilityMode)
+                    run.bruteEligibilityReuseFlagUnchanged = false;
+                if (run.bruteEnvelopeBranchTimingMode)
+                {
+                    run.bruteEnvelopeBranchTimingFlagUnchanged = false;
+                    run.bruteBranchTimingFlagUnchanged = false;
+                }
                 return;
             }
-            bool defaultsValid = EnvelopeBindingQueryDefaultsValid(envelopeBindingQuery);
+            bool defaultsValid = run.bruteEnvelopeBranchTimingMode
+                ? EnvelopeBranchTimingScopeValid(envelopeBindingQuery, run)
+                : run.bruteEnvelopeBindingEligibilityMode
+                ? EnvelopeBindingEligibilityScopeValid(envelopeBindingQuery, run)
+                : EnvelopeBindingQueryDefaultsValid(envelopeBindingQuery);
+            if (run.bruteEnvelopeBranchTimingMode)
+            {
+                run.bruteEnvelopeBranchTimingFlagUnchanged &= defaultsValid;
+                run.bruteBranchTimingFlagUnchanged &= defaultsValid;
+            }
+            if (run.bruteEnvelopeBindingEligibilityMode)
+            {
+                run.bruteEligibilityReuseFlagUnchanged &= defaultsValid;
+                run.bruteEligibilityReuseObservedApplied |= envelopeBindingQuery.LastBruteEligibilityReuseAppliedForDiagnostics;
+            }
             run.bruteCoarseEnvelopeFlagUnchanged &= defaultsValid && envelopeBindingQuery.EnableBruteCoarseEnvelopeForDiagnostics;
             run.bruteRejectedBindingReuseFlagUnchanged &= defaultsValid &&
                 envelopeBindingQuery.EnableBruteRejectedBindingReuseForDiagnostics == run.bruteRejectedBindingReuseEnabled;
@@ -1408,9 +1700,32 @@ namespace NTSD.Test.Editor
             Require(envelopeBindingQuery != null && run.bruteCoarseEnvelopeFlagApplied &&
                 run.bruteRejectedBindingReuseFlagApplied && run.bruteCoarseEnvelopeFlagUnchanged &&
                 run.bruteRejectedBindingReuseFlagUnchanged, EnvelopeBindingDriftError);
+            if (run.bruteEnvelopeBindingEligibilityMode)
+            {
+                Require(envelopeBindingEligibilityOwner && run.bruteEligibilityReuseFlagApplied &&
+                    run.bruteEligibilityReuseFlagUnchanged, EnvelopeBindingDriftError);
+                run.bruteEligibilityReuseAppliedDelta =
+                    envelopeBindingQuery.TotalBruteEligibilityReuseCollectionAppliedForDiagnostics -
+                    run.bruteEligibilityReuseAppliedBaseline;
+            }
+            if (run.bruteEnvelopeBranchTimingMode)
+            {
+                Require(envelopeBindingBranchTimingOwner && run.bruteEnvelopeBranchTimingFlagApplied &&
+                    run.bruteEnvelopeBranchTimingFlagUnchanged && run.bruteBranchTimingFlagApplied &&
+                    run.bruteBranchTimingFlagUnchanged, EnvelopeBindingDriftError);
+                run.bruteBranchTimingCoverage = envelopeBindingQuery.TotalBruteBranchTimingCoverageForDiagnostics;
+                run.bruteBranchTimingCoverageScope = "Totals include warmup and sampled collections; clocks only stride64-selected directions, not full-cost or steady-only.";
+            }
             bool restored = RestoreBruteEnvelopeBinding();
             run.bruteCoarseEnvelopeRestored = restored;
             run.bruteRejectedBindingReuseRestored = restored;
+            if (run.bruteEnvelopeBindingEligibilityMode)
+                run.bruteEligibilityReuseRestored = restored;
+            if (run.bruteEnvelopeBranchTimingMode)
+            {
+                run.bruteEnvelopeBranchTimingRestored = restored;
+                run.bruteBranchTimingRestored = restored;
+            }
         }
 
         private static bool EnvelopeBindingObservationValid(RunState run) =>
@@ -1423,15 +1738,55 @@ namespace NTSD.Test.Editor
                 : !run.bruteRejectedBindingReuseObservedApplied && run.bruteRejectedBindingMaximumObservedProbes == 0 &&
                     run.bruteRejectedBindingMaximumObservedReuses == 0);
 
+        private static bool EnvelopeBindingEligibilityObservationValid(RunState run) =>
+            run.bruteEnvelopeBindingEligibilityMode && EnvelopeBindingObservationValid(run) &&
+            run.bruteEligibilityReuseFlagApplied && run.bruteEligibilityReuseFlagUnchanged &&
+            run.bruteEligibilityReuseRestored &&
+            run.bruteEligibilityReuseObservedApplied == run.bruteEligibilityReuseEnabled &&
+            run.bruteEligibilityReuseAppliedDelta == (run.bruteEligibilityReuseEnabled ? run.warmupTicks + run.sampledTicks : 0);
+
+        private static bool EnvelopeBranchTimingObservationValid(RunState run)
+        {
+            if (!run.bruteEnvelopeBranchTimingMode || !EnvelopeBindingObservationValid(run) ||
+                !run.bruteEnvelopeBranchTimingFlagApplied || !run.bruteEnvelopeBranchTimingFlagUnchanged ||
+                !run.bruteEnvelopeBranchTimingRestored || !run.bruteBranchTimingFlagApplied ||
+                !run.bruteBranchTimingFlagUnchanged || !run.bruteBranchTimingRestored ||
+                run.bruteBranchTimingSampleStride != 64)
+                return false;
+            var coverage = run.bruteBranchTimingCoverage;
+            if (!run.bruteBranchTimingEnabled)
+                return coverage.eligibleDirections == 0 && coverage.timedDirections == 0 &&
+                    coverage.rejectedBindingVisits == 0 && coverage.rejectedBindingTimed == 0 &&
+                    coverage.pairAllowedVisits == 0 && coverage.pairAllowedTimed == 0 &&
+                    coverage.exactWorkVisits == 0 && coverage.exactWorkTimed == 0;
+            return coverage.eligibleDirections > 0 && coverage.timedDirections > 0 &&
+                coverage.timedDirections <= coverage.eligibleDirections &&
+                coverage.rejectedBindingVisits > 0 && coverage.rejectedBindingTimed > 0 &&
+                coverage.rejectedBindingTimed <= coverage.rejectedBindingVisits &&
+                coverage.pairAllowedVisits > 0 && coverage.pairAllowedTimed > 0 &&
+                coverage.pairAllowedTimed <= coverage.pairAllowedVisits &&
+                coverage.exactWorkVisits > 0 && coverage.exactWorkTimed > 0 &&
+                coverage.exactWorkTimed <= coverage.exactWorkVisits;
+        }
+
         private static bool RestoreBruteEnvelopeBindingForExit()
         {
             bool restored = RestoreBruteEnvelopeBinding();
-            if (state != null && state.bruteEnvelopeBindingCandidate && state.runIndex >= 0 &&
+            if (state != null && (state.bruteEnvelopeBindingCandidate || state.bruteEnvelopeBindingEligibilityCandidate ||
+                state.bruteEnvelopeBranchTimingCandidate) &&
+                state.runIndex >= 0 &&
                 state.runIndex < state.runs.Length)
             {
                 RunState run = state.runs[state.runIndex];
                 run.bruteCoarseEnvelopeRestored = restored;
                 run.bruteRejectedBindingReuseRestored = restored;
+                if (run.bruteEnvelopeBindingEligibilityMode)
+                    run.bruteEligibilityReuseRestored = restored;
+                if (run.bruteEnvelopeBranchTimingMode)
+                {
+                    run.bruteEnvelopeBranchTimingRestored = restored;
+                    run.bruteBranchTimingRestored = restored;
+                }
             }
             return restored;
         }
@@ -1444,6 +1799,22 @@ namespace NTSD.Test.Editor
             envelopeBindingQuery.EnableBruteRejectedBindingReuseForDiagnostics = previousEnvelopeBindingReuse;
             bool restored = envelopeBindingQuery.EnableBruteCoarseEnvelopeForDiagnostics == previousEnvelopeBindingEnvelope &&
                 envelopeBindingQuery.EnableBruteRejectedBindingReuseForDiagnostics == previousEnvelopeBindingReuse;
+            if (envelopeBindingEligibilityOwner)
+            {
+                envelopeBindingQuery.EnableBruteEligibilityReuseForDiagnostics = previousEnvelopeBindingEligibility;
+                restored &= envelopeBindingQuery.EnableBruteEligibilityReuseForDiagnostics == previousEnvelopeBindingEligibility;
+            }
+            if (envelopeBindingBranchTimingOwner)
+            {
+                envelopeBindingQuery.EnableBruteEnvelopeBranchTimingForDiagnostics = previousEnvelopeBranchTiming;
+                envelopeBindingQuery.EnableBruteBranchTimingForDiagnostics = previousBranchTiming;
+                envelopeBindingQuery.BruteBranchTimingSampleStrideForDiagnostics = previousBranchTimingSampleStride;
+                restored &= envelopeBindingQuery.EnableBruteEnvelopeBranchTimingForDiagnostics == previousEnvelopeBranchTiming &&
+                    envelopeBindingQuery.EnableBruteBranchTimingForDiagnostics == previousBranchTiming &&
+                    envelopeBindingQuery.BruteBranchTimingSampleStrideForDiagnostics == previousBranchTimingSampleStride;
+            }
+            envelopeBindingEligibilityOwner = false;
+            envelopeBindingBranchTimingOwner = false;
             envelopeBindingQuery = null;
             return restored;
         }
@@ -1452,7 +1823,85 @@ namespace NTSD.Test.Editor
             query != null && ProductionDefaultsEnabled(query) &&
             !query.EnableBruteKind5PresenceForDiagnostics && !query.EnableBruteEligibilityReuseForDiagnostics &&
             !query.EnableBruteRejectedBindingReuseForDiagnostics && !query.EnableBruteCoarseDispatchForDiagnostics &&
-            !query.EnableBruteBranchTimingForDiagnostics;
+            !query.EnableBruteBranchTimingForDiagnostics && !query.EnableBruteEnvelopeBranchTimingForDiagnostics;
+
+        private static void ApplyRenderTextureBindingReuse(RunState run, bool enabled)
+        {
+            Require(run != null && !renderTextureBindingReuseOwner &&
+                !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics, RenderTextureBindingOwnerError);
+            previousRenderTextureBindingReuse = BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics;
+            renderTextureBindingReuseOwner = true;
+            renderTextureBindingReuseRun = run;
+            lastRenderTextureBindingExecuteSequence = BattleRenderFeature.LastSegmentTextureBindingExecuteSequenceForDiagnostics;
+            run.renderTextureBindingReuseEnabled = enabled;
+            BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics = enabled;
+            run.renderTextureBindingReuseFlagApplied = BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics == enabled;
+            run.renderTextureBindingReuseFlagUnchanged = run.renderTextureBindingReuseFlagApplied;
+            RenderPipelineManager.endCameraRendering += ObserveRenderTextureBindingCamera;
+        }
+
+        private static bool IsRenderTextureBindingObservationFresh(
+            long previousSequence, long currentSequence, int expectedCameraId, int actualCameraId,
+            int prepareCount, int reuseCount) =>
+            previousSequence >= 0 && currentSequence > previousSequence && expectedCameraId != 0 &&
+            actualCameraId == expectedCameraId && prepareCount > 0 && reuseCount >= 0;
+
+        private static void ObserveRenderTextureBindingCamera(ScriptableRenderContext context, Camera camera)
+        {
+            RunState run = renderTextureBindingReuseRun;
+            if (!renderTextureBindingReuseOwner || run == null)
+                return;
+            run.renderTextureBindingReuseFlagUnchanged &=
+                BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics == run.renderTextureBindingReuseEnabled;
+            if (!Application.isPlaying || camera == null || camera.cameraType != CameraType.Game ||
+                currentReport == null || currentReport.status != "Running" ||
+                currentReport.warmupTicksCompleted < 120 || currentReport.sampledLogicTicks <= 0)
+                return;
+            int cameraId = camera.GetInstanceID();
+            if (run.renderTextureBindingCameraId != 0 && run.renderTextureBindingCameraId != cameraId)
+                return;
+            long sequence = BattleRenderFeature.LastSegmentTextureBindingExecuteSequenceForDiagnostics;
+            int prepareCount = BattleRenderFeature.LastSegmentTextureBindingPrepareCountForDiagnostics;
+            int reuseCount = BattleRenderFeature.LastSegmentTextureBindingReuseCountForDiagnostics;
+            if (!IsRenderTextureBindingObservationFresh(lastRenderTextureBindingExecuteSequence, sequence,
+                    cameraId,
+                    BattleRenderFeature.LastSegmentTextureBindingCameraIdForDiagnostics, prepareCount, reuseCount))
+                return;
+            run.renderTextureBindingCameraId = cameraId;
+            lastRenderTextureBindingExecuteSequence = sequence;
+            run.renderTextureBindingAcceptedCameraSamples++;
+            run.renderTextureBindingBodyPrepareCount += prepareCount;
+            run.renderTextureBindingBodyReuseCount += reuseCount;
+        }
+
+        private static void CompleteRenderTextureBindingReuse(RunState run)
+        {
+            Require(renderTextureBindingReuseOwner && ReferenceEquals(renderTextureBindingReuseRun, run) &&
+                run.renderTextureBindingReuseFlagApplied, RenderTextureBindingOwnerError);
+            run.renderTextureBindingReuseFlagUnchanged &=
+                BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics == run.renderTextureBindingReuseEnabled;
+            Require(run.renderTextureBindingReuseFlagUnchanged, RenderTextureBindingDriftError);
+            Require(run.renderTextureBindingAcceptedCameraSamples > 0 && run.renderTextureBindingBodyPrepareCount > 0 &&
+                run.renderTextureBindingBodyReuseCount >= 0 &&
+                (run.renderTextureBindingReuseEnabled || run.renderTextureBindingBodyReuseCount == 0),
+                RenderTextureBindingObservationError);
+            run.renderTextureBindingReuseRestored = RestoreRenderTextureBindingReuse();
+        }
+
+        private static bool RestoreRenderTextureBindingReuse()
+        {
+            if (!renderTextureBindingReuseOwner)
+                return true;
+            RenderPipelineManager.endCameraRendering -= ObserveRenderTextureBindingCamera;
+            BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics = previousRenderTextureBindingReuse;
+            bool restored = BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics == previousRenderTextureBindingReuse;
+            if (renderTextureBindingReuseRun != null)
+                renderTextureBindingReuseRun.renderTextureBindingReuseRestored = restored;
+            renderTextureBindingReuseOwner = false;
+            renderTextureBindingReuseRun = null;
+            lastRenderTextureBindingExecuteSequence = 0;
+            return restored;
+        }
 
         private static void ApplyBruteCoarseEnvelope(BruteForceSceneQuery query, RunState run, bool enabled)
         {
@@ -1641,6 +2090,770 @@ namespace NTSD.Test.Editor
 #if UNITY_INCLUDE_TESTS
     public sealed class BattleOptimizationWindowsAiSuiteRequestTests
     {
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void RenderTextureBindingWindow_ApplyCompleteRestoresOwnedFlag(bool enabled)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRenderTextureBindingReuse");
+            MethodInfo complete = EligibilityMethod("CompleteRenderTextureBindingReuse");
+            MethodInfo restore = EligibilityMethod("RestoreRenderTextureBindingReuse");
+            PropertyInfo flag = RenderTextureBindingWindowFlag();
+            bool previous = (bool)flag.GetValue(null);
+            NUnit.Framework.Assert.That(previous, NUnit.Framework.Is.False, "The candidate remains default OFF.");
+            NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            object run = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { run, enabled });
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(enabled));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseEnabled"), NUnit.Framework.Is.EqualTo(enabled));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseFlagApplied"), NUnit.Framework.Is.EqualTo(true));
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingAcceptedCameraSamples", 1);
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingBodyPrepareCount", 4L);
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingBodyReuseCount", enabled ? 2L : 0L);
+                complete.Invoke(null, new[] { run });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseFlagUnchanged"), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseRestored"), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(previous));
+                NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                flag.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void RenderTextureBindingWindow_RejectsSecondOwnerWithoutChangingFirst()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRenderTextureBindingReuse");
+            MethodInfo restore = EligibilityMethod("RestoreRenderTextureBindingReuse");
+            PropertyInfo flag = RenderTextureBindingWindowFlag();
+            bool previous = (bool)flag.GetValue(null);
+            NUnit.Framework.Assert.That(previous, NUnit.Framework.Is.False);
+            NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            object first = NewEligibilityRun();
+            object second = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { first, true });
+                TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { second, false }));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(EligibilityRunField(first, "renderTextureBindingReuseFlagApplied"), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(EligibilityRunField(second, "renderTextureBindingReuseFlagApplied"), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(previous));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                flag.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void RenderTextureBindingWindow_RejectsUnownedNondefaultFlag()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRenderTextureBindingReuse");
+            PropertyInfo flag = RenderTextureBindingWindowFlag();
+            bool previous = (bool)flag.GetValue(null);
+            NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            object run = NewEligibilityRun();
+            try
+            {
+                flag.SetValue(null, true);
+                TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { run, false }));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseFlagApplied"), NUnit.Framework.Is.EqualTo(false));
+            }
+            finally
+            {
+                flag.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void RenderTextureBindingWindow_CompleteRejectsDriftAndExitRestoreIsIdempotent(bool enabled)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRenderTextureBindingReuse");
+            MethodInfo complete = EligibilityMethod("CompleteRenderTextureBindingReuse");
+            MethodInfo restore = EligibilityMethod("RestoreRenderTextureBindingReuse");
+            PropertyInfo flag = RenderTextureBindingWindowFlag();
+            bool previous = (bool)flag.GetValue(null);
+            NUnit.Framework.Assert.That(previous, NUnit.Framework.Is.False);
+            NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            object run = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { run, enabled });
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingAcceptedCameraSamples", 1);
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingBodyPrepareCount", 4L);
+                SetRenderTextureBindingWindowRunField(run, "renderTextureBindingBodyReuseCount", 0L);
+                flag.SetValue(null, !enabled);
+                TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    complete.Invoke(null, new[] { run }));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseFlagUnchanged"), NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(previous));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "renderTextureBindingReuseRestored"), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(previous));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                flag.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void RenderTextureBindingWindow_RestoreWithoutOwnerPreservesExternalFlag(bool externalFlag)
+        {
+            MethodInfo restore = EligibilityMethod("RestoreRenderTextureBindingReuse");
+            PropertyInfo flag = RenderTextureBindingWindowFlag();
+            bool previous = (bool)flag.GetValue(null);
+            NUnit.Framework.Assert.That(RenderTextureBindingWindowOwner().GetValue(null), NUnit.Framework.Is.EqualTo(false));
+            try
+            {
+                flag.SetValue(null, externalFlag);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(externalFlag));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(flag.GetValue(null), NUnit.Framework.Is.EqualTo(externalFlag));
+            }
+            finally
+            {
+                flag.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.TestCase(10L, 11L, 73, 73, 2, 8, true)]
+        [NUnit.Framework.TestCase(10L, 10L, 73, 73, 2, 8, false)]
+        [NUnit.Framework.TestCase(10L, 9L, 73, 73, 2, 8, false)]
+        [NUnit.Framework.TestCase(10L, 11L, 73, 74, 2, 8, false)]
+        [NUnit.Framework.TestCase(10L, 11L, 0, 0, 2, 8, false)]
+        [NUnit.Framework.TestCase(10L, 11L, 73, 73, 0, 0, false)]
+        [NUnit.Framework.TestCase(10L, 11L, 73, 73, 0, 8, false)]
+        [NUnit.Framework.TestCase(10L, 11L, 73, 73, 2, -1, false)]
+        public void RenderTextureBindingWindow_ObservationRequiresNewValidBodyExecute(
+            long previousSequence, long currentSequence, int expectedCameraId, int actualCameraId,
+            int prepareCount, int reuseCount, bool expected)
+        {
+            MethodInfo valid = EligibilityMethod("IsRenderTextureBindingObservationFresh");
+            Type feature = typeof(NTSD.Animation.Rendering.BattleRenderFeature);
+            foreach (string propertyName in new[]
+            {
+                "LastSegmentTextureBindingExecuteSequenceForDiagnostics",
+                "LastSegmentTextureBindingCameraIdForDiagnostics",
+            })
+            {
+                PropertyInfo property = feature.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Static);
+                NUnit.Framework.Assert.That(property, NUnit.Framework.Is.Not.Null, propertyName);
+                NUnit.Framework.Assert.That(property.PropertyType, NUnit.Framework.Is.EqualTo(
+                    propertyName.Contains("Sequence") ? typeof(long) : typeof(int)));
+                NUnit.Framework.Assert.That(property.GetGetMethod(), NUnit.Framework.Is.Not.Null);
+                NUnit.Framework.Assert.That(property.GetSetMethod(), NUnit.Framework.Is.Null, "Observation has no public setter.");
+            }
+            NUnit.Framework.Assert.That(valid.GetParameters().Length, NUnit.Framework.Is.EqualTo(6),
+                "Fresh Execute does not require a new logic tick, publication or GPU completion.");
+            NUnit.Framework.Assert.That(valid.Invoke(null, new object[]
+            {
+                previousSequence, currentSequence, expectedCameraId, actualCameraId, prepareCount, reuseCount,
+            }), NUnit.Framework.Is.EqualTo(expected));
+            if (expected)
+            {
+                NUnit.Framework.Assert.That(valid.Invoke(null, new object[]
+                {
+                    previousSequence, currentSequence, -73, -73, prepareCount, reuseCount,
+                }), NUnit.Framework.Is.EqualTo(true), "Unity instance identity may be negative; only zero is invalid.");
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void RenderTextureBindingWindow_RequestKeepsProductionWorkloadAndFreshOutput(int index)
+        {
+            MethodInfo method = EligibilityMethod("BuildRenderTextureBindingRequest");
+            var actual = (ProductionEntityStressRequest)method.Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected =
+                BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/windows-01/" +
+                index.ToString("D2") + "-" + expected.action +
+                (index % 2 == 0 ? "-binding-off" : "-binding-on") + "/report.json"));
+            NUnit.Framework.Assert.That(actual.inputMode, NUnit.Framework.Is.EqualTo("ai"));
+            NUnit.Framework.Assert.That(actual.entityCount, NUnit.Framework.Is.EqualTo(1000));
+            NUnit.Framework.Assert.That(actual.warmupTicks, NUnit.Framework.Is.EqualTo(120));
+            NUnit.Framework.Assert.That(actual.sampleTicks, NUnit.Framework.Is.EqualTo(180));
+            NUnit.Framework.Assert.That(actual.maxCatchUpTicksPerFrame, NUnit.Framework.Is.EqualTo(2));
+            NUnit.Framework.Assert.That(actual.maxBacklogTicks, NUnit.Framework.Is.EqualTo(2));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+            if (index == 0)
+            {
+                foreach (int rejectedIndex in new[] { -1, 4 })
+                    NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        method.Invoke(null, new object[] { rejectedIndex })).InnerException,
+                        NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+            }
+        }
+
+        private static PropertyInfo RenderTextureBindingWindowFlag()
+        {
+            PropertyInfo property = typeof(NTSD.Animation.Rendering.BattleRenderFeature).GetProperty(
+                "EnableSegmentTextureBindingReuseForDiagnostics", BindingFlags.Public | BindingFlags.Static);
+            NUnit.Framework.Assert.That(property, NUnit.Framework.Is.Not.Null);
+            return property;
+        }
+
+        private static FieldInfo RenderTextureBindingWindowOwner()
+        {
+            FieldInfo field = typeof(BattleOptimizationWindowsAiSuiteEditor).GetField(
+                "renderTextureBindingReuseOwner", BindingFlags.NonPublic | BindingFlags.Static);
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(field.FieldType, NUnit.Framework.Is.EqualTo(typeof(bool)));
+            return field;
+        }
+
+        private static void SetRenderTextureBindingWindowRunField(object run, string name, object value)
+        {
+            FieldInfo field = run.GetType().GetField(name, BindingFlags.Public | BindingFlags.Instance);
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null, name);
+            field.SetValue(run, value);
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteEnvelopeBranchTimingWindow_RequestKeepsProductionWorkload(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod(
+                "BuildBruteEnvelopeBranchTimingRequest").Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected =
+                BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/windows-01/" +
+                index.ToString("D2") + "-" + expected.action +
+                (index % 2 == 0 ? "-timing-off" : "-timing-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_RequestRejectsOutsideMatrix()
+        {
+            MethodInfo method = EligibilityMethod("BuildBruteEnvelopeBranchTimingRequest");
+            foreach (int index in new[] { -1, 4 })
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    method.Invoke(null, new object[] { index })).InnerException,
+                    NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_ModeIsExplicitAndRoutesBeforeScope()
+        {
+            MethodInfo menu = EligibilityMethod("BeginBruteEnvelopeBranchTiming");
+            var attributes = menu.GetCustomAttributes(typeof(MenuItem), false);
+            NUnit.Framework.Assert.That(((MenuItem)attributes[0]).menuItem, NUnit.Framework.Is.EqualTo(
+                "NTSD/Validation/Optimization/Batch65 Envelope Branch Timing Full Driver GC 1000 AI"));
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            FieldInfo mode = owner.FieldType.GetField("bruteEnvelopeBranchTimingCandidate");
+            NUnit.Framework.Assert.That(mode, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(mode.GetValue(JsonUtility.FromJson("{\"logicGcScopeOnly\":true}", owner.FieldType)),
+                NUnit.Framework.Is.EqualTo(false));
+            object candidate = Activator.CreateInstance(owner.FieldType, true);
+            mode.SetValue(candidate, true);
+            owner.FieldType.GetField("logicGcScopeOnly").SetValue(candidate, true);
+            try
+            {
+                owner.SetValue(null, candidate);
+                for (int index = 0; index < 4; index++)
+                    NUnit.Framework.Assert.That(JsonUtility.ToJson(EligibilityMethod("BuildCurrentRequest").Invoke(null,
+                        new object[] { index })), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(
+                            EligibilityMethod("BuildBruteEnvelopeBranchTimingRequest").Invoke(null, new object[] { index }))));
+            }
+            finally { owner.SetValue(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_ModeRejectsMissingScopeAndOtherModes()
+        {
+            FieldInfo startup = CoarseEnvelopeStaticField("startingEnvelopeBranchTimingWindow");
+            MethodInfo begin = EligibilityMethod("BeginSuite");
+            ParameterInfo[] parameters = begin.GetParameters();
+            try
+            {
+                for (int defect = 0; defect < 4; defect++)
+                {
+                    object[] arguments = new object[parameters.Length];
+                    for (int index = 0; index < arguments.Length; index++)
+                        arguments[index] = parameters[index].Name == "bruteProductionOnly" && defect != 0 ||
+                            parameters[index].Name == "logicGcScopeOnly" && defect != 1 ||
+                            parameters[index].Name == "cpuGcCaptureOnly" && defect == 2 ||
+                            parameters[index].Name == "bruteBranchTimingOnly" && defect == 3;
+                    startup.SetValue(null, true);
+                    TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        begin.Invoke(null, arguments));
+                    NUnit.Framework.Assert.That(error.InnerException.Message,
+                        NUnit.Framework.Does.Contain("envelope branch timing window requires"));
+                    NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("state").GetValue(null), NUnit.Framework.Is.Null);
+                }
+            }
+            finally { startup.SetValue(null, false); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_ColdOwnerAndOldScopesRejectNewOptIn()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteEnvelopeBranchTiming");
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            foreach (string flag in new[] { "EnableBruteEnvelopeBranchTimingForDiagnostics",
+                "EnableBruteBranchTimingForDiagnostics", "EnableBruteCoarseEnvelopeForDiagnostics",
+                "EnableBruteRejectedBindingReuseForDiagnostics", "EnableBruteEligibilityReuseForDiagnostics",
+                "EnableBruteKind5PresenceForDiagnostics", "EnableBruteCoarseDispatchForDiagnostics" })
+            {
+                var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+                typeof(BruteForceSceneQuery).GetProperty(flag).SetValue(query, true);
+                try
+                {
+                    NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        apply.Invoke(null, new object[] { query, NewEligibilityRun(), true }));
+                    NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("envelopeBindingQuery").GetValue(null),
+                        NUnit.Framework.Is.Null);
+                }
+                finally { restore.Invoke(null, null); }
+            }
+            var excluded = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            excluded.EnableBruteEnvelopeBranchTimingForDiagnostics = true;
+            foreach (string valid in new[] { "EnvelopeBindingQueryDefaultsValid", "CoarseEnvelopeQueryDefaultsValid" })
+                NUnit.Framework.Assert.That(EligibilityMethod(valid).Invoke(null, new object[] { excluded }),
+                    NUnit.Framework.Is.EqualTo(false));
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBranchTimingWindow_ApplyCompleteRestoresFlagsAndStride(bool enabled)
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            query.BruteBranchTimingSampleStrideForDiagnostics = 8;
+            object run = NewEligibilityRun();
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            try
+            {
+                EligibilityMethod("ApplyBruteEnvelopeBranchTiming").Invoke(null, new object[] { query, run, enabled });
+                NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics &&
+                    query.EnableBruteRejectedBindingReuseForDiagnostics && query.EnableBruteEnvelopeBranchTimingForDiagnostics,
+                    NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(query.EnableBruteBranchTimingForDiagnostics, NUnit.Framework.Is.EqualTo(enabled));
+                NUnit.Framework.Assert.That(query.BruteBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(64));
+                NUnit.Framework.Assert.That(EligibilityMethod("EnvelopeBranchTimingScopeValid").Invoke(null,
+                    new object[] { query, run }), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(EligibilityMethod("EnvelopeBindingScopeValid").Invoke(null,
+                    new object[] { query, run }), NUnit.Framework.Is.EqualTo(false));
+                EligibilityMethod("CompleteBruteEnvelopeBinding").Invoke(null, new[] { run });
+                foreach (string field in new[] { "bruteCoarseEnvelopeRestored", "bruteRejectedBindingReuseRestored",
+                    "bruteEnvelopeBranchTimingRestored", "bruteBranchTimingRestored", "bruteBranchTimingFlagUnchanged" })
+                    NUnit.Framework.Assert.That(EligibilityRunField(run, field), NUnit.Framework.Is.EqualTo(true), field);
+                NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                    query.EnableBruteRejectedBindingReuseForDiagnostics || query.EnableBruteEnvelopeBranchTimingForDiagnostics ||
+                    query.EnableBruteBranchTimingForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(query.BruteBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(8));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_DriftLatchesAndStillRestores()
+        {
+            foreach (string flag in new[] { "EnableBruteEnvelopeBranchTimingForDiagnostics",
+                "EnableBruteBranchTimingForDiagnostics", "EnableBruteCoarseEnvelopeForDiagnostics",
+                "EnableBruteRejectedBindingReuseForDiagnostics" })
+            {
+                var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+                object run = NewEligibilityRun();
+                MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+                try
+                {
+                    EligibilityMethod("ApplyBruteEnvelopeBranchTiming").Invoke(null, new object[] { query, run, true });
+                    typeof(BruteForceSceneQuery).GetProperty(flag).SetValue(query, false);
+                    EligibilityMethod("ObserveBruteEnvelopeBinding").Invoke(null, new[] { run });
+                    typeof(BruteForceSceneQuery).GetProperty(flag).SetValue(query, true);
+                    NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        EligibilityMethod("CompleteBruteEnvelopeBinding").Invoke(null, new[] { run }));
+                }
+                finally
+                {
+                    NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                    NUnit.Framework.Assert.That(query.EnableBruteEnvelopeBranchTimingForDiagnostics ||
+                        query.EnableBruteBranchTimingForDiagnostics, NUnit.Framework.Is.False);
+                }
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBranchTimingWindow_AbortRestoresCurrentOrCompletedRun(bool currentRun)
+        {
+            FieldInfo stateOwner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(stateOwner.GetValue(null), NUnit.Framework.Is.Null);
+            object run = NewEligibilityRun();
+            object candidate = Activator.CreateInstance(stateOwner.FieldType, true);
+            Array runs = Array.CreateInstance(run.GetType(), 1);
+            runs.SetValue(run, 0);
+            stateOwner.FieldType.GetField("runs").SetValue(candidate, runs);
+            stateOwner.FieldType.GetField("runIndex").SetValue(candidate, currentRun ? 0 : 1);
+            FieldInfo mode = stateOwner.FieldType.GetField("bruteEnvelopeBranchTimingCandidate");
+            NUnit.Framework.Assert.That(mode, NUnit.Framework.Is.Not.Null);
+            mode.SetValue(candidate, true);
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            try
+            {
+                EligibilityMethod("ApplyBruteEnvelopeBranchTiming").Invoke(null, new object[] { query, run, true });
+                stateOwner.SetValue(null, candidate);
+                NUnit.Framework.Assert.That(EligibilityMethod("RestoreBruteEnvelopeBindingForExit").Invoke(null, null),
+                    NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.EnableBruteEnvelopeBranchTimingForDiagnostics ||
+                    query.EnableBruteBranchTimingForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "bruteEnvelopeBranchTimingRestored"),
+                    NUnit.Framework.Is.EqualTo(currentRun));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { restore.Invoke(null, null); stateOwner.SetValue(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBranchTimingWindow_StrideDriftIsNotHiddenByRestoringFlag()
+        {
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            object run = NewEligibilityRun();
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            try
+            {
+                EligibilityMethod("ApplyBruteEnvelopeBranchTiming").Invoke(null, new object[] { query, run, true });
+                query.BruteBranchTimingSampleStrideForDiagnostics = 1;
+                EligibilityMethod("ObserveBruteEnvelopeBinding").Invoke(null, new[] { run });
+                query.BruteBranchTimingSampleStrideForDiagnostics = 64;
+                NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("CompleteBruteEnvelopeBinding").Invoke(null, new[] { run }));
+            }
+            finally
+            {
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.BruteBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(1));
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBranchTimingWindow_ObservationRequiresCoverageAndRestoration(bool enabled)
+        {
+            MethodInfo valid = EligibilityMethod("EnvelopeBranchTimingObservationValid");
+            object run = NewEligibilityRun();
+            foreach (string field in new[] { "bruteEnvelopeBranchTimingMode", "bruteCoarseEnvelopeEnabled",
+                "bruteCoarseEnvelopeFlagApplied", "bruteCoarseEnvelopeFlagUnchanged", "bruteCoarseEnvelopeRestored",
+                "bruteRejectedBindingReuseEnabled", "bruteRejectedBindingReuseFlagApplied",
+                "bruteRejectedBindingReuseFlagUnchanged", "bruteRejectedBindingReuseRestored",
+                "bruteRejectedBindingReuseObservedApplied", "bruteEnvelopeBranchTimingFlagApplied",
+                "bruteEnvelopeBranchTimingFlagUnchanged", "bruteEnvelopeBranchTimingRestored",
+                "bruteBranchTimingFlagApplied", "bruteBranchTimingFlagUnchanged", "bruteBranchTimingRestored" })
+                SetCoarseEnvelopeRunField(run, field, true);
+            SetCoarseEnvelopeRunField(run, "bruteCoarseEnvelopeMaximumObservedDirections", 8L);
+            SetCoarseEnvelopeRunField(run, "bruteCoarseEnvelopeMaximumObservedRejects", 4L);
+            SetCoarseEnvelopeRunField(run, "bruteRejectedBindingMaximumObservedProbes", 3L);
+            SetCoarseEnvelopeRunField(run, "bruteRejectedBindingMaximumObservedReuses", 2L);
+            SetCoarseEnvelopeRunField(run, "bruteBranchTimingEnabled", enabled);
+            SetCoarseEnvelopeRunField(run, "bruteBranchTimingSampleStride", 64);
+            var coverage = new BruteForceSceneQuery.BruteBranchTimingCoverage();
+            if (enabled)
+            {
+                coverage.eligibleDirections = 128;
+                coverage.timedDirections = 2;
+                coverage.rejectedBindingVisits = coverage.pairAllowedVisits = coverage.exactWorkVisits = 64;
+                coverage.rejectedBindingTimed = coverage.pairAllowedTimed = coverage.exactWorkTimed = 1;
+            }
+            SetCoarseEnvelopeRunField(run, "bruteBranchTimingCoverage", coverage);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(true));
+            var invalid = coverage;
+            invalid.rejectedBindingTimed = enabled ? 0 : 1;
+            SetCoarseEnvelopeRunField(run, "bruteBranchTimingCoverage", invalid);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(false));
+            SetCoarseEnvelopeRunField(run, "bruteBranchTimingCoverage", coverage);
+            SetCoarseEnvelopeRunField(run, "bruteEnvelopeBranchTimingRestored", false);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(false));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void BruteEnvelopeBindingEligibility_RequestKeepsProductionWorkload(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod(
+                "BuildBruteEnvelopeBindingEligibilityRequest").Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected =
+                BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH64-ENVELOPE-BINDING-ELIGIBILITY-20261008/windows-01/" +
+                index.ToString("D2") + "-" + expected.action +
+                (index % 2 == 0 ? "-eligibility-off" : "-eligibility-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBindingEligibility_RequestRejectsOutsideMatrix()
+        {
+            MethodInfo method = EligibilityMethod("BuildBruteEnvelopeBindingEligibilityRequest");
+            foreach (int index in new[] { -1, 4 })
+            {
+                TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    method.Invoke(null, new object[] { index }));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBindingEligibility_ModeIsExplicitAndRoutesBeforeScope()
+        {
+            MethodInfo menu = EligibilityMethod("BeginBruteEnvelopeBindingEligibility");
+            var attributes = menu.GetCustomAttributes(typeof(MenuItem), false);
+            NUnit.Framework.Assert.That(((MenuItem)attributes[0]).menuItem, NUnit.Framework.Is.EqualTo(
+                "NTSD/Validation/Optimization/Batch64 Envelope Binding Eligibility Full Driver GC 1000 AI"));
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+            NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("startingEnvelopeBindingEligibilityWindow").GetValue(null),
+                NUnit.Framework.Is.EqualTo(false));
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            FieldInfo mode = owner.FieldType.GetField("bruteEnvelopeBindingEligibilityCandidate");
+            NUnit.Framework.Assert.That(mode, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(mode.GetValue(JsonUtility.FromJson("{\"logicGcScopeOnly\":true}", owner.FieldType)),
+                NUnit.Framework.Is.EqualTo(false));
+            object candidate = Activator.CreateInstance(owner.FieldType, true);
+            mode.SetValue(candidate, true);
+            owner.FieldType.GetField("bruteProductionOnly").SetValue(candidate, true);
+            owner.FieldType.GetField("logicGcScopeOnly").SetValue(candidate, true);
+            try
+            {
+                owner.SetValue(null, candidate);
+                for (int index = 0; index < 4; index++)
+                {
+                    object actual = EligibilityMethod("BuildCurrentRequest").Invoke(null, new object[] { index });
+                    object expected = EligibilityMethod("BuildBruteEnvelopeBindingEligibilityRequest").Invoke(null,
+                        new object[] { index });
+                    NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+                }
+            }
+            finally { owner.SetValue(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBindingEligibility_ModeRejectsMissingScopeAndOtherModes()
+        {
+            FieldInfo startup = CoarseEnvelopeStaticField("startingEnvelopeBindingEligibilityWindow");
+            FieldInfo envelope = CoarseEnvelopeStaticField("startingCoarseEnvelopeWindow");
+            FieldInfo binding = CoarseEnvelopeStaticField("startingEnvelopeBindingWindow");
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            MethodInfo begin = EligibilityMethod("BeginSuite");
+            ParameterInfo[] parameters = begin.GetParameters();
+            try
+            {
+                for (int defect = 0; defect < 6; defect++)
+                {
+                    object[] arguments = new object[parameters.Length];
+                    for (int index = 0; index < arguments.Length; index++)
+                        arguments[index] = parameters[index].Name == "bruteProductionOnly" && defect != 0 ||
+                            parameters[index].Name == "logicGcScopeOnly" && defect != 1 ||
+                            parameters[index].Name == "cpuGcCaptureOnly" && defect == 2 ||
+                            parameters[index].Name == "bruteEligibilityReuseCandidate" && defect == 3;
+                    startup.SetValue(null, true);
+                    envelope.SetValue(null, defect == 4);
+                    binding.SetValue(null, defect == 5);
+                    TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        begin.Invoke(null, arguments));
+                    NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                    NUnit.Framework.Assert.That(error.InnerException.Message,
+                        NUnit.Framework.Does.Contain("envelope binding eligibility window requires"));
+                    NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+                }
+            }
+            finally
+            {
+                startup.SetValue(null, false);
+                envelope.SetValue(null, false);
+                binding.SetValue(null, false);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBindingEligibility_ApplyScopeCompleteRestoresThree(bool enabled)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteEnvelopeBindingEligibility");
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            object run = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, enabled });
+                NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics &&
+                    query.EnableBruteRejectedBindingReuseForDiagnostics, NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(query.EnableBruteEligibilityReuseForDiagnostics, NUnit.Framework.Is.EqualTo(enabled));
+                NUnit.Framework.Assert.That(EligibilityMethod("EnvelopeBindingEligibilityScopeValid").Invoke(null,
+                    new object[] { query, run }), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(EligibilityMethod("EnvelopeBindingScopeValid").Invoke(null,
+                    new object[] { query, run }), NUnit.Framework.Is.EqualTo(false));
+                EligibilityMethod("CompleteBruteEnvelopeBinding").Invoke(null, new[] { run });
+                foreach (string field in new[] { "bruteCoarseEnvelopeRestored", "bruteRejectedBindingReuseRestored",
+                    "bruteEligibilityReuseRestored", "bruteEligibilityReuseFlagUnchanged" })
+                    NUnit.Framework.Assert.That(EligibilityRunField(run, field), NUnit.Framework.Is.EqualTo(true), field);
+                NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                    query.EnableBruteRejectedBindingReuseForDiagnostics || query.EnableBruteEligibilityReuseForDiagnostics,
+                    NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(query.EnableEmptyItrPairGuardForDiagnostics &&
+                    query.EnableBruteEmptyItrRosterForDiagnostics && query.EnableBruteExactCacheForDiagnostics &&
+                    query.EnableBruteGeometryFirstForDiagnostics, NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("envelopeBindingQuery").GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("envelopeBindingEligibilityOwner").GetValue(null),
+                    NUnit.Framework.Is.EqualTo(false));
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBindingEligibility_DriftLatchesAndRestorationStillWorks()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteEnvelopeBindingEligibility");
+            MethodInfo observe = EligibilityMethod("ObserveBruteEnvelopeBinding");
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            foreach (string property in new[] { "EnableBruteCoarseEnvelopeForDiagnostics",
+                "EnableBruteRejectedBindingReuseForDiagnostics", "EnableBruteEligibilityReuseForDiagnostics",
+                "EnableBruteExactCacheForDiagnostics" })
+            {
+                var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+                object run = NewEligibilityRun();
+                try
+                {
+                    apply.Invoke(null, new object[] { query, run, true });
+                    query.GetType().GetProperty(property).SetValue(query, false, null);
+                    observe.Invoke(null, new[] { run });
+                    query.GetType().GetProperty(property).SetValue(query, true, null);
+                    TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                        EligibilityMethod("CompleteBruteEnvelopeBinding").Invoke(null, new[] { run }));
+                    NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                    NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.EqualTo(true));
+                    NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                        query.EnableBruteRejectedBindingReuseForDiagnostics || query.EnableBruteEligibilityReuseForDiagnostics,
+                        NUnit.Framework.Is.False);
+                }
+                finally { restore.Invoke(null, null); }
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void BruteEnvelopeBindingEligibility_ColdApplyRejectsUnownedCandidateWithoutMutation()
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteEnvelopeBindingEligibility");
+            foreach (string property in new[] { "EnableBruteKind5PresenceForDiagnostics",
+                "EnableBruteEligibilityReuseForDiagnostics", "EnableBruteCoarseDispatchForDiagnostics",
+                "EnableBruteBranchTimingForDiagnostics", "EnableBruteCoarseEnvelopeForDiagnostics",
+                "EnableBruteRejectedBindingReuseForDiagnostics" })
+            {
+                var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+                query.GetType().GetProperty(property).SetValue(query, true, null);
+                TargetInvocationException error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { query, NewEligibilityRun(), true }));
+                NUnit.Framework.Assert.That(error.InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.GetType().GetProperty(property).GetValue(query, null), NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("envelopeBindingQuery").GetValue(null), NUnit.Framework.Is.Null);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBindingEligibility_ExitRestoresThreeAndOnlyCurrentRun(bool currentRun)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyBruteEnvelopeBindingEligibility");
+            MethodInfo restore = EligibilityMethod("RestoreBruteEnvelopeBinding");
+            FieldInfo owner = CoarseEnvelopeStaticField("state");
+            NUnit.Framework.Assert.That(owner.GetValue(null), NUnit.Framework.Is.Null);
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            object run = NewEligibilityRun();
+            object candidate = Activator.CreateInstance(owner.FieldType, true);
+            Array runs = Array.CreateInstance(run.GetType(), 1);
+            runs.SetValue(run, 0);
+            owner.FieldType.GetField("runs").SetValue(candidate, runs);
+            owner.FieldType.GetField("runIndex").SetValue(candidate, currentRun ? 0 : 1);
+            owner.FieldType.GetField("bruteEnvelopeBindingEligibilityCandidate").SetValue(candidate, true);
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, true });
+                owner.SetValue(null, candidate);
+                NUnit.Framework.Assert.That(EligibilityMethod("RestoreBruteEnvelopeBindingForExit").Invoke(null, null),
+                    NUnit.Framework.Is.EqualTo(true));
+                NUnit.Framework.Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics ||
+                    query.EnableBruteRejectedBindingReuseForDiagnostics || query.EnableBruteEligibilityReuseForDiagnostics,
+                    NUnit.Framework.Is.False);
+                foreach (string field in new[] { "bruteCoarseEnvelopeRestored", "bruteRejectedBindingReuseRestored",
+                    "bruteEligibilityReuseRestored" })
+                    NUnit.Framework.Assert.That(EligibilityRunField(run, field), NUnit.Framework.Is.EqualTo(currentRun), field);
+            }
+            finally
+            {
+                owner.SetValue(null, null);
+                restore.Invoke(null, null);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void BruteEnvelopeBindingEligibility_ObservationRequiresActualDeltaAndThreeRestored(bool enabled)
+        {
+            MethodInfo valid = EligibilityMethod("EnvelopeBindingEligibilityObservationValid");
+            object run = NewEligibilityRun();
+            foreach (string field in new[] { "bruteEnvelopeBindingEligibilityMode", "bruteCoarseEnvelopeEnabled",
+                "bruteCoarseEnvelopeFlagApplied", "bruteCoarseEnvelopeFlagUnchanged", "bruteCoarseEnvelopeRestored",
+                "bruteRejectedBindingReuseEnabled", "bruteRejectedBindingReuseFlagApplied",
+                "bruteRejectedBindingReuseFlagUnchanged", "bruteRejectedBindingReuseRestored",
+                "bruteRejectedBindingReuseObservedApplied", "bruteEligibilityReuseFlagApplied",
+                "bruteEligibilityReuseFlagUnchanged", "bruteEligibilityReuseRestored" })
+                SetCoarseEnvelopeRunField(run, field, true);
+            SetCoarseEnvelopeRunField(run, "bruteCoarseEnvelopeMaximumObservedDirections", 8L);
+            SetCoarseEnvelopeRunField(run, "bruteCoarseEnvelopeMaximumObservedRejects", 4L);
+            SetCoarseEnvelopeRunField(run, "bruteRejectedBindingMaximumObservedProbes", 3L);
+            SetCoarseEnvelopeRunField(run, "bruteRejectedBindingMaximumObservedReuses", 2L);
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseEnabled", enabled);
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseObservedApplied", enabled);
+            SetCoarseEnvelopeRunField(run, "warmupTicks", 120);
+            SetCoarseEnvelopeRunField(run, "sampledTicks", 180);
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseAppliedDelta", enabled ? 300L : 0L);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(true));
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseAppliedDelta", enabled ? 299L : 1L);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(false));
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseAppliedDelta", enabled ? 300L : 0L);
+            SetCoarseEnvelopeRunField(run, "bruteEligibilityReuseRestored", false);
+            NUnit.Framework.Assert.That(valid.Invoke(null, new[] { run }), NUnit.Framework.Is.EqualTo(false));
+        }
+
 
         [NUnit.Framework.TestCase(false)]
         [NUnit.Framework.TestCase(true)]

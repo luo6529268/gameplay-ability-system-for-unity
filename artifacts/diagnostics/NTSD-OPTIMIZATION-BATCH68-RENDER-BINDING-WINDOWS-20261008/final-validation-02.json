@@ -1,0 +1,53 @@
+{
+  "utc": "2026-10-08T05:54:00.1561767Z",
+  "outcomes": [
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-RENDER-BINDING-WINDOWS-068.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/RECORD.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008/REPORT.md",
+      "exit": 1,
+      "whitespaceErrors": []
+    }
+  ],
+  "newScriptChanges": false,
+  "testsRerun": false,
+  "windowsRerun": false
+}

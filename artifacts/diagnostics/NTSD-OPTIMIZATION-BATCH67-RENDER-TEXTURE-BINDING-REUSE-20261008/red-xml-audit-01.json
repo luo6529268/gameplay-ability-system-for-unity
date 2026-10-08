@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-08T04:27:50.0772448Z",
+  "total": "25",
+  "passed": "0",
+  "failed": "25",
+  "cases": 25,
+  "allExpectedNames": true,
+  "distinctFailureMessages": [
+    "  Candidate opt-in contract is missing.\n  Expected: not null\n  But was:  null\n",
+    "  Candidate segment appender contract is missing.\n  Expected: not null\n  But was:  null\n"
+  ],
+  "copySha": "9A5C4C7EE713AD176D7CA4970AD065966E2ACBB269C1592980B895B6CDD07086",
+  "sourceSha": "9A5C4C7EE713AD176D7CA4970AD065966E2ACBB269C1592980B895B6CDD07086"
+}

@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-08T03:20:20.7762762Z",
+  "suiteShaStillMatches": true,
+  "reportDifferences": [],
+  "newMarkdownWhitespace": [],
+  "sourceSha": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha": "ED518287DFFB8F870D774AD4E168833DD1D743AA99F2B968DF5CDBA7FF6A0DEC"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha": "9282999F1126173495C3C29E98DF7A60AC184CCEFE3C09EC8D216F9F7A61E97D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "48E580E9246F71F93757E66EB953FAE678C58656932E7D07433656B20D9C9471"
+    }
+  ]
+}
