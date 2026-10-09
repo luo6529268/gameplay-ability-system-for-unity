@@ -1,3 +1,24 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# M-03 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 渲染 / 中 |
+| 当前状态 | 选定阶段通过／父项开放；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | H-11容量与publication/alpha合同；EXT-1仍未批准 |
+| 下一步与具体方向 | 保留13 metadata和15每camera消重；脏区优化先区分publication/alpha/完全重复显示 |
+| 完成边界 | 受改动显示/像素/first-visible/上传/0GC通过；publication不变不能跳过alpha更新 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+**阶段结果：** 13 metadata批量上传、15每camera消重以及86相关选定链已具名通过；不重复从“统计尚未接入”开始，不称整个渲染/设备域完成。
+
+## 原方案与历史证据（原始正文保留）
+
 > 2026-10-07 第25批必要证据更正：当前Editor已知存活1MiB数组仍由GC.GetAllocatedBytesForCurrentThread读0，positive control未响应。第23批未有校准，原0B读数/断言事实保留，但不再作为完整热路径0GC验收；H11更正为EVIDENCE_PENDING，容量/显示/成本/lease/关闭保持。M03显示/成本/GameConfig Foot限定通过不撤回，不称0GC。原父项均OPEN，不重跑历史或改production。详第25批REPORT。
 
 > 2026-10-07 第23批限定收口：NTSD-OPTIMIZATION-BATCH23-FULL-CHAIN-CLOSURE-20261007 / SCOPED_FIRST_STAGE_H11_M03_ACCEPTANCE_PASS；NTSD-OPT-H11-M03-FULL-CHAIN-CLOSURE-023 / VERIFIED（本Task）。原Editor24/24；两活动aux完整CPU桥各1800sample当前线程0B/growth0/CPUlease0；原Battle重进1800camera每帧Foot2/Health2，两slot、DrawMesh11504录制=执行、1800Build，11阶段三残留0/Scene同/Menu恢复。第13批A-B五指纹同、第15批消费域及动态/像素等限定证据复用；不称global/native/GPU/1000AI/Android。新子批2/8完成，六项首阶段H11/M03限定交付2/6，34父项关闭0；下一H06/H07与M13/M14，不加本条目可选验收，专项门保持。

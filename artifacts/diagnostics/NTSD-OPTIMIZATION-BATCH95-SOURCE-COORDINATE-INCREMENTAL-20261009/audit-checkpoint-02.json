@@ -1,0 +1,25 @@
+{
+  "observedAt": "2026-10-09T16:06:11.3989392+08:00",
+  "operation": "NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009",
+  "status": "IN_PROGRESS / DRIVER_PARITY_PASS / DRIVER_GC_FAIL / DEFAULT_OFF",
+  "guardCount": 1128,
+  "guardDrift": [],
+  "beforeBackups": 10,
+  "backupDrift": [],
+  "runtimeUnchangedSinceCheckpoint01": true,
+  "runtimeDrift": [],
+  "HEAD": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "staged": [],
+  "diffCheckExit": 0,
+  "diffCheckNotes": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ]
+}

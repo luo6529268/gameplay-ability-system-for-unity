@@ -1,3 +1,26 @@
+> 2026-10-09 用户取消本轮优化自动执行，转外部 AI 评审交接。当前 get_goal 返回 goal:null；不标完成、不回退代码、不继续95或新开96。最新完成94/73包，95第74包未验收，候选默认OFF；六项5/6、H07 PERFORMANCE_FAIL、34父项关闭0。下方 Goal active / 下一执行动作均为历史快照，不构成恢复授权。本轮仅文档交接，文件操作 NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/RECORD.md)；[交接说明](../HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md)。
+
+> 第95批在途：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095 / DRIVER_PARITY_PASS / DRIVER_GC_FAIL / NOT_ADMITTED / DEFAULT_OFF。局部37PASS证据保留；两正式root各12tick、两真实catalog千人布局各32tick OFF/ON完整hash/RNG/28行/first10/index与cold双缓冲一致。千人资格整体仍FAIL：两边暖sample均有GC事件（多数2/tick），已缩小到stage准备每tick1event与core通常1event，调用点待确认，不能归因候选或冒充0GC通过；03/04有效分域及原32tick校验同保持；05三次单步取证均FAIL于导出envelope0，raw/失败/设置恢复已保存，callsite仍未知，不称新CPU收益。用户质询方案闭合，本轮只收尾在途，后继先核已有raw而非重复fixture；不启动Windows/1800或推广、不拆96。最新完成94/73已完成包，95第74包在途；阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active。编号100只检查方案落实清楚，不要求性能达标。[95报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md)。
+
+> 以下第94批及更早为完成时的历史快照；第95批尚未完成整个实施包，以文首在途状态为准。
+
+> 第94批限定评估完成：NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094 / FOCUSED_TEST_PASS / LOCAL_ONLY / NOT_ADMITTED / DEFAULT_OFF。最终38/38安全回归，OFF缓存容量0/封存增长拒绝/原序列payload与RNG/暖collector0B；V2局部D -0.83%/C -8.81%仅旧guard无AI线索，最终版没有实际AI/Driver性能收益证明，不开窗口/不推广。latest94/73执行/阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active；编号100只检查方案落实清楚，不要求达标。[94报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/REPORT.md)。下一核当前IndexedCanonical producer→freeze→commit整块重复工作；84同条件capacity skip0方向已排除，不重跑旧微候选。
+
+> 以下第93批及更早记录为历史快照，以文首第94批为当前状态。
+
+> 第93批 WINDOWS_COMPLETED / NO_GAIN_PROVEN / DEFAULT_OFF：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093 VERIFIED仅冷窗口工具域。原Editor24 RED→85/85 GREEN，一次四actual1000AI120+180；ON整logic均值/P95未改善、不推广/不重复此版长窗；四校准fullDriver180steady0event/0B、两对末tick十hash/完整JSON同、owner恢复/关闭三0/Menu clean8。SetPass5/中央CPUdraw2非GPU batch；最新完成93/实际执行72/阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active。[93报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/REPORT.md)。编号100仅方案是否落实清楚，不是性能截止；下一转有证大块重复工作、先核代码落点，不追加同构计时或无证微候选。
+
+> 第93批事前快照（以下数字为当时状态，不是当前进度）：
+> 第93批 PLANNED：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093，仅现有92候选的独立真实千人OFF/ON冷接线、24 test-first＋61邻域、一次四120+180；不重跑92资格、不改runtime/默认，当前latest92/71执行/阶段5of6/H07 FAIL/Goal active。9现存dirty字节新absent备份/1049非写域已核；[Task](../TASKS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009.md) / [Change](../CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093.md) / [Operation](NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/RECORD.md)。编号100只看方案落实清楚与否，不以性能FAIL暂停；下方旧状态保留。
+
+> Operation NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009 / VERIFIED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。只更正暂停触发条件，非优化第100批。
+
+> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](../TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。
+
+> 历史摘要（语义已被上述用户澄清替代，非当前暂停规则）：2026-10-09 用户条件暂停门已登记（非新优化子批）：按批次编号100，不按实际执行100次。若第100批结束H07仍未达到既定Windows性能门或方案仍未落实清楚，完成在途作业/有序关闭并恢复Editor后，update_goal paused、交付现有方案及证据给用户外部评审，不进入101、不标complete/blocked。当前最新完成编号92、实际执行71；93只读准备，未改C#/启动窗口；Goal仍active、阶段5/6。H11选定CPU阶段已在86通过，不重新扩大它；H07仍FAIL。千人AI行为策略不因原版AI一致单一理由被排除，具体实现/模式边界另行准确声明，不视为已实施或普遍战斗规则豁免。[执行合同8.1](../TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [留痕](NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/RECORD.md)。下方历史保留。
+
+> 第92批 FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / DRIVER_QUALIFIED / DEFAULT_OFF：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092。V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），真实Driver8/8、88paired/176step checksum与双完整RNG同；Sakura1000AI两32tick均actualAI1000/Role/noabort，ON拒绝D576450/C515802，数组/容量稳定、owner恢复/关闭三0/Menu clean8。71执行/阶段5of6/34父0/H07 FAIL/Goal active，未做真实成本/FPS/fullDriver0GC或推广。下一独立准确OFF/ON短窗，不重试本资格/局部或旧无收益候选；[92报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md)。下方为历史快照。
+
 > 第92批进行中：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092，V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），默认OFF。第4准确C# Driver冷资格扩展已事前留痕/dirty备份/999范围外保护；Driver RED5有效，GREEN资格待。累计71执行/阶段5of6/34父0/H07 FAIL/Goal active，无生产推广/真实耗时或完整Driver 0GC新验收。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009；下方为历史快照。
 
 > 第92批 PLANNED：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092；现有Role几何相交后的纯阵营拒绝前置，避免无用完整payload，default OFF/不换索引或生产默认。3准确C#、9当前dirty副本及1000保护已核；test-first/两布局managed交替成本待，无实际AI/FPS新证据。70执行/阶段5of6/34父0/H07 FAIL/Goal active。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009，下方为历史快照。
@@ -601,3 +624,35 @@ Operation TMP-VERTEX-EFFECTS-SHARED-20261008 / VERIFIED（限定定向编辑/资
 
 本批操作索引：NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009，SCOPED_EXECUTED / QUALIFICATION_REJECTED；[Record](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/RECORD.md) / [原manifest](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-01.json) / [Driver精确源扩展](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-02.json)。只保留本批增量、原件及失败，不删除/移动或破坏性Git；SaveNew Guid文件名更正见Record/报告。
 
+> 第94批事前PLANNED记录现已由文首结果与94报告更新；旧93/72数字仅为开始时快照。本包未建立真实千人收益，默认关闭、H07仍FAIL，编号100仅方案清晰度检查。
+
+> 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。
+
+
+
+Operation NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009 / PLANNED（文档重整）：[Record](NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/RECORD.md)。用户授权文档整理，实施仍停止；39文档原始字节备份，最终范围见manifest/write-plan。
+
+Operation NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009 / VERIFIED（文档操作限定）：[Record](NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/RECORD.md) / [验证](NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/validation-final.json)。39原正文完整保留＋9新文档；34父项/5子项、286链接、阶段依赖无环、2349保护0漂移。D1待决策，优化未执行，提示词为草案。
+
+Operation NTSD-OPTIMIZATION-D1-A-20261009 / PLANNED：[Record](NTSD-OPTIMIZATION-D1-A-20261009/RECORD.md)。用户选择A，仅同步文档和提示词，不实施优化。
+
+Operation NTSD-OPTIMIZATION-D1-A-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATION-D1-A-20261009/RECORD.md)。D1=A已批准并同步11文档，提示词已定稿；生产/配置未变，无Unity执行。
+
+- NTSD-H06-ROLE-SCOPED-ADMISSION-20261009 / RUNNING / H06具名限定准入，当前用户授权；[NTSD-H06-ROLE-SCOPED-ADMISSION-20261009](NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/RECORD.md)。
+
+
+- 2026-10-09T19:43:21.601460+08:00 `NTSD-H06-PROFILER-RESET-100-PREP-20261009` / PLANNED：用户授权旧Profiler内存缓存清空与100对象短诊断准备；不删除旧文件、不改生产逻辑。[Record](NTSD-H06-PROFILER-RESET-100-PREP-20261009/RECORD.md)。
+
+- 2026-10-09T19:57:47.998605+08:00 `NTSD-H06-PROFILER-RESET-100-PREP-20261009` / RUNNING收尾：旧内存清空与100对象短诊断通过；原件保留，生产未改，validator待最终落盘。[Record](NTSD-H06-PROFILER-RESET-100-PREP-20261009/RECORD.md)。
+
+- 2026-10-09T20:01:15.881870+08:00 `NTSD-H06-PROFILER-RESET-100-PREP-20261009` / VERIFIED（准备范围）：旧内存清空、100对象定位/新raw导出、准确设置恢复和objects/slots0；1192保护0变、原dirty备份6/6、HEAD/staged稳，Ledger exit0，旧磁盘数据全部保留。[Record](NTSD-H06-PROFILER-RESET-100-PREP-20261009/RECORD.md)。
+
+- [NTSD-H06-FIND-EFFECT-ZEROGC-20261009](NTSD-H06-FIND-EFFECT-ZEROGC-20261009/RECORD.md) — RUNNING；FindEffect单点修复及必要验证，用户明确授权。
+
+- [NTSD-H06-FIND-EFFECT-ZEROGC-20261009](NTSD-H06-FIND-EFFECT-ZEROGC-20261009/RECORD.md) — COMPLETE；FindEffect单点修复/100一致0GC/原千人8次0GC；11备份校验通过、2439保护仅登记生产1变、HEAD/staged稳，Ledger exit0。H06整体准入未完成。
+
+
+> 2026-10-09 Operation `NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009` / PLANNED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/RECORD.md)。新增 FindEffect 独立修复说明及记录格式，现有文档仅补导航；真实 dirty 备份已核验，不改代码或恢复执行。
+
+
+> 2026-10-09 Operation `NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009` / VERIFIED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/RECORD.md)。两份独立实施说明/格式已建立、四处导航已补；3014保护文件及五份dirty备份SHA一致，代码前后片段/链接检查通过。没有代码修改、测试或后继执行。

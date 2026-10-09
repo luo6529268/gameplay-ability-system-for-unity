@@ -1,0 +1,19 @@
+{
+  "markers": 3,
+  "sampleCount": 66,
+  "bytes": 2640,
+  "byFrame": {
+    "0": 22,
+    "1": 22,
+    "2": 22
+  },
+  "firstManagedFrame": [
+    {
+      "method": "Assembly-CSharp.dll!NTSD.DatParser::LoganKindCatalog.FindEffect()",
+      "bytesEach": 40,
+      "events": 66
+    }
+  ],
+  "allHaveManagedFrames": true,
+  "errors": []
+}

@@ -1,3 +1,22 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-02 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 平台 / 中 |
+| 当前状态 | 待授权与前置；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | H-04构建配置；H-01可部署内容用于运行验收；M-09/M-15指纹 |
+| 下一步与具体方向 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+| 完成边界 | Development ARM64包及冷启动/退出重进通过；Release签名另属L-02 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+## 原方案与历史证据（原始正文保留）
+
 # H-02 Android Build 与 Scene 闭包方案
 
 > 优先级：高  

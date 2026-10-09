@@ -1,0 +1,139 @@
+{
+  "operation": "NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009",
+  "status": "VERIFIED_DOCS_HANDOFF_ONLY",
+  "verification": {
+    "bodyChecks": [
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "oldBodyNewlineNormalizedEqual": true
+      },
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "docs/ai/STATE.md",
+        "oldBodyNewlineNormalizedEqual": true
+      },
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "oldBodyNewlineNormalizedEqual": true
+      },
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "oldBodyNewlineNormalizedEqual": true
+      },
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "oldBodyNewlineNormalizedEqual": true
+      },
+      {
+        "oldBodyExactText": true,
+        "backupVerified": true,
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "oldBodyNewlineNormalizedEqual": true
+      }
+    ],
+    "drift": [],
+    "guardCount": 1127,
+    "time": "2026-10-09T17:06:21.0695091+08:00",
+    "summaryLines": 107,
+    "diffExit": 0,
+    "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+    "missingLinks": [],
+    "diffOutput": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md', LF will be replaced by CRLF the next time Git touches it"
+    ],
+    "staged": []
+  },
+  "finalFiles": {
+    "staged": [],
+    "time": "2026-10-09T17:07:32.6079062+08:00",
+    "files": [
+      {
+        "bytes": 135204,
+        "sha": "10E412CD17A7ADE80F45F7C10E2FA4A2B316246B7D98C396C5393C65C0571591",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md"
+      },
+      {
+        "bytes": 1654440,
+        "sha": "F2792755D2E79C52BA22B76220A8FFB72988CACBE7EE0E670FB0BF91B6BA324C",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+        "path": "docs/ai/STATE.md"
+      },
+      {
+        "bytes": 746950,
+        "sha": "7BEC45258FC427EB60C0BDC19EADD7337493DD3E435C4FC8961DF1001B2368C7",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+        "path": "docs/ai/CHANGE-LEDGER.md"
+      },
+      {
+        "bytes": 1588466,
+        "sha": "ED8A3EEB394070FDCF92BBEB771B8B813BFF0F0F017A3B2B54A3E78C00E92514",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      },
+      {
+        "bytes": 210076,
+        "sha": "6EE687C1DCF9B0094FA673284760C112DB7C1B8DA102DBE45A2A3DE1BCC7E7F6",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      },
+      {
+        "bytes": 48648,
+        "sha": "AF096E09AB83B5193CA02FB14D10F2EA511625D4CC256C7D9A083F992A13C871",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+        "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+      },
+      {
+        "bytes": 15802,
+        "sha": "BC6B3088B8F524F6F0957BEE289A3173FAF1AA02DE77B6A11C0CAA50AF29FD2D",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\HANDOFFS\\NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md",
+        "path": "docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md"
+      },
+      {
+        "bytes": 5560,
+        "sha": "1FC6EEA30F069B11A493355CAEF253B6B1BE11F455AC6009979C6E916FF5425F",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009\\RECORD.md",
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/RECORD.md"
+      },
+      {
+        "bytes": 516267,
+        "sha": "60BC1DB3EB9CF040B18593E5DB3D182D9D054318CD1E4C219AF8A614A5634AF3",
+        "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009\\before-manifest-01.json",
+        "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-manifest-01.json"
+      }
+    ],
+    "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173"
+  },
+  "goalState": "Latest get_goal: goal:null. No replacement goal. Not marked complete.",
+  "notRun": [
+    "Unity",
+    "compile",
+    "tests",
+    "Profiler",
+    "Frame Debugger",
+    "GPU capture",
+    "M0",
+    "performance measurement",
+    "ChangeLedger validator (no script edits this turn)"
+  ],
+  "selfHash": "This after manifest does not hash itself.",
+  "limitations": [
+    "Historical code/test/performance acceptance unchanged",
+    "No H07 or batch95 completion",
+    "Line-ending reminders retained in diffOutput"
+  ]
+}

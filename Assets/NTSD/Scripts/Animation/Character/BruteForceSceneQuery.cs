@@ -118,6 +118,10 @@ namespace NTSD.Animation
         private readonly RoleAwareFormalParticipantBuffer _roleFormalParticipants =
             new RoleAwareFormalParticipantBuffer(128);
         private byte[] _roleFormalParticipantRoleFlags = new byte[128];
+        private BattleHitCandidatePairSnapshotFactory.Endpoint[] _roleSnapshotEndpoints =
+            Array.Empty<BattleHitCandidatePairSnapshotFactory.Endpoint>();
+        private byte[] _roleSnapshotEndpointStates = Array.Empty<byte>();
+        private bool _roleEndpointSnapshotReuseForCurrentCollection;
         private readonly Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>
             _roleFormalBodyTemplates =
                 new Dictionary<LF2FrameData, RoleAwareFormalBodyTemplate>(
@@ -226,6 +230,11 @@ namespace NTSD.Animation
         public long LastRoleSnapshotFrameReuseCountForDiagnostics { get; private set; }
         public bool EnableRoleRejectedGroupSnapshotSkipForDiagnostics { get; set; }
         public long LastRoleRejectedGroupSnapshotSkipCountForDiagnostics { get; private set; }
+        public bool EnableRoleEndpointSnapshotReuseForDiagnostics { get; set; }
+        public long LastRoleEndpointSnapshotCaptureCountForDiagnostics { get; private set; }
+        public long LastRoleEndpointSnapshotComposeCountForDiagnostics { get; private set; }
+        public long LastRoleEndpointSnapshotFallbackCountForDiagnostics { get; private set; }
+        public int RoleEndpointSnapshotCapacityForDiagnostics => _roleSnapshotEndpoints.Length;
 #if UNITY_INCLUDE_TESTS
         private int _lastRoleAwareCachedPairSnapshotCaptureCount;
         private int _lastEmptyItrGuardRejectCount;
@@ -1048,6 +1057,15 @@ namespace NTSD.Animation
             int pairCapacity = checked(entityCapacity * (entityCapacity - 1) / 2);
             int sweepCapacity = checked(entityCapacity * 4);
 
+            if (EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                _roleSnapshotEndpoints.Length < entityCapacity)
+            {
+                if (_world?.RuntimeCapacity?.IsSealed == true)
+                    throw new InvalidOperationException("Cannot grow role endpoint snapshots after battle capacity is sealed.");
+                Array.Resize(ref _roleSnapshotEndpoints, entityCapacity);
+                Array.Resize(ref _roleSnapshotEndpointStates, entityCapacity);
+            }
+
             EnsureListCapacity(_tmpHitResult, HitCandidateMax);
             EnsureListCapacity(_tmpAllObjects, entityCapacity);
             int bruteRosterCapacity = checked(entityCapacity + 1);
@@ -1174,6 +1192,8 @@ namespace NTSD.Animation
 
         internal void ResetFormalSpatialBroadphase()
         {
+            _roleEndpointSnapshotReuseForCurrentCollection = false;
+            Array.Clear(_roleSnapshotEndpointStates, 0, _roleSnapshotEndpointStates.Length);
             _formalBroadphase.ResetIncremental();
             _roleFormalBroadphase.ResetIncremental();
             _immediateBroadphase.ResetIncremental();
@@ -1676,6 +1696,12 @@ namespace NTSD.Animation
         /// </summary>
         public void CollectCollisionCandidates()
         {
+            _roleEndpointSnapshotReuseForCurrentCollection = false;
+            LastRoleEndpointSnapshotCaptureCountForDiagnostics = 0;
+            LastRoleEndpointSnapshotComposeCountForDiagnostics = 0;
+            LastRoleEndpointSnapshotFallbackCountForDiagnostics = 0;
+            if (EnableRoleEndpointSnapshotReuseForDiagnostics)
+                Array.Clear(_roleSnapshotEndpointStates, 0, _roleSnapshotEndpointStates.Length);
             _lastBruteBranchTimingCoverage = default;
             _lastRoleBranchTimingCoverage = default;
             if (EnableRoleBranchTimingForDiagnostics &&
@@ -3538,6 +3564,7 @@ namespace NTSD.Animation
             _lastRoleAwareBodyEntryCount = roleFormalBodyEntryCount;
             _lastRoleAwareItrQueryCount = _roleFormalItrEntries.Count;
 
+            PrepareRoleEndpointSnapshotEligibility(participantCount);
             try
             {
                 BattleTickDetailPhaseDiagnostics pairLoopDiagnostics =
@@ -6661,7 +6688,13 @@ namespace NTSD.Animation
 #if UNITY_INCLUDE_TESTS
                     reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
 #endif
-                    if (reuseFrames)
+                    if (roleDirection && EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                        TryCaptureRoleEndpointPairSnapshot(in attackerParticipant,
+                            in targetParticipant, out pairSnapshot))
+                    {
+                        LastRoleEndpointSnapshotComposeCountForDiagnostics++;
+                    }
+                    else if (reuseFrames)
                     {
                         // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
                         pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
@@ -6693,6 +6726,80 @@ namespace NTSD.Animation
                     roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
                         System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
             }
+        }
+
+        private void PrepareRoleEndpointSnapshotEligibility(int participantCount)
+        {
+            if (!EnableRoleEndpointSnapshotReuseForDiagnostics)
+                return;
+#if UNITY_INCLUDE_TESTS
+            if (AfterRoleAwareExactPairForSelfCheck != null)
+                return;
+#endif
+            foreach (LF2Entity entity in _world.ActiveEntitiesByRuntimeSlotForModule)
+            {
+                if (entity.GetType() != typeof(LF2Character))
+                    return;
+            }
+            _roleEndpointSnapshotReuseForCurrentCollection = true;
+            for (int ordinal = 0; ordinal < participantCount; ordinal++)
+            {
+                RoleAwareFormalParticipant participant = _roleFormalParticipants[ordinal];
+                int slot = participant.Handle.Slot;
+                if (participant.Handle.IsValid &&
+                    slot >= 0 && slot < _roleSnapshotEndpointStates.Length &&
+                    participant.HasExactCommonCache)
+                {
+                    _roleSnapshotEndpointStates[slot] = 1;
+                }
+            }
+        }
+
+        private bool TryCaptureRoleEndpointPairSnapshot(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant,
+            out BattleHitCandidatePairSnapshot pairSnapshot)
+        {
+            // Alignment contract: NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094.
+            // A synchronous collection cannot change these native scalar inputs.
+            pairSnapshot = default;
+            int attackerSlot = attackerParticipant.Handle.Slot;
+            int targetSlot = targetParticipant.Handle.Slot;
+            if (!_roleEndpointSnapshotReuseForCurrentCollection ||
+                attackerSlot < 0 || attackerSlot >= _roleSnapshotEndpointStates.Length ||
+                targetSlot < 0 || targetSlot >= _roleSnapshotEndpointStates.Length ||
+                _roleSnapshotEndpointStates[attackerSlot] == 0 ||
+                _roleSnapshotEndpointStates[targetSlot] == 0)
+            {
+                LastRoleEndpointSnapshotFallbackCountForDiagnostics++;
+                return false;
+            }
+            if (_roleSnapshotEndpointStates[attackerSlot] == 1)
+            {
+                _roleSnapshotEndpoints[attackerSlot] = BattleHitCandidatePairSnapshotFactory.CaptureEndpoint(
+                    attackerParticipant.Entity, attackerParticipant.CurrentFrame,
+                    attackerParticipant.CollisionFrame);
+                _roleSnapshotEndpointStates[attackerSlot] = 2;
+                LastRoleEndpointSnapshotCaptureCountForDiagnostics++;
+            }
+            if (_roleSnapshotEndpointStates[targetSlot] == 1)
+            {
+                _roleSnapshotEndpoints[targetSlot] = BattleHitCandidatePairSnapshotFactory.CaptureEndpoint(
+                    targetParticipant.Entity, targetParticipant.CurrentFrame,
+                    targetParticipant.CollisionFrame);
+                _roleSnapshotEndpointStates[targetSlot] = 2;
+                LastRoleEndpointSnapshotCaptureCountForDiagnostics++;
+            }
+            if (!_roleSnapshotEndpoints[attackerSlot].Valid ||
+                !_roleSnapshotEndpoints[targetSlot].Valid)
+            {
+                LastRoleEndpointSnapshotFallbackCountForDiagnostics++;
+                return false;
+            }
+            pairSnapshot = BattleHitCandidatePairSnapshotFactory.ComposeFromEndpoints(
+                attackerParticipant.Entity, _world,
+                in _roleSnapshotEndpoints[attackerSlot], in _roleSnapshotEndpoints[targetSlot]);
+            return true;
         }
 
         private bool RoleAwareFormalExactCacheIsCurrent(

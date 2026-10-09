@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-10-09T12:43:20.5368816+08:00",
+  "guards": 1049,
+  "drift": [],
+  "backups": 9,
+  "backupDrift": [],
+  "sharedRequestExists": false,
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "staged": [],
+  "suiteSha": "DF63DFB1A4C01BAF32672022B22AA089EE9D59006822EE8C3867CFCD26188013",
+  "menuSha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+  "battleSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "requestPairs": [
+    {
+      "layout": "00-dispersed1000-group-off",
+      "comparedFields": 65,
+      "differentFields": [
+        "outputPath"
+      ]
+    },
+    {
+      "layout": "02-combat1000-group-off",
+      "comparedFields": 65,
+      "differentFields": [
+        "outputPath"
+      ]
+    }
+  ],
+  "greenSha": "9784E9B5E9E8DDE095792A8BBAFE7BAB330131A56851B8F19C78A3EB3D78CF8A",
+  "validator": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 4428,
+    "records": 1388,
+    "governedCodeDiffCount": 1
+  },
+  "diffCheckExit": 0
+}

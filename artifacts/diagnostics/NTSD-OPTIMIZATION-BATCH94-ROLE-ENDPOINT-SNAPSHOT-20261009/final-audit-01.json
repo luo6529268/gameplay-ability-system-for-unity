@@ -1,0 +1,162 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009",
+  "change": "NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094",
+  "status": "SCOPE_AUDIT_PASS / FOCUSED_TEST_PASS / LOCAL_ONLY / NOT_ADMITTED / DEFAULT_OFF",
+  "timestamp": "2026-10-09T13:57:24.4501322+08:00",
+  "latestCompletedBatchNumber": 94,
+  "actualOptimizationBatches": 73,
+  "selectedStagesPassed": 5,
+  "selectedStagesTotal": 6,
+  "parentOptimizationItemsClosed": 0,
+  "parentOptimizationItemsTotal": 34,
+  "h07": "PERFORMANCE_FAIL",
+  "goal": "active",
+  "batch100": "plan clarity only; performance deadline forbidden",
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "staged": [],
+  "beforeManifest": {
+    "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-manifest-01.json",
+    "sha": "000A528BEF1A623F8859ECF2C90F791793614D957CCFE04E1025A73E2C54E469"
+  },
+  "guards": {
+    "count": 1103,
+    "drift": [],
+    "checkedAt": "2026-10-09T13:49:19.3204593+08:00"
+  },
+  "backups": {
+    "count": 9,
+    "allMatchBefore": true
+  },
+  "editor": {
+    "version": "2022.3.62f3",
+    "port": 6402,
+    "scene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "loadedScenes": 1,
+    "rootCount": 8,
+    "isDirty": false,
+    "isPlaying": false,
+    "isTesting": false,
+    "isCompiling": false,
+    "state": "idle",
+    "evidence": "Fresh TCP get_editor_state and manage_scene get_loaded_scenes during final closure"
+  },
+  "tests": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/red-01/tests.xml",
+      "sha": "E53EE01CE5CEB07D717DF98BF97CFBF84457CC48FE8474800CCDC9AD796EEC88",
+      "total": "15",
+      "discovered": "10478",
+      "passed": "0",
+      "failed": "15",
+      "skipped": "0",
+      "start": "2026-10-09 05:19:07Z",
+      "end": "2026-10-09 05:19:09Z"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/tests.xml",
+      "sha": "520A46850B4B558D8E2E8746533CDF48C92A80516D893FB56C770B71CD0ED4E0",
+      "total": "39",
+      "discovered": "10478",
+      "passed": "38",
+      "failed": "1",
+      "skipped": "0",
+      "start": "2026-10-09 05:21:55Z",
+      "end": "2026-10-09 05:22:07Z"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-02/tests.xml",
+      "sha": "BD2D67910F43154DEF459C75C77F64CE622F37791E2C813B1EFA5AA4E73F2CAE",
+      "total": "39",
+      "discovered": "10478",
+      "passed": "39",
+      "failed": "0",
+      "skipped": "0",
+      "start": "2026-10-09 05:25:56Z",
+      "end": "2026-10-09 05:26:09Z"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-03-safety/tests.xml",
+      "sha": "858798B5730FD17B4F17D6553FA1B7F7CAFC19C106A34804571880C31C180CAA",
+      "total": "37",
+      "discovered": "10478",
+      "passed": "37",
+      "failed": "0",
+      "skipped": "0",
+      "start": "2026-10-09 05:31:47Z",
+      "end": "2026-10-09 05:31:50Z"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-04-final/tests.xml",
+      "sha": "4C74A089A53552FF9659291C158E5F17CB0591A688CF26B9A32F7A573FF1E77E",
+      "total": "38",
+      "discovered": "10479",
+      "passed": "38",
+      "failed": "0",
+      "skipped": "0",
+      "start": "2026-10-09 05:39:08Z",
+      "end": "2026-10-09 05:39:10Z"
+    }
+  ],
+  "finalJobId": "2b9d0660db9747688288cbd1445c1a80",
+  "finalSource": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335",
+      "bytes": 407759
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "430CF2C263FD8A427AE2E605F891024A0893DF0960BEB2E941D43C11F84B1D07",
+      "bytes": 7343
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "8370EF5368DE03E2E212CE31D865C219F8C28219C37A19C46E9C191B4E38FE16",
+      "bytes": 489410
+    }
+  ],
+  "costEvidence": {
+    "scope": "V2 OLD guard noAI collector, not final source or actual1000AI",
+    "dispersed": {
+      "offMs": 12.384075,
+      "onMs": 12.28095
+    },
+    "concentrated": {
+      "offMs": 186.8899625,
+      "onMs": 170.43286875
+    },
+    "decision": "Do not admit or promote, final actual AI/Driver performance unmeasured"
+  },
+  "validation": {
+    "ledger": {
+      "exitCode": 0,
+      "errorCount": 0,
+      "warningCount": 4355,
+      "records": 1389,
+      "governedCodeFiles": 4
+    },
+    "scopedDiffCheck": {
+      "exitCode": 0,
+      "lineEndingWarnings": true
+    }
+  },
+  "unperformed": [
+    "Play",
+    "Profiler",
+    "GPU capture",
+    "Frame Debugger",
+    "M0",
+    "actual1000AI new windows",
+    "1800sample certificate",
+    "default promotion",
+    "native full-tick parity",
+    "Android"
+  ],
+  "afterManifest": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/after-manifest-01.json"
+}

@@ -1,3 +1,24 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# M-14 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 加载 / 低 |
+| 当前状态 | 评估结束／前置未就绪；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | H-01不可变manifest/read lease，H-08输入身份与M-09失效协议 |
+| 下一步与具体方向 | 保留可变Editor stale守卫；前置成立后才评估同epoch复用 |
+| 完成边界 | 拒绝集合不变，TOCTOU和失效明确，收益有证；不删校验求快 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+**历史状态更正：** 已有906图片/约29,939,600B及校验成本记录，选定评估完成；immutable manifest/read lease缺失，缓存不实施。
+
+## 原方案与历史证据（原始正文保留）
+
 > 2026-10-07 首阶段评估完成 / DEPENDENCY_NOT_READY：第25批当前真实906图、图片hash读取29,939,600B下界，Capture（含Assert）12.001s，两Assert3.830/3.656s；包含catalog解析/转换日志等，不是纯IO或cold启动。可变源文件、HashFile stream关闭、generation不等于read lease，immutable/Manifest前置未闭合，不缓存/删守卫。详[报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH25-BOUNDED-ASSESSMENTS-20261007/REPORT.md)，父项开放。
 
 # M-14 启动内容完整性校验 I/O 去重方案

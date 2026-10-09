@@ -1,0 +1,74 @@
+[
+  {
+    "symbol": "ResolveFormalCollectorMode",
+    "same": true,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "ba01bd92df004f700ca31886b5688e90e2c33c131821eebe07b067bca00ea779",
+    "currentSha": "ba01bd92df004f700ca31886b5688e90e2c33c131821eebe07b067bca00ea779"
+  },
+  {
+    "symbol": "TryCollectCollisionCandidatesRoleAware",
+    "same": false,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "06281f15b5f4ac30802f6a177712f1466a2c5c42c9c3d4f8ddb83e3bd836cd13",
+    "currentSha": "fef2a37d435a75f978a04833fe98062393f1e9205161111d22c70a6869cf0cb5"
+  },
+  {
+    "symbol": "CollectCollisionCandidates",
+    "same": false,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "25a9c0be9346170034bdd80c574cdb923db9b8a513668decb5c5cd8b47295c7e",
+    "currentSha": "0a19d79586c9595362140c6815425f3f8f265cca3ca11934cda0254fafa890cd"
+  },
+  {
+    "symbol": "ResetCandidateCollectionState",
+    "same": true,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "388b6415359c026621f869812eb5bb6cb647ff0497ab1e468d21812089825be1",
+    "currentSha": "388b6415359c026621f869812eb5bb6cb647ff0497ab1e468d21812089825be1"
+  },
+  {
+    "symbol": "SortAndDeduplicate",
+    "same": true,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "94f13e0309ea2fa77506f83d38ac69685a2810d945d971b6ecacd633c7c95b0e",
+    "currentSha": "94f13e0309ea2fa77506f83d38ac69685a2810d945d971b6ecacd633c7c95b0e"
+  },
+  {
+    "symbol": "EndCollisionCandidateConsumption",
+    "same": true,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "38cc2ef9279a11be1ec722c32ebec41ad058c2efe30ea6c952bd1d501c9745fa",
+    "currentSha": "38cc2ef9279a11be1ec722c32ebec41ad058c2efe30ea6c952bd1d501c9745fa"
+  },
+  {
+    "symbol": "TryValidateRoleAwareFormalInputs",
+    "same": false,
+    "oldPresent": false,
+    "currentPresent": false,
+    "oldSha": null,
+    "currentSha": null
+  },
+  {
+    "symbol": "TryBuildRoleAwareFormalInputs",
+    "same": false,
+    "oldPresent": false,
+    "currentPresent": false,
+    "oldSha": null,
+    "currentSha": null
+  },
+  {
+    "symbol": "CollectCollisionCandidatesWithPlatforms",
+    "same": true,
+    "oldPresent": true,
+    "currentPresent": true,
+    "oldSha": "194a988b2cefee2cf74b296f50ac004e91244f6e2247194be782e281ff656a5c",
+    "currentSha": "194a988b2cefee2cf74b296f50ac004e91244f6e2247194be782e281ff656a5c"
+  }
+]

@@ -441,6 +441,334 @@ namespace NTSD.Test
     [Category("U6RoleAwareFormal")]
     public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
     {
+
+        [Test]
+        public void EndpointSnapshot_DefaultOff()
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            Assert.That(EndpointSnapshotProperty("EnableRoleEndpointSnapshotReuseForDiagnostics").GetValue(query), Is.False);
+            query.PrepareBattleCapacity(4, 3, 2);
+            Assert.That(ReadEndpointSnapshotCounter(query, "RoleEndpointSnapshotCapacityForDiagnostics"), Is.Zero);
+        }
+
+        [TestCase(0)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        [TestCase(10)]
+        [TestCase(11)]
+        public void EndpointSnapshot_SequencePayloadRngAndKind4Parity(int kind)
+        {
+            CreateEndpointSnapshotScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            int baselineKind4 = participants[0].Runtime.Kind4SourceCount92;
+            participants[0].Runtime.Kind4SourceCount92 = 0;
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(participants[0].Runtime.Kind4SourceCount92, Is.EqualTo(baselineKind4));
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics"), Is.GreaterThan(1));
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotCaptureCountForDiagnostics"), Is.EqualTo(4));
+            Assert.That(candidate.CollectionAborted, Is.False);
+        }
+
+        [Test]
+        public void EndpointSnapshot_NoPrewarmUsesOriginalWithoutGrowing()
+        {
+            CreateEndpointSnapshotScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants, false);
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotCaptureCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotFallbackCountForDiagnostics"), Is.GreaterThan(0));
+            Assert.That(ReadEndpointSnapshotCounter(query, "RoleEndpointSnapshotCapacityForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void EndpointSnapshot_CustomSubtypeKeepsOriginalVirtualReads()
+        {
+            CreateEndpointSnapshotScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            LF2Character custom = CreateCharacter("Endpoint_Custom", 1499,
+                MakePairSnapshotReuseFrame(false, 0));
+            Register(world, custom, 4, 3, 0);
+            SetEndpointSnapshotReuse(query, true);
+            query.PrepareBattleCapacity(5, 3, 2);
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotFallbackCountForDiagnostics"), Is.GreaterThan(0));
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void EndpointSnapshot_PairMutationHookDisablesCollectionReuse()
+        {
+            CreateEndpointSnapshotScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            SetEndpointSnapshotReuse(query, false);
+            query.AfterRoleAwareExactPairForSelfCheck = _ => { };
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            participants[0].Runtime.Kind4SourceCount92 = 0;
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotCaptureCountForDiagnostics"), Is.Zero);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void EndpointSnapshot_CustomHolderWithoutCollisionFrameDisablesReuse()
+        {
+            CreateEndpointSnapshotScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            LF2Character holder = CreateEndpointSnapshotCharacter("Endpoint_InertHolder", 1498,
+                MakeFrame(null, null), new EndpointSnapshotInertHolder());
+            Register(world, holder, 4, 3, 0);
+            participants[0].Runtime.HolderStableId = 4;
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(candidate.Sequences[0][0].PairSnapshot.LinkedHolderPresent, Is.True);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics"), Is.Zero);
+        }
+
+        [Test]
+        public void EndpointSnapshot_RepeatedSameTickRefreshesTeamFacingAndFrames()
+        {
+            CreateEndpointSnapshotScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun first = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            int tick = world.CurrentTickIndex;
+            participants[0].RelationTeam = 4;
+            participants[1].RelationTeam = 5;
+            participants[0].Runtime.Dir = "left";
+            participants[0].PS.dir = "left";
+            LF2FrameData changed = MakePairSnapshotReuseFrame(false, 4);
+            changed.frameId = 7;
+            changed.state = 9;
+            participants[1].FrameCache.Wrapper.characterData.frames.Add(changed);
+            participants[1].FrameCache.Load(participants[1].FrameCache.Wrapper);
+            participants[1].Frame.N = 7;
+            participants[1].Frame.D = participants[1].FrameCache.GetFrameDataById(7);
+            participants[0].Runtime.Kind4SourceCount92 = 0;
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            participants[0].Runtime.Kind4SourceCount92 = 0;
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(world.CurrentTickIndex, Is.EqualTo(tick));
+            Assert.That(candidate.Sequences[0][0].PairSnapshot,
+                Is.Not.EqualTo(first.Sequences[0][0].PairSnapshot));
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotCaptureCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void EndpointSnapshot_PreparedArraysAreReusedAndReset()
+        {
+            CreateEndpointSnapshotScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            SetEndpointSnapshotReuse(query, true);
+            var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            System.Reflection.FieldInfo valuesField = typeof(BruteForceSceneQuery).GetField("_roleSnapshotEndpoints", flags);
+            System.Reflection.FieldInfo statesField = typeof(BruteForceSceneQuery).GetField("_roleSnapshotEndpointStates", flags);
+            Assert.That(valuesField, Is.Not.Null);
+            Assert.That(statesField, Is.Not.Null);
+            object values = valuesField.GetValue(query);
+            object states = statesField.GetValue(query);
+            for (int i = 0; i < 4; i++)
+                RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, participants);
+            Assert.That(valuesField.GetValue(query), Is.SameAs(values));
+            Assert.That(statesField.GetValue(query), Is.SameAs(states));
+            query.ResetFormalSpatialBroadphase();
+            foreach (byte state in (byte[])states)
+                Assert.That(state, Is.Zero);
+            Assert.That(ReadEndpointSnapshotCounter(query, "RoleEndpointSnapshotCapacityForDiagnostics"), Is.EqualTo(4));
+            world.RuntimeCapacity.Seal();
+            Assert.Throws<InvalidOperationException>(() => query.PrepareBattleCapacity(5, 3, 2));
+            Assert.That(valuesField.GetValue(query), Is.SameAs(values));
+            Assert.That(statesField.GetValue(query), Is.SameAs(states));
+        }
+
+        [Test]
+        public void EndpointSnapshot_WarmedFullCollectorHasNoManagedAllocation()
+        {
+            CreateEndpointSnapshotScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character[] participants);
+            SetEndpointSnapshotReuse(query, true);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            for (int i = 0; i < 32; i++)
+                CollectEndpointSnapshotOnly(world);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 16; i++)
+                CollectEndpointSnapshotOnly(world);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+            Assert.That(ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics"), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void EndpointSnapshot_1000ParticipantsAlternatingCostAndParity(bool concentrated)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var participants = new LF2Character[1000];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                bool attack = i % 25 == 0;
+                participants[i] = CreateEndpointSnapshotCharacter("Endpoint_Cost_" + i,
+                    1500 + i, MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participants[i], i, attack ? 1 : 2,
+                    concentrated ? (i % 5) * 5 : (i / 25) * 120 + (i % 5) * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            SetEndpointSnapshotReuse(query, true);
+            query.PrepareBattleCapacity(1000, 3, 2);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            SetEndpointSnapshotReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetEndpointSnapshotReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query,
+                CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            double baselineMs = 0;
+            double candidateMs = 0;
+            long captures = 0;
+            long composed = 0;
+            for (int iteration = -8; iteration < 16; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetEndpointSnapshotReuse(query, enabled);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    CollectEndpointSnapshotOnly(world);
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double ms = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                    {
+                        candidateMs += ms;
+                        captures += ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotCaptureCountForDiagnostics");
+                        composed += ReadEndpointSnapshotCounter(query, "LastRoleEndpointSnapshotComposeCountForDiagnostics");
+                    }
+                    else
+                        baselineMs += ms;
+                }
+            }
+            Assert.That(captures, Is.GreaterThan(0));
+            Assert.That(captures, Is.LessThanOrEqualTo(16000));
+            Assert.That(2 * composed, Is.GreaterThan(captures));
+            TestContext.WriteLine("ENDPOINT_SNAPSHOT_COST concentrated=" + concentrated +
+                " participants=1000 warmup=8 sample=16 baselineMeanMs=" +
+                (baselineMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" +
+                (candidateMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " captures=" + captures + " composed=" + composed +
+                " scope=collector_without_AI_not_FPS gc=full_Driver_UNKNOWN");
+        }
+
+        private static void CreateEndpointSnapshotScenario(int kind,
+            out SimulationWorld world, out BruteForceSceneQuery query,
+            out LF2Character[] participants, bool prewarm = true)
+        {
+            world = new SimulationWorld();
+            participants = new LF2Character[4];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                participants[i] = CreateEndpointSnapshotCharacter("Endpoint_" + i,
+                    1400 + i, MakePairSnapshotReuseFrame(i == 0, kind));
+                Register(world, participants[i], i, i == 0 ? 1 : 2, 0);
+            }
+            participants[0].Runtime.EnvironmentState320 = 1;
+            query = GetQuery(world);
+            if (prewarm)
+            {
+                SetEndpointSnapshotReuse(query, true);
+                query.PrepareBattleCapacity(4, 3, 2);
+                SetEndpointSnapshotReuse(query, false);
+            }
+        }
+
+        private static LF2Character CreateEndpointSnapshotCharacter(string name,
+            int objectId, LF2FrameData frame, LF2Character character = null)
+        {
+            character = character ?? new LF2Character();
+            character.ModuleInitialize();
+            character.Name = name;
+            character.ObjectId = objectId;
+            character.Controller = new FormalSelfCheckController();
+            character.FrameCache.Load(new LF2CharacterDataWrapper(objectId, new LF2CharacterData
+            {
+                name = name,
+                type_sub = 1,
+                frames = new List<LF2FrameData> { frame },
+            }));
+            character.Frame.D = character.FrameCache.GetFrameDataById(0);
+            character.Frame.PN = 0;
+            character.Frame.N = 0;
+            character.Initialize(500, 500);
+            character.FrameDelay = 0;
+            return character;
+        }
+
+        private static void CollectEndpointSnapshotOnly(SimulationWorld world)
+        {
+            world.Rng.Seed(CollectionSeed);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            world.EndCollisionCandidateConsumption();
+        }
+
+        private sealed class EndpointSnapshotInertHolder : LF2Character
+        {
+            public override LF2FrameData GetCollisionFrameData() => null;
+        }
+
+        private static System.Reflection.PropertyInfo EndpointSnapshotProperty(string name)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Endpoint snapshot candidate contract missing: " + name);
+            return property;
+        }
+
+        private static void SetEndpointSnapshotReuse(BruteForceSceneQuery query, bool enabled)
+        {
+            EndpointSnapshotProperty("EnableRoleEndpointSnapshotReuseForDiagnostics").SetValue(query, enabled);
+        }
+
+        private static long ReadEndpointSnapshotCounter(BruteForceSceneQuery query, string name)
+        {
+            return Convert.ToInt64(EndpointSnapshotProperty(name).GetValue(query));
+        }
         [Test]
         public void GroupSnapshotSkip_DefaultsOff()
         {

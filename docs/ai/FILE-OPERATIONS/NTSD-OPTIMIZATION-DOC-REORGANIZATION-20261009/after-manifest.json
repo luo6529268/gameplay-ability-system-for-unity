@@ -1,0 +1,242 @@
+[
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+    "mode": "prepend",
+    "sha256": "0fe3fc0e42780105ce1f40040e420a656991d3066b0f0350d33ac56301dd95e6"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md",
+    "mode": "prepend",
+    "sha256": "845047495d8f7430c54b76f4a320a363a3ec9fe8a39105953dfb1bd5e47527bd"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md",
+    "mode": "prepend",
+    "sha256": "3632043aad8d3d33ebcfd09c62c1ea1c3bc6e97c10cfe036b1de3349b4fff319"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md",
+    "mode": "prepend",
+    "sha256": "c78648c5f88bdf7ebc8f5bacbd9ecf1ea54683184b8485e2f2919d3959aed65b"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md",
+    "mode": "prepend",
+    "sha256": "da5839f8683014a7c6e00137cc4741f20646b4cdcf5dd4b8e263f0ebcc5b87f6"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+    "mode": "prepend",
+    "sha256": "394b025b21be5bca7a9a5c2dc7295ec2893eb209289a0e62da8c50a94a62ff38"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+    "mode": "prepend",
+    "sha256": "1f4446c1db9c7461336c207ad5213b7f9b8d0cb2336bf992d7ab3bc9bc357814"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+    "mode": "prepend",
+    "sha256": "a39ee92580385233cbf5866165c3701b3502fb7c1cdf5e40817f963883a54a37"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md",
+    "mode": "prepend",
+    "sha256": "a7ca78d49a1eb76b0bdc6dd1392d86228ea7127a5367bf6d86b1ff808163aa2f"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "mode": "prepend",
+    "sha256": "dc076c041d4d6ddd9a58ab9fd5d447cf1794f33d1dc0f97fcd0f18bfd3b17ebc"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md",
+    "mode": "prepend",
+    "sha256": "540f691931d29869b37e30a17ff112ce4986f6b2f63a0195118a03bceb5fecc8"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md",
+    "mode": "prepend",
+    "sha256": "57099786bda24bace2c30e3107efc86b14d7c01228057b90a1c3f0428eedc8aa"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md",
+    "mode": "prepend",
+    "sha256": "3403cb193c5a4ba0c3a9c85d496401ce97e26547f3cee14fe68776618228c1dd"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "mode": "prepend",
+    "sha256": "9f80c4cf89b4166bee589488b130465de7e2c63b2b0d73d77b824c2faf97d132"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md",
+    "mode": "prepend",
+    "sha256": "1b728bdbda20f1ffee5d1255652962fdc1f4fba9c956b6d5d7457f1a5a776534"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md",
+    "mode": "prepend",
+    "sha256": "bade0e8bc30bae3b514f250012b7929520b7f938c43ff180126423555ec8ddcf"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md",
+    "mode": "prepend",
+    "sha256": "3271d82fb9748b009231e544cbe7ab714f989af335ee53e70807a07f1344791d"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md",
+    "mode": "prepend",
+    "sha256": "df09412c39058647c75ede1090fd13ae11655d302386ee3e226d0726cf2e48ca"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md",
+    "mode": "prepend",
+    "sha256": "c401a76e3ba30712b3d99cdfc69bfacdedbcf3b8fa734d724263a154cbf027e1"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md",
+    "mode": "prepend",
+    "sha256": "285bfeeb771abbda910e6e1400b1572d154a142f962dfa31512c783c9c99c09f"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md",
+    "mode": "prepend",
+    "sha256": "0ed974872b68fe9064a483865ee3b4ee171f3e56fca2ce441c6d5cba896007f5"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md",
+    "mode": "prepend",
+    "sha256": "8a645250050b52c6837206fdf67a8b9ebe10790b3618e78d6fc3a05d335b06b3"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md",
+    "mode": "prepend",
+    "sha256": "9cfe3789d83488625a75d3ce9d30f903b27d89d40a11d5de78d733bfe5312750"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md",
+    "mode": "prepend",
+    "sha256": "9d43f0097129f9ab54739a88ae91be706edb58ad4a35e6dbe8a8b520ac23f311"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md",
+    "mode": "prepend",
+    "sha256": "bdcf2616cf9e36b628d0b2a9a9f05426bcb73b21c580088f3cea6db5c6c6c8a1"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md",
+    "mode": "prepend",
+    "sha256": "0fe55a981dcffef5cbcb4abdc4e1602fb7d69041eb80d31afeffe015c9ee5eae"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md",
+    "mode": "prepend",
+    "sha256": "102687b7bd561572478d8b05eaa0615550cabd60cf37149fc111f0d4c9cac139"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md",
+    "mode": "prepend",
+    "sha256": "40e4c264dc7aa394dae2e175b0caba25d81ec0f38f27810e4834ac36b50c4f51"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md",
+    "mode": "prepend",
+    "sha256": "d2e81f0305fcca2936824fff423599b4540f15808e7b1f50812c34ce7dfefff0"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md",
+    "mode": "prepend",
+    "sha256": "f847c3355465c154efcadbd0c6e2cdef7c9efc20f01024202df43e93bae14c91"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md",
+    "mode": "prepend",
+    "sha256": "27af4bc20675764e59e597a8ce72ca7aeb970479ebd1f7a69b3e35bb9c1827cf"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md",
+    "mode": "prepend",
+    "sha256": "390fdd6be9685b25408b9d5ee0832853c0f84379a2dcb3a572588cfc03f51e42"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md",
+    "mode": "prepend",
+    "sha256": "72307d8dd8ae45c2c2b99f8b43d299f61c7bb9c6334bb150941c43ff710feb76"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md",
+    "mode": "prepend",
+    "sha256": "0abd2fdf2c4d83083286e42136aefd199e04a7deae2878f0068f514795496366"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "mode": "prepend",
+    "sha256": "037dc7adf455ae81287889e8fc852e5a61f7c4a35d571a8ff5010ce3070271d0"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "mode": "prepend",
+    "sha256": "a2fa27614ebc30db8bd79879262dc950bf0eeff112d8a4f219d30cdf6c68afc2"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+    "mode": "prepend",
+    "sha256": "d1e9147d5932db63608fc89d14daf3f83b8269673c1ebb1327ef1cb406260519"
+  },
+  {
+    "path": "docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md",
+    "mode": "prepend",
+    "sha256": "ebccf069d0a5e6e5c7a2d933b77f64311ca35da58a669c9409f8f7250496c98e"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "mode": "prepend",
+    "sha256": "c80d04ee518e91be7596cb5f884474e60e91b090885fbd4077fedf471e7707f5"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+    "mode": "create",
+    "sha256": "9b034f799af34144aac2f3bd3ca6c1f036ef0a8c84e9d7b11a27dc88e06df8fa"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+    "mode": "create",
+    "sha256": "602694fd006896040a64240041f42de759e49418be914170521b6be66e010b3f"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+    "mode": "create",
+    "sha256": "cb9b084dab7bfe8402bc819242939788b1fe96b99a63299e34b9498df2651720"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md",
+    "mode": "create",
+    "sha256": "9703e57933a6bf07d621ec11b484d5ed102075f3f0883cc777449000f727b9a0"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md",
+    "mode": "create",
+    "sha256": "76dbcb0ace398fd63f55aed70fadebdd857b0f60fa47541806235069779e9ab9"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md",
+    "mode": "create",
+    "sha256": "f59f1e12333b5a4437ac8603dfe5443318dc0a6a411182431b1db3769418d846"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md",
+    "mode": "create",
+    "sha256": "2016e56c031086e3f4c97e007a4d96212ab6b4d1c62016a53fdb87320b965f2b"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "mode": "create",
+    "sha256": "0ac9e3755f5ea27c0b15261774df9b8dfb027ec87bfa6922db6aee2116790154"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md",
+    "mode": "create",
+    "sha256": "6c8ecade5b0d095d0606cff9718bc354dbbcb4d5862f7999cc4ef00f6c4e1b04"
+  }
+]

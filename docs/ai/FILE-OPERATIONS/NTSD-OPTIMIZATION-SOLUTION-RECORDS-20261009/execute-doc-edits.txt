@@ -1,0 +1,33 @@
+from pathlib import Path
+import json,hashlib,datetime,os
+root=Path.cwd().resolve()
+op=root/'docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009'
+plan=json.loads((op/'planned-document-edits.json').read_text(encoding='utf-8'))
+sha=lambda b:hashlib.sha256(b).hexdigest().upper()
+meta=json.loads((op/'manifest-before.json').read_text(encoding='utf-8'))
+allowed=set(meta['new_documents']+[x['path'] for x in meta['existing_documents'] if x['path']!='docs/ai/FILE-OPERATIONS/INDEX.md'])
+assert len(plan)==6 and {x['path'] for x in plan}==allowed
+for item in plan:
+    p=(root/item['path']).resolve()
+    assert p.is_relative_to(root)
+    content=item['content'].encode('utf-8')
+    assert sha(content)==item['content_sha256']
+    if item['mode']=='create_absent':
+        assert not p.exists(),str(p)
+    elif item['mode']=='prepend_preserve_bytes':
+        assert sha(p.read_bytes())==item['expected_sha256'],str(p)
+    else:raise AssertionError('Unknown edit mode')
+now=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=8))).isoformat()
+record=op/'RECORD.md'
+with record.open('a',encoding='utf-8',newline='\n') as f:
+    f.write('\n\n## 实际执行 / RUNNING\n\n'+now+'，内联Python进程 PID '+str(os.getpid())+'。精确API及参数见 planned-document-edits.json，完整执行器见 execute-doc-edits.txt；六个路径前置状态全部通过校验。\n')
+touched=[]
+for item in plan:
+    p=root/item['path'];content=item['content'].encode('utf-8')
+    if item['mode']=='create_absent':
+        p.parent.mkdir(parents=True,exist_ok=True)
+        with p.open('xb') as f:f.write(content)
+    else:p.write_bytes(content+p.read_bytes())
+    touched.append({'path':item['path'],'bytes':p.stat().st_size,'sha256':sha(p.read_bytes())})
+(op/'document-writes.json').write_text(json.dumps(touched,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+print(json.dumps({'created':2,'navigation_only':4,'paths':[x['path'] for x in touched]},ensure_ascii=False))

@@ -1,0 +1,52 @@
+[
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "exists": true,
+    "sha256": "ADCD81561BAE9A22BF4829BD2C3B1ACFB3FFB86747E97DA729AA02A5DD1777CE",
+    "bytes": 136460,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\00-INDEX.md"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "exists": true,
+    "sha256": "0F1C1A9B64ABE7CBAEB1B718BBC8B9950FCA427FD3BE55D43684374639637B53",
+    "bytes": 747423,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\01-CHANGE-LEDGER.md"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "exists": true,
+    "sha256": "77EFE6CDCCDCD5BB76D3FD6A931BA2AE0A32141C364A0CA21393AE5A8358F428",
+    "bytes": 1654910,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\02-STATE.md"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "exists": true,
+    "sha256": "141352005FF63AC3C34D954ABF71100139D8E52809DF3474C9D44839EFC32C50",
+    "bytes": 373643,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\03-CURRENT-AUTHORITY.md"
+  },
+  {
+    "path": "docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md",
+    "exists": true,
+    "sha256": "32EC94145D6D6635A601E01D2310FFA902140896973070700DD861A4FDF5AF09",
+    "bytes": 16572,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\04-NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md"
+  },
+  {
+    "path": "Temp/Goal18_LastTestResults.xml",
+    "exists": true,
+    "sha256": "F7AA0716197C4695DBE69CA6021829FA0E352E97E8A0EA6E2EEA11037A3134DE",
+    "bytes": 2839,
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H06-PROFILER-RESET-100-PREP-20261009\\before\\05-Goal18_LastTestResults.xml"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H06CollectorPreparationEditorTests.cs",
+    "exists": false
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H06CollectorPreparationEditorTests.cs.meta",
+    "exists": false
+  }
+]

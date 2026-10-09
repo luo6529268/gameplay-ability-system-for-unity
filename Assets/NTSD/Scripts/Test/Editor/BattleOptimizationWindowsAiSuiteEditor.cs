@@ -73,6 +73,11 @@ namespace NTSD.Test.Editor
         private static SimulationWorld producerSnapshotReuseWorld;
         private static bool previousProducerSnapshotReuse;
         private static bool previousProducerSnapshotBoundaryTiming;
+        private const string RoleGroupSnapshotSkipOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01";
+        private static bool startingRoleGroupSnapshotSkipWindow;
+        private static SimulationWorld roleGroupSnapshotSkipWorld;
+        private static BruteForceSceneQuery roleGroupSnapshotSkipQuery;
+        private static bool previousRoleGroupSnapshotSkip;
         private static readonly PropertyInfo MatchBindingsEnabled =
             typeof(CharacterAnimtorManager).GetProperty("MatchCentralBindingsEnabledForDiagnostics",
                 BindingFlags.NonPublic | BindingFlags.Static);
@@ -151,6 +156,13 @@ namespace NTSD.Test.Editor
         [Serializable]
         private sealed class RunState
         {
+            public bool roleGroupSnapshotSkipEnabled;
+            public bool roleGroupSnapshotSkipFlagApplied;
+            public bool roleGroupSnapshotSkipUnchanged;
+            public bool roleGroupSnapshotSkipRestored;
+            public int roleGroupSnapshotSkipObservedCollections;
+            public long roleGroupSnapshotSkipMaximumObservedRejects;
+            public string roleGroupSnapshotSkipObservationScope = "Last completed collection at sampled Editor observations; maxima are not all-tick totals.";
             public bool producerSnapshotReuseEnabled;
             public bool producerSnapshotReuseFlagApplied;
             public bool producerSnapshotReuseUnchanged;
@@ -374,6 +386,7 @@ namespace NTSD.Test.Editor
             public bool inputBoundaryTimingWindow;
             public bool nativeSampledStateTimingWindow;
             public bool producerSnapshotReuseWindow;
+            public bool roleGroupSnapshotSkipWindow;
             public string originalScene;
             public string originalSceneHash;
             public string battleSceneHash;
@@ -692,6 +705,26 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [MenuItem("NTSD/Optimization/Run Batch93 Role Group Snapshot Windows")]
+        private static void BeginRoleGroupSnapshotSkip()
+        {
+            Require(!startingRoleGroupSnapshotSkipWindow && roleGroupSnapshotSkipWorld == null &&
+                roleGroupSnapshotSkipQuery == null && !startingProducerSnapshotReuseWindow &&
+                producerSnapshotReuseWorld == null && !startingInputBoundaryTimingWindow &&
+                inputBoundaryTimingWorld == null && !startingRoleBranchTimingWindow &&
+                roleBranchTimingQuery == null && !startingNativeSampledStateTimingWindow,
+                "The role group snapshot window requires an exclusive cold owner.");
+            startingRoleGroupSnapshotSkipWindow = true;
+            try
+            {
+                BeginPostBindingsRole();
+            }
+            finally
+            {
+                startingRoleGroupSnapshotSkipWindow = false;
+            }
+        }
+
         private static void BeginSuite(bool roleCandidate, bool roleFormalCandidate = false,
             bool pairSnapshotCandidate = false, bool emptyItrGuardCandidate = false,
             bool emptyItrRosterCandidate = false, bool bruteExactCacheCandidate = false,
@@ -702,6 +735,17 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            Require(!startingRoleGroupSnapshotSkipWindow || startingPostBindingsRoleWindow &&
+                roleGroupSnapshotSkipWorld == null && roleGroupSnapshotSkipQuery == null &&
+                !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null &&
+                !startingInputBoundaryTimingWindow && inputBoundaryTimingWorld == null &&
+                !startingRoleBranchTimingWindow && roleBranchTimingQuery == null &&
+                !startingNativeSampledStateTimingWindow,
+                "Role group snapshot skip requires exclusive post-bindings ownership.");
+            Require(!(startingProducerSnapshotReuseWindow || startingInputBoundaryTimingWindow ||
+                startingRoleBranchTimingWindow || startingNativeSampledStateTimingWindow) ||
+                !startingRoleGroupSnapshotSkipWindow && roleGroupSnapshotSkipWorld == null && roleGroupSnapshotSkipQuery == null,
+                "Other role windows cannot share the group snapshot skip owner.");
             Require(!startingNativeSampledStateTimingWindow || startingInputBoundaryTimingWindow,
                 "Native sampled state timing requires the existing input boundary owner.");
             Require(!startingProducerSnapshotReuseWindow || startingPostBindingsRoleWindow &&
@@ -843,7 +887,8 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
+            string outputRoot = startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
+                startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
                 startingProducerSnapshotReuseWindow ? ProducerSnapshotReuseRetryOutputRoot :
                 startingInputBoundaryTimingWindow ? InputBoundaryTimingOutputRoot :
                 startingRoleBranchTimingWindow ? RoleBranchTimingOutputRoot :
@@ -909,6 +954,7 @@ namespace NTSD.Test.Editor
                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
                 runs = new RunState[startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
@@ -991,6 +1037,8 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.roleGroupSnapshotSkipWindow)
+                return BuildRoleGroupSnapshotSkipRequest(index);
             if (state.nativeSampledStateTimingWindow)
                 return BuildNativeSampledStateTimingRequest(index);
             if (state.producerSnapshotReuseWindow)
@@ -1304,6 +1352,17 @@ namespace NTSD.Test.Editor
             return request;
         }
 
+        private static ProductionEntityStressRequest BuildRoleGroupSnapshotSkipRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
+            request.formalCollectorMode = "role";
+            request.outputPath = RoleGroupSnapshotSkipOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-group-off" : "-group-on") + "/report.json";
+            return request;
+        }
+
         private static ProductionEntityStressRequest BuildPostBindingsRoleRequest(int index)
         {
             if (index < 0 || index >= 4)
@@ -1470,6 +1529,11 @@ namespace NTSD.Test.Editor
                 if (state.postBindingsRoleWindow)
                 {
                     run.postBindingsRoleUnchanged &= CurrentPostBindingsRoleQueryValid(productionQuery, state.runIndex);
+                    if (state.roleGroupSnapshotSkipWindow)
+                    {
+                        run.roleGroupSnapshotSkipUnchanged &= RoleGroupSnapshotSkipQueryValid(productionQuery, state.runIndex);
+                        run.roleGroupSnapshotSkipRestored = RestoreRoleGroupSnapshotSkip();
+                    }
                     if (state.producerSnapshotReuseWindow)
                     {
                         run.producerSnapshotReuseUnchanged &= ProducerSnapshotReuseQueryValid(productionQuery, state.runIndex);
@@ -1606,6 +1670,7 @@ namespace NTSD.Test.Editor
                     (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
                     (!state.bruteDepthRejectCandidate || DepthRejectObservationValid(run)) &&
                     (!state.postBindingsRoleWindow || PostBindingsRoleObservationValid(run)) &&
+                    (!state.roleGroupSnapshotSkipWindow || RoleGroupSnapshotSkipObservationValid(run)) &&
                     (!state.roleBranchTimingWindow || RoleBranchTimingObservationValid(run)) &&
                     (!state.inputBoundaryTimingWindow || InputBoundaryTimingObservationValid(run)) &&
                     (!state.producerSnapshotReuseWindow || ProducerSnapshotReuseObservationValid(run)) &&
@@ -1701,6 +1766,8 @@ namespace NTSD.Test.Editor
                         productionQuery != null && !productionQuery.EnableRoleSnapshotFrameReuseForDiagnostics,
                         "Native sampled state attribution requires producer and frame snapshot reuse OFF.");
                 }
+                if (state.roleGroupSnapshotSkipWindow)
+                    ApplyRoleGroupSnapshotSkip(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
                 if (state.producerSnapshotReuseWindow)
                     ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
                 if (state.inputBoundaryTimingWindow)
@@ -1897,6 +1964,8 @@ namespace NTSD.Test.Editor
             if (state.postBindingsRoleWindow)
             {
                 run.postBindingsRoleUnchanged &= CurrentPostBindingsRoleQueryValid(productionQuery, state.runIndex);
+                if (state.roleGroupSnapshotSkipWindow)
+                    ObserveRoleGroupSnapshotSkip(run, state.runIndex);
                 if (state.producerSnapshotReuseWindow)
                     ObserveProducerSnapshotReuse(run, state.runIndex);
                 if (state.roleBranchTimingWindow)
@@ -1965,10 +2034,75 @@ namespace NTSD.Test.Editor
         }
 
         private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
+            state.roleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipQueryValid(query, index) :
             state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
             state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
             state.roleBranchTimingWindow ? RoleBranchTimingQueryValid(query, index) : PostBindingsRoleQueryValid(query, index);
 
+
+        private static bool RoleGroupSnapshotSkipQueryValid(BruteForceSceneQuery query, int index) =>
+            index >= 0 && index < 4 && roleGroupSnapshotSkipWorld != null &&
+            query == roleGroupSnapshotSkipQuery && roleGroupSnapshotSkipWorld.SceneQuery == query &&
+            producerSnapshotReuseWorld == null && inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+            PostBindingsRoleQueryValid(query, 1) && !query.EnableRoleBranchTimingForDiagnostics &&
+            !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+            !roleGroupSnapshotSkipWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics &&
+            !roleGroupSnapshotSkipWorld.EnableCharacterInputBoundaryTimingForDiagnostics &&
+            query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics == (index % 2 != 0);
+
+        private static void ApplyRoleGroupSnapshotSkip(SimulationWorld world, BruteForceSceneQuery query, RunState run, int index)
+        {
+            // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093; cold diagnostic World only.
+            Require(index >= 0 && index < 4 && run != null && roleGroupSnapshotSkipWorld == null &&
+                roleGroupSnapshotSkipQuery == null && producerSnapshotReuseWorld == null &&
+                inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+                world != null && world.SceneQuery == query && PostBindingsRoleQueryValid(query, 1) &&
+                !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleBranchTimingForDiagnostics &&
+                !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+                !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics &&
+                !world.EnableCharacterInputBoundaryTimingForDiagnostics &&
+                world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null,
+                "Role group snapshot skip requires an unowned recording World and unchanged Role query.");
+            previousRoleGroupSnapshotSkip = query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics;
+            roleGroupSnapshotSkipWorld = world;
+            roleGroupSnapshotSkipQuery = query;
+            run.roleGroupSnapshotSkipEnabled = index % 2 != 0;
+            query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics = run.roleGroupSnapshotSkipEnabled;
+            run.roleGroupSnapshotSkipFlagApplied = RoleGroupSnapshotSkipQueryValid(query, index);
+            run.roleGroupSnapshotSkipUnchanged = run.roleGroupSnapshotSkipFlagApplied;
+        }
+
+        private static void ObserveRoleGroupSnapshotSkip(RunState run, int index)
+        {
+            bool valid = RoleGroupSnapshotSkipQueryValid(productionQuery, index) &&
+                roleGroupSnapshotSkipWorld.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null;
+            run.roleGroupSnapshotSkipUnchanged &= valid;
+            if (!valid)
+                return;
+            run.roleGroupSnapshotSkipObservedCollections++;
+            run.roleGroupSnapshotSkipMaximumObservedRejects = Math.Max(run.roleGroupSnapshotSkipMaximumObservedRejects,
+                productionQuery.LastRoleRejectedGroupSnapshotSkipCountForDiagnostics);
+        }
+
+        private static bool RoleGroupSnapshotSkipObservationValid(RunState run) =>
+            run != null && run.roleGroupSnapshotSkipFlagApplied && run.roleGroupSnapshotSkipUnchanged &&
+            run.roleGroupSnapshotSkipRestored && run.roleGroupSnapshotSkipObservedCollections > 0 &&
+            (run.roleGroupSnapshotSkipEnabled ? run.roleGroupSnapshotSkipMaximumObservedRejects > 0 :
+                run.roleGroupSnapshotSkipMaximumObservedRejects == 0);
+
+        private static bool RestoreRoleGroupSnapshotSkip()
+        {
+            if (roleGroupSnapshotSkipQuery == null)
+                return roleGroupSnapshotSkipWorld == null;
+            roleGroupSnapshotSkipQuery.EnableRoleRejectedGroupSnapshotSkipForDiagnostics = previousRoleGroupSnapshotSkip;
+            bool restored = roleGroupSnapshotSkipQuery.EnableRoleRejectedGroupSnapshotSkipForDiagnostics == previousRoleGroupSnapshotSkip;
+            if (restored)
+            {
+                roleGroupSnapshotSkipQuery = null;
+                roleGroupSnapshotSkipWorld = null;
+            }
+            return restored;
+        }
 
         private static bool ProducerSnapshotReuseQueryValid(BruteForceSceneQuery query, int index) =>
             producerSnapshotReuseWorld != null && producerSnapshotReuseWorld.SceneQuery == query &&
@@ -2144,6 +2278,7 @@ namespace NTSD.Test.Editor
 
         private static void ShutdownAndExit()
         {
+            Require(RestoreRoleGroupSnapshotSkip(), "Role group snapshot skip must be restored before owner shutdown.");
             Require(RestoreProducerSnapshotReuse(), "Producer snapshot reuse must be restored before owner shutdown.");
             Require(RestoreInputBoundaryTiming(), "Input boundary timing must be restored before owner shutdown.");
             Require(RestoreRoleBranchTiming(), "Role branch timing must be restored before owner shutdown.");
@@ -2201,6 +2336,8 @@ namespace NTSD.Test.Editor
         {
             if (state == null)
                 return;
+            if (state.roleGroupSnapshotSkipWindow && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreRoleGroupSnapshotSkip(), "Role group snapshot skip must also be restored on external Play exit.");
             if (state.producerSnapshotReuseWindow && change == PlayModeStateChange.ExitingPlayMode)
                 Require(RestoreProducerSnapshotReuse(), "Producer snapshot reuse must also be restored on external Play exit.");
             if (state.inputBoundaryTimingWindow && change == PlayModeStateChange.ExitingPlayMode)
@@ -2371,6 +2508,8 @@ namespace NTSD.Test.Editor
                     PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseRetryOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(InputBoundaryTimingOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(RoleGroupSnapshotSkipOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(NativeSampledStateOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
@@ -3316,6 +3455,221 @@ namespace NTSD.Test.Editor
                 native.SetValue(null, previousNative);
                 input.SetValue(null, previousInput);
                 role.SetValue(null, previousRole);
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void RoleGroupWindow_RequestChangesOnlyCollectorAndOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildRoleGroupSnapshotSkipRequest")
+                .Invoke(null, new object[] { index });
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-group-off" : "-group-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            actual.formalCollectorMode = expected.formalCollectorMode;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void RoleGroupWindow_RequestRejectsOutsideMatrix(int index)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("BuildRoleGroupSnapshotSkipRequest").Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        public void RoleGroupWindow_AppliesDetectsDriftAndRestoresOwner(int index)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            object run = NewEligibilityRun();
+            var restore = EligibilityMethod("RestoreRoleGroupSnapshotSkip");
+            try
+            {
+                EligibilityMethod("ApplyRoleGroupSnapshotSkip").Invoke(null, new object[] { world, query, run, index });
+                NUnit.Framework.Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, NUnit.Framework.Is.EqualTo(index % 2 != 0));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "roleGroupSnapshotSkipFlagApplied"), NUnit.Framework.Is.True);
+                query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics = index % 2 == 0;
+                NUnit.Framework.Assert.That(EligibilityMethod("RoleGroupSnapshotSkipQueryValid")
+                    .Invoke(null, new object[] { query, index }), NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("roleGroupSnapshotSkipWorld").GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(CoarseEnvelopeStaticField("roleGroupSnapshotSkipQuery").GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void RoleGroupWindow_StructuralOwnerSurvivesStoppedRecording()
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var restore = EligibilityMethod("RestoreRoleGroupSnapshotSkip");
+            try
+            {
+                EligibilityMethod("ApplyRoleGroupSnapshotSkip").Invoke(null, new object[] { world, query, NewEligibilityRun(), 0 });
+                world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+                NUnit.Framework.Assert.That(EligibilityMethod("RoleGroupSnapshotSkipQueryValid")
+                    .Invoke(null, new object[] { query, 0 }), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(true)]
+        [NUnit.Framework.TestCase(false)]
+        public void RoleGroupWindow_LiveObservationRequiresRecording(bool recording)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var queryField = CoarseEnvelopeStaticField("productionQuery");
+            object previous = queryField.GetValue(null);
+            var restore = EligibilityMethod("RestoreRoleGroupSnapshotSkip");
+            try
+            {
+                object run = NewEligibilityRun();
+                EligibilityMethod("ApplyRoleGroupSnapshotSkip").Invoke(null, new object[] { world, query, run, 1 });
+                queryField.SetValue(null, query);
+                typeof(BruteForceSceneQuery).GetProperty("LastRoleRejectedGroupSnapshotSkipCountForDiagnostics")
+                    .SetValue(query, 5L);
+                if (!recording)
+                    world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+                EligibilityMethod("ObserveRoleGroupSnapshotSkip").Invoke(null, new object[] { run, 1 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "roleGroupSnapshotSkipUnchanged"), NUnit.Framework.Is.EqualTo(recording));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "roleGroupSnapshotSkipObservedCollections"), NUnit.Framework.Is.EqualTo(recording ? 1 : 0));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "roleGroupSnapshotSkipMaximumObservedRejects"), NUnit.Framework.Is.EqualTo(recording ? 5L : 0L));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                queryField.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        public void RoleGroupWindow_InvalidOwnerRejectedBeforeMutation(int defect)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = defect == 1 ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware;
+            if (defect != 3)
+                world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var apply = EligibilityMethod("ApplyRoleGroupSnapshotSkip");
+            var restore = EligibilityMethod("RestoreRoleGroupSnapshotSkip");
+            try
+            {
+                if (defect == 4)
+                    apply.Invoke(null, new object[] { world, query, NewEligibilityRun(), 0 });
+                bool before = query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics;
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { defect == 0 ? null : defect == 2 ? new SimulationWorld() : world,
+                        query, NewEligibilityRun(), 1 })).InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, NUnit.Framework.Is.EqualTo(before));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void RoleGroupWindow_SessionIsBackwardCompatible()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            FieldInfo field = type.GetField("roleGroupSnapshotSkipWindow");
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            object session = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(field.GetValue(session), NUnit.Framework.Is.False);
+            field.SetValue(session, true);
+            NUnit.Framework.Assert.That(field.GetValue(JsonUtility.FromJson(JsonUtility.ToJson(session), type)), NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+        }
+
+        [NUnit.Framework.TestCase(false, 0L, true, true)]
+        [NUnit.Framework.TestCase(true, 5L, true, true)]
+        [NUnit.Framework.TestCase(true, 0L, true, false)]
+        [NUnit.Framework.TestCase(true, 5L, false, false)]
+        public void RoleGroupWindow_ObservationRequiresStableOwnerAndActualSkip(bool enabled, long skips, bool valid, bool expected)
+        {
+            object run = NewEligibilityRun();
+            foreach (string name in new[] { "roleGroupSnapshotSkipFlagApplied", "roleGroupSnapshotSkipRestored" })
+            {
+                FieldInfo field = run.GetType().GetField(name);
+                NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+                field.SetValue(run, true);
+            }
+            run.GetType().GetField("roleGroupSnapshotSkipEnabled").SetValue(run, enabled);
+            run.GetType().GetField("roleGroupSnapshotSkipUnchanged").SetValue(run, valid);
+            run.GetType().GetField("roleGroupSnapshotSkipObservedCollections").SetValue(run, 1);
+            run.GetType().GetField("roleGroupSnapshotSkipMaximumObservedRejects").SetValue(run, skips);
+            NUnit.Framework.Assert.That(EligibilityMethod("RoleGroupSnapshotSkipObservationValid").Invoke(null, new[] { run }),
+                NUnit.Framework.Is.EqualTo(expected));
+        }
+
+        [NUnit.Framework.Test]
+        public void RoleGroupWindow_CurrentRequestRoutesToIndependentRoot()
+        {
+            FieldInfo stateField = CoarseEnvelopeStaticField("state");
+            object previous = stateField.GetValue(null);
+            object current = Activator.CreateInstance(stateField.FieldType, true);
+            FieldInfo flag = current.GetType().GetField("roleGroupSnapshotSkipWindow");
+            NUnit.Framework.Assert.That(flag, NUnit.Framework.Is.Not.Null);
+            flag.SetValue(current, true);
+            try
+            {
+                stateField.SetValue(null, current);
+                var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildCurrentRequest").Invoke(null, new object[] { 2 });
+                var expected = (ProductionEntityStressRequest)EligibilityMethod("BuildRoleGroupSnapshotSkipRequest").Invoke(null, new object[] { 2 });
+                NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+            }
+            finally { stateField.SetValue(null, previous); }
+        }
+
+        [NUnit.Framework.TestCase(true)]
+        [NUnit.Framework.TestCase(false)]
+        public void RoleGroupWindow_RejectedBeginDoesNotChangeExistingOwner(bool producerBusy)
+        {
+            var group = CoarseEnvelopeStaticField("startingRoleGroupSnapshotSkipWindow");
+            var producer = CoarseEnvelopeStaticField("startingProducerSnapshotReuseWindow");
+            var input = CoarseEnvelopeStaticField("startingInputBoundaryTimingWindow");
+            object previousGroup = group.GetValue(null);
+            object previousProducer = producer.GetValue(null);
+            object previousInput = input.GetValue(null);
+            try
+            {
+                group.SetValue(null, false);
+                producer.SetValue(null, producerBusy);
+                input.SetValue(null, !producerBusy);
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("BeginRoleGroupSnapshotSkip").Invoke(null, null)).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(group.GetValue(null), NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(producer.GetValue(null), NUnit.Framework.Is.EqualTo(producerBusy));
+                NUnit.Framework.Assert.That(input.GetValue(null), NUnit.Framework.Is.EqualTo(!producerBusy));
+            }
+            finally
+            {
+                group.SetValue(null, previousGroup);
+                producer.SetValue(null, previousProducer);
+                input.SetValue(null, previousInput);
             }
         }
 

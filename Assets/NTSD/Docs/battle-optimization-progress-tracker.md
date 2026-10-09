@@ -1,3 +1,98 @@
+> **已完成问题的代码对照记录：** [优化点 A：FindEffect 临时分配修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。本次只补说明，不新增完成包；下方H07-INPUT建议及H06准入待办保持。
+
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# 优化进度：当前工作入口（2026-10-09）
+
+当前任务：**FindEffect单点分配修复 / VERIFIED（仅本Task）**。2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+
+- 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。限定准入未完成，未新增完成包；详当前H06报告。34项文档结构、D1=A和旧证据边界保留。
+- 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+- 下一项建议：本次H06具名任务交付后H07-INPUT；消费91已有归因，先形成准确热点/字段/失效方案，由用户决定后继实施。Role默认不是硬前置，未授权队列不自动续跑。
+- 首阶段六项：H11/M03选定实现范围、H06/M13/M14选定评估共5/6；H07性能FAIL。34父项完整关闭0。
+- 批次：最新完成94/73包；95第74包未验收、默认OFF且执行停止；没有本轮新96。
+
+[总清单](android-mobile-readiness-priority-risk-register.md) · [依赖](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同规则](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [执行提示词](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md)
+
+## 父项状态与下一步
+
+| ID | 当前状态（按范围） | 下一步 |
+|---|---|---|
+| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 待方案决策 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
+| [H-02](android-mobile-readiness/h-02-android-build-scene-closure.md) | 待授权与前置 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+| [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+| [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+| [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | GC局部修复VERIFIED / ADMISSION_PENDING / NO_DEFAULT_PROMOTION；父项OPEN | 四场景强一致证据复用；混合collector234→0 events/sample，待同配置收益及接线必要门，非33ms阻塞 |
+| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL／执行已取消 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+| [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+| [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+| [H-11](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 选定CPU域已通过／父项开放 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
+| [M-01](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | 候选待归因／专项边界保持 | 先核eligible/active/fallback/等待；不将worker默认true当实际并行 |
+| [M-02](android-mobile-readiness/m-02-central-render-draw-segmentation.md) | 共享绑定成果保留／设备开放 | 保留80同Sakura SetPass1995→5、CPU DrawMesh约2；多资源场景有证再优化 |
+| [M-03](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 选定阶段通过／父项开放 | 保留13 metadata和15每camera消重；脏区优化先区分publication/alpha/完全重复显示 |
+| [M-04](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 已有诊断／设备矩阵待验 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
+| [M-05](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 待归因 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
+| [M-06](android-mobile-readiness/m-06-pool-capacity-prewarm.md) | 已有预热／峰值待评估 | 按slot/command/shell分别清点峰值，不能用GameConfig旧10/200判断现容量 |
+| [M-07](android-mobile-readiness/m-07-android-graphics-api-policy.md) | 设备策略待决定 | 先候选Vulkan/GLES矩阵后定策略；Automatic并非已证错误 |
+| [M-08](android-mobile-readiness/m-08-sustained-thermal-performance.md) | 设备前置未满足 | 固定温度/功耗等环境，按原10—20分钟门评价 |
+| [M-09](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 复用现有manifest／缺字段补齐 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
+| [M-10](android-mobile-readiness/m-10-mobile-viewport-safe-area.md) | 待产品与设备条件 | 先viewport/Safe Area合同后触控适配；保留用户底部黑区和平台取景 |
+| [M-11](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | USER_HOLD | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
+| [M-12](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 方案待容量预算 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
+| [M-13](android-mobile-readiness/m-13-sound-event-aggregation.md) | 选定评估结束／不实施 | 现有评估未建立真实热点，冻结原算法；不因二次复杂度描述直接改 |
+| [M-14](android-mobile-readiness/m-14-content-verification-io.md) | 评估结束／前置未就绪 | 保留可变Editor stale守卫；前置成立后才评估同epoch复用 |
+| [M-15](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 证书集成待完善 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
+| [L-01](android-mobile-readiness/l-01-application-identifier.md) | 待产品值 | 冻结dev/release命名与Manifest一致性 |
+| [L-02](android-mobile-readiness/l-02-signing-keystore.md) | 待安全配置 | 用户安全环境配置；文档只公开证书指纹，不读取私钥/口令 |
+| [L-03](android-mobile-readiness/l-03-target-api.md) | 待发布周期 | 实施时查询官方要求并冻结min/target；本轮不写未经核实的政策值 |
+| [L-04](android-mobile-readiness/l-04-orientation-policy.md) | 待用户决策 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
+| [L-05](android-mobile-readiness/l-05-graphics-jobs-frame-timing.md) | 待设备A/B | 采集开销与Jobs性能分开；不能盲开开关 |
+| [L-06](android-mobile-readiness/l-06-urp-hdr.md) | 待画面与设备决策 | 保持其他配置做HDR对照；先有GPU成本再定 |
+| [L-07](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 方案明确／未执行 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
+| [L-08](android-mobile-readiness/l-08-release-packaging.md) | 待发布阶段 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
+
+## 已有成果及不再机械重做的工作
+
+- 生产成果：四Brute fast path；80/86共享绑定和冷接线；H11容量预热与选定CPU域；13 metadata、15camera物化消重；Foot配置冷接线；生成准入/名字预热局部分配修复。准确范围见[取消时交接](../../../docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md)及下面原记录。
+- 候选：Role实际窗口有收益、未推广；95仅局部0.35ms信号且GC资格FAIL；94 LOCAL_ONLY。默认均不因本轮改变。
+- 不再原样重试：89无一致收益、92/93无整tick收益、84同条件skip0、无新前提的微缓存和三次同构envelope导出。结束的是具名版本，不删除代码/历史，不永久否定技术类别。
+- 诊断：91八子阶段已归因；不重新从零采样。81/82/86/91/93及已有像素/关闭证据未受影响即复用，默认接线实际影响另补。
+- 95 GC不是全局门；91/93有效实景0事件仍保留。父子计时不相加，局部与整tick/显示FPS分开。
+
+## 子方案进度
+
+| 子项 | 当前 | 后继条件 |
+|---|---|---|
+| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+| [H07-LATE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+| [H07-GC95](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+| [H06-SPATIAL](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+| [H07-AI-MODE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+
+## 下方原批次记录（历史只读证据，不代表恢复执行）
+
+> 2026-10-09 用户主动取消本轮优化自动执行，转外部AI评审。当前 fresh get_goal 返回 goal:null；无活动目标，不标完成、不回退代码、不继续95或新开96。最新完成94/73包，95第74包未完成验收、默认OFF；选定阶段5/6、H07 PERFORMANCE_FAIL、34父项关闭0。下方 Goal active / 下一执行动作属于历史快照，不构成恢复授权。方案入口、已做处理、未推广候选和剩余瓶颈见[本轮交接说明](../../../docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md)。本轮只增文档通知/说明，不改验收合同、不启动测试或测量。
+
+> 第95批在途：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095 / DRIVER_PARITY_PASS / DRIVER_GC_FAIL / NOT_ADMITTED / DEFAULT_OFF。局部37PASS证据保留；两正式root各12tick、两真实catalog千人布局各32tick OFF/ON完整hash/RNG/28行/first10/index与cold双缓冲一致。千人资格整体仍FAIL：两边暖sample均有GC事件（多数2/tick），已缩小到stage准备每tick1event与core通常1event，调用点待确认，不能归因候选或冒充0GC通过；03/04有效分域及原32tick校验同保持；05三次单步取证均FAIL于导出envelope0，raw/失败/设置恢复已保存，callsite仍未知，不称新CPU收益。用户质询方案闭合，本轮只收尾在途，后继先核已有raw而非重复fixture；不启动Windows/1800或推广、不拆96。最新完成94/73已完成包，95第74包在途；阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active。编号100只检查方案落实清楚，不要求性能达标。[95报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md)。
+
+> 以下第94批及更早为完成时的历史快照；第95批尚未完成整个实施包，以文首在途状态为准。
+
+> 第94批限定评估完成：NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094 / FOCUSED_TEST_PASS / LOCAL_ONLY / NOT_ADMITTED / DEFAULT_OFF。最终38/38安全回归，OFF缓存容量0/封存增长拒绝/原序列payload与RNG/暖collector0B；V2局部D -0.83%/C -8.81%仅旧guard无AI线索，最终版没有实际AI/Driver性能收益证明，不开窗口/不推广。latest94/73执行/阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active；编号100只检查方案落实清楚，不要求达标。[94报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/REPORT.md)。下一核当前IndexedCanonical producer→freeze→commit整块重复工作；84同条件capacity skip0方向已排除，不重跑旧微候选。
+
+> 以下第93批及更早记录为历史快照，以文首第94批为当前状态。
+
+> 第93批 WINDOWS_COMPLETED / NO_GAIN_PROVEN / DEFAULT_OFF：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093 VERIFIED仅冷窗口工具域。原Editor24 RED→85/85 GREEN，一次四actual1000AI120+180；ON整logic均值/P95未改善、不推广/不重复此版长窗；四校准fullDriver180steady0event/0B、两对末tick十hash/完整JSON同、owner恢复/关闭三0/Menu clean8。SetPass5/中央CPUdraw2非GPU batch；最新完成93/实际执行72/阶段5of6/34父0/H07 PERFORMANCE_FAIL/Goal active。[93报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/REPORT.md)。编号100仅方案是否落实清楚，不是性能截止；下一转有证大块重复工作、先核代码落点，不追加同构计时或无证微候选。
+
+> 第93批事前快照（以下数字为当时状态，不是当前进度）：
+> 第93批 PLANNED：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093，仅现有92候选的独立真实千人OFF/ON冷接线、24 test-first＋61邻域、一次四120+180；不重跑92资格、不改runtime/默认，当前latest92/71执行/阶段5of6/H07 FAIL/Goal active。9现存dirty字节新absent备份/1049非写域已核；[Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009.md) / [Change](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093.md) / [Operation](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/RECORD.md)。编号100只看方案落实清楚与否，不以性能FAIL暂停；下方旧状态保留。
+
+> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。
+
+> 历史摘要（语义已被上述用户澄清替代，非当前暂停规则）：2026-10-09 用户条件暂停门已登记（非新优化子批）：按批次编号100，不按实际执行100次。若第100批结束H07仍未达到既定Windows性能门或方案仍未落实清楚，完成在途作业/有序关闭并恢复Editor后，update_goal paused、交付现有方案及证据给用户外部评审，不进入101、不标complete/blocked。当前最新完成编号92、实际执行71；93只读准备，未改C#/启动窗口；Goal仍active、阶段5/6。H11选定CPU阶段已在86通过，不重新扩大它；H07仍FAIL。千人AI行为策略不因原版AI一致单一理由被排除，具体实现/模式边界另行准确声明，不视为已实施或普遍战斗规则豁免。[执行合同8.1](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [留痕](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/RECORD.md)。下方历史保留。
+
+> 第92批 FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / DRIVER_QUALIFIED / DEFAULT_OFF：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092。V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），真实Driver8/8、88paired/176step checksum与双完整RNG同；Sakura1000AI两32tick均actualAI1000/Role/noabort，ON拒绝D576450/C515802，数组/容量稳定、owner恢复/关闭三0/Menu clean8。71执行/阶段5of6/34父0/H07 FAIL/Goal active，未做真实成本/FPS/fullDriver0GC或推广。下一独立准确OFF/ON短窗，不重试本资格/局部或旧无收益候选；[92报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md)。下方为历史快照。
+
 > 第92批进行中：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092，V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），默认OFF。第4准确C# Driver冷资格扩展已事前留痕/dirty备份/999范围外保护；Driver RED5有效，GREEN资格待。累计71执行/阶段5of6/34父0/H07 FAIL/Goal active，无生产推广/真实耗时或完整Driver 0GC新验收。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009；下方为历史快照。
 
 > 第92批 PLANNED：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092；现有Role几何相交后的纯阵营拒绝前置，避免无用完整payload，default OFF/不换索引或生产默认。3准确C#、9当前dirty副本及1000保护已核；test-first/两布局managed交替成本待，无实际AI/FPS新证据。70执行/阶段5of6/34父0/H07 FAIL/Goal active。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009，下方为历史快照。
@@ -421,7 +516,7 @@ MONO B0-B9独立实施门、ATLAS资源/bank/预算/格式、Scene/Input Actions
 | H-06 | 首阶段有限准入评估完成，NO_DEFAULT_PROMOTION；父项OPEN | 四1000-participant collector形状候选/handle/RNG同，集中仍秒级；实际OPoint/完整tick/native证据待依赖，不重开campaign |
 | M-13 | 首阶段热点评估完成，NO_IMPLEMENTATION_THIS_PHASE；父项OPEN | 三synthetic分布0.28/2.1/21.6ms，未获得真实多cue热点；不改voice/音频算法 |
 | M-14 | 首阶段IO/前置评估完成，DEPENDENCY_NOT_READY；父项OPEN | 906图/29,939,600B下界，两Assert3.83/3.66s；可变文件无跨阶段read lease，保留守卫，不缓存 |
-| H-07 | 91实际八子归因已完成；71/71聚焦＋四actual1000AI120warm/180sample，DIAGNOSTIC_ONLY/NO_DEFAULT_PROMOTION | 本诊断收口，不是总Goal停止：ON P9560.104435/57.298315ms/drop315/308仍FAIL；Builtins约1.09/1.04ms，仅logic约2.2%，不能单独填33ms缺口。较大CandidateCollect15.7/16.2、PairExactLoop8.1/8.4ms；下一必要只读选择可消除重复工作，不增加无价值子计时、不重试89或切Grid/Burst/默认/专项。70执行/阶段5of6/34父0/Goal active；[91报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md)。 |
+| H-07 | 95源坐标增量刷新在途：默认OFF；局部37PASS、完整Driver逐tick正确性通过 | DRIVER_PARITY_PASS / DRIVER_GC_FAIL / NOT_ADMITTED。两正式root12tick/两千人32tick OFF/ON完整hash/RNG/行/index与双cold缓冲一致；千人测试整体GC FAIL，两边多数2event/tick，来源待定位，不宣称收益/0GC。下一同95核GC分配域；无Suite/窗口/1800/推广、不拆96。最新完成94/73，95第74包在途/阶段5of6/34父0/H07 FAIL/Goal active；[95报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md)。 |
 
 第65批实际失败保留，[四窗报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH65-ENVELOPE-PATH-BRANCH-TIMING-20261008/REPORT.md)不是性能达标。第66批NO_GAIN已经结束候选推广，Goal未停止。第67批[限定报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH67-RENDER-TEXTURE-BINDING-REUSE-20261008/REPORT.md)仅局部重复纹理信号，默认OFF；下一[68实景对照](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH68-RENDER-BINDING-WINDOWS-20261008.md)仅READY，先准确owner/test-first/新副本，不重采旧cost或堆新微候选。原Editor测试terminal后已不在，live Scene/Console未知，不自动启动；46已执行（22—67）/阶段4/6/H07/H11 OPEN/Goal active，68准备不加执行数。
 
@@ -434,7 +529,7 @@ MONO B0-B9独立实施门、ATLAS资源/bank/预算/格式、Scene/Input Actions
 | H-06 | 既有四形状collector强一致/成本评估有据结论。 | 本阶段评估完成，NO_DEFAULT_PROMOTION；父项OPEN。 | 不重开评估；未批准Role-aware生产切换只拦该动作。 |
 | M-13 | 热点/最小聚合候选资格评估有结论。 | 本阶段评估完成，NO_IMPLEMENTATION_THIS_PHASE；父项OPEN。 | 无真实热点不实施，不追加synthetic证明。 |
 | M-14 | IO成本及immutable/read lease前置评估有结论。 | 本阶段评估完成，DEPENDENCY_NOT_READY；父项OPEN。 | 保留完整性守卫，不将评估结论冒充缓存实现。 |
-| H-07 | 两真实1000AI固定正式Windows窗口、logic P95 <33ms、无持续backlog、正常dropped tick 0、logic 0 B/tick，reject/unresolved/stale/teardown残留0及适用正确性门。 | 未完成：91四短窗P95112.537870/60.104435/63.032595/57.298315ms、drop462/315/316/308仍FAIL；四校准完整Driver180稳态0event/0B、terminal三0/末tick300两对JSON同不替代正式1800或全帧stale/GPU。 | 下一有证较大CandidateCollect热点，原Builtins归因已闭不再刷报告；不重复89、旧资格、已过五项或解冻专项/切生产默认。阶段出口≠目标停止，70执行/阶段5of6/Goal active/34父0。 |
+| H-07 | 两真实1000AI固定正式Windows窗口、logic P95 <33ms、无持续backlog、正常dropped tick 0、logic 0 B/tick，reject/unresolved/stale/teardown残留0及适用正确性门。 | 未完成：95两千人OFF/ON完整Driver正确性通过，但整体资格GC FAIL（两边均非0）；局部实际AI-2.80%只是旧信号，不称整帧收益。无新真实窗口/1800或推广，93实际P95/drop仍FAIL。 | source候选default OFF；下一同95定位完整Driver GC分配域，再决定受影响修复/验证，不复刷已过项。latest完成94/73，95在途/阶段5of6/Goal active/34父0；100仅方案是否落实清楚，性能FAIL不触发暂停。 |
 
 通过4/6是“选定阶段条件”，其中三项是评估完成；不是四个父项优化已全部落地。当前整体为PARTIAL / STAGE_NOT_COMPLETE。下一准确Task/Change与验证先留痕；仅实质新增权限另请批准。
 
@@ -446,7 +541,7 @@ MONO B0-B9独立实施门、ATLAS资源/bank/预算/格式、Scene/Input Actions
 | H-10 | 高 | 全量音频预热与双声道 PCM 副本增加整局内存和启动成本。 | QUEUED | OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED | [方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) |
 | H-11 | 高 | 86直接Battle首次/原地重开共享绑定冷接线；79/79聚焦、原地rematch最终XML1/1、两同源完整1800camera均PASS。 | SCOPED_DIRECT_BINDINGS_ACCEPTANCE_PASS / VERIFIED（86 Task）/ SELECTED_CPU_PHASE_PASS / PARENT_OPEN | 两窗校准camera/observer均0event、双slot/FootHealth2/growth0/CPUlease0/recorded=executed5840/11阶段三0/Scene同/Menu clean8；父项OPEN，未认证native/GPU/device/千人或GPUconsumer完成。 | [方案](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md)；[86报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/REPORT.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-DIRECT-BATTLE-SHARED-BINDINGS-086.md)。旧43自然12event、79无采样/前置FAIL与86首个transport失败原件保留，本次PASS不是历史错误调用点已定位；本阶段scope收口不重开。 |
 | M-03 | 高 | metadata/warm消重、显示及GameConfig Foot生产接线的首阶段限定验收通过。 | SCOPED_FIRST_STAGE_PASS / PARENT_OPEN（20旧FAIL保留） | OPEN / SCOPED_DISPLAY_AND_COST_ACCEPTANCE_PASS | [方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md)；13 A-B当前五指纹同、15消重、16–18显示、22活动catalog与23完整CPU桥/严格重进复用合并。转H06/H07及M13/M14，不称1000AI/GPU/FPS/Android证书 |
-| H-07 | 高 | 91四actual1000AI八子归因完成，71/71聚焦、完整Driver180steady0event/0B/关闭三0/终态pair同/Menu恢复。 | PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION / PARENT_OPEN；91 VERIFIED仅诊断接线/归因 | ON mean48.120733/47.399534ms、P9560.104435/57.298315/drop315/308仍未达，时序波动不当ON收益；SetPass5/CPUdraw2。Builtins约1ms不足独立解决，较大CandidateCollect15.7/16.2ms；无正式1800/Android/120FPS/GPU证书。 | [方案](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md)；[91报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md)。下一现有Role PairExactLoop有证重复工作选择，不重新做无一致收益89或无决策价值计时、不重开已过项/专项；70执行/阶段5of6/Goal active/34父0。 |
+| H-07 | 高 | 95 default-off源坐标AI行增量已写；原37局部PASS，两个正式root/两千人完整Driver逐tickhash/RNG/28行/first10/index相同，双cold缓冲及关闭恢复通过。 | PERFORMANCE_FAIL / PARENT_OPEN；95 IN_PROGRESS / DRIVER_PARITY_PASS / DRIVER_GC_FAIL / NOT_ADMITTED / DEFAULT_OFF | 千人各32tick OFF/ON均actualAI1000、consumer reads32000，候选source增量D61917/C61495；暖16sample GC总数OFF D34/C61、ON均32，可靠校准/未饱和，来源待定位。千人资格整体2FAIL，不冒充0GC或性能准入；原局部-2.80%（一块回退）与失败原件保留。 | [方案](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md)；[95报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md)。下一同95定位该Driver分配域，不另拆96或新窗口。latest完成94/73；95第74包在途、阶段5of6/Goal active/34父0，100非性能截止。 |
 | H-01 | 高 | 正式 DAT、角色图片和公共资源仍依赖项目文件路径，Android 部署链待闭合。 | QUEUED | OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED | [方案](android-mobile-readiness/h-01-content-deployment.md) |
 | H-02 | 高 | Menu/Battle 场景列表已接线，但 Android 构建和冷启动闭包仍待验收。 | QUEUED | OPEN / UNITY_SCENE_LIST_AND_EDITOR_CALLBACK_PASS / ANDROID_BUILD_PENDING | [方案](android-mobile-readiness/h-02-android-build-scene-closure.md) |
 | H-04 | 高 | Android ARM64/IL2CPP 成品及平台确定性证据尚未齐备。 | QUEUED | OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED | [方案](android-mobile-readiness/h-04-il2cpp-arm64.md) |
@@ -481,6 +576,7 @@ MONO B0-B9独立实施门、ATLAS资源/bank/预算/格式、Scene/Input Actions
 
 | 批次 | 条目 | Task / Change | 状态与证据 | 剩余条件 |
 |---|---|---|---|---|
+| 92 纯阵营拒绝前置／完整快照省读与真实资格 | H07 | [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.md) | FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / DRIVER_QUALIFIED / DEFAULT_OFF；V1反向/夹具FAIL保留，V2 125/125；Driver有效RED5→8/8，四CreateNew JSON逐tick无差异；[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md) | D/C各actual1000AI32tick，ON拒绝576450/515802；只有局部成本-5.54%/-13.64%，非真实Driver性能/0GC/1800。999范围外保护、10当前dirty备份及三V1版本保存；HEAD外部提交推进另留痕，不回退。71执行/阶段5of6/34父0/H07 FAIL/Goal active，下一独立真实OFF/ON窗，不重测资格/局部或推广默认。 |
 | 90 NativeSampledState八子步骤归因准备 | H07 | [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-NATIVE-SAMPLED-STATE-TIMING-090.md) | FOCUSED_TEST_PASS / ATTRIBUTION_READY / DIAGNOSTIC_ONLY / DEFAULT_OFF；23 case RED2控制PASS/21新schema FAIL→新23＋相邻33共56/56 GREEN，0skip；[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/REPORT.md) | 只补观测，原顺序/live frame/Ai条件保持，无实际新千人/性能收益；局部输入1024次0B非完整logic，未注入异常/Play/Profiler/M0。69执行/阶段5of6/34父0/H07 FAIL/Goal active；下一实际子归因，不重采89或解冻专项。 |
 | 91 NativeSampledState实际千人八子归因 | H07 | [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091.md) | ATTRIBUTION_COMPLETE / DIAGNOSTIC_ONLY / NO_DEFAULT_PROMOTION；10有效RED→71/71 GREEN，四120+180实际1000AI完成；[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md) | ON最贵Builtins1.088330/1.035558ms，仅logic约2.2%；CandidateCollect15.734382/16.155797ms更大。四fullDriver180稳态0event/0B、终态两pair各10hash同/关闭三0/Menu恢复；ON P9560.104435/57.298315/drop315/308仍FAIL，非候选收益/正式1800。70执行/阶段5of6/34父0/Goal active，下一有证较大热点，不重试89或解冻专项。 |
 | 89 已校验帧引用复用局部评估 | H07 | [Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009.md) / [Record](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.md) | FOCUSED_TEST_PASS / NO_CONSISTENT_GAIN / NOT_ADMITTED / DEFAULT_OFF；20 RED→33 GREEN，原payload/旧测试normalized同，factory局部4096次0B；[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/REPORT.md) | 两局部1000实体fixture分散-2.8123%/集中+5.7546%，不推广、不进真实窗口、不重复找PASS；无新FPS/1000AI收益，H07未过。68执行/阶段5of6/34父0/Goal active；下一既有NativeSampledState热点。 |
@@ -701,3 +797,5 @@ MONO B0-B9独立实施门、ATLAS资源/bank/预算/格式、Scene/Input Actions
 > 2026-10-08 第54批 VERIFIED（仅检测接入）/ RELIABLE_LOGIC_GC_MIXED / PERFORMANCE_FAIL：两真实1000AI各120+180，前后校准/300完整Driver scope有效；分散steady0event，混战6event/first tick158、字节数未知。logic P95 112.550/114.910ms，drop802/789，容量拒绝与关闭残留0；终态完整snapshot逐字节同52 baseline，非逐tick/native。61guards/8副本/4源SHA/HEAD同，原Menu clean8roots/idle，pwsh validator0/1350Records/4253历史warnings。阶段4/6、产物5/6、33已执行、H07/H11 OPEN、Goal active；下一仅必要混战调用点，不重采同54/不推广候选。 [留痕](../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-LOGIC-GC-SCOPE-054.md)。
 > 2026-10-08 第58批 PLANNED / ENVELOPE_QUALIFICATION_PENDING：NTSD-OPT-H07-BRUTE-COARSE-ENVELOPE-058；普通Brute保守包络仅默认OFF资格，两C#准确dirty副本/87guards先核，先RED后候选与一次两千participant局部cost。没有Driver/实景/0GC/收益，36已执行＋58准备、阶段4/6、H07/H11 OPEN、Goal active；不重采57或切专项。
 > 2026-10-08 第59批 DRIVER_QUALIFICATION_PASS / FOCUSED_TEST_PASS / NOT_ADMITTED：只既有Admission接入候选，4有效RED→8/8 GREEN，88同tick配对/176完整Driver执行，声明hash/entities/双RNG同、两千人实际拒绝/OFF0；四production defaults保持，Query/Suite不改，92guards/8backup/HEAD同。非实景/FPS/可靠0GC，实际57性能FAIL仍保留；38已执行、阶段4/6、产物5/6、34父关闭0、Goal active。下一60现有Suite四个120+180实际收益窗仅READY，不重复资格/成本，不按计数停工。[59报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH59-COARSE-ENVELOPE-DRIVER-20261008/REPORT.md)。
+> 第94批事前PLANNED记录现已由文首结果与94报告更新；旧93/72数字仅为开始时快照。本包未建立真实千人收益，默认关闭、H07仍FAIL，编号100仅方案清晰度检查。
+> 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。

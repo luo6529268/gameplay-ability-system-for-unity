@@ -5987,6 +5987,21 @@ namespace NTSD.Simulation
             }
         }
 
+        public bool AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics
+        {
+            get => aiRuntime.Decision.SourceCoordinateIncrementalRefresh;
+            set
+            {
+                if (_ticking)
+                    throw new InvalidOperationException(
+                        "Unified AI source-coordinate refresh mode cannot change while a simulation pass is running.");
+                aiRuntime.Decision.SourceCoordinateIncrementalRefresh = value;
+            }
+        }
+
+        public long AiUnifiedSnapshotSourceCoordinateRefreshCountForDiagnostics =>
+            aiRuntime.Decision.SourceCoordinateIncrementalRefreshCount;
+
         public int AiDecisionIndexedCanonicalFullOracleSampleInterval
         {
             get => aiDecisionIndexedCanonicalFullOracleSampleInterval;

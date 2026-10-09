@@ -1,0 +1,23 @@
+{
+  "checked_at": "2026-10-09T21:54:02.724872+08:00",
+  "protected_files": 3014,
+  "protected_changes": [],
+  "dirty_backups_verified": 5,
+  "original_document_bytes_preserved": true,
+  "new_document_count": 2,
+  "navigation_links_checked": 32,
+  "code_blocks_match_real_before_and_after": true,
+  "head_unchanged": true,
+  "staged_unchanged": true,
+  "git_diff_check_exit": 0,
+  "new_unexpected_status_changes": [],
+  "errors": [],
+  "not_run": [
+    "Unity",
+    "tests",
+    "Profiler",
+    "performance measurement",
+    "ChangeLedger validator (no script changes)"
+  ],
+  "active_q06_body_read": false
+}

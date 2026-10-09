@@ -1,0 +1,23 @@
+{
+  "time": "2026-10-09T17:50:22.922018+08:00",
+  "documents": 48,
+  "parent_ids": 34,
+  "child_plans": 5,
+  "old_bodies_preserved": 39,
+  "new_links_checked": 286,
+  "hard_stage_nodes": 28,
+  "hard_stage_edges": 26,
+  "hard_stage_acyclic": true,
+  "protected_files": 2349,
+  "protected_drift": [],
+  "git_diff_check_exit": 0,
+  "errors": [],
+  "limits": [
+    "No Unity/tests/profiling/runtime or device validation",
+    "Q06 methods not read",
+    "Dependency DAG is document-stage graph, not full runtime call graph",
+    "D1 remains pending; execution prompt is draft"
+  ],
+  "parent_id_unique_check": "PASS: anchored first-column IDs; child parent references excluded",
+  "validation_correction": "Initial unanchored string count incorrectly counted H06/H07 in child parent columns; no document error or content change."
+}

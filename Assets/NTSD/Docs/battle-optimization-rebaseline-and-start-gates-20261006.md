@@ -1,3 +1,5 @@
+> **2026-10-09 优化文档整理入口（不恢复执行）：** 用户授权整理总清单/单项方案/进度/依赖；本轮只改文档。[组织与规则](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md)、[当前进度](battle-optimization-progress-tracker.md)、[依赖](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md)、[D1=A已批准](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。34父项与旧证据保留；用户已批准D1=A：既有Role必要准入门通过后可先默认推广，H06/H07最终性能门不变；本会话仍未实施，H07仍FAIL；PERF/ATLAS/MONO/EXT-1保持原门。下方旧active/继续语句是历史，不得自动恢复；正式战斗规则不变；限定准入分阶段依D1=A，最终验收不降低。
+
 # NTSD 优化文档重基线与启动门（2026-10-06）
 
 > 标识：`NTSD-OPTIMIZATION-DOC-REBASELINE-20261006`

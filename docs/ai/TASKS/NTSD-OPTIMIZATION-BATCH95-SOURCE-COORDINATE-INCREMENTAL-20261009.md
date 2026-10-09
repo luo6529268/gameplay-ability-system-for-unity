@@ -1,0 +1,70 @@
+# 第95批 源规则坐标下AI行增量刷新
+状态 IN_PROGRESS / DRIVER_PARITY_PASS / DRIVER_GC_FAIL / NOT_ADMITTED / DEFAULT_OFF。需求为有效六项合同0—8.1及用户继续H07优化。latest完成94/73已完成实施包，95第74包在途/阶段5of6/H07 PERFORMANCE_FAIL/Goal active；编号100仅方案落实清晰度复盘，不要求性能达标。
+
+## 本次重扫事实与假设
+当前检查点：原37/37局部PASS保留；原Editor两个正式root各12tick和两千人布局各32tick OFF/ON的完整Driver状态/hash/RNG/published行与cold双缓冲一致。千人资格用例整体仍FAIL：OFF/ON可靠GC scope在tick17—32均非0，多数2event/tick，前后校准有效/无饱和，来源待定位，不能称候选引入或0GC通过。下一同95核其完整Driver分配域、保留旧实际Windows0GC证据而不混同两fixture；未启动新Scene/窗口/1800或默认推广。详REPORT，本包不完成、不拆96、不因次数或性能未达而暂停。
+
+当前SimulationWorld.RunCharacterInputPasses在producer freeze后和routing后各刷新unified row；SimulationAiDecisionModule.RefreshUnifiedExecutionRowAfterCharacterInput第1681行因input.UseSourceRulePosition强制full capture。SimulationAiSensingModule.TryCaptureRow第1654—1675行除源X/Z外仍逐字段读取30项投影；现有BattleAiUnifiedRowPublisher已暂存其它canonical mutation。当前BuildAiInputSlotSnapshot以全部active.SourceRulePositionInitialized决定sourceComplete（World4070—4083）。这是真实代码阻断，不是87基础runtime snapshot的no-op skip，也不更改TryRollForward全tick重建保护。
+91真实mean CharacterInput约12ms、ProducerSnapshotRefresh约1ms，不能把整12ms都当可消除；新局部收益尚未证明。候选只针对同一表现无关AI行发布边界，可能减少2N full-row capture，不承诺解决全部33ms缺口。
+
+## 精确4脚本与方法
+- SimulationWorld.cs：新增default-OFF AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics façade及成功计数getter；不改两个pass/producer freeze/proxy/提交/Runtime基础snapshot。
+- SimulationAiDecisionModule.cs：新增default-OFF SourceCoordinateIncrementalRefresh与计数；原RefreshUnifiedExecutionRowAfterCharacterInput在source模式且exact LF2Character/SourceInitialized、无既有force-full或mutation hook时，使用现有pending writer补源X/Z并commit。其它实体/未初始化/显式force保持原full capture；已启用增量验证以sourceX/Z作坐标oracle，Y仍physical。不删初态全行capture或TryRollForward的source保护。
+- BattleAiUnifiedRowPublisher.cs：PublishSourceRuleCoordinates只暂存X/Z，覆盖物理坐标pending但不覆盖Y/其它mask；直到既有TryCommitPending才可见，role/team products按原变更规则重建。
+- AiDecisionSoAShadowEditorTests.cs：新增SourceCoordinateIncremental_反射test-first；既有断言/fixture不改。
+
+## 数据/安全/生命周期
+不加数组、manager、owner、lease或热容量，不增加cache驻留。publisher仍原World所有权、BeginPass/EndPass/occupancy invalidation和关闭阶段；flag仅cold explicit测试开启、默认OFF，记录恢复。保留slot/generation/stable/type/epoch身份门、源/物理坐标不同值、原层级/fail-closed、33ms/3ms/max2、RNG/输入/commit时点与publication只读。没有新source位置写回、GPU/Scene/资源/Packages/Server/Q06body/默认推广。
+对于显式force-full和测试mutation hooks走原capture；未知派生类不启用。source行X/Z和slice/key/presentation无关。无法证明所有写方覆盖则不采用，不能为测试PASS删除相关guard。
+
+脚本前补充保守资格门：本次重扫发现publisher的role-change检测使用Y，而full capture/index member使用HitStop（Publisher468/469/502/503，Sensing1689—1711）。本包不修既有通用分类器，source增量候选在当前State或HitStop与已发布行不同的时候回退full capture；这样不将这项既有差异带入新增source路径。新增两个SourceCoordinateIncremental_RoleMutationKeepsFullCapture手动边界测试覆盖状态/HitStop变化及ground/air index；原数组/角色语义和旧测试保持。
+
+## 冻结验证与退出
+仅原2022.3.62f3 PID74724/6402、Menu clean8 idle，无第二Editor。新反射测试先运行缺API有效RED，再implementation GREEN＋既有UnifiedAuthority_/统一故障邻域（不重全部history）。矩阵：默认OFF；源/物理不同与正负坐标、两个刷新边界、full-vs-candidate输入/实体/RNG/行字段同；pending源X/Z覆盖物理X/Z且Y保持；generation stale拒绝；force-full与hook回退；非source原路径；数组/0GC/生命周期；1000无AI纯collector类局部整刷新成本可先预检但不能替代actual AI。每项实际执行数由XML total/leaf为准，不用discovery数。
+收益不可辨或正确性未闭→NOT_ADMITTED/DEFAULT_OFF，不启动实际短窗/1800或推广。若局部有稳定同版信号、完整Driver资格通过，则必须同包事前准确扩展Suite/driver工具与固定窗口，不把测试传递成FPS收益。新证据必要性与失败均保留，不刷旧93/94或已过五项。
+
+## 同包验证修订
+GREEN01三个正负坐标案例的完整行/输入/RNG比较已到达，失败是把first10的live-state校验放在ClearSlotSnapshot把UseSourceRulePosition清零之后；该校验再用物理X/Z，与源坐标缓存不在同一读域。修订新增测试为比较全部published row/first10 product，并直接ValidateIndexedContract；full和candidate的旧live validator结果同时比较，不改runtime validator。局部GC改用既有BattleScopedGcAllocationRecorder，正/空例前后校准+不饱和0event，旧byte计数器不能证明0GC的失败原件保留。
+
+新增SourceCoordinateIncremental_Isolated1000InputCost两个参数（无AI/有实际AI）的固定isolated CharacterInputAll成本预检：同seed/同静态源位置、16warm、四块各12sample、OFF/ON交替、块间完整published和RNG/输入/实体同，时间不设机器阈值。非完整tick、无collector/physics/camera/Driver、无1000AI正式窗口或性能准入。这些仍在既有test文件内，无新owner/路径，Suite/Driver不改。
+
+## 留痕与恢复
+## 同95完整Driver资格冻结（执行前）
+只扩展既有 AiDecisionSoAShadowEditorTests.cs 的 SourceCoordinateIncremental_Driver* 测试、RunSourceCoordinateDriver/row capture与比较helper，不改上述三个runtime或新增code-path，不修改原BattleBruteProductionAdmissionEditorTests/RawCapture helper/93Suite。备份为Operation下before-driver-qualification-01/AiDecisionSoAShadowEditorTests.cs，原检查点manifest保持不可变。通过反射复用现有WithRoleDriverScenario、PrepareThousandAi、SetCandidate与CompareRoot，保留其正式EXE/场景SHA、cold数据/Pool/Driver、allocation seal、关闭零对象/slot/borrower和singleton恢复。
+固定矩阵：两个适用正式root trace各12tick OFF/ON；Sakura正式catalog Dispersed1000/Combat1000各32tick OFF/ON；千人16warm＋16完整StepOneTick sample仅用既有scoped recorder前后正/空例校准。诊断Manual/logic-only，不建设实际战斗Scene，不是Windows120warm/1800、render/GPU/设备验收。双方仅source-coordinate flag不同、原BruteForce collector及已采用cache开关相同，其它未准入候选关闭。source candidate/optional row oracle cold设置并finally在Driver关闭前恢复；字段全28+first10/index、extended/lockstep hash、完整native/legacy scalar RNG、actual AI1000、硬违例与precommit失败、source protection、已预热行数组identity/容量逐tick比。checksum导出/反射/assert在GC scope外，scope为整StepOneTick，关闭Driver自动checksum字符串捕获但在scope外逐tick显式核完整checksum，不宣称包含证据序列化的GC。
+本次资格测试不重复37个局部PASS，不为它另拆96，不修改Scene/资源/Q06body/默认，不把局部收益或资格PASS写为H07完成。若发现差异保留first-difference并仅修受影响域；资格通过后同包准确扩展Suite才可必要Windows窗口，若无收益不采用。
+
+Operation NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009、Change NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095先于scripts；10现有写域逐SHA/dirty备份见before-manifest-01.json与before-01/<relative>。其它仅本Task/Record/manifest/artifacts新absent证据。已有内容无覆盖/删除/Git回退；恢复需用户批准使用当前dirty副本或本hunk，不能把HEAD覆盖当撤销。准确code4、gov5、公共TempXML1；根保护继承94并核当前值，保护94三C#及原93Suite，不读Q06body/外部codex内容。
+## 同95 GC归因冻结03（执行前）
+2026-10-09：仅扩展既有AiDecisionSoAShadowEditorTests.cs新SourceCoordinateIncremental_DriverGcStageAttribution与可选归因参数/结果。不改三个runtime、原局部/正式/千人0GC断言、Admission/RawCapture/Suite或任何Scene。静态发现StageRenderModule.RefreshWalkableAreaSnapshotFromScene在snapshot=null时可能每tick new List，即使manager/definition未变；尚未证明2GC的来源。
+固定仅Dispersed1000基线OFF/32tick、16warm+16sample；使用原scoped recorder前后校准，先单独测world.PrepareStageRuntimeSnapshotForTick(tick)，随后原完整StepOneTick已准备stage的剩余scope；两部分均记录，不声称排除stage后的scope是0GC验收。新归因输出FileMode.CreateNew，现有严格完整Driver两千人测试不改、不重跑旧37/正式root。可选参数默认为null，原全部case控制流不增加归因调用。记录marker/unit与每tick事件、控制、实际1000AI、checksum/RNG、关闭恢复，诊断成功仅表示取证有效，不表示候选准入。
+脚本修改前另保存当前dirty测试字节到Operation before-gc-attribution-03/AiDecisionSoAShadowEditorTests.cs新absent/noForce并核SHA。Task/Change/本Operation先登记再脚本；公共Temp XML仍在原10写域，当前原件另存该备份目录。失败归因保留，不新编号96、不取消0GC门。
+## 同95 GC归因04冻结（执行前）
+03单case job45bb10ecbc73486788749ebffa8fddcc实际1PASS为有效归因，不是0GC；stage16sample各1event，remaining通常1event（tick17/31各2），TimeNanoseconds不按字节。逐32tick全部extended/lockstep/native/legacy与既有OFF基线同。产物gc-attribution-03/C5D2E00AC7AE10F68D71FBB21735C3EFA59B631E8AC9C311FAD419A6D445BE61。
+下一仅同测试文件加DriverGcWrapperAttribution：预绑定StopDedicatedSimulationWorker/StepOneTickInternal(FrameInputSet,bool,bool)/DispatchPublishedSoundsAfterSuccessfulTick/RefreshInspectorState委托，暖后按原public wrapper顺序分别scoped记录（stage依旧单列、actual full wrapper资格未改）；反射/参数/委托/数组冷分配，热scope不反射/不建closure。固定仅同D1000/OFF32tick，结果完整hash/RNG与已存baseline逐tick比较，rawscope与校准保存新absent。仅是等序分解归因，不能把core scope改称整Driver或替代严格0GC断言。绿03的测试原件为事前当前dirty备份，原37/正式root/千人两断言保持；不改runtime/Scene/Suite，不新增批次。
+## GC归因03/04收尾（非性能/0GC准入）
+用户新问H07最终目标；本轮不再启动新测试/性能窗口或实现修复，只收尾已经在途作业，当前验收标准与Goal active未变。
+03 job45bb10ecbc73486788749ebffa8fddcc实际1/1PASS，04 job1643644f2bdf4bce9f4fee3fa5325a80实际1/1PASS；均是有效归因，不是原完整Driver资格通过。03 XML E5E13A7FC1CDC5176324507A53E113E3EE163AC09F08BD9A1794DBB77DDD7A0F；04 XML A6043F41AA7A79FD9061F26EF04293F1CB9D44D6287867AC0BA71D37DF3B3511。03/04 JSON SHA分别C5D2E00AC7AE10F68D71FBB21735C3EFA59B631E8AC9C311FAD419A6D445BE61 / 34A04D3EDF644021C32E10611790098FDBAAB341F4F52100E533C63C68CDD005。
+同D1000/OFF32tick，16warm+16sample前后正/空例控制有效/未饱和，marker GC.Alloc/unit TimeNanoseconds，只解释事件数不按bytes。stage准备每sample1event；等序分解wrapper StopWorker/SoundDispatch/Inspector各0event，core通常1event、tick17/31各2。两种分解的32tick完整extended/lockstep/native/legacy state与既有OFF基线完全相同，actualAI1000/固定行容量/关闭零对象/slot/borrower保持。具体stage/core分配调用点仍待确认，stage空walkable临时List是静态候选不是已证调用栈；不凭该线索改runtime或豁免分配。仅原测试文件新block与using变更，移除整个Driver新增block+5using后的旧37tests规范化字节完全同before-driver-qualification-01。原两千人完整Driver0GC FAIL、三个runtime/default OFF和95在途不变；未重测37/正式root/旧Windows。
+首次03编译CS1061缺System.Linq及误在编译中提交0test job b2444c7261e94cd492a35883cdc7eb73原件保留，0test不算PASS；修仅新增using，之后编译/idle确认再运行。原Menu clean8/非Play恢复；未启动下一阶段或更改目标。checkpoint03的保护、validator、当前SHA另记录，不覆写01/02。
+## 同95 GC调用点取证05冻结（执行前）
+上一轮人类只询问H07最终目标，未批准改变目标或放宽0GC；本轮按仍active的有效合同继续同95。03/04已将GC定位到stage/core，静态阅读无法证明具体callsite，旧55/93实景fixture不能解释当前headless fixture，故需要最小新取证。
+仅AiDecisionSoAShadowEditorTests.cs新增SourceCoordinateIncremental_DriverGcCallsite UnityTest和同文件私有capture helper；RunSourceCoordinateDriver只新增默认为null的cold capture参数，null路径/全部旧断言保持。fixture仍冻结32输入且只执行前17完整Step（16warm+tick17），同D1000/OFF/既有Brute flags，保留原published/index/storage/actualAI/关闭门，17tick完整checksum/RNG与已存OFF基线比较。unique ProfilerMarker仅包tick17完整原public StepOneTick，前后scoped正/空校准保留，GC记录数需与该marker内raw GC.Alloc一致且有可解析callstack。只证明调用点，不是性能收益/0GC准入，不重跑37/正式root/旧窗口，不拆96。
+必须现有原EditorMenu clean8/非Play非test/编译完成、全局CPU Profiler idle且无GPU/deep；复用既有BattleOptimizationCpuGcCaptureEditor.RequireAvailable/ReadSettings/RestoreSettings/SaveProfilerHistory的准确私有方法，仅cold反射、不修改该受保护工具。捕获使用profileEditor=true、CPU area/callstacks，禁止binary log覆盖旧文件，不清空或回载用户Profiler history；如已有history先保存至自有新absent prior-history.raw，新采集仅追加，结束保存自有cpu-gc.raw并只导出unique marker。所有Profiler设置finally还原并逐字段比较，history原件保存但不声称UI历史内容字节恢复。
+产物仅本包gc-callsite-05/<fresh-Guid>下raw/JSON/settings audit及公共Temp XML的预声明写域；FileMode.CreateNew/SaveProfile先验absent，失败原件保留。脚本前保存当前dirty测试及公共XML到Operation before-gc-callsite-05新absent目标，不用HEAD/Force。范围外1128guard/03的54refs先核，3runtime/default/Scene/资源/Q06/Suite/Admission不变。没有生产修复或新默认；如确证需改其它脚本必须先另列准确路径/备份/聚焦验收。
+
+## GC调用点05首次失败及最小采集修订
+job7ccc00cb482843b7afeae2a37ea65900实际1FAIL：raw仅4B、first/last=-1、unique envelope0，scoped tick17有效3event但没有callstack。Profiler设置十字段before/after完全同，原件gc-callsite-05/ef9430547ae1488f9940db1104367672保留；不是生产/0GC失败新增结论，也不能把3event推成字节或callsite。
+必要修订仅同capture helper：显式设置ProfilerDriver.enabled=true，并在完整回调返回后的UnityTest中等待ProfilerDriver记录新frame（最多30秒Editor时间、逐frame yield非阻塞），而非固定yield一次就保存。仍只标记原tick17、没有新增采样逻辑步/fixture/性能窗口，所有settings finally恢复；等待到限只令本次取证FAIL，不重复/重启目标。编译后只重跑此一个失败case。执行前当前测试/XML另存before-gc-callsite-06，失败XML/test版本保存callsite-attempt-05-01，均新absent无Force。准确最终Profiler数据和状态必须实读，不宣称已修复调用点。
+
+## GC调用点05第二次失败与帧前预启动修订
+job29daf4eb04584e6dbdd7cb3610f0947d实际1FAIL，raw12,643,012B已有frame0—1但unique envelope0；有效scope仍3event，设置finally完全恢复。只等待回调之后新frame不能追回未录入marker，不能称callstack有效或归因完成。原件5cfc4a3adb5d42a0b7cca7711869381a与失败XML保存，不重采相同无效起点。
+同helper必要改为在UnityTest首frame先启动CPU Profiler（allocation callstack先关），逐frame yield等待首个真实Profiler frame、30s到限则直接FAIL且不加载fixture；确认录制已生效后才调用现有cold fixture/16warm/原tick17。tick17才启用allocation callstack与unique marker，记录后继续等新frame再保存。因同步fixture不能跨帧yield，冷载入及16warm的CPU样本也会存在raw中，但严格只导出tick17唯一marker，绝不当性能计时；不改变原最大buffer设置、不清空history。没有新增逻辑步、矩阵或生产改动，失败/设置恢复都保留。修改前当前测试/XML另存before-gc-callsite-07；第二次原件callsite-attempt-05-02。
+
+## GC调用点取证05收尾与用户方案质询（2026-10-09）
+本轮不改变H07目标/权限或0GC门；用户询问“有完整优化思路吗、95批为何仍不能闭合”，本轮只收尾已启动作业，不再新增候选/性能窗口。既有03/04有效分域证据保留。
+05三个单case均实际1FAIL/0skip：job7ccc00cb482843b7afeae2a37ea65900（XML49F2053FF35A2E8CEAA4FA0B2F41F613BE0817C2F76B36A4D664E62880095F2E）、29daf4eb04584e6dbdd7cb3610f0947d（D059CBACE7EDC779A5DE874DFEC9B21FF5210AF7E548A9BBA0E99AD3289DA5BC）、f4fc1fc4f7ff49bdb7abca978815d4a0（751EA14EF353343281FCFADF3F89DE71A64DAA0EC048858ABF401C043F4B3043）。各scoped tick17校准有效/3event，但导出unique envelope均0，不能确认callsite、不能称0GC/资格或性能通过。原始raw分别4B、12,643,012B、21,203,416B；最后raw能检出marker名称字节，仅证明名称存在，不证明对应sample/stack已核实。后继若继续此归因须先恢复已有raw检查线程/边界frame（目前导出从previousLastFrame之后开始），不再盲重跑相同fixture。
+所有Profiler设置before/after十字段完全同，已有history新absent备份且未清空/回载。终态原Editor idle/nonPlay/nonTest/nonCompile，Menu clean8；三个runtime和default OFF保持。本轮新增只同测试文件的私有capture helper/默认为null可选参数；原37及正式root、两千人严格0GC断言保留。测试工具当前仍FAIL，不能报告本包交付完成。最新94/73完成，95第74包在途，阶段5of6/H07性能FAIL/Goal active。
+方案问题的证据不是“缺少更多同构测试”：93实际Role千人OFF logic均值48.31/57.64ms、P9563.75/88.61ms；CandidateCollect16.05—23.04ms、CharacterInput12.28—17.13ms是大热点。92/93局部group候选未建立完整收益，已不采用；95实际AI的isolated输入只约0.35ms/2.80%信号，未证明整tick收益。必须把方案落实与最终性能验收分开，不能用批号/诊断/测试数量代替高收益主改法。此前“全套方案闭合”尚无证据；模式化千人AI策略/空间查询的新方向未准确冻结，不以原版AI一致单独否决，也不得凭本次质询自动实施。已过H11限定CPU阶段与SetPass5受控窗口不重开，正式1800只在冒烟有达标可能时执行。
+本轮验证、保护与当前SHA存checkpoint04，不覆写01—03；仍无新windows/1800/production promotion、无Q06 body/Scene/资源/Settings/Packages/Server改动，无破坏性Git。
+

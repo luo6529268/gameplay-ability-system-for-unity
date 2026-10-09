@@ -1,0 +1,554 @@
+## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 2]
+ M .codex/config.toml
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md
+ M Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+ M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md
+ M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+ M Assets/NTSD/Scripts/DatParser/Runtime/Models/LoganKindCatalog.cs
+ M Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs
+ M Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs
+ M Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009.md
+ M docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? Assets/NTSD/Scripts/Test/Editor/H06CollectorPreparationEditorTests.cs
+?? Assets/NTSD/Scripts/Test/Editor/H06CollectorPreparationEditorTests.cs.meta
+?? Assets/NTSD/Scripts/Test/Editor/H06FindEffectAllocationEditorTests.cs
+?? Assets/NTSD/Scripts/Test/Editor/H06FindEffectAllocationEditorTests.cs.meta
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/after-100.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/after-cleanup.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/after-tests.xml
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before-100.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before-cleanup.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before-tests.xml
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/editor-final-0.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/editor-final-1.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/editor-final-2.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/fingerprints.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/preservation-audit.json
+?? artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/thousand-tests.xml
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/allocation-summary-final.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/callsites.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/capture.raw
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/cleanup.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/export.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/preflight.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-77aa1947b69544459e9c0a347e33577d/settings-before.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/callsites.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/capture.raw
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/cleanup.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/export.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/preflight.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture-100-96a75c3ff7ef4304a6be807665be2104/settings-before.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-dispatch.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-request.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-result-01.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-revision02-dispatch.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-revision02-request.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-revision02-result.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-revision02-tests.xml
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/change-ledger-final-revision02-summary.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/change-ledger-final-revision03-summary.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/change-ledger-final-summary.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/editor-final-state.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/governance-check-final.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/import-request.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/import-response.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/import-revision02-response.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/protection-check-01.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/protection-check-final.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-06339ee6fe764cb0b581e2ea0b3427de/before.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-06339ee6fe764cb0b581e2ea0b3427de/history-reset.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-3dcd7b51179349d68ac34c10b5f663aa/before.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-3dcd7b51179349d68ac34c10b5f663aa/history-reset.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-dispatch.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-request.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-result.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset-tests.xml
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset2-dispatch.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset2-request.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset2-result.json
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset2-tests.xml
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/revision-01-assertion-contamination/Goal18_LastTestResults.xml
+?? artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/revision-01-assertion-contamination/H06CollectorPreparationEditorTests.cs
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Combat-collector-gc-d4fa5a53246a4b8c84de7cac20a043d4.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Combat-configured-driver-41259065e0ba406a83c42eb917bc013c.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Combat-configured-driver-ad0a2a2052564b50836ac1b3fcef0eae.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Concentrated-collector-gc-54de1063004c4a1baae3b7c423065afe.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Concentrated-configured-driver-1071638a5be1474eaf5c6bf94f077b2f.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Concentrated-configured-driver-f6a0bd42217341e391a35e14ce62bd75.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Dispersed-collector-gc-1ab56a4100a44869b0b6866e19dd44b9.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Dispersed-configured-driver-0b4f121a7c434ddd9fdf5093245cb92f.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/Dispersed-configured-driver-7c84aeae66054c79bf8b35cb5ded1e55.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-configured-driver-55bc2bfd53aa43bd88d1262b84ac6f7f.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-configured-driver-c15fae919be44d4b91d4def56ae11a72.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-shaped-collector-gc-7f5a826ab9dc4874822a67910dbc7bf6.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-shaped-collector-gc-9e8228bbc42e47b796c0f80825d4ea06.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-shaped-gc-phase-diagnostic-d827cce7afa944c697d7ff095e5ed7d6.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/batch81-source-fingerprint.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/batch81-symbol-fingerprint.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/change-ledger-validation-final.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/change-ledger-validation.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/closeout-audit-final.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/closeout-audit.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/editor-release-and-default-422cfb24b1164f6abcf2ed88dc99ea1c.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/fallback-symbol-reuse.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/final-editor-state.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/gc-callsite-7929cdfdd1e4423dbce54dd4e0763741/prior-history.raw
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/profiler-owned-recovery-b6c0e27ebda04847a89647d40bfb84c7.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-00-empty/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-01-observer-fail/fingerprint.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-01-observer-fail/test-source.cs.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-01-observer-fail/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-02-opoint-type-fail/fingerprint.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-02-opoint-type-fail/test-source.cs.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-02-opoint-type-fail/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-03-gc-fail/fingerprint.json
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-03-gc-fail/test-source.cs.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-03-gc-fail/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-04-phase/test-source.cs.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-04-phase/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-05-profiler-history-fail/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-06-profiler-release-fail/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-07-profiler-recovered/tests.xml
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-08-final-release-pass/test-source.cs.txt
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/qualification-08-final-release-pass/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/audit-final-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-green-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Combat1000-group-snapshot-driver-parity-b1f34ab10e42417c89b769dc3015abc1.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Dispersed1000-group-snapshot-driver-parity-ba360fead0c1482ea0e23d175b052d48.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/left-x350-group-snapshot-driver-parity-8f092cb9fa7446f3a91b10d3fbc25ae4.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/final-audit-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/green-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/measurement-audit-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/red-01/test-first.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/red-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.final-checksum.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.logic-gc.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.observation.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.request.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.shared-terminal-before.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-group-off/report.json.terminal.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.final-checksum.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.logic-gc.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.observation.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.request.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.shared-terminal-before.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-group-on/report.json.terminal.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.final-checksum.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.logic-gc.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.observation.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.request.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.shared-terminal-before.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-group-off/report.json.terminal.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.final-checksum.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.logic-gc.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.observation.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.request.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.shared-terminal-before.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-group-on/report.json.terminal.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0000.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0001.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0002.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0003.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0004.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0005.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/windows-01/suite-result.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/final-audit-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-02/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-03-safety/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-04-final/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/BattleHitCandidatePairSnapshotFactory.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/BruteForceSceneQuery.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/RoleAwareCollisionShadowSelfCheckTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/red-01/test-first.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/red-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-before-eof-fix-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-02.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-03.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-01/AiDecisionSoAShadowEditorTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-02/AiDecisionSoAShadowEditorTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-02/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-03/AiDecisionSoAShadowEditorTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-03/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/compile-test-first-01.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-01/AiDecisionSoAShadowEditorTests.cs.before
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-02/AiDecisionSoAShadowEditorTests.cs.before
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-02/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-03/AiDecisionSoAShadowEditorTests.cs.before
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-03/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/Combat1000-source-coordinate-driver-parity-68366de88c8e4c63a03999a89760fed3.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/Dispersed1000-source-coordinate-driver-parity-94c326d0b02a46d88ea58afdff466844.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/left-x350-source-coordinate-driver-parity-d03738f4014a4f9aa6132e41a5a80340.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/right-x550-source-coordinate-driver-parity-224b23e84060469ba8f56651d4bd52cc.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-compile-01.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-03/dispersed1000-stage-gc-attribution-67437e3b0c8842018275b022761b1aee.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-04/dispersed1000-wrapper-gc-attribution-8b312439f4b94c15901e2747691b690c.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-discovery-03/compile-03.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-discovery-03/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-03/AiDecisionSoAShadowEditorTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-03/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-04/AiDecisionSoAShadowEditorTests.cs
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-04/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/driver-gc-callstacks.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/profiler-settings-audit.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/driver-gc-callstacks.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/prior-history.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/profiler-settings-audit.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/driver-gc-callstacks.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/profiler-settings-audit.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-01/AiDecisionSoAShadowEditorTests.cs.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-02/AiDecisionSoAShadowEditorTests.cs.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-02/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-03/AiDecisionSoAShadowEditorTests.cs.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-03/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-01/AiDecisionSoAShadowEditorTests.cs.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-01/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-02/AiDecisionSoAShadowEditorTests.cs.txt
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-02/tests.xml
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-02.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-03.json
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-H06-FIND-EFFECT-ZEROGC-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-H06-PROFILER-RESET-100-PREP-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-H06-ROLE-SCOPED-ADMISSION-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Assets__NTSD__Docs__android-mobile-readiness__h-06-collision-broadphase-1000.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Assets__NTSD__Scripts__DatParser__Runtime__Models__LoganKindCatalog.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/Temp__Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/docs__ai__CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/docs__ai__CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/docs__ai__FILE-OPERATIONS__INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__DEPENDENCIES.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/before/docs__ai__STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/change-before-close.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/diff-before.patch
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/head-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/protected-before.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/staged-before.patch
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/status-after.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/status-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/test-before-namespace-fix.cs.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/after-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/00-INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/01-CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/02-STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/03-CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/04-NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/before/05-Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/capture100-revision02-xml-before.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/change-before-code-written.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/00-NTSD-H06-PROFILER-RESET-100-PREP-20261009.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/01-NTSD-H06-PROFILER-RESET-100-PREP-001.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/02-RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/03-INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/04-CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/05-STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/06-CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/07-NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/closeout-before/manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/final-validation.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/git-staged-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/git-status-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/git-status-final.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/head-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/protection-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/reset2-xml-before.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/task-before-final-closure.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/task-before-link-correction.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/tests-before-capture100.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-PROFILER-RESET-100-PREP-20261009/tests-before-reset.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Docs__android-mobile-readiness__h-06-collision-broadphase-1000.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Scripts__Simulation__Runtime__BattleRuntimeProfile.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Scripts__Test__Editor__BattleBruteProductionAdmissionEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/Temp__Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__FILE-OPERATIONS__INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__DECISIONS.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__DEPENDENCIES.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__README.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/before/docs__ai__STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/dirty-before.patch
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/git-status-after.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/git-status-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/head-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/protection-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Temp/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Temp/NTSD_ProductionEntityStress.result
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Temp/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-02.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-03.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-04.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Temp/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-driver-qualification-01/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-attribution-03/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-attribution-03/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-05/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-05/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-06/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-06/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-07/AiDecisionSoAShadowEditorTests.cs
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-07/Goal18_LastTestResults.xml
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/after-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/before/docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/diff-check.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/protected-before.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/validation.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/write-plan.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/after-manifest-final.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/after-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before-column-correction/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before-column-correction/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before-column-correction/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before-manifest.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/docs/ai/CURRENT-AUTHORITY.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/before/docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/column-correction-plan.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/draft-payload-1.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/draft-payload-2.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/draft-payload-3.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/git-diff-check.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/git-status-after.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/git-status-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/protected-before.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/review-data.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/validation-final.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/validation.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/write-plan-final.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/write-plan.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/docs/ai/CHANGE-LEDGER.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/docs/ai/STATE.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/before-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/RECORD.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__android-mobile-readiness__h-06-collision-broadphase-1000.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/docs__ai__FILE-OPERATIONS__INDEX.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__README.md
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/document-writes.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/execute-doc-edits.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/git-diff-check.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/git-staged-before.patch.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/git-status-before.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/index-planned.sha256.txt
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/manifest-before.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/planned-document-edits.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/protected-before.json
+?? docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
+?? docs/ai/TASKS/NTSD-H06-FIND-EFFECT-ZEROGC-20261009.md
+?? docs/ai/TASKS/NTSD-H06-PROFILER-RESET-100-PREP-20261009.md
+?? docs/ai/TASKS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009.md

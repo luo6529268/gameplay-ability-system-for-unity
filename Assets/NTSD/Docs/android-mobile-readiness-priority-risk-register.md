@@ -1,3 +1,65 @@
+> **已实施问题的详细说明：** [实施记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md) · [H-06子问题：FindEffect修复前后对照](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。用于解释具体代码改法，不新增父项或另一套进度。
+
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# 优化总清单：当前导航（2026-10-09）
+
+本文件负责全部优化点的登记和方案入口；当前实施状态只维护在[唯一进度文首](battle-optimization-progress-tracker.md)。旧正文为历史登记，不按旧计数/Goal active恢复任务。
+
+[文档职责与推进规则](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [依赖与阶段顺序](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [待决策](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [新会话执行提示词](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md)
+
+34父项保留原ID，不把测试/工具/子候选重复计数。以下优先级针对重整后的处理建议，不改原合同、不授予实施权限；CPU、内存、平台、保障、验收和发布分别看待。证据来自原具名记录，本轮没有新增性能测量。
+
+| ID | 优化点 / 独立方案 | 类型 | 建议优先级 | 当前处理方向 |
+|---|---|---|---|---|
+| H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
+| H-02 | [Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 平台 | 中 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+| H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+| H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+| H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+| H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | FindEffect局部修复已验证：100结果一致且0GC、原千人混合234→0事件/样本；限定准入待收益/接线，默认Brute，H06/H07最终门不变 |
+| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+| H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+| H-11 | [表现容量与0GC](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 保障 | 随改动 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
+| M-01 | [worker吞吐与背压](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | CPU | 中 | 先核eligible/active/fallback/等待；不将worker默认true当实际并行 |
+| M-02 | [中央segment与提交](android-mobile-readiness/m-02-central-render-draw-segmentation.md) | 渲染 | 中 | 保留80同Sakura SetPass1995→5、CPU DrawMesh约2；多资源场景有证再优化 |
+| M-03 | [Mesh物化与上传](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 渲染 | 中 | 保留13 metadata和15每camera消重；脏区优化先区分publication/alpha/完全重复显示 |
+| M-04 | [中央失败诊断](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 保障 | 后续 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
+| M-05 | [GameObject shell成本](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 内存/CPU | 中 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
+| M-06 | [池预热与容量计划](android-mobile-readiness/m-06-pool-capacity-prewarm.md) | 内存 | 中 | 按slot/command/shell分别清点峰值，不能用GameConfig旧10/200判断现容量 |
+| M-07 | [图形API策略](android-mobile-readiness/m-07-android-graphics-api-policy.md) | 平台 | 后续 | 先候选Vulkan/GLES矩阵后定策略；Automatic并非已证错误 |
+| M-08 | [持续热稳态](android-mobile-readiness/m-08-sustained-thermal-performance.md) | 验收 | 后续 | 固定温度/功耗等环境，按原10—20分钟门评价 |
+| M-09 | [证据指纹](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 保障 | 随改动 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
+| M-10 | [移动取景与Safe Area](android-mobile-readiness/m-10-mobile-viewport-safe-area.md) | 平台 | 后续 | 先viewport/Safe Area合同后触控适配；保留用户底部黑区和平台取景 |
+| M-11 | [Mono/Core/Presentation分层](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | 架构 | 暂缓 | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
+| M-12 | [解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 内存 | 中 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
+| M-13 | [声音事件聚合](android-mobile-readiness/m-13-sound-event-aggregation.md) | CPU | 低 | 现有评估未建立真实热点，冻结原算法；不因二次复杂度描述直接改 |
+| M-14 | [重复完整性校验I/O](android-mobile-readiness/m-14-content-verification-io.md) | 加载 | 低 | 保留可变Editor stale守卫；前置成立后才评估同epoch复用 |
+| M-15 | [Kernel构建可复现](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 保障 | 随改动 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
+| L-01 | [应用包名](android-mobile-readiness/l-01-application-identifier.md) | 发布 | 低 | 冻结dev/release命名与Manifest一致性 |
+| L-02 | [签名与升级链](android-mobile-readiness/l-02-signing-keystore.md) | 发布 | 低 | 用户安全环境配置；文档只公开证书指纹，不读取私钥/口令 |
+| L-03 | [Target API](android-mobile-readiness/l-03-target-api.md) | 发布 | 低 | 实施时查询官方要求并冻结min/target；本轮不写未经核实的政策值 |
+| L-04 | [屏幕方向](android-mobile-readiness/l-04-orientation-policy.md) | 产品 | 按需前置 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
+| L-05 | [Graphics Jobs与FrameTiming](android-mobile-readiness/l-05-graphics-jobs-frame-timing.md) | 设备候选 | 低 | 采集开销与Jobs性能分开；不能盲开开关 |
+| L-06 | [HDR成本](android-mobile-readiness/l-06-urp-hdr.md) | 设备候选 | 低 | 保持其他配置做HDR对照；先有GPU成本再定 |
+| L-07 | [AI profile说明一致性](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 维护 | 低 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
+| L-08 | [发布包装](android-mobile-readiness/l-08-release-packaging.md) | 发布 | 低 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
+
+## 新热点与条件候选：5个父项子方案
+
+| 子ID | 父项 | 优先级 | 独立方案 |
+|---|---|---|---|
+| H07-INPUT | H-07 | 高 | [CharacterInput等价优化](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) |
+| H07-LATE | H-07 | 中 | [后续实体更新](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) |
+| H07-GC95 | H-07 | 限定问题 | [第95批分配调用点](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) |
+| H06-SPATIAL | H-06 | 条件候选 | [保守空间候选裁剪](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) |
+| H07-AI-MODE | H-07 | 待行为决策 | [独立千人AI策略](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md) |
+
+PERF、ATLAS、MONO及EXT-1为既有专项入口，不增加父项计数、也不自动解冻；见[原专项索引](battle-optimization-proposals-index.md)。
+
+## 原登记正文（历史快照与原验收链接保留）
+
 > 2026-10-07 完成边界更正：优化执行以[有限首阶段合同第0—8节](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)为准。次数/批次只触发复盘，不自动停止目标；候选不采用不等于全部Goal无路可做。阶段、产物、父项关闭分别判断，旧停点按历史阅读；[文档操作](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PHASE-COMPLETION-BOUNDARY-CORRECTION-20261007/RECORD.md)。
 
 > 2026-10-07 第22批限定通过：NTSD-OPTIMIZATION-BATCH22-RUNTIME-FOOT-CONFIG-20261007 / SCOPED_RUNTIME_FOOT_CONFIG_PASS；NTSD-OPT-M03-RUNTIME-FOOT-CONFIG-022 / VERIFIED（本批）。GameConfig fallback接线，显式authoring/禁用保持；原Editor32/32，Battle1800实际camera每帧Foot2/Health2、两slot、CPU DrawMesh11815录制=执行、growth0；三档100/500/1000真实catalog重复命令重放均局部0B/growth0，非1000AI。11阶段关闭三残留0/Scene同/Menu恢复，30保护/11备份保持。有限首阶段1/8新子批完成，34项父项关闭仍0；完整选定链与后续5项继续，EXT-1/Mono/ATLAS门不解冻。下方旧快照按时间阅读。

@@ -1,3 +1,30 @@
+> **已完成单点的独立说明：** [优化点 A：FindEffect 从原代码到修复后代码、效果与边界](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。单点完成不等于本父项或Role默认推广完成。
+
+> 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。
+
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-06 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | CPU / 高 |
+| 当前状态 | D1=A已批准／FindEffect局部修复VERIFIED，原千人混合collector八次0GC；限定准入待收益/接线，生产默认Brute |
+| 依赖的最小范围 | H-09受影响正确性、H-11适用容量、M-09/M-15基线；不依赖Mono整体 |
+| 下一步与具体方向 | 已消除已知FindEffect分配；接续必要门核对、实际同配置收益及默认接线。不重复已PASS三场景，不以未33ms阻断D1=A；空间分区仍独立 |
+| 完成边界 | 限定准入必要门通过后可先推广；H06父项/H07整体P95等门未过仍开放 |
+| 方案成熟度 | FindEffect单点生产修复及聚焦验证完成；100结果一致/0GC、原千人混合0GC通过，Profile/Suite未改；限定准入未完成 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+子方案（不增加父项数量）：[H06-SPATIAL 保守空间候选裁剪](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md)。
+
+**D1=A已批准：** 用户确认可先用安全有效的Role方案。限定准入通过四场景强一致、受影响完整0GC/容量/关闭及可追溯收益门后，允许默认推广，不必先达到整tick P95<33ms。原33ms、无持续backlog、正常drop0等仍是H06父项/H07最终性能门，未通过不得关闭。下方旧“完成性能门后才切配置”对这个限定子阶段被本决定取代；其他正确性和最终验收不变。2026-10-09用户已授权具名实施；[Task](../../../../docs/ai/TASKS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009.md)、[当前证据](../../../../artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/REPORT.md)。尚未通过全部门，未切默认。
+
+## 原方案与历史证据（原始正文保留）
+
 > 2026-10-07 首阶段限定准入评估完成 / NO_DEFAULT_PROMOTION：第25批四1000-participant collector形状候选序列/handle/hit/RNG同，实际18/18；Direct/Sweep/tree在分散有局部收益，但集中261150pair仍1.1–1.5秒。实际OPoint/完整tick/checksum/native336和可靠GC未闭合，不默认推广，不重写索引。详[第25批报告](../../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH25-BOUNDED-ASSESSMENTS-20261007/REPORT.md)。原下方方案未来正式准入不变。
 
 # H-06 1000 实体碰撞 Broadphase 方案

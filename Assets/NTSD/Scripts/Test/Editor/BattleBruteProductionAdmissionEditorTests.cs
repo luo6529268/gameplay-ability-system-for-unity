@@ -20,6 +20,490 @@ namespace NTSD.Test.Editor
 {
     public sealed class BattleBruteProductionAdmissionEditorTests
     {
+        private const string H06AdmissionOutput = "artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/";
+        private static bool h06CollectorCallsiteCapture;
+
+        [Test]
+        [Explicit("Recovery only for this task's failed profiler capture; never a routine test.")]
+        public void H06RoleAdmission_ReleaseOwnedFailedProfilerCapture()
+        {
+            Assert.That(File.Exists(H06AdmissionOutput + "qualification-05-profiler-history-fail/tests.xml"), Is.True);
+            Assert.That(UnityEditorInternal.ProfilerDriver.deepProfiling || UnityEditorInternal.ProfilerDriver.profileGPU, Is.False);
+            MethodInfo read = typeof(BattleOptimizationCpuGcCaptureEditor)
+                .GetMethod("ReadSettings", BindingFlags.Static | BindingFlags.NonPublic);
+            object before = read.Invoke(null, null);
+            UnityEngine.Profiling.Profiler.enabled = false;
+            UnityEditorInternal.ProfilerDriver.enabled = false;
+            UnityEngine.Profiling.Profiler.enableAllocationCallstacks = false;
+            UnityEditorInternal.ProfilerDriver.profileEditor = false;
+            h06CollectorCallsiteCapture = false;
+            SaveNew("profiler-owned-recovery.json", new { before, after = read.Invoke(null, null),
+                limitation = "Initial recording=false was checked; original profileEditor/callstack values were not persisted. Reset these owned toggles to false, not certified exact restoration." }, H06AdmissionOutput);
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+        }
+
+        [Test]
+        public void H06RoleAdmission_EditorReleasedAndDefaultStillBrute()
+        {
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            Assert.That(h06CollectorCallsiteCapture, Is.False);
+            var backend = CollisionBroadphaseBackendResolver.Resolve(null, null);
+            Assert.That(backend, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            object settings = typeof(BattleOptimizationCpuGcCaptureEditor)
+                .GetMethod("ReadSettings", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
+            SaveNew("editor-release-and-default.json", new { settings, backend,
+                scope = "read-only release/default verification after blocked admission" }, H06AdmissionOutput);
+        }
+
+        [UnityEngine.TestTools.UnityTest]
+        [Explicit("Allocation localization only; requires idle profiler and exportable retained history.")]
+        public System.Collections.IEnumerator H06RoleAdmission_OPointCollectorAllocationCallsites()
+        {
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            Type capture = typeof(BattleOptimizationCpuGcCaptureEditor);
+            const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic;
+            MethodInfo read = capture.GetMethod("ReadSettings", flags);
+            MethodInfo restore = capture.GetMethod("RestoreSettings", flags);
+            MethodInfo save = capture.GetMethod("SaveProfilerHistory", flags);
+            object before = read.Invoke(null, null);
+            string output = Path.GetFullPath(H06AdmissionOutput + "gc-callsite-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(output);
+            SaveNew("settings-before.json", before, output + Path.DirectorySeparatorChar);
+            if (UnityEditorInternal.ProfilerDriver.firstFrameIndex >= 0)
+                save.Invoke(null, new object[] { Path.Combine(output, "prior-history.raw") });
+            UnityEngine.TestTools.LogAssert.NoUnexpectedReceived();
+            var samples = new List<object>();
+            int markers = 0;
+            try
+            {
+                UnityEditorInternal.ProfilerDriver.profileEditor = true;
+                UnityEditorInternal.ProfilerDriver.SetAreaEnabled(UnityEngine.Profiling.ProfilerArea.CPU, true);
+                UnityEngine.Profiling.Profiler.enableAllocationCallstacks = true;
+                UnityEngine.Profiling.Profiler.enabled = true;
+                yield return null;
+                h06CollectorCallsiteCapture = true;
+                H06RoleAdmission_FourShapeCollectorZeroGc("OPointBurst-shaped", true);
+                h06CollectorCallsiteCapture = false;
+                yield return null;
+                yield return null;
+                UnityEngine.Profiling.Profiler.enabled = false;
+                UnityEditorInternal.ProfilerDriver.enabled = false;
+                save.Invoke(null, new object[] { Path.Combine(output, "capture.raw") });
+                var addresses = new List<ulong>();
+                int scanned = 0;
+                for (int frame = UnityEditorInternal.ProfilerDriver.firstFrameIndex;
+                    frame >= 0 && frame <= UnityEditorInternal.ProfilerDriver.lastFrameIndex;
+                    frame = UnityEditorInternal.ProfilerDriver.GetNextFrameIndex(frame))
+                {
+                    Assert.That(++scanned, Is.LessThanOrEqualTo(300), "bounded retained frames");
+                    using var view = UnityEditorInternal.ProfilerDriver.GetRawFrameDataView(frame, 0);
+                    if (!view.valid)
+                        continue;
+                    for (int index = 0; index < view.sampleCount; index++)
+                    {
+                        if (view.GetSampleName(index) != "H06.RoleCollector.AllocationLocalization")
+                            continue;
+                        markers++;
+                        int end = index + view.GetSampleChildrenCountRecursive(index);
+                        for (int child = index + 1; child <= end; child++)
+                        {
+                            if (view.GetSampleName(child) != "GC.Alloc")
+                                continue;
+                            addresses.Clear();
+                            view.GetSampleCallstack(child, addresses);
+                            var stack = new List<object>();
+                            foreach (ulong address in addresses)
+                            {
+                                var method = view.ResolveMethodInfo(address);
+                                stack.Add(new { method.methodName, method.sourceFileName, method.sourceFileLine });
+                            }
+                            samples.Add(new { frame, child,
+                                bytes = view.GetSampleMetadataCount(child) > 0 ? view.GetSampleMetadataAsLong(child, 0) : -1,
+                                stack });
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                h06CollectorCallsiteCapture = false;
+                restore.Invoke(null, new[] { before });
+                SaveNew("profiler-settings.json", new { before, after = read.Invoke(null, null) }, output + Path.DirectorySeparatorChar);
+                SaveNew("callsites.json", new { scope = "allocation localization; not performance/zero-GC admission", markers, samples }, output + Path.DirectorySeparatorChar);
+            }
+            Assert.That(markers, Is.GreaterThan(0), "owned collection marker must be retained");
+            Assert.That(samples.Count, Is.GreaterThan(0), "known nonzero allocations must be captured");
+        }
+
+        [TestCase("Dispersed")]
+        [TestCase("Combat")]
+        [TestCase("Concentrated")]
+        [TestCase("OPointBurst")]
+        [Timeout(600000)]
+        public void H06RoleAdmission_ConfiguredFourSceneDriverParity(string shape)
+        {
+            H06AdmissionRow[] brute = RunH06Admission(shape, CollisionBroadphaseBackend.BruteForce);
+            H06AdmissionRow[] role = RunH06Admission(shape, CollisionBroadphaseBackend.LooseQuadtree);
+            SaveNew(shape + "-configured-driver.json", new
+            {
+                scope = "32 complete Manual Driver ticks; actual configured backend; read-only candidate hook; no GC/performance claim",
+                fixtureSha = HashFile(RoleSakuraScenario), brute, role,
+            }, H06AdmissionOutput);
+            for (int i = 0; i < brute.Length; i++)
+            {
+                string label = shape + " first difference tick=" + (i + 1);
+                Assert.That(role[i].input, Is.EqualTo(brute[i].input), label + " input");
+                Assert.That(role[i].state, Is.EqualTo(brute[i].state), label + " full extended hashes");
+                Assert.That(role[i].lockstep, Is.EqualTo(brute[i].lockstep), label + " lockstep hashes");
+                Assert.That(role[i].nativeRng, Is.EqualTo(brute[i].nativeRng), label + " native RNG");
+                Assert.That(role[i].legacyRng, Is.EqualTo(brute[i].legacyRng), label + " legacy RNG");
+                Assert.That(role[i].legacyCalls, Is.EqualTo(brute[i].legacyCalls), label + " legacy RNG calls");
+                Assert.That(role[i].candidates, Is.EqualTo(brute[i].candidates), label + " ordered candidate payload/handles");
+                Assert.That(role[i].candidateCount, Is.EqualTo(brute[i].candidateCount), label + " candidate count");
+                Assert.That(role[i].entities, Is.EqualTo(brute[i].entities), label + " entities");
+                Assert.That(role[i].pendingSpawns, Is.EqualTo(brute[i].pendingSpawns), label + " pending OPoint");
+                Assert.That(role[i].spawnIdentity, Is.EqualTo(brute[i].spawnIdentity), label + " spawned slot identities");
+                Assert.That(role[i].observations, Is.EqualTo(1), label + " Role observation coverage");
+                Assert.That(brute[i].observations, Is.EqualTo(1), label + " Brute observation coverage");
+                Assert.That(role[i].candidates, Is.Not.Null.And.Not.Empty, label);
+                Assert.That(brute[i].candidates, Is.Not.Null.And.Not.Empty, label);
+                Assert.That(role[i].actualMode, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(brute[i].actualMode, Is.EqualTo((int)CollisionFormalCollectorMode.ForceBruteForce), label);
+                Assert.That(role[i].aborted || brute[i].aborted, Is.False, label + " whole collection fallback");
+            }
+            Assert.That(role.Sum(row => row.candidateCount), Is.GreaterThan(0), "must exercise nonempty candidates");
+            if (shape == "OPointBurst")
+            {
+                Assert.That(role[0].entities, Is.EqualTo(1000), "queued production OPoint must materialize during Driver tick1");
+                Assert.That(role[0].pendingSpawns, Is.Zero);
+            }
+        }
+
+
+        [TestCase("Dispersed")]
+        [TestCase("Combat")]
+        [TestCase("Concentrated")]
+        [TestCase("OPointBurst-shaped")]
+        [TestCase("OPointBurst-shaped", true, Explicit = true)]
+        [Timeout(120000)]
+        public void H06RoleAdmission_FourShapeCollectorZeroGc(string shape, bool phaseDiagnostic = false)
+        {
+            Type fixture = typeof(NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests);
+            const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic;
+            MethodInfo makeFrame = fixture.GetMethod("MakeFrame", flags);
+            MethodInfo create = fixture.GetMethod("CreateCharacter", flags);
+            MethodInfo register = fixture.GetMethod("Register", flags);
+            var itr = new InteractionArea
+            {
+                kind = 0, vrest = 1, x = shape == "Dispersed" ? 10000 : -16,
+                y = -5, w = shape == "Dispersed" ? 10 : 32, h = 10, zwidth = 15,
+            };
+            var frame = (LF2FrameData)makeFrame.Invoke(null, new object[]
+            {
+                itr, new BodyBox { kind = 0, x = 0, y = -5, w = 10, h = 10 },
+            });
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 1100,
+                CollisionBroadphaseBackend.LooseQuadtree);
+            var participants = new LF2Entity[1000];
+            try
+            {
+                for (int slot = 0; slot < participants.Length; slot++)
+                {
+                    var entity = (LF2Character)create.Invoke(null, new object[]
+                    {
+                        "H06Collector_" + shape + "_" + slot, 1, frame,
+                        shape == "OPointBurst-shaped" && slot >= 760,
+                    });
+                    participants[slot] = entity;
+                    int columns = shape == "Combat" ? 50 : shape == "Concentrated" ? 20 : 40;
+                    int x = shape == "Dispersed" ? slot * 20 :
+                        slot % columns * (shape == "Combat" ? 20 : shape == "Concentrated" ? 1 : 16);
+                    int z = shape == "Dispersed" ? 0 :
+                        slot / columns * (shape == "Combat" ? 30 : shape == "Concentrated" ? 1 : 20);
+                    register.Invoke(null, new object[] { world, entity, slot, slot < 500 ? 1 : 2, x });
+                    entity.Runtime.SetPosition(x, 0, z);
+                    entity.Runtime.SyncIntegerPosition();
+                }
+                var query = (BruteForceSceneQuery)world.SceneQuery;
+                query.PrepareBattleCapacity(1000, 3, 2);
+                Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+                Assert.That(query.BeforeCollisionCandidateStoreFinalCompareForSelfCheck, Is.Null);
+                Action collect = () =>
+                {
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                };
+                for (int i = 0; i < 4; i++)
+                {
+                    world.Rng.Seed(1314149188u);
+                    collect();
+                }
+                object[] arrays = ReadDepthRejectPreparedArrays(query);
+                int[] capacities = { query.BruteExactParticipantCapacityForDiagnostics,
+                    query.BruteExactItrCapacityForDiagnostics, query.BruteExactBodyCapacityForDiagnostics };
+                world.RuntimeCapacity.Seal();
+                long rejectedBefore = world.RuntimeCapacity.RejectedGrowthCount;
+                var results = new BattleScopedGcAllocationRecorder.ScopeResult[8];
+                var pairs = new int[8];
+                var fallbacks = new int[8];
+                using var recorder = new BattleScopedGcAllocationRecorder(phaseDiagnostic ? 4096 : 256);
+                var before = recorder.Calibrate();
+                if (phaseDiagnostic)
+                {
+                    var diagnostic = new List<object>();
+                    foreach (CollisionFormalCollectorMode mode in new[]
+                        { CollisionFormalCollectorMode.Configured, CollisionFormalCollectorMode.ForceBruteForce })
+                    {
+                        query.FormalCollectorMode = mode;
+                        for (int warm = 0; warm < 4; warm++)
+                            collect();
+                        for (int sample = 0; sample < 8; sample++)
+                        {
+                            world.Rng.Seed(1314149188u);
+                            recorder.Begin();
+                            world.CaptureCollisionFrameSnapshotsAll();
+                            var snapshot = recorder.End();
+                            bool marker = h06CollectorCallsiteCapture && mode == CollisionFormalCollectorMode.Configured;
+                            if (marker)
+                                UnityEngine.Profiling.Profiler.BeginSample("H06.RoleCollector.AllocationLocalization");
+                            recorder.Begin();
+                            BattleScopedGcAllocationRecorder.ScopeResult collection;
+                            try
+                            {
+                                world.CollectCollisionCandidatesAll();
+                            }
+                            finally
+                            {
+                                collection = recorder.End();
+                                if (marker)
+                                    UnityEngine.Profiling.Profiler.EndSample();
+                            }
+                            recorder.Begin();
+                            world.EndCollisionCandidateConsumption();
+                            var end = recorder.End();
+                            diagnostic.Add(new { mode, sample, snapshot, collection, end });
+                        }
+                    }
+                    var diagnosticAfter = recorder.Calibrate();
+                    SaveNew(shape + "-gc-phase-diagnostic.json", new
+                    {
+                        scope = "allocation localization only; not a zero-GC admission pass",
+                        recorder.Unit, before, after = diagnosticAfter, diagnostic,
+                    }, H06AdmissionOutput);
+                    Assert.That(before.passed && diagnosticAfter.passed, Is.True);
+                    return;
+                }
+                for (int i = 0; i < results.Length; i++)
+                {
+                    world.Rng.Seed(1314149188u);
+                    bool began = recorder.Begin();
+                    try
+                    {
+                        collect();
+                    }
+                    finally
+                    {
+                        results[i] = recorder.End();
+                    }
+                    Assert.That(began, Is.True);
+                    pairs[i] = query.LastFormalPairCountForDiagnostics;
+                    fallbacks[i] = query.LastFormalFallbackParticipantCountForDiagnostics;
+                    Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+                    Assert.That(query.LastFormalCollectorModeForDiagnostics,
+                        Is.EqualTo(CollisionFormalCollectorMode.ForceRoleAware));
+                    object[] actual = ReadDepthRejectPreparedArrays(query);
+                    for (int j = 0; j < arrays.Length; j++)
+                        Assert.That(actual[j], Is.SameAs(arrays[j]));
+                    Assert.That(new[] { query.BruteExactParticipantCapacityForDiagnostics,
+                        query.BruteExactItrCapacityForDiagnostics, query.BruteExactBodyCapacityForDiagnostics },
+                        Is.EqualTo(capacities));
+                }
+                var after = recorder.Calibrate();
+                SaveNew(shape + "-collector-gc.json", new
+                {
+                    scope = "Configured adaptive Role collector only; no hook/AI/Driver/natural OPoint; 4 warm + 8 measured",
+                    recorder.Unit, recorder.Marker, recorder.Capacity, before, after, results, pairs, fallbacks,
+                    capacities, rejectedBefore, rejectedAfter = world.RuntimeCapacity.RejectedGrowthCount,
+                }, H06AdmissionOutput);
+                Assert.That(world.RuntimeCapacity.RejectedGrowthCount, Is.EqualTo(rejectedBefore));
+                for (int i = 0; i < results.Length; i++)
+                    Assert.That(BattleScopedGcAllocationRecorder.HasZeroEvents(results[i], before, after),
+                        Is.True, shape + " calibrated collector GC scope " + i);
+            }
+            finally
+            {
+                world.RuntimeCapacity.Unseal();
+                foreach (LF2Entity entity in participants)
+                    if (entity != null)
+                        world.Unregister(entity);
+                Assert.That(world.ObjectCount, Is.Zero);
+                Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.Zero);
+            }
+        }
+        private sealed class H06AdmissionRow
+        {
+            public int tick, entities, actualMode, candidateCount, fallbackParticipants, pendingSpawns, observations;
+            public bool aborted;
+            public string input, state, lockstep, nativeRng, candidates, candidateSource, spawnIdentity;
+            public uint legacyRng;
+            public ulong legacyCalls;
+        }
+
+        private static H06AdmissionRow[] RunH06Admission(string shape, CollisionBroadphaseBackend backend)
+        {
+            var rows = new H06AdmissionRow[32];
+            WithRoleDriverScenario(RuntimeRoot, RoleSakuraScenario, BattleRuntimeProfile.MobileExtended, 32,
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    var query = (BruteForceSceneQuery)world.SceneQuery;
+                    Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+                    Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(backend));
+                    Assert.That(world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics, Is.False, "95 remains OFF");
+                    Assert.That(query.EnableRoleEndpointSnapshotReuseForDiagnostics ||
+                        query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics ||
+                        query.EnableRoleSnapshotFrameReuseForDiagnostics ||
+                        query.EnableRoleCapacityRecordGuardForDiagnostics, Is.False);
+                    ProductionEntityStressMode layout = shape == "Dispersed" ?
+                        ProductionEntityStressMode.Dispersed1000 : ProductionEntityStressMode.Combat1000;
+                    PrepareThousandAi(world, layout, 1, shape == "OPointBurst" ? 984 : 1000);
+                    if (shape == "Concentrated")
+                    {
+                        for (int slot = 0; slot < 1000; slot++)
+                        {
+                            LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
+                            double x = 500 + slot % 20, z = 400 + slot / 20;
+                            entity.Runtime.SetPosition(x, 0, z);
+                            entity.Runtime.SyncIntegerPosition();
+                            entity.Runtime.SetSourceRulePosition(x, z);
+                            entity.Runtime.SyncSourceRuleIntegerPosition();
+                        }
+                    }
+                    object[] arrays = ReadDepthRejectPreparedArrays(query);
+                    int[] capacities = { query.BruteExactParticipantCapacityForDiagnostics,
+                        query.BruteExactItrCapacityForDiagnostics, query.BruteExactBodyCapacityForDiagnostics };
+                    var store = (CollisionCandidateStore)typeof(BruteForceSceneQuery)
+                        .GetField("_candidateStoreShadow", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(query);
+                    var legacy = (Dictionary<LF2Entity, List<SceneQueryHit>>)typeof(BruteForceSceneQuery)
+                        .GetField("_candidateCache", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(query);
+                    int current = 0, observations = 0;
+                    query.BeforeCollisionCandidateStoreFinalCompareForSelfCheck = () =>
+                    {
+                        rows[current].observations++;
+                        Assert.That(rows[current].observations, Is.EqualTo(1), "duplicate candidate observation");
+                        var payload = new List<object>();
+                        int count = 0;
+                        for (int slot = 0; slot < world.MaxRuntimeSlotsForServices; slot++)
+                        {
+                            LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
+                            if (entity == null || !world.TryGetCurrentRuntimeHandleForDiagnostics(slot, entity, out RuntimeEntityHandle handle))
+                                continue;
+                            CollisionCandidateStoreEntry[] hits;
+                            if (store.TryGetBuildingAttackerRowForCompare(handle, out int candidates))
+                            {
+                                rows[current].candidateSource = "Store";
+                                hits = new CollisionCandidateStoreEntry[candidates];
+                                for (int j = 0; j < candidates; j++)
+                                    Assert.That(store.TryGetBuildingCandidateForCompare(handle, j, out hits[j]), Is.True);
+                            }
+                            else if (legacy.TryGetValue(entity, out List<SceneQueryHit> sequence))
+                            {
+                                rows[current].candidateSource = "LegacyLists";
+                                candidates = sequence.Count;
+                                hits = new CollisionCandidateStoreEntry[candidates];
+                                for (int j = 0; j < candidates; j++)
+                                {
+                                    SceneQueryHit hit = sequence[j];
+                                    Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(
+                                        hit.TargetSlot, hit.Target, out RuntimeEntityHandle target), Is.True);
+                                    hits[j] = new CollisionCandidateStoreEntry(hit.TargetSlot, target,
+                                        hit.BodyX, hit.ItrIndex, hit.RuntimeItr, hit.ZeroAttackerHpOnConsume,
+                                        hit.ReleaseHeavyHeldTargetOnConsume, hit.PairSnapshot);
+                                }
+                            }
+                            else
+                                continue;
+                            count += candidates;
+                            payload.Add(new { attacker = handle, hits });
+                        }
+                        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload));
+                        using var sha = SHA256.Create();
+                        rows[current].candidates = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "");
+                        rows[current].candidateCount = count;
+                        observations++;
+                    };
+                    try
+                    {
+                        for (current = 0; current < 32; current++)
+                        {
+                            rows[current] = new H06AdmissionRow { tick = current + 1 };
+                            if (shape == "OPointBurst" && current == 0)
+                            {
+                                Assert.That(world.ObjectCount, Is.EqualTo(984));
+                                for (int slot = 984; slot < 1000; slot++)
+                                {
+                                    Assert.That(world.FindEntityByRuntimeSlotForQuery(slot), Is.Null, "reserved burst slot=" + slot);
+                                    world.LogicObjectPointRuntime.EnqueueCreateObject(new OPointCreateTask
+                                    {
+                                        targetWorld = world, requiredRuntimeSlot = slot,
+                                        parent = world.FindEntityByRuntimeSlotForQuery(slot & 1),
+                                        dir = (slot & 1) == 0 ? "right" : "left",
+                                        nativeWeaponPieceSpawn = true, relationTeam = (slot & 1) + 1,
+                                        team = (slot & 1) + 1, useExplicitRelationIdentity = true,
+                                        preserveActionZero = true,
+                                        useDirectRuntimePosition = true, directX = 500 + slot % 20, directZ = 420,
+                                        opoint = new ObjectPoint { oid = 1, action = 0 },
+                                    });
+                                }
+                            }
+                            Assert.That(driver.StepOneTick(inputs[current], true, false), Is.True);
+                            H06AdmissionRow row = rows[current];
+                            Assert.That(row.observations, Is.EqualTo(1), "capture exactly once tick=" + row.tick);
+                            Assert.That(row.candidateSource, Is.Not.Null, "actual candidate producer must be observed");
+                            row.input = JsonConvert.SerializeObject(inputs[current]);
+                            row.state = JsonConvert.SerializeObject(world.CaptureExtendedChecksumSnapshot(current + 1, inputs[current]).Hashes);
+                            row.lockstep = JsonConvert.SerializeObject(world.CaptureLockstepChecksumSnapshot(current + 1, inputs[current]).Hashes);
+                            row.nativeRng = JsonConvert.SerializeObject(world.NativeRandom.CaptureScalarState());
+                            row.legacyRng = world.Rng.State;
+                            row.legacyCalls = world.Rng.CallCount;
+                            row.entities = world.ObjectCount;
+                            row.actualMode = (int)query.LastFormalCollectorModeForDiagnostics;
+                            row.aborted = query.LastFormalCollectionAbortedForDiagnostics;
+                            row.fallbackParticipants = query.LastFormalFallbackParticipantCountForDiagnostics;
+                            row.pendingSpawns = world.LogicObjectPointRuntime.PendingTaskCountForDiagnostics;
+                            if (shape == "OPointBurst")
+                            {
+                                var spawned = new List<object>(16);
+                                for (int slot = 984; slot < 1000; slot++)
+                                {
+                                    LF2Entity child = world.FindEntityByRuntimeSlotForQuery(slot);
+                                    Assert.That(child, Is.TypeOf<LF2Character>(), "spawned slot=" + slot);
+                                    Assert.That(child.ObjectId, Is.EqualTo(1), "spawned oid slot=" + slot);
+                                    Assert.That(child.Team, Is.EqualTo((slot & 1) + 1), "spawned team slot=" + slot);
+                                    Assert.That(child.RelationTeam, Is.EqualTo((slot & 1) + 1), "spawned relation slot=" + slot);
+                                    Assert.That(world.TryGetCurrentRuntimeHandleForDiagnostics(slot, child,
+                                        out RuntimeEntityHandle handle), Is.True);
+                                    spawned.Add(new { handle, child.ObjectId, child.Team, child.RelationTeam });
+                                }
+                                row.spawnIdentity = JsonConvert.SerializeObject(spawned);
+                                Assert.That(row.pendingSpawns, Is.Zero, "OPoint queue drained tick=" + row.tick);
+                            }
+                            object[] actualArrays = ReadDepthRejectPreparedArrays(query);
+                            for (int i = 0; i < arrays.Length; i++)
+                                Assert.That(actualArrays[i], Is.SameAs(arrays[i]), "prepared array tick=" + row.tick);
+                            Assert.That(new[] { query.BruteExactParticipantCapacityForDiagnostics,
+                                query.BruteExactItrCapacityForDiagnostics, query.BruteExactBodyCapacityForDiagnostics }, Is.EqualTo(capacities));
+                        }
+                        Assert.That(observations, Is.EqualTo(32), "every actual collection must be observed");
+                    }
+                    finally
+                    {
+                        query.BeforeCollisionCandidateStoreFinalCompareForSelfCheck = null;
+                    }
+                }, true, backend);
+            return rows;
+        }
 
         private const string RoleGroupSnapshotDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/";
 
@@ -1764,7 +2248,8 @@ namespace NTSD.Test.Editor
 
         private static void WithRoleDriverScenario(string runtimeRoot, string scenario,
             BattleRuntimeProfile profile, int ticks,
-            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify, bool useProjectMode)
+            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify, bool useProjectMode,
+            CollisionBroadphaseBackend backend = CollisionBroadphaseBackend.BruteForce)
         {
             if (scenario != RoleSakuraScenario)
             {
@@ -1809,7 +2294,7 @@ namespace NTSD.Test.Editor
             {
                 var driver = (SimulationTickDriver)driverType.GetProperty("Driver", instance).GetValue(driverScope);
                 var settings = new BattleRuntimeWorldSettings(profile,
-                    BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity, BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities);
+                    BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity, BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities, backend);
                 Assert.That(driver.TryConfigureEmptyDiagnosticWorld(settings, BattleAiExecutionProfile.DataOrientedCanonical,
                     out string reason), Is.True, reason);
                 world = driver.World;
@@ -2136,10 +2621,11 @@ namespace NTSD.Test.Editor
             return result.ToArray();
         }
 
-        private static void PrepareThousandAi(SimulationWorld world, ProductionEntityStressMode mode, int objectId = 2)
+        private static void PrepareThousandAi(SimulationWorld world, ProductionEntityStressMode mode, int objectId = 2,
+            int participantCount = 1000)
         {
             Assert.That(world.AiExecutionProfile, Is.EqualTo(BattleAiExecutionProfile.DataOrientedCanonical));
-            for (int index = 0; index < 1000; index++)
+            for (int index = 0; index < participantCount; index++)
             {
                 LF2Entity entity = index < 2 ? world.FindEntityByRuntimeSlotForQuery(index) :
                     world.LogicEntityFactory.Create(new OPointCreateTask
@@ -2168,9 +2654,9 @@ namespace NTSD.Test.Editor
                 character.Runtime.SetSourceRulePosition(position.x, position.z);
                 character.Runtime.SyncSourceRuleIntegerPosition();
             }
-            Assert.That(world.ObjectCount, Is.EqualTo(1000));
+            Assert.That(world.ObjectCount, Is.EqualTo(participantCount));
             Assert.That(Enumerable.Range(0, 1000).Select(world.FindEntityByRuntimeSlotForQuery)
-                .OfType<LF2Character>().Count(value => value.AiControlled), Is.EqualTo(1000));
+                .OfType<LF2Character>().Count(value => value.AiControlled), Is.EqualTo(participantCount));
         }
 
         private static void CompareRoot(SimulationWorld world, JObject native, int tick)

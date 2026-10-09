@@ -1,0 +1,69 @@
+{
+  "operation_id": "NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009",
+  "started_at": "2026-10-09T21:49:58.292622+08:00",
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "pid": 93396,
+  "existing_documents": [
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "type": "Markdown document",
+      "bytes": 6639,
+      "sha256": "78DBDBBC6AA1F598C693C15F13CC05879B262F819C573171E6BE2CEE13F2E3B0",
+      "git_tracked": false,
+      "git_status": "?? docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/docs__ai__OPTIMIZATION-REVIEW-20261009__README.md",
+      "backup_sha256": "78DBDBBC6AA1F598C693C15F13CC05879B262F819C573171E6BE2CEE13F2E3B0"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "type": "Markdown document",
+      "bytes": 7322,
+      "sha256": "FB11C3D33C66BBC2BB3F12AC920E260302D8283F768FD6C7155BB20EFEEF6E7B",
+      "git_tracked": true,
+      "git_status": "M Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__android-mobile-readiness__h-06-collision-broadphase-1000.md",
+      "backup_sha256": "FB11C3D33C66BBC2BB3F12AC920E260302D8283F768FD6C7155BB20EFEEF6E7B"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "type": "Markdown document",
+      "bytes": 221153,
+      "sha256": "AA01D72531DFA13B22AE83518DDF698CA0CFA01E1D16AA8B3681BCCD66817DE1",
+      "git_tracked": true,
+      "git_status": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "backup_sha256": "AA01D72531DFA13B22AE83518DDF698CA0CFA01E1D16AA8B3681BCCD66817DE1"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "type": "Markdown document",
+      "bytes": 40789,
+      "sha256": "DBB582ACB6A12ECC85AFFEF867CBE7D3F2310FE1DDEF342F3E8603C36846BE53",
+      "git_tracked": true,
+      "git_status": "M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/Assets__NTSD__Docs__android-mobile-readiness-priority-risk-register.md",
+      "backup_sha256": "DBB582ACB6A12ECC85AFFEF867CBE7D3F2310FE1DDEF342F3E8603C36846BE53"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "type": "Markdown document",
+      "bytes": 137805,
+      "sha256": "85BC7C1B2CA290EA050D1B1A4F10A2C459DE6E8555DE3C6FEB40FF00DBA8226B",
+      "git_tracked": true,
+      "git_status": "M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/before/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "backup_sha256": "85BC7C1B2CA290EA050D1B1A4F10A2C459DE6E8555DE3C6FEB40FF00DBA8226B"
+    }
+  ],
+  "new_documents": [
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md"
+  ],
+  "protected_count": 3014,
+  "staged_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+}

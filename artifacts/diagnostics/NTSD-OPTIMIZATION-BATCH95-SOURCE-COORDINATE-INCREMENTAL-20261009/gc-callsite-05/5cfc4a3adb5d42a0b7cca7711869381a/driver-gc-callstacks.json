@@ -1,0 +1,65 @@
+{
+  "evidence": "HEADLESS_DRIVER_CALLSITE_ONLY; no performance or zero-GC acceptance",
+  "marker": "NTSD.Optimization.Batch95.HeadlessDriver.GC",
+  "first": 0,
+  "last": 1,
+  "previousLastFrame": -1,
+  "envelopes": 0,
+  "stacksResolved": true,
+  "tick": 17,
+  "actualAi": 1000,
+  "gcScope": {
+    "valid": true,
+    "calibratedBefore": true,
+    "saturated": false,
+    "wrapped": false,
+    "sampleCount": 3,
+    "allocationEvents": 3,
+    "rawValueTotal": 90600
+  },
+  "gcBefore": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 200
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "gcAfter": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 11700
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "allocations": []
+}

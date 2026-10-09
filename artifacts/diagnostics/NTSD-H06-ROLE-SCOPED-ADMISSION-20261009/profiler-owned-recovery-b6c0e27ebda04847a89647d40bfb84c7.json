@@ -1,0 +1,27 @@
+{
+  "before": {
+    "enabled": true,
+    "driverEnabled": false,
+    "binary": false,
+    "logFile": "",
+    "allocationCallstacks": true,
+    "cpuArea": true,
+    "profileEditor": true,
+    "deepProfiling": false,
+    "memoryRecordMode": 1,
+    "maximumBufferedBytes": 536870912
+  },
+  "after": {
+    "enabled": false,
+    "driverEnabled": false,
+    "binary": false,
+    "logFile": "",
+    "allocationCallstacks": false,
+    "cpuArea": false,
+    "profileEditor": false,
+    "deepProfiling": false,
+    "memoryRecordMode": 0,
+    "maximumBufferedBytes": 536870912
+  },
+  "limitation": "Initial recording=false was checked; original profileEditor/callstack values were not persisted. Reset these owned toggles to false, not certified exact restoration."
+}

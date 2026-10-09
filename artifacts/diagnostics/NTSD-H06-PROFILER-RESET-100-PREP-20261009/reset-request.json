@@ -1,0 +1,9 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.H06CollectorPreparationEditorTests.ClearAuthorizedProfilerHistory"
+    ]
+  }
+}

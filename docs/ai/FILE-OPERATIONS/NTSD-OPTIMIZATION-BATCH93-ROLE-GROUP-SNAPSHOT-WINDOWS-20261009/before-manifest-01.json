@@ -1,0 +1,236 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009",
+  "change": "NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093",
+  "status": "PLANNED",
+  "timestamp": "2026-10-09T12:04:33.4870130+08:00",
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "editorPid": 74724,
+  "editorPort": 6402,
+  "originalScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+  "originalRootCount": 8,
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "6B01A2B69E84A74E09DCA4FB35AAB4CE7070622340494FA9A2FD79D3D13D52FE",
+      "bytes": 436633,
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "5E47A2772037F90C344DECD7AD7C5B00931789BB6A0D5885C02CABB9226EC089",
+      "bytes": 1649404,
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/STATE.md",
+      "firstLine": "> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "16340F99F9323E4F0E1E3620C3E4C897FAFFB35EFC47860FE8C5C5FBD6BF2CEB",
+      "bytes": 741914,
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/CHANGE-LEDGER.md",
+      "firstLine": "> 第92批 FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / DRIVER_QUALIFIED / DEFAULT_OFF：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092。V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），真实Driver8/8、88paired/176step checksum与双完整RNG同；Sakura1000AI两32tick均actualAI1000/Role/noabort，ON拒绝D576450/C515802，数组/容量稳定、owner恢复/关闭三0/Menu clean8。71执行/阶段5of6/34父0/H07 FAIL/Goal active，未做真实成本/FPS/fullDriver0GC或推广。下一独立准确OFF/ON短窗，不重试本资格/局部或旧无收益候选；[92报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md)。下方为历史快照。"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "EFD26BC18E72C2F93E2ECDBFF0B3B462FE9E6531EE99E1EFA2D99C348CF1698C",
+      "bytes": 130177,
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "firstLine": "> Operation NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009 / VERIFIED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。只更正暂停触发条件，非优化第100批。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "9F195C5B581C5CE08D4BEF55EFD4F5AAC05E62842183E1DD1175DB2A0258374D",
+      "bytes": 1583353,
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "FED5E9A75922635671FAB09450EB83635420958FEDDA9D3A7BB7F58CE6997BAC",
+      "bytes": 204862,
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "firstLine": "> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "3D5B09FDA1838EAAD871B75398428AB9F778C83CD9FBE013C279139DF8E0E1E6",
+      "bytes": 7193366,
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Temp/Goal18_LastTestResults.xml",
+      "firstLine": "<test-suite type=\"TestSuite\" id=\"13086\" name=\"NTSD\" fullname=\"NTSD\" runstate=\"Runnable\" testcasecount=\"10439\" result=\"Passed\" start-time=\"2026-10-09 02:51:09Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"489.893381\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"Assembly\" id=\"25131\" name=\"Assembly-CSharp-Editor.dll\" fullname=\"I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll\" runstate=\"Runnable\" testcasecount=\"10431\" result=\"Passed\" start-time=\"2026-10-09 02:51:09Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"489.730018\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties><property name=\"_PID\" value=\"74724\" /><property name=\"_APPDOMAIN\" value=\"Unity Child Domain\" /><property name=\"platform\" value=\"EditMode\" /></properties><test-suite type=\"TestSuite\" id=\"25132\" name=\"NTSD\" fullname=\"NTSD\" runstate=\"Runnable\" testcasecount=\"10431\" result=\"Passed\" start-time=\"2026-10-09 02:51:09Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"489.636039\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestSuite\" id=\"25140\" name=\"Test\" fullname=\"NTSD.Test\" runstate=\"Runnable\" testcasecount=\"9638\" result=\"Passed\" start-time=\"2026-10-09 02:51:09Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"489.503298\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestSuite\" id=\"25141\" name=\"Editor\" fullname=\"NTSD.Test.Editor\" runstate=\"Runnable\" testcasecount=\"6385\" result=\"Passed\" start-time=\"2026-10-09 02:51:09Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"489.112684\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestFixture\" id=\"17279\" name=\"BattleBruteProductionAdmissionEditorTests\" fullname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" classname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" runstate=\"Runnable\" testcasecount=\"84\" result=\"Passed\" start-time=\"2026-10-09 02:51:10Z\" end-time=\"2026-10-09 02:59:19Z\" duration=\"488.690617\" total=\"8\" passed=\"8\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:12806 (active clients: 1)"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha": "9C3AC5FC6C3B18D2DC37106A505F8911C4A555DC66B77DDD9A9253887AE6686C",
+      "bytes": 534,
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/Temp/NTSD_ProductionEntityStress.result",
+      "firstLine": "PASS"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha": "EB14101124D7A98E4AF371BD3782156341F72A712952633DDFE0574022698532",
+      "bytes": 47479,
+      "git": [
+        " M docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "firstLine": "# NTSD 有限首阶段优化执行合同（完成边界更正）"
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-manifest-01.json",
+      "sha": "83B01F4B96181D99422D412321E22C342B21A1D284D734DA0598590A607E2F3C"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result",
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+  ],
+  "additionalGuards": [
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha": "EB14101124D7A98E4AF371BD3782156341F72A712952633DDFE0574022698532",
+      "bytes": 47479
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha": "5E47A2772037F90C344DECD7AD7C5B00931789BB6A0D5885C02CABB9226EC089",
+      "bytes": 1649404
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "EFD26BC18E72C2F93E2ECDBFF0B3B462FE9E6531EE99E1EFA2D99C348CF1698C",
+      "bytes": 130177
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "9F195C5B581C5CE08D4BEF55EFD4F5AAC05E62842183E1DD1175DB2A0258374D",
+      "bytes": 1583353
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "FED5E9A75922635671FAB09450EB83635420958FEDDA9D3A7BB7F58CE6997BAC",
+      "bytes": 204862
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "exists": true,
+      "sha": "6D9F5A7C6642EE72DC874E0E5E956CEA6D99C4839A857AD8DF7350BB5F640F39",
+      "bytes": 31865
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md",
+      "exists": true,
+      "sha": "4ACFFAA9286221146F61F5533342318F2B8402B0238A23B2D5B2D7D61BE3EA60",
+      "bytes": 5169
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "83B01F4B96181D99422D412321E22C342B21A1D284D734DA0598590A607E2F3C",
+      "bytes": 7105
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha": "16C43FF85E2D6FDE6D746C04996DD4CE52658B07D8AF50073BFEEA2F872C843A",
+      "bytes": 46176
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/STATE.md",
+      "exists": true,
+      "sha": "758F0FB7AEFC519B0CD12CB74B8127461B44D723BC72528EB652975C5EF19125",
+      "bytes": 1648430
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "69BD8D4A7FA53A5CCBBE8889757497DE654E8FF53D73F7CE517ED2992F0ED16B",
+      "bytes": 128973
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "4EFE47612E6DD707A72BEEAD362DAF0B504A6675BB810B93673844D2A352A89F",
+      "bytes": 1582345
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "7DFD347E2EC45994A2B8B582D35B96EB710DF16984CEB988F0CD27093E511577",
+      "bytes": 203856
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "exists": true,
+      "sha": "E1E09D8192E2B0025CE06C740E1C1C11050A011A8BCB9A08D8E7E56434539F48",
+      "bytes": 30642
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/after-manifest-01.json",
+      "exists": true,
+      "sha": "EBE9C90578AEAE31CF56747652D2BE4518A9F274C11BE24B3EBEA9C966A1109D",
+      "bytes": 4441
+    },
+    {
+      "path": ".codex/config.toml",
+      "exists": true,
+      "sha": "B8A26BFCB61C44ED0DB4EDC7F7F67B59399A742FFA0D0B5A2F9BFC93B3A16720",
+      "bytes": 574
+    }
+  ],
+  "protectedCount": 1049,
+  "drift": [],
+  "latestCompletedBatchNumber": 92,
+  "actualOptimizationBatches": 71,
+  "newFrozenTests": 24,
+  "regressionTestsExpected": 61
+}

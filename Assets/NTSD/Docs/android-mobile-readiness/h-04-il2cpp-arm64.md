@@ -1,3 +1,22 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-04 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 平台 / 中 |
+| 当前状态 | 待配置授权；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | 构建准备可独立；运行验收需要H-01内容和H-02可安装包 |
+| 下一步与具体方向 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+| 完成边界 | ABI/AOT构建与具名平台确定性通过；不等Android千人性能才确认ABI成果 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+## 原方案与历史证据（原始正文保留）
+
 # H-04 Android IL2CPP 与 ARM64 方案
 
 > 优先级：高  

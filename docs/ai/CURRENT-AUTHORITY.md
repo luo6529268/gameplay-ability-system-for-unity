@@ -1,3 +1,15 @@
+> 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+
+> 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+
+> 2026-10-09 准备/诊断已实测通过：`NTSD-H06-PROFILER-RESET-100-PREP-001` / VERIFIED（仅准备测试）；100对象三次collect各22event/40B，首managed frame FindEffect71，新raw成功导出，设置及原Scene恢复/保护合格。H06准入仍BLOCKED、Brute默认及95OFF保持，不恢复旧Goal，不计新增优化包。[Task](TASKS/NTSD-H06-PROFILER-RESET-100-PREP-20261009.md) / [报告](../../artifacts/diagnostics/NTSD-H06-PROFILER-RESET-100-PREP-20261009/REPORT.md)。下方IN_PROGRESS为本轮事前快照。
+
+> 2026-10-09 用户仅授权准备阶段：`NTSD-H06-PROFILER-RESET-100-PREP-001` / IN_PROGRESS。原Editor旧Profiler缓存清空＋100对象短分配定位；不改生产逻辑、不恢复自动目标，H06准入仍BLOCKED。 [Task](TASKS/NTSD-H06-PROFILER-RESET-100-PREP-20261009.md)。
+
+> 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Change: NTSD-H06-ROLE-SCOPED-ADMISSION-001；[证据](../../artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/REPORT.md)。
+
+> **2026-10-09 优化文档整理入口（不恢复执行）：** 用户授权整理总清单/单项方案/进度/依赖；本轮只改文档。[组织与规则](OPTIMIZATION-REVIEW-20261009/README.md)、[当前进度](../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)、[依赖](OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md)、[D1=A已批准](OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。34父项与旧证据保留；用户已批准D1=A：既有Role必要准入门通过后可先默认推广，H06/H07最终性能门不变；本会话仍未实施，H07仍FAIL；PERF/ATLAS/MONO/EXT-1保持原门。下方旧active/继续语句是历史，不得自动恢复；正式战斗规则不变；限定准入分阶段依D1=A，最终验收不降低。
+
 > **2026-10-06 阴影残留共用显示修复限定验收：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / SCOPED_SHADOW_DISPLAY_FIX_VERIFIED；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / VERIFIED。原 Editor 聚焦12/12＋既有几何self-check1/1通过；原saved Battle300tick，石头碎片central阴影20→0，仙法手里剑命中HP500→295、结束阴影0；有序关闭objects/slots/borrowers0，Scene clean/SHA不变。仅向下离开画面的非角色共用阴影显示门，不删仍活跃的native碎片，不改DAT/模拟/非战斗；受控释放/破碎入口，不称物理按键/随机掉落或正式EXE全World/GPU一致。旧总目标收尾保持，下方PLANNED为事前快照。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。
 
 > **2026-10-06 阴影残留定向任务：** NTSD28-BATTLE-SHADOW-RETIREMENT-20261006 / IN_PROGRESS；NTSD28-BATTLE-SHADOW-RETIREMENT-001 / PLANNED。用户报告武器破碎/投掷命中/技能消失残留阴影，只查共用生命周期和表现首差，先新聚焦测试；无生产结论，不改DAT/Scene/非战斗，旧总目标收尾及红线修复保持。 [Record](CHANGE-RECORDS/NTSD28-BATTLE-SHADOW-RETIREMENT-001.md)。

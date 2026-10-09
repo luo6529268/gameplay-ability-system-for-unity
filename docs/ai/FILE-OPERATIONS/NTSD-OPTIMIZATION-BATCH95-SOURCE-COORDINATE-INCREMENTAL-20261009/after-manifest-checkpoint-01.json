@@ -1,0 +1,169 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009",
+  "change": "NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095",
+  "status": "IN_PROGRESS_CHECKPOINT",
+  "observedAt": "2026-10-09T14:55:55.5459843+08:00",
+  "beforeManifest": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-manifest-01.json",
+  "audit": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-01.json",
+  "HEAD": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "Staged": [],
+  "guardCount": 1128,
+  "guardDrift": [],
+  "backups": 10,
+  "backupDrift": [],
+  "diffCheckExit": 0,
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "026823D0070C236E4EB352AC92777471470B6DED80FC3890AF15FD66262EF842",
+      "bytes": 315126,
+      "git": [
+        " M Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha": "7FB62EA1F3910D4352297423359DE9F9A92824668DA663B11B13BC88BF4983F6",
+      "bytes": 297920,
+      "git": [
+        " M Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+      "sha": "1B2B0C469365DE2821C7C87C05A648A2E314365CE4E5199C2A3BF1D9E3C0E589",
+      "bytes": 24072,
+      "git": [
+        " M Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "1DF4547AD0CFEE5E9B4F9402445751B7A331A5661CE80BFB5D700B71B2C6653A",
+      "bytes": 127903,
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha": "83553EBD425C78A71869218E3C8FED7E7FE786146D850BEF2B52230BDF11464A",
+      "bytes": 1653556,
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "2F9F237708348CB3F3E3815D8C5FCD87BFDB0735E71A6654A84DD99546C53831",
+      "bytes": 746066,
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "E472CA0384AF6D8EA35C8007B49362397E171BA9F3728CF9E18B8C36A4661C8B",
+      "bytes": 134328,
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "88A9C4A6DC0BDFE3427018C3EB313EB8FB19BD6528D8CB31F2E3752E64AEED72",
+      "bytes": 1587565,
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "D7C97B814049FB6EF2C0C7543908756D70D1EB81E42CC87788C151E5C3A6FBC9",
+      "bytes": 209169,
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "sha": "8F31FDCCC27B39E8A3D0689C694D193121CECB32E746153ABECB0C2E62FC10C3",
+      "bytes": 26099,
+      "git": []
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095.md",
+      "sha": "E6DFE9FF161057C9B36ADFB519629CE2F687AA5F33429C0632B0C249E95320C3"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009.md",
+      "sha": "B5EFDBEBBD50CF2B9A2CA80D8795BA72436A290EF39FDE2F670AC39EB13DD624"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\validator-checkpoint-01.json",
+      "sha": "132776968DF69335FB1A626CF89D6FBA0A5D0673EB75849937D8EB38B5B4E249"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\REPORT.md",
+      "sha": "50091B41821050FDFAEEBBE8584297CC4DDF51B9C4F24BD20F1C530A5B04411D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\red-02\\tests.xml",
+      "sha": "35F12BE8DCB04ECB2A6AE26E25C2939C5CEE1D5333015BEE456D5EFD03117178"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\red-02\\AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "380FEB6682C2BDF5BDC6DE31DD90447D48F9FE0F3EAB72E1C580990C2469B211"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\red-01\\tests.xml",
+      "sha": "31B3677B884ED0687A5F0A156BD9411C93139B892F5E9E45692BC8ABB9CDFDA7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\red-01\\AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "626D8A99B33D7395F1824B04067666B09AC003D7F46AC5B34AFAF24E18EC3F7B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-03\\tests.xml",
+      "sha": "8F31FDCCC27B39E8A3D0689C694D193121CECB32E746153ABECB0C2E62FC10C3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-03\\AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "1DF4547AD0CFEE5E9B4F9402445751B7A331A5661CE80BFB5D700B71B2C6653A"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\RECORD.md",
+      "sha": "D9DC4BC39BCF4CD54A6202BF1591D8BC7020BEAD0B3A4FCA47B43BDFC4B042E6"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\before-manifest-01.json",
+      "sha": "B1FC6EF247055835CEF45BDAA7F0CA842C5C663B28D3C119A2E3538F22EDFE96"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-02\\tests.xml",
+      "sha": "5EA0E8832F680EDDC79C2735746978FFFFB10F9C3C6ADD2FB7309C26F4D22CBB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-02\\AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "482007EA1428A792D7AB7847FBA8BD7E8F9CAAACDD837E184BD04A2BE523364C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-01\\tests.xml",
+      "sha": "D21A92C9150CB8DC5E7FC13901E82CA2DACDC08A8A733D29D08AF80403B78184"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\green-01\\AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "380FEB6682C2BDF5BDC6DE31DD90447D48F9FE0F3EAB72E1C580990C2469B211"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\compile-test-first-01.md",
+      "sha": "B13A0256379493B88B0010D4DF5854F29B5805F54027B3B39D4D34B98DAA9DCF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\audit-before-eof-fix-01.json",
+      "sha": "B2B8565F2223B7471C3B97713247F632E4F87A7EAC90AFC6BE5D2C2DF73C818F"
+    }
+  ]
+}

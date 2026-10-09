@@ -1,3 +1,30 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-07 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 验收 / 高 |
+| 当前状态 | PERFORMANCE_FAIL／执行已取消；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | 所选优化的实际成果；M-09/M-15指纹与H-09正确性，Android阶段另需H-02/H-04 |
+| 下一步与具体方向 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| 完成边界 | Windows两布局120+180冒烟后120+1800；P95<33ms、drop0、暖0GC及原容量/表现/关闭门；Android另判 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+子方案（不增加父项数量）：[H07-INPUT CharacterInput等价优化](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)；[H07-LATE 后续实体更新](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md)；[H07-GC95 第95批分配调用点](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md)；[H07-AI-MODE 独立千人AI策略](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md)。
+
+**口径更正：** 91/93实景有效scope零分配与95资格fixture分配失败分别保存；不推导GC导致P95。最新94完成/95未验收，H07仍FAIL，用户已取消自动执行。
+
+## 原方案与历史证据（原始正文保留）
+
+> 2026-10-09 用户澄清已生效（非新优化子批）：编号100只检查“优化方案是否落实清楚”，不要求届时性能达标。只有具体优化对象/改法/落地点、已落实与未落实、下一可执行动作仍不清楚，才完成在途取证/有序关闭/原Editor恢复后paused并交付外部评审、不进入101；方案清楚但性能未达则继续必要优化，性能FAIL不能单独触发暂停。性能门仅用于阶段完成，不能拿文档/测试/批次数代替方案落实。最新完成92/实际执行71，93未实施/未测试，Goal active、阶段5/6；H11选定CPU域已通过/H07性能FAIL事实不变。[执行合同8.1](../../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [更正留痕](../../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/RECORD.md)。
+
+> 历史摘要（语义已被上述用户澄清替代，非当前暂停规则）：2026-10-09 用户条件暂停门已登记（非新优化子批）：按批次编号100，不按实际执行100次。若第100批结束H07仍未达到既定Windows性能门或方案仍未落实清楚，完成在途作业/有序关闭并恢复Editor后，update_goal paused、交付现有方案及证据给用户外部评审，不进入101、不标complete/blocked。当前最新完成编号92、实际执行71；93只读准备，未改C#/启动窗口；Goal仍active、阶段5/6。H11选定CPU阶段已在86通过，不重新扩大它；H07仍FAIL。千人AI行为策略不因原版AI一致单一理由被排除，具体实现/模式边界另行准确声明，不视为已实施或普遍战斗规则豁免。[执行合同8.1](../../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md#81-用户批次100条件暂停与外部评审交接) / [留痕](../../../../docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/RECORD.md)。下方历史保留。
+
 > 2026-10-08 第52批 SCOPED_WINDOWS_AB_COMPLETED / MIXED_RESULT / COMBINATION_NOT_ADMITTED：NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052 / VERIFIED仅诊断；11RED→28/28＋四actual1000AI120+180 valid、elig300all/kind5OFF0ON300/restored、两布局20终态hash/snapshot同。分散logic92.624→117.744ms（变慢27.12%），混战79.295→76.518（减少3.50%）；ON P95162.293/113.060>33/drop1181/664/GC UNKNOWN，组合不推广，不重跑同窗找PASS。58guards/8副本/HEAD/source同、关闭0残留/Menu clean8roots idle。PairExactLoop仍约98%collector，下一有据更高杠杆、无collector/专项解冻；H07/H11 OPEN、阶段4/6、5/6产物、34父关闭0、22—52已执行31、Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md)。下方为历史。
 
 > 2026-10-08 第52批 PLANNED / COMBINED_REAL_GAIN_PENDING：NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052；只既有Suite新增组合4实景窗（elig全ON/kind5 OFF→ON），11新test-first＋15旧影响域；7dirty/58guards/自有Temp旧50PASS副本先核，默认/专项门不变。阶段4/6、5/6产物、34父关闭0、30已执行＋52PLANNED，Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-COMBINED-CACHE-WINDOWS-052.md)。下方为历史。
@@ -42,13 +69,13 @@
 
 > 优先级：高  
 > 状态：`OPEN / CURRENT_CERTIFICATE_MISSING / SCOPED_PRODUCTION_ADMISSION_PASS / PERFORMANCE_FAIL`
-> 最后更新：2026-10-07
-> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)。40已有Brute普通默认接入限定通过，千人logic83.435/85.775ms、P95 107.065/113.849ms，显示估算3.7—3.9FPS仍未达；无新完整证书。Android/其余专项门未解冻。
+> 最后更新：2026-10-09（用户澄清第100批只看方案落实清楚与否、不要求性能达标；本次无新测量）
+> 本轮共同合同与启动门：[2026-10-06复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)。最新已测91四短窗均未达，ON分散/集中logic P95 60.104435/57.298315ms、dropped315/308；92仅managed collector收益信号和真实千人Driver资格、default OFF，不能当成真实耗时收益。H11选定CPU域已在86通过；千人SetPass最近四窗5、中央CPU DrawMesh 2，非GPU batch/120FPS证书。Android/其余专项门未解冻；唯一当前进度见[总表](../battle-optimization-progress-tracker.md)。
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 当前六项首阶段完成边界
 
-[执行合同第0—8节](../../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)是当前入口。H07不再只以Windows报告交付判定阶段完成：按本文既有两正式窗口logic P95 <33ms、无持续backlog、正常dropped tick 0、warmup后logic 0 B/tick，capacity reject/central unresolved/stale/teardown残留0及适用正确性门判断。当前短窗性能FAIL，必须继续已批准路径有据优化，不因次数/修复轮数/窗口结束停目标。
+[执行合同第0—8节及8.1用户澄清后的方案暂停门](../../../../docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md)是当前入口。H07不再只以Windows报告交付判定阶段完成：按本文既有两正式窗口logic P95 <33ms、无持续backlog、正常dropped tick 0、warmup后logic 0 B/tick，capacity reject/central unresolved/stale/teardown残留0及适用正确性门判断。第100批只检查方案是否落实清楚：明确优化对象/改法/落地点、已落实与未落实、必要验证及下一动作；方案清楚但性能未达继续必要优化，只有方案仍未落实清楚才paused并交付外部评审、不进入101。性能FAIL不能单独触发暂停；上述性能门只决定阶段完成，不以报告交付或资格PASS改写。
 
 工具缺陷先修工具补必要证据；候选无效停止该候选推广，根据实测复盘/调整同范围方向，不反复采集旧窗口找PASS。事前声明准确Task/Change、调用路径及必要验证；既有Brute权限不自动授权Role-aware生产切换/新backend，但未批准推广不阻止其它范围内定位。真实新增权限才另请用户决定。
 

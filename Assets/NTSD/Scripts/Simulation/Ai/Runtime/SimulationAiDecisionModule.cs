@@ -223,6 +223,8 @@ namespace NTSD.Simulation
         internal bool UnifiedSnapshotExecutionCommittedThisPass { get; set; }
         internal bool UnifiedSnapshotExecutionConsumerStartedThisPass { get; set; }
         internal bool UnifiedSnapshotNoPendingRefreshSkip { get; set; } = true;
+        internal bool SourceCoordinateIncrementalRefresh { get; set; }
+        internal long SourceCoordinateIncrementalRefreshCount { get; set; }
         internal ulong UnifiedSnapshotPassEpoch { get; set; }
         internal bool UnifiedSnapshotPassAvailable { get; set; }
         internal bool UnifiedSnapshotPassFailureRecorded { get; set; }
@@ -1676,10 +1678,6 @@ namespace NTSD.Simulation
             if (!UnifiedSnapshotExecutionCommittedThisPass)
                 return;
 
-            // Source-rule position writes do not publish through the physical
-            // FrameMotionStore. Recapture this AI row at the existing boundary.
-            forceFullPostRefresh |= input.UseSourceRulePosition;
-
             AiUnifiedSnapshotExceptionStage stage =
                 AiUnifiedSnapshotExceptionStage.Refresh;
             try
@@ -1715,6 +1713,28 @@ namespace NTSD.Simulation
                 uint generation = rows.Generation[slot];
                 stage = AiUnifiedSnapshotExceptionStage.RefreshCapture;
                 ThrowUnifiedSnapshotExceptionForSelfCheck(stage);
+                bool incrementalSourceCoordinates = false;
+                if (input.UseSourceRulePosition)
+                {
+                    // Alignment contract: NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095.
+                    incrementalSourceCoordinates =
+                        SourceCoordinateIncrementalRefresh &&
+                        !forceFullPostRefresh &&
+                        entity.GetType() == typeof(LF2Character) &&
+                        entity.Runtime.SourceRulePositionInitialized &&
+                        rows.State[slot] == entity.GetState() &&
+                        rows.HitStop[slot] == entity.Runtime.HitStop;
+                    forceFullPostRefresh |= !incrementalSourceCoordinates;
+                    if (incrementalSourceCoordinates)
+                    {
+                        rowPublisher.PublishSourceRuleCoordinates(
+                            slot,
+                            generation,
+                            entity.Runtime.SourceRuleXInt,
+                            entity.Runtime.SourceRuleZInt);
+                    }
+                }
+
                 if (UnifiedSnapshotNoPendingRefreshSkip &&
                     !validateIncrementalRow &&
                     !forceFullPostRefresh &&
@@ -1836,6 +1856,8 @@ namespace NTSD.Simulation
                     entity,
                     slot,
                     generation);
+                if (incrementalSourceCoordinates)
+                    SourceCoordinateIncrementalRefreshCount++;
                 UnifiedExecutionRefreshCount++;
             }
             catch (Exception exception)
@@ -1911,9 +1933,9 @@ namespace NTSD.Simulation
                    rows.NativeAiProfileObjectId[slot] == runtime.NativeAiProfileObjectId &&
                    rows.DataObjectType[slot] == identity.DataObjectType &&
                    rows.InputHistoryGate[slot] == inputProjection.InputHistoryGate &&
-                   rows.X[slot] == frameMotion.X &&
+                   rows.X[slot] == (rows.UseSourceRulePosition ? runtime.SourceRuleXInt : frameMotion.X) &&
                    rows.Y[slot] == frameMotion.Y &&
-                   rows.Z[slot] == frameMotion.Z &&
+                   rows.Z[slot] == (rows.UseSourceRulePosition ? runtime.SourceRuleZInt : frameMotion.Z) &&
                    rows.Hp[slot] == vital.Hp &&
                    rows.Hp3[slot] == vital.Hp3 &&
                    rows.HpMax[slot] == vital.HpBound &&

@@ -352,6 +352,22 @@ namespace NTSD.Simulation.Ecs
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal void PublishSourceRuleCoordinates(
+            int slot,
+            uint generation,
+            int sourceX,
+            int sourceZ)
+        {
+            if (!active)
+                return;
+            ValidateRow(slot, generation);
+            BeginPending(slot);
+            pendingX[slot] = sourceX;
+            pendingZ[slot] = sourceZ;
+            pendingMask[slot] |= XBit | ZBit;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void PublishRelationLink(
             int slot,
             uint generation,

@@ -1,0 +1,319 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009",
+  "change": "NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094",
+  "status": "VERIFIED_SCOPE_ONLY",
+  "timestamp": "2026-10-09T13:57:24.4501322+08:00",
+  "beforeManifest": {
+    "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-manifest-01.json",
+    "sha": "000A528BEF1A623F8859ECF2C90F791793614D957CCFE04E1025A73E2C54E469"
+  },
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-manifest-01.json",
+      "sha": "000A528BEF1A623F8859ECF2C90F791793614D957CCFE04E1025A73E2C54E469"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "refs": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335",
+      "bytes": 407759
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "430CF2C263FD8A427AE2E605F891024A0893DF0960BEB2E941D43C11F84B1D07",
+      "bytes": 7343
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "8370EF5368DE03E2E212CE31D865C219F8C28219C37A19C46E9C191B4E38FE16",
+      "bytes": 489410
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "F9CCF09C67E6436D289709121EFF348F0E1A081987DDE0FC10D6B766A4EDAA10",
+      "bytes": 1652000
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "BEBB92F4EF50E43E39003E7EEC2194552A7332C8696206BC3A1E8D918C091854",
+      "bytes": 744510
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "C2E349F8BFA3D61ACAE53150603183DC7274063B58C4DFFD4558608AF87C66D1",
+      "bytes": 132769
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "C93F52A89E8D4D1F2BD71FD796E0B69BBE197940E77FB822AEFD58B2F3BADD6E",
+      "bytes": 1586006
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "D72C4DED483557086435E01062D6EC7790D250B9BB3AACDB0CCF964D4EF2F4E6",
+      "bytes": 207543
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "4C74A089A53552FF9659291C158E5F17CB0591A688CF26B9A32F7A573FF1E77E",
+      "bytes": 25207
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "000A528BEF1A623F8859ECF2C90F791793614D957CCFE04E1025A73E2C54E469",
+      "bytes": 21935
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/RECORD.md",
+      "exists": true,
+      "sha": "692336877FF622014306AB7351E66647B2F5CF6CCA12F02D0F3A92F9FAEAB0AF",
+      "bytes": 5597
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "E0DD57FC6A6794DD7B3BC3A59AF94E463407529E450FA1538A77986DAD9533C1",
+      "bytes": 206614
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "26565C6692F7FF511BDD9C2B2883C27F7B3F32226033509A3309DB2E4926BC02",
+      "bytes": 1584952
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "DCCCBF1F681D2E91A5F53E80339F212874BDDBEAEB02FCCCEDCC51E7E206015E",
+      "bytes": 401832
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "1888ADFC288F3FBDC61367CEFA095BAB9C39703BD2384595849BF70F0BAA380D",
+      "bytes": 4259
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "12C676059C85FC06E7D01A9E499510868A9A98C77B192F4B77121AAA116E7D40",
+      "bytes": 471195
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "653700FA603A90F79E32B999C7A1F48B6354CE7E9436EA5118A79F6C138A1DA6",
+      "bytes": 743459
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/STATE.md",
+      "exists": true,
+      "sha": "7DA3297086165D0114D3268A22BAD0F58A0448FAFE9B50B7FB188A55162AECA4",
+      "bytes": 1650949
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "9AA3BAC4D44BB5BC22BAD68A0331D97FD1825253921A044F2965E442AF644B41",
+      "bytes": 131715
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/before-01/Temp/Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "9784E9B5E9E8DDE095792A8BBAFE7BAB330131A56851B8F19C78A3EB3D78CF8A",
+      "bytes": 61004
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/REPORT.md",
+      "exists": true,
+      "sha": "5BF7DD3E1A7E2639F6F9F5A3EA4A2DD4236F2E33BD3293C8685B5C9C54B81FB6",
+      "bytes": 8034
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-02/tests.xml",
+      "exists": true,
+      "sha": "BD2D67910F43154DEF459C75C77F64CE622F37791E2C813B1EFA5AA4E73F2CAE",
+      "bytes": 26828
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-03-safety/tests.xml",
+      "exists": true,
+      "sha": "858798B5730FD17B4F17D6553FA1B7F7CAFC19C106A34804571880C31C180CAA",
+      "bytes": 24659
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-04-final/tests.xml",
+      "exists": true,
+      "sha": "4C74A089A53552FF9659291C158E5F17CB0591A688CF26B9A32F7A573FF1E77E",
+      "bytes": 25207
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "430CF2C263FD8A427AE2E605F891024A0893DF0960BEB2E941D43C11F84B1D07",
+      "bytes": 7343
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "84FE26D08DD80BCCDB4E8E30BC27A00F756F1F5E962CFF28DC73AC695FF32703",
+      "bytes": 407567
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "AEF8B61B2584E68ED6151027DB7FAF34783EA00D3512D65AABF60E4339F403E2",
+      "bytes": 487199
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/green-first-01/tests.xml",
+      "exists": true,
+      "sha": "520A46850B4B558D8E2E8746533CDF48C92A80516D893FB56C770B71CD0ED4E0",
+      "bytes": 27586
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/red-01/test-first.cs",
+      "exists": true,
+      "sha": "AEF8B61B2584E68ED6151027DB7FAF34783EA00D3512D65AABF60E4339F403E2",
+      "bytes": 487199
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/red-01/tests.xml",
+      "exists": true,
+      "sha": "E53EE01CE5CEB07D717DF98BF97CFBF84457CC48FE8474800CCDC9AD796EEC88",
+      "bytes": 27068
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009.md",
+      "exists": true,
+      "sha": "52464A3222E7ED08D82DDD4F4A7611C120F0B729CEF22D71B5CE937BEDCB5ADE",
+      "bytes": 7467
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094.md",
+      "exists": true,
+      "sha": "41949C3B2747BC56C5AD973B30D2709A0937D9EAA8EA8C02BEFE45169CB52666",
+      "bytes": 5862
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/final-audit-01.json",
+      "sha": "C058855E993A1EAFFB780E06571153D4C6B64CFA07259E249B2122A5CE04F886",
+      "exists": true,
+      "bytes": 5682
+    }
+  ],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335",
+      "bytes": 407759
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "430CF2C263FD8A427AE2E605F891024A0893DF0960BEB2E941D43C11F84B1D07",
+      "bytes": 7343
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "8370EF5368DE03E2E212CE31D865C219F8C28219C37A19C46E9C191B4E38FE16",
+      "bytes": 489410
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "F9CCF09C67E6436D289709121EFF348F0E1A081987DDE0FC10D6B766A4EDAA10",
+      "bytes": 1652000
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "BEBB92F4EF50E43E39003E7EEC2194552A7332C8696206BC3A1E8D918C091854",
+      "bytes": 744510
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "C2E349F8BFA3D61ACAE53150603183DC7274063B58C4DFFD4558608AF87C66D1",
+      "bytes": 132769
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "C93F52A89E8D4D1F2BD71FD796E0B69BBE197940E77FB822AEFD58B2F3BADD6E",
+      "bytes": 1586006
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "D72C4DED483557086435E01062D6EC7790D250B9BB3AACDB0CCF964D4EF2F4E6",
+      "bytes": 207543
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "4C74A089A53552FF9659291C158E5F17CB0591A688CF26B9A32F7A573FF1E77E",
+      "bytes": 25207
+    }
+  ],
+  "guardAudit": {
+    "count": 1103,
+    "drift": [],
+    "checkedAt": "2026-10-09T13:49:19.3204593+08:00"
+  },
+  "backupAudit": {
+    "count": 9,
+    "allMatchBefore": true
+  },
+  "latestCompletedBatchNumber": 94,
+  "actualOptimizationBatches": 73,
+  "selectedStagesPassed": 5,
+  "selectedStagesTotal": 6,
+  "h07": "PERFORMANCE_FAIL",
+  "goal": "active",
+  "candidate": "FOCUSED_TEST_PASS / LOCAL_ONLY / NOT_ADMITTED / DEFAULT_OFF",
+  "batch100": "Only plan clarity; not performance deadline",
+  "note": "No default promotion or actual1000AI new performance windows. Evidence/source SHA are captured as files stand; no historical failure overwritten. This manifest excludes its own hash to avoid a self-reference cycle."
+}

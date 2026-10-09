@@ -1,3 +1,24 @@
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-11 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 保障 / 随改动 |
+| 当前状态 | 选定CPU域已通过／父项开放；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | 具体变更的容量单位、consumer生命周期；设备部分依赖H-02/H-05初始矩阵 |
+| 下一步与具体方向 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
+| 完成边界 | 选定CPU域保持通过，不因95 logic夹具分配抹去；native/GPU/设备未闭 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+**历史结果更新：** 下方35等旧camera FAIL不再代表86选定CPU域状态；86两轮1800camera限定通过保留，GPU/native/设备父项仍未闭。
+
+## 原方案与历史证据（原始正文保留）
+
 > 2026-10-07 第47批 FINITE_DIAGNOSTIC_COMPLETED / CALLSITE_NOT_REPRODUCED：NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047 / RUNTIME_PENDING，50/50＋末33/33（51去重），唯一完整1800camera0event/四校准PASS、two slots/Foot2/Health2、draw11560录制=执行、growth/CPUlease/十一阶段残留0、双Scene同/Menu8roots clean。原history/new raw保留、settings恢复；R1只读容量缓存保护不重采。旧43迟发12event FAIL不消去，无新FPS/调用点。下一H07实际45—48ms collector有据候选，不重复此窗/旧资格；阶段4/6/26已执行/Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047.md)。下方为历史。
 
 > 2026-10-07 第47批 PLANNED / LATE_CALLSITE_DIAGNOSTIC_ONLY：NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047；首8工具不足解释ordinal937，三个Editor脚本拟增事件触发/固定8边界ring、最多1800/300s，旧history先保存/不clear，完整scope/失败不缩。9当前副本/42guards/HEAD先核；尚无新代码/测试/调用点，H07/H11未达、阶段4/6/25已执行、Goal active。[Record](../../../../docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-GC-CALLSTACK-047.md)。下方为历史。

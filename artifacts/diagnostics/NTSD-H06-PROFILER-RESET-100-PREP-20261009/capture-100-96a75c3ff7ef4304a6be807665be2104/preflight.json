@@ -1,0 +1,93 @@
+{
+  "scope": "100-object collector only; no Driver or performance certification",
+  "count": 100,
+  "ordinary": 76,
+  "specialAttack": 24,
+  "teamOne": 50,
+  "teamTwo": 50,
+  "types": {
+    "FormalSelfCheckCharacter": 76,
+    "FormalSelfCheckSpecialAttack": 24
+  },
+  "layout": "original 40 columns, 16 X spacing, 20 Z spacing; scaled role/team cutoffs",
+  "Unit": "TimeNanoseconds",
+  "calibrationBefore": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 100
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "calibrationAfter": {
+    "passed": true,
+    "knownLiveBytes": 1048576,
+    "positive": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 1,
+      "allocationEvents": 1,
+      "rawValueTotal": 100
+    },
+    "empty": {
+      "valid": true,
+      "calibratedBefore": false,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 0,
+      "allocationEvents": 0,
+      "rawValueTotal": 0
+    }
+  },
+  "preflight": [
+    {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 29,
+      "allocationEvents": 29,
+      "rawValueTotal": 1900
+    },
+    {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 29,
+      "allocationEvents": 29,
+      "rawValueTotal": 1800
+    },
+    {
+      "valid": true,
+      "calibratedBefore": true,
+      "saturated": false,
+      "wrapped": false,
+      "sampleCount": 29,
+      "allocationEvents": 29,
+      "rawValueTotal": 1600
+    }
+  ],
+  "pairs": 97,
+  "actualMode": 3,
+  "fallback": 0,
+  "aborted": false,
+  "rejectedBefore": 0,
+  "rejectedAfter": 0
+}

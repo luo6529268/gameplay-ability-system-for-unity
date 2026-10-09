@@ -1,0 +1,26 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/DatParser/Runtime/Models/LoganKindCatalog.cs",
+    "sha256": "CC7409790933E446CB0F45BDA7681AF70CE674B27FBED7B6FB133B54FEF65D47"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H06FindEffectAllocationEditorTests.cs",
+    "sha256": "C1E887D919597F417FE0DCEFB958672F3EED3BFB4F5FD7D017DA734E049BBCBD"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H06CollectorPreparationEditorTests.cs",
+    "sha256": "ED0F5AE09BD207762A32B15A6168751AF5A5406D247806D865B204A1CE959798"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    "sha256": "09B9204AA87BA4956210C10C2B5CBCDF1241A332DDBE1745F952DFB3ABC85C15"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs",
+    "sha256": "5D53AEE14BAEFDD7AF8E9971DE5182E8C2B860A00EE8C9258229CD9A08B82336"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/OPointBurst-shaped-collector-gc-7f5a826ab9dc4874822a67910dbc7bf6.json",
+    "sha256": "91FA17916FCC506B562C10D7B1170F2D21554C715EADE89156069E991C2FBB3F"
+  }
+]

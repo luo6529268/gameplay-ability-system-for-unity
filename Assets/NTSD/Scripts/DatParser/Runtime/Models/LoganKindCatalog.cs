@@ -69,9 +69,12 @@ namespace NTSD.DatParser
 
         public LoganKindRecord FindEffect(int effect)
         {
-            foreach (LoganKindRecord record in Records)
+            for (int index = 0; index < Records.Count; index++)
+            {
+                LoganKindRecord record = Records[index];
                 if (record.Effect == effect)
                     return record;
+            }
             return null;
         }
     }

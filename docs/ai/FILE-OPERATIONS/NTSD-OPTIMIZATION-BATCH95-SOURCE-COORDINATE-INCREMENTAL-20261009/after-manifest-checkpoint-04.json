@@ -1,0 +1,480 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009",
+  "change": "NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095",
+  "status": "IN_PROGRESS / DRIVER_GC_FAIL / CALLSITE_EXPORT_FAIL",
+  "observedAt": "2026-10-09T16:54:21.6406807+08:00",
+  "beforeManifest": {
+    "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009\\before-manifest-01.json",
+    "sha": "B1FC6EF247055835CEF45BDAA7F0CA842C5C663B28D3C119A2E3538F22EDFE96"
+  },
+  "guardCount": 1128,
+  "guardDrift": [],
+  "backupCount": 10,
+  "backupDrift": [],
+  "HEAD": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "staged": [],
+  "diffCheckExit": 0,
+  "diffCheckNotes": [
+    "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/CHANGE-LEDGER.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it",
+    "warning: in the working copy of 'docs/ai/STATE.md', LF will be replaced by CRLF the next time Git touches it"
+  ],
+  "writes": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "026823D0070C236E4EB352AC92777471470B6DED80FC3890AF15FD66262EF842",
+      "bytes": 315126
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha": "7FB62EA1F3910D4352297423359DE9F9A92824668DA663B11B13BC88BF4983F6",
+      "bytes": 297920
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+      "sha": "1B2B0C469365DE2821C7C87C05A648A2E314365CE4E5199C2A3BF1D9E3C0E589",
+      "bytes": 24072
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "33F25BB837766C626DF88FBE18A4126B870EBF25B864045B91130130035EADE5",
+      "bytes": 171266
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha": "D07B36933E93C17026FDBD4465C5B62D61A27507CD0BAE79B6031E64AFFB1C5D",
+      "bytes": 1653812
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "CED86AD8B28B7CA7D211E6C3F2B6C974980E9CDEEAE3C92D5E0BC4EB96BA7A89",
+      "bytes": 746322
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "A1B4488D93D7E532739E0A48E1EB4C94DFB5EBF9BB9781818DF60853D78732DC",
+      "bytes": 134584
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "204169F514314E632728F898B2061ECF34A57DD446A934AC013006C418B9FF3B",
+      "bytes": 1587821
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "25F2A6E96752631EC8930A5552A71DC8A50A9BDA217C655EE3B1251D41068FFD",
+      "bytes": 209433
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "sha": "751EA14EF353343281FCFADF3F89DE71A64DAA0EC048858ABF401C043F4B3043",
+      "bytes": 902029
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-01.json",
+      "sha": "EF075ED4366362AC1ED90E23D82E7BED12C0C800FEEFE0CF4E6297095EE02873",
+      "bytes": 7305
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-02.json",
+      "sha": "87DF76839CE6CAD43B3B7B333E5E3416BDB93B3A5FBFA82DA5E2ACBB4A8E91DF",
+      "bytes": 11284
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/after-manifest-checkpoint-03.json",
+      "sha": "EF6C1B40701614493DCD4F93F26C91F006186329125704B42097398CDE9C1015",
+      "bytes": 13622
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-manifest-01.json",
+      "sha": "B1FC6EF247055835CEF45BDAA7F0CA842C5C663B28D3C119A2E3538F22EDFE96",
+      "bytes": 16363
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md",
+      "sha": "0642AE863A265CAA3A6FED9EC46AF0AD85DF5527A2608DF12E093D0F1E95D980",
+      "bytes": 16640
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "D72C4DED483557086435E01062D6EC7790D250B9BB3AACDB0CCF964D4EF2F4E6",
+      "bytes": 207543
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "C93F52A89E8D4D1F2BD71FD796E0B69BBE197940E77FB822AEFD58B2F3BADD6E",
+      "bytes": 1586006
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA",
+      "bytes": 296668
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "3DD81EC13C77B992B7DAA37F35EF42061CB1990D8EE5D41BCDB6F4ECAE9E78AE",
+      "bytes": 314470
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+      "sha": "90806F72EAA1BC2627791F1FE43A510B0511EF92BCAFA5635D752256AFF090F7",
+      "bytes": 23577
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "57B666B3B1D00049729C038BC56C974CD9695BF3E4DEF6B7446A80F9CD32C693",
+      "bytes": 103997
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/CHANGE-LEDGER.md",
+      "sha": "BEBB92F4EF50E43E39003E7EEC2194552A7332C8696206BC3A1E8D918C091854",
+      "bytes": 744510
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/STATE.md",
+      "sha": "F9CCF09C67E6436D289709121EFF348F0E1A081987DDE0FC10D6B766A4EDAA10",
+      "bytes": 1652000
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "C2E349F8BFA3D61ACAE53150603183DC7274063B58C4DFFD4558608AF87C66D1",
+      "bytes": 132769
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-01/Temp/Goal18_LastTestResults.xml",
+      "sha": "4C74A089A53552FF9659291C158E5F17CB0591A688CF26B9A32F7A573FF1E77E",
+      "bytes": 25207
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-driver-qualification-01/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "1DF4547AD0CFEE5E9B4F9402445751B7A331A5661CE80BFB5D700B71B2C6653A",
+      "bytes": 127903
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-attribution-03/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "DA7B538198119AE0F9B08A032EB529C8DFB2FC3EC0C862D04A49388B163DDD9D",
+      "bytes": 149655
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-attribution-03/Goal18_LastTestResults.xml",
+      "sha": "392E134E09529FE4F5BF31EC3091780625883F5168FCF2DBC3FA303785F8E881",
+      "bytes": 3596782
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-05/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "9E085D5F5EB9885A9E15B4753A0C54FBC7DFBE791DE767C8B44533E131909BCF",
+      "bytes": 159761
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-05/Goal18_LastTestResults.xml",
+      "sha": "A6043F41AA7A79FD9061F26EF04293F1CB9D44D6287867AC0BA71D37DF3B3511",
+      "bytes": 900676
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-06/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "AE5476B8DF5552CDCCBA01C51FAEB8AA97768CF4D06D75404291AC39AC9B1148",
+      "bytes": 170026
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-06/Goal18_LastTestResults.xml",
+      "sha": "49F2053FF35A2E8CEAA4FA0B2F41F613BE0817C2F76B36A4D664E62880095F2E",
+      "bytes": 902112
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-07/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "0372E12BC373D840D59656D3F4046F658A7F91AAED2B479D3CB54723E02EDD97",
+      "bytes": 170439
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/before-gc-callsite-07/Goal18_LastTestResults.xml",
+      "sha": "D059CBACE7EDC779A5DE874DFEC9B21FF5210AF7E548A9BBA0E99AD3289DA5BC",
+      "bytes": 902028
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-before-eof-fix-01.json",
+      "sha": "B2B8565F2223B7471C3B97713247F632E4F87A7EAC90AFC6BE5D2C2DF73C818F",
+      "bytes": 8032
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-01.json",
+      "sha": "7C49CDF7CA95543DCD5DEDC0101AB64F0E45AD8B5C9561A797EB18112EF2B38B",
+      "bytes": 8394
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-02.json",
+      "sha": "1A07E45CF079653BBBE37C322C0EBCE88CA0999D77EFC71FBDA549AE46B91268",
+      "bytes": 1818
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/audit-checkpoint-03.json",
+      "sha": "489E9709BB2AFF14363C76CB65EBF440EFA06EC64035327E998034E34681FE08",
+      "bytes": 1112
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/compile-test-first-01.md",
+      "sha": "B13A0256379493B88B0010D4DF5854F29B5805F54027B3B39D4D34B98DAA9DCF",
+      "bytes": 404
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-compile-01.md",
+      "sha": "8AF4FADDE49FA1B5CC4320A3CE863E4692C9CD8E1E17724967C43B41D551B1C4",
+      "bytes": 822
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/REPORT.md",
+      "sha": "9CCDEB3F3A9912E10146E1DC5A869F950D194A0151805385F0B90A696D603396",
+      "bytes": 14860
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-01.json",
+      "sha": "132776968DF69335FB1A626CF89D6FBA0A5D0673EB75849937D8EB38B5B4E249",
+      "bytes": 940
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-02.json",
+      "sha": "0AFEF04FA4D743C77957AFC9B6841ED8600AEB67580D32E5ADD1F9EEDECB5C1E",
+      "bytes": 886
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/validator-checkpoint-03.json",
+      "sha": "EB6139D370398E4240D88E663021E2E8A18E1C3273AD81077483D18291354D3A",
+      "bytes": 182
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-01/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "AE5476B8DF5552CDCCBA01C51FAEB8AA97768CF4D06D75404291AC39AC9B1148",
+      "bytes": 170026
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-01/tests.xml",
+      "sha": "49F2053FF35A2E8CEAA4FA0B2F41F613BE0817C2F76B36A4D664E62880095F2E",
+      "bytes": 902112
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-02/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "0372E12BC373D840D59656D3F4046F658A7F91AAED2B479D3CB54723E02EDD97",
+      "bytes": 170439
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-02/tests.xml",
+      "sha": "D059CBACE7EDC779A5DE874DFEC9B21FF5210AF7E548A9BBA0E99AD3289DA5BC",
+      "bytes": 902028
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-03/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "33F25BB837766C626DF88FBE18A4126B870EBF25B864045B91130130035EADE5",
+      "bytes": 171266
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/callsite-attempt-05-03/tests.xml",
+      "sha": "751EA14EF353343281FCFADF3F89DE71A64DAA0EC048858ABF401C043F4B3043",
+      "bytes": 902029
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-01/AiDecisionSoAShadowEditorTests.cs.before",
+      "sha": "DD6A999F02A1DFB91A0A5E08CED86E6CF404A02DAF0A28F64A4F269BE795678B",
+      "bytes": 146618
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-01/tests.xml",
+      "sha": "2BD8BD8829B4D87804C86889A11C24CBA9411DF97BA6ED587EBB458D69B6B3CD",
+      "bytes": 3649547
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-02/AiDecisionSoAShadowEditorTests.cs.before",
+      "sha": "D0D689B615BA066896EB76B574672EA8AD2B8C1913EB1F44C7CAF7FE2BD6AF2D",
+      "bytes": 148690
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-02/tests.xml",
+      "sha": "7260F3A52DFD95FB9A2F8B0A55D81BB9ABCD55E14EF688B80935BD3E7378683F",
+      "bytes": 5400757
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-03/AiDecisionSoAShadowEditorTests.cs.before",
+      "sha": "DA7B538198119AE0F9B08A032EB529C8DFB2FC3EC0C862D04A49388B163DDD9D",
+      "bytes": 149655
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-green-03/tests.xml",
+      "sha": "392E134E09529FE4F5BF31EC3091780625883F5168FCF2DBC3FA303785F8E881",
+      "bytes": 3596782
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/Combat1000-source-coordinate-driver-parity-68366de88c8e4c63a03999a89760fed3.json",
+      "sha": "9E856AB8AB888E32667486F3920E608C29E013550BDCF6D1E302A1B281381526",
+      "bytes": 6469817
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/Dispersed1000-source-coordinate-driver-parity-94c326d0b02a46d88ea58afdff466844.json",
+      "sha": "198A8E584804AB2DB7E5BC94255FBE2B9A3048E54BCE448CF6489C5DB5427D53",
+      "bytes": 6473107
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/left-x350-source-coordinate-driver-parity-d03738f4014a4f9aa6132e41a5a80340.json",
+      "sha": "F9B4F510748CA47BE11A1C4D85465954DAD59CC5F843DA796F3EBD62B04CD565",
+      "bytes": 743639
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/right-x550-source-coordinate-driver-parity-224b23e84060469ba8f56651d4bd52cc.json",
+      "sha": "ED988E047BDE32294DEE17EC86EF28B320F5715ADEB7DA9BCE4D4534C0951E5A",
+      "bytes": 743637
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-03/dispersed1000-stage-gc-attribution-67437e3b0c8842018275b022761b1aee.json",
+      "sha": "C5D2E00AC7AE10F68D71FBB21735C3EFA59B631E8AC9C311FAD419A6D445BE61",
+      "bytes": 82484
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-04/dispersed1000-wrapper-gc-attribution-8b312439f4b94c15901e2747691b690c.json",
+      "sha": "34A04D3EDF644021C32E10611790098FDBAAB341F4F52100E533C63C68CDD005",
+      "bytes": 106481
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-discovery-03/compile-03.md",
+      "sha": "A23F4F631F774C201F66A810D4A85B497BF5E719B5BF5068515D68CA2E662874",
+      "bytes": 501
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-discovery-03/tests.xml",
+      "sha": "753E7DD7664334E831A04977B1D7FA44EDBA72EB75D210CDB46319F6A4BB7B21",
+      "bytes": 312
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-03/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "B6E52CA4F6D3CDBF7AB12782DDCB80A836D7CF650A5DDC9340324469555E8C4E",
+      "bytes": 153567
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-03/tests.xml",
+      "sha": "E5E13A7FC1CDC5176324507A53E113E3EE163AC09F08BD9A1794DBB77DDD7A0F",
+      "bytes": 900770
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-04/AiDecisionSoAShadowEditorTests.cs",
+      "sha": "9E085D5F5EB9885A9E15B4753A0C54FBC7DFBE791DE767C8B44533E131909BCF",
+      "bytes": 159761
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-green-04/tests.xml",
+      "sha": "A6043F41AA7A79FD9061F26EF04293F1CB9D44D6287867AC0BA71D37DF3B3511",
+      "bytes": 900676
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/cpu-gc.raw",
+      "sha": "B79C3D9348C8AB58F506C08B376D2789BE7A146579D26BAC25FE13EF95662F19",
+      "bytes": 12643012
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/driver-gc-callstacks.json",
+      "sha": "F898C8F39DC1D55656F2E5A52C5F76AF80AA06AEE038D3AC553198EBCEF01E26",
+      "bytes": 1523
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/5cfc4a3adb5d42a0b7cca7711869381a/profiler-settings-audit.json",
+      "sha": "04A26325CFA7BAD20FF7E99FA79BE9CCFE06203A40AE11CC8A0FFC3F4B289548",
+      "bytes": 744
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/cpu-gc.raw",
+      "sha": "5E3A9B74D3B94FD0910728BAFDFD0B8A94373836ADD6322D2B9656F0201B04B0",
+      "bytes": 21203416
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/driver-gc-callstacks.json",
+      "sha": "884E46302363224D2D44913202D6E1852D9FF59814EE01DBE390856104791678",
+      "bytes": 1521
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/prior-history.raw",
+      "sha": "5091D44721A3B8FCA6083A1116BF756C622E3F645878A3D21EE65327E7C8A559",
+      "bytes": 16056136
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/84f029967f68468994998339b810f1b9/profiler-settings-audit.json",
+      "sha": "A5C843B226FE78699866531A9F6E444D0D61CA4BA563A8126CBDF32D26178CCE",
+      "bytes": 743
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/cpu-gc.raw",
+      "sha": "E9CF9D8C46A14093B985833E6BFD3FB8B3C06B1088DED800AA049948A660FB71",
+      "bytes": 4
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/driver-gc-callstacks.json",
+      "sha": "D190A0839A065AB4F8A106FA6408058C98E73A25F5186A363DAFBDD7AC26643C",
+      "bytes": 1526
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-callsite-05/ef9430547ae1488f9940db1104367672/profiler-settings-audit.json",
+      "sha": "04A26325CFA7BAD20FF7E99FA79BE9CCFE06203A40AE11CC8A0FFC3F4B289548",
+      "bytes": 744
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-01/AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "380FEB6682C2BDF5BDC6DE31DD90447D48F9FE0F3EAB72E1C580990C2469B211",
+      "bytes": 119634
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-01/tests.xml",
+      "sha": "D21A92C9150CB8DC5E7FC13901E82CA2DACDC08A8A733D29D08AF80403B78184",
+      "bytes": 25685
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-02/AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "482007EA1428A792D7AB7847FBA8BD7E8F9CAAACDD837E184BD04A2BE523364C",
+      "bytes": 126116
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-02/tests.xml",
+      "sha": "5EA0E8832F680EDDC79C2735746978FFFFB10F9C3C6ADD2FB7309C26F4D22CBB",
+      "bytes": 259252
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-03/AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "1DF4547AD0CFEE5E9B4F9402445751B7A331A5661CE80BFB5D700B71B2C6653A",
+      "bytes": 127903
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/green-03/tests.xml",
+      "sha": "8F31FDCCC27B39E8A3D0689C694D193121CECB32E746153ABECB0C2E62FC10C3",
+      "bytes": 26099
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-01/AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "626D8A99B33D7395F1824B04067666B09AC003D7F46AC5B34AFAF24E18EC3F7B",
+      "bytes": 118316
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-01/tests.xml",
+      "sha": "31B3677B884ED0687A5F0A156BD9411C93139B892F5E9E45692BC8ABB9CDFDA7",
+      "bytes": 19519
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-02/AiDecisionSoAShadowEditorTests.cs.txt",
+      "sha": "380FEB6682C2BDF5BDC6DE31DD90447D48F9FE0F3EAB72E1C580990C2469B211",
+      "bytes": 119634
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/red-02/tests.xml",
+      "sha": "35F12BE8DCB04ECB2A6AE26E25C2939C5CEE1D5333015BEE456D5EFD03117178",
+      "bytes": 6075
+    }
+  ],
+  "validator": {
+    "exit": 0,
+    "records": 1390,
+    "governedCode": 8,
+    "errors": 0,
+    "warnings": 4280
+  },
+  "note": "Three callsite diagnostics failed, original strict qualification unchanged. Prior audit attempt used nonexistent backup property and is invalid; this correction checks each before-01/<relative> literal backup with terminating errors. No new performance evidence/default promotion."
+}

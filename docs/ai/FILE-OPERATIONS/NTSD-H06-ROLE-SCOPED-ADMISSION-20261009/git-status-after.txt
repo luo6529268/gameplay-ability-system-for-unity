@@ -1,0 +1,97 @@
+## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 2]
+ M .codex/config.toml
+ M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+ M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-02-android-build-scene-closure.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-03-touch-input-fixed-tick.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-04-il2cpp-arm64.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-05-device-gpu-certification.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-09-ntsd28-correctness-alignment.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md
+ M Assets/NTSD/Docs/android-mobile-readiness/h-11-presentation-capacity-zero-gc.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-01-application-identifier.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-02-signing-keystore.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-03-target-api.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-04-orientation-policy.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-05-graphics-jobs-frame-timing.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-06-urp-hdr.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-07-ai-profile-description-drift.md
+ M Assets/NTSD/Docs/android-mobile-readiness/l-08-release-packaging.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-01-dedicated-worker-throughput.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-02-central-render-draw-segmentation.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-05-gameobject-shell-cost.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-06-pool-capacity-prewarm.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-07-android-graphics-api-policy.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-08-sustained-thermal-performance.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-09-performance-evidence-fingerprint.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-10-mobile-viewport-safe-area.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-11-mono-core-presentation-layering.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-12-decode-upload-byte-backpressure.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-13-sound-event-aggregation.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-14-content-verification-io.md
+ M Assets/NTSD/Docs/android-mobile-readiness/m-15-kernel-build-reproducibility.md
+ M Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+ M Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md
+ M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+ M Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs
+ M Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs
+ M Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs
+ M Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+ M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+ M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs
+ M docs/ai/CHANGE-LEDGER.md
+ M docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.md
+ M docs/ai/CURRENT-AUTHORITY.md
+ M docs/ai/FILE-OPERATIONS/INDEX.md
+ M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/RECORD.md
+ M docs/ai/STATE.md
+ M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009.md
+ M docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md
+?? artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/audit-final-01.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-green-01/
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Combat1000-group-snapshot-driver-parity-b1f34ab10e42417c89b769dc3015abc1.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Dispersed1000-group-snapshot-driver-parity-ba360fead0c1482ea0e23d175b052d48.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/left-x350-group-snapshot-driver-parity-8f092cb9fa7446f3a91b10d3fbc25ae4.json
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/
+?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl
+?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl
+?? docs/ai/CHANGE-RECORDS/NTSD-H06-ROLE-SCOPED-ADMISSION-001.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-ENDPOINT-SNAPSHOT-094.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-WINDOWS-093.md
+?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095.md
+?? docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/after-manifest-01.json
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-D1-A-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DOC-REORGANIZATION-20261009/
+?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PAUSE-REVIEW-HANDOFF-20261009/
+?? docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md
+?? docs/ai/OPTIMIZATION-REVIEW-20261009/
+?? docs/ai/TASKS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH93-ROLE-GROUP-SNAPSHOT-WINDOWS-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH94-ROLE-ENDPOINT-SNAPSHOT-20261009.md
+?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009.md

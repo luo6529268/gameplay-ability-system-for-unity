@@ -1,0 +1,254 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009",
+  "change": "NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092",
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "originalHead": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "headAdvance": "external_commit_preserved",
+  "after": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "DCCCBF1F681D2E91A5F53E80339F212874BDDBEAEB02FCCCEDCC51E7E206015E",
+      "bytes": 401832
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "exists": true,
+      "sha": "21D858584C694403FD91BE44E17AEE9F1A67E714CD80071FADC75AE650853946",
+      "bytes": 7822
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "12C676059C85FC06E7D01A9E499510868A9A98C77B192F4B77121AAA116E7D40",
+      "bytes": 471195
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "0AF64E14C3CC8CE659711FF2DB20753A784EAC42936D7EDBD0A2AF16777D1F19",
+      "bytes": 141654
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha": "C4F2982FB53DB751D7E00D6B11A62102F79307C374F03DD3384F7B61024ABCC6",
+      "bytes": 1647476
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "16340F99F9323E4F0E1E3620C3E4C897FAFFB35EFC47860FE8C5C5FBD6BF2CEB",
+      "bytes": 741914
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "1A50397E421817D0777B573510571DAC968878FA6F6258286F3B3D47A70CAF11",
+      "bytes": 128032
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "BAC329D3177FDC83C3F7561A9A7D0B9CA8BF2FB96B4812C33501C777A0CE5710",
+      "bytes": 1581357
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "ABC342F41F191DE6450EC3293BB685613916938086B425011BCBB1B4907E52AB",
+      "bytes": 202870
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "3D5B09FDA1838EAAD871B75398428AB9F778C83CD9FBE013C279139DF8E0E1E6",
+      "bytes": 7193366
+    }
+  ],
+  "new": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/audit-final-01.json",
+      "exists": true,
+      "sha": "E22DC6209DEAB02E09AF6070400527C9A18F342959296FD914809DFC97F46CAE",
+      "bytes": 5543
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/REPORT.md",
+      "exists": true,
+      "sha": "68331608CCAF9A3331D4EC0C304A2FAAECE1BFD9F2CD8BC2C94A20649897439E",
+      "bytes": 8134
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-green-01/tests.xml",
+      "exists": true,
+      "sha": "3D5B09FDA1838EAAD871B75398428AB9F778C83CD9FBE013C279139DF8E0E1E6",
+      "bytes": 7193366
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Combat1000-group-snapshot-driver-parity-b1f34ab10e42417c89b769dc3015abc1.json",
+      "exists": true,
+      "sha": "A39504D7B169DF7810C7D99938CF695CE42D9DEA230EE0DBC54A8CFE3B75EFD1",
+      "bytes": 205697
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/Dispersed1000-group-snapshot-driver-parity-ba360fead0c1482ea0e23d175b052d48.json",
+      "exists": true,
+      "sha": "9EC0492EC0E0FAF1FDB2096C7EF82CD3B4A610A1304EF5C69630C13C25E8D85D",
+      "bytes": 205698
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/left-x350-group-snapshot-driver-parity-8f092cb9fa7446f3a91b10d3fbc25ae4.json",
+      "exists": true,
+      "sha": "B6127258E22BB1218DD1674DBF3539AC0819DEF047E5C4E53805CA3767AC4CD9",
+      "bytes": 74933
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/right-x550-group-snapshot-driver-parity-c52fecea6cc84035bd6a96c6073544cc.json",
+      "exists": true,
+      "sha": "24C377C5E480C2C4AF901823E0C75CAAD1D246EDF8C2D2D2DCD4A24B8D8AEAF7",
+      "bytes": 74933
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-red-01/tests.xml",
+      "exists": true,
+      "sha": "573FA116E0B9E36896EC2AB4DFF14E0B1EF59551E0C91F98D69B8AC4C0E5BA32",
+      "bytes": 11496
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/green-02/tests.xml",
+      "exists": true,
+      "sha": "E0C707020E6404733E7657B88C362A6CB36CDDA790BCA671BDDA12724E454EA2",
+      "bytes": 83164
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/green-first-01/tests.xml",
+      "exists": true,
+      "sha": "6D5DE2548B344E3FB1C8D8C2F49CE160199E21CD86A8CA84E1970D3A573BAB50",
+      "bytes": 83953
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/red-01/tests.xml",
+      "exists": true,
+      "sha": "7164B6DF35CBFF50E629EFA5BF184C47C3BA0C3F1A680A4453CA4AC41575B4B9",
+      "bytes": 43878
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "64EC5BE5C93E91E7170C72BA113B14879F3EEF0490B7BF6B820CD5955D7EDEE6",
+      "bytes": 21401
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-manifest-02.json",
+      "exists": true,
+      "sha": "4C03A3006FC8289901D673149414660FFB57741A787D443D6F9E220176C2CEF6",
+      "bytes": 1654
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/RECORD.md",
+      "exists": true,
+      "sha": "03F1406CC00ADB5187EFF4778FB193B3B97EA211AE869B6C3EAED45A59D95360",
+      "bytes": 6970
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "5094ECEE7F4C12A22C8C064773BE6E285053933B158DC7AB087CF438A6DFCC4B",
+      "bytes": 200311
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "58FDF586F708649346B58069355A1FB0B58D65DDD868C3F6B2780FB2EBB97A44",
+      "bytes": 1579687
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "CD68A227AB23F9BEFE91ADCA3B7F749EE35DD790813DD9EED8625DFCFC10C216",
+      "bytes": 398293
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "exists": true,
+      "sha": "AF8050EDA5A9473BA4B4266D47AA0A28172449AEDE5C066E90E2C88BBA681BA0",
+      "bytes": 5103
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "B769A7B3D31B84235089662CECAC3A483043050AB4B37B7728DA04EC1C8B858A",
+      "bytes": 458039
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "1B55FDD71A1DE89EE5AD8B37D1C5376ABA6DC735493FBD83C3F9F258271CEF7A",
+      "bytes": 740247
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/STATE.md",
+      "exists": true,
+      "sha": "E8AB5339C60F56178A37E1E518FC5BAFD5C747D7A83198943F3D2213B24AC4FC",
+      "bytes": 1645809
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "4E5873DDDEBB00500B86D87A7A0EBB1BC818F949EA44B80574F65284A8012AC7",
+      "bytes": 126362
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Temp/Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "BE8683DD5599F1E58C1451BAB0C4F4B83255AEF7EFF9685E645B243697EAFD96",
+      "bytes": 51268
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-02-first-candidate/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "E5E2F92C28500B03FE155FF6892BBAF5CF31979BD73D8EFC2DE6E0CF2BA4510A",
+      "bytes": 401104
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-02-first-candidate/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "exists": true,
+      "sha": "21D858584C694403FD91BE44E17AEE9F1A67E714CD80071FADC75AE650853946",
+      "bytes": 7822
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-02-first-candidate/Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "88ACA96271032020F71BE47A461E043571BB20F1EDA560930374BDCC592B1634",
+      "bytes": 471053
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-03-driver/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "650E5F8ECDF7C0ADBD7EE4578B908EF60AB6A9E34EF9D6F34FB9F49F7510C7D5",
+      "bytes": 131779
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009.md",
+      "exists": true,
+      "sha": "3A7B6A4E2027AD287E6F118129102A81EE39D6CBF86ECBE72D79CF6103DF5396",
+      "bytes": 10014
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.md",
+      "exists": true,
+      "sha": "B291E14FC6902FCCBD81C402D13E03555DB395427AC9C6E62F10648B8D1EF7CE",
+      "bytes": 7611
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-manifest-02.json",
+      "sha": "4C03A3006FC8289901D673149414660FFB57741A787D443D6F9E220176C2CEF6"
+    }
+  ],
+  "status": "FOCUSED_TEST_PASS / LOCAL_GAIN_SIGNAL / DRIVER_QUALIFIED / DEFAULT_OFF",
+  "goal": "active",
+  "h07": "PERFORMANCE_FAIL"
+}

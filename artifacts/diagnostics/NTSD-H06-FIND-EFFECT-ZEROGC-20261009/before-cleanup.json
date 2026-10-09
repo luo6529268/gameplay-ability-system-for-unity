@@ -1,0 +1,67 @@
+{
+  "settings": {
+    "settings": {
+      "enabled": false,
+      "driverEnabled": false,
+      "binary": false,
+      "logFile": "",
+      "allocationCallstacks": false,
+      "cpuArea": false,
+      "profileEditor": false,
+      "deepProfiling": false,
+      "memoryRecordMode": 0,
+      "maximumBufferedBytes": 536870912
+    },
+    "gpu": false,
+    "areas": {
+      "CPU": false,
+      "GPU": false,
+      "Rendering": true,
+      "Memory": true,
+      "Audio": true,
+      "Video": true,
+      "Physics": true,
+      "Physics2D": true,
+      "NetworkMessages": true,
+      "NetworkOperations": true,
+      "UI": true,
+      "UIDetails": true,
+      "GlobalIllumination": true,
+      "VirtualTexturing": true
+    }
+  },
+  "after": {
+    "settings": {
+      "enabled": false,
+      "driverEnabled": false,
+      "binary": false,
+      "logFile": "",
+      "allocationCallstacks": false,
+      "cpuArea": false,
+      "profileEditor": false,
+      "deepProfiling": false,
+      "memoryRecordMode": 0,
+      "maximumBufferedBytes": 536870912
+    },
+    "gpu": false,
+    "areas": {
+      "CPU": false,
+      "GPU": false,
+      "Rendering": true,
+      "Memory": true,
+      "Audio": true,
+      "Video": true,
+      "Physics": true,
+      "Physics2D": true,
+      "NetworkMessages": true,
+      "NetworkOperations": true,
+      "UI": true,
+      "UIDetails": true,
+      "GlobalIllumination": true,
+      "VirtualTexturing": true
+    }
+  },
+  "settingsEqual": true,
+  "objects": 0,
+  "slots": 0
+}

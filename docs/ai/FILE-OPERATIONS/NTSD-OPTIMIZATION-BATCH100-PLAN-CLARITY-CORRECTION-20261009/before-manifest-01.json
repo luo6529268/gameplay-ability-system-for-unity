@@ -1,0 +1,151 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009",
+  "status": "PLANNED",
+  "type": "documentation_only_plan_clarity_pause_correction",
+  "timestamp": "2026-10-09T11:43:48.2554705+08:00",
+  "head": "a0ecb01588e77feeda7fd369bc2011fc099b1173",
+  "before": [
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha": "16C43FF85E2D6FDE6D746C04996DD4CE52658B07D8AF50073BFEEA2F872C843A",
+      "bytes": 46176,
+      "git": [
+        " M docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "758F0FB7AEFC519B0CD12CB74B8127461B44D723BC72528EB652975C5EF19125",
+      "bytes": 1648430,
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "69BD8D4A7FA53A5CCBBE8889757497DE654E8FF53D73F7CE517ED2992F0ED16B",
+      "bytes": 128973,
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "4EFE47612E6DD707A72BEEAD362DAF0B504A6675BB810B93673844D2A352A89F",
+      "bytes": 1582345,
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "7DFD347E2EC45994A2B8B582D35B96EB710DF16984CEB988F0CD27093E511577",
+      "bytes": 203856,
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "exists": true,
+      "sha": "E1E09D8192E2B0025CE06C740E1C1C11050A011A8BCB9A08D8E7E56434539F48",
+      "bytes": 30642,
+      "git": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-PLAN-CLARITY-CORRECTION-20261009/before-01/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-manifest-01.json",
+      "sha": "65A0E6D2A433542D9D4415CF40B86500491A8C11FEA0A9775607DD849CB52D16"
+    }
+  ],
+  "excludedGuardPaths": [
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+    "docs/ai/STATE.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+  ],
+  "additionalGuards": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "65A0E6D2A433542D9D4415CF40B86500491A8C11FEA0A9775607DD849CB52D16",
+      "bytes": 17818
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/RECORD.md",
+      "exists": true,
+      "sha": "AAB2818FF7B2F893B83AC2852D647CE2A30B1CC968C5E14FED003D531B57CFA1",
+      "bytes": 4123
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "ABC342F41F191DE6450EC3293BB685613916938086B425011BCBB1B4907E52AB",
+      "bytes": 202870
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "BAC329D3177FDC83C3F7561A9A7D0B9CA8BF2FB96B4812C33501C777A0CE5710",
+      "bytes": 1581357
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "exists": true,
+      "sha": "E192CF48DCF6EC3847DE3ACCE8AD3729B33E72F692D00B31D6DE7C98DCFE6EB3",
+      "bytes": 29214
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/STATE.md",
+      "exists": true,
+      "sha": "C4F2982FB53DB751D7E00D6B11A62102F79307C374F03DD3384F7B61024ABCC6",
+      "bytes": 1647476
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "1A50397E421817D0777B573510571DAC968878FA6F6258286F3B3D47A70CAF11",
+      "bytes": 128032
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/before-01/docs/ai/TASKS/NTSD-OPTIMIZATION-BOUNDED-AUTOGOAL-20261007.md",
+      "exists": true,
+      "sha": "47531885C4D94017D0B91F8F01D38A7E9E860FD81BE0CFB3CA904F466180D989",
+      "bytes": 42590
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH100-REVIEW-HANDOFF-GATE-20261009/after-manifest-01.json",
+      "exists": true,
+      "sha": "3CEF3A1C76ACAD3C439AA00D924C41430703832F1F8A50D74012BEE7B5BF5FC5",
+      "bytes": 4461
+    }
+  ],
+  "protectedCount": 1042,
+  "drift": [],
+  "latestCompletedBatchNumber": 92,
+  "actualOptimizationBatches": 71,
+  "goalActual": "active",
+  "batch93": "read_only_preparation_not_started"
+}

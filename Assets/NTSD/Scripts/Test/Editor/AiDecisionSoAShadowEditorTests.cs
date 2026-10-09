@@ -1,11 +1,22 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.Rendering.Editor;
 using NTSD.Simulation;
 using NUnit.Framework;
+using Unity.Profiling;
+using UnityEditor.Profiling;
+using UnityEditorInternal;
+using UnityEngine.Profiling;
+using UnityEngine.TestTools;
 
 namespace NTSD.Test
 {
@@ -1183,6 +1194,1180 @@ namespace NTSD.Test
             Assert.That(unified.AiSoACandidateSnapshotRefreshCountForDiagnostics,
                 Is.Zero);
             Assert.That(unified.AiDecisionSharedRefreshCountForDiagnostics, Is.Zero);
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_DefaultOff()
+        {
+            var world = new SimulationWorld();
+            Assert.That(SourceCoordinateProperty(
+                "AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics").GetValue(world), Is.False);
+            Assert.That(SourceCoordinateRefreshCount(world), Is.Zero);
+        }
+
+        [TestCase(500, 610)]
+        [TestCase(-311, -73)]
+        [TestCase(0, 0)]
+        public void SourceCoordinateIncremental_FullRefreshParityAcrossBothBoundaries(int sourceX, int sourceZ)
+        {
+            var full = new SimulationWorld();
+            var candidate = new SimulationWorld
+            {
+                ValidateIncrementalAiUnifiedRowForDiagnostics = true,
+            };
+            SetSourceCoordinateIncremental(candidate, true);
+            int[] slots = { 0, 21, 43 };
+            var left = new LF2Character[slots.Length];
+            var right = new LF2Character[slots.Length];
+            for (int index = 0; index < slots.Length; index++)
+            {
+                int state = index == 2 ? 14 : 2;
+                left[index] = RegisterCharacter(full, slots[index], index + 1, index & 1,
+                    index * 60 + 10, 0, index * 4, state, true);
+                right[index] = RegisterCharacter(candidate, slots[index], index + 1, index & 1,
+                    index * 60 + 10, 0, index * 4, state, true);
+            }
+            ConfigureGateBWorld(full, true, 0xC005u);
+            ConfigureGateBWorld(candidate, true, 0xC005u);
+            for (int tick = 2; tick < 10; tick++)
+            {
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    SetSourceCoordinatePosition(left[index], sourceX + index * 40 + tick, sourceZ + index * 4);
+                    SetSourceCoordinatePosition(right[index], sourceX + index * 40 + tick, sourceZ + index * 4);
+                }
+                full.CharacterInputAll(tick);
+                candidate.CharacterInputAll(tick);
+                AssertSourceCoordinateRowsEqual(full, candidate);
+                for (int index = 0; index < slots.Length; index++)
+                {
+                    AssertDecisionStateEqual(full, left[index], candidate, right[index]);
+                    AssertEntityObservableStateEqual(left[index], right[index]);
+                    Assert.That(right[index].Runtime.SourceRuleXInt,
+                        Is.EqualTo(left[index].Runtime.SourceRuleXInt));
+                    Assert.That(right[index].Runtime.SourceRuleZInt,
+                        Is.EqualTo(left[index].Runtime.SourceRuleZInt));
+                }
+                AssertNativeRandomScalarStateEqual(full.NativeRandom.CaptureScalarState(),
+                    candidate.NativeRandom.CaptureScalarState(), "source incremental native RNG");
+                Assert.That(candidate.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(),
+                    Is.EqualTo(full.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck()),
+                    "post-pass live validator reads physical positions after the source latch clears");
+            }
+            Assert.That(candidate.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
+                Is.EqualTo(16L * slots.Length));
+            Assert.That(SourceCoordinateRefreshCount(candidate), Is.InRange(1L, 16L * slots.Length));
+            Assert.That(candidate.AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics,
+                Is.EqualTo(SourceCoordinateRefreshCount(candidate)),
+                "only source incremental commits use the incremental validation oracle");
+            Assert.That(SourceCoordinateRefreshCount(full), Is.Zero);
+            Assert.That(candidate.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics, Is.Zero,
+                "source-mode rolling rebuild protection is not relaxed by this candidate");
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_PublisherStagesSourceXZAndPreservesPendingY()
+        {
+            var world = new SimulationWorld();
+            LF2Character character = RegisterCharacter(world, 21, 1, 1, 10, 0, 4, 2, false);
+            SetSourceCoordinatePosition(character, 500, 610);
+            ConfigureGateBWorld(world, true, 0xC006u);
+            Invoke(world, "BuildAiInputSlotSnapshot");
+            var publisher = world.AiUnifiedRowPublisherForServices;
+            int[] x = SourceCoordinatePublisherArray<int>(publisher, "x");
+            int[] y = SourceCoordinatePublisherArray<int>(publisher, "y");
+            int[] z = SourceCoordinatePublisherArray<int>(publisher, "z");
+            uint generation = SourceCoordinatePublisherArray<uint>(publisher, "generations")[21];
+            publisher.PublishIntegerPosition(21, generation, 999, 17, 888);
+            SourceCoordinatePublisherMethod(publisher).Invoke(publisher,
+                new object[] { 21, generation, -123, 246 });
+            Assert.That(x[21], Is.EqualTo(500), "staging cannot publish before the boundary");
+            Assert.That(y[21], Is.Zero);
+            Assert.That(z[21], Is.EqualTo(610));
+            Assert.That(publisher.TryCommitPending(21, generation, out bool roleChanged, out _), Is.True);
+            Assert.That(x[21], Is.EqualTo(-123));
+            Assert.That(y[21], Is.EqualTo(17), "source X/Z must not overwrite the physical Y pending value");
+            Assert.That(z[21], Is.EqualTo(246));
+            Assert.That(roleChanged, Is.True);
+            EndUnifiedManualPass(world);
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_PublisherRejectsStaleGeneration()
+        {
+            var world = new SimulationWorld();
+            LF2Character character = RegisterCharacter(world, 21, 1, 1, 10, 0, 4, 2, false);
+            SetSourceCoordinatePosition(character, 500, 610);
+            ConfigureGateBWorld(world, true, 0xC007u);
+            Invoke(world, "BuildAiInputSlotSnapshot");
+            var publisher = world.AiUnifiedRowPublisherForServices;
+            uint generation = SourceCoordinatePublisherArray<uint>(publisher, "generations")[21];
+            MethodInfo method = SourceCoordinatePublisherMethod(publisher);
+            TargetInvocationException failure = Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(publisher, new object[] { 21, generation + 1u, -123, 246 }));
+            Assert.That(failure.InnerException, Is.TypeOf<InvalidOperationException>());
+            Assert.That(SourceCoordinatePublisherArray<int>(publisher, "x")[21], Is.EqualTo(500));
+            Assert.That(publisher.HasPendingValues(21, generation), Is.False);
+            EndUnifiedManualPass(world);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SourceCoordinateIncremental_ForceFullOrMutationHookKeepsFullCapture(bool useHook)
+        {
+            var world = new SimulationWorld();
+            SetSourceCoordinateIncremental(world, true);
+            LF2Character character = RegisterCharacter(world, 21, 1, 1, 10, 0, 4, 2, true);
+            SetSourceCoordinatePosition(character, 500, 610);
+            ConfigureGateBWorld(world, true, 0xC008u);
+            if (useHook)
+                world.SetCharacterInputProducerPassMutationOverrideForSelfCheck((_, __) => { });
+            else
+                world.ForceFullCharacterInputPostRefreshForDiagnostics = true;
+            world.CharacterInputAll(2);
+            Assert.That(SourceCoordinateRefreshCount(world), Is.Zero);
+            Assert.That(world.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(), Is.True);
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_NonSourceRowsRetainExistingIncrementalPath()
+        {
+            var world = new SimulationWorld
+            {
+                ValidateIncrementalAiUnifiedRowForDiagnostics = true,
+            };
+            SetSourceCoordinateIncremental(world, true);
+            LF2Character character = RegisterCharacter(world, 21, 1, 1, 10, 0, 4, 2, true);
+            character.Runtime.SourceRulePositionInitialized = false;
+            ConfigureGateBWorld(world, true, 0xC009u);
+            world.CharacterInputAll(2);
+            Assert.That(SourceCoordinateRefreshCount(world), Is.Zero);
+            Assert.That(world.AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(), Is.True);
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_CustomSubtypeKeepsFullCapture()
+        {
+            var world = new SimulationWorld();
+            SetSourceCoordinateIncremental(world, true);
+            var frame = new LF2FrameData { frameId = 0, state = 2, wait = 100, next = 0 };
+            var data = new LF2CharacterData
+            {
+                type_sub = 0,
+                frames = new List<LF2FrameData> { frame },
+            };
+            var character = new SourceCoordinateCustomCharacter();
+            character.ModuleInitialize();
+            character.ObjectId = 1;
+            character.FrameCache.Load(new LF2CharacterDataWrapper(1, data));
+            character.Frame.D = frame;
+            character.Frame.N = 0;
+            character.Initialize(500, 500);
+            character.SetRequiredRuntimeSlot(21);
+            character.Controller = new EmptyController();
+            character.AiControlled = true;
+            world.Register(character);
+            SetSourceCoordinatePosition(character, 500, 610);
+            ConfigureGateBWorld(world, true, 0xC010u);
+            world.CharacterInputAll(2);
+            Assert.That(SourceCoordinateRefreshCount(world), Is.Zero);
+            Assert.That(world.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_WarmedInputPassHasNoManagedAllocation()
+        {
+            var world = new SimulationWorld();
+            SetSourceCoordinateIncremental(world, true);
+            for (int index = 0; index < 3; index++)
+            {
+                LF2Character character = RegisterCharacter(world, 20 + index, index + 1, index & 1,
+                    index * 60, 0, index * 4, 2, false);
+                SetSourceCoordinatePosition(character, 500 + index * 60, 610 + index * 4);
+            }
+            ConfigureGateBWorld(world, true, 0xC011u);
+            for (int tick = 2; tick < 34; tick++)
+                world.CharacterInputAll(tick);
+            long sourceBefore = SourceCoordinateRefreshCount(world);
+            using (var recorder = new NTSD.Test.Editor.BattleScopedGcAllocationRecorder())
+            {
+                var before = recorder.Calibrate();
+                Assert.That(before.passed, Is.True);
+                bool started = recorder.Begin();
+                NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult scope;
+                try
+                {
+                    for (int tick = 34; tick < 50; tick++)
+                        world.CharacterInputAll(tick);
+                }
+                finally
+                {
+                    scope = recorder.End();
+                }
+                var after = recorder.Calibrate();
+                Assert.That(started, Is.True);
+                Assert.That(NTSD.Test.Editor.BattleScopedGcAllocationRecorder.HasZeroEvents(
+                    scope, before, after), Is.True, "complete local warmed CharacterInputAll scope");
+            }
+            Assert.That(SourceCoordinateRefreshCount(world) - sourceBefore, Is.EqualTo(16L * 3));
+            Assert.That(world.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics, Is.EqualTo(48L * 3));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SourceCoordinateIncremental_RoleMutationKeepsFullCapture(bool changeState)
+        {
+            var world = new SimulationWorld();
+            SetSourceCoordinateIncremental(world, true);
+            LF2Character character = RegisterCharacter(world, 21, 1, 1, 10, 17, 4, 2, false);
+            SetSourceCoordinatePosition(character, 500, 610);
+            ConfigureGateBWorld(world, true, 0xC012u);
+            Invoke(world, "BuildAiInputSlotSnapshot");
+            Assert.That(world.AiUnifiedSnapshotExecutionPublishedGroundRoleCountForTests, Is.EqualTo(1));
+            if (changeState)
+                character.Frame.D.state = 14;
+            else
+                character.Runtime.HitStop = 3;
+            Invoke(world, "RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput", character);
+            Assert.That(SourceCoordinateRefreshCount(world), Is.Zero);
+            Assert.That(world.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.AiUnifiedSnapshotExecutionPublishedGroundRoleCountForTests, Is.Zero);
+            Assert.That(world.ValidateAiUnifiedSnapshotExecutionPublishedStateForSelfCheck(), Is.True);
+            EndUnifiedManualPass(world);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SourceCoordinateIncremental_Isolated1000InputCost(bool aiControlled)
+        {
+            const int count = 1000;
+            const int samplesPerBlock = 12;
+            var full = new SimulationWorld(BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            var candidate = new SimulationWorld(BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            SetSourceCoordinateIncremental(candidate, true);
+            var left = new LF2Character[count];
+            var right = new LF2Character[count];
+            for (int index = 0; index < count; index++)
+            {
+                int x = index % 40 * 40;
+                int z = index / 40 * 10;
+                left[index] = RegisterCharacter(full, index, 1, index & 1, x, 0, z, 2, aiControlled);
+                right[index] = RegisterCharacter(candidate, index, 1, index & 1, x, 0, z, 2, aiControlled);
+                SetSourceCoordinatePosition(left[index], x + 500, z + 610);
+                SetSourceCoordinatePosition(right[index], x + 500, z + 610);
+            }
+            Assert.That(full.ObjectCount, Is.EqualTo(count), "all requested registrations must succeed");
+            Assert.That(candidate.ObjectCount, Is.EqualTo(count));
+            Assert.That(full.RuntimeSlotCapacityForDiagnostics, Is.GreaterThanOrEqualTo(count));
+            ConfigureGateBWorld(full, true, 0xC014u);
+            ConfigureGateBWorld(candidate, true, 0xC014u);
+            for (int tick = 2; tick < 18; tick++)
+            {
+                full.CharacterInputAll(tick);
+                candidate.CharacterInputAll(tick);
+            }
+            long sourceBefore = SourceCoordinateRefreshCount(candidate);
+            long aiReadsBefore = candidate.AiUnifiedSnapshotExecutionReadCountForDiagnostics;
+            double totalFullMs = 0;
+            double totalCandidateMs = 0;
+            using (var recorder = new NTSD.Test.Editor.BattleScopedGcAllocationRecorder())
+            {
+                for (int block = 0; block < 4; block++)
+                {
+                    int tick = 18 + block * samplesPerBlock;
+                    double fullMs;
+                    double candidateMs;
+                    if ((block & 1) == 0)
+                    {
+                        fullMs = MeasureSourceCoordinateInputBlock(full, recorder, tick, samplesPerBlock);
+                        candidateMs = MeasureSourceCoordinateInputBlock(candidate, recorder, tick, samplesPerBlock);
+                    }
+                    else
+                    {
+                        candidateMs = MeasureSourceCoordinateInputBlock(candidate, recorder, tick, samplesPerBlock);
+                        fullMs = MeasureSourceCoordinateInputBlock(full, recorder, tick, samplesPerBlock);
+                    }
+                    totalFullMs += fullMs;
+                    totalCandidateMs += candidateMs;
+                    AssertSourceCoordinateRowsEqual(full, candidate);
+                    AssertNativeRandomScalarStateEqual(full.NativeRandom.CaptureScalarState(),
+                        candidate.NativeRandom.CaptureScalarState(), "isolated 1000 input native RNG");
+                    for (int index = 0; index < count; index++)
+                    {
+                        AssertDecisionStateEqual(full, left[index], candidate, right[index]);
+                        AssertEntityObservableStateEqual(left[index], right[index]);
+                    }
+                    Assert.That(full.LastNTSD28InputProducerFreezeCountForDiagnostics, Is.EqualTo(count));
+                    Assert.That(candidate.LastNTSD28InputProducerFreezeCountForDiagnostics, Is.EqualTo(count));
+                    TestContext.WriteLine("LOCAL_INPUT_ONLY ai=" + aiControlled + " block=" + block +
+                        " OFF_ms_per_pass=" + fullMs / samplesPerBlock +
+                        " ON_ms_per_pass=" + candidateMs / samplesPerBlock);
+                }
+            }
+            Assert.That(SourceCoordinateRefreshCount(full), Is.Zero);
+            Assert.That(SourceCoordinateRefreshCount(candidate) - sourceBefore, Is.GreaterThan(0));
+            Assert.That(candidate.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
+                Is.EqualTo(64L * count * (aiControlled ? 2 : 1)));
+            Assert.That(candidate.AiUnifiedSnapshotExecutionReadCountForDiagnostics - aiReadsBefore,
+                Is.EqualTo(aiControlled ? 48L * count : 0));
+            Assert.That(candidate.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics, Is.Zero);
+            TestContext.WriteLine("LOCAL_INPUT_ONLY ai=" + aiControlled + " samples=48" +
+                " entities=" + count + " sampled_source_incremental=" +
+                (SourceCoordinateRefreshCount(candidate) - sourceBefore) +
+                " OFF_mean_ms=" + totalFullMs / 48 +
+                " ON_mean_ms=" + totalCandidateMs / 48 +
+                " relative_change_percent=" + (totalCandidateMs / totalFullMs - 1) * 100);
+        }
+
+        private static double MeasureSourceCoordinateInputBlock(
+            SimulationWorld world,
+            NTSD.Test.Editor.BattleScopedGcAllocationRecorder recorder,
+            int firstTick,
+            int samples)
+        {
+            var before = recorder.Calibrate();
+            bool started = recorder.Begin();
+            long begin = System.Diagnostics.Stopwatch.GetTimestamp();
+            NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult scope;
+            long end;
+            try
+            {
+                for (int tick = firstTick; tick < firstTick + samples; tick++)
+                    world.CharacterInputAll(tick);
+            }
+            finally
+            {
+                end = System.Diagnostics.Stopwatch.GetTimestamp();
+                scope = recorder.End();
+            }
+            var after = recorder.Calibrate();
+            Assert.That(started, Is.True);
+            Assert.That(NTSD.Test.Editor.BattleScopedGcAllocationRecorder.HasZeroEvents(
+                scope, before, after), Is.True, "isolated input block calibrated GC event scope");
+            return (end - begin) * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        }
+
+        private static PropertyInfo SourceCoordinateProperty(string name)
+        {
+            PropertyInfo property = typeof(SimulationWorld).GetProperty(name, InstanceMembers);
+            Assert.That(property, Is.Not.Null, "Missing source-coordinate candidate API: " + name);
+            return property;
+        }
+
+        private static void SetSourceCoordinateIncremental(SimulationWorld world, bool enabled)
+        {
+            SourceCoordinateProperty("AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics")
+                .SetValue(world, enabled);
+        }
+
+        private static long SourceCoordinateRefreshCount(SimulationWorld world)
+        {
+            return (long)SourceCoordinateProperty(
+                "AiUnifiedSnapshotSourceCoordinateRefreshCountForDiagnostics").GetValue(world);
+        }
+
+        private static void SetSourceCoordinatePosition(LF2Character character, double x, double z)
+        {
+            character.Runtime.SetSourceRulePosition(x, z);
+            character.Runtime.SyncSourceRuleIntegerPosition();
+        }
+
+        private static T[] SourceCoordinatePublisherArray<T>(object publisher, string fieldName)
+        {
+            return (T[])publisher.GetType().GetField(fieldName, InstanceMembers).GetValue(publisher);
+        }
+
+        private static MethodInfo SourceCoordinatePublisherMethod(object publisher)
+        {
+            MethodInfo method = publisher.GetType().GetMethod("PublishSourceRuleCoordinates", InstanceMembers);
+            Assert.That(method, Is.Not.Null, "Missing source X/Z staging API");
+            return method;
+        }
+
+        private static void AssertSourceCoordinateRowsEqual(SimulationWorld full, SimulationWorld candidate)
+        {
+            PropertyInfo property = typeof(SimulationWorld).GetProperty(
+                "aiUnifiedSnapshotPublishedState", InstanceMembers);
+            object fullState = property.GetValue(full);
+            object candidateState = property.GetValue(candidate);
+            object fullRows = fullState.GetType().GetField("Rows", InstanceMembers).GetValue(fullState);
+            object candidateRows = candidateState.GetType().GetField("Rows", InstanceMembers).GetValue(candidateState);
+            foreach (string fieldName in new[]
+            {
+                "Included", "Generation", "Identity", "ObjectId", "NativeAiProfileObjectId",
+                "DataObjectType", "InputHistoryGate", "X", "Y", "Z", "Hp", "Hp3", "HpMax",
+                "Pp", "Team", "State", "Frame", "HitJ", "LinkState", "OwnerSlot", "CachedTargetSlot",
+                "CoordinateTargetX", "Vx", "Facing", "TargetSlot", "HitStop", "BoundaryFlags",
+                "SpecialScanMember",
+            })
+            {
+                FieldInfo field = fullRows.GetType().GetField(fieldName, InstanceMembers);
+                CollectionAssert.AreEqual((Array)field.GetValue(fullRows),
+                    (Array)field.GetValue(candidateRows), fieldName);
+            }
+            Assert.That(AiSensingKernel.ValidateIndexedContract((AiSensingSnapshot)fullRows), Is.True);
+            Assert.That(AiSensingKernel.ValidateIndexedContract((AiSensingSnapshot)candidateRows), Is.True);
+            foreach (string fieldName in new[]
+            {
+                "MoveModeFirst10Present", "MoveModeFirst10Eligible", "MoveModeFirst10Generation",
+                "MoveModeFirst10Hp", "MoveModeFirst10X", "MoveModeFirst10Z",
+            })
+            {
+                FieldInfo field = fullState.GetType().GetField(fieldName, InstanceMembers);
+                CollectionAssert.AreEqual((Array)field.GetValue(fullState),
+                    (Array)field.GetValue(candidateState), fieldName);
+            }
+            Assert.That(candidateState.GetType().GetField("MoveModeFirst10Valid", InstanceMembers)
+                .GetValue(candidateState), Is.True);
+        }
+
+        private sealed class SourceCoordinateCustomCharacter : LF2Character
+        {
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void SourceCoordinateIncremental_DriverApplicableFormalRoot(
+            string side, string trace, string expectedSha)
+        {
+            string tracePath = SourceCoordinateAdmissionConstant("RootTrace") + trace;
+            Assert.That(SourceCoordinateAdmissionMethod("HashFile").Invoke(null,
+                new object[] { tracePath }), Is.EqualTo(expectedSha));
+            var native = new List<JObject>();
+            foreach (string line in File.ReadLines(tracePath))
+            {
+                JObject row = JObject.Parse(line);
+                if ((int)row["tick"] >= 1 && (int)row["tick"] <= 12)
+                    native.Add(row);
+            }
+            Assert.That(native.Count, Is.EqualTo(12));
+            string scenario = SourceCoordinateAdmissionConstant("ScenarioRoot") +
+                "unity-scenario-" + side + ".json";
+            SourceCoordinateDriverRow[] full = RunSourceCoordinateDriver(
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native.ToArray(), false);
+            SourceCoordinateDriverRow[] candidate = RunSourceCoordinateDriver(
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native.ToArray(), true);
+            AssertSourceCoordinateDriverRowsEqual(full, candidate, false);
+            SaveSourceCoordinateDriverRows(side, full, candidate, false);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void SourceCoordinateIncremental_DriverThousandCanonicalAi(
+            ProductionEntityStressMode mode)
+        {
+            string scenario = SourceCoordinateAdmissionConstant("RoleSakuraScenario");
+            SourceCoordinateDriverRow[] full = RunSourceCoordinateDriver(
+                scenario, true, mode, 32, null, false);
+            SourceCoordinateDriverRow[] candidate = RunSourceCoordinateDriver(
+                scenario, true, mode, 32, null, true);
+            SaveSourceCoordinateDriverRows(mode.ToString(), full, candidate, true);
+            AssertSourceCoordinateDriverRowsEqual(full, candidate, true);
+            for (int index = 16; index < full.Length; index++)
+            {
+                Assert.That(NTSD.Test.Editor.BattleScopedGcAllocationRecorder.HasZeroEvents(
+                    full[index].gcScope, full[index].gcBefore, full[index].gcAfter), Is.True,
+                    "baseline full Driver GC tick=" + full[index].tick);
+                Assert.That(NTSD.Test.Editor.BattleScopedGcAllocationRecorder.HasZeroEvents(
+                    candidate[index].gcScope, candidate[index].gcBefore, candidate[index].gcAfter), Is.True,
+                    "candidate full Driver GC tick=" + candidate[index].tick);
+            }
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_DriverGcStageAttribution()
+        {
+            var attribution = new SourceCoordinateDriverGcAttribution();
+            SourceCoordinateDriverRow[] rows = RunSourceCoordinateDriver(
+                SourceCoordinateAdmissionConstant("RoleSakuraScenario"), true,
+                ProductionEntityStressMode.Dispersed1000, 32, null, false, attribution);
+            SourceCoordinateAdmissionMethod("SaveNew").Invoke(null, new object[]
+            {
+                "dispersed1000-stage-gc-attribution.json",
+                new
+                {
+                    evidence = "GC_ATTRIBUTION_ONLY; stage prepare plus remaining StepOneTick; not a zero-GC qualification",
+                    attribution,
+                    ticks = rows.Select(row => new
+                    {
+                        row.tick, row.entities, row.actualAi, row.extendedHashes, row.lockstepHashes,
+                        row.nativeState, row.legacyState, row.legacyCalls, row.gcScope,
+                    }).ToArray(),
+                },
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-03/",
+            });
+            Assert.That(attribution.before.passed && attribution.after.passed, Is.True);
+            for (int index = 16; index < rows.Length; index++)
+            {
+                Assert.That(attribution.stage[index].valid && rows[index].gcScope.valid, Is.True,
+                    "both attribution scopes must be valid at tick=" + rows[index].tick);
+                Assert.That(rows[index].actualAi, Is.EqualTo(1000));
+            }
+        }
+
+        [Test]
+        public void SourceCoordinateIncremental_DriverGcWrapperAttribution()
+        {
+            var attribution = new SourceCoordinateDriverGcAttribution { splitWrapper = true };
+            SourceCoordinateDriverRow[] rows = RunSourceCoordinateDriver(
+                SourceCoordinateAdmissionConstant("RoleSakuraScenario"), true,
+                ProductionEntityStressMode.Dispersed1000, 32, null, false, attribution);
+            SourceCoordinateAdmissionMethod("SaveNew").Invoke(null, new object[]
+            {
+                "dispersed1000-wrapper-gc-attribution.json",
+                new
+                {
+                    evidence = "GC_ATTRIBUTION_ONLY; ordered wrapper decomposition; not a full Driver zero-GC qualification",
+                    labels = new[] { "StopWorker", "CoreStep", "SoundDispatch", "InspectorRefresh" },
+                    attribution,
+                    ticks = rows.Select(row => new
+                    {
+                        row.tick, row.entities, row.actualAi, row.extendedHashes, row.lockstepHashes,
+                        row.nativeState, row.legacyState, row.legacyCalls,
+                    }).ToArray(),
+                },
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/gc-attribution-04/",
+            });
+            Assert.That(attribution.before.passed && attribution.after.passed, Is.True);
+            JObject baseline = JObject.Parse(File.ReadAllText(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/" +
+                "driver-qualification-01/Dispersed1000-source-coordinate-driver-parity-94c326d0b02a46d88ea58afdff466844.json"));
+            for (int index = 0; index < rows.Length; index++)
+            {
+                JObject current = JObject.FromObject(rows[index]);
+                foreach (string field in new[]
+                    { "extendedHashes", "lockstepHashes", "nativeState", "legacyState", "legacyCalls" })
+                    Assert.That(JToken.DeepEquals(current[field], baseline["baseline"][index][field]),
+                        Is.True, field + " decomposed wrapper tick=" + rows[index].tick);
+                if (index <= 15)
+                    continue;
+                Assert.That(attribution.stage[index].valid, Is.True);
+                foreach (var scope in attribution.wrapper[index])
+                    Assert.That(scope.valid, Is.True, "wrapper attribution scope must be valid");
+            }
+        }
+
+        [UnityTest]
+        public IEnumerator SourceCoordinateIncremental_DriverGcCallsite()
+        {
+            var capture = new SourceCoordinateDriverGcCallsite();
+            try
+            {
+                capture.Prepare();
+                double readyDeadline = UnityEditor.EditorApplication.timeSinceStartup + 30;
+                do
+                {
+                    yield return null;
+                }
+                while (!capture.HasFreshFrame && UnityEditor.EditorApplication.timeSinceStartup < readyDeadline);
+                Assert.That(capture.HasFreshFrame, Is.True, "Profiler recording must be active before fixture execution");
+                SourceCoordinateDriverRow[] rows = RunSourceCoordinateDriver(
+                    SourceCoordinateAdmissionConstant("RoleSakuraScenario"), true,
+                    ProductionEntityStressMode.Dispersed1000, 32, null, false, null, capture);
+                double frameDeadline = UnityEditor.EditorApplication.timeSinceStartup + 30;
+                do
+                {
+                    yield return null;
+                }
+                while (!capture.HasFreshFrame && UnityEditor.EditorApplication.timeSinceStartup < frameDeadline);
+                capture.StopAndExport(rows[16]);
+                JObject baseline = JObject.Parse(File.ReadAllText(
+                    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/" +
+                    "driver-qualification-01/Dispersed1000-source-coordinate-driver-parity-94c326d0b02a46d88ea58afdff466844.json"));
+                for (int index = 0; index < rows.Length; index++)
+                {
+                    JObject current = JObject.FromObject(rows[index]);
+                    foreach (string field in new[]
+                        { "extendedHashes", "lockstepHashes", "nativeState", "legacyState", "legacyCalls" })
+                        Assert.That(JToken.DeepEquals(current[field], baseline["baseline"][index][field]),
+                            Is.True, field + " callsite capture tick=" + rows[index].tick);
+                }
+            }
+            finally
+            {
+                capture.Restore();
+            }
+        }
+
+        private sealed class SourceCoordinateDriverGcCallsite
+        {
+            private const string MarkerName = "NTSD.Optimization.Batch95.HeadlessDriver.GC";
+            private readonly ProfilerMarker marker = new ProfilerMarker(MarkerName);
+            private readonly Type profilerOwner = typeof(NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor);
+            private object settings;
+            private string root;
+            private int previousLastFrame;
+            private bool previousHistorySaved;
+
+            public bool HasFreshFrame => ProfilerDriver.lastFrameIndex > previousLastFrame;
+
+            private MethodInfo Method(string name)
+            {
+                return profilerOwner.GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic);
+            }
+
+            public void Prepare()
+            {
+                NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+                root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/" +
+                    "gc-callsite-05/" + Guid.NewGuid().ToString("N");
+                Assert.That(Directory.Exists(root), Is.False);
+                Directory.CreateDirectory(root);
+                settings = Method("ReadSettings").Invoke(null, null);
+                if (ProfilerDriver.firstFrameIndex >= 0)
+                {
+                    Method("SaveProfilerHistory").Invoke(null,
+                        new object[] { Path.Combine(root, "prior-history.raw") });
+                    previousHistorySaved = true;
+                }
+                marker.Begin();
+                marker.End();
+                previousLastFrame = ProfilerDriver.lastFrameIndex;
+                Profiler.enableBinaryLog = false;
+                ProfilerDriver.profileEditor = true;
+                ProfilerDriver.SetAreaEnabled(ProfilerArea.CPU, true);
+                Profiler.enableAllocationCallstacks = false;
+                ProfilerDriver.enabled = true;
+                Profiler.enabled = true;
+            }
+
+            public void BeforeTick(int tick)
+            {
+                if (tick != 17)
+                    return;
+                previousLastFrame = ProfilerDriver.lastFrameIndex;
+                Profiler.enableBinaryLog = false;
+                ProfilerDriver.profileEditor = true;
+                ProfilerDriver.SetAreaEnabled(ProfilerArea.CPU, true);
+                Profiler.enableAllocationCallstacks = true;
+                ProfilerDriver.enabled = true;
+                Profiler.enabled = true;
+            }
+
+            public bool Step(SimulationTickDriver driver, FrameInputSet input)
+            {
+                marker.Begin();
+                try
+                {
+                    return driver.StepOneTick(input, true, false);
+                }
+                finally
+                {
+                    marker.End();
+                }
+            }
+
+            public void StopAndExport(SourceCoordinateDriverRow row)
+            {
+                Profiler.enabled = false;
+                Method("SaveProfilerHistory").Invoke(null,
+                    new object[] { Path.Combine(root, "cpu-gc.raw") });
+                int first = previousLastFrame < 0
+                    ? ProfilerDriver.firstFrameIndex : ProfilerDriver.GetNextFrameIndex(previousLastFrame);
+                int last = ProfilerDriver.lastFrameIndex;
+                var allocations = new List<object>();
+                var stack = new List<ulong>(64);
+                int envelopes = 0;
+                int scanned = 0;
+                bool stacksResolved = true;
+                for (int frame = first; frame >= 0 && frame <= last;
+                    frame = ProfilerDriver.GetNextFrameIndex(frame))
+                {
+                    Assert.That(++scanned, Is.LessThanOrEqualTo(128), "bounded fresh profiler frame range");
+                    using (RawFrameDataView view = ProfilerDriver.GetRawFrameDataView(frame, 0))
+                    {
+                        if (!view.valid)
+                            continue;
+                        Assert.That(view.threadName, Is.EqualTo("Main Thread"));
+                        for (int index = 0; index < view.sampleCount; index++)
+                        {
+                            if (view.GetSampleName(index) != MarkerName)
+                                continue;
+                            envelopes++;
+                            double begin = view.GetSampleStartTimeMs(index);
+                            double end = begin + view.GetSampleTimeMs(index);
+                            Assert.That(double.IsNaN(begin) || double.IsInfinity(begin) || end < begin, Is.False);
+                            for (int sample = index + 1; sample < view.sampleCount; sample++)
+                            {
+                                double start = view.GetSampleStartTimeMs(sample);
+                                if (view.GetSampleName(sample) != "GC.Alloc" || start < begin || start >= end)
+                                    continue;
+                                stack.Clear();
+                                view.GetSampleCallstack(sample, stack);
+                                var calls = new List<object>(stack.Count);
+                                bool resolved = false;
+                                foreach (ulong address in stack)
+                                {
+                                    FrameDataView.MethodInfo method = view.ResolveMethodInfo(address);
+                                    resolved |= !string.IsNullOrEmpty(method.methodName);
+                                    calls.Add(new
+                                    {
+                                        address = address.ToString("X16"), method = method.methodName,
+                                        file = method.sourceFileName, line = method.sourceFileLine,
+                                    });
+                                }
+                                int metadata = view.GetSampleMetadataCount(sample);
+                                stacksResolved &= resolved && metadata > 0;
+                                allocations.Add(new
+                                {
+                                    frame, sample, startMs = start,
+                                    bytes = metadata > 0 ? view.GetSampleMetadataAsLong(sample, 0) : -1,
+                                    calls,
+                                });
+                            }
+                        }
+                    }
+                    if (frame == last)
+                        break;
+                }
+                Save("driver-gc-callstacks.json", new
+                {
+                    evidence = "HEADLESS_DRIVER_CALLSITE_ONLY; no performance or zero-GC acceptance",
+                    marker = MarkerName, first, last, previousLastFrame, envelopes, stacksResolved,
+                    row.tick, row.actualAi, row.gcScope, row.gcBefore, row.gcAfter, allocations,
+                });
+                Assert.That(envelopes, Is.EqualTo(1), "one complete warmed Driver envelope");
+                Assert.That(row.gcBefore.passed && row.gcAfter.passed && row.gcScope.valid, Is.True);
+                Assert.That(allocations.Count, Is.EqualTo(row.gcScope.allocationEvents));
+                Assert.That(stacksResolved && allocations.Count > 0, Is.True, "actual allocation callsites required");
+            }
+
+            public void Restore()
+            {
+                if (settings == null)
+                    return;
+                Method("RestoreSettings").Invoke(null, new[] { settings });
+                object after = Method("ReadSettings").Invoke(null, null);
+                bool restored = JToken.DeepEquals(JObject.FromObject(settings), JObject.FromObject(after));
+                Save("profiler-settings-audit.json", new
+                {
+                    before = settings, after, restored, previousHistorySaved,
+                    history = "No clear or reload; retained previous history plus owned capture frames",
+                });
+                Assert.That(restored, Is.True, "all preserved Profiler settings restored");
+            }
+
+            private void Save(string file, object value)
+            {
+                using var stream = new FileStream(Path.Combine(root, file), FileMode.CreateNew,
+                    FileAccess.Write, FileShare.Read);
+                using var writer = new StreamWriter(stream);
+                writer.Write(JsonConvert.SerializeObject(value, Formatting.Indented));
+            }
+        }
+
+        private sealed class SourceCoordinateDriverGcAttribution
+        {
+            public string marker;
+            public string unit;
+            public bool boundaryManagerPresent;
+            public int enabledBoundaryCount;
+            public bool splitWrapper;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[][] wrapper =
+                Enumerable.Range(0, 32).Select(_ =>
+                    new NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[4]).ToArray();
+            private Action<bool> stopWorker;
+            private Func<FrameInputSet, bool, bool, bool> coreStep;
+            private Action dispatchSounds;
+            private Action refreshInspector;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[] stage =
+                new NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[32];
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult before;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult after;
+
+            public void PrepareWrapper(SimulationTickDriver driver)
+            {
+                Type type = typeof(SimulationTickDriver);
+                stopWorker = (Action<bool>)Delegate.CreateDelegate(typeof(Action<bool>), driver,
+                    type.GetMethod("StopDedicatedSimulationWorker", InstanceMembers));
+                coreStep = (Func<FrameInputSet, bool, bool, bool>)Delegate.CreateDelegate(
+                    typeof(Func<FrameInputSet, bool, bool, bool>), driver,
+                    type.GetMethod("StepOneTickInternal", InstanceMembers, null,
+                        new[] { typeof(FrameInputSet), typeof(bool), typeof(bool) }, null));
+                dispatchSounds = (Action)Delegate.CreateDelegate(typeof(Action), driver,
+                    type.GetMethod("DispatchPublishedSoundsAfterSuccessfulTick", InstanceMembers));
+                refreshInspector = (Action)Delegate.CreateDelegate(typeof(Action), driver,
+                    type.GetMethod("RefreshInspectorState", InstanceMembers));
+            }
+
+            public bool StepSplit(FrameInputSet input, int index,
+                NTSD.Test.Editor.BattleScopedGcAllocationRecorder recorder)
+            {
+                recorder.Begin();
+                try
+                {
+                    stopWorker(true);
+                }
+                finally
+                {
+                    wrapper[index][0] = recorder.End();
+                }
+                bool stepped;
+                recorder.Begin();
+                try
+                {
+                    stepped = coreStep(input, false, true);
+                }
+                finally
+                {
+                    wrapper[index][1] = recorder.End();
+                }
+                recorder.Begin();
+                try
+                {
+                    if (stepped)
+                        dispatchSounds();
+                }
+                finally
+                {
+                    wrapper[index][2] = recorder.End();
+                }
+                recorder.Begin();
+                try
+                {
+                    refreshInspector();
+                }
+                finally
+                {
+                    wrapper[index][3] = recorder.End();
+                }
+                return stepped;
+            }
+        }
+
+        private static MethodInfo SourceCoordinateAdmissionMethod(string name)
+        {
+            MethodInfo method = typeof(NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests)
+                .GetMethod(name, BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "existing Driver qualification helper: " + name);
+            return method;
+        }
+
+        private static string SourceCoordinateAdmissionConstant(string name)
+        {
+            return (string)typeof(NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests)
+                .GetField(name, BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+        }
+
+        private static SourceCoordinateDriverRow[] RunSourceCoordinateDriver(
+            string scenario, bool thousand, ProductionEntityStressMode mode,
+            int ticks, JObject[] native, bool enabled,
+            SourceCoordinateDriverGcAttribution attribution = null,
+            SourceCoordinateDriverGcCallsite callsite = null)
+        {
+            var result = new SourceCoordinateDriverRow[callsite == null ? ticks : 17];
+            Action<SimulationTickDriver, FrameInputSet[], NTSD.Simulation.Lockstep.LockstepSessionIdentity> verify =
+                (driver, inputs, identity) =>
+                {
+                    SimulationWorld world = driver.World;
+                    var query = (BruteForceSceneQuery)world.SceneQuery;
+                    query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+                    SourceCoordinateAdmissionMethod("SetCandidate").Invoke(null, new object[] { query, true });
+                    if (thousand)
+                        SourceCoordinateAdmissionMethod("PrepareThousandAi").Invoke(null,
+                            new object[] { world, mode, 1 });
+                    bool previous = world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics;
+                    bool previousOracle = world.ValidateIncrementalAiUnifiedRowForDiagnostics;
+                    Assert.That(previous, Is.False, "source incremental remains default OFF");
+                    NTSD.Test.Editor.BattleScopedGcAllocationRecorder recorder = null;
+                    var before = default(NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult);
+                    var measured = new NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[ticks];
+                    var preparedRows = new Dictionary<object, object[]>();
+                    foreach (string property in new[]
+                    {
+                        "aiUnifiedSnapshotPublishedState", "aiUnifiedSnapshotScratchState",
+                        "aiUnifiedSnapshotStandbyState",
+                    })
+                    {
+                        object state = typeof(SimulationWorld).GetProperty(property, InstanceMembers).GetValue(world);
+                        if (state != null && !preparedRows.ContainsKey(state))
+                            preparedRows.Add(state, SourceCoordinateDriverStorage(state));
+                    }
+                    Assert.That(preparedRows.Count, Is.EqualTo(2), "both execution buffers are cold prepared");
+                    ulong nativeCallsBefore = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+                    try
+                    {
+                        world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics = enabled;
+                        world.ValidateIncrementalAiUnifiedRowForDiagnostics = true;
+                        driver.ApplySettings(new LockstepSimulationSettings
+                        {
+                            driveMode = SimulationDriveMode.Manual,
+                            enableFrameChecksum = false,
+                        });
+                        if (thousand)
+                            recorder = new NTSD.Test.Editor.BattleScopedGcAllocationRecorder();
+                        if (recorder != null)
+                        {
+                            before = recorder.Calibrate();
+                            Assert.That(before.passed, Is.True, "full Driver GC positive/empty controls");
+                            if (attribution != null)
+                            {
+                                attribution.marker = recorder.Marker;
+                                attribution.unit = recorder.Unit;
+                                attribution.before = before;
+                                var boundaryManager = NTSD.LevelEditor.BoundaryWallManager.TryGetInstance();
+                                attribution.boundaryManagerPresent = boundaryManager != null;
+                                attribution.enabledBoundaryCount = boundaryManager?.EnabledBoundaries.Count ?? 0;
+                                if (attribution.splitWrapper)
+                                    attribution.PrepareWrapper(driver);
+                            }
+                        }
+                        for (int tick = 1; tick <= result.Length; tick++)
+                        {
+                            callsite?.BeforeTick(tick);
+                            if (attribution != null && tick > 16)
+                            {
+                                bool stageStarted = recorder.Begin();
+                                try
+                                {
+                                    world.PrepareStageRuntimeSnapshotForTick(tick);
+                                }
+                                finally
+                                {
+                                    if (stageStarted)
+                                        attribution.stage[tick - 1] = recorder.End();
+                                }
+                                Assert.That(stageStarted, Is.True, "stage attribution scope starts");
+                            }
+                            bool splitWrapper = attribution?.splitWrapper == true && tick > 16;
+                            bool started = tick > 16 && recorder != null && !splitWrapper && recorder.Begin();
+                            bool stepped;
+                            try
+                            {
+                                if (splitWrapper)
+                                {
+                                    stepped = attribution.StepSplit(inputs[tick - 1], tick - 1, recorder);
+                                    measured[tick - 1] = attribution.wrapper[tick - 1][1];
+                                    started = true;
+                                }
+                                else
+                                {
+                                    stepped = callsite != null && tick == 17
+                                        ? callsite.Step(driver, inputs[tick - 1])
+                                        : driver.StepOneTick(inputs[tick - 1], true, false);
+                                }
+                            }
+                            finally
+                            {
+                                if (started && !splitWrapper)
+                                    measured[tick - 1] = recorder.End();
+                            }
+                            Assert.That(stepped, Is.True, "full Driver tick=" + tick);
+                            if (tick > 16 && recorder != null)
+                                Assert.That(started, Is.True, "full Driver GC scope starts");
+                            if (native != null)
+                                SourceCoordinateAdmissionMethod("CompareRoot").Invoke(null,
+                                    new object[] { world, native[tick - 1], tick });
+                            Assert.That(world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics,
+                                Is.EqualTo(enabled), "cold owner remains applied");
+                            Assert.That(world.AiUnifiedSnapshotExecutionPostCommitHardBreachCountForDiagnostics,
+                                Is.Zero, "full Driver hard breach tick=" + tick);
+                            Assert.That(world.AiUnifiedSnapshotExecutionPreCommitFailureCountForDiagnostics,
+                                Is.Zero, "full Driver precommit failure tick=" + tick);
+                            Assert.That(query.LastFormalCollectorModeForDiagnostics,
+                                Is.EqualTo(CollisionFormalCollectorMode.ForceBruteForce));
+                            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+                            Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics ||
+                                query.EnableRoleCapacityRecordGuardForDiagnostics ||
+                                world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, Is.False,
+                                "no unadmitted candidate composition");
+                            object published = typeof(SimulationWorld).GetProperty(
+                                "aiUnifiedSnapshotPublishedState", InstanceMembers).GetValue(world);
+                            object rows = published.GetType().GetField("Rows", InstanceMembers).GetValue(published);
+                            Assert.That(AiSensingKernel.ValidateIndexedContract((AiSensingSnapshot)rows), Is.True);
+                            var actualRows = new List<object>();
+                            var rowFields = new Dictionary<string, object>();
+                            foreach (string field in new[]
+                            {
+                                "Included", "Generation", "Identity", "ObjectId", "NativeAiProfileObjectId",
+                                "DataObjectType", "InputHistoryGate", "X", "Y", "Z", "Hp", "Hp3", "HpMax",
+                                "Pp", "Team", "State", "Frame", "HitJ", "LinkState", "OwnerSlot", "CachedTargetSlot",
+                                "CoordinateTargetX", "Vx", "Facing", "TargetSlot", "HitStop", "BoundaryFlags",
+                                "SpecialScanMember",
+                            })
+                            {
+                                object array = rows.GetType().GetField(field, InstanceMembers).GetValue(rows);
+                                actualRows.Add(array);
+                                rowFields.Add(field, array);
+                            }
+                            foreach (string field in new[]
+                            {
+                                "MoveModeFirst10Present", "MoveModeFirst10Eligible", "MoveModeFirst10Generation",
+                                "MoveModeFirst10Hp", "MoveModeFirst10X", "MoveModeFirst10Z",
+                            })
+                            {
+                                object array = published.GetType().GetField(field, InstanceMembers).GetValue(published);
+                                actualRows.Add(array);
+                                rowFields.Add(field, array);
+                            }
+                            Assert.That(preparedRows.ContainsKey(published), Is.True,
+                                "published state belongs to the cold-prepared two-buffer set");
+                            object[] expectedRows = preparedRows[published];
+                            for (int index = 0; index < expectedRows.Length; index++)
+                                Assert.That(ReferenceEquals(actualRows[index], expectedRows[index]), Is.True,
+                                    "no hot row storage growth index=" + index);
+                            int actualAi = 0;
+                            for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                                if (world.FindEntityByRuntimeSlotForQuery(slot) is LF2Character character &&
+                                    character.AiControlled)
+                                    actualAi++;
+                            result[tick - 1] = new SourceCoordinateDriverRow
+                            {
+                                tick = tick,
+                                entities = world.ObjectCount,
+                                actualAi = actualAi,
+                                extendedHashes = JsonConvert.SerializeObject(thousand
+                                    ? (object)world.CaptureExtendedChecksumSnapshot(tick, inputs[tick - 1]).Hashes
+                                    : world.CaptureParityFrameSnapshot(tick, inputs[tick - 1],
+                                        includeFullDomains: true).Hashes),
+                                lockstepHashes = JsonConvert.SerializeObject(world.CaptureLockstepChecksumSnapshot(
+                                    tick, inputs[tick - 1]).Hashes),
+                                nativeState = JsonConvert.SerializeObject(world.NativeRandom.CaptureScalarState()),
+                                legacyState = world.Rng.State,
+                                legacyCalls = world.Rng.CallCount,
+                                publishedRows = JsonConvert.SerializeObject(rowFields),
+                                sourceRefreshes = SourceCoordinateRefreshCount(world),
+                                aiReads = world.AiUnifiedSnapshotExecutionReadCountForDiagnostics,
+                                sourceRollForward = world.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                                incrementalValidations = world.AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics,
+                            };
+                            if (thousand)
+                                Assert.That(actualAi, Is.EqualTo(1000), "actual canonical AI tick=" + tick);
+                        }
+                        if (recorder != null)
+                        {
+                            var after = recorder.Calibrate();
+                            if (attribution != null)
+                                attribution.after = after;
+                            for (int index = 16; index < result.Length; index++)
+                            {
+                                result[index].gcScope = measured[index];
+                                result[index].gcBefore = before;
+                                result[index].gcAfter = after;
+                            }
+                        }
+                        if (thousand)
+                        {
+                            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                                Is.GreaterThan(nativeCallsBefore), "canonical AI RNG actually ran");
+                            Assert.That(world.AiUnifiedSnapshotExecutionReadCountForDiagnostics, Is.GreaterThan(0));
+                            if (enabled)
+                                Assert.That(SourceCoordinateRefreshCount(world), Is.GreaterThan(0),
+                                    "candidate must actually exercise source-coordinate refresh");
+                        }
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            recorder?.Dispose();
+                        }
+                        finally
+                        {
+                            world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics = previous;
+                            world.ValidateIncrementalAiUnifiedRowForDiagnostics = previousOracle;
+                            Assert.That(world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics,
+                                Is.EqualTo(previous), "cold flag restores before ordered Driver shutdown");
+                            Assert.That(world.ValidateIncrementalAiUnifiedRowForDiagnostics,
+                                Is.EqualTo(previousOracle), "cold oracle restores");
+                        }
+                    }
+                };
+            SourceCoordinateAdmissionMethod("WithRoleDriverScenario").Invoke(null, new object[]
+            {
+                SourceCoordinateAdmissionConstant("RuntimeRoot"), scenario,
+                thousand ? BattleRuntimeProfile.MobileExtended : BattleRuntimeProfile.Authority400,
+                ticks, verify, true,
+            });
+            return result;
+        }
+
+        private static void AssertSourceCoordinateDriverRowsEqual(
+            SourceCoordinateDriverRow[] full, SourceCoordinateDriverRow[] candidate, bool thousand)
+        {
+            Assert.That(candidate.Length, Is.EqualTo(full.Length));
+            for (int index = 0; index < full.Length; index++)
+            {
+                SourceCoordinateDriverRow a = full[index], b = candidate[index];
+                string label = "source-coordinate Driver first-difference tick=" + a.tick;
+                Assert.That(b.entities, Is.EqualTo(a.entities), label + " entities");
+                Assert.That(b.actualAi, Is.EqualTo(a.actualAi), label + " AI roster");
+                Assert.That(b.extendedHashes, Is.EqualTo(a.extendedHashes), label + " complete hashes");
+                Assert.That(b.lockstepHashes, Is.EqualTo(a.lockstepHashes), label + " lockstep hashes");
+                Assert.That(b.nativeState, Is.EqualTo(a.nativeState), label + " full native scalar RNG");
+                Assert.That(b.legacyState, Is.EqualTo(a.legacyState), label + " legacy RNG state");
+                Assert.That(b.legacyCalls, Is.EqualTo(a.legacyCalls), label + " legacy RNG calls");
+                Assert.That(b.publishedRows, Is.EqualTo(a.publishedRows), label + " row/first10 fields");
+                Assert.That(a.sourceRefreshes, Is.Zero, label + " baseline does not use candidate");
+                Assert.That(b.sourceRollForward, Is.EqualTo(a.sourceRollForward), label + " source rebuild protection");
+                Assert.That(b.aiReads, Is.EqualTo(a.aiReads), label + " actual consumer reads");
+            }
+            if (thousand)
+                Assert.That(candidate[candidate.Length - 1].sourceRefreshes, Is.GreaterThan(0));
+        }
+
+        private static object[] SourceCoordinateDriverStorage(object published)
+        {
+            object rows = published.GetType().GetField("Rows", InstanceMembers).GetValue(published);
+            var arrays = new List<object>();
+            foreach (string field in new[]
+            {
+                "Included", "Generation", "Identity", "ObjectId", "NativeAiProfileObjectId",
+                "DataObjectType", "InputHistoryGate", "X", "Y", "Z", "Hp", "Hp3", "HpMax",
+                "Pp", "Team", "State", "Frame", "HitJ", "LinkState", "OwnerSlot", "CachedTargetSlot",
+                "CoordinateTargetX", "Vx", "Facing", "TargetSlot", "HitStop", "BoundaryFlags",
+                "SpecialScanMember",
+            })
+                arrays.Add(rows.GetType().GetField(field, InstanceMembers).GetValue(rows));
+            foreach (string field in new[]
+            {
+                "MoveModeFirst10Present", "MoveModeFirst10Eligible", "MoveModeFirst10Generation",
+                "MoveModeFirst10Hp", "MoveModeFirst10X", "MoveModeFirst10Z",
+            })
+                arrays.Add(published.GetType().GetField(field, InstanceMembers).GetValue(published));
+            return arrays.ToArray();
+        }
+
+        private static void SaveSourceCoordinateDriverRows(string name,
+            SourceCoordinateDriverRow[] full, SourceCoordinateDriverRow[] candidate, bool thousand)
+        {
+            SourceCoordinateAdmissionMethod("SaveNew").Invoke(null, new object[]
+            {
+                name + "-source-coordinate-driver-parity.json",
+                new
+                {
+                    baseline = full, candidate, thousand, performanceEvidence = false,
+                    gcScope = thousand ? "full StepOneTick; 16warm+16sample per OFF/ON; calibrated events" : "not measured",
+                    checksumEvidenceSerializationOutsideGcScope = true,
+                },
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/driver-qualification-01/",
+            });
+        }
+
+        private sealed class SourceCoordinateDriverRow
+        {
+            public int tick;
+            public int entities;
+            public int actualAi;
+            public string extendedHashes;
+            public string lockstepHashes;
+            public string nativeState;
+            public uint legacyState;
+            public ulong legacyCalls;
+            public string publishedRows;
+            public long sourceRefreshes;
+            public long aiReads;
+            public long sourceRollForward;
+            public long incrementalValidations;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult gcScope;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult gcBefore;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult gcAfter;
         }
 
         [Test]
