@@ -5444,6 +5444,7 @@ namespace NTSD.Animation.Rendering.Editor
                 throw new InvalidOperationException(failureReason);
 
             world = driver.World;
+            manager.PrepareBattleCentralBindings(driver, new[] { selectedCharacterOid });
             PrepareStressWorldServices(driver);
             initialRosterLogicOnlyMaterialization = world.UsesLogicOnlyEntityMaterialization;
             report.initialRosterLogicOnlyMaterialization = initialRosterLogicOnlyMaterialization;

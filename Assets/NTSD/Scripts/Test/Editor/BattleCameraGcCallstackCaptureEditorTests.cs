@@ -10,6 +10,83 @@ namespace NTSD.Test.Editor
     public sealed class BattleCameraGcCallstackCaptureEditorTests
     {
         [Test]
+        public void PositiveControl_RequestUsesOneKnownAllocationAtCameraNineOfSixteen()
+        {
+            object request = CreatePositiveRequest();
+            Assert.That(Field<int>(request, "targetCameraFrames"), Is.EqualTo(16));
+            Assert.That(Field<bool>(request, "lateCameraPositiveControl"), Is.True);
+            Assert.That(Field<bool>(request, "lateCameraPositiveControlInjected"), Is.False);
+            Assert.That(Field<int>(request, "lateCameraPositiveControlOrdinal"), Is.EqualTo(9));
+            Assert.That(Field<int>(request, "lateCameraPositiveControlBytes"), Is.EqualTo(1024 * 1024));
+        }
+
+        [Test]
+        public void PositiveControl_RequestPreservesFullCalibratedScopeWithoutReplayOrInput()
+        {
+            object request = CreatePositiveRequest();
+            Assert.That(Field<bool>(request, "lateCameraGcCallstackCapture"), Is.True);
+            Assert.That(Field<bool>(request, "cameraGcCallstackCapture"), Is.True);
+            Assert.That(Field<bool>(request, "calibratedAllocationSampling"), Is.True);
+            Assert.That(Field<bool>(request, "allocationFrameProvenance"), Is.True);
+            Assert.That(Field<bool>(request, "allocationObserverStages"), Is.True);
+            Assert.That(Field<bool>(request, "prepareObserverLiterals"), Is.True);
+            Assert.That(Field<bool>(request, "requireActiveAuxiliaryCoverage"), Is.True);
+            Assert.That(Field<bool>(request, "runNextCycle"), Is.False);
+            Assert.That(Field<bool>(request, "sampleTiming"), Is.False);
+            Assert.That(Field<bool>(request, "dynamicInput"), Is.False);
+            Assert.That(Field<bool>(request, "replayProductionCatalog"), Is.False);
+        }
+
+        [Test]
+        public void PositiveControl_RequestRetainsFreshRootAndDiagnosticOnlyLabel()
+        {
+            object request = CreatePositiveRequest();
+            Assert.That(Field<string>(request, "outputRoot"), Is.EqualTo("test-only-positive-root/"));
+            Assert.That(Field<string>(request, "allocationScope"), Does.Contain("KNOWN_POSITIVE_CONTROL"));
+            Assert.That(Field<string>(request, "allocationScope"), Does.Contain("DIAGNOSTIC_ONLY"));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void PositiveControl_OriginalRequestsRemainDisabled(bool late)
+        {
+            object request = late ? CreateLateRequest() : CreateRequest();
+            Assert.That(Field<bool>(request, "lateCameraPositiveControl"), Is.False);
+            Assert.That(Field<bool>(request, "lateCameraPositiveControlInjected"), Is.False);
+            Assert.That(Field<int>(request, "lateCameraPositiveControlOrdinal"), Is.Zero);
+            Assert.That(Field<int>(request, "lateCameraPositiveControlBytes"), Is.Zero);
+        }
+
+        [TestCase(false, false, 9, 9, 16, false)]
+        [TestCase(true, false, 8, 9, 16, false)]
+        [TestCase(true, false, 9, 9, 16, true)]
+        [TestCase(true, false, 10, 9, 16, false)]
+        [TestCase(true, true, 9, 9, 16, false)]
+        [TestCase(true, false, 17, 17, 16, false)]
+        public void PositiveControl_GateIsDisabledSingleOrdinalAndBounded(
+            bool enabled, bool injected, int ordinal, int injectionOrdinal, int cameraLimit, bool expected)
+        {
+            Assert.That((bool)Method(typeof(BattleCentralProductionWindowSceneProbeEditor),
+                "ShouldInjectLateCameraPositiveControl").Invoke(null,
+                    new object[] { enabled, injected, ordinal, injectionOrdinal, cameraLimit }), Is.EqualTo(expected));
+        }
+
+        [Test]
+        public void PositiveControl_AllocatorIsExplicitlyNoInliningForRawStackAttribution()
+        {
+            MethodInfo method = Method(typeof(BattleCentralProductionWindowSceneProbeEditor),
+                "InjectKnownLateCameraAllocation");
+            Assert.That(method.GetMethodImplementationFlags() & MethodImplAttributes.NoInlining,
+                Is.EqualTo(MethodImplAttributes.NoInlining));
+        }
+
+        private static object CreatePositiveRequest()
+        {
+            return Method(typeof(BattleCentralProductionWindowSceneProbeEditor),
+                "CreateLateCameraPositiveControlReport").Invoke(null, new object[] { "test-only-positive-root/" });
+        }
+
+        [Test]
         public void Request_CapturesFirstEightCamerasWithoutReplay()
         {
             object request = CreateRequest();

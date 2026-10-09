@@ -1,0 +1,29 @@
+{
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-01.json",
+      "sha": "CD66846C6666B8AF570561480B6D741BCDB2B641C708CB91019BAA8543205B62"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "absolute": "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "bytes": 113750,
+      "sha": "9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-05-driver-admission.cs"
+    }
+  ],
+  "started": "2026-10-09T03:51:46.3694866+08:00",
+  "scope": "only necessary default-off guard Driver qualification after local gain; initial11 write paths still declared in parent",
+  "driverOutputPaths": [
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/driver-qualification-01/right-x550-capacity-record-driver-parity.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/driver-qualification-01/left-x350-capacity-record-driver-parity.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/driver-qualification-01/Dispersed1000-capacity-record-driver-parity.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/driver-qualification-01/Combat1000-capacity-record-driver-parity.json"
+  ]
+}

@@ -1942,6 +1942,14 @@ namespace NTSD.Simulation
 
         public bool BattleAiInputDetailDiagnosticsAllocatedForDiagnostics => diagnosticsModule.BattleAiInputDetailAllocated;
 
+        public bool EnableCharacterInputBoundaryTimingForDiagnostics { get; set; }
+
+        public bool EnableCharacterInputProducerSnapshotReuseForDiagnostics { get; set; }
+
+        public int LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics { get; private set; }
+
+        public int LastCharacterInputProducerSnapshotRefreshCountForDiagnostics { get; private set; }
+
         public BattleAiInputDetailDiagnostics ActiveBattleAiInputDetailDiagnosticsForDiagnostics => diagnosticsModule.ActiveBattleAiInputDetail;
 
         public BattleAiInputDetailDiagnostics EnableBattleAiInputDetailDiagnosticsForDiagnostics() => diagnosticsModule.EnableBattleAiInputDetail();
@@ -3036,12 +3044,16 @@ namespace NTSD.Simulation
 
             LastCharacterInputProgressCommitCountForDiagnostics = 0;
             LastCharacterInputProgressCommitSkipCountForDiagnostics = 0;
+            LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics = 0;
+            LastCharacterInputProducerSnapshotRefreshCountForDiagnostics = 0;
             battleCharacterInputWriter.ResetAiProjectionPublicationDiagnostics();
             EnsureAiSensingModeAvailableBeforeTick();
             BattleTickDetailPhaseDiagnostics detailDiagnostics =
                 ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             BattleAiInputDetailDiagnostics aiDetailDiagnostics =
                 ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            BattleAiInputDetailDiagnostics boundaryDiagnostics =
+                EnableCharacterInputBoundaryTimingForDiagnostics ? aiDetailDiagnostics : null;
             aiDetailDiagnostics?.BeginTick(tickIndex);
             ntsd28InputTwoPassModule.BeginPass();
             detailDiagnostics?.BeginPhase(
@@ -3098,7 +3110,16 @@ namespace NTSD.Simulation
                         runtimeHooks.CharacterInputProducerPassMutationOverride
                             ?.Invoke(this, entity);
 #endif
-                        ntsd28InputTwoPassModule.FreezeProducerState(entity);
+                        boundaryDiagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.ProducerFreeze);
+                        boundaryDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ProducerFreeze);
+                        try
+                        {
+                            ntsd28InputTwoPassModule.FreezeProducerState(entity);
+                        }
+                        finally
+                        {
+                            boundaryDiagnostics?.EndPhase(BattleAiInputDetailPhase.ProducerFreeze);
+                        }
 
                         bool refreshProducer = entity.AiControlled;
 #if UNITY_INCLUDE_TESTS
@@ -3106,7 +3127,18 @@ namespace NTSD.Simulation
                             runtimeHooks.CharacterInputProducerPassMutationOverride != null;
 #endif
                         if (refreshProducer && IsActiveForCurrentPass(entity))
-                            RefreshCharacterInputSnapshotsAfterProducer(entity);
+                        {
+                            boundaryDiagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.ProducerSnapshotRefresh);
+                            boundaryDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ProducerSnapshotRefresh);
+                            try
+                            {
+                                RefreshCharacterInputSnapshotsAfterProducer(entity);
+                            }
+                            finally
+                            {
+                                boundaryDiagnostics?.EndPhase(BattleAiInputDetailPhase.ProducerSnapshotRefresh);
+                            }
+                        }
                     }
 
                     // The second ascending scan performs exact proxy copy first,
@@ -3119,12 +3151,30 @@ namespace NTSD.Simulation
                             continue;
                         }
 
-                        bool proxyApplied =
-                            ntsd28InputTwoPassModule.TryApplyProxy(entity);
+                        bool proxyApplied;
+                        boundaryDiagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.ProxyApply);
+                        boundaryDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ProxyApply);
+                        try
+                        {
+                            proxyApplied = ntsd28InputTwoPassModule.TryApplyProxy(entity);
+                        }
+                        finally
+                        {
+                            boundaryDiagnostics?.EndPhase(BattleAiInputDetailPhase.ProxyApply);
+                        }
                         if (UsesNTSD28NativeInputPipeline)
                         {
-                            ntsd28InputTwoPassModule
-                                .ProcessNativeSampledState(entity);
+                            boundaryDiagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeSampledState);
+                            boundaryDiagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeSampledState);
+                            try
+                            {
+                                ntsd28InputTwoPassModule
+                                    .ProcessNativeSampledState(entity);
+                            }
+                            finally
+                            {
+                                boundaryDiagnostics?.EndPhase(BattleAiInputDetailPhase.NativeSampledState);
+                            }
                         }
                         else if (proxyApplied)
                         {
@@ -3207,7 +3257,21 @@ namespace NTSD.Simulation
 
         private void RefreshCharacterInputSnapshotsAfterProducer(LF2Entity entity)
         {
-            RefreshRuntimeSnapshot(entity);
+            // Alignment contract: NTSD-OPT-H07-PRODUCER-SNAPSHOT-REUSE-087.
+            bool reuseSnapshot = EnableCharacterInputProducerSnapshotReuseForDiagnostics &&
+                entity.GetType() == typeof(LF2Character) && entity.AiControlled &&
+                entity.IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp();
+#if UNITY_INCLUDE_TESTS
+            if (runtimeHooks.CharacterInputProducerPassMutationOverride != null)
+                reuseSnapshot = false;
+#endif
+            if (reuseSnapshot)
+                LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics++;
+            else
+            {
+                RefreshRuntimeSnapshot(entity);
+                LastCharacterInputProducerSnapshotRefreshCountForDiagnostics++;
+            }
             if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
             {
                 RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);

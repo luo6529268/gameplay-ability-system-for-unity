@@ -552,6 +552,293 @@ namespace NTSD.Animation
         public BattleAtlasPolicyDecision LastAtlasPolicyDecision { get; private set; }
         public BattleAtlasDiagnosticInputs LastAtlasDiagnosticInputs { get; private set; }
 
+        internal static bool MatchCentralBindingsEnabledForDiagnostics { get; set; } = true;
+
+        internal static bool BattleVisualBindingBoundaryAllows(
+            NTSD.Simulation.BattleRuntimeLifecycleState lifecycle, int objectCount,
+            bool sealedData, int catalogLeaseCount)
+        {
+            return lifecycle == NTSD.Simulation.BattleRuntimeLifecycleState.Preparing &&
+                objectCount == 0 && !sealedData && catalogLeaseCount == 0;
+        }
+
+        internal static HashSet<int> CollectBattleVisualDependencyIds(
+            IReadOnlyDictionary<int, LF2CharacterDataWrapper> configs,
+            IReadOnlyCollection<int> rootIds)
+        {
+            if (configs == null || rootIds == null)
+                throw new ArgumentNullException(configs == null ? nameof(configs) : nameof(rootIds));
+            var result = new HashSet<int>();
+            var pending = new Queue<int>();
+            foreach (int root in rootIds)
+            {
+                if (!configs.TryGetValue(root, out var config) || config?.characterData == null)
+                    throw new InvalidOperationException("Battle visual root has no loaded config: " + root);
+                if (result.Add(root))
+                    pending.Enqueue(root);
+            }
+            void Include(int id)
+            {
+                if (configs.TryGetValue(id, out var config) && config?.characterData != null &&
+                    result.Add(id))
+                    pending.Enqueue(id);
+            }
+            while (pending.Count > 0)
+            {
+                LF2CharacterData data = configs[pending.Dequeue()].characterData;
+                foreach (LF2FrameData frame in data.frames)
+                {
+                    if (frame == null)
+                        continue;
+                    if (frame.opoint.HasValue)
+                        Include(frame.opoint.Value.Oid);
+                    if (frame.opoints != null)
+                    {
+                        foreach (var point in frame.opoints)
+                            Include(point.Oid);
+                    }
+                    // Existing runtime state transitions; this selects resources, never executes rules.
+                    if (frame.state == 9995)
+                        Include(50);
+                    if (frame.state >= 4000 && frame.state < 5000)
+                        Include(frame.state - 4000);
+                    if (frame.state >= 8000 && frame.state < 9000)
+                        Include(frame.state - 8000);
+                }
+            }
+            return result;
+        }
+
+        internal void PrepareBattleCentralBindings(
+            NTSD.Simulation.SimulationTickDriver driver, IReadOnlyCollection<int> rootIds)
+        {
+            if (rootIds == null || rootIds.Count == 0)
+                return;
+            if (driver == null || driver.World == null || spritePrewarmDisposed ||
+                activeNativePrewarm != null || !IsPrewarmCompleted ||
+                !BattleVisualBindingBoundaryAllows(driver.LifecycleState, driver.World.ObjectCount,
+                    driver.World.RuntimeDataCatalog.IsSealedForBattle ||
+                    driver.World.RuntimeCapacity.IsSealed, spriteCatalogRendererBindings.Count))
+                throw new InvalidOperationException("Match bindings require an empty, unsealed Preparing World without catalog leases.");
+
+            int generation = driver.PreparationGeneration;
+            var world = driver.World;
+            HashSet<int> ids = CollectBattleVisualDependencyIds(TotalCharacterFrameConfig, rootIds);
+            var previousAtlas = new HashSet<UnityEngine.Object>();
+            foreach (BattleSpriteEntry entry in SpriteCatalog.Entries.Values)
+            {
+                if (entry.CentralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D)
+                    previousAtlas.Add(entry.CentralBinding.Texture);
+            }
+            foreach (BattleCommonVisualBinding binding in EnumerateMatchCommonBindings(CommonVisualCatalog))
+            {
+                if (binding.CentralBinding.Mode != BattleSpriteCentralBindingMode.SourceTexture2D)
+                    previousAtlas.Add(binding.CentralBinding.Texture);
+            }
+            long retainedAtlasBytes = 0;
+            foreach (UnityEngine.Object resource in previousAtlas)
+            {
+                if (resource is Texture2DArray array)
+                    retainedAtlasBytes += (long)array.width * array.height * array.depth * 4;
+                else if (resource is Texture2D page)
+                    retainedAtlasBytes += (long)page.width * page.height * 4;
+            }
+            var device = BattleRenderingDeviceCapabilities.FromSystem();
+            var available = new BattleRenderingDeviceCapabilities(
+                device.GpuName, device.DeviceName, device.GraphicsApiName,
+                device.Supports2DArrayTextures, device.MaxTextureSize, device.MaxTextureArraySlices,
+                device.SupportsRgba32Sampling, device.SupportsCopyTexture,
+                device.AtlasMemoryBudgetBytes < 0 ? device.AtlasMemoryBudgetBytes :
+                    Math.Max(0, device.AtlasMemoryBudgetBytes - retainedAtlasBytes));
+            var decodedSources = new Dictionary<Texture2D, Color32[]>();
+            Color32[] DecodeSource(Texture2D texture, string path)
+            {
+                if (decodedSources.TryGetValue(texture, out Color32[] pixels))
+                    return pixels;
+                if (texture.isReadable)
+                    pixels = texture.GetPixels32();
+                else if (publishedLoganCandidate != null)
+                {
+                    LoganVisualContentCandidate.ImageInput image = null;
+                    bool spark = CommonVisualCatalog.TryGetSpark(0, out var sparkBinding) &&
+                        sparkBinding.Texture == texture;
+                    if (spark)
+                        image = publishedLoganCandidate.SparkInput.Image;
+                    for (int sheet = 0; image == null &&
+                        publishedLoganCandidate.WordsInput != null &&
+                        sheet < BattleCommonVisualCatalog.WordSheetCount; sheet++)
+                    {
+                        if (CommonVisualCatalog.TryGetWordGlyph(sheet, 0, out var glyph) &&
+                            glyph.Texture == texture)
+                            image = publishedLoganCandidate.WordsInput.Images[sheet];
+                    }
+                    string imagePath = image?.Path ?? path;
+                    // Synthetic clamped cells and unknown common surfaces remain valid source bindings.
+                    if (!File.Exists(imagePath))
+                        return null;
+                    string hash = image?.Sha256 ?? publishedLoganCandidate.GetImageSha256(imagePath);
+                    var decoded = BMPLoader.LoadVerifiedImageData(imagePath, hash);
+                    if (decoded == null || decoded.Width != texture.width || decoded.Height != texture.height)
+                        throw new InvalidDataException("Match source geometry changed: " + imagePath);
+                    pixels = spark ? ApplyNativeSparkBlackKey(ConvertToColor32(decoded.Pixels)) :
+                        PrepareBattleSheetPixels(decoded, publishedLoganCandidate.Catalog.Source);
+                }
+                if (pixels != null)
+                    decodedSources.Add(texture, pixels);
+                return pixels;
+            }
+            bool sharedBindings = MatchCentralBindingsEnabledForDiagnostics;
+            string[] atlasArguments = sharedBindings ? null : new[]
+            {
+                BattleRenderingPolicyResolver.AtlasModeArgument,
+                nameof(BattleAtlasPolicyMode.SourceTexture2D),
+            };
+            if (!TryBuildMatchCentralAtlasPublication(SpriteCatalog, CommonVisualCatalog,
+                sharedBindings ? (IReadOnlyCollection<int>)ids : Array.Empty<int>(),
+                available, NTSD.App.GameConfig.Instance, atlasArguments, out var catalog, out var common,
+                out var resources, out string diagnostic, out var decision, out var inputs, DecodeSource))
+                throw new InvalidOperationException(diagnostic);
+            try
+            {
+                if (!driver.IsBattlePreparationCurrent(generation, world) ||
+                    spriteCatalogRendererBindings.Count != 0)
+                    throw new OperationCanceledException("Match binding preparation was superseded.");
+                // Alignment contract: NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080; no logic/UI/Sprite publication.
+                var retainedResources = new HashSet<UnityEngine.Object>(publishedOwnedResources);
+                retainedResources.ExceptWith(previousAtlas);
+                retainedResources.UnionWith(resources);
+                BattleSpriteCatalog previousCatalog = SpriteCatalog;
+                SpriteCatalog = catalog;
+                CommonVisualCatalog = common;
+                publishedOwnedResources = retainedResources;
+                LastAtlasDiagnostic = diagnostic;
+                LastAtlasPolicyDecision = decision;
+                LastAtlasDiagnosticInputs = inputs;
+                QueueRetiredSpritePublication(previousCatalog, new HashSet<Sprite>(), previousAtlas);
+                resources = null;
+            }
+            finally
+            {
+                if (resources != null)
+                    DestroyStagedPresentation(null, resources);
+            }
+        }
+
+        private static IEnumerable<BattleCommonVisualBinding> EnumerateMatchCommonBindings(
+            BattleCommonVisualCatalog common)
+        {
+            yield return common.Shadow;
+            for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
+            {
+                if (common.TryGetSpark(pic, out var spark))
+                    yield return spark;
+            }
+            for (int sheet = 0; sheet < BattleCommonVisualCatalog.WordSheetCount; sheet++)
+            {
+                for (int code = 0; code < BattleCommonVisualCatalog.WordGlyphsPerSheet; code++)
+                {
+                    if (common.TryGetWordGlyph(sheet, code, out var glyph))
+                        yield return glyph;
+                }
+            }
+            foreach (var label in common.ComLabels)
+            {
+                if (label != null)
+                    yield return label;
+            }
+        }
+
+        internal static bool TryBuildMatchCentralAtlasPublication(
+            BattleSpriteCatalog catalog, BattleCommonVisualCatalog common, IReadOnlyCollection<int> ids,
+            BattleRenderingDeviceCapabilities capabilities, NTSD.App.GameConfig config, string[] arguments,
+            out BattleSpriteCatalog boundCatalog, out BattleCommonVisualCatalog boundCommon,
+            out HashSet<UnityEngine.Object> resources, out string diagnostic,
+            out BattleAtlasPolicyDecision decision, out BattleAtlasDiagnosticInputs inputs,
+            Func<Texture2D, string, Color32[]> pixelProvider = null)
+        {
+            var sourceBindings = new Dictionary<BattleSpriteKey, BattleSpriteCentralBinding>();
+            var commonBindings = new Dictionary<BattleVisualResourceKey, BattleSpriteCentralBinding>();
+            var sources = new List<BattleAtlasSourcePixels>();
+            var sourceTextures = new Dictionary<string, Texture2D>(StringComparer.Ordinal);
+            var sourcePixels = new Dictionary<string, Color32[]>(StringComparer.Ordinal);
+            var exclusions = new HashSet<string>(StringComparer.Ordinal);
+            var selectedPaths = new HashSet<string>(StringComparer.Ordinal);
+            var selectedIds = new HashSet<int>(ids);
+            BattleSpriteCentralBinding SourceBinding(Texture2D texture, Rect rect, Rect uv)
+            {
+                return new BattleSpriteCentralBinding(
+                    BattleSpriteCentralBindingMode.SourceTexture2D, texture, 0, uv, rect);
+            }
+            void AddSource(string path, Texture2D texture)
+            {
+                path = BattleAtlasLayoutPlanner.NormalizePath(path);
+                if (sourceTextures.TryGetValue(path, out Texture2D existing))
+                {
+                    if (existing != texture && !exclusions.Contains(path))
+                    {
+                        if (existing.width != texture.width || existing.height != texture.height)
+                            throw new InvalidDataException("Conflicting match source geometry: " + path);
+                        Color32[] duplicate = pixelProvider != null ? pixelProvider(texture, path) :
+                            texture.isReadable ? texture.GetPixels32() : null;
+                        if (duplicate == null)
+                        {
+                            exclusions.Add(path);
+                            sources.RemoveAll(source =>
+                                BattleAtlasLayoutPlanner.NormalizePath(source.Path) == path);
+                            sourcePixels.Remove(path);
+                            return;
+                        }
+                        Color32[] original = sourcePixels[path];
+                        if (original.Length != duplicate.Length)
+                            throw new InvalidDataException("Conflicting match source pixel count: " + path);
+                        for (int index = 0; index < original.Length; index++)
+                        {
+                            if (!original[index].Equals(duplicate[index]))
+                                throw new InvalidDataException("Conflicting match source pixels: " + path);
+                        }
+                    }
+                    return;
+                }
+                sourceTextures.Add(path, texture);
+                Color32[] pixels = pixelProvider != null ? pixelProvider(texture, path) :
+                    texture.isReadable ? texture.GetPixels32() : null;
+                if (pixels == null)
+                {
+                    exclusions.Add(path);
+                    return;
+                }
+                sourcePixels.Add(path, pixels);
+                sources.Add(new BattleAtlasSourcePixels(path, texture.width, texture.height, pixels));
+            }
+            foreach (var pair in catalog.Entries)
+            {
+                BattleSpriteEntry entry = pair.Value;
+                sourceBindings.Add(pair.Key, SourceBinding(entry.SharedTexture, entry.PixelRect, entry.NormalizedUv));
+                if (selectedIds.Contains(pair.Key.VisualDataId))
+                    selectedPaths.Add(BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath));
+            }
+            foreach (BattleSpriteEntry entry in catalog.Entries.Values)
+            {
+                string path = BattleAtlasLayoutPlanner.NormalizePath(entry.SourceSheetPath);
+                if (selectedPaths.Contains(path))
+                    AddSource(path, entry.SharedTexture);
+                else
+                    exclusions.Add(path);
+            }
+            var commonPaths = new Dictionary<BattleVisualResourceKey, string>();
+            foreach (var binding in EnumerateMatchCommonBindings(common))
+            {
+                string path = "__match-common/" + binding.Texture.GetInstanceID();
+                commonPaths.Add(binding.Key, path);
+                commonBindings.Add(binding.Key, SourceBinding(binding.Texture, binding.PixelRect, binding.NormalizedUv));
+                AddSource(path, binding.Texture);
+            }
+            return TryBuildUnifiedCentralAtlasPublication(
+                catalog.WithCentralBindings(sourceBindings), common.WithCentralBindings(commonBindings),
+                sources, commonPaths, exclusions, capabilities, config, arguments,
+                out boundCatalog, out boundCommon, out resources, out diagnostic, out decision, out inputs);
+        }
+
         #endregion
 
         #region Inspector 调试工具

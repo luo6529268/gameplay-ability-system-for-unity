@@ -1,0 +1,35 @@
+{
+  "observed": "2026-10-09T04:55:49.9956198+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "stagedCount": 0,
+  "guardCount": 770,
+  "expectedAbsenceCount": 10,
+  "driftCount": 0,
+  "backupCount": 11,
+  "backupDriftCount": 0,
+  "diffCheck": 0,
+  "windowAbsent": true,
+  "sharedRequestAbsent": true,
+  "source": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "45C3B7ADE316FE44120EC19999B2DF20852BDB38F47B29CF6E5954EB90D9BF4F",
+      "bytes": 313292
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha": "C569EAC16518E6DA967595CDC4DADB059B2DA5E94EB66F9CD697E7C47F260A20",
+      "bytes": 41724
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "0F9F040B3C5756B6F98FB7D27890CF2E53B48A7B52A0288FE2B76F7011A499C8",
+      "bytes": 62496
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5",
+      "bytes": 406977
+    }
+  ]
+}

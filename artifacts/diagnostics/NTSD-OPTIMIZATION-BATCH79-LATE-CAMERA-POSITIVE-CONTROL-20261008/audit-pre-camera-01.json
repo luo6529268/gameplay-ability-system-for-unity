@@ -1,0 +1,22 @@
+{
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "beforeDrift": 0,
+  "guards": 748,
+  "utc": "2026-10-08T18:18:15.6621821Z",
+  "cameraOutputAbsent": true,
+  "guardDrift": 0,
+  "staged": [],
+  "sourceDrift": 0,
+  "greenSha": "7922C6C560B966AC6EE8D25E3575EBD77DB343316A31DAC60791B6B6F3188EFA",
+  "beforeCopies": 12,
+  "sceneSHA": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ]
+}

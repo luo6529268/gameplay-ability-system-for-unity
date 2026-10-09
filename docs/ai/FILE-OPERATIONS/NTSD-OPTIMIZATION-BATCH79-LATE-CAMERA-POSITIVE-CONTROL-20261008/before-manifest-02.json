@@ -1,0 +1,241 @@
+{
+  "id": "NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008",
+  "change": "NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079",
+  "utc": "2026-10-08T18:09:25.4598488Z",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+    "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+    "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/RECORD.md"
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-manifest-01.json",
+      "sha": "4A99C5E27B373682E90182C7C517854A6FA52458855CE08E0A06FB659AA29551"
+    }
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-manifest-01.json",
+      "sha": "AB21B6432064719BC2EB7392F2E1BF915BCA9892E5DD2420C1595B9A9E999D0F",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "sha": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs.meta",
+      "sha": "D630B6A08824D4C4F621BAAFF242896322C2CBAA56CAF542DE7C53217694336F",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs.meta",
+      "sha": "C36C4ABEE086104A13BDE5363322C3BC777AEF766D83A3EEB49794761263602D",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/audit-final-01.json",
+      "sha": "768C552866A1211342AFC24A1F60595218045D6D8AB7C7CE47EE3C81DA86444E",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/battle-optimization-progress-tracker.md",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/CODEX-CURRENT-HANDOFF.md",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/STATE.md",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/CHANGE-LEDGER.md",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/INDEX.md",
+      "sha": null,
+      "exists": false
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-01/Goal18_LastTestResults.xml",
+      "sha": null,
+      "exists": false
+    }
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "exists": true,
+      "bytes": 105171,
+      "sha": "351937511B65C91E951626FF375C188EBC33EF30F43FCF1D54ACBACCA3ED1AA7",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Assets__NTSD__Scripts__Test__Editor__BattleCentralProductionWindowSceneProbeEditor.cs",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs",
+      "exists": true,
+      "bytes": 54759,
+      "sha": "3838B133247C5835A8DE71EAD2BABCA75720475E88D9E01D342B913B6C1ACE25",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationCpuGcCaptureEditor.cs",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCameraGcCallstackCaptureEditorTests.cs",
+      "exists": true,
+      "bytes": 10579,
+      "sha": "63018018DB4D9397A959B0FE77181982248397908BFA71DC6978EF1D552C51A2",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Assets__NTSD__Scripts__Test__Editor__BattleCameraGcCallstackCaptureEditorTests.cs",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 182574,
+      "sha": "2A5888DD5A537C823EE6CAAADF99C84268E7D7C26343F1D9157CFB7109D66943",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "firstLine": "> 第82批 DRIVER_QUALIFICATION_PASS / FOCUSED_TEST_PASS / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082。5有效RED→首轮9/7/2（Sakura夹具入口拒绝）→受影响2/2，去重9具名PASS；保留全部失败及原件。4对88paired/176完整Driver step、声明extended/parity＋lockstep hash与完整Native scalar/legacy RNG同；两OID1 Sakura真实AI1000/每tick实际Role/无whole-collection abort/受检3数组identity及容量稳定/关闭三0。fallback峰值分散3/混战5/两root1，不冒称0fallback；有限native root12tick字段不是全域权威证书。仅Editor admission接线/严格owned诊断fixture，Raw正式校验/runtime/default不改，无新性能/GC测量。739保护及7原副本同、原Menu clean8/Scene SHA保持；60执行/阶段4of6/H07H11 OPEN/Goal active，79未执行。81性能仍FAIL：Role logic P9550.438/52.710ms/drop276/271；下一现有空间候选准确生产授权与剩余精确判定/输入热点，不重开H06或已过项、不因本资格完成停止Goal。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1568046,
+      "sha": "8276467BE33E4ECF031EFE7E892F9484858E5EAC362D42943D6A0D88462A88CA",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> 第82批 DRIVER_QUALIFICATION_PASS / FOCUSED_TEST_PASS / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082。5有效RED→首轮9/7/2（Sakura夹具入口拒绝）→受影响2/2，去重9具名PASS；保留全部失败及原件。4对88paired/176完整Driver step、声明extended/parity＋lockstep hash与完整Native scalar/legacy RNG同；两OID1 Sakura真实AI1000/每tick实际Role/无whole-collection abort/受检3数组identity及容量稳定/关闭三0。fallback峰值分散3/混战5/两root1，不冒称0fallback；有限native root12tick字段不是全域权威证书。仅Editor admission接线/严格owned诊断fixture，Raw正式校验/runtime/default不改，无新性能/GC测量。739保护及7原副本同、原Menu clean8/Scene SHA保持；60执行/阶段4of6/H07H11 OPEN/Goal active，79未执行。81性能仍FAIL：Role logic P9550.438/52.710ms/drop276/271；下一现有空间候选准确生产授权与剩余精确判定/输入热点，不重开H06或已过项、不因本资格完成停止Goal。"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "bytes": 1634356,
+      "sha": "84F5AD29DB2C0007294BF940B98394E5B25948E0FD1A8FB26D00452248EA27D9",
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__STATE.md",
+      "firstLine": "> 第82批 DRIVER_QUALIFICATION_PASS / FOCUSED_TEST_PASS / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082。5有效RED→首轮9/7/2（Sakura夹具入口拒绝）→受影响2/2，去重9具名PASS；保留全部失败及原件。4对88paired/176完整Driver step、声明extended/parity＋lockstep hash与完整Native scalar/legacy RNG同；两OID1 Sakura真实AI1000/每tick实际Role/无whole-collection abort/受检3数组identity及容量稳定/关闭三0。fallback峰值分散3/混战5/两root1，不冒称0fallback；有限native root12tick字段不是全域权威证书。仅Editor admission接线/严格owned诊断fixture，Raw正式校验/runtime/default不改，无新性能/GC测量。739保护及7原副本同、原Menu clean8/Scene SHA保持；60执行/阶段4of6/H07H11 OPEN/Goal active，79未执行。81性能仍FAIL：Role logic P9550.438/52.710ms/drop276/271；下一现有空间候选准确生产授权与剩余精确判定/输入热点，不重开H06或已过项、不因本资格完成停止Goal。"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 728438,
+      "sha": "43ADE3D1BF917B5CCFA55D01C7CF48A9EEB5C67769033EDD2014EACC55F9DB15",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__CHANGE-LEDGER.md",
+      "firstLine": "> 第82批 DRIVER_QUALIFICATION_PASS / FOCUSED_TEST_PASS / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082。5有效RED→首轮9/7/2（Sakura夹具入口拒绝）→受影响2/2，去重9具名PASS；保留全部失败及原件。4对88paired/176完整Driver step、声明extended/parity＋lockstep hash与完整Native scalar/legacy RNG同；两OID1 Sakura真实AI1000/每tick实际Role/无whole-collection abort/受检3数组identity及容量稳定/关闭三0。fallback峰值分散3/混战5/两root1，不冒称0fallback；有限native root12tick字段不是全域权威证书。仅Editor admission接线/严格owned诊断fixture，Raw正式校验/runtime/default不改，无新性能/GC测量。739保护及7原副本同、原Menu clean8/Scene SHA保持；60执行/阶段4of6/H07H11 OPEN/Goal active，79未执行。81性能仍FAIL：Role logic P9550.438/52.710ms/drop276/271；下一现有空间候选准确生产授权与剩余精确判定/输入热点，不重开H06或已过项、不因本资格完成停止Goal。"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "bytes": 114389,
+      "sha": "8B16A897EE96B93E99E9F1FF814CC27081F7F98892AD13B35EA8AF990E38EB6C",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "firstLine": "> NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009 / SCOPED_AUDIT_PASS：739保护项无漂移、7原before副本核同、各XML及两helper版副本保留。5RED→9/7/2夹具入口FAIL→仅受影响2/2，去重9PASS；严格owned adapter不改Raw正式校验/原默认，无新性能测量。4对88paired、受检3数组同/关闭三0，Menu sole clean8/非Play idle及Scene恢复；不删除或推广，H07/H11 OPEN、Goal active。[Operation](NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/RECORD.md)。"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "bytes": 3596312,
+      "sha": "C783774A94C688D9FA39CD384AA58C2CBF4468007BC2E23CCB54DB520719FB0F",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/Temp__Goal18_LastTestResults.xml",
+      "firstLine": "<test-suite type=\"TestSuite\" id=\"12779\" name=\"NTSD\" fullname=\"NTSD\" runstate=\"Runnable\" testcasecount=\"10189\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.890549\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"Assembly\" id=\"24517\" name=\"Assembly-CSharp-Editor.dll\" fullname=\"I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll\" runstate=\"Runnable\" testcasecount=\"10181\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.752528\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties><property name=\"_PID\" value=\"74724\" /><property name=\"_APPDOMAIN\" value=\"Unity Child Domain\" /><property name=\"platform\" value=\"EditMode\" /></properties><test-suite type=\"TestSuite\" id=\"24518\" name=\"NTSD\" fullname=\"NTSD\" runstate=\"Runnable\" testcasecount=\"10181\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.650870\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestSuite\" id=\"24526\" name=\"Test\" fullname=\"NTSD.Test\" runstate=\"Runnable\" testcasecount=\"9401\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.550777\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestSuite\" id=\"24527\" name=\"Editor\" fullname=\"NTSD.Test.Editor\" runstate=\"Runnable\" testcasecount=\"6286\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.393591\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"TestFixture\" id=\"16807\" name=\"BattleBruteProductionAdmissionEditorTests\" fullname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" classname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" runstate=\"Runnable\" testcasecount=\"69\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"306.098033\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-suite type=\"ParameterizedMethod\" id=\"16814\" name=\"RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick\" fullname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick\" classname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" runstate=\"Runnable\" testcasecount=\"2\" result=\"Passed\" start-time=\"2026-10-08 17:44:22Z\" end-time=\"2026-10-08 17:49:28Z\" duration=\"305.999358\" total=\"2\" passed=\"2\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"0\"><properties /><test-case id=\"16812\" name=\"RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick(Dispersed1000)\" fullname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests.RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick(Dispersed1000)\" methodname=\"RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick\" classname=\"NTSD.Test.Editor.BattleBruteProductionAdmissionEditorTests\" runstate=\"Runnable\" seed=\"1689904096\" result=\"Passed\" start-time=\"2026-10-08 17:44:23Z\" end-time=\"2026-10-08 17:46:57Z\" duration=\"154.513937\" asserts=\"0\"><properties /><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=1, wpoints=1, opoint=无, 属性数=14</color>"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+      "exists": true,
+      "bytes": 3773,
+      "sha": "08A3473D0F1CBC57495478A99BFEE5203996454E0155DC198FBD477C30BACE3D",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__TASKS__NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+      "firstLine": "# NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+      "exists": true,
+      "bytes": 2356,
+      "sha": "E9BDDCA6521BD1513FF40847B79A6C6CC056E959B8A81A1F25A0BFBC8C7DBAAD",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__CHANGE-RECORDS__NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+      "firstLine": "<!-- CHANGE-RECORD"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\RECORD.md",
+      "exists": true,
+      "bytes": 3027,
+      "sha": "D3F5364B3710B03191EC3F4820183D9D02053B632C595AE523FECCFB440364B8",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/docs__ai__FILE-OPERATIONS__NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008__RECORD.md",
+      "firstLine": "# NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008"
+    }
+  ],
+  "parentGuardCount": 736,
+  "parentGuardDrift": 0,
+  "outputRootAbsent": true,
+  "before02Absent": true,
+  "reportAbsent": true
+}

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -182,6 +183,7 @@ namespace NTSD.Test
 
                 // 6. 配置并启动关卡
                 var levelMgr = BoundaryWallManager.Instance;
+                PrepareDirectBattleCentralBindings(simulationDriver);
                 simulationDriver.PrepareBattleRuntimeServices();
                 SetupTestCharacters(levelMgr, gameObject.scene);
                 Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
@@ -285,6 +287,35 @@ namespace NTSD.Test
             {
                 forceWalkingMode = false;
             }
+        }
+
+        internal static List<int> CollectDirectBattleVisualRootIds(int[] overrides)
+        {
+            var roots = new List<int>(overrides?.Length ?? 1);
+            if (overrides == null)
+            {
+                roots.Add(0);
+            }
+            else
+            {
+                for (int index = 0; index < overrides.Length; index++)
+                {
+                    if (overrides[index] >= 0)
+                        roots.Add(overrides[index]);
+                }
+            }
+            return roots;
+        }
+
+        private void PrepareDirectBattleCentralBindings(SimulationTickDriver driver)
+        {
+            CharacterAnimtorManager manager = CharacterAnimtorManager.TryGetInstance();
+            if (manager == null)
+                throw new System.InvalidOperationException(
+                    "Direct battle central binding preparation requires loaded character data.");
+
+            manager.PrepareBattleCentralBindings(driver,
+                CollectDirectBattleVisualRootIds(overrideCharacterIds));
         }
 
         private void SetupTestCharacters(BoundaryWallManager levelMgr, Scene battleScene)
@@ -405,6 +436,7 @@ namespace NTSD.Test
                         driver.World.RefreshStageRuntimeSnapshotFromScene();
                 }
 
+                PrepareDirectBattleCentralBindings(driver);
                 driver.PrepareBattleRuntimeServices();
                 firstPlayerLf2 = null;
                 SetupTestCharacters(BoundaryWallManager.Instance, battleScene);

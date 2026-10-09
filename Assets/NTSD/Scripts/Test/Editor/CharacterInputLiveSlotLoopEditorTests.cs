@@ -11,6 +11,586 @@ namespace NTSD.Test
 {
     public sealed class CharacterInputLiveSlotLoopEditorTests
     {
+        private static readonly string[] NativeSamplePhaseNames =
+        {
+            "NativeSamplePreprocess", "NativeComboRoute", "NativeThreeButtonRoute",
+            "NativeDirectionRoute", "NativeBuiltinsRoute", "NativeLegacyProjection",
+            "NativeCanonicalAiSync", "NativeInputStateSync",
+        };
+
+        private static Action<LF2Entity> NativeSampleProcessor(SimulationWorld world)
+        {
+            Type type = typeof(SimulationWorld).Assembly.GetType(
+                "NTSD.Simulation.NTSD28InputTwoPassModule", true);
+            object module = Activator.CreateInstance(type,
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic, null, new object[] { world, null }, null);
+            var method = type.GetMethod("ProcessNativeSampledState",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            return (Action<LF2Entity>)Delegate.CreateDelegate(typeof(Action<LF2Entity>), module, method);
+        }
+
+        [TestCase("NativeSamplePreprocess", 34)]
+        [TestCase("NativeComboRoute", 35)]
+        [TestCase("NativeThreeButtonRoute", 36)]
+        [TestCase("NativeDirectionRoute", 37)]
+        [TestCase("NativeBuiltinsRoute", 38)]
+        [TestCase("NativeLegacyProjection", 39)]
+        [TestCase("NativeCanonicalAiSync", 40)]
+        [TestCase("NativeInputStateSync", 41)]
+        public void NativeSampleTiming_PhaseSchema(string name, int ordinal)
+        {
+            var phase = BoundaryPhase(name);
+            Assert.That((int)phase, Is.EqualTo(ordinal));
+            Assert.That((int)BattleAiInputDetailPhase.NativeSampledState, Is.EqualTo(33));
+            Assert.That(BattleAiInputDetailDiagnostics.PhaseCount, Is.EqualTo(42));
+            Assert.That(BattleAiInputDetailDiagnostics.GetPhaseName(phase),
+                Is.EqualTo("CharacterInput/Boundary/NativeSampledState/" + name));
+        }
+
+        [TestCase(false, false, false)]
+        [TestCase(false, false, true)]
+        [TestCase(false, true, false)]
+        [TestCase(false, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(true, false, true)]
+        [TestCase(true, true, false)]
+        [TestCase(true, true, true)]
+        public void NativeSampleTiming_RespectsNativeBoundaryAndRecordingGates(
+            bool native, bool boundary, bool recording)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(native ? BattleAiExecutionProfile.DataOrientedCanonical :
+                BattleAiExecutionProfile.LegacyCanonical);
+            var character = RegisterCharacter(world, 0, 961);
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = boundary;
+            diagnostics.SetEnabled(recording);
+            diagnostics.BeginTick(2);
+            NativeSampleProcessor(world)(character);
+            foreach (string name in NativeSamplePhaseNames)
+            {
+                var phase = BoundaryPhase(name);
+                bool counted = native && boundary && recording && name != "NativeCanonicalAiSync";
+                Assert.That(diagnostics.GetLastCallCount(phase), Is.EqualTo(counted ? 1 : 0), name);
+                if (counted)
+                    Assert.That(diagnostics.GetLastElapsedTimestampTicks(phase), Is.GreaterThan(0), name);
+                else
+                    Assert.That(diagnostics.GetLastElapsedTimestampTicks(phase), Is.Zero, name);
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NativeSampleTiming_AiSyncIsConditionalAndParentIncludesChildren(bool ai)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var character = RegisterCharacter(world, 0, 962);
+            character.AiControlled = ai;
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            diagnostics.BeginTick(2);
+            diagnostics.BeginPhase(BattleAiInputDetailPhase.NativeSampledState);
+            NativeSampleProcessor(world)(character);
+            diagnostics.EndPhase(BattleAiInputDetailPhase.NativeSampledState);
+            long sum = 0;
+            foreach (string name in NativeSamplePhaseNames)
+            {
+                var phase = BoundaryPhase(name);
+                Assert.That(diagnostics.GetLastCallCount(phase),
+                    Is.EqualTo(name == "NativeCanonicalAiSync" && !ai ? 0 : 1), name);
+                sum += diagnostics.GetLastElapsedTimestampTicks(phase);
+            }
+            Assert.That(sum, Is.LessThanOrEqualTo(
+                diagnostics.GetLastElapsedTimestampTicks(BattleAiInputDetailPhase.NativeSampledState)));
+        }
+
+        [Test]
+        public void NativeSampleTiming_DisableAndNextTickClearChildren()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var character = RegisterCharacter(world, 0, 963);
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var process = NativeSampleProcessor(world);
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            diagnostics.BeginTick(2);
+            process(character);
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("NativeComboRoute")), Is.EqualTo(1));
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = false;
+            diagnostics.BeginTick(3);
+            process(character);
+            foreach (string name in NativeSamplePhaseNames)
+            {
+                Assert.That(diagnostics.GetLastCallCount(BoundaryPhase(name)), Is.Zero);
+                Assert.That(diagnostics.GetLastElapsedTimestampTicks(BoundaryPhase(name)), Is.Zero);
+            }
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+            process(character);
+            Assert.That(world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics, Is.Null);
+            foreach (string name in NativeSamplePhaseNames)
+                Assert.That(diagnostics.GetLastCallCount(BoundaryPhase(name)), Is.Zero);
+        }
+
+        [Test]
+        public void NativeSampleTiming_NullEntityDoesNotRecord()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            NativeSampleProcessor(world)(null);
+            foreach (string name in NativeSamplePhaseNames)
+                Assert.That(diagnostics.GetLastCallCount(BoundaryPhase(name)), Is.Zero);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NativeSampleTiming_OnOffPreservesPerTickStateAndRng(bool ai)
+        {
+            var baseline = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var observed = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            baseline.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            observed.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            baseline.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var diagnostics = observed.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            observed.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            var a = CreateFrameJumpCharacter(0, 964);
+            var b = CreateFrameJumpCharacter(0, 964);
+            a.AiControlled = b.AiControlled = ai;
+            baseline.Register(a);
+            observed.Register(b);
+            var processA = NativeSampleProcessor(baseline);
+            var processB = NativeSampleProcessor(observed);
+            for (int tick = 2; tick < 18; tick++)
+            {
+                a.Runtime.NativeInputProxy.Current[4] = b.Runtime.NativeInputProxy.Current[4] = (byte)(tick & 1);
+                a.Runtime.NativeInputProxy.Previous[4] = b.Runtime.NativeInputProxy.Previous[4] = 0;
+                diagnostics.BeginTick(tick);
+                processA(a);
+                processB(b);
+                string expected = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = baseline.CaptureExtendedChecksumSnapshot(tick, null).Hashes,
+                    lockstep = baseline.CaptureLockstepChecksumSnapshot(tick, null).Hashes,
+                    random = baseline.NativeRandom.CaptureScalarState(), baseline.Rng.State, baseline.Rng.CallCount,
+                    proxy = a.Runtime.NativeInputProxy, history = a.Runtime.InputHistory,
+                    frame = a.Frame.N, hp = a.Health.HP, pp = a.Health.PP,
+                });
+                string actual = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = observed.CaptureExtendedChecksumSnapshot(tick, null).Hashes,
+                    lockstep = observed.CaptureLockstepChecksumSnapshot(tick, null).Hashes,
+                    random = observed.NativeRandom.CaptureScalarState(), observed.Rng.State, observed.Rng.CallCount,
+                    proxy = b.Runtime.NativeInputProxy, history = b.Runtime.InputHistory,
+                    frame = b.Frame.N, hp = b.Health.HP, pp = b.Health.PP,
+                });
+                Assert.That(actual, Is.EqualTo(expected), "input-only fixture tick=" + tick);
+            }
+        }
+
+        [Test]
+        public void NativeSampleTiming_WarmedProcessorAndResetDoNotAllocate()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var character = RegisterCharacter(world, 0, 965);
+            character.AiControlled = true;
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            var process = NativeSampleProcessor(world);
+            for (int tick = 0; tick < 128; tick++)
+            {
+                diagnostics.BeginTick(tick);
+                process(character);
+            }
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int tick = 128; tick < 1152; tick++)
+            {
+                diagnostics.BeginTick(tick);
+                process(character);
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero, "warmed direct sampled-input fixture only, not complete tick/render GC");
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("NativeInputStateSync")), Is.EqualTo(1));
+        }
+
+        private static System.Reflection.PropertyInfo ProducerSnapshotReuseFlag()
+        {
+            var property = typeof(SimulationWorld).GetProperty(
+                "EnableCharacterInputProducerSnapshotReuseForDiagnostics");
+            Assert.That(property, Is.Not.Null);
+            return property;
+        }
+
+        private static int ProducerSnapshotReuseCount(SimulationWorld world, bool skipped)
+        {
+            string name = skipped ? "LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics" :
+                "LastCharacterInputProducerSnapshotRefreshCountForDiagnostics";
+            var property = typeof(SimulationWorld).GetProperty(name);
+            Assert.That(property, Is.Not.Null, name);
+            return (int)property.GetValue(world);
+        }
+
+        private static Action<LF2Entity> ProducerSnapshotRefresh(SimulationWorld world)
+        {
+            var method = typeof(SimulationWorld).GetMethod(
+                "RefreshCharacterInputSnapshotsAfterProducer",
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            return (Action<LF2Entity>)Delegate.CreateDelegate(typeof(Action<LF2Entity>), world, method);
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_DefaultOff()
+        {
+            Assert.That(ProducerSnapshotReuseFlag().GetValue(new SimulationWorld()), Is.False);
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_CurrentExactAiSkipsOnlySelfCopy()
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 960);
+            character.AiControlled = true;
+            character.RefreshRuntimeSnapshot();
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            ProducerSnapshotRefresh(world)(character);
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.EqualTo(1));
+            Assert.That(ProducerSnapshotReuseCount(world, false), Is.Zero);
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_DisabledRetainsFullRefresh()
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 961);
+            character.AiControlled = true;
+            ProducerSnapshotReuseFlag().SetValue(world, false);
+            ProducerSnapshotRefresh(world)(character);
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.Zero);
+            Assert.That(ProducerSnapshotReuseCount(world, false), Is.EqualTo(1));
+        }
+
+        [TestCase("ObjType")]
+        [TestCase("EntityType")]
+        [TestCase("Frame")]
+        [TestCase("WaitCounter")]
+        [TestCase("NextFrame")]
+        public void ProducerSnapshotReuse_StaleNonAliasFallsBackAndRepairs(string field)
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 962);
+            character.AiControlled = true;
+            character.RefreshRuntimeSnapshot();
+            var member = typeof(NTSDEntityRuntime).GetField(field);
+            var property = typeof(NTSDEntityRuntime).GetProperty(field);
+            Assert.That(member != null || property != null, Is.True, field);
+            object expected = member != null ? member.GetValue(character.Runtime) :
+                property.GetValue(character.Runtime);
+            if (member != null)
+                member.SetValue(character.Runtime, -123);
+            else
+                property.SetValue(character.Runtime, -123);
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            ProducerSnapshotRefresh(world)(character);
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.Zero);
+            Assert.That(ProducerSnapshotReuseCount(world, false), Is.EqualTo(1));
+            Assert.That(member != null ? member.GetValue(character.Runtime) :
+                property.GetValue(character.Runtime), Is.EqualTo(expected), field);
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_UnknownDerivedRetainsVirtualRefresh()
+        {
+            var world = new SimulationWorld();
+            var character = InitializeCharacter(new ProducerRefreshWitnessCharacter(), 0, 963);
+            world.Register(character);
+            character.AiControlled = true;
+            int before = character.RefreshCalls;
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            ProducerSnapshotRefresh(world)(character);
+            Assert.That(character.RefreshCalls, Is.EqualTo(before + 1));
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.Zero);
+            Assert.That(ProducerSnapshotReuseCount(world, false), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_ProducerHookRetainsFullRefresh()
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 964);
+            character.AiControlled = true;
+            character.RefreshRuntimeSnapshot();
+            world.SetCharacterInputProducerPassMutationOverrideForSelfCheck((w, entity) => { });
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            try
+            {
+                ProducerSnapshotRefresh(world)(character);
+                Assert.That(ProducerSnapshotReuseCount(world, true), Is.Zero);
+                Assert.That(ProducerSnapshotReuseCount(world, false), Is.EqualTo(1));
+            }
+            finally
+            {
+                world.SetCharacterInputProducerPassMutationOverrideForSelfCheck(null);
+            }
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_HumanRetainsFullRefresh()
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 965);
+            character.AiControlled = false;
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            ProducerSnapshotRefresh(world)(character);
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.Zero);
+            Assert.That(ProducerSnapshotReuseCount(world, false), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_RuntimeAliasesAndAiRowsMatchFullRefresh()
+        {
+            var baseline = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var candidate = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var a = RegisterCharacter(baseline, 0, 966);
+            var b = RegisterCharacter(candidate, 0, 966);
+            a.AiControlled = b.AiControlled = true;
+            a.RefreshRuntimeSnapshot();
+            b.RefreshRuntimeSnapshot();
+            foreach (var character in new[] { a, b })
+            {
+                character.Team = 7;
+                character.OwnerId = 17;
+                character.OwnerEntityIndex = 4;
+                character.AttackingCounter = 3;
+                character.FrameDelay = 2;
+                character.HitStun = 1;
+                character.AttackExempt = 8;
+                character.HealTimer = 9;
+                character.KillCount = 10;
+                character.ShotCount = 11;
+                character.HPOrig = 12;
+                character.HP2Orig = 13;
+                character.RespawnCount = 14;
+                character.Health.HP = 300;
+                character.Health.MP = 200;
+                character.Health.PP = 100;
+                character.Health.MaxPP = 600;
+                character.Health.PPBound = 400;
+                character.Health.HPLost = 20;
+                character.Health.HPBound = 450;
+                character.Health.MaxMP = 650;
+            }
+            ProducerSnapshotReuseFlag().SetValue(candidate, true);
+            ProducerSnapshotRefresh(baseline)(a);
+            ProducerSnapshotRefresh(candidate)(b);
+            Assert.That(Newtonsoft.Json.JsonConvert.SerializeObject(
+                candidate.CaptureExtendedChecksumSnapshot(2, null)), Is.EqualTo(
+                Newtonsoft.Json.JsonConvert.SerializeObject(baseline.CaptureExtendedChecksumSnapshot(2, null))));
+            Assert.That(ProducerSnapshotReuseCount(candidate, true), Is.EqualTo(1));
+            Assert.That(b.Runtime.AttackExempt, Is.EqualTo(a.Runtime.AttackExempt));
+            Assert.That(b.Runtime.HPBound, Is.EqualTo(a.Runtime.HPBound));
+            Assert.That(b.Runtime.PPMax, Is.EqualTo(a.Runtime.PPMax));
+            Assert.That(b.Runtime.MPMax, Is.EqualTo(a.Runtime.MPMax));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ProducerSnapshotReuse_OnOffPreservesEachInputTick(bool native)
+        {
+            var baseline = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var candidate = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var profile = native ? BattleAiExecutionProfile.DataOrientedCanonical : BattleAiExecutionProfile.LegacyCanonical;
+            baseline.ConfigureAiExecutionProfile(profile);
+            candidate.ConfigureAiExecutionProfile(profile);
+            var a = CreateFrameJumpCharacter(0, 967);
+            var b = CreateFrameJumpCharacter(0, 967);
+            baseline.Register(a);
+            candidate.Register(b);
+            a.AiControlled = b.AiControlled = true;
+            ProducerSnapshotReuseFlag().SetValue(candidate, true);
+            int skips = 0;
+            for (int tick = 2; tick < 18; tick++)
+            {
+                a.Runtime.KeyAttack = b.Runtime.KeyAttack = (byte)(tick & 1);
+                baseline.CharacterInputAll(tick);
+                candidate.CharacterInputAll(tick);
+                string expected = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = baseline.CaptureExtendedChecksumSnapshot(tick, null),
+                    lockstep = baseline.CaptureLockstepChecksumSnapshot(tick, null),
+                    nativeState = baseline.NativeRandom.CaptureScalarState(),
+                    baseline.Rng.State, baseline.Rng.CallCount, proxy = a.Runtime.NativeInputProxy,
+                });
+                string actual = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = candidate.CaptureExtendedChecksumSnapshot(tick, null),
+                    lockstep = candidate.CaptureLockstepChecksumSnapshot(tick, null),
+                    nativeState = candidate.NativeRandom.CaptureScalarState(),
+                    candidate.Rng.State, candidate.Rng.CallCount, proxy = b.Runtime.NativeInputProxy,
+                });
+                Assert.That(actual, Is.EqualTo(expected), "producer input fixture tick=" + tick);
+                skips += ProducerSnapshotReuseCount(candidate, true);
+                Assert.That(ProducerSnapshotReuseCount(baseline, true), Is.Zero);
+            }
+            Assert.That(skips, Is.GreaterThan(0), "This fixture must exercise the candidate.");
+        }
+
+        [Test]
+        public void ProducerSnapshotReuse_WarmedDelegateDoesNotAllocate()
+        {
+            var world = new SimulationWorld();
+            var character = RegisterCharacter(world, 0, 968);
+            character.AiControlled = true;
+            character.RefreshRuntimeSnapshot();
+            ProducerSnapshotReuseFlag().SetValue(world, true);
+            Action<LF2Entity> refresh = ProducerSnapshotRefresh(world);
+            for (int i = 0; i < 64; i++)
+                refresh(character);
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 256; i++)
+                refresh(character);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+            Assert.That(ProducerSnapshotReuseCount(world, true), Is.EqualTo(320));
+        }
+
+        private sealed class ProducerRefreshWitnessCharacter : LF2Character
+        {
+            public int RefreshCalls { get; private set; }
+
+            protected override void RefreshRuntimeFromEntity()
+            {
+                RefreshCalls++;
+                base.RefreshRuntimeFromEntity();
+            }
+        }
+
+        private static System.Reflection.PropertyInfo BoundaryTimingFlag()
+        {
+            var property = typeof(SimulationWorld).GetProperty(
+                "EnableCharacterInputBoundaryTimingForDiagnostics");
+            Assert.That(property, Is.Not.Null);
+            return property;
+        }
+
+        private static BattleAiInputDetailPhase BoundaryPhase(string name)
+        {
+            Assert.That(Enum.IsDefined(typeof(BattleAiInputDetailPhase), name), Is.True, name);
+            return (BattleAiInputDetailPhase)Enum.Parse(typeof(BattleAiInputDetailPhase), name);
+        }
+
+        [Test]
+        public void InputBoundaryTiming_DefaultOff()
+        {
+            Assert.That(BoundaryTimingFlag().GetValue(new SimulationWorld()), Is.False);
+        }
+
+        [TestCase("ProducerFreeze", 30)]
+        [TestCase("ProducerSnapshotRefresh", 31)]
+        [TestCase("ProxyApply", 32)]
+        [TestCase("NativeSampledState", 33)]
+        public void InputBoundaryTiming_PhaseSchema(string name, int ordinal)
+        {
+            var phase = BoundaryPhase(name);
+            Assert.That((int)phase, Is.EqualTo(ordinal));
+            Assert.That((int)BattleAiInputDetailPhase.ActionProgressCommit, Is.EqualTo(29));
+            Assert.That(BattleAiInputDetailDiagnostics.PhaseCount, Is.EqualTo(42));
+            Assert.That(BattleAiInputDetailDiagnostics.GetPhaseName(phase),
+                Is.EqualTo("CharacterInput/Boundary/" + name));
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void InputBoundaryTiming_CoverageMatchesNativeAndEnabledGates(bool enabled, bool native)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(native ? BattleAiExecutionProfile.DataOrientedCanonical :
+                BattleAiExecutionProfile.LegacyCanonical);
+            for (int slot = 0; slot < 3; slot++)
+                RegisterCharacter(world, slot, 940 + slot).AiControlled = slot == 0;
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            BoundaryTimingFlag().SetValue(world, enabled);
+            world.CharacterInputAll(2);
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProducerFreeze")), Is.EqualTo(enabled ? 3 : 0));
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProducerSnapshotRefresh")), Is.EqualTo(enabled ? 1 : 0));
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProxyApply")), Is.EqualTo(enabled ? 3 : 0));
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("NativeSampledState")), Is.EqualTo(enabled && native ? 3 : 0));
+            foreach (string phase in new[] { "ProducerFreeze", "ProducerSnapshotRefresh", "ProxyApply", "NativeSampledState" })
+            {
+                long elapsed = diagnostics.GetLastElapsedTimestampTicks(BoundaryPhase(phase));
+                if (enabled && (native || phase != "NativeSampledState"))
+                    Assert.That(elapsed, Is.GreaterThan(0));
+                else
+                    Assert.That(elapsed, Is.Zero);
+            }
+        }
+
+        [Test]
+        public void InputBoundaryTiming_DisablingStopsAndNextTickClears()
+        {
+            var world = new SimulationWorld();
+            RegisterCharacter(world, 0, 950);
+            var diagnostics = world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            BoundaryTimingFlag().SetValue(world, true);
+            world.CharacterInputAll(2);
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProducerFreeze")), Is.EqualTo(1));
+            BoundaryTimingFlag().SetValue(world, false);
+            world.CharacterInputAll(3);
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProducerFreeze")), Is.Zero);
+            Assert.That(diagnostics.GetLastElapsedTimestampTicks(BoundaryPhase("ProducerFreeze")), Is.Zero);
+            BoundaryTimingFlag().SetValue(world, true);
+            world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.CharacterInputAll(4);
+            Assert.That(world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics, Is.Null);
+            Assert.That(diagnostics.GetLastCallCount(BoundaryPhase("ProducerFreeze")), Is.Zero);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void InputBoundaryTiming_OnOffPreservesNativeInputStateAndRng(bool native)
+        {
+            var baseline = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var observed = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 512);
+            var profile = native ? BattleAiExecutionProfile.DataOrientedCanonical : BattleAiExecutionProfile.LegacyCanonical;
+            baseline.ConfigureAiExecutionProfile(profile);
+            observed.ConfigureAiExecutionProfile(profile);
+            baseline.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            observed.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            BoundaryTimingFlag().SetValue(observed, true);
+            var a = CreateFrameJumpCharacter(0, 951);
+            var b = CreateFrameJumpCharacter(0, 951);
+            baseline.Register(a);
+            observed.Register(b);
+            for (int tick = 2; tick < 18; tick++)
+            {
+                a.Runtime.KeyAttack = b.Runtime.KeyAttack = (byte)(tick & 1);
+                a.Runtime.NativeInputProxy.EdgeWindow[0] = b.Runtime.NativeInputProxy.EdgeWindow[0] = (byte)(tick % 3);
+                baseline.CharacterInputAll(tick);
+                observed.CharacterInputAll(tick);
+                string expected = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = baseline.CaptureExtendedChecksumSnapshot(tick, null).Hashes,
+                    lockstep = baseline.CaptureLockstepChecksumSnapshot(tick, null).Hashes,
+                    nativeState = baseline.NativeRandom.CaptureScalarState(), baseline.Rng.State, baseline.Rng.CallCount,
+                    proxy = a.Runtime.NativeInputProxy,
+                });
+                string actual = Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    extended = observed.CaptureExtendedChecksumSnapshot(tick, null).Hashes,
+                    lockstep = observed.CaptureLockstepChecksumSnapshot(tick, null).Hashes,
+                    nativeState = observed.NativeRandom.CaptureScalarState(), observed.Rng.State, observed.Rng.CallCount,
+                    proxy = b.Runtime.NativeInputProxy,
+                });
+                Assert.That(actual, Is.EqualTo(expected), "input-only fixture tick=" + tick);
+            }
+        }
+
         [Test]
         public void CharacterInputPass_DefaultsToDataOrientedForExactAiCharacters()
         {

@@ -1,0 +1,36 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009",
+  "phase": "driver-extension",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-manifest-01.json",
+      "sha": "64EC5BE5C93E91E7170C72BA113B14879F3EEF0490B7BF6B820CD5955D7EDEE6"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs"
+  ],
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "650E5F8ECDF7C0ADBD7EE4578B908EF60AB6A9E34EF9D6F34FB9F49F7510C7D5",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-03-driver/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "bytes": 131779,
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs"
+      ]
+    }
+  ],
+  "sharedRequestMustRemainAbsent": "Temp/NTSD_ProductionEntityStress.request.json"
+}

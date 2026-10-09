@@ -11,6 +11,352 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleCommonAtlasBindingEditorTests
     {
+
+        private static IEnumerable<TestCaseData> DirectBindingsRootCases()
+        {
+            yield return DirectRootCase("Null", null, new[] { 0 });
+            yield return DirectRootCase("Empty", Array.Empty<int>(), Array.Empty<int>());
+            yield return DirectRootCase("Negative", new[] { -1 }, Array.Empty<int>());
+            yield return DirectRootCase("AllNegative", new[] { -1, -5 }, Array.Empty<int>());
+            yield return DirectRootCase("Zero", new[] { 0 }, new[] { 0 });
+            yield return DirectRootCase("Multiple", new[] { 1, 2 }, new[] { 1, 2 });
+            yield return DirectRootCase("Repeated", new[] { 2, -1, 2, 0 }, new[] { 2, 2, 0 });
+            yield return DirectRootCase("IntegerLimits", new[] { int.MinValue, int.MaxValue },
+                new[] { int.MaxValue });
+            yield return DirectRootCase("Mixed", new[] { 13, -1, 1 }, new[] { 13, 1 });
+        }
+
+        private static TestCaseData DirectRootCase(string name, int[] input, int[] expected)
+        {
+            return new TestCaseData(new object[] { input, expected })
+                .SetName("DirectBindings_Root_" + name);
+        }
+
+        [TestCaseSource(nameof(DirectBindingsRootCases))]
+        public void DirectBindings_RootSelectionMatchesExistingRoster(int[] input, int[] expected)
+        {
+            int[] before = input == null ? null : (int[])input.Clone();
+            MethodInfo method = typeof(NTSD.Test.BattleTestBootstrap).GetMethod(
+                "CollectDirectBattleVisualRootIds", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            var actual = (List<int>)method.Invoke(null, new object[] { input });
+            Assert.That(actual, Is.EqualTo(expected));
+            Assert.That(input, Is.EqualTo(before));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void DirectBindings_ColdHookupBeforeServicesAndEntities(bool rematch)
+        {
+            string source = System.IO.File.ReadAllText(
+                "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs");
+            string start = rematch ? "public bool TryHandleFirstBattleOnlyResult(" :
+                "private async void Start()";
+            string end = rematch ? "public bool TryHandleSecondBattleOnlyResult(" :
+                "private static void EnsureAppManager(";
+            int begin = source.IndexOf(start, StringComparison.Ordinal);
+            int finish = source.IndexOf(end, begin, StringComparison.Ordinal);
+            Assert.That(begin, Is.GreaterThanOrEqualTo(0));
+            Assert.That(finish, Is.GreaterThan(begin));
+            string body = source.Substring(begin, finish - begin);
+            string driver = rematch ? "driver" : "simulationDriver";
+            int binding = body.IndexOf("PrepareDirectBattleCentralBindings(" + driver + ");",
+                StringComparison.Ordinal);
+            int services = body.IndexOf(driver + ".PrepareBattleRuntimeServices();",
+                StringComparison.Ordinal);
+            int entities = body.IndexOf("SetupTestCharacters(", StringComparison.Ordinal);
+            Assert.That(binding, Is.GreaterThanOrEqualTo(0));
+            Assert.That(services, Is.GreaterThan(binding));
+            Assert.That(entities, Is.GreaterThan(services));
+            if (!rematch)
+            {
+                int suppress = body.LastIndexOf("if (SuppressEntityCreationForProductionStress)",
+                    StringComparison.Ordinal);
+                int stressReturn = body.IndexOf("return;", suppress, StringComparison.Ordinal);
+                Assert.That(suppress, Is.GreaterThanOrEqualTo(0));
+                Assert.That(binding, Is.GreaterThan(stressReturn));
+            }
+        }
+
+        [TestCase(false, "NTSD/Validation/Optimization/Batch86 Direct Bindings Full GC 1800 Cameras",
+            "camera-01")]
+        [TestCase(true, "NTSD/Validation/Optimization/Batch86 Direct Bindings Reentry Full GC 1800 Cameras",
+            "camera-02")]
+        public void DirectBindings_CameraMenuKeepsCompleteCalibratedScope(
+            bool reentry, string menu, string directory)
+        {
+            Type probe = typeof(BattleCommonAtlasBindingEditorTests).Assembly.GetType(
+                "NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor", true);
+            string methodName = reentry ? "StartBatch86DirectBindingsGcReentry" :
+                "StartBatch86DirectBindingsGc";
+            MethodInfo method = probe.GetMethod(methodName,
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            bool found = false;
+            foreach (CustomAttributeData attribute in method.GetCustomAttributesData())
+            {
+                if (attribute.AttributeType == typeof(UnityEditor.MenuItem))
+                {
+                    found = true;
+                    Assert.That(attribute.ConstructorArguments[0].Value, Is.EqualTo(menu));
+                }
+            }
+            Assert.That(found, Is.True);
+            string source = System.IO.File.ReadAllText(
+                "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs");
+            int begin = source.IndexOf("private static void " + methodName + "()",
+                StringComparison.Ordinal);
+            int end = source.IndexOf("}", begin, StringComparison.Ordinal);
+            Assert.That(source.Substring(begin, end - begin), Does.Contain(
+                "StartCalibratedGc(\"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/" +
+                directory + "/\", true, true, true);"));
+        }
+
+        [Test]
+        public void MatchDependencies_AllFramesMultiOpointCyclesAndStateTransforms()
+        {
+            var configs = new Dictionary<int, LF2CharacterDataWrapper>();
+            foreach (int id in new[] { 1, 2, 3, 4, 50, 99 })
+                configs[id] = new LF2CharacterDataWrapper(id, new LF2CharacterData());
+            configs[1].characterData.frames.Add(new LF2FrameData
+            {
+                state = 4003,
+                opoint = new BattleObjectPointValue(1, 0, 0, 0, 0, 0, 2, 0),
+                opoints = new List<BattleObjectPointValue>
+                {
+                    new BattleObjectPointValue(1, 0, 0, 0, 0, 0, 4, 0),
+                },
+            });
+            configs[2].characterData.frames.Add(new LF2FrameData { state = 8050 });
+            configs[3].characterData.frames.Add(new LF2FrameData { state = 9995 });
+            configs[4].characterData.frames.Add(new LF2FrameData
+            {
+                opoint = new BattleObjectPointValue(1, 0, 0, 0, 0, 0, 1, 0),
+            });
+            var method = MatchMethod("CollectBattleVisualDependencyIds");
+            var ids = (HashSet<int>)method.Invoke(null, new object[] { configs, new[] { 1 } });
+            Assert.That(ids, Is.EquivalentTo(new[] { 1, 2, 3, 4, 50 }));
+            Assert.That(configs.Count, Is.EqualTo(6));
+        }
+
+        [Test]
+        public void MatchDependencies_UnregisteredRootRejectedWithoutChangingConfigs()
+        {
+            var configs = new Dictionary<int, LF2CharacterDataWrapper>();
+            var exception = Assert.Throws<TargetInvocationException>(() =>
+                MatchMethod("CollectBattleVisualDependencyIds").Invoke(null,
+                    new object[] { configs, new[] { 123 } }));
+            Assert.That(exception.InnerException, Is.TypeOf<InvalidOperationException>());
+            Assert.That(configs, Is.Empty);
+        }
+
+        [TestCase(BattleRuntimeLifecycleState.Preparing, 0, false, 0, true)]
+        [TestCase(BattleRuntimeLifecycleState.Running, 0, false, 0, false)]
+        [TestCase(BattleRuntimeLifecycleState.Stopping, 0, false, 0, false)]
+        [TestCase(BattleRuntimeLifecycleState.Stopped, 0, false, 0, false)]
+        [TestCase(BattleRuntimeLifecycleState.Preparing, 1, false, 0, false)]
+        [TestCase(BattleRuntimeLifecycleState.Preparing, 0, true, 0, false)]
+        [TestCase(BattleRuntimeLifecycleState.Preparing, 0, false, 1, false)]
+        public void MatchBindings_ColdBoundaryOnly(BattleRuntimeLifecycleState lifecycle,
+            int objects, bool sealedData, int leases, bool expected)
+        {
+            Assert.That(MatchMethod("BattleVisualBindingBoundaryAllows").Invoke(null,
+                new object[] { lifecycle, objects, sealedData, leases }), Is.EqualTo(expected));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MatchPublication_CompleteCatalogSharedCommonAndBudgetFallback(bool withinBudget)
+        {
+            using var fixture = new CommonFixture();
+            var builder = new BattleSpriteCatalogBuilder();
+            builder.Add(1, 0, "selected-body", fixture.Catalog.Shadow.Texture,
+                fixture.Catalog.Shadow.PixelRect, fixture.Catalog.Shadow.Sprite);
+            builder.Add(99, 7, "unselected-body", fixture.Catalog.Shadow.Texture,
+                fixture.Catalog.Shadow.PixelRect, fixture.Catalog.Shadow.Sprite);
+            BattleSpriteCatalog source = builder.Publish();
+            var capabilities = new BattleRenderingDeviceCapabilities(
+                "test", "test", "test", true, 4096, 256, true, false,
+                withinBudget ? 256L * 1024L * 1024L : 1);
+            object[] args =
+            {
+                source, fixture.Catalog, new[] { 1 }, capabilities, null,
+                Array.Empty<string>(), null, null, null, null, null, null, null,
+            };
+            Assert.That((bool)MatchMethod("TryBuildMatchCentralAtlasPublication").Invoke(null, args),
+                Is.True, args[9] as string);
+            var bound = (BattleSpriteCatalog)args[6];
+            var common = (BattleCommonVisualCatalog)args[7];
+            fixture.Track((HashSet<UnityEngine.Object>)args[8]);
+            Assert.That(bound.Count, Is.EqualTo(source.Count));
+            foreach (var pair in source.Entries)
+            {
+                BattleSpriteEntry entry = bound.Entries[pair.Key];
+                Assert.That(entry.SharedTexture, Is.SameAs(pair.Value.SharedTexture));
+                Assert.That(entry.LegacySprite, Is.SameAs(pair.Value.LegacySprite));
+                Assert.That(entry.PixelRect, Is.EqualTo(pair.Value.PixelRect));
+                Assert.That(entry.Pivot, Is.EqualTo(pair.Value.Pivot));
+                Assert.That(entry.CentralBinding.IsValid, Is.True);
+            }
+            BattleSpriteCentralBinding selected = bound.Entries[new BattleSpriteKey(1, 0)].CentralBinding;
+            BattleSpriteCentralBinding other = bound.Entries[new BattleSpriteKey(99, 7)].CentralBinding;
+            Assert.That(other.Mode, Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+            Assert.That(other.Texture, Is.SameAs(fixture.Catalog.Shadow.Texture));
+            AssertDescriptorIdentity(fixture.Catalog.Shadow, common.Shadow);
+            if (withinBudget)
+            {
+                Assert.That(selected.Mode, Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
+                Assert.That(selected.Texture, Is.SameAs(common.Shadow.CentralBinding.Texture));
+            }
+            else
+            {
+                Assert.That(selected.Mode, Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+                Assert.That((HashSet<UnityEngine.Object>)args[8], Is.Empty);
+                Assert.That(args[9] as string, Does.Contain("exceeds budget"));
+            }
+        }
+
+        [Test]
+        public void MatchSourceCatalog_PreviousAtlasIsNotRetainedAsSourceIdentity()
+        {
+            using var fixture = new CommonFixture();
+            var builder = new BattleSpriteCatalogBuilder();
+            builder.Add(1, 0, "body", fixture.Catalog.Shadow.Texture,
+                fixture.Catalog.Shadow.PixelRect, fixture.Catalog.Shadow.Sprite);
+            BattleSpriteCatalog source = builder.Publish();
+            object[] args =
+            {
+                source, fixture.Catalog, new[] { 1 },
+                new BattleRenderingDeviceCapabilities("test", "test", "test",
+                    true, 4096, 256, true, false, 256L * 1024L * 1024L),
+                null, Array.Empty<string>(), null, null, null, null, null, null, null,
+            };
+            Assert.That((bool)MatchMethod("TryBuildMatchCentralAtlasPublication").Invoke(null, args),
+                Is.True, args[9] as string);
+            fixture.Track((HashSet<UnityEngine.Object>)args[8]);
+            var previous = (BattleSpriteCatalog)args[6];
+            args[0] = previous;
+            args[1] = args[7];
+            args[2] = Array.Empty<int>();
+            Assert.That((bool)MatchMethod("TryBuildMatchCentralAtlasPublication").Invoke(null, args),
+                Is.True, args[9] as string);
+            fixture.Track((HashSet<UnityEngine.Object>)args[8]);
+            var rebound = (BattleSpriteCatalog)args[6];
+            Assert.That(rebound.Entries[new BattleSpriteKey(1, 0)].CentralBinding.Mode,
+                Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+            Assert.That(rebound.Entries[new BattleSpriteKey(1, 0)].CentralBinding.Texture,
+                Is.SameAs(source.Entries[new BattleSpriteKey(1, 0)].SharedTexture));
+        }
+
+        private static MethodInfo MatchMethod(string name)
+        {
+            MethodInfo method = typeof(CharacterAnimtorManager).GetMethod(name,
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "Missing cold match binding API: " + name);
+            return method;
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void MatchPublication_SamePathDistinctTexturesRequireEqualPixels(bool equalPixels)
+        {
+            using var fixture = new CommonFixture();
+            Texture2D first = fixture.Catalog.Shadow.Texture;
+            Color32[] pixels = first.GetPixels32();
+            if (!equalPixels)
+                pixels[0] = new Color32(77, 1, 2, 255);
+            var second = new Texture2D(first.width, first.height, TextureFormat.RGBA32, false);
+            second.SetPixels32(pixels);
+            second.Apply();
+            Sprite sprite = Sprite.Create(second, fixture.Catalog.Shadow.PixelRect,
+                fixture.Catalog.Shadow.Pivot);
+            fixture.Track(new UnityEngine.Object[] { sprite, second });
+            var builder = new BattleSpriteCatalogBuilder();
+            builder.Add(1, 0, "shared-body", first, fixture.Catalog.Shadow.PixelRect,
+                fixture.Catalog.Shadow.Sprite);
+            builder.Add(2, 0, "shared-body", second, fixture.Catalog.Shadow.PixelRect, sprite);
+            object[] args =
+            {
+                builder.Publish(), fixture.Catalog, new[] { 1, 2 },
+                new BattleRenderingDeviceCapabilities("test", "test", "test",
+                    true, 4096, 256, true, false, 256L * 1024L * 1024L),
+                null, Array.Empty<string>(), null, null, null, null, null, null, null,
+            };
+            MethodInfo method = MatchMethod("TryBuildMatchCentralAtlasPublication");
+            if (!equalPixels)
+            {
+                Assert.That(Assert.Throws<TargetInvocationException>(() =>
+                    method.Invoke(null, args)).InnerException, Is.TypeOf<System.IO.InvalidDataException>());
+                return;
+            }
+            Assert.That((bool)method.Invoke(null, args), Is.True, args[9] as string);
+            fixture.Track((HashSet<UnityEngine.Object>)args[8]);
+            var bound = (BattleSpriteCatalog)args[6];
+            Assert.That(bound.Entries[new BattleSpriteKey(1, 0)].CentralBinding.Texture,
+                Is.SameAs(bound.Entries[new BattleSpriteKey(2, 0)].CentralBinding.Texture));
+            Assert.That(bound.Entries[new BattleSpriteKey(2, 0)].SharedTexture, Is.SameAs(second));
+        }
+
+        [Test]
+        public void MatchPublication_NonReadableSourceUsesColdPixelsWithoutChangingImporter()
+        {
+            using var fixture = new CommonFixture();
+            Texture2D body = fixture.Catalog.Shadow.Texture;
+            Color32[] original = body.GetPixels32();
+            body.Apply(false, true);
+            Assert.That(body.isReadable, Is.False);
+            var builder = new BattleSpriteCatalogBuilder();
+            builder.Add(1, 0, "body", body, fixture.Catalog.Shadow.PixelRect,
+                fixture.Catalog.Shadow.Sprite);
+            Func<Texture2D, string, Color32[]> provider = (texture, path) =>
+                texture == body ? original : texture.GetPixels32();
+            object[] args =
+            {
+                builder.Publish(), fixture.Catalog, new[] { 1 },
+                new BattleRenderingDeviceCapabilities("test", "test", "test",
+                    true, 4096, 256, true, false, 256L * 1024L * 1024L),
+                null, Array.Empty<string>(), null, null, null, null, null, null, provider,
+            };
+            Assert.That((bool)MatchMethod("TryBuildMatchCentralAtlasPublication").Invoke(null, args),
+                Is.True, args[9] as string);
+            fixture.Track((HashSet<UnityEngine.Object>)args[8]);
+            Assert.That(body.isReadable, Is.False);
+            Assert.That(((BattleSpriteCatalog)args[6]).Entries[new BattleSpriteKey(1, 0)]
+                .CentralBinding.Texture, Is.SameAs(((BattleCommonVisualCatalog)args[7])
+                .Shadow.CentralBinding.Texture));
+        }
+
+        [Test]
+        public void MatchWindow_TwoCombatRequestsDifferOnlyInOutputPath()
+        {
+            MethodInfo method = typeof(BattleCommonAtlasBindingEditorTests).Assembly.GetType(
+                "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteEditor").GetMethod(
+                "BuildMatchCentralBindingsRequest", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.That(method, Is.Not.Null);
+            var off = (ProductionEntityStressRequest)method.Invoke(null, new object[] { 0 });
+            var on = (ProductionEntityStressRequest)method.Invoke(null, new object[] { 1 });
+            Assert.That(off.action, Is.EqualTo("combat1000"));
+            Assert.That(off.warmupTicks, Is.EqualTo(120));
+            Assert.That(off.sampleTicks, Is.EqualTo(180));
+            Assert.That(off.outputPath, Does.Contain("/00-combat1000-off/"));
+            Assert.That(on.outputPath, Does.Contain("/01-combat1000-on/"));
+            off.outputPath = on.outputPath = string.Empty;
+            Assert.That(JsonUtility.ToJson(off), Is.EqualTo(JsonUtility.ToJson(on)));
+        }
+
+        [TestCase(-1)]
+        [TestCase(2)]
+        public void MatchWindow_RejectsOutsideFinitePair(int index)
+        {
+            MethodInfo method = typeof(BattleCommonAtlasBindingEditorTests).Assembly.GetType(
+                "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteEditor").GetMethod(
+                "BuildMatchCentralBindingsRequest", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.That(method, Is.Not.Null);
+            Assert.That(Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { index })).InnerException,
+                Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
         [Test]
         public void NativeSparkBlackKey_RemovesOnlyExactRgbBlack()
         {

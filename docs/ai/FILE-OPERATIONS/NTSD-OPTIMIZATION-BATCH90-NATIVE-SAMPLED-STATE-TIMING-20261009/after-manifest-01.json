@@ -1,0 +1,171 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009",
+  "utc": "2026-10-09T01:23:12.3636955Z",
+  "status": "FOCUSED_TEST_PASS / ATTRIBUTION_READY / DIAGNOSTIC_ONLY / DEFAULT_OFF",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-manifest-02.json",
+      "sha": "4BCDE63F36E6D00AC6CFAB2005281E807A9FE364E78975DCB29584FCE7145EBD"
+    }
+  ],
+  "guardsChecked": 929,
+  "guardDrift": [],
+  "backupsChecked": 9,
+  "backupDrift": [],
+  "sharedRequestExists": false,
+  "after": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+      "exists": true,
+      "sha": "38569AA92C5BBBB237298963D21F717D8FE808D22D12BFB605297FBCCBE4562E",
+      "bytes": 10127
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "exists": true,
+      "sha": "97DC0AD87A68B92626A91D120CA7788D5CFCD04F7370181C2F8938B6128E43D0",
+      "bytes": 43330
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "exists": true,
+      "sha": "C5CFF51EAED3D6A7E79F144107EA646C1C315BA3312EC5634490F1E8F1DB3CAB",
+      "bytes": 86342
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha": "3446F78079D4A50D1601B64A4A48AD07AD76287204C381F201E2736DA94DE09F",
+      "bytes": 1644013
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "B92326A3D403F8CA0FA982AA80C296C7FDEEB6EE600469A7B02D8583651D4D31",
+      "bytes": 738451
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "D382B872014D02FEE64D467A7D569BFBC67E92AFA815BB20437B4DDC42AD98BE",
+      "bytes": 124563
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "C7696D0E2D235CC198B262BFE905EAC4A6D8AE122E9B67F67836DD76D07B2D58",
+      "bytes": 1577888
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "6BA80A0F038CD93473F915EDA123F67E36B4DBCBC0B027955BD2381C06E936F0",
+      "bytes": 197569
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "3FE36B7A088ED3590FDD5C59AEB6B336BC2405C9D0F56E1C7D14DFA1E50CE609",
+      "bytes": 36123
+    }
+  ],
+  "newFiles": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/audit-final-01.json",
+      "sha": "CB37E543BFE32BFB3A9C2B9DB6D067893A78CC837487974EE11517B5A872FA61",
+      "bytes": 6559
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/green-01/tests.xml",
+      "sha": "3FE36B7A088ED3590FDD5C59AEB6B336BC2405C9D0F56E1C7D14DFA1E50CE609",
+      "bytes": 36123
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/red-01/tests.xml",
+      "sha": "A99AFBC3BF8CDD400F790D824E2B7F709F613D4FD22D951CE6EA22B8BF949307",
+      "bytes": 31225
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/REPORT.md",
+      "sha": "509495E1419784CCFF7D945ED8D1E0EBFD35CF4318C9D85135E1D0B6186A10B2",
+      "bytes": 5637
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-NATIVE-SAMPLED-STATE-TIMING-090.md",
+      "sha": "B149210B5DB364E6F5BAC5929EFDF86FAAC65E6B8EA080C9117088BAEFA868E3",
+      "bytes": 5925
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "sha": "A4398B371895959BB034FD0D6423FF56CBF77421C2A2D1A1BC689C1A68B00172",
+      "bytes": 195603
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "sha": "A011EA95E0967EE6DD24123F8054D13696234201C1BD42B26C175B1606B0B72F",
+      "bytes": 1576745
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Assets__NTSD__Scripts__Simulation__Diagnostics__SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha": "C569EAC16518E6DA967595CDC4DADB059B2DA5E94EB66F9CD697E7C47F260A20",
+      "bytes": 41724
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Assets__NTSD__Scripts__Simulation__Input__NTSD28InputTwoPassModule.cs",
+      "sha": "3AFAE97FFF32302F043875B4D46838C8858D7A48AC1E1975287D882D7DB05996",
+      "bytes": 6896
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "9B1F511AED212E44E0410C3183584D7B33D85621FDC5B1677E831A3F82883F78",
+      "bytes": 74909
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "sha": "76EE78D4B78140D84965754394A0B701E0091436413FC51DC593EF9E8036D089",
+      "bytes": 737328
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "sha": "1CE989EAE0E5B4EC0CB5A4B669B6D5039E0CE84F6CD1CC52CDB4B7AF16A14AE9",
+      "bytes": 123434
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/docs__ai__STATE.md",
+      "sha": "D0E4C58D8F5185050217B51CA34D5739CA19476325277A68654EBF2D1F3EB9FD",
+      "bytes": 1642890
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "sha": "F5E865E35693B028D2FFEBE83ED8F283A4EDC59A5957C17D4E039D9A3DCED16B",
+      "bytes": 23997
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-02/test-first.cs",
+      "sha": "C5CFF51EAED3D6A7E79F144107EA646C1C315BA3312EC5634490F1E8F1DB3CAB",
+      "bytes": 86342
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-manifest-01.json",
+      "sha": "42D8A0817C300EB55DAAA0D11B502F420A35FA0F9CE6687DE7A8CDF312B27C67",
+      "bytes": 14431
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-manifest-02.json",
+      "sha": "4BCDE63F36E6D00AC6CFAB2005281E807A9FE364E78975DCB29584FCE7145EBD",
+      "bytes": 1352
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/RECORD.md",
+      "sha": "FAFE9D1DD48473E51843A34F0206E9AEEB01BB8538DDE117BD0DD8CC1B6A67DB",
+      "bytes": 3478
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009.md",
+      "sha": "73309CCC4422DA8E0F4D97FAAC343113BDB0853D1C8EBC4148FB52C7523D41B7",
+      "bytes": 4657
+    }
+  ]
+}

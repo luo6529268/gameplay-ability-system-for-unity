@@ -441,6 +441,963 @@ namespace NTSD.Test
     [Category("U6RoleAwareFormal")]
     public sealed class RoleAwareCollisionFormalCollectorSelfCheckTests
     {
+        [Test]
+        public void GroupSnapshotSkip_DefaultsOff()
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            Assert.That(GroupSnapshotSkipProperty("EnableRoleRejectedGroupSnapshotSkipForDiagnostics").GetValue(query), Is.False);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.Zero);
+        }
+
+        [Test]
+        public void GroupSnapshotSkip_SameGroupRejectsWithoutCapturingFullPayload()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            SetGroupSnapshotSkip(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(1));
+            SetGroupSnapshotSkip(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.EqualTo(2));
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.Zero);
+        }
+
+        [TestCase(0, 0, 0)]
+        [TestCase(4, 0, 0)]
+        [TestCase(8, 0, 0)]
+        [TestCase(50, 0, 0)]
+        [TestCase(0, 190, 0)]
+        [TestCase(0, 18, 0)]
+        [TestCase(0, 180, 0)]
+        [TestCase(0, 0, 10)]
+        [TestCase(0, 0, 13)]
+        public void GroupSnapshotSkip_GroupAndStateExceptionsKeepOriginalPayloadAndSideEffects(
+            int kind, int attackerState, int targetState)
+        {
+            SetGroupSnapshotSkip(GetQuery(new SimulationWorld()), false);
+            var world = new SimulationWorld();
+            LF2FrameData attackerFrame = MakePairSnapshotReuseFrame(true, kind);
+            LF2FrameData targetFrame = MakePairSnapshotReuseFrame(false, kind);
+            attackerFrame.state = attackerState;
+            targetFrame.state = targetState;
+            LF2Character attacker = CreateCharacter("GroupSkip_Attacker", 1300, attackerFrame);
+            LF2Character target = CreateCharacter("GroupSkip_Target", 1301, targetFrame);
+            Register(world, attacker, 0, 1, 0);
+            Register(world, target, 1, kind == 0 && attackerState == 0 && targetState == 0 ? 2 : 1, 0);
+            attacker.Runtime.EnvironmentState320 = 1;
+            BruteForceSceneQuery query = GetQuery(world);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int baselineSources = attacker.Runtime.Kind4SourceCount92;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            SetGroupSnapshotSkip(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(baselineSources));
+            Assert.That(ReadGroupSnapshotSkips(query), Is.Zero);
+            if (candidate.Counts[0] > 0)
+                Assert.That(candidate.Sequences[0][0].PairSnapshot.Valid, Is.True);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void GroupSnapshotSkip_PreservesProducerModes(int producerMode)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = producerMode == 1;
+            query.CollisionCandidateStoreAuthorityEnabled = producerMode >= 2;
+            query.CollisionCandidateStoreLegacyOracleInterval = producerMode == 2 ? 1 : 0;
+            SetGroupSnapshotSkip(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetGroupSnapshotSkip(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.EqualTo(2));
+            Assert.That(candidate.CollectionAborted, Is.False);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void GroupSnapshotSkip_BruteFallbackLegacyOrMutationHookDoNotUseWitness(int control)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            SetGroupSnapshotSkip(query, true);
+            if (control == 1)
+                query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+                {
+                    target.Runtime.SetPosition(1, 0, 0);
+                    target.Runtime.SyncIntegerPosition();
+                };
+            if (control == 2)
+                SetLegacyPairSnapshotCapture(query, true);
+            if (control == 3)
+                query.AfterRoleAwareExactPairForSelfCheck = _ => { };
+            CandidateRun candidate = RunCollection(world, query, control == 0
+                ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.Zero);
+            Assert.That(candidate.CollectionAborted, Is.EqualTo(control == 1));
+        }
+
+        [Test]
+        public void GroupSnapshotSkip_LaterCollectionReadsLiveGroupAndResetsCounter()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            SetGroupSnapshotSkip(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.GreaterThan(0));
+            target.RelationTeam = 2;
+            SetGroupSnapshotSkip(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetGroupSnapshotSkip(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(6));
+            Assert.That(ReadGroupSnapshotSkips(query), Is.Zero);
+        }
+
+        [Test]
+        public void GroupSnapshotSkip_NoGeometryOverlapDoesNotProbeOrCapture()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            target.Runtime.SetPosition(10000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            SetGroupSnapshotSkip(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.Zero);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.Zero);
+        }
+
+        [Test]
+        public void GroupSnapshotSkip_WarmedCollectorHasNoManagedAllocation()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            SetGroupSnapshotSkip(query, true);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.PrepareBattleCapacity(2, 3, 3);
+            world.CaptureCollisionFrameSnapshotsAll();
+            Assert.That(query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(16), Is.Zero);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void GroupSnapshotSkip_1000ParticipantsLocalAlternatingCostAndParity(bool concentrated)
+        {
+            SetGroupSnapshotSkip(GetQuery(new SimulationWorld()), false);
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var participants = new LF2Character[1000];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                bool attacker = i % 25 == 0;
+                participants[i] = CreateCharacter("GroupSnapshotSkip_Cost_" + i,
+                    1300 + i, MakePairSnapshotReuseFrame(attacker, 0));
+                Register(world, participants[i], i, attacker ? 1 : 1 + i % 2,
+                    (concentrated ? 0 : (i / 25) * 120) + (i % 5) * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.PrepareBattleCapacity(1000, 3, 3);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetGroupSnapshotSkip(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadGroupSnapshotSkips(query), Is.GreaterThan(0));
+            var toggle = (Action<BruteForceSceneQuery, bool>)Delegate.CreateDelegate(typeof(Action<BruteForceSceneQuery, bool>),
+                GroupSnapshotSkipProperty("EnableRoleRejectedGroupSnapshotSkipForDiagnostics").GetSetMethod());
+            double offMs = 0, onMs = 0;
+            long offCaptures = 0, onCaptures = 0, onSkips = 0;
+            for (int order = 0; order < 2; order++)
+                for (int iteration = -8; iteration < 16; iteration++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    toggle(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000d /
+                        System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration < 0)
+                        continue;
+                    if (enabled) { onMs += ms; onCaptures += ReadPairSnapshotCaptureCount(query); onSkips += ReadGroupSnapshotSkips(query); }
+                    else { offMs += ms; offCaptures += ReadPairSnapshotCaptureCount(query); }
+                }
+            toggle(query, false);
+            Assert.That(onCaptures, Is.LessThan(offCaptures));
+            Assert.That(onSkips, Is.GreaterThan(0));
+            TestContext.WriteLine("GROUP_SNAPSHOT_SKIP_COST participants=1000 concentrated=" + concentrated +
+                " warmup=8 sample=16 offMeanMs=" + (offMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " onMeanMs=" + (onMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " offCaptures=" + offCaptures + " onCaptures=" + onCaptures + " onSkips=" + onSkips +
+                " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static System.Reflection.PropertyInfo GroupSnapshotSkipProperty(string name)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Group rejection needs an explicit default-off switch and measured skip count.");
+            return property;
+        }
+
+        private static void SetGroupSnapshotSkip(BruteForceSceneQuery query, bool enabled)
+        {
+            GroupSnapshotSkipProperty("EnableRoleRejectedGroupSnapshotSkipForDiagnostics").SetValue(query, enabled);
+        }
+
+        private static long ReadGroupSnapshotSkips(BruteForceSceneQuery query)
+        {
+            return (long)GroupSnapshotSkipProperty("LastRoleRejectedGroupSnapshotSkipCountForDiagnostics").GetValue(query);
+        }
+
+
+        [Test]
+        public void SnapshotFrameReuse_DefaultsOff()
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            Assert.That(SnapshotFrameReuseProperty("EnableRoleSnapshotFrameReuseForDiagnostics").GetValue(query), Is.False);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.Zero);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(0, true)]
+        [TestCase(10, false)]
+        [TestCase(2, false)]
+        [TestCase(7, false)]
+        public void SnapshotFrameReuse_MultiBodyPreservesPayloadSequenceRngAndSourceCount(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                    itr.vrest = 0;
+            SetSnapshotFrameReuse(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            int geometryCount = query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics;
+            SetSnapshotFrameReuse(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics, Is.EqualTo(geometryCount));
+            Assert.That(ReadSnapshotFrameReuses(query), Is.GreaterThan(0));
+            if (nearest)
+                Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void SnapshotFrameReuse_PreservesAllProducerModes(int producerMode)
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = producerMode == 1;
+            query.CollisionCandidateStoreAuthorityEnabled = producerMode >= 2;
+            query.CollisionCandidateStoreLegacyOracleInterval = producerMode == 2 ? 1 : 0;
+            SetSnapshotFrameReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetSnapshotFrameReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.EqualTo(1));
+            Assert.That(candidate.CollectionAborted, Is.False);
+            Assert.That(candidate.Counts[0], Is.EqualTo(6));
+        }
+
+        [Test]
+        public void SnapshotFrameReuse_LaterCollectionReadsLiveTeamsFacingAndPreviousState()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetSnapshotFrameReuse(query, true);
+            CandidateRun first = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            target.RelationTeam = 3;
+            attacker.Runtime.Dir = "left";
+            attacker.PS.dir = "left";
+            LF2FrameData previous = MakeFrame(null, null);
+            previous.frameId = 17;
+            previous.state = LF2States.Injured2;
+            target.FrameCache.Wrapper.characterData.frames.Add(previous);
+            target.FrameCache.Load(target.FrameCache.Wrapper);
+            target.Frame.Prev = 17;
+            SetSnapshotFrameReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetSnapshotFrameReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(candidate.Sequences[0][0].PairSnapshot, Is.Not.EqualTo(first.Sequences[0][0].PairSnapshot));
+            Assert.That(candidate.Sequences[0][0].PairSnapshot.TargetPreviousState, Is.EqualTo(LF2States.Injured2));
+        }
+
+        [Test]
+        public void SnapshotFrameReuse_NoOverlapDoesNotCaptureAndResetsCount()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetSnapshotFrameReuse(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.GreaterThan(0));
+            target.Runtime.SetPosition(1000, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(candidate.Counts[0], Is.Zero);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.Zero);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SnapshotFrameReuse_BruteOrInputFallbackNeverReuses(bool fallback)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetSnapshotFrameReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetSnapshotFrameReuse(query, true);
+            if (fallback)
+                query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+                {
+                    target.Runtime.SetPosition(1, 0, 0);
+                    target.Runtime.SyncIntegerPosition();
+                };
+            CandidateRun candidate = RunCollection(world, query, fallback
+                ? CollisionFormalCollectorMode.ForceRoleAware : CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = null;
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.Zero);
+            Assert.That(candidate.CollectionAborted, Is.EqualTo(fallback));
+        }
+
+        [Test]
+        public void SnapshotFrameReuse_LegacyCaptureControlWins()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetSnapshotFrameReuse(query, true);
+            SetLegacyPairSnapshotCapture(query, true);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.Zero);
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(6));
+        }
+
+        [Test]
+        public void SnapshotFrameReuse_AfterPairMutationHookUsesOriginalCapture()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            SetSnapshotFrameReuse(query, true);
+            int hooks = 0;
+            query.AfterRoleAwareExactPairForSelfCheck = _ => hooks++;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            query.AfterRoleAwareExactPairForSelfCheck = null;
+            Assert.That(hooks, Is.GreaterThan(0));
+            Assert.That(candidate.Counts[0], Is.GreaterThan(0));
+            Assert.That(ReadSnapshotFrameReuses(query), Is.Zero);
+        }
+
+        [Test]
+        public void SnapshotFrameReuse_ResolvedFactoryPreservesDistinctTickAndCurrentFramesWithZeroWarmAllocation()
+        {
+            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            LF2FrameData tick = MakePairSnapshotReuseFrame(false, 4);
+            tick.frameId = 18;
+            tick.state = LF2States.Injured2;
+            target.FrameCache.Wrapper.characterData.frames.Add(tick);
+            target.FrameCache.Load(target.FrameCache.Wrapper);
+            target.Frame.Prev2 = 18;
+            LF2FrameData attackerCurrent = attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
+            LF2FrameData targetCurrent = target.FrameCache.GetNativeFrameDataById(target.Frame.N);
+            LF2FrameData attackerTick = attacker.GetCollisionFrameData();
+            LF2FrameData targetTick = target.GetCollisionFrameData();
+            Type factoryType = typeof(SimulationWorld).Assembly.GetType("NTSD.Simulation.Ecs.BattleHitCandidatePairSnapshotFactory");
+            System.Reflection.MethodInfo method = factoryType.GetMethod("CaptureWithResolvedFrames",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "Validated frame entry must exist before measuring it.");
+            var capture = (SnapshotFrameCapture)Delegate.CreateDelegate(typeof(SnapshotFrameCapture), method);
+            var original = (SnapshotOriginalCapture)Delegate.CreateDelegate(typeof(SnapshotOriginalCapture),
+                factoryType.GetMethod("Capture", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic));
+            BattleHitCandidatePairSnapshot expected = original(attacker, target, world);
+            Assert.That(expected.Valid, Is.True);
+            Assert.That(expected.TargetTickState, Is.EqualTo(LF2States.Injured2));
+            Assert.That(expected.TargetCurrentState, Is.Not.EqualTo(expected.TargetTickState));
+            Assert.That(capture(attacker, target, world, attackerCurrent, targetCurrent, attackerTick, targetTick), Is.EqualTo(expected));
+            Assert.That(capture(attacker, target, world, attackerCurrent, targetCurrent, null, targetTick).Valid, Is.False);
+            for (int i = 0; i < 64; i++)
+                capture(attacker, target, world, attackerCurrent, targetCurrent, attackerTick, targetTick);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            bool equal = true;
+            for (int i = 0; i < 4096; i++)
+                equal &= capture(attacker, target, world, attackerCurrent, targetCurrent, attackerTick, targetTick) == expected;
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(equal, Is.True);
+            Assert.That(allocated, Is.Zero);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SnapshotFrameReuse_1000ParticipantsLocalAlternatingCostAndParity(bool concentrated)
+        {
+            SetSnapshotFrameReuse(GetQuery(new SimulationWorld()), false);
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var participants = new LF2Character[1000];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                bool attacker = i % 25 == 0;
+                participants[i] = CreateCharacter("SnapshotFrameReuse_Cost_" + i,
+                    1300 + i, MakePairSnapshotReuseFrame(attacker, 0));
+                Register(world, participants[i], i, attacker ? 1 : 2,
+                    (concentrated ? 0 : (i / 25) * 120) + (i % 5) * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.PrepareBattleCapacity(1000, 3, 3);
+            SetSnapshotFrameReuse(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, participants);
+            SetSnapshotFrameReuse(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, participants);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadSnapshotFrameReuses(query), Is.GreaterThan(0));
+            var toggle = (Action<BruteForceSceneQuery, bool>)Delegate.CreateDelegate(typeof(Action<BruteForceSceneQuery, bool>),
+                SnapshotFrameReuseProperty("EnableRoleSnapshotFrameReuseForDiagnostics").GetSetMethod());
+            double offMs = 0;
+            double onMs = 0;
+            long offReuses = 0;
+            long onReuses = 0;
+            for (int iteration = -8; iteration < 16; iteration++)
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    toggle(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    double ms = (System.Diagnostics.Stopwatch.GetTimestamp() - started) * 1000d /
+                        System.Diagnostics.Stopwatch.Frequency;
+                    if (iteration < 0)
+                        continue;
+                    if (enabled) { onMs += ms; onReuses += ReadSnapshotFrameReuses(query); }
+                    else { offMs += ms; offReuses += ReadSnapshotFrameReuses(query); }
+                }
+            toggle(query, false);
+            Assert.That(offReuses, Is.Zero);
+            Assert.That(onReuses, Is.GreaterThan(0));
+            TestContext.WriteLine("SNAPSHOT_FRAME_REUSE_COST participants=1000 concentrated=" + concentrated +
+                " warmup=8 sample=16 offMeanMs=" + (offMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " onMeanMs=" + (onMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " onReuses=" + onReuses + " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private delegate BattleHitCandidatePairSnapshot SnapshotFrameCapture(LF2Entity attacker,
+            LF2Entity target, SimulationWorld world, LF2FrameData attackerCurrent, LF2FrameData targetCurrent,
+            LF2FrameData attackerTick, LF2FrameData targetTick);
+
+        private delegate BattleHitCandidatePairSnapshot SnapshotOriginalCapture(LF2Entity attacker,
+            LF2Entity target, SimulationWorld world);
+
+        private static System.Reflection.PropertyInfo SnapshotFrameReuseProperty(string name)
+        {
+            System.Reflection.PropertyInfo property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Scoped frame reuse must have an explicit default-off switch and actual counter.");
+            return property;
+        }
+
+        private static void SetSnapshotFrameReuse(BruteForceSceneQuery query, bool enabled)
+        {
+            SnapshotFrameReuseProperty("EnableRoleSnapshotFrameReuseForDiagnostics").SetValue(query, enabled);
+        }
+
+        private static long ReadSnapshotFrameReuses(BruteForceSceneQuery query)
+        {
+            return (long)SnapshotFrameReuseProperty("LastRoleSnapshotFrameReuseCountForDiagnostics").GetValue(query);
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_DefaultIsOff()
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            Assert.That(RoleCapacityGuardProperty("EnableRoleCapacityRecordGuardForDiagnostics").GetValue(query), Is.False);
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void RoleCapacityRecordGuard_FullQueuePreservesAllProducerModes(int producerMode)
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            query.CollisionCandidateStoreShadowDiagnosticsEnabled = producerMode == 1;
+            query.CollisionCandidateStoreAuthorityEnabled = producerMode >= 2;
+            query.CollisionCandidateStoreLegacyOracleInterval = producerMode == 2 ? 1 : 0;
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int baselineCaptures = ReadPairSnapshotCaptureCount(query);
+            int baselineGeometry = query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics;
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(20));
+            Assert.That(candidate.CollectionAborted, Is.False);
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.GreaterThan(0));
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.LessThan(baselineCaptures));
+            Assert.That(query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics, Is.EqualTo(baselineGeometry));
+        }
+
+        [TestCase(3, false)]
+        [TestCase(4, true)]
+        public void RoleCapacityRecordGuard_UsesExactTwentyCandidateBoundary(int targetCount, bool expectedSkip)
+        {
+            CreateRoleCapacityGuardFixture(targetCount, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(Math.Min(20, targetCount * 6)));
+            Assert.That(ReadRoleCapacityGuardSkips(query) > 0, Is.EqualTo(expectedSkip));
+        }
+
+        [TestCase(4, 1)]
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(2, 1)]
+        [TestCase(7, 1)]
+        public void RoleCapacityRecordGuard_ExcludedKindsAndNearestKeepSideEffects(int kind, int vrest)
+        {
+            CreateRoleCapacityGuardFixture(40, kind, vrest, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            SetRoleCapacityGuard(query, false);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int expectedSourceCount = attacker.Runtime.Kind4SourceCount92;
+            SetRoleCapacityGuard(query, true);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(expectedSourceCount));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+            if (kind == 4)
+                Assert.That(expectedSourceCount, Is.EqualTo(240));
+            if (vrest == 0)
+            {
+                Assert.That(candidate.Counts[0], Is.EqualTo(1));
+                Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+            }
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_LegacyCaptureControlIsNotBypassed()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            SetLegacyPairSnapshotCapture(query, true);
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int captures = ReadPairSnapshotCaptureCount(query);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(captures, Is.EqualTo(240));
+            Assert.That(ReadPairSnapshotCaptureCount(query), Is.EqualTo(captures));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_BruteRouteDoesNotAdoptRoleGuard()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceBruteForce, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(20));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_InputInvalidationUsesOriginalFallback()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+            {
+                targets[0].Runtime.SetPosition(11, 0, 0);
+                targets[0].Runtime.SyncIntegerPosition();
+            };
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            targets[0].Runtime.SetPosition(0, 0, 0);
+            targets[0].Runtime.SyncIntegerPosition();
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(baseline.CollectionAborted, Is.True);
+            Assert.That(candidate.CollectionAborted, Is.True);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_NextCollectionDoesNotReuseFullCount()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun first = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(first.Counts[0], Is.EqualTo(20));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.GreaterThan(0));
+            foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                itr.vrest = 0;
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(1));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+            Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_FullQueueThenNearestStillReplaces()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets, true);
+            for (int i = 0; i < targets.Length; i++)
+            {
+                targets[i].Runtime.SetPosition(i < 20 ? i * 4 : 80, 0, 0);
+                targets[i].Runtime.SyncIntegerPosition();
+            }
+            query.PrepareBattleCapacity(41, 3, 4);
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(1));
+            Assert.That(candidate.Sequences[0][0].ItrIndex, Is.GreaterThanOrEqualTo(2));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.GreaterThan(0));
+            Assert.That(baseline.RngCalls, Is.GreaterThan(0));
+            Assert.That(candidate.RngCalls, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void RoleCapacityRecordGuard_GroupRejectedAfterFullQueueIsReadOnly()
+        {
+            CreateRoleCapacityGuardFixture(40, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            for (int i = 4; i < targets.Length; i++)
+                targets[i].RelationTeam = attacker.RelationTeam;
+            SetRoleCapacityGuard(query, false);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            SetRoleCapacityGuard(query, true);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(candidate.Counts[0], Is.EqualTo(20));
+            Assert.That(ReadRoleCapacityGuardSkips(query), Is.GreaterThan(0));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void RoleCapacityRecordGuard_ThousandFixtureLocalCost(bool concentrated)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 2000);
+            var participants = new LF2Character[1000];
+            for (int i = 0; i < participants.Length; i++)
+            {
+                bool attack = i % 25 == 0;
+                participants[i] = CreateCharacter("CapacityGuard_Cost_" + i, 1300 + i,
+                    MakePairSnapshotReuseFrame(attack, 0));
+                Register(world, participants[i], i, attack ? 1 : 2,
+                    concentrated ? i % 5 * 5 : i / 25 * 120 + i % 5 * 5);
+            }
+            BruteForceSceneQuery query = GetQuery(world);
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.PrepareBattleCapacity(1000, 3, 2);
+            double baselineMs = 0;
+            double candidateMs = 0;
+            long baselineCaptures = 0;
+            long candidateCaptures = 0;
+            long skips = 0;
+            for (int iteration = -8; iteration < 16; iteration++)
+            {
+                for (int order = 0; order < 2; order++)
+                {
+                    bool enabled = ((iteration & 1) == 0) == (order == 0);
+                    SetRoleCapacityGuard(query, enabled);
+                    world.Rng.Seed(CollectionSeed);
+                    long started = System.Diagnostics.Stopwatch.GetTimestamp();
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    world.EndCollisionCandidateConsumption();
+                    long elapsed = System.Diagnostics.Stopwatch.GetTimestamp() - started;
+                    if (iteration < 0)
+                        continue;
+                    double elapsedMs = elapsed * 1000d / System.Diagnostics.Stopwatch.Frequency;
+                    if (enabled)
+                    {
+                        candidateMs += elapsedMs;
+                        candidateCaptures += ReadPairSnapshotCaptureCount(query);
+                        skips += ReadRoleCapacityGuardSkips(query);
+                    }
+                    else
+                    {
+                        baselineMs += elapsedMs;
+                        baselineCaptures += ReadPairSnapshotCaptureCount(query);
+                        Assert.That(ReadRoleCapacityGuardSkips(query), Is.Zero);
+                    }
+                }
+            }
+            Assert.That(skips, Is.GreaterThan(0));
+            Assert.That(baselineCaptures, Is.GreaterThan(candidateCaptures));
+            Assert.That(baselineMs, Is.GreaterThan(0));
+            Assert.That(candidateMs, Is.GreaterThan(0));
+            TestContext.WriteLine("ROLE_CAPACITY_RECORD_GUARD_COST participants=1000 shape=" +
+                (concentrated ? "concentrated" : "dispersed") + " warmup=8 sample=16 baselineMeanMs=" +
+                (baselineMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " candidateMeanMs=" + (candidateMs / 16d).ToString("R", System.Globalization.CultureInfo.InvariantCulture) +
+                " baselineCaptures=" + baselineCaptures + " candidateCaptures=" + candidateCaptures +
+                " skips=" + skips + " scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN");
+        }
+
+        private static void CreateRoleCapacityGuardFixture(int targetCount, int kind, int vrest,
+            out SimulationWorld world, out BruteForceSceneQuery query,
+            out LF2Character attacker, out LF2Character[] targets, bool mixedNearest = false)
+        {
+            world = new SimulationWorld();
+            LF2FrameData attackerFrame = MakePairSnapshotReuseFrame(true, kind);
+            if (mixedNearest)
+                for (int i = 0; i < 2; i++)
+                    attackerFrame.itrs.Add(new InteractionArea
+                    {
+                        kind = 0, vrest = 0, x = 80, y = -10, w = 80, h = 20, zwidth = 15, fall = 100,
+                    });
+            attacker = CreateCharacter("CapacityGuard_Attacker", 1300, attackerFrame);
+            foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs)
+                if (!mixedNearest || itr.x != 80)
+                    itr.vrest = vrest;
+            Register(world, attacker, 0, 1, 0);
+            attacker.Runtime.EnvironmentState320 = 1;
+            targets = new LF2Character[targetCount];
+            for (int i = 0; i < targetCount; i++)
+            {
+                targets[i] = CreateCharacter("CapacityGuard_Target_" + i, 1301 + i,
+                    MakePairSnapshotReuseFrame(false, kind));
+                Register(world, targets[i], i + 1, 2, i % 4 * 2);
+            }
+            query = GetQuery(world);
+            query.PrepareBattleCapacity(targetCount + 1, 3, 2);
+        }
+
+        private static System.Reflection.PropertyInfo RoleCapacityGuardProperty(string name)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "The default-off Role capacity guard needs an explicit bounded contract.");
+            return property;
+        }
+
+        private static void SetRoleCapacityGuard(BruteForceSceneQuery query, bool enabled)
+        {
+            RoleCapacityGuardProperty("EnableRoleCapacityRecordGuardForDiagnostics").SetValue(query, enabled);
+        }
+
+        private static long ReadRoleCapacityGuardSkips(BruteForceSceneQuery query)
+        {
+            return (long)RoleCapacityGuardProperty("LastRoleCapacityRecordGuardSkipCountForDiagnostics").GetValue(query);
+        }
+
+        [Test]
+        public void RoleBranchTiming_DefaultIsOff()
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            Assert.That(RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").GetValue(query), Is.False);
+            Assert.That(RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").GetValue(query), Is.EqualTo(64));
+        }
+
+        [TestCase("PairAllowed", 48)]
+        [TestCase("Coarse", 49)]
+        [TestCase("ItrAllowed", 50)]
+        [TestCase("BodyGeometry", 51)]
+        [TestCase("CandidateAccepts", 52)]
+        [TestCase("CandidateRecord", 53)]
+        public void RoleBranchTiming_PhaseIdsAndNamesAreDistinct(string suffix, int id)
+        {
+            Assert.That(Enum.TryParse("CandidateCollectRole" + suffix, out BattleTickDetailPhase phase), Is.True);
+            Assert.That((int)phase, Is.EqualTo(id));
+            Assert.That(BattleTickDetailPhaseDiagnostics.GetPhaseName(phase), Is.EqualTo("CandidateCollect/Role" + suffix));
+            Assert.That((int)BattleTickDetailPhase.CandidateCollectBruteExactWork, Is.EqualTo(47));
+        }
+
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(3)]
+        [TestCase(8192)]
+        public void RoleBranchTiming_InvalidStrideIsRejected(int stride)
+        {
+            var exception = Assert.Throws<System.Reflection.TargetInvocationException>(() =>
+                RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").SetValue(GetQuery(new SimulationWorld()), stride));
+            Assert.That(exception.InnerException, Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [TestCase(1)]
+        [TestCase(64)]
+        [TestCase(4096)]
+        public void RoleBranchTiming_ValidStrideIsRetained(int stride)
+        {
+            BruteForceSceneQuery query = GetQuery(new SimulationWorld());
+            RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").SetValue(query, stride);
+            Assert.That(RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").GetValue(query), Is.EqualTo(stride));
+        }
+
+        [TestCase("flag")]
+        [TestCase("recorder")]
+        [TestCase("brute")]
+        public void RoleBranchTiming_InactiveGateDoesNotCount(string gate)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").SetValue(query, gate != "flag");
+            if (gate != "recorder")
+                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(77);
+            if (gate == "brute") SetBruteExactCache(query, true);
+            RunCollection(world, query, gate == "brute" ? CollisionFormalCollectorMode.ForceBruteForce :
+                CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadRoleTimingCoverage(query, false, "eligibleDirections"), Is.Zero);
+            Assert.That(ReadRoleTimingCoverage(query, true, "eligibleDirections"), Is.Zero);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void RoleBranchTiming_MultiBodySequenceSnapshotsAndRngAreUnchanged(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs) itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int sourceCount = attacker.Runtime.Kind4SourceCount92;
+            RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").SetValue(query, true);
+            RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").SetValue(query, 1);
+            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(77);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(sourceCount));
+            Assert.That(ReadRoleTimingCoverage(query, false, "eligibleDirections"), Is.GreaterThan(0));
+            Assert.That(ReadRoleTimingCoverage(query, false, "timedDirections"),
+                Is.EqualTo(ReadRoleTimingCoverage(query, false, "eligibleDirections")));
+            foreach (string branch in new[] { "pairAllowed", "coarse", "itrAllowed", "bodyGeometry", "candidateAccepts", "candidateRecord" })
+            {
+                if (kind == 0)
+                    Assert.That(ReadRoleTimingCoverage(query, false, branch + "Visits"), Is.GreaterThan(0));
+                else
+                    Assert.That(ReadRoleTimingCoverage(query, false, branch + "Visits"), Is.GreaterThanOrEqualTo(0));
+                Assert.That(ReadRoleTimingCoverage(query, false, branch + "Timed"),
+                    Is.EqualTo(ReadRoleTimingCoverage(query, false, branch + "Visits")));
+            }
+            Assert.That(query.LastBruteBranchTimingCoverageForDiagnostics.eligibleDirections, Is.Zero);
+        }
+
+        [TestCase(1)]
+        [TestCase(64)]
+        public void RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(int stride)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").SetValue(query, true);
+            RoleTimingProperty("RoleBranchTimingSampleStrideForDiagnostics").SetValue(query, stride);
+            BattleTickDetailPhaseDiagnostics recorder = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            for (int offset = 0; offset < 64; offset++)
+            {
+                recorder.BeginTick(offset);
+                RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+                Assert.That(ReadRoleTimingCoverage(query, false, "eligibleDirections"), Is.EqualTo(1));
+            }
+            Assert.That(ReadRoleTimingCoverage(query, true, "eligibleDirections"), Is.EqualTo(64));
+            Assert.That(ReadRoleTimingCoverage(query, true, "timedDirections"), Is.EqualTo(64 / stride));
+            RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").SetValue(query, false);
+            recorder.BeginTick(200);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(ReadRoleTimingCoverage(query, false, "eligibleDirections"), Is.Zero);
+            Assert.That(ReadRoleTimingCoverage(query, true, "eligibleDirections"), Is.EqualTo(64));
+        }
+
+        [Test]
+        public void RoleBranchTiming_InputInvalidationFallbackRemainsConservative()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            query.ForceRoleAwareDirectForDiagnostics = true;
+            query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+            {
+                target.Runtime.SetPosition(11, 0, 0);
+                target.Runtime.SyncIntegerPosition();
+            };
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(baseline.CollectionAborted, Is.True);
+            target.Runtime.SetPosition(0, 0, 0);
+            target.Runtime.SyncIntegerPosition();
+            RoleTimingProperty("EnableRoleBranchTimingForDiagnostics").SetValue(query, true);
+            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(77);
+            CandidateRun candidate = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(candidate.CollectionAborted, Is.True);
+            AssertPairSnapshotRunsEqual(baseline, candidate);
+            Assert.That(ReadRoleTimingCoverage(query, false, "eligibleDirections"), Is.Zero);
+        }
+
+        private static System.Reflection.PropertyInfo RoleTimingProperty(string name)
+        {
+            var property = typeof(BruteForceSceneQuery).GetProperty(name);
+            Assert.That(property, Is.Not.Null, "Role cached-direction timing needs an independent diagnostic contract.");
+            return property;
+        }
+
+        private static long ReadRoleTimingCoverage(BruteForceSceneQuery query, bool total, string field)
+        {
+            object coverage = RoleTimingProperty((total ? "Total" : "Last") +
+                "RoleBranchTimingCoverageForDiagnostics").GetValue(query);
+            var member = coverage.GetType().GetField(field);
+            Assert.That(member, Is.Not.Null);
+            return (long)member.GetValue(coverage);
+        }
 
         [Test]
         public void BruteDepthReject_DefaultOffPreservesProductionDefaults()

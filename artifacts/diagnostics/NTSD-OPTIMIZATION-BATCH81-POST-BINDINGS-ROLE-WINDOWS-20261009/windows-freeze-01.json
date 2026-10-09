@@ -1,0 +1,47 @@
+{
+  "outputAbsent": true,
+  "publicResultSha": "47C1A72EA66EADD828E06FE323EFC1783794F784B8D5286D28A145636E071122",
+  "guardCount": 680,
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "scene": [
+    {
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity"
+    },
+    {
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    }
+  ],
+  "guardChanges": [],
+  "source": [
+    {
+      "sha": "48E894A458AB0DD2E4805359246BB35883BAA37A8AF61675FAC9B9E7B5050100",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "sha": "E90FACD3E95F815F9266D124086096032B9796C91D4ADC5987857901DCF93F99",
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs"
+    },
+    {
+      "sha": "4DE75AE969F9F398469D3BDC8B8DD68409F575DA99A49AE7377174DBA7305802",
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs"
+    },
+    {
+      "sha": "332CCBA5A5C41B7961312691AD48D624F29CF4825226AE01C926DA0AC85B34CF",
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs"
+    },
+    {
+      "sha": "1FF48CA62EE7DB21F3956D48B9FDF59D8BD96EC3936E969EE2C23A8B9758BD8B",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+    },
+    {
+      "sha": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs"
+    }
+  ],
+  "staged": [],
+  "utc": "2026-10-08T16:40:30.3637813Z",
+  "green31Sha": "222E9E61F5CFFB2F28AE3E944C7D3F040CB2BBD63D1B1FC1111DAEEA3D84D2AF",
+  "green8Sha": "3DC50D0D49581FCB524DFC4CC079852E3AC05232AD7B8449EA71D852ACAA0DD5"
+}

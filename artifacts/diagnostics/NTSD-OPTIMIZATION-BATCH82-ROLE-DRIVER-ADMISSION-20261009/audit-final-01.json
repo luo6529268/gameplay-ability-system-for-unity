@@ -1,0 +1,343 @@
+{
+  "schema": "ntsd-opt-h07-role-driver-admission-audit/1.0",
+  "status": "SCOPED_AUDIT_PASS",
+  "operation": "NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009",
+  "change": "NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082",
+  "diffCheckExit": 0,
+  "validatorExit": 0,
+  "beforeCopies": [
+    {
+      "expected": "D33345A3DBA761C41E27B0CFF2A48C451E56C514973D93C50BFAA456B5B09242",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/BattleBruteProductionAdmissionEditorTests.cs",
+      "actual": "D33345A3DBA761C41E27B0CFF2A48C451E56C514973D93C50BFAA456B5B09242",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "equal": true
+    },
+    {
+      "expected": "51FEF6690AB6497C153C9CB28D9B8E672FE7D4EFB30C24DC98E1E86D309109E0",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/battle-optimization-progress-tracker.md",
+      "actual": "51FEF6690AB6497C153C9CB28D9B8E672FE7D4EFB30C24DC98E1E86D309109E0",
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "equal": true
+    },
+    {
+      "expected": "1B7BDD4C9BE9BF9420E41355AAFFFC449BD912A8963687D120AE0C4C93080920",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/CODEX-CURRENT-HANDOFF.md",
+      "actual": "1B7BDD4C9BE9BF9420E41355AAFFFC449BD912A8963687D120AE0C4C93080920",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "equal": true
+    },
+    {
+      "expected": "AABF92942EB17F3D4CBB4A1C122B52E2F4102E9FDA8B66337F42E7DAC85CD12B",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/STATE.md",
+      "actual": "AABF92942EB17F3D4CBB4A1C122B52E2F4102E9FDA8B66337F42E7DAC85CD12B",
+      "path": "docs/ai/STATE.md",
+      "equal": true
+    },
+    {
+      "expected": "DFCD59D85CD4B428B86DD92B96A752B9C29B843215028C52DFF1446FB85B0141",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/CHANGE-LEDGER.md",
+      "actual": "DFCD59D85CD4B428B86DD92B96A752B9C29B843215028C52DFF1446FB85B0141",
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "equal": true
+    },
+    {
+      "expected": "49965F8949B23E86B09EB0847D6A2EA144C7988551605ECABFEE6A48331B90AE",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/INDEX.md",
+      "actual": "49965F8949B23E86B09EB0847D6A2EA144C7988551605ECABFEE6A48331B90AE",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "equal": true
+    },
+    {
+      "expected": "3DC50D0D49581FCB524DFC4CC079852E3AC05232AD7B8449EA71D852ACAA0DD5",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-01/Goal18_LastTestResults.xml",
+      "actual": "3DC50D0D49581FCB524DFC4CC079852E3AC05232AD7B8449EA71D852ACAA0DD5",
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "equal": true
+    }
+  ],
+  "drift": [],
+  "sourceSha": "9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389",
+  "publicStressSha": "CBA272C015CFD0537157931AF77E7466A3AF69E3B235CE2564BDDE8E0CC3C990",
+  "archiveCopies": [
+    {
+      "sha": "3D2F5F37C1B108E9DC12C38C16283B3DC351655556B36747926F80F116B95903",
+      "equal": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-02-red.xml",
+      "source": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/red-01/tests.xml"
+    },
+    {
+      "sha": "BAC374212C2D200763B853387DD8CFC9BF5E1D98BDF345A38AC613D77CD47552",
+      "equal": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-03-fixture-fail.xml",
+      "source": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/green-01-fixture-fail/tests.xml"
+    },
+    {
+      "sha": "C783774A94C688D9FA39CD384AA58C2CBF4468007BC2E23CCB54DB520719FB0F",
+      "equal": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-04-green.xml",
+      "source": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/green-02/tests.xml"
+    },
+    {
+      "sha": "3ACBF13FB9442F47656BB6D952A0F063337F444F144C210BE74A630FB7CF79DF",
+      "equal": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-03-invalid-schema.json",
+      "source": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/sakura-qualification-scenario-01.json"
+    }
+  ],
+  "profileDiff": [],
+  "staged": [],
+  "validatorWarnings": 4339,
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "validatorSummary": [
+    "  Records: 1377",
+    "  Governed code files in diff: 6"
+  ],
+  "guardCount": 739,
+  "diffErrors": [],
+  "helperCopies": [
+    {
+      "actual": "8476A81A6DB9A60904B9836E0FC86D34E8CF86190FF844631A33C4C927DE12CD",
+      "equal": true,
+      "expected": "8476A81A6DB9A60904B9836E0FC86D34E8CF86190FF844631A33C4C927DE12CD",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-02-test-first.cs"
+    },
+    {
+      "actual": "EF978016DE51738957FE362F0587599BECFD57AE1D851FF5C4DB6139407C7923",
+      "equal": true,
+      "expected": "EF978016DE51738957FE362F0587599BECFD57AE1D851FF5C4DB6139407C7923",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/before-03-helper-first.cs"
+    }
+  ],
+  "utc": "2026-10-08T17:55:48.4245707Z",
+  "post": [
+    {
+      "bytes": 113750,
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389"
+    },
+    {
+      "bytes": 182574,
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "2A5888DD5A537C823EE6CAAADF99C84268E7D7C26343F1D9157CFB7109D66943"
+    },
+    {
+      "bytes": 1568046,
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "8276467BE33E4ECF031EFE7E892F9484858E5EAC362D42943D6A0D88462A88CA"
+    },
+    {
+      "bytes": 1634356,
+      "path": "docs/ai/STATE.md",
+      "sha": "84F5AD29DB2C0007294BF940B98394E5B25948E0FD1A8FB26D00452248EA27D9"
+    },
+    {
+      "bytes": 728438,
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "43ADE3D1BF917B5CCFA55D01C7CF48A9EEB5C67769033EDD2014EACC55F9DB15"
+    },
+    {
+      "bytes": 114389,
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "8B16A897EE96B93E99E9F1FF814CC27081F7F98892AD13B35EA8AF990E38EB6C"
+    },
+    {
+      "bytes": 6875,
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009.md",
+      "sha": "5B69E600C3FFF9E82618DD3120CA7E0B3F6FD9991C05BA1542CDB5CCC7FA98A6"
+    },
+    {
+      "bytes": 4721,
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082.md",
+      "sha": "F015BE822FF732F115C619B56CBCF6EC5BC1C67A95FB68AE636B0ECD97A987E8"
+    },
+    {
+      "bytes": 3243,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/RECORD.md",
+      "sha": "E1E2B65234F455C8259E54B9A1F2FBD49CA06B4E72632C04A591D2039ED4007C"
+    },
+    {
+      "bytes": 6628,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/REPORT.md",
+      "sha": "0A1F3113D859DD1B5AECFEFCF04D83AD466D9E89A61E56EBE563FCAEF6207E94"
+    },
+    {
+      "bytes": 801,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/sakura-qualification-scenario-01.json",
+      "sha": "3ACBF13FB9442F47656BB6D952A0F063337F444F144C210BE74A630FB7CF79DF"
+    },
+    {
+      "bytes": 3596312,
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "sha": "C783774A94C688D9FA39CD384AA58C2CBF4468007BC2E23CCB54DB520719FB0F"
+    }
+  ],
+  "jobs": [
+    {
+      "job": "45b11d348be54fb29668e753190a3126",
+      "transportStatus": "failed_to_initialize",
+      "actualXml": {
+        "total": 5,
+        "passed": 0,
+        "failed": 5,
+        "sha": "3D2F5F37C1B108E9DC12C38C16283B3DC351655556B36747926F80F116B95903"
+      },
+      "meaning": "expected missing explicit Driver entry; XML proves actual execution"
+    },
+    {
+      "job": "49d87427ccc1440ab1dd192f2495da86",
+      "status": "failed",
+      "actualXml": {
+        "total": 9,
+        "passed": 7,
+        "failed": 2,
+        "sha": "BAC374212C2D200763B853387DD8CFC9BF5E1D98BDF345A38AC613D77CD47552"
+      },
+      "meaning": "Sakura new schema rejected by formal fixture entry before tick; seven unchanged gates retained"
+    },
+    {
+      "job": "74e5e349d7014b68b50df8c28c183453",
+      "status": "succeeded",
+      "actualXml": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "sha": "C783774A94C688D9FA39CD384AA58C2CBF4468007BC2E23CCB54DB520719FB0F"
+      },
+      "meaning": "two affected Sakura cases only; no duplicate full native gate rerun"
+    }
+  ],
+  "uniquePassedCases": 9,
+  "pairedTicks": 88,
+  "completedDriverSteps": 176,
+  "driverRows": [
+    {
+      "entitiesMax": 1000,
+      "bruteRequested": [
+        1
+      ],
+      "name": "Combat1000-sakura-role-driver-parity-ffa46fce182b49838c8fdd0aac2ddaa5.json",
+      "roleActual": [
+        3
+      ],
+      "roleRequested": [
+        3
+      ],
+      "differences": [],
+      "bytes": 187087,
+      "bruteActual": [
+        1
+      ],
+      "pairedTicks": 32,
+      "roleAborted": 0,
+      "bruteAiMin": 1000,
+      "sha": "E309EF2D28F4399B69468C0D464B89A5DE396749184CF15FD97BC5E3EE31BBD6",
+      "bruteAborted": 0,
+      "roleAiMin": 1000,
+      "roleFallbackPeak": 5
+    },
+    {
+      "entitiesMax": 1000,
+      "bruteRequested": [
+        1
+      ],
+      "name": "Dispersed1000-sakura-role-driver-parity-541acc8aea074ff6ba2d8495c579c0db.json",
+      "roleActual": [
+        3
+      ],
+      "roleRequested": [
+        3
+      ],
+      "differences": [],
+      "bytes": 187083,
+      "bruteActual": [
+        1
+      ],
+      "pairedTicks": 32,
+      "roleAborted": 0,
+      "bruteAiMin": 1000,
+      "sha": "0B9061528F703CFCB360F44962E69C36E6195BF1F6C1070D9B9F863B9FA322F6",
+      "bruteAborted": 0,
+      "roleAiMin": 1000,
+      "roleFallbackPeak": 3
+    },
+    {
+      "entitiesMax": 3,
+      "bruteRequested": [
+        1
+      ],
+      "name": "left-x350-role-driver-parity-71ad4c25249541c4846a1727d3e4d818.json",
+      "roleActual": [
+        3
+      ],
+      "roleRequested": [
+        3
+      ],
+      "differences": [],
+      "bytes": 67997,
+      "bruteActual": [
+        1
+      ],
+      "pairedTicks": 12,
+      "roleAborted": 0,
+      "bruteAiMin": 0,
+      "sha": "A78C46F5FDFD1A82072B4167592560346D9EA4403B356E260B7793DD43178970",
+      "bruteAborted": 0,
+      "roleAiMin": 0,
+      "roleFallbackPeak": 1
+    },
+    {
+      "entitiesMax": 3,
+      "bruteRequested": [
+        1
+      ],
+      "name": "right-x550-role-driver-parity-9dc07bf022d445c8b690548f6256d65e.json",
+      "roleActual": [
+        3
+      ],
+      "roleRequested": [
+        3
+      ],
+      "differences": [],
+      "bytes": 67997,
+      "bruteActual": [
+        1
+      ],
+      "pairedTicks": 12,
+      "roleAborted": 0,
+      "bruteAiMin": 0,
+      "sha": "511AEC17A28020B284D51D0A444DE7C352113D986FED40EDD874A7C54CBC73C7",
+      "bruteAborted": 0,
+      "roleAiMin": 0,
+      "roleFallbackPeak": 1
+    }
+  ],
+  "sceneObservation": {
+    "loadedScenes": 1,
+    "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "rootCount": 8,
+    "isDirty": false,
+    "isPlaying": false,
+    "isPaused": false,
+    "isCompiling": false,
+    "isTestsRunning": false,
+    "phase": "idle",
+    "observedUnixMs": 1791481840484
+  },
+  "limits": {
+    "productionDefaultPromoted": false,
+    "newPerformanceMeasured": false,
+    "newGcMeasured": false,
+    "fullNativeBitwiseCertification": false,
+    "newM0": false,
+    "q06MethodsRead": false,
+    "goalStatusChanged": false,
+    "h07PhasePassed": false,
+    "h11PhasePassed": false,
+    "stagePassCount": 4,
+    "selectedStageCount": 6,
+    "executedBatches": 60,
+    "parentClosedCount": 0
+  }
+}

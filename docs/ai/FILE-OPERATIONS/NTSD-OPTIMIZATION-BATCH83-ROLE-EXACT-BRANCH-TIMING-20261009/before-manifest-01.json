@@ -1,0 +1,245 @@
+{
+  "change": "NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083",
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009.md",
+    "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083.md",
+    "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/RECORD.md"
+  ],
+  "files": [
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs",
+      "exists": true,
+      "bytes": 387471,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "sha": "1FF48CA62EE7DB21F3956D48B9FDF59D8BD96EC3936E969EE2C23A8B9758BD8B",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "git": []
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Scripts__Simulation__Diagnostics__SimulationWorld.DetailTimingDiagnostics.cs",
+      "exists": true,
+      "bytes": 39905,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Diagnostics\\SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha": "1F7A5ABD0E14622895BE31B04C11F4E951CC8D2C891ADDC79F7C9B7E83D07CE6",
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "git": []
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "bytes": 414905,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha": "EE755D691AF92B396C4F0730AFBE2B45401F5ABF72F4B58E94766042FAC842AA",
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "git": []
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "bytes": 377344,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "48E894A458AB0DD2E4805359246BB35883BAA37A8AF61675FAC9B9E7B5050100",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 184522,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha": "C58768A605044FB79E6FBE01EAC8B27B961A00AD7A913625EE0919C0935E12C2",
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1568924,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha": "D841A006F638B00823C9ADCB65E0766504E0C55162083AFEAD8641F8F2970383",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/docs__ai__STATE.md",
+      "exists": true,
+      "bytes": 1635234,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha": "AAD7A27A9996CCCADDB47539ABEA406F2BCA6F53FDA96B5ECBDE90A9DE1DD9EB",
+      "path": "docs/ai/STATE.md",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 729468,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "sha": "6FE37F67498F7EFFC4E84254D221F12A976D4FC9A24ACBDF1CB0E582C52E9B1B",
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "exists": true,
+      "bytes": 115267,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha": "1E09C94BB5D48DA4504226222324C0DE956E020092C38BDD9C9BB4622B6CB206",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "exists": true,
+      "bytes": 35954,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "sha": "7922C6C560B966AC6EE8D25E3575EBD77DB343316A31DAC60791B6B6F3188EFA",
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "git": []
+    },
+    {
+      "backup": null,
+      "exists": false,
+      "bytes": 0,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009.md",
+      "sha": null,
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009.md",
+      "git": []
+    },
+    {
+      "backup": null,
+      "exists": false,
+      "bytes": 0,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083.md",
+      "sha": null,
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083.md",
+      "git": []
+    },
+    {
+      "backup": null,
+      "exists": false,
+      "bytes": 0,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009\\RECORD.md",
+      "sha": null,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/RECORD.md",
+      "git": []
+    }
+  ],
+  "status": [
+    "## NTSD_2.8_C++...origin/NTSD_2.8_C++ [ahead 1]",
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+    " M Assets/NTSD/Scripts/App/AppManager.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/RECORD.md",
+    " M docs/ai/STATE.md",
+    " M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc-samples-recovered.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH39-CPU-GC-CAPTURE-20261007/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH42-CAMERA-GC-CALLSTACK-20261007/camera-02/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01/profiler-history-before.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc-samples.json",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH55-LOGIC-GC-CALLSITE-20261008/windows-01/cpu-gc.raw",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/",
+    "?? artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl",
+    "?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-POST-BINDINGS-ROLE-WINDOWS-081.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-DRIVER-ADMISSION-082.md",
+    "?? docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-02/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-manifest-02.json",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/execution-plan-02.md",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/",
+    "?? docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009.md",
+    "?? docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009.md"
+  ],
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "id": "NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009",
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+      "sha": "12483474FC50D8A751010C1A67AEB16D44877B123AFA74CC2A65FEE25F2F392E",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha": "1C567A303CDDF13097F6F8CA5DF75D6A5A4A76DF41E13D7040F11ACFA81A7DD0",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+      "sha": "6E813E31E91659BE21949EAE5AE7F4BFBB4810C432C9B1CCC3169C15B41122E6",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md",
+      "sha": "FEFF31D3D501024D7BE044199C73A48D3A1A66594A57412911B0CA363A18EEF9",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+      "sha": "7122FAB451A462217E92DBAF8C84B385E71F482CAC3B381B1DC09CAB68E09310",
+      "exists": true
+    }
+  ],
+  "started": "2026-10-09T02:47:33.7220437+08:00",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-manifest-02.json",
+      "sha": "A7DF94F2BBA1D05354B63ED20DE2C66EAB571A2873646C02023AB4B86181C747"
+    }
+  ],
+  "guardCount": 744,
+  "heads": {
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": "> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。",
+    "docs/ai/STATE.md": "> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。",
+    "docs/ai/FILE-OPERATIONS/INDEX.md": "> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。",
+    "docs/ai/CHANGE-LEDGER.md": "> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md": "> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。"
+  }
+}

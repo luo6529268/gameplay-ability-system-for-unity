@@ -1,0 +1,491 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009",
+  "utc": "2026-10-08T23:59:01.8297803Z",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "stagedCount": 0,
+  "guards": 818,
+  "guardDrift": 0,
+  "expectedAbsence": 10,
+  "after": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "20EFAE60D9079F1645161149B063253B020D596C457A3F2D818B967DFDB9BD96",
+      "beforeSha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backupSha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "650E5F8ECDF7C0ADBD7EE4578B908EF60AB6A9E34EF9D6F34FB9F49F7510C7D5",
+      "beforeSha": "4055C38E182B554F9A1C179B13A001993365BB4D026FD4F77743DD3625CEDBC5",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleBruteProductionAdmissionEditorTests.cs",
+      "backupSha": "4055C38E182B554F9A1C179B13A001993365BB4D026FD4F77743DD3625CEDBC5"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha": "F3147F35CC5DE5FCC963F903F9A995ABF1B9FFBB91F6AF43B4E1CF8450AF8975",
+      "beforeSha": "E163D40D506EB3738ECC1D112A111CEBE0602E89F030DFF054F891C17B972D51",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__STATE.md",
+      "backupSha": "E163D40D506EB3738ECC1D112A111CEBE0602E89F030DFF054F891C17B972D51"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "7475120631B8F8C8BB08E525B01D3537CAB8DBF205D8451CCA8C604205EA8CC8",
+      "beforeSha": "204168602D54A530718072E5440381EB9EC2AE432F72A483CEA5EBB2734F0A98",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "backupSha": "204168602D54A530718072E5440381EB9EC2AE432F72A483CEA5EBB2734F0A98"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "65530153AAF8D7B7DC787FF7F4794A32BD6ADEB5DEE55A8C8B6934905E1A3E85",
+      "beforeSha": "36C67998004C0AF5B4C96CD0EE4DF5EBDCA2A612A812AA32085BE03F21B501F9",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "backupSha": "36C67998004C0AF5B4C96CD0EE4DF5EBDCA2A612A812AA32085BE03F21B501F9"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "A7513E36614B4133F48D7D9BEEE1990138D24017E6E47BBD3CF224DCEC7EC265",
+      "beforeSha": "20D514A47E8C5BBDCA4A808CE98ABDAB41502267FF9FDA2793C389CB11411DB5",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "backupSha": "20D514A47E8C5BBDCA4A808CE98ABDAB41502267FF9FDA2793C389CB11411DB5"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "35D0172E56C5F0A7819C1E4E0A94269373065BBAEEE4FB6451160D99577B3DB4",
+      "beforeSha": "BAF4A931D9F882D11B07AD8F2D9224B00527F899CF95FFB12F3AA7CBCB3F75B9",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "backupSha": "BAF4A931D9F882D11B07AD8F2D9224B00527F899CF95FFB12F3AA7CBCB3F75B9"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "sha": "2D214207E9D106B67FF9215C089F4456A31BB49E4FBA7F3BC4F871C8B5C769D2",
+      "beforeSha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "backupSha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821",
+      "beforeSha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__NTSD_ProductionEntityStress.result",
+      "backupSha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93"
+    }
+  ],
+  "newFiles": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/audit-final-01.json",
+      "sha": "C81C7742D0189E5A3455F8C76D195E366F7130A4AC1038AE6B98ADA7FFF549DC",
+      "bytes": 4235
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/measurements-summary-01.json",
+      "sha": "C3E22EFCEEBAA0A8B216B4D47FDD2B77ED56BC1F65559862B5B18E5123071995",
+      "bytes": 10780
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/REPORT.md",
+      "sha": "42DF913DEB93BC02F84911FC4E657412902681EB63FEF372A1B88EA14F0C036F",
+      "bytes": 8672
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-freeze-01.json",
+      "sha": "E26650E41513D2E02DD03E4AE8AA841FFB6DEB7C7F01AB683BCDB8C8EFB95682",
+      "bytes": 1937
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-freeze-02.json",
+      "sha": "F09D5FD5C6C865A3DCBDEE72B81C577A622019BA7E0DD6DE585F5A1754AE16B7",
+      "bytes": 2229
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/Combat1000-producer-snapshot-driver-parity-5b3d7720ef0749ef99f2631081d1ca20.json",
+      "sha": "613ADDA013D6DA6B07E0CB3BC26D1F8F23E2703A6AA36091A6C6CDC7FBE55CF3",
+      "bytes": 200527
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/Dispersed1000-producer-snapshot-driver-parity-e70db09ba3a14be2981c8a063ae5728b.json",
+      "sha": "1E255A2EDDB9E4710BE5E0DC1BFA59C2293AB27F0C981F270D4848F603619945",
+      "bytes": 200523
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/left-x350-producer-snapshot-driver-parity-e96c60d488dd4592adef272d4e69e833.json",
+      "sha": "87AF775A9EAEE60A8171BECDA81AAE87488EFE5F2AB4FD02D3B4048ACFBA2354",
+      "bytes": 72965
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/right-x550-producer-snapshot-driver-parity-9fc563606d004cbab438a81f92a30734.json",
+      "sha": "9747FF5E9B46A4A10F51BC8C25AD54807C4C04EE220ADD34212FDB3F087A701C",
+      "bytes": 72965
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-01/previous-public.xml",
+      "sha": "35914ED85972702F0BF9B8C4EDC6D0E954BB918C2AC72D6DC3932C67E510AC0F",
+      "bytes": 11510
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-01/tests.xml",
+      "sha": "9756244EAD210C5F0931CCDEB0DD1206B8C5A7E8128C2FA51DE11D5FB72A6FBD",
+      "bytes": 57306
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-02/previous-public.xml",
+      "sha": "57DDAECAB30583E4F6A5A88F5B587F9B126A33F9D235BC413EABFC1EDF82BB4E",
+      "bytes": 5597
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-02/tests.xml",
+      "sha": "A9BDC618D0E308086133F7472459301A3945821B0D785EAA78F4A054D315FB34",
+      "bytes": 62747
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-03/previous-public.xml",
+      "sha": "A9BDC618D0E308086133F7472459301A3945821B0D785EAA78F4A054D315FB34",
+      "bytes": 62747
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-03/tests.xml",
+      "sha": "2D214207E9D106B67FF9215C089F4456A31BB49E4FBA7F3BC4F871C8B5C769D2",
+      "bytes": 5092
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-driver-01/previous-public.xml",
+      "sha": "9756244EAD210C5F0931CCDEB0DD1206B8C5A7E8128C2FA51DE11D5FB72A6FBD",
+      "bytes": 57306
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-driver-01/tests.xml",
+      "sha": "DB8519A05F898E7E6DA3D73D4503D4CCE81A6D5C559153DD3B813F030B4F2674",
+      "bytes": 7189861
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-01/previous-public.xml",
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8",
+      "bytes": 37768
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-01/tests.xml",
+      "sha": "5B54386B2703A7274A2DED7E7A5F17DD85832301CDB58F35C7C8A16AB51FFA87",
+      "bytes": 7228279
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-02/previous-public.xml",
+      "sha": "5B54386B2703A7274A2DED7E7A5F17DD85832301CDB58F35C7C8A16AB51FFA87",
+      "bytes": 7228279
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-02/tests.xml",
+      "sha": "35914ED85972702F0BF9B8C4EDC6D0E954BB918C2AC72D6DC3932C67E510AC0F",
+      "bytes": 11510
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-lifecycle-01/previous-public.xml",
+      "sha": "DB8519A05F898E7E6DA3D73D4503D4CCE81A6D5C559153DD3B813F030B4F2674",
+      "bytes": 7189861
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-lifecycle-01/tests.xml",
+      "sha": "57DDAECAB30583E4F6A5A88F5B587F9B126A33F9D235BC413EABFC1EDF82BB4E",
+      "bytes": 5597
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0000.json",
+      "sha": "9C4321F84E54C2206C60E1E5D56A5C2DFD2A1D0D3AC7E271B8E1471311A49F1F",
+      "bytes": 9960
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/suite-result.json",
+      "sha": "C944B2D5971703B5BDEB1E57387426B3EEF2CA7FE508A5688201710374E41A1D",
+      "bytes": 50499
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json",
+      "sha": "F259DD79E6D73B3F0C9CF082FDC0720A086AB3A2E7C7D10EA0A507DA179A1D3C",
+      "bytes": 151079
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.final-checksum.json",
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.logic-gc.json",
+      "sha": "4F712452E67F07DB5BCCC038ED102E38454231D1F2CE9E047B44746D5450BE10",
+      "bytes": 1915
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.observation.json",
+      "sha": "29768E245F0E2977F268068A2B48AE52FF3FC3BF2B9EB4B19B5AC2858F21A753",
+      "bytes": 10058
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.request.json",
+      "sha": "EAFEA4ED0EF739480ECB5E48751D6D39EAA0E776CB956E9527F31228D07B5EDB",
+      "bytes": 2752
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.shared-terminal-before.txt",
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93",
+      "bytes": 529
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.terminal.txt",
+      "sha": "1FE207B05CF9D69A5553B962358C2E6160D80D92FF27AB47458E66FF808D3A09",
+      "bytes": 538
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-producer-on/report.json.request.json",
+      "sha": "5778A76AA6B2D39626C6628A3B9E218E822EF7DBD3E34F7BE2A47F2650051021",
+      "bytes": 2751
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-producer-off/report.json.request.json",
+      "sha": "D0E92F6658687012AD764F6CD65BB6A45B3832C0434D31777F3D8D5F97A56746",
+      "bytes": 2746
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-producer-on/report.json.request.json",
+      "sha": "E8E20C1B102581A1239CA828320975822344C3FF064469894B5F35FDC4B4D03C",
+      "bytes": 2745
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0000.json",
+      "sha": "F4ACDA84C9D0A5E075D5A3847300599829FFFB5863B4146EF4DB9948E99C9C2B",
+      "bytes": 9960
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0001.json",
+      "sha": "1D941FC8D618CFBB7E9B415164DA49850F2599761B6B45668913BBDBE0C312FC",
+      "bytes": 9958
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0002.json",
+      "sha": "3573DA999EA1F4A43A006B77EDFCC68696DB117DCEA0875EE2FAD0F9C0EAD3C5",
+      "bytes": 9954
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0003.json",
+      "sha": "C0846FAF58A18D99AB94470AA9DC207CEB633C5653C45495D1B4A36C08E9E119",
+      "bytes": 9952
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/suite-result.json",
+      "sha": "027A6B10CA9D9257971F4E6997AC86E93287E8ADA3FBEF5CAA68465DEF1996DF",
+      "bytes": 50418
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json",
+      "sha": "36E554C9CEB96C07F74F910901F087A80E55364D73536AFF276EB982C29C92BC",
+      "bytes": 151116
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.final-checksum.json",
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.logic-gc.json",
+      "sha": "7AC94C1791DACAC2EC94B56DE45325376F624CAC1464A2C7DF1FE1FF758D68CF",
+      "bytes": 1915
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.observation.json",
+      "sha": "A731EC982FC467ACF4FB7880259CCEB6E48C47F293E5D74C59133D92FD94BAEE",
+      "bytes": 10054
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.request.json",
+      "sha": "1D5954AD6E91708DB68AB18C62DD75535E967D0D41A3FFF738E9A45AC1B01117",
+      "bytes": 2752
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.shared-terminal-before.txt",
+      "sha": "1FE207B05CF9D69A5553B962358C2E6160D80D92FF27AB47458E66FF808D3A09",
+      "bytes": 538
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.terminal.txt",
+      "sha": "2F659AD4B21B2C86BC708A91505BB23D58C94C37841EA8F8A262B46CE2E8152B",
+      "bytes": 538
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json",
+      "sha": "8592D315EFB25359121D72DB07FF7E5293B46834C98D9B500FFF2345A9F7E374",
+      "bytes": 151363
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.final-checksum.json",
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.logic-gc.json",
+      "sha": "6BA058D87C23DDD8185ACEE2AC61CBBD6A95546E68C2C04AF7BA5BBA68EF16E2",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.observation.json",
+      "sha": "95F6B7BDB86B553FA25B2DF74CD1CB937447011096E85E4D7206B76C437E3E8A",
+      "bytes": 10051
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.request.json",
+      "sha": "D32DCD365A155207C47E9B5C14142357EF73C2CD84F45E598510BDF0D5153A3B",
+      "bytes": 2751
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.shared-terminal-before.txt",
+      "sha": "2F659AD4B21B2C86BC708A91505BB23D58C94C37841EA8F8A262B46CE2E8152B",
+      "bytes": 538
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.terminal.txt",
+      "sha": "BCAAA98AF1AB1ECC92BCF51E390EB1E8E2A4F19F208259107013EF465D997125",
+      "bytes": 536
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json",
+      "sha": "97C6B1153F115A4BB6D4E99245B1D643D4BCA9A4FA2E409B9B16E3E8905403D5",
+      "bytes": 151084
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.logic-gc.json",
+      "sha": "DBA01A636D2EF1B28C80561D98911AD89198DD774C282365414E82A665A93D7D",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.observation.json",
+      "sha": "B17DD9B5AD3DA86A9FAEEBD33297EC9A8A8A876112D355CF759168A05EB985CB",
+      "bytes": 10050
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.request.json",
+      "sha": "292A48AFBC545D388C7D3DFEFBA3D504D96AF3F807B4302DE25C9A85D1440131",
+      "bytes": 2746
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.shared-terminal-before.txt",
+      "sha": "BCAAA98AF1AB1ECC92BCF51E390EB1E8E2A4F19F208259107013EF465D997125",
+      "bytes": 536
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.terminal.txt",
+      "sha": "4C40B9108491F3D84B61E5405F9426E3FEA68B0BFD6C6209EB3B3DE5EDD81361",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json",
+      "sha": "4C2A3D6E97853024BD50D198A916FBD2418876EDD7664D5053DF5387E681CF60",
+      "bytes": 151185
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.logic-gc.json",
+      "sha": "6BA058D87C23DDD8185ACEE2AC61CBBD6A95546E68C2C04AF7BA5BBA68EF16E2",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.observation.json",
+      "sha": "4DF76CDD27E0CDF10E70AC549AAA8A326739411AB6C433B16BD9DD22BF4274A1",
+      "bytes": 10048
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.request.json",
+      "sha": "E92467FBAD793BD26F0866599AADF69A0FDDBFD1BCA44B2C6DAB9E8C1A96FE90",
+      "bytes": 2745
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.shared-terminal-before.txt",
+      "sha": "4C40B9108491F3D84B61E5405F9426E3FEA68B0BFD6C6209EB3B3DE5EDD81361",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.terminal.txt",
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821",
+      "bytes": 533
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-manifest-01.json",
+      "sha": "BFCBEBD55485873D5E874B7B8809CE91F3EFBA5E4E4D826C6EF7895CE98640EC",
+      "bytes": 205760
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/RECORD.md",
+      "sha": "5702E4D635EDFE03617D500362DDB8582ED110F6919F676955D3EC10F7AC5216",
+      "bytes": 6141
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "sha": "BAF4A931D9F882D11B07AD8F2D9224B00527F899CF95FFB12F3AA7CBCB3F75B9",
+      "bytes": 191663
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "sha": "20D514A47E8C5BBDCA4A808CE98ABDAB41502267FF9FDA2793C389CB11411DB5",
+      "bytes": 1573944
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "4055C38E182B554F9A1C179B13A001993365BB4D026FD4F77743DD3625CEDBC5",
+      "bytes": 122181
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5",
+      "bytes": 406977
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "sha": "204168602D54A530718072E5440381EB9EC2AE432F72A483CEA5EBB2734F0A98",
+      "bytes": 734685
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "sha": "36C67998004C0AF5B4C96CD0EE4DF5EBDCA2A612A812AA32085BE03F21B501F9",
+      "bytes": 120738
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__STATE.md",
+      "sha": "E163D40D506EB3738ECC1D112A111CEBE0602E89F030DFF054F891C17B972D51",
+      "bytes": 1640146
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8",
+      "bytes": 37768
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__NTSD_ProductionEntityStress.result",
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93",
+      "bytes": 529
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-02/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "D656A86671F492FD024417F08CC2E9D57EB82B9B2070450585793A66B81614F8",
+      "bytes": 425346
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009.md",
+      "sha": "175B618693DAEB1175D8667B15F2070D13D76AF3F1EA9FBCA2600BD1B6A01DF3",
+      "bytes": 4829
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088.md",
+      "sha": "AC5E54C9ACCFC607D8BC45142659525ACF3DFEB07A3FA1A485D5DD5DF5FE3D38",
+      "bytes": 10017
+    }
+  ],
+  "notes": [
+    "Exact dirty-before snapshots retained; no deletion, moving, destructive Git or scene saving.",
+    "This manifest does not self-hash; audit-final exists and is included.",
+    "Qualification reused only when its Admission/World/Harness/fixture fingerprints stayed unchanged."
+  ]
+}

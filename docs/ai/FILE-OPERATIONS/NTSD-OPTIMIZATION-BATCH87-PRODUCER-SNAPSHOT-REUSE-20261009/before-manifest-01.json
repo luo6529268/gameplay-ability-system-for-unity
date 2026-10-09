@@ -1,0 +1,221 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009",
+  "started": "2026-10-09T06:26:26.3060158+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-manifest-01.json",
+      "sha": "9025CE77D7EA66CDF95C6F85D7F2B56C5C38A91FC1998904360B080DBA6A437B"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+      "sha": "5C3F5A6D04CE7E1BEB990A58C6B0F3F94EAAA93E51EEFC1BC393F385C6C28A56",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "sha": "DF2344D5E91452B5DD5E041F46CF9AE84872DAEC0E984A7CE96E14DD91F6A830",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha": "453267DDAC02523334432AA893168689716E14D69A50CC12938442E2E3298151",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/REPORT.md",
+      "sha": "F6C7141B1783D2E5BEEDBC02524CBE532560CDA64FBEBE4033643657F4E2D05C",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-01/production-window-01.json",
+      "sha": "33317F2D35D561BAC50A140105EFECDE7A92B83698A966EAC54B76FF38341F36",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-01/materialization-window-01.json",
+      "sha": "1ED0C53D37A6BF44C0438B77764AFA1D67E9F5E938DDF6E2E7BD4E647DCD52C8",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-02/production-window-01.json",
+      "sha": "53B73EAEB60B01C1201CC40DF27BCEA9B27C8B1DB9A87A5A0432C7D8C9A4D45C",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-02/materialization-window-01.json",
+      "sha": "440B8F3165155584CE61C9079A028E3C4B2E7ED8C0A59AA9921127FBAAFE974A",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/red-01/tests.xml",
+      "sha": "DA861428360A39C6894085EBB6B17E17E436B49FD2F628EC73749C8DB9508101",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/red-02/tests.xml",
+      "sha": "5280BAF5C26E06C3A2D105CA5262FD64F6725B8E7D3AADB354E67FECEF92FB5E",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/green-02/tests.xml",
+      "sha": "B36908D0D306361E6231168051E224CC455F7B4BEAFAE4BB204AFDAEDCB7A1D4",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/rematch-01/tests.xml",
+      "sha": "7383EC3CEC555B790DA3AC3F47EC103DB2D37BDF903578D811A1F86C38B599F0",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/rematch-02/tests.xml",
+      "sha": "825294BBB3F8D2F1E9074A6066A8FD4998159AB5C6E6607980953805E70BBE57",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/green-01-not-started/job.json",
+      "sha": "A7F2BE6C9C279FD36D3155A66E00E9A1EDC3AABF090599CC740B7EC411278B81",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009.md",
+      "sha": "D82DD3F2B8ADF8ABB614DCABEE1EE52427E6E776DA34ED33D25845ED53D7ACF5",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-DIRECT-BATTLE-SHARED-BINDINGS-086.md",
+      "sha": "C0A03E1F3EB1AE5F02C7E9227EDCBA2F49D370DCEB78F442DAB91A21113C92CB",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/RECORD.md",
+      "sha": "58BCF3D3A86C304499847B01D86BF8DAB5D2F470E20008381D4BDFB85D489623",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-manifest-01.json",
+      "sha": "9025CE77D7EA66CDF95C6F85D7F2B56C5C38A91FC1998904360B080DBA6A437B",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/pre-window-01.json",
+      "sha": "D2D612CF20778F14BE8E75ACACFDCFEC789123CB9668C5F1A7A4F7CF0B562017",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009.md",
+      "sha": "D82DD3F2B8ADF8ABB614DCABEE1EE52427E6E776DA34ED33D25845ED53D7ACF5",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-DIRECT-BATTLE-SHARED-BINDINGS-086.md",
+      "sha": "C0A03E1F3EB1AE5F02C7E9227EDCBA2F49D370DCEB78F442DAB91A21113C92CB",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/RECORD.md",
+      "sha": "58BCF3D3A86C304499847B01D86BF8DAB5D2F470E20008381D4BDFB85D489623",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/after-01.json",
+      "sha": "BF78667A36E35CD4B5520EC6AC7DAE367F2384B1FF7002C6AE64EE71BB0E6459",
+      "exists": true
+    }
+  ],
+  "guardCount": 800,
+  "expectedAbsent": 10,
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+      "bytes": 313292,
+      "sha": "45C3B7ADE316FE44120EC19999B2DF20852BDB38F47B29CF6E5954EB90D9BF4F",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Scripts__Simulation__Core__SimulationWorld.cs",
+      "git": [
+        " M Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\CharacterInputLiveSlotLoopEditorTests.cs",
+      "bytes": 62496,
+      "sha": "0F9F040B3C5756B6F98FB7D27890CF2E53B48A7B52A0288FE2B76F7011A499C8",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__CharacterInputLiveSlotLoopEditorTests.cs",
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs"
+      ]
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1639028,
+      "sha": "8ADE722FDD07C056FB5DC1BE225D264C95C2404E13CBE9F7342A0887A2CA775A",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__STATE.md",
+      "git": [
+        " M docs/ai/STATE.md"
+      ]
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 733567,
+      "sha": "D2662D3D4EB064FE887174061D3BE76132B8988FE6936A5D160746BE6E562B3F",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ]
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 120074,
+      "sha": "5CCE91BEEC9358E60C5E54D61DB74E94CD4BC8FCA2F6F3C8A263633C42951F90",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1572761,
+      "sha": "9921163399B11EFE573293AEF100B0BD201FB5BD94B376B669CB938F75159EFF",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 190319,
+      "sha": "CFF3D7AB8895803A5F38E13BA3F7F114E834743E81CDF2052351458DEDDB335D",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ]
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "bytes": 978335,
+      "sha": "825294BBB3F8D2F1E9074A6066A8FD4998159AB5C6E6607980953805E70BBE57",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "git": []
+    }
+  ]
+}

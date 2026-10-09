@@ -85,28 +85,116 @@ namespace NTSD.Simulation
             if (runtime == null || !world.UsesNTSD28NativeInputPipeline)
                 return;
 
-            NTSD28NativeInputPreprocessor.ApplyCurrentButtonRemap(runtime);
-            bool suppressJumpEdge =
-                NTSD28NativeInputPreprocessor.ShouldSuppressJumpEdge(runtime);
-            NTSD28NativeComboStateMachine.ProcessSampledInput(
-                runtime,
-                suppressJumpEdge);
-            world.CharacterActionWriter.RouteNativeComboAction(entity);
-            world.CharacterActionWriter.RouteNativeThreeButtonFields(entity);
-            world.CharacterActionWriter.RouteNativeDirectionFields(entity);
-            if (!world.CharacterActionWriter.RouteNativeGroundBuiltins(entity))
+            BattleAiInputDetailDiagnostics diagnostics =
+                world.EnableCharacterInputBoundaryTimingForDiagnostics
+                    ? world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics
+                    : null;
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeSamplePreprocess);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeSamplePreprocess);
+            try
             {
-                world.CharacterActionWriter
-                    .RouteNativeAirDashRedirectBuiltins(entity);
+                NTSD28NativeInputPreprocessor.ApplyCurrentButtonRemap(runtime);
+                bool suppressJumpEdge =
+                    NTSD28NativeInputPreprocessor.ShouldSuppressJumpEdge(runtime);
+                NTSD28NativeComboStateMachine.ProcessSampledInput(
+                    runtime,
+                    suppressJumpEdge);
             }
-            NTSD28NativeComboStateMachine.ProjectExactStateToLegacy(runtime);
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeSamplePreprocess);
+            }
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeComboRoute);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeComboRoute);
+            try
+            {
+                world.CharacterActionWriter.RouteNativeComboAction(entity);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeComboRoute);
+            }
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeThreeButtonRoute);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeThreeButtonRoute);
+            try
+            {
+                world.CharacterActionWriter.RouteNativeThreeButtonFields(entity);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeThreeButtonRoute);
+            }
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeDirectionRoute);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeDirectionRoute);
+            try
+            {
+                world.CharacterActionWriter.RouteNativeDirectionFields(entity);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeDirectionRoute);
+            }
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeBuiltinsRoute);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeBuiltinsRoute);
+            try
+            {
+                if (!world.CharacterActionWriter.RouteNativeGroundBuiltins(entity))
+                {
+                    world.CharacterActionWriter
+                        .RouteNativeAirDashRedirectBuiltins(entity);
+                }
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeBuiltinsRoute);
+            }
+
+            diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeLegacyProjection);
+            diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeLegacyProjection);
+            try
+            {
+                NTSD28NativeComboStateMachine.ProjectExactStateToLegacy(runtime);
+            }
+            finally
+            {
+                diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeLegacyProjection);
+            }
+
             if (entity.AiControlled)
             {
-                world.CharacterInputWriter
-                    .SynchronizeNativeExactAiStateFromRuntime(runtime);
+
+                diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeCanonicalAiSync);
+                diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeCanonicalAiSync);
+                try
+                {
+                    world.CharacterInputWriter
+                        .SynchronizeNativeExactAiStateFromRuntime(runtime);
+                }
+                finally
+                {
+                    diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeCanonicalAiSync);
+                }
             }
+
             if (entity is LF2Character character)
-                character.InputState?.SyncFromRuntime(runtime);
+            {
+
+                diagnostics?.RecordPhaseCall(BattleAiInputDetailPhase.NativeInputStateSync);
+                diagnostics?.BeginPhase(BattleAiInputDetailPhase.NativeInputStateSync);
+                try
+                {
+                    character.InputState?.SyncFromRuntime(runtime);
+                }
+                finally
+                {
+                    diagnostics?.EndPhase(BattleAiInputDetailPhase.NativeInputStateSync);
+                }
+            }
         }
 
         internal bool TryApplyProxy(LF2Entity target)

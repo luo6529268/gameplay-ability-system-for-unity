@@ -46,6 +46,29 @@ namespace NTSD.Animation
         private BruteBranchTimingCoverage _totalBruteBranchTimingCoverage;
         private int _bruteBranchTimingSampleStride = 1;
         private int _bruteBranchTimingSampleOffset;
+        [Serializable]
+        public struct RoleBranchTimingCoverage
+        {
+            public long eligibleDirections;
+            public long timedDirections;
+            public long pairAllowedVisits;
+            public long pairAllowedTimed;
+            public long coarseVisits;
+            public long coarseTimed;
+            public long itrAllowedVisits;
+            public long itrAllowedTimed;
+            public long bodyGeometryVisits;
+            public long bodyGeometryTimed;
+            public long candidateAcceptsVisits;
+            public long candidateAcceptsTimed;
+            public long candidateRecordVisits;
+            public long candidateRecordTimed;
+        }
+
+        private RoleBranchTimingCoverage _lastRoleBranchTimingCoverage;
+        private RoleBranchTimingCoverage _totalRoleBranchTimingCoverage;
+        private int _roleBranchTimingSampleStride = 64;
+        private int _roleBranchTimingSampleOffset;
         private readonly CollisionBroadphaseBackend _collisionBroadphase;
         private readonly List<SceneQueryHit> _tmpHitResult = new List<SceneQueryHit>(16);
         private readonly List<LF2Entity> _tmpAllObjects = new List<LF2Entity>(32);
@@ -197,6 +220,12 @@ namespace NTSD.Animation
         private int _lastRoleAwareExactDirectionCount;
         private int _lastRoleAwareExactItrVisitCount;
         private int _lastRoleAwareExactBodyOverlapCheckCount;
+        public bool EnableRoleCapacityRecordGuardForDiagnostics { get; set; }
+        public long LastRoleCapacityRecordGuardSkipCountForDiagnostics { get; private set; }
+        public bool EnableRoleSnapshotFrameReuseForDiagnostics { get; set; }
+        public long LastRoleSnapshotFrameReuseCountForDiagnostics { get; private set; }
+        public bool EnableRoleRejectedGroupSnapshotSkipForDiagnostics { get; set; }
+        public long LastRoleRejectedGroupSnapshotSkipCountForDiagnostics { get; private set; }
 #if UNITY_INCLUDE_TESTS
         private int _lastRoleAwareCachedPairSnapshotCaptureCount;
         private int _lastEmptyItrGuardRejectCount;
@@ -305,6 +334,23 @@ namespace NTSD.Animation
             _lastBruteBranchTimingCoverage;
         public BruteBranchTimingCoverage TotalBruteBranchTimingCoverageForDiagnostics =>
             _totalBruteBranchTimingCoverage;
+        // Alignment contract: NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083; clocks never select or skip rule work.
+        public bool EnableRoleBranchTimingForDiagnostics { get; set; }
+        public int RoleBranchTimingSampleStrideForDiagnostics
+        {
+            get => _roleBranchTimingSampleStride;
+            set
+            {
+                if (value < 1 || value > 4096 || (value & (value - 1)) != 0)
+                    throw new ArgumentOutOfRangeException(nameof(value));
+                _roleBranchTimingSampleStride = value;
+                _roleBranchTimingSampleOffset = 0;
+            }
+        }
+        public RoleBranchTimingCoverage LastRoleBranchTimingCoverageForDiagnostics =>
+            _lastRoleBranchTimingCoverage;
+        public RoleBranchTimingCoverage TotalRoleBranchTimingCoverageForDiagnostics =>
+            _totalRoleBranchTimingCoverage;
         public long LastBruteGeometryFirstRejectCountForDiagnostics { get; private set; }
         public long TotalBruteGeometryFirstCollectionAppliedForDiagnostics { get; private set; }
         public bool LastBruteExactCacheAppliedForDiagnostics { get; private set; }
@@ -1631,6 +1677,14 @@ namespace NTSD.Animation
         public void CollectCollisionCandidates()
         {
             _lastBruteBranchTimingCoverage = default;
+            _lastRoleBranchTimingCoverage = default;
+            if (EnableRoleBranchTimingForDiagnostics &&
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics?.Enabled == true &&
+                ResolveFormalCollectorMode() == CollisionFormalCollectorMode.ForceRoleAware)
+            {
+                _roleBranchTimingSampleOffset = (_roleBranchTimingSampleOffset + 1) &
+                    (_roleBranchTimingSampleStride - 1);
+            }
             LastBruteCoarseProofReuseCountForDiagnostics = 0;
             // Alignment contract: NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001.
             foreach (LF2Entity entity in _world.ActiveEntitiesByRuntimeSlotForModule)
@@ -1715,6 +1769,9 @@ namespace NTSD.Animation
                 LastBruteOrdinalPacketAppliedForDiagnostics = false;
                 LastBruteDepthRejectAppliedForDiagnostics = false;
                 LastBruteDepthRejectedDirectionCountForDiagnostics = 0;
+                LastRoleCapacityRecordGuardSkipCountForDiagnostics = 0;
+                LastRoleSnapshotFrameReuseCountForDiagnostics = 0;
+                LastRoleRejectedGroupSnapshotSkipCountForDiagnostics = 0;
                 LastBruteOrdinalPacketFallbackForDiagnostics = false;
                 LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics = 0;
                 LastBruteOrdinalPacketProofCountForDiagnostics = 0;
@@ -6176,7 +6233,67 @@ namespace NTSD.Animation
 
             CollectCandidatesForPairCached(
                 in attackerParticipant,
-                in targetParticipant);
+                in targetParticipant,
+                roleDirection: true);
+        }
+
+        private BattleTickDetailPhaseDiagnostics SelectRoleBranchTiming(out bool timing)
+        {
+            timing = false;
+            BattleTickDetailPhaseDiagnostics diagnostics =
+                _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+            if (diagnostics == null || !diagnostics.Enabled)
+                return null;
+
+            _lastRoleBranchTimingCoverage.eligibleDirections++;
+            _totalRoleBranchTimingCoverage.eligibleDirections++;
+            timing = ((_lastRoleBranchTimingCoverage.eligibleDirections - 1 +
+                _roleBranchTimingSampleOffset) & (_roleBranchTimingSampleStride - 1)) == 0;
+            if (timing)
+            {
+                _lastRoleBranchTimingCoverage.timedDirections++;
+                _totalRoleBranchTimingCoverage.timedDirections++;
+            }
+            return diagnostics;
+        }
+
+        private long BeginRoleBranchPhase(BattleTickDetailPhase phase, bool timing)
+        {
+            RecordRoleBranchVisit(ref _lastRoleBranchTimingCoverage, phase, timing);
+            RecordRoleBranchVisit(ref _totalRoleBranchTimingCoverage, phase, timing);
+            return timing ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
+        }
+
+        private static void RecordRoleBranchVisit(ref RoleBranchTimingCoverage coverage,
+            BattleTickDetailPhase phase, bool timing)
+        {
+            switch (phase)
+            {
+                case BattleTickDetailPhase.CandidateCollectRolePairAllowed:
+                    coverage.pairAllowedVisits++;
+                    if (timing) coverage.pairAllowedTimed++;
+                    break;
+                case BattleTickDetailPhase.CandidateCollectRoleCoarse:
+                    coverage.coarseVisits++;
+                    if (timing) coverage.coarseTimed++;
+                    break;
+                case BattleTickDetailPhase.CandidateCollectRoleItrAllowed:
+                    coverage.itrAllowedVisits++;
+                    if (timing) coverage.itrAllowedTimed++;
+                    break;
+                case BattleTickDetailPhase.CandidateCollectRoleBodyGeometry:
+                    coverage.bodyGeometryVisits++;
+                    if (timing) coverage.bodyGeometryTimed++;
+                    break;
+                case BattleTickDetailPhase.CandidateCollectRoleCandidateAccepts:
+                    coverage.candidateAcceptsVisits++;
+                    if (timing) coverage.candidateAcceptsTimed++;
+                    break;
+                case BattleTickDetailPhase.CandidateCollectRoleCandidateRecord:
+                    coverage.candidateRecordVisits++;
+                    if (timing) coverage.candidateRecordTimed++;
+                    break;
+            }
         }
 
         private BattleTickDetailPhaseDiagnostics SelectBruteBranchTiming(bool geometryFirst, out bool timing)
@@ -6208,7 +6325,8 @@ namespace NTSD.Animation
             int bruteTargetOrdinal = -1,
             bool coarseFilterPassed = false,
             BattleTickDetailPhaseDiagnostics envelopeBranchDiagnostics = null,
-            bool envelopeBranchTiming = false)
+            bool envelopeBranchTiming = false,
+            bool roleDirection = false)
         {
             _lastRoleAwareExactDirectionCount++;
             LF2Entity attacker = attackerParticipant.Entity;
@@ -6216,6 +6334,9 @@ namespace NTSD.Animation
 
             if (attacker == null || target == null || attacker == target)
                 return;
+            bool roleBranchTiming = false;
+            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics = roleDirection && EnableRoleBranchTimingForDiagnostics
+                ? SelectRoleBranchTiming(out roleBranchTiming) : null;
             // Reuse the envelope entry's sample for survivors; never count or select the direction twice.
             bool timing = envelopeBranchTiming;
             BattleTickDetailPhaseDiagnostics branchDiagnostics = envelopeBranchDiagnostics ??
@@ -6262,11 +6383,16 @@ namespace NTSD.Animation
                 }
             }
             long pairAllowedStart = timing ? System.Diagnostics.Stopwatch.GetTimestamp() : 0;
+            long rolePairAllowedStart = roleBranchDiagnostics != null
+                ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRolePairAllowed, roleBranchTiming) : 0;
             bool pairAllowed = CandidateCollectionPairAllowedCached(
                 in attackerParticipant, in targetParticipant);
             if (timing)
                 branchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectBrutePairAllowed,
                     System.Diagnostics.Stopwatch.GetTimestamp() - pairAllowedStart);
+            if (roleBranchTiming)
+                roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRolePairAllowed,
+                    System.Diagnostics.Stopwatch.GetTimestamp() - rolePairAllowedStart);
             if (!pairAllowed)
                 return;
 
@@ -6287,11 +6413,17 @@ namespace NTSD.Animation
                 return;
             }
 
-            if (!geometryFirst && !PassesReleaseCoarsePrefilterCached(
-                    in attackerParticipant,
-                    in targetParticipant))
+            if (!geometryFirst)
             {
-                return;
+                long roleCoarseStart = roleBranchDiagnostics != null
+                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCoarse, roleBranchTiming) : 0;
+                bool coarsePassed = PassesReleaseCoarsePrefilterCached(
+                    in attackerParticipant, in targetParticipant);
+                if (roleBranchTiming)
+                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCoarse,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - roleCoarseStart);
+                if (!coarsePassed)
+                    return;
             }
 
             if (diagnosing)
@@ -6309,6 +6441,8 @@ namespace NTSD.Animation
                              attackerParticipant.ExactItrRectCount;
             BattleHitCandidatePairSnapshot pairSnapshot = default;
             bool pairSnapshotCaptured = false;
+            BattleHitGroupEligibilityWitness groupWitness = default;
+            bool groupWitnessCaptured = false;
             for (int itrRectIndex = attackerParticipant.ExactItrRectOffset;
                  itrRectIndex < itrRectEnd;
                  itrRectIndex++)
@@ -6317,13 +6451,19 @@ namespace NTSD.Animation
                     _roleFormalExactItrRects[itrRectIndex];
                 InteractionArea itr = itrEntry.Itr;
                 _lastRoleAwareExactItrVisitCount++;
-                if (!ItrAllowedForFormalCollection(
+                long roleItrStart = roleBranchDiagnostics != null
+                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleItrAllowed, roleBranchTiming) : 0;
+                bool itrAllowed = ItrAllowedForFormalCollection(
                         attacker,
                         attackerCurrentFrame,
                         attackerCollisionFrame,
                         itr,
                         target,
-                        targetCurrentFrame))
+                        targetCurrentFrame);
+                if (roleBranchTiming)
+                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleItrAllowed,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - roleItrStart);
+                if (!itrAllowed)
                 {
                     continue;
                 }
@@ -6334,7 +6474,12 @@ namespace NTSD.Animation
                     in targetParticipant,
                     targetCurrentFrame,
                     ref pairSnapshot,
-                    ref pairSnapshotCaptured);
+                    ref pairSnapshotCaptured,
+                    ref groupWitness,
+                    ref groupWitnessCaptured,
+                    roleBranchDiagnostics,
+                    roleBranchTiming,
+                    roleDirection);
             }
             if (timing)
                 branchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectBruteExactWork,
@@ -6407,7 +6552,12 @@ namespace NTSD.Animation
             in RoleAwareFormalParticipant targetParticipant,
             LF2FrameData targetCurrentFrame,
             ref BattleHitCandidatePairSnapshot pairSnapshot,
-            ref bool pairSnapshotCaptured)
+            ref bool pairSnapshotCaptured,
+            ref BattleHitGroupEligibilityWitness groupWitness,
+            ref bool groupWitnessCaptured,
+            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics,
+            bool roleBranchTiming,
+            bool roleDirection)
         {
             LF2Entity attacker = attackerParticipant.Entity;
             LF2Entity target = targetParticipant.Entity;
@@ -6431,22 +6581,36 @@ namespace NTSD.Animation
                 RoleAwareFormalExactBodyRectEntry bodyEntry =
                     _roleFormalExactBodyRects[bodyRectIndex];
                 _lastRoleAwareExactBodyOverlapCheckCount++;
-                if (!BodyDepthOverlaps(zDelta, itr.zwidth, bodyEntry.ZWidth) ||
-                    !Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
+                long roleGeometryStart = roleBranchDiagnostics != null
+                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleBodyGeometry, roleBranchTiming) : 0;
+                bool overlaps = BodyDepthOverlaps(zDelta, itr.zwidth, bodyEntry.ZWidth) &&
+                    Overlap(itrEntry.WorldRect, bodyEntry.WorldRect);
+                if (roleBranchTiming)
+                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleBodyGeometry,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - roleGeometryStart);
+                if (!overlaps)
                     continue;
 
                 int bodyX = bodyEntry.BodyX;
-                if (!CandidateAccepts(
+                long roleAcceptsStart = roleBranchDiagnostics != null
+                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateAccepts, roleBranchTiming) : 0;
+                bool accepts = CandidateAccepts(
                         attacker,
                         attackerParticipant.CurrentFrame,
                         itr,
                         target,
                         targetCurrentFrame,
-                        bodyX))
+                        bodyX);
+                if (roleBranchTiming)
+                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateAccepts,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - roleAcceptsStart);
+                if (!accepts)
                 {
                     continue;
                 }
 
+                long roleRecordStart = roleBranchDiagnostics != null
+                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord, roleBranchTiming) : 0;
 #if UNITY_INCLUDE_TESTS
                 if (ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics)
                 {
@@ -6454,15 +6618,63 @@ namespace NTSD.Animation
                     TryRecordReleaseCandidate(
                         attacker, target, itr, targetCurrentFrame, bodyX,
                         itrEntry.ItrIndex, attackerParticipant.Handle);
+                    if (roleBranchTiming)
+                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
                     continue;
                 }
 #endif
+                // Alignment contract: NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.
+                // Ordinary multiple-candidate records are read-only once the producer is full.
+                if (roleDirection && EnableRoleCapacityRecordGuardForDiagnostics &&
+                    itr.kind == 0 && itr.vrest != 0 &&
+                    GetCollisionCandidateProducerCount(attacker, attackerParticipant.Handle) >= HitCandidateMax)
+                {
+                    LastRoleCapacityRecordGuardSkipCountForDiagnostics++;
+                    if (roleBranchTiming)
+                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                    continue;
+                }
+                // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
+                bool rejectGroupBeforeCapture = roleDirection &&
+                    EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !pairSnapshotCaptured;
+#if UNITY_INCLUDE_TESTS
+                rejectGroupBeforeCapture &= AfterRoleAwareExactPairForSelfCheck == null;
+#endif
+                if (rejectGroupBeforeCapture &&
+                    RejectRoleGroupBeforePairSnapshot(in attackerParticipant, in targetParticipant, itr,
+                        ref groupWitness, ref groupWitnessCaptured))
+                {
+                    LastRoleRejectedGroupSnapshotSkipCountForDiagnostics++;
+                    if (roleBranchTiming)
+                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                    // Group rejection is body-independent and precedes every record side effect.
+                    return;
+                }
                 // Alignment contract: NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.
                 // Record writes candidates/counts/RNG, not this direction's snapshot inputs.
                 if (!pairSnapshotCaptured)
                 {
-                    pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
-                        attacker, target, _world);
+                    bool reuseFrames = roleDirection && EnableRoleSnapshotFrameReuseForDiagnostics;
+#if UNITY_INCLUDE_TESTS
+                    reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
+#endif
+                    if (reuseFrames)
+                    {
+                        // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
+                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
+                            attacker, target, _world, attackerParticipant.CurrentFrame,
+                            targetParticipant.CurrentFrame, attackerParticipant.CollisionFrame,
+                            targetParticipant.CollisionFrame);
+                        LastRoleSnapshotFrameReuseCountForDiagnostics++;
+                    }
+                    else
+                    {
+                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
+                            attacker, target, _world);
+                    }
                     pairSnapshotCaptured = true;
 #if UNITY_INCLUDE_TESTS
                     _lastRoleAwareCachedPairSnapshotCaptureCount++;
@@ -6477,6 +6689,9 @@ namespace NTSD.Animation
                     itrEntry.ItrIndex,
                     in pairSnapshot,
                     attackerParticipant.Handle);
+                if (roleBranchTiming)
+                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
             }
         }
 
@@ -6819,6 +7034,41 @@ namespace NTSD.Animation
             }
 
             attacker.Runtime.HitCandidateCount = candidateCount + 1;
+        }
+
+        private bool RejectRoleGroupBeforePairSnapshot(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalParticipant targetParticipant,
+            InteractionArea itr,
+            ref BattleHitGroupEligibilityWitness witness,
+            ref bool witnessCaptured)
+        {
+            if (!witnessCaptured)
+            {
+                LF2Entity attacker = attackerParticipant.Entity;
+                LF2Entity target = targetParticipant.Entity;
+                if (attacker?.Runtime == null || target?.Runtime == null ||
+                    attacker.Frame == null || target.Frame == null ||
+                    attacker.FrameCache == null || target.FrameCache == null ||
+                    attackerParticipant.CollisionFrame == null || targetParticipant.CollisionFrame == null)
+                {
+                    return false;
+                }
+
+                witness = new BattleHitGroupEligibilityWitness(
+                    true, attackerParticipant.CurrentDataObjectId, targetParticipant.CurrentDataObjectId,
+                    attackerParticipant.DataObjectType, targetParticipant.DataObjectType,
+                    attacker.RelationTeam, target.RelationTeam,
+                    attacker.Frame.N, target.Frame.N,
+                    attackerParticipant.CurrentFrame?.state ?? 0, targetParticipant.CurrentFrame?.state ?? 0,
+                    attacker.Runtime.IsFacingLeft, target.Runtime.IsFacingLeft);
+                witnessCaptured = true;
+            }
+            int activeModeHitGroupGate18 =
+                _world.Runtime?.NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState.DefaultActiveModeHitGroupGate18;
+            return !BattleHitGroupEligibilityResolver.ResolveWitness(
+                itr.kind, itr.effect, in witness, activeModeHitGroupGate18).Accepted;
         }
 
         private bool TryRecordNearestPathCandidate(

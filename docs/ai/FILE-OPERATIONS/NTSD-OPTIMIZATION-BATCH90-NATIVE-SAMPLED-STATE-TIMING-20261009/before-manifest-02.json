@@ -1,0 +1,33 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009",
+  "reason": "External Packages drift before source edits; preserve current files. Rebaseline only two observed dependency hashes, never discard user work.",
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/before-manifest-01.json",
+      "sha": "42D8A0817C300EB55DAAA0D11B502F420A35FA0F9CE6687DE7A8CDF312B27C67"
+    }
+  ],
+  "additionalGuards": [
+    {
+      "path": "Packages/manifest.json",
+      "exists": true,
+      "sha": "21D93B83F18D354050EA0965165806001563DE7AC2E974841279AFF63EDB2705"
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "exists": true,
+      "sha": "2F106073218B01F2B70676DF173B6F1F791FAB8F15A6957E9C41E509AA3DF06E"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+    "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+    "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ]
+}

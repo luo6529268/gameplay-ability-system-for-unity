@@ -1,0 +1,40 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009",
+  "started": "2026-10-09T05:42:31.2704068+08:00",
+  "source": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+      "sha": "5C3F5A6D04CE7E1BEB990A58C6B0F3F94EAAA93E51EEFC1BC393F385C6C28A56",
+      "bytes": 23698
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "sha": "DF2344D5E91452B5DD5E041F46CF9AE84872DAEC0E984A7CE96E14DD91F6A830",
+      "bytes": 59373
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "sha": "453267DDAC02523334432AA893168689716E14D69A50CC12938442E2E3298151",
+      "bytes": 108925
+    }
+  ],
+  "scenes": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ],
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardCount": 782,
+  "guardDrift": 0,
+  "backupCount": 9,
+  "backupDrift": 0,
+  "camera01Absent": true,
+  "camera02Absent": true,
+  "rematchXmlFailedWithTransportLog": true
+}

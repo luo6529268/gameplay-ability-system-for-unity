@@ -1,0 +1,458 @@
+{
+  "utc": "2026-10-08T16:12:19.3434521Z",
+  "additionalGuards": [
+    {
+      "exists": true,
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha": "E90FACD3E95F815F9266D124086096032B9796C91D4ADC5987857901DCF93F99"
+    },
+    {
+      "exists": true,
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha": "332CCBA5A5C41B7961312691AD48D624F29CF4825226AE01C926DA0AC85B34CF"
+    },
+    {
+      "exists": true,
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha": "4DE75AE969F9F398469D3BDC8B8DD68409F575DA99A49AE7377174DBA7305802"
+    },
+    {
+      "exists": true,
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "sha": "73F518E7ED04D99895CFF3EA493864456485FADEC96215B11B0A91AC5D3C4AF6"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008.md",
+      "sha": "B75F1582D8C9861080F93D86C17349699C7CA1EE3F9E6E48D94EDD8B843B0487"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080.md",
+      "sha": "5F949F5F4765366D5BFAED201A5BEF2CFC759ADDC2B2F38CDD6B0C9232E6BE68"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/audit-final-01.json",
+      "sha": "9C90DBAC87B35E59D7B011BA9A4887D1B857CED486888A15DC4C6364A1C8707E"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/REPORT.md",
+      "sha": "959F58CA0F89417BD110A822CB417C68B2E8D14C30484CCFAB6E9335E6EE1E3C"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/runtime-summary-01.json",
+      "sha": "D4F0D9CE7034A19A1FD54B44E49EED0CCE06375AD4AFCFFA3FA4465E77CB0508"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/green-01/tests.xml",
+      "sha": "1E7C80DFB08FE9E7BBA3ED33C9B4203DD708A784BD63306EE7F8C1F082FA7BB8"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/green-02/tests.xml",
+      "sha": "4BFE59969B2D44EC2327FFA0D5CF5EF4F50E5F9315003B8EDD133852D9C0BEBC"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/green-03/tests.xml",
+      "sha": "E2209C489320898B91B2D123F25C2D6321C6079DE7E82BC2FE97D05C5ADDFA51"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/red-01/tests.xml",
+      "sha": "94F258CA6ACE4C88BDBDE492F141025E450082B52D24AA647B4854DFB6912D6C"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/red-02/tests.xml",
+      "sha": "6445CDD8A99FBA365AE26397C7C86C13C06FEAD9773E14EF9726D2150FC3162B"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/red-03/tests.xml",
+      "sha": "D05723F56546C3FE81ECA9771FF7975E0EED53A4A4AEA3AF5694BD56A0F5B19F"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/progress-0000.json",
+      "sha": "B5CE7BAD5C697F8685EF3FE60B7E10B493B4322BD1BD1058C94229622C2936A9"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/progress-0001.json",
+      "sha": "EA3A036DAB3CD0CD4C07ED088EA0F8372B12F1AC1C20C1A679B49688D5B6286E"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/progress-0002.json",
+      "sha": "CE61A507E711509C027AC53220F7272329D4D3EC625E663E2FF51A0368168308"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/suite-result.json",
+      "sha": "A62A1960891A1E2FE5EBCD3CDE577B7657843CED5B4F8548F081BECDA728CDE7"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json",
+      "sha": "1BBBC92754F87B12C2D0DCC8406AE2BF9D5578B4AAAB3183D44D8239C0B6495C"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.central-segments.json",
+      "sha": "2AEBF5A835ADB358CCB702CFA9C367BF3415825D6B18C1F633AA1D4297D367B2"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.observation.json",
+      "sha": "0B5FF4F1800E96AD27A111D7EDB54EA83087260469CCA417438E005BB6D23041"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.request.json",
+      "sha": "FC7B8A1683519D6F25AC8E3308378F689A7530D73C4E12226CC525E0AE2E160C"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.shared-terminal-before.txt",
+      "sha": "2257E8E779C89571ACDA7C66360E8BCB25B69906BB9399C4CE1C8E3C377518A7"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/00-combat1000-off/report.json.terminal.txt",
+      "sha": "A37115822A04D3E917AA32FD7CC6229475BA56607918D68302349442C333B0B6"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/01-combat1000-on/report.json",
+      "sha": "0B86D9B8125C798BCD1685D8FD8641CB4CE312881AFDCDC764671867EB4C465A"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/01-combat1000-on/report.json.final-checksum.json",
+      "sha": "D2DAF9741035B28D83A44B439B96D71A6D978F38A08BB6B519E75094C4563281"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/01-combat1000-on/report.json.request.json",
+      "sha": "008931D6D1226430CCDAE958306B4F27071A735CDBFE3D8E003F4F8042A66F83"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-01/01-combat1000-on/report.json.shared-terminal-before.txt",
+      "sha": "A37115822A04D3E917AA32FD7CC6229475BA56607918D68302349442C333B0B6"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/progress-0000.json",
+      "sha": "6441E386E7927F8458044184FAF39D7C0940D9D77925C60A09DE2BE60FA58C67"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/progress-0001.json",
+      "sha": "AEA02BCD01EA1413BD396FFA436C47B048F7138230B88F34C558883F2DA3EAF6"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/progress-0002.json",
+      "sha": "E76D603A8A4428D032418202BB4262EB149361FC03342526018287428FBDEED2"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/progress-0003.json",
+      "sha": "4413B8C7719ADD5EB57A53C056A0895540A332907AB3A4355B463B810D58764B"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/suite-result.json",
+      "sha": "04CF6257B3F144104F62F737E8DDB9DDFBE085BC2B6874E78055533F0D79D413"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json",
+      "sha": "C4F0627A44ED23D93489699AA4A453F5ABCE5DAC99F5FDCFDB341827FF286E6B"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.central-segments.json",
+      "sha": "9ABC11529AB9AC2CB35C09BBBE9C3F75908B804FE9144863FB1350AA50CCCF18"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.observation.json",
+      "sha": "719FE849648234DD3123A816FE23B5CCF5EF2F102072B414C6A81BFB40FEF9BC"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.request.json",
+      "sha": "93B680B84A7B292CB996F9A936EFDB27FBC10BCE41365C0935E2452719722455"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.shared-terminal-before.txt",
+      "sha": "A37115822A04D3E917AA32FD7CC6229475BA56607918D68302349442C333B0B6"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/00-combat1000-off/report.json.terminal.txt",
+      "sha": "C1649333CB4768DC53BF42F8DABF9084C93DFE259555EB1D87C3D71F706BCF8B"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json",
+      "sha": "A1970269E3423B21C1B1C62782BC5E5262A55847CBF8854716ECB031D3F97686"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.central-segments.json",
+      "sha": "7F51C88C0D007235170F75F2EE4BDBD1CC64AED5E324CB751BCE8687FE4E576D"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.observation.json",
+      "sha": "EE63770F68D316553C00C2075B1050B3CA01F7535F753B09DAADD2BF417D7475"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.request.json",
+      "sha": "E2AC3BEAE091619CA14754B5DA1BB95FF2BB867EADCCC9401CD5CE7DEF231FF9"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.shared-terminal-before.txt",
+      "sha": "C1649333CB4768DC53BF42F8DABF9084C93DFE259555EB1D87C3D71F706BCF8B"
+    },
+    {
+      "exists": true,
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/windows-02/01-combat1000-on/report.json.terminal.txt",
+      "sha": "47C1A72EA66EADD828E06FE323EFC1783794F784B8D5286D28A145636E071122"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-02-red-result.xml",
+      "sha": "94F258CA6ACE4C88BDBDE492F141025E450082B52D24AA647B4854DFB6912D6C"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-03-red-window-result.xml",
+      "sha": "6445CDD8A99FBA365AE26397C7C86C13C06FEAD9773E14EF9726D2150FC3162B"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-04-green-failure.xml",
+      "sha": "1E7C80DFB08FE9E7BBA3ED33C9B4203DD708A784BD63306EE7F8C1F082FA7BB8"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-05-shared-terminal.result",
+      "sha": "2257E8E779C89571ACDA7C66360E8BCB25B69906BB9399C4CE1C8E3C377518A7"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-06-green42.xml",
+      "sha": "4BFE59969B2D44EC2327FFA0D5CF5EF4F50E5F9315003B8EDD133852D9C0BEBC"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-07-dedup-red.xml",
+      "sha": "D05723F56546C3FE81ECA9771FF7975E0EED53A4A4AEA3AF5694BD56A0F5B19F"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-manifest-01.json",
+      "sha": "8E206F811A2886289B9AB269102D85008D8D2FA577271B5EA599E8C8F1E34882"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-manifest-02-shared-terminal.json",
+      "sha": "9891D78388830935B3EAF427D6E843ACA930121008EA785D78E121815377AB41"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/RECORD.md",
+      "sha": "5412F8456BB6EEA49F475638ACE9A2A041AF205A65D39ECAE3243A5FB3AF62AE"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/AppManager.cs",
+      "sha": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/battle-optimization-progress-tracker.md",
+      "sha": "4C3DD53ED6A46683DD85AAF15D0DEF9AB0A4D69AF4C182E3F67520D3EA276E1F"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleCommonAtlasBindingEditorTests.cs",
+      "sha": "6DD26240F424ACC52FD99A9F5B88DC325236B0769D37E2E2C5767694C44A6139"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "6FE1054C0FE8F02223B706E218D559E90C9215B35001EC274A733591DA8470E7"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CHANGE-LEDGER.md",
+      "sha": "BC95EDCDE99EB9112967C9E26D3A865A6A74D17D49A4D711BDC7D5B0372847C8"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CharacterAnimtorManager.cs",
+      "sha": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CODEX-CURRENT-HANDOFF.md",
+      "sha": "D7F31A027C41CC5030DC1070237E42F4FB047FB68D2360F3A747F4C18D444859"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/Goal18_LastTestResults.xml",
+      "sha": "5D9A625DDF59E7EA78EED3398214C0705AFBA1300B71277B0FF5BB89DE517268"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/INDEX.md",
+      "sha": "CBEFAB44A9359E4B30F77FA7B14ACEA5F5F20BDAA345F1EF97FC7D99F7DB5901"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/ProductionEntityStressHarness.cs",
+      "sha": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928"
+    },
+    {
+      "exists": true,
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/STATE.md",
+      "sha": "B96622A2F57819AFF1408A518BA0E1CB2390EB5C2CCDB0F62C953BE797464744"
+    }
+  ],
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "id": "NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009",
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-manifest-02-shared-terminal.json",
+      "sha": "9891D78388830935B3EAF427D6E843ACA930121008EA785D78E121815377AB41"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result"
+  ],
+  "outputAbsent": true,
+  "newOutput": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01",
+  "files": [
+    {
+      "exists": true,
+      "sha": "6E1E59FB46596F4D05021AA91B70BCCA17820800B2838707D45879C0F2AD87E2",
+      "bytes": 363529,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "exists": true,
+      "sha": "A8631706A268B50FD98128D140BB95C4491E386E7F41ABFBC3263D2196D7005D",
+      "bytes": 178401,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/battle-optimization-progress-tracker.md"
+    },
+    {
+      "exists": true,
+      "sha": "4A91066D91CC9A2DD66687A3110D163E13C79B11F0E29FAE43FC5D7B7BBCD89A",
+      "bytes": 1566113,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "exists": true,
+      "sha": "D87F77ADAC00A730071696B402FC03CB48A923AEF250E4653898C73ED594593F",
+      "bytes": 1632423,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "path": "docs/ai/STATE.md",
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/STATE.md"
+    },
+    {
+      "exists": true,
+      "sha": "721159A68394B0E0444AE24E6A2163A21A64BDD684207A0B8218CE36E304D367",
+      "bytes": 726505,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/CHANGE-LEDGER.md"
+    },
+    {
+      "exists": true,
+      "sha": "88950566E04D92E0BF54D03F1B02B2F4FF99AC44FA28C9B935FA4D12353F9BE1",
+      "bytes": 113365,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/INDEX.md"
+    },
+    {
+      "exists": true,
+      "sha": "E2209C489320898B91B2D123F25C2D6321C6079DE7E82BC2FE97D05C5ADDFA51",
+      "bytes": 31520,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/Goal18_LastTestResults.xml"
+    },
+    {
+      "exists": true,
+      "sha": "47C1A72EA66EADD828E06FE323EFC1783794F784B8D5286D28A145636E071122",
+      "bytes": 521,
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/before-01/NTSD_ProductionEntityStress.result"
+    }
+  ],
+  "change": "NTSD-OPT-H07-POST-BINDINGS-ROLE-WINDOWS-081",
+  "staged": []
+}

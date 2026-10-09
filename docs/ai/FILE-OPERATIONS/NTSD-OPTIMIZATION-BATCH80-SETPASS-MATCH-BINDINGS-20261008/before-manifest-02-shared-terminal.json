@@ -1,0 +1,29 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008",
+  "correction": "Exact shared terminal is .result; initial .result.txt entry was absent and wrong. Snapshot before first window's terminal replacement.",
+  "existing": [
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "bytes": 524,
+      "sha256": "2257E8E779C89571ACDA7C66360E8BCB25B69906BB9399C4CE1C8E3C377518A7",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-05-shared-terminal.result",
+      "firstLines": [
+        "PASS",
+        "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH77-BRUTE-DEPTH-WINDOWS-20261008\\windows-01\\03-combat1000-depth-on\\report.json",
+        "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=1050->1050 (delta=0; doesNotAffectRestored=True)"
+      ],
+      "gitStatus": [],
+      "utc": "2026-10-08T15:28:50.3148906Z"
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-manifest-01.json",
+      "sha": "8E206F811A2886289B9AB269102D85008D8D2FA577271B5EA599E8C8F1E34882"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Temp/NTSD_ProductionEntityStress.result"
+  ]
+}

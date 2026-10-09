@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-08T23:32:21.4620375Z",
+  "pid": 74724,
+  "port": 6402,
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "stagedCount": 0,
+  "guards": 818,
+  "guardDrift": 0,
+  "backups": 9,
+  "backupDrift": 0,
+  "sharedRequestAbsent": true,
+  "windowsRootAbsent": true,
+  "menuDirty": false,
+  "menuRootCount": 8,
+  "source": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "D656A86671F492FD024417F08CC2E9D57EB82B9B2070450585793A66B81614F8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "650E5F8ECDF7C0ADBD7EE4578B908EF60AB6A9E34EF9D6F34FB9F49F7510C7D5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "3DD81EC13C77B992B7DAA37F35EF42061CB1990D8EE5D41BCDB6F4ECAE9E78AE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha": "4DE75AE969F9F398469D3BDC8B8DD68409F575DA99A49AE7377174DBA7305802"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "9B1F511AED212E44E0410C3183584D7B33D85621FDC5B1677E831A3F82883F78"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/sakura-qualification-scenario-01.json",
+      "sha": "3ACBF13FB9442F47656BB6D952A0F063337F444F144C210BE74A630FB7CF79DF"
+    }
+  ],
+  "compileEvidence": "Original Editor idle and four Driver tests passed with the frozen sources; the latest read_console call timed out, so it is not a fresh Console scan."
+}

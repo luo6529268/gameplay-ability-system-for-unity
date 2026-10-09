@@ -185,6 +185,16 @@ namespace NTSD.App
                 }
 
                 // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
+                var visualRoots = new System.Collections.Generic.List<int>();
+                if (CurrentMatchConfig?.players != null)
+                {
+                    foreach (PlayerSlotConfig player in CurrentMatchConfig.players)
+                    {
+                        if (player != null && player.use)
+                            visualRoots.Add(player.characterId);
+                    }
+                }
+                contentManager.PrepareBattleCentralBindings(simulationDriver, visualRoots);
                 simulationDriver.PrepareBattleRuntimeServices();
                 SetupBattleCharacters(scene);
 

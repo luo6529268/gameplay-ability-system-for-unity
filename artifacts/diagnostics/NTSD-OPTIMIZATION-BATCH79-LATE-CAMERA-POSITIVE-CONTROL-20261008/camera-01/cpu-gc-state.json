@@ -1,0 +1,143 @@
+{
+    "outputRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\camera-01\\",
+    "status": "PARTIAL",
+    "stopReason": "late-capture-start-error",
+    "error": "System.InvalidOperationException: Late capture requires an initialized history capacity from 8 to 300; it will not initialize or change user settings.\r\n  at NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.BeginLateCameraWindow (System.String outputRoot) [0x00097] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs:275 ",
+    "recording": false,
+    "finishPending": false,
+    "settingsRestored": true,
+    "startLastFrame": 0,
+    "connectionId": -1,
+    "capturedFrames": 0,
+    "frameIndices": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ],
+    "warmupTicks": 0,
+    "sampleTickAtStart": 0,
+    "minimumSampleTick": 1,
+    "activeAiAtStart": 0,
+    "baseRosterAtStart": 0,
+    "deadline": 0.0,
+    "before": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0,
+        "maximumBufferedBytes": 536870912
+    },
+    "after": {
+        "enabled": false,
+        "driverEnabled": false,
+        "binary": false,
+        "logFile": "",
+        "allocationCallstacks": false,
+        "cpuArea": false,
+        "profileEditor": false,
+        "deepProfiling": false,
+        "memoryRecordMode": 0,
+        "maximumBufferedBytes": 536870912
+    },
+    "validMainThreadFrames": 0,
+    "exportedThreadFrames": 0,
+    "threadScanLimitReached": false,
+    "cameraEnvelopeMode": true,
+    "cameraEnvelopeOpen": false,
+    "cameraBoundariesValid": true,
+    "completedCameras": 0,
+    "cameraBoundaries": [
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        },
+        {
+            "ordinal": 0,
+            "beginUnityFrame": 0,
+            "endUnityFrame": 0,
+            "beginLogicTick": 0,
+            "endLogicTick": 0,
+            "allocationEvents": 0,
+            "calibratedScopeValid": false
+        }
+    ],
+    "importedFirstFrame": -1,
+    "importedLastFrame": -1,
+    "exportedCameraEnvelopes": 0,
+    "allocationCountsMatch": false,
+    "allocationCallstacksPresent": false,
+    "lateCameraMode": true,
+    "triggerOrdinal": 0,
+    "historyCapacity": 0,
+    "previousHistorySaved": true,
+    "previousHistoryWasEmpty": false
+}

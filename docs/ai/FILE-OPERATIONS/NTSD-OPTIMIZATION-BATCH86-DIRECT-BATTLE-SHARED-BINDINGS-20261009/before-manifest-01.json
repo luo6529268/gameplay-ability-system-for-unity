@@ -1,0 +1,194 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009",
+  "started": "2026-10-09T05:31:07.7762133+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-manifest-01.json",
+      "sha": "2AAC4A504FCAA22673C80523521890EE5C6BC1624F87E1E7D0869A2BBA21CC46"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "45C3B7ADE316FE44120EC19999B2DF20852BDB38F47B29CF6E5954EB90D9BF4F",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha": "C569EAC16518E6DA967595CDC4DADB059B2DA5E94EB66F9CD697E7C47F260A20",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "0F9F040B3C5756B6F98FB7D27890CF2E53B48A7B52A0288FE2B76F7011A499C8",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5",
+      "exists": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93",
+      "exists": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/REPORT.md",
+      "sha": "18860FF8A6CD29D4C1B70AF92E7FC51A14FA24FAD536438108E8BD223530FA9F",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009.md",
+      "sha": "E95E333F9BBEB8E527528278835A3EB1A613FCFF18AC1A1595B108F42E1732D2",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-INPUT-BOUNDARY-TIMING-085.md",
+      "sha": "9E56693117FF485F2EC20F3DE82F533610754B517C1E0F30047D74E3260D5C24",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/RECORD.md",
+      "sha": "DE743ABA88560C4D3C9D2662E1C19615FED906AE1D52EDC67E7C568CEABAEEB9",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-manifest-01.json",
+      "sha": "2AAC4A504FCAA22673C80523521890EE5C6BC1624F87E1E7D0869A2BBA21CC46",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/pre-window-01.json",
+      "sha": "C6362BAA32041A506448AB420C5A626963C4AF47068833E7D57D7FDD17AFD07B",
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/after-01.json",
+      "sha": "9463C2D2649A069F934C6DB455A0712197AF6892ACD9E3AB9C1440F4D87B30AA",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs.meta",
+      "sha": "C0EB5D30AE33EDE33A700A706C0F770BEB70E954986D0B837AB62D05FA78AD56",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs.meta",
+      "sha": "4AD18E1880EA0C24B0F698F1C87C922B02625956917A4EE131DF61418C507553",
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs.meta",
+      "sha": "1973871363795844E0CBCD64A025D0F34BF84F1FAA66118CA3E0FED9E0156600",
+      "exists": true
+    }
+  ],
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\BattleTestBootstrap.cs",
+      "bytes": 22447,
+      "sha": "6173B2FE8AF48B6070F747BE6850646EF22B145029FB3F118224F78CBC6E19A9",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleCommonAtlasBindingEditorTests.cs",
+      "bytes": 53587,
+      "sha": "73F518E7ED04D99895CFF3EA493864456485FADEC96215B11B0A91AC5D3C4AF6",
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs",
+      "bytes": 108258,
+      "sha": "1C567A303CDDF13097F6F8CA5DF75D6A5A4A76DF41E13D7040F11ACFA81A7DD0",
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1637801,
+      "sha": "DC333C3A5C8FFA5E7DA6B25205F90D97446EAE6DAE2CFFC840BD37E0F78098C9",
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 732340,
+      "sha": "EEB535A33370A1CA1ACD9B58101D0215A1BB20AE835C0F0697A05BD185EDF797",
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 118837,
+      "sha": "4475B811C143475193036858399368ED95E17A9C4E264A8C920CAA60623D4DDD",
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1571514,
+      "sha": "4D4C5BBF20EC2A5A2863CDFC581B573732222A37F2CC450C4ADF16A5D1106687",
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 188185,
+      "sha": "006623EF791551BE49395B33606EAF2AFAAD0F2FBBE5D2E490DCF65014183688",
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "bytes": 55302,
+      "sha": "B29BE7D8A9481AF738F5DA194089AD195C6F890FF70E6FE72295529CBB0EA4A3",
+      "git": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/before-01/Temp/Goal18_LastTestResults.xml"
+    }
+  ],
+  "inheritedGuardCount": 770,
+  "preexistingDriftCount": 0,
+  "cameraRootsAbsent": [
+    true,
+    true
+  ]
+}

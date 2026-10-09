@@ -1,0 +1,202 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009",
+  "utc": "2026-10-08T22:47:42.2680531Z",
+  "status": "FOCUSED_TEST_PASS / DEFAULT_OFF / PERFORMANCE_PENDING",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-manifest-01.json",
+      "sha": "9B5CF9BD6C662722C81D466FC13D896B0711D42D7D13BE5E9FFE656EEF63DA42"
+    }
+  ],
+  "modified": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "before": "45C3B7ADE316FE44120EC19999B2DF20852BDB38F47B29CF6E5954EB90D9BF4F",
+      "sha": "3DD81EC13C77B992B7DAA37F35EF42061CB1990D8EE5D41BCDB6F4ECAE9E78AE",
+      "bytes": 314470,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Scripts__Simulation__Core__SimulationWorld.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "before": "0F9F040B3C5756B6F98FB7D27890CF2E53B48A7B52A0288FE2B76F7011A499C8",
+      "sha": "9B1F511AED212E44E0410C3183584D7B33D85621FDC5B1677E831A3F82883F78",
+      "bytes": 74909,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__CharacterInputLiveSlotLoopEditorTests.cs"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "before": "8ADE722FDD07C056FB5DC1BE225D264C95C2404E13CBE9F7342A0887A2CA775A",
+      "sha": "E163D40D506EB3738ECC1D112A111CEBE0602E89F030DFF054F891C17B972D51",
+      "bytes": 1640146,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "before": "D2662D3D4EB064FE887174061D3BE76132B8988FE6936A5D160746BE6E562B3F",
+      "sha": "204168602D54A530718072E5440381EB9EC2AE432F72A483CEA5EBB2734F0A98",
+      "bytes": 734685,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "before": "5CCE91BEEC9358E60C5E54D61DB74E94CD4BC8FCA2F6F3C8A263633C42951F90",
+      "sha": "36C67998004C0AF5B4C96CD0EE4DF5EBDCA2A612A812AA32085BE03F21B501F9",
+      "bytes": 120738,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "before": "9921163399B11EFE573293AEF100B0BD201FB5BD94B376B669CB938F75159EFF",
+      "sha": "20D514A47E8C5BBDCA4A808CE98ABDAB41502267FF9FDA2793C389CB11411DB5",
+      "bytes": 1573944,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "before": "CFF3D7AB8895803A5F38E13BA3F7F114E834743E81CDF2052351458DEDDB335D",
+      "sha": "BAF4A931D9F882D11B07AD8F2D9224B00527F899CF95FFB12F3AA7CBCB3F75B9",
+      "bytes": 191663,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "before": "825294BBB3F8D2F1E9074A6066A8FD4998159AB5C6E6607980953805E70BBE57",
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8",
+      "bytes": 37768,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-01/Temp__Goal18_LastTestResults.xml"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009.md",
+      "sha": "34FA8930D1D92BF8202457078830EFCC1255C2C1F8B3780BE6514687C5385FD8",
+      "bytes": 4871
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-PRODUCER-SNAPSHOT-REUSE-087.md",
+      "sha": "56270FD7756247FEDB9D2C86791D0D66F65062700DED40E68AD0EF4CB3DF725E",
+      "bytes": 6126
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/RECORD.md",
+      "sha": "2DA2AFF846E66A6E7673AC2D44113171B25DD97AAC31E275568C117019FD7FF5",
+      "bytes": 4052
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/before-manifest-01.json",
+      "sha": "9B5CF9BD6C662722C81D466FC13D896B0711D42D7D13BE5E9FFE656EEF63DA42",
+      "bytes": 10508
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/REPORT.md",
+      "sha": "634571D19DDA69564072C8FD62A49A5F59A1BCFEFFB7F391BD6AA5469C2CF6AF",
+      "bytes": 5286
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/validation.json",
+      "sha": "6D067749A1E0552B37D9997F5194C5E43FE251377842C142817CBF0C59A26A4E",
+      "bytes": 811
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-01/job.json",
+      "sha": "03BBEC53CCC0E52A70663EA3221B9A6B505D9165DB0E1140DA24B3B91D6BA504",
+      "bytes": 551
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-01/previous-test-results.xml",
+      "sha": "156148AA9077DF2320EF449DD0B82FF8DAD16923274CEB38C50E38D8EF79E736",
+      "bytes": 20567
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-01/submitted.json",
+      "sha": "E2D7185D39856E11E08561E041F855002991BD24E480B731262E05F0969237E3",
+      "bytes": 287
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-01/test-results.xml",
+      "sha": "1312A6484638F393B1106518B6B29C71E9F22E9232AA88B78C6FCA06828DD989",
+      "bytes": 40023
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-02/job.json",
+      "sha": "7EBA1FF1655EF724B42012E1566D32D3618F0A3065F1FD30F0E8CFA4B2AC9D69",
+      "bytes": 467
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-02/previous-test-results.xml",
+      "sha": "1312A6484638F393B1106518B6B29C71E9F22E9232AA88B78C6FCA06828DD989",
+      "bytes": 40023
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-02/submitted.json",
+      "sha": "F84E88E1CF44DB78F86661AE977506C5768802747611ABEC39F86BF1E65A64C4",
+      "bytes": 364
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/green-02/test-results.xml",
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8",
+      "bytes": 37768
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/red-01/job.json",
+      "sha": "C6AD13EF90C8C3E09959EDB423CBE0254D4F4C0C901733C2E3CAD9E39DC09F85",
+      "bytes": 453
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/red-01/previous-test-results.xml",
+      "sha": "825294BBB3F8D2F1E9074A6066A8FD4998159AB5C6E6607980953805E70BBE57",
+      "bytes": 978335
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/red-01/submitted.json",
+      "sha": "6F728981A54D27FBC8E33F185BBD506ECD69F6FB7DE23C49FBA9B1EBE3CFF35E",
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/red-01/test-results.xml",
+      "sha": "156148AA9077DF2320EF449DD0B82FF8DAD16923274CEB38C50E38D8EF79E736",
+      "bytes": 20567
+    }
+  ],
+  "guards": 800,
+  "expectedAbsent": 10,
+  "backupCount": 8,
+  "driftCount": 0,
+  "unityTests": [
+    {
+      "phase": "RED",
+      "job": "a2e1660e1b60474ba12c0fb42312bd15",
+      "total": 15,
+      "passed": 0,
+      "failed": 15
+    },
+    {
+      "phase": "GREEN01",
+      "job": "676dd50d14e44b89b9ff67e5d8de0278",
+      "total": 64,
+      "passed": 63,
+      "failed": 1
+    },
+    {
+      "phase": "GREEN02",
+      "job": "29b9be582dac4550be1f22b6ae48b3e2",
+      "total": 64,
+      "passed": 64,
+      "failed": 0
+    }
+  ],
+  "performanceMeasured": false,
+  "defaultPromoted": false,
+  "goalStatus": "active",
+  "stagePassed": 5,
+  "stageTotal": 6,
+  "executedPackages": 66,
+  "parentClosed": 0,
+  "next": "Declare exact Suite cold owner scope and current before; freeze four same-version 1000AI OFF/ON windows; no change to rules, defaults, Q06 or专项.",
+  "notes": [
+    "Read-only after-manifest assembly command had one PowerShell ParserError; no file was written. Corrected read-only command completed successfully before this apply_patch.",
+    "Only this package's 2 C# plus 5 governance files and natural public test XML were modified; existing dirt was preserved. No Suite change, performance run, default promotion or goal completion."
+  ]
+}

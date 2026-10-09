@@ -13,12 +13,322 @@ using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.Rendering.Editor;
 using NTSD.EditorTools;
 using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
 using NUnit.Framework;
 
 namespace NTSD.Test.Editor
 {
     public sealed class BattleBruteProductionAdmissionEditorTests
     {
+
+        private const string RoleGroupSnapshotDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/driver-qualification-01/";
+
+        [Test]
+        public void RoleGroupSnapshotDriver_DefaultOffAndExplicitQualificationOnly()
+        {
+            RequireRoleGroupSnapshotDriver();
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, Is.False);
+            Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void RoleGroupSnapshotDriver_PreservesApplicableFormalRootEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            MethodInfo run = RequireRoleGroupSnapshotDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, true,
+            });
+            CompareRoleGroupSnapshotDriverRows(baseline, candidate, false);
+            SaveNew(side + "-group-snapshot-driver-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, RoleGroupSnapshotDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void RoleGroupSnapshotDriver_ThousandSakuraCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            MethodInfo run = RequireRoleGroupSnapshotDriver();
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, true,
+            });
+            CompareRoleGroupSnapshotDriverRows(baseline, candidate, true);
+            SaveNew(mode + "-group-snapshot-driver-parity.json", new
+            {
+                baseline, candidate, objectId = 1, scenarioSha = HashFile(RoleSakuraScenario),
+                performanceEvidence = false, gcEvidence = false,
+            }, RoleGroupSnapshotDriverOutput);
+        }
+
+        private static MethodInfo RequireRoleGroupSnapshotDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunRoleGroupSnapshotDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "group snapshot skip requires an explicit default-off Driver owner");
+            return method;
+        }
+
+        private static void CompareRoleGroupSnapshotDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand)
+        {
+            CompareEveryTick(baseline, candidate);
+            long actualSkips = 0;
+            for (int index = 0; index < baseline.Length; index++)
+            {
+                TickRow a = baseline[index], b = candidate[index];
+                string label = "Role group snapshot first-difference tick=" + a.tick;
+                Assert.That(a.nativeScalarState, Is.Not.Null.And.Not.Empty, label + " scalar available");
+                Assert.That(b.nativeScalarState, Is.EqualTo(a.nativeScalarState), label + " native scalar RNG");
+                Assert.That(b.legacyScalarState, Is.EqualTo(a.legacyScalarState), label + " legacy RNG");
+                JObject off = JObject.FromObject(a), on = JObject.FromObject(b);
+                Assert.That((bool)off["roleGroupSnapshotSkipEnabled"], Is.False, label + " explicit OFF");
+                Assert.That((bool)on["roleGroupSnapshotSkipEnabled"], Is.True, label + " explicit ON");
+                Assert.That((long)off["roleGroupSnapshotSkips"], Is.Zero, label + " OFF skip");
+                actualSkips += (long)on["roleGroupSnapshotSkips"];
+                Assert.That(a.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(b.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(a.formalCollectionAborted || b.formalCollectionAborted, Is.False, label);
+                if (thousand)
+                {
+                    Assert.That(a.actualAi, Is.EqualTo(1000), label);
+                    Assert.That(b.actualAi, Is.EqualTo(1000), label);
+                }
+            }
+            if (thousand)
+                Assert.That(actualSkips, Is.GreaterThan(0), "the candidate must actually reject groups before full capture");
+        }
+
+        private const string ProducerSnapshotDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/";
+        [Test]
+        public void ProducerSnapshotDriver_DefaultOffAndExplicitQualificationOnly()
+        {
+            RequireProducerSnapshotDriver();
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, Is.False);
+            Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void ProducerSnapshotDriver_PreservesApplicableFormalRootEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            MethodInfo run = RequireProducerSnapshotDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, true,
+            });
+            CompareProducerSnapshotDriverRows(baseline, candidate, false);
+            SaveNew(side + "-producer-snapshot-driver-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, ProducerSnapshotDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void ProducerSnapshotDriver_ThousandSakuraCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            MethodInfo run = RequireProducerSnapshotDriver();
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, true,
+            });
+            CompareProducerSnapshotDriverRows(baseline, candidate, true);
+            SaveNew(mode + "-producer-snapshot-driver-parity.json", new
+            {
+                baseline, candidate, objectId = 1, scenarioSha = HashFile(RoleSakuraScenario),
+                performanceEvidence = false, gcEvidence = false,
+            }, ProducerSnapshotDriverOutput);
+        }
+
+        private static MethodInfo RequireProducerSnapshotDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunProducerSnapshotDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "producer snapshot admission requires an explicit default-off Driver owner");
+            return method;
+        }
+
+        private static void CompareProducerSnapshotDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand)
+        {
+            CompareEveryTick(baseline, candidate);
+            long actualSkips = 0;
+            for (int index = 0; index < baseline.Length; index++)
+            {
+                TickRow a = baseline[index], b = candidate[index];
+                string label = "Producer snapshot Driver first-difference tick=" + a.tick;
+                Assert.That(a.nativeScalarState, Is.Not.Null.And.Not.Empty, label + " baseline scalar available");
+                Assert.That(b.nativeScalarState, Is.EqualTo(a.nativeScalarState), label + " full native scalar RNG");
+                Assert.That(b.legacyScalarState, Is.EqualTo(a.legacyScalarState), label + " legacy RNG state");
+                JObject off = JObject.FromObject(a), on = JObject.FromObject(b);
+                Assert.That((bool)off["producerSnapshotReuseEnabled"], Is.False, label + " explicit OFF");
+                Assert.That((bool)on["producerSnapshotReuseEnabled"], Is.True, label + " explicit ON");
+                Assert.That((long)off["producerSnapshotReuseSkips"], Is.Zero, label + " no OFF skip");
+                actualSkips += (long)on["producerSnapshotReuseSkips"];
+                Assert.That((int)on["producerSnapshotReuseSkips"] + (int)on["producerSnapshotFullRefreshes"],
+                    Is.EqualTo((int)off["producerSnapshotFullRefreshes"]), label + " same producer count");
+                Assert.That(a.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(b.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(a.formalCollectionAborted || b.formalCollectionAborted, Is.False, label);
+                if (thousand)
+                {
+                    Assert.That((int)off["producerSnapshotFullRefreshes"], Is.GreaterThan(0), label + " OFF refresh must execute");
+                    Assert.That(a.actualAi, Is.EqualTo(1000), label);
+                    Assert.That(b.actualAi, Is.EqualTo(1000), label);
+                }
+            }
+            if (thousand)
+                Assert.That(actualSkips, Is.GreaterThan(0), "the candidate must actually skip producer refreshes in this workload");
+        }
+
+
+        private const string CapacityRecordDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/driver-qualification-01/";
+
+        [Test]
+        public void RoleCapacityDriver_DefaultOffAndExplicitQualificationOnly()
+        {
+            RequireRoleCapacityDriver();
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            Assert.That(query.EnableRoleCapacityRecordGuardForDiagnostics, Is.False);
+            Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void RoleCapacityDriver_PreservesApplicableFormalRootEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            MethodInfo run = RequireRoleCapacityDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native, true,
+            });
+            CompareRoleCapacityDriverRows(baseline, candidate, false);
+            SaveNew(side + "-capacity-record-driver-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, CapacityRecordDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        [Explicit("Qualification not applicable: the frozen 32-tick workloads do not trigger the capacity record guard.")]
+        public void RoleCapacityDriver_ThousandSakuraCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            MethodInfo run = RequireRoleCapacityDriver();
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, false,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, true,
+            });
+            CompareRoleCapacityDriverRows(baseline, candidate, true);
+            SaveNew(mode + "-capacity-record-driver-parity.json", new
+            {
+                baseline, candidate, objectId = 1, scenarioSha = HashFile(RoleSakuraScenario),
+                performanceEvidence = false, gcEvidence = false,
+            }, CapacityRecordDriverOutput);
+        }
+
+        private static MethodInfo RequireRoleCapacityDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunRoleCapacityRecordDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "capacity guard admission requires an explicit default-off Driver owner");
+            return method;
+        }
+
+        private static void CompareRoleCapacityDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand)
+        {
+            CompareEveryTick(baseline, candidate);
+            long actualSkips = 0;
+            for (int index = 0; index < baseline.Length; index++)
+            {
+                TickRow a = baseline[index], b = candidate[index];
+                string label = "Role capacity Driver first-difference tick=" + a.tick;
+                Assert.That(b.nativeScalarState, Is.EqualTo(a.nativeScalarState), label + " full native scalar RNG");
+                Assert.That(b.legacyScalarState, Is.EqualTo(a.legacyScalarState), label + " legacy RNG state");
+                JObject off = JObject.FromObject(a), on = JObject.FromObject(b);
+                Assert.That((bool)off["roleCapacityGuardEnabled"], Is.False, label + " explicit OFF");
+                Assert.That((bool)on["roleCapacityGuardEnabled"], Is.True, label + " explicit ON");
+                Assert.That((long)off["roleCapacityGuardSkips"], Is.Zero, label + " no OFF skip");
+                actualSkips += (long)on["roleCapacityGuardSkips"];
+                Assert.That(a.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(b.formalCollectorActual, Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label);
+                Assert.That(a.formalCollectionAborted || b.formalCollectionAborted, Is.False, label);
+                if (thousand)
+                {
+                    Assert.That(a.actualAi, Is.EqualTo(1000), label);
+                    Assert.That(b.actualAi, Is.EqualTo(1000), label);
+                }
+            }
+            if (thousand)
+                Assert.That(actualSkips, Is.GreaterThan(0), "the candidate must actually skip full records in this workload");
+        }
         private const string RuntimeRoot = "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime";
         private const string FormalSha = "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3";
         private const string ScenarioRoot = "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/";
@@ -35,6 +345,108 @@ namespace NTSD.Test.Editor
         private const string OrdinalPacketDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH71-BRUTE-ORDINAL-PACKET-DRIVER-20261008/driver-qualification-01/";
 
         private const string DepthRejectDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH76-BRUTE-DEPTH-DRIVER-20261008/driver-qualification-01/";
+
+        private const string RoleDriverOutput = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/driver-qualification-01/";
+        private const string RoleSakuraScenario = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/sakura-qualification-scenario-01.json";
+
+        [Test]
+        public void RoleDriver_DefaultBruteAndExplicitQualificationOnly()
+        {
+            RequireRoleDriver();
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+            OrdinaryBruteDefaultsEnableAdmittedFastPath();
+            EnvelopeBindingEligibilityQualificationDoesNotPromoteDefaults();
+        }
+
+        [TestCase("right-x550", "right-x550-root-v1-trace.jsonl",
+            "AA327E22F85000294699EA689795E90B02EFF38194954294CE41024D1D415FBE")]
+        [TestCase("left-x350", "left-x350-root-v2-trace.jsonl",
+            "CF2701700E543AB7C37B132D1D1A0337DB1814C6440846FC8F16C6EAAD5BB9B2")]
+        public void RoleDriver_PreservesApplicableFormalRootAndEveryTick(
+            string side, string trace, string expectedSha)
+        {
+            MethodInfo run = RequireRoleDriver();
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            Assert.That(HashFile(RootTrace + trace), Is.EqualTo(expectedSha));
+            JObject[] native = File.ReadLines(RootTrace + trace).Select(JObject.Parse)
+                .Where(row => (int)row["tick"] >= 1 && (int)row["tick"] <= 12).ToArray();
+            Assert.That(native.Length, Is.EqualTo(12));
+            string scenario = ScenarioRoot + "unity-scenario-" + side + ".json";
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native,
+                CollisionFormalCollectorMode.ForceBruteForce,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                scenario, false, ProductionEntityStressMode.Combat1000, 12, native,
+                CollisionFormalCollectorMode.ForceRoleAware,
+            });
+            CompareRoleDriverRows(baseline, candidate, false);
+            SaveNew(side + "-role-driver-parity.json", new
+            {
+                baseline, candidate, formalRootSha = FormalSha, traceSha = expectedSha,
+                rootFields = new[] { "oid", "action", "hp", "vx" }, performanceEvidence = false,
+            }, RoleDriverOutput);
+        }
+
+        [TestCase(ProductionEntityStressMode.Dispersed1000)]
+        [TestCase(ProductionEntityStressMode.Combat1000)]
+        public void RoleDriver_ThousandSakuraCanonicalAiPreservesEveryTick(ProductionEntityStressMode mode)
+        {
+            MethodInfo run = RequireRoleDriver();
+            TickRow[] baseline = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, CollisionFormalCollectorMode.ForceBruteForce,
+            });
+            TickRow[] candidate = (TickRow[])run.Invoke(null, new object[]
+            {
+                RoleSakuraScenario, true, mode, 32, null, CollisionFormalCollectorMode.ForceRoleAware,
+            });
+            CompareRoleDriverRows(baseline, candidate, true);
+            SaveNew(mode + "-sakura-role-driver-parity.json", new
+            {
+                baseline, candidate, objectId = 1, scenarioSha = HashFile(RoleSakuraScenario),
+                performanceEvidence = false, gcEvidence = false,
+            }, RoleDriverOutput);
+        }
+
+        private static MethodInfo RequireRoleDriver()
+        {
+            MethodInfo method = typeof(BattleBruteProductionAdmissionEditorTests).GetMethod(
+                "RunRoleDriver", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "the explicit Role-aware Driver qualification entry is missing");
+            return method;
+        }
+
+        private static void CompareRoleDriverRows(TickRow[] baseline, TickRow[] candidate, bool thousand)
+        {
+            CompareEveryTick(baseline, candidate);
+            for (int index = 0; index < baseline.Length; index++)
+            {
+                TickRow a = baseline[index], b = candidate[index];
+                string label = "Role Driver first-difference tick=" + a.tick;
+                Assert.That(b.nativeScalarState, Is.EqualTo(a.nativeScalarState), label + " full native scalar RNG");
+                Assert.That(b.legacyScalarState, Is.EqualTo(a.legacyScalarState), label + " legacy RNG state");
+                JObject brute = JObject.FromObject(a), role = JObject.FromObject(b);
+                Assert.That((int)brute["formalCollectorActual"],
+                    Is.EqualTo((int)CollisionFormalCollectorMode.ForceBruteForce), label + " actual Brute route");
+                Assert.That((int)role["formalCollectorActual"],
+                    Is.EqualTo((int)CollisionFormalCollectorMode.ForceRoleAware), label + " actual Role route");
+                Assert.That((bool)brute["formalCollectionAborted"], Is.False, label);
+                Assert.That((bool)role["formalCollectionAborted"], Is.False, label);
+                if (thousand)
+                {
+                    Assert.That(a.actualAi, Is.EqualTo(1000), label);
+                    Assert.That(b.actualAi, Is.EqualTo(1000), label);
+                    Assert.That(a.entities, Is.EqualTo(b.entities), label);
+                }
+            }
+        }
 
         [Test]
         public void DepthRejectDriver_DefaultOffAndExplicitQualificationOnly()
@@ -1242,24 +1654,241 @@ namespace NTSD.Test.Editor
             return arrays;
         }
 
+
+        private static TickRow[] RunProducerSnapshotDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            // Alignment contract: NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088; explicit diagnostic qualification only.
+            return Run(scenario, true, thousand, mode, ticks, native,
+                formalCollector: CollisionFormalCollectorMode.ForceRoleAware, producerSnapshotReuse: enabled);
+        }
+
+        private sealed class ProducerSnapshotDriverWorldOwner : IDisposable
+        {
+            private SimulationWorld world;
+            private readonly bool previous;
+
+            public ProducerSnapshotDriverWorldOwner(SimulationWorld world, bool enabled)
+            {
+                Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, Is.False,
+                    "producer snapshot reuse must not be inherited as a production default");
+                this.world = world;
+                previous = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics;
+                world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = enabled;
+            }
+
+            public void Dispose()
+            {
+                if (world == null)
+                    return;
+                world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = previous;
+                bool restored = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics == previous;
+                world = null;
+                Assert.That(restored, Is.True, "producer snapshot owner must restore before Driver shutdown");
+            }
+        }
+
+        private static TickRow[] RunRoleGroupSnapshotDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            TickRow[] rows = Run(scenario, true, thousand, mode, ticks, native,
+                formalCollector: CollisionFormalCollectorMode.ForceRoleAware,
+                roleGroupSnapshotSkip: enabled);
+            Assert.That(rows.All(row => row.roleGroupSnapshotSkipEnabled == enabled &&
+                row.formalCollectorRequested == (int)CollisionFormalCollectorMode.ForceRoleAware &&
+                row.formalCollectorActual == (int)CollisionFormalCollectorMode.ForceRoleAware &&
+                !row.formalCollectionAborted && !row.ordinalPacketApplied && !row.kind5PresenceApplied &&
+                !row.eligibilityReuseApplied && !row.coarseEnvelopeEnabled && !row.bindingReuseApplied &&
+                !row.depthRejectApplied && !row.roleCapacityGuardEnabled && !row.producerSnapshotReuseEnabled),
+                Is.True, "only the explicit Role group snapshot candidate may differ");
+            return rows;
+        }
+
+        private sealed class RoleGroupSnapshotDriverQueryOwner : IDisposable
+        {
+            private BruteForceSceneQuery query;
+            private readonly bool previous;
+
+            internal RoleGroupSnapshotDriverQueryOwner(BruteForceSceneQuery query, bool enabled)
+            {
+                Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, Is.False,
+                    "group snapshot skip must not be inherited as a production default");
+                Assert.That(query.EnableRoleCapacityRecordGuardForDiagnostics ||
+                    query.EnableRoleSnapshotFrameReuseForDiagnostics, Is.False,
+                    "group snapshot qualification must not compose unadmitted Role candidates");
+                this.query = query;
+                previous = query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics;
+                query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics = enabled;
+            }
+
+            public void Dispose()
+            {
+                if (query == null)
+                    return;
+                query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics = previous;
+                bool restored = query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics == previous;
+                query = null;
+                Assert.That(restored, Is.True, "group snapshot owner must restore before Driver shutdown");
+            }
+        }
+
+        private static TickRow[] RunRoleCapacityRecordDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, bool enabled)
+        {
+            TickRow[] rows = Run(scenario, true, thousand, mode, ticks, native,
+                formalCollector: CollisionFormalCollectorMode.ForceRoleAware,
+                roleCapacityRecordGuard: enabled);
+            Assert.That(rows.All(row => row.roleCapacityGuardEnabled == enabled &&
+                row.formalCollectorRequested == (int)CollisionFormalCollectorMode.ForceRoleAware &&
+                row.formalCollectorActual == (int)CollisionFormalCollectorMode.ForceRoleAware &&
+                !row.formalCollectionAborted && !row.ordinalPacketApplied && !row.kind5PresenceApplied &&
+                !row.eligibilityReuseApplied && !row.coarseEnvelopeEnabled && !row.bindingReuseApplied &&
+                !row.depthRejectApplied), Is.True, "only the explicit Role record guard may differ");
+            return rows;
+        }
+
+        private static TickRow[] RunRoleDriver(string scenario, bool thousand,
+            ProductionEntityStressMode mode, int ticks, JObject[] native, CollisionFormalCollectorMode collector)
+        {
+            Assert.That(collector == CollisionFormalCollectorMode.ForceBruteForce ||
+                collector == CollisionFormalCollectorMode.ForceRoleAware, Is.True,
+                "Role qualification requires an explicit existing collector");
+            TickRow[] rows = Run(scenario, true, thousand, mode, ticks, native, formalCollector: collector);
+            Assert.That(rows.All(row => row.formalCollectorRequested == (int)collector &&
+                row.formalCollectorActual == (int)collector && !row.formalCollectionAborted &&
+                !row.ordinalPacketApplied && !row.kind5PresenceApplied && !row.eligibilityReuseApplied &&
+                !row.coarseEnvelopeEnabled && !row.bindingReuseApplied && !row.depthRejectApplied), Is.True,
+                "Role qualification must exercise only the requested route and admitted baseline");
+            return rows;
+        }
+
+        private static void WithRoleDriverScenario(string runtimeRoot, string scenario,
+            BattleRuntimeProfile profile, int ticks,
+            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify, bool useProjectMode)
+        {
+            if (scenario != RoleSakuraScenario)
+            {
+                NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                    runtimeRoot, scenario, profile, ticks, verify, useProjectMode);
+                return;
+            }
+
+            Assert.That(UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode, Is.False);
+            Assert.That(runtimeRoot, Is.EqualTo(RuntimeRoot));
+            Assert.That(profile, Is.EqualTo(BattleRuntimeProfile.MobileExtended));
+            Assert.That(ticks, Is.EqualTo(32));
+            Assert.That(useProjectMode, Is.True);
+            Assert.That(HashFile(scenario),
+                Is.EqualTo("3ACBF13FB9442F47656BB6D952A0F063337F444F144C210BE74A630FB7CF79DF"),
+                "only the frozen owned diagnostic fixture may use this entry");
+            Assert.That(HashFile(Path.GetFullPath(Path.Combine(RuntimeRoot, "../../NTSD2.8-Logan.exe"))),
+                Is.EqualTo(FormalSha));
+            string fixture = File.ReadAllText(scenario);
+            JObject metadata = JObject.Parse(fixture);
+            Assert.That((string)metadata["schema"], Is.EqualTo("ntsd-opt-h07-role-driver-sakura-qualification/1.0"));
+            Assert.That((string)metadata["referenceExeSha256"], Is.EqualTo(FormalSha));
+
+            // Diagnostic-only adapter: retain the existing formal replay validator unchanged.
+            const BindingFlags instance = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            Type capture = typeof(NTSD28UnityRawCaptureEditor);
+            Type dataType = capture.GetNestedType("UnityCurrentDatScope", BindingFlags.NonPublic);
+            Type poolType = capture.GetNestedType("TemporaryObjectPoolScope", BindingFlags.NonPublic);
+            Type driverType = capture.GetNestedType("TemporarySimulationDriverScope", BindingFlags.NonPublic);
+            Type scenarioType = capture.GetNestedType("UnityRawScenario", BindingFlags.NonPublic);
+            Assert.That(new[] { dataType, poolType, driverType, scenarioType }.All(type => type != null), Is.True);
+            using var dataScope = (IDisposable)Activator.CreateInstance(dataType, new object[] { new[] { 1 }, runtimeRoot, true });
+            var configs = (Dictionary<int, LF2CharacterDataWrapper>)dataType.GetProperty("Configs", instance).GetValue(dataScope);
+            var catalog = (LoganObjectCatalog)dataType.GetProperty("Catalog", instance).GetValue(dataScope);
+            MethodInfo assertInputs = dataType.GetMethod("AssertInputsCurrent", instance);
+            Assert.That(assertInputs, Is.Not.Null);
+            using var poolScope = (IDisposable)Activator.CreateInstance(poolType);
+            var driverScope = (IDisposable)Activator.CreateInstance(driverType);
+            SimulationWorld world;
+            BattleLogicReferencePool logicPool;
+            using (driverScope)
+            {
+                var driver = (SimulationTickDriver)driverType.GetProperty("Driver", instance).GetValue(driverScope);
+                var settings = new BattleRuntimeWorldSettings(profile,
+                    BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity, BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities);
+                Assert.That(driver.TryConfigureEmptyDiagnosticWorld(settings, BattleAiExecutionProfile.DataOrientedCanonical,
+                    out string reason), Is.True, reason);
+                world = driver.World;
+                logicPool = new BattleLogicReferencePool();
+                world.BindLogicReferencePool(logicPool);
+                capture.GetMethod("ConfigureWorldAndRoster", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null,
+                    new object[] { world, configs, UnityEngine.JsonUtility.FromJson(fixture, scenarioType), true, catalog });
+                world.PrepareRuntimeDataCatalogForBattle(catalog.Entries
+                    .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                    id => configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null, loganCatalog: catalog);
+                driver.ApplySettings(new LockstepSimulationSettings { driveMode = SimulationDriveMode.Manual, enableFrameChecksum = true });
+                driver.SetPaused(false);
+                driver.BeginBattleAllocationSeal();
+                world.SetLogicOnlyEntityMaterialization(true);
+                var inputs = Enumerable.Range(1, ticks).Select(tick => new FrameInputSet(tick, new[]
+                {
+                    new SimulationPlayerInput(0, SimulationInputButtons.None),
+                    new SimulationPlayerInput(1, SimulationInputButtons.None),
+                })).ToArray();
+                ulong fixtureIdentity = LoganContentIdentity.ForDecodeContract(HashFile(scenario),
+                    "NTSD_OPT_ROLE_DRIVER_DIAGNOSTIC_FIXTURE_V1").CatalogFingerprint;
+                var identity = catalog.ContentIdentity.CreateLocalValidationSessionIdentity(
+                    0x8201UL, unchecked((uint)(int)metadata["seed"]), fixtureIdentity, new[] { 0, 1 });
+                assertInputs.Invoke(dataScope, null);
+                verify(driver, inputs, identity);
+                assertInputs.Invoke(dataScope, null);
+            }
+            Assert.That(world.ObjectCount, Is.Zero, "diagnostic shutdown objects");
+            Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.Zero, "diagnostic shutdown slots");
+            Assert.That(logicPool.ActiveCount, Is.Zero, "diagnostic shutdown borrowers");
+            var shutdown = (BattleRuntimeShutdownReport)driverType.GetProperty("LastShutdownReport", instance).GetValue(driverScope);
+            Assert.That(shutdown.Status, Is.Not.EqualTo(BattleRuntimeShutdownStatus.Failed));
+        }
+
         private static TickRow[] Run(string scenario, bool enabled, bool thousand,
             ProductionEntityStressMode mode, int ticks, JObject[] native,
             bool? kind5Presence = null, bool? eligibilityReuse = null, bool? coarseEnvelope = null,
             bool? rejectedBindingReuse = null, bool? ordinalPacket = null, bool? depthReject = null,
+            CollisionFormalCollectorMode? formalCollector = null,
+            bool? roleCapacityRecordGuard = null,
+            bool? producerSnapshotReuse = null,
+            bool? roleGroupSnapshotSkip = null,
             bool composeEnvelopeBindingEligibility = false)
         {
+            Assert.That(!roleGroupSnapshotSkip.HasValue ||
+                formalCollector == CollisionFormalCollectorMode.ForceRoleAware && enabled &&
+                !roleCapacityRecordGuard.HasValue && !producerSnapshotReuse.HasValue &&
+                !composeEnvelopeBindingEligibility, Is.True,
+                "group snapshot skip is an explicit isolated Role qualification, never a new default");
+            Assert.That(!producerSnapshotReuse.HasValue ||
+                formalCollector == CollisionFormalCollectorMode.ForceRoleAware && enabled &&
+                !roleCapacityRecordGuard.HasValue && !composeEnvelopeBindingEligibility, Is.True,
+                "producer snapshot reuse is an explicit Role-only qualification, never a new default");
+            Assert.That(!roleCapacityRecordGuard.HasValue ||
+                formalCollector == CollisionFormalCollectorMode.ForceRoleAware && enabled &&
+                !composeEnvelopeBindingEligibility, Is.True,
+                "capacity record guard is an explicit Role-only qualification, never a new default");
             Assert.That(!composeEnvelopeBindingEligibility || enabled && !kind5Presence.HasValue &&
                 eligibilityReuse.HasValue && coarseEnvelope == true && rejectedBindingReuse == true, Is.True,
                 "three-mechanism composition requires its explicit mode and exact baseline flags");
+            Assert.That(!formalCollector.HasValue || enabled && !composeEnvelopeBindingEligibility &&
+                !kind5Presence.HasValue && !eligibilityReuse.HasValue && !coarseEnvelope.HasValue &&
+                !rejectedBindingReuse.HasValue && !ordinalPacket.HasValue && !depthReject.HasValue, Is.True,
+                "collector qualification must not compose unadmitted candidates");
             var result = new List<TickRow>(ticks);
-            NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+            WithRoleDriverScenario(
                 RuntimeRoot, scenario, thousand ? BattleRuntimeProfile.MobileExtended : BattleRuntimeProfile.Authority400,
                 ticks, (driver, inputs, identity) =>
                 {
                     SimulationWorld world = driver.World;
                     var query = (BruteForceSceneQuery)world.SceneQuery;
-                    query.FormalCollectorMode = CollisionFormalCollectorMode.ForceBruteForce;
+                    query.FormalCollectorMode = formalCollector ?? CollisionFormalCollectorMode.ForceBruteForce;
                     SetCandidate(query, enabled);
+                    if (roleCapacityRecordGuard.HasValue)
+                    {
+                        Assert.That(query.EnableRoleCapacityRecordGuardForDiagnostics, Is.False,
+                            "capacity record guard must not be inherited as a default");
+                        query.EnableRoleCapacityRecordGuardForDiagnostics = roleCapacityRecordGuard.Value;
+                    }
                     if (composeEnvelopeBindingEligibility)
                     {
                         Assert.That(query.EnableBruteCoarseEnvelopeForDiagnostics ||
@@ -1348,7 +1977,19 @@ namespace NTSD.Test.Editor
                         query.EnableBruteDepthRejectForDiagnostics = depthReject.Value;
                     }
                     if (thousand)
-                        PrepareThousandAi(world, mode);
+                        PrepareThousandAi(world, mode, formalCollector.HasValue ? 1 : 2);
+                    object[] roleArrays = formalCollector.HasValue ? ReadDepthRejectPreparedArrays(query) : null;
+                    int[] roleCapacities = formalCollector.HasValue ? new[]
+                    {
+                        query.BruteExactParticipantCapacityForDiagnostics,
+                        query.BruteExactItrCapacityForDiagnostics,
+                        query.BruteExactBodyCapacityForDiagnostics,
+                    } : null;
+                    if (formalCollector.HasValue)
+                    {
+                        Assert.That(roleCapacities[0], Is.GreaterThanOrEqualTo(world.ObjectCount));
+                        Assert.That(roleArrays.All(array => array != null), Is.True);
+                    }
                     object[] depthArrays = depthReject.HasValue ? ReadDepthRejectPreparedArrays(query) : null;
                     int[] depthCapacities = depthReject.HasValue ? new[]
                     {
@@ -1366,6 +2007,10 @@ namespace NTSD.Test.Editor
                         Assert.That(packetArray, Is.Not.Null);
                         Assert.That(packetCapacity, Is.GreaterThanOrEqualTo((world.ObjectCount + 15) / 16));
                     }
+                    using var producerSnapshotOwner = producerSnapshotReuse.HasValue
+                        ? new ProducerSnapshotDriverWorldOwner(world, producerSnapshotReuse.Value) : null;
+                    using var roleGroupSnapshotOwner = roleGroupSnapshotSkip.HasValue
+                        ? new RoleGroupSnapshotDriverQueryOwner(query, roleGroupSnapshotSkip.Value) : null;
                     ulong before = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
                     for (int tick = 1; tick <= ticks; tick++)
                     {
@@ -1373,8 +2018,31 @@ namespace NTSD.Test.Editor
                             "completed tick=" + tick + ", fast=" + enabled);
                         if (native != null)
                             CompareRoot(world, native[tick - 1], tick);
+                        if (producerSnapshotReuse.HasValue)
+                            Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics,
+                                Is.EqualTo(producerSnapshotReuse.Value), "owned producer snapshot flag tick=" + tick);
                         Assert.That(world.AiUnifiedSnapshotExecutionPostCommitHardBreachCountForDiagnostics,
                             Is.Zero, "AI post-commit tick=" + tick);
+                        if (formalCollector.HasValue)
+                        {
+                            if (roleGroupSnapshotSkip.HasValue)
+                                Assert.That(query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics,
+                                    Is.EqualTo(roleGroupSnapshotSkip.Value), "owned group snapshot skip tick=" + tick);
+                            if (roleCapacityRecordGuard.HasValue)
+                                Assert.That(query.EnableRoleCapacityRecordGuardForDiagnostics,
+                                    Is.EqualTo(roleCapacityRecordGuard.Value), "owned capacity guard tick=" + tick);
+                            Assert.That(query.LastFormalCollectorModeForDiagnostics,
+                                Is.EqualTo(formalCollector.Value), "actual collector tick=" + tick);
+                            Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False,
+                                "collector must complete tick=" + tick);
+                            object[] actualArrays = ReadDepthRejectPreparedArrays(query);
+                            for (int index = 0; index < roleArrays.Length; index++)
+                                Assert.That(actualArrays[index], Is.SameAs(roleArrays[index]),
+                                    "collector prepared array=" + index + ", tick=" + tick);
+                            Assert.That(query.BruteExactParticipantCapacityForDiagnostics, Is.EqualTo(roleCapacities[0]));
+                            Assert.That(query.BruteExactItrCapacityForDiagnostics, Is.EqualTo(roleCapacities[1]));
+                            Assert.That(query.BruteExactBodyCapacityForDiagnostics, Is.EqualTo(roleCapacities[2]));
+                        }
                         if (ordinalPacket.HasValue)
                         {
                             Assert.That(packetArrayField.GetValue(query), Is.SameAs(packetArray), "packet array tick=" + tick);
@@ -1419,25 +2087,37 @@ namespace NTSD.Test.Editor
                             ordinalPacketFallback = ordinalPacket.HasValue && query.LastBruteOrdinalPacketFallbackForDiagnostics,
                             ordinalPacketRejects = ordinalPacket.HasValue ? query.LastBruteOrdinalPacketRejectedDirectionCountForDiagnostics : 0,
                             ordinalPacketProofs = ordinalPacket.HasValue ? query.LastBruteOrdinalPacketProofCountForDiagnostics : 0,
-                            nativeScalarState = ordinalPacket.HasValue || depthReject.HasValue
+                            nativeScalarState = ordinalPacket.HasValue || depthReject.HasValue || formalCollector.HasValue
                                 ? JsonConvert.SerializeObject(world.NativeRandom.CaptureScalarState()) : null,
-                            legacyScalarState = ordinalPacket.HasValue || depthReject.HasValue ? world.Rng.State : 0,
+                            legacyScalarState = ordinalPacket.HasValue || depthReject.HasValue || formalCollector.HasValue
+                                ? world.Rng.State : 0,
                             bruteExactDirections = ordinalPacket.HasValue || depthReject.HasValue
                                 ? query.LastBruteExactCacheDirectionCountForDiagnostics : 0,
                             bruteGeometryRejects = ordinalPacket.HasValue || depthReject.HasValue
                                 ? query.LastBruteGeometryFirstRejectCountForDiagnostics : 0,
-                            actualAi = ordinalPacket.HasValue || depthReject.HasValue
+                            actualAi = ordinalPacket.HasValue || depthReject.HasValue || formalCollector.HasValue
                                 ? Enumerable.Range(0, 1000).Select(world.FindEntityByRuntimeSlotForQuery)
                                 .OfType<LF2Character>().Count(character => character.AiControlled) : 0,
                             depthRejectApplied = depthReject.HasValue && query.LastBruteDepthRejectAppliedForDiagnostics,
                             depthRejects = depthReject.HasValue ? query.LastBruteDepthRejectedDirectionCountForDiagnostics : 0,
+                            formalCollectorRequested = formalCollector.HasValue ? (int)query.FormalCollectorMode : 0,
+                            formalCollectorActual = formalCollector.HasValue ? (int)query.LastFormalCollectorModeForDiagnostics : 0,
+                            formalCollectionAborted = formalCollector.HasValue && query.LastFormalCollectionAbortedForDiagnostics,
+                            formalFallbackParticipants = formalCollector.HasValue ? query.LastFormalFallbackParticipantCountForDiagnostics : 0,
+                            roleCapacityGuardEnabled = roleCapacityRecordGuard.HasValue && query.EnableRoleCapacityRecordGuardForDiagnostics,
+                            roleCapacityGuardSkips = roleCapacityRecordGuard.HasValue ? query.LastRoleCapacityRecordGuardSkipCountForDiagnostics : 0,
+                            producerSnapshotReuseEnabled = producerSnapshotReuse.HasValue && world.EnableCharacterInputProducerSnapshotReuseForDiagnostics,
+                            producerSnapshotReuseSkips = producerSnapshotReuse.HasValue ? world.LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics : 0,
+                            producerSnapshotFullRefreshes = producerSnapshotReuse.HasValue ? world.LastCharacterInputProducerSnapshotRefreshCountForDiagnostics : 0,
+                            roleGroupSnapshotSkipEnabled = roleGroupSnapshotSkip.HasValue && query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics,
+                            roleGroupSnapshotSkips = roleGroupSnapshotSkip.HasValue ? query.LastRoleRejectedGroupSnapshotSkipCountForDiagnostics : 0,
                         });
                         if (kind5Presence.HasValue)
                         {
                             Assert.That(query.LastBruteKind5PresenceAppliedForDiagnostics,
                                 Is.EqualTo(kind5Presence.Value), "kind5 application tick=" + tick);
                         }
-                        if (enabled)
+                        if (enabled && formalCollector != CollisionFormalCollectorMode.ForceRoleAware)
                         {
                             Assert.That(query.LastBruteExactCacheAppliedForDiagnostics, Is.True,
                                 "prepared cache must be exercised tick=" + tick);
@@ -1456,7 +2136,7 @@ namespace NTSD.Test.Editor
             return result.ToArray();
         }
 
-        private static void PrepareThousandAi(SimulationWorld world, ProductionEntityStressMode mode)
+        private static void PrepareThousandAi(SimulationWorld world, ProductionEntityStressMode mode, int objectId = 2)
         {
             Assert.That(world.AiExecutionProfile, Is.EqualTo(BattleAiExecutionProfile.DataOrientedCanonical));
             for (int index = 0; index < 1000; index++)
@@ -1472,9 +2152,11 @@ namespace NTSD.Test.Editor
                         team = (index & 1) + 1,
                         useExplicitRelationIdentity = true,
                         preserveActionZero = true,
-                        opoint = new ObjectPoint { oid = 2, action = 0 },
+                        opoint = new ObjectPoint { oid = objectId, action = 0 },
                     }, out _);
                 Assert.That(entity, Is.TypeOf<LF2Character>(), "roster index=" + index);
+                if (objectId == 1)
+                    Assert.That(entity.ObjectId, Is.EqualTo(1), "Sakura roster index=" + index);
                 var character = (LF2Character)entity;
                 character.AiControlled = true;
                 character.Team = (index & 1) + 1;
@@ -1576,6 +2258,17 @@ namespace NTSD.Test.Editor
             public int actualAi;
             public bool depthRejectApplied;
             public long depthRejects;
+            public int formalCollectorRequested;
+            public int formalCollectorActual;
+            public bool formalCollectionAborted;
+            public int formalFallbackParticipants;
+            public bool roleCapacityGuardEnabled;
+            public long roleCapacityGuardSkips;
+            public bool producerSnapshotReuseEnabled;
+            public int producerSnapshotReuseSkips;
+            public int producerSnapshotFullRefreshes;
+            public bool roleGroupSnapshotSkipEnabled;
+            public long roleGroupSnapshotSkips;
         }
     }
 }

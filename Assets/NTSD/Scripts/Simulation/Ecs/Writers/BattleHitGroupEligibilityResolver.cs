@@ -2,6 +2,46 @@ using NTSD.Animation;
 
 namespace NTSD.Simulation.Ecs
 {
+    internal readonly struct BattleHitGroupEligibilityWitness
+    {
+        internal BattleHitGroupEligibilityWitness(
+            bool valid, int attackerObjectId, int targetObjectId,
+            int attackerObjectType, int targetObjectType,
+            int attackerBattleGroup, int targetBattleGroup,
+            int attackerAction, int targetAction,
+            int attackerCurrentState, int targetCurrentState,
+            bool attackerFacing, bool targetFacing)
+        {
+            Valid = valid;
+            AttackerObjectId = attackerObjectId;
+            TargetObjectId = targetObjectId;
+            AttackerObjectType = attackerObjectType;
+            TargetObjectType = targetObjectType;
+            AttackerBattleGroup = attackerBattleGroup;
+            TargetBattleGroup = targetBattleGroup;
+            AttackerAction = attackerAction;
+            TargetAction = targetAction;
+            AttackerCurrentState = attackerCurrentState;
+            TargetCurrentState = targetCurrentState;
+            AttackerFacing = attackerFacing;
+            TargetFacing = targetFacing;
+        }
+
+        internal bool Valid { get; }
+        internal int AttackerObjectId { get; }
+        internal int TargetObjectId { get; }
+        internal int AttackerObjectType { get; }
+        internal int TargetObjectType { get; }
+        internal int AttackerBattleGroup { get; }
+        internal int TargetBattleGroup { get; }
+        internal int AttackerAction { get; }
+        internal int TargetAction { get; }
+        internal int AttackerCurrentState { get; }
+        internal int TargetCurrentState { get; }
+        internal bool AttackerFacing { get; }
+        internal bool TargetFacing { get; }
+    }
+
     internal enum BattleHitGroupEligibilityReason : byte
     {
         InvalidSnapshot = 0,
@@ -34,6 +74,24 @@ namespace NTSD.Simulation.Ecs
     internal static class BattleHitGroupEligibilityResolver
     {
         private const int FreezeColumnObjectId = 212;
+
+        internal static BattleHitGroupEligibilityResult ResolveWitness(
+            int originalKind,
+            int effect,
+            in BattleHitGroupEligibilityWitness witness,
+            int activeModeHitGroupGate18)
+        {
+            // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
+            // This filter-only projection is never published as a candidate payload.
+            var filterInput = new BattleHitCandidatePairSnapshot(
+                witness.Valid, witness.AttackerObjectId, witness.TargetObjectId,
+                witness.AttackerObjectType, witness.TargetObjectType,
+                witness.AttackerBattleGroup, witness.TargetBattleGroup,
+                witness.AttackerAction, witness.TargetAction,
+                witness.AttackerCurrentState, witness.TargetCurrentState,
+                0, 0, 0, 0, witness.AttackerFacing, witness.TargetFacing, false, 0);
+            return Resolve(originalKind, effect, in filterInput, activeModeHitGroupGate18);
+        }
 
         internal static BattleHitGroupEligibilityResult Resolve(
             int originalKind,

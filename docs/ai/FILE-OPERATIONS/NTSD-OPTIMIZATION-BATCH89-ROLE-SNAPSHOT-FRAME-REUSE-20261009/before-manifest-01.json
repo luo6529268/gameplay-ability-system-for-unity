@@ -1,0 +1,627 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009",
+  "started": "2026-10-09T08:11:57.3468447+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-manifest-01.json",
+      "sha": "BFCBEBD55485873D5E874B7B8809CE91F3EFBA5E4E4D826C6EF7895CE98640EC"
+    }
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "20EFAE60D9079F1645161149B063253B020D596C457A3F2D818B967DFDB9BD96"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "650E5F8ECDF7C0ADBD7EE4578B908EF60AB6A9E34EF9D6F34FB9F49F7510C7D5"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha": "F3147F35CC5DE5FCC963F903F9A995ABF1B9FFBB91F6AF43B4E1CF8450AF8975"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "7475120631B8F8C8BB08E525B01D3537CAB8DBF205D8451CCA8C604205EA8CC8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha": "65530153AAF8D7B7DC787FF7F4794A32BD6ADEB5DEE55A8C8B6934905E1A3E85"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "A7513E36614B4133F48D7D9BEEE1990138D24017E6E47BBD3CF224DCEC7EC265"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "35D0172E56C5F0A7819C1E4E0A94269373065BBAEEE4FB6451160D99577B3DB4"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "2D214207E9D106B67FF9215C089F4456A31BB49E4FBA7F3BC4F871C8B5C769D2"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/audit-final-01.json",
+      "exists": true,
+      "sha": "C81C7742D0189E5A3455F8C76D195E366F7130A4AC1038AE6B98ADA7FFF549DC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/measurements-summary-01.json",
+      "exists": true,
+      "sha": "C3E22EFCEEBAA0A8B216B4D47FDD2B77ED56BC1F65559862B5B18E5123071995"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/REPORT.md",
+      "exists": true,
+      "sha": "42DF913DEB93BC02F84911FC4E657412902681EB63FEF372A1B88EA14F0C036F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-freeze-01.json",
+      "exists": true,
+      "sha": "E26650E41513D2E02DD03E4AE8AA841FFB6DEB7C7F01AB683BCDB8C8EFB95682"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-freeze-02.json",
+      "exists": true,
+      "sha": "F09D5FD5C6C865A3DCBDEE72B81C577A622019BA7E0DD6DE585F5A1754AE16B7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/Combat1000-producer-snapshot-driver-parity-5b3d7720ef0749ef99f2631081d1ca20.json",
+      "exists": true,
+      "sha": "613ADDA013D6DA6B07E0CB3BC26D1F8F23E2703A6AA36091A6C6CDC7FBE55CF3"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/Dispersed1000-producer-snapshot-driver-parity-e70db09ba3a14be2981c8a063ae5728b.json",
+      "exists": true,
+      "sha": "1E255A2EDDB9E4710BE5E0DC1BFA59C2293AB27F0C981F270D4848F603619945"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/left-x350-producer-snapshot-driver-parity-e96c60d488dd4592adef272d4e69e833.json",
+      "exists": true,
+      "sha": "87AF775A9EAEE60A8171BECDA81AAE87488EFE5F2AB4FD02D3B4048ACFBA2354"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/driver-qualification-01/right-x550-producer-snapshot-driver-parity-9fc563606d004cbab438a81f92a30734.json",
+      "exists": true,
+      "sha": "9747FF5E9B46A4A10F51BC8C25AD54807C4C04EE220ADD34212FDB3F087A701C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-01/previous-public.xml",
+      "exists": true,
+      "sha": "35914ED85972702F0BF9B8C4EDC6D0E954BB918C2AC72D6DC3932C67E510AC0F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-01/tests.xml",
+      "exists": true,
+      "sha": "9756244EAD210C5F0931CCDEB0DD1206B8C5A7E8128C2FA51DE11D5FB72A6FBD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-02/previous-public.xml",
+      "exists": true,
+      "sha": "57DDAECAB30583E4F6A5A88F5B587F9B126A33F9D235BC413EABFC1EDF82BB4E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-02/tests.xml",
+      "exists": true,
+      "sha": "A9BDC618D0E308086133F7472459301A3945821B0D785EAA78F4A054D315FB34"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-03/previous-public.xml",
+      "exists": true,
+      "sha": "A9BDC618D0E308086133F7472459301A3945821B0D785EAA78F4A054D315FB34"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-cold-03/tests.xml",
+      "exists": true,
+      "sha": "2D214207E9D106B67FF9215C089F4456A31BB49E4FBA7F3BC4F871C8B5C769D2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-driver-01/previous-public.xml",
+      "exists": true,
+      "sha": "9756244EAD210C5F0931CCDEB0DD1206B8C5A7E8128C2FA51DE11D5FB72A6FBD"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/green-driver-01/tests.xml",
+      "exists": true,
+      "sha": "DB8519A05F898E7E6DA3D73D4503D4CCE81A6D5C559153DD3B813F030B4F2674"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-01/previous-public.xml",
+      "exists": true,
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-01/tests.xml",
+      "exists": true,
+      "sha": "5B54386B2703A7274A2DED7E7A5F17DD85832301CDB58F35C7C8A16AB51FFA87"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-02/previous-public.xml",
+      "exists": true,
+      "sha": "5B54386B2703A7274A2DED7E7A5F17DD85832301CDB58F35C7C8A16AB51FFA87"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-02/tests.xml",
+      "exists": true,
+      "sha": "35914ED85972702F0BF9B8C4EDC6D0E954BB918C2AC72D6DC3932C67E510AC0F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-lifecycle-01/previous-public.xml",
+      "exists": true,
+      "sha": "DB8519A05F898E7E6DA3D73D4503D4CCE81A6D5C559153DD3B813F030B4F2674"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/red-lifecycle-01/tests.xml",
+      "exists": true,
+      "sha": "57DDAECAB30583E4F6A5A88F5B587F9B126A33F9D235BC413EABFC1EDF82BB4E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/progress-0000.json",
+      "exists": true,
+      "sha": "9C4321F84E54C2206C60E1E5D56A5C2DFD2A1D0D3AC7E271B8E1471311A49F1F"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/suite-result.json",
+      "exists": true,
+      "sha": "C944B2D5971703B5BDEB1E57387426B3EEF2CA7FE508A5688201710374E41A1D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json",
+      "exists": true,
+      "sha": "F259DD79E6D73B3F0C9CF082FDC0720A086AB3A2E7C7D10EA0A507DA179A1D3C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "4F712452E67F07DB5BCCC038ED102E38454231D1F2CE9E047B44746D5450BE10"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.observation.json",
+      "exists": true,
+      "sha": "29768E245F0E2977F268068A2B48AE52FF3FC3BF2B9EB4B19B5AC2858F21A753"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.request.json",
+      "exists": true,
+      "sha": "EAFEA4ED0EF739480ECB5E48751D6D39EAA0E776CB956E9527F31228D07B5EDB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/00-dispersed1000-producer-off/report.json.terminal.txt",
+      "exists": true,
+      "sha": "1FE207B05CF9D69A5553B962358C2E6160D80D92FF27AB47458E66FF808D3A09"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/01-dispersed1000-producer-on/report.json.request.json",
+      "exists": true,
+      "sha": "5778A76AA6B2D39626C6628A3B9E218E822EF7DBD3E34F7BE2A47F2650051021"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/02-combat1000-producer-off/report.json.request.json",
+      "exists": true,
+      "sha": "D0E92F6658687012AD764F6CD65BB6A45B3832C0434D31777F3D8D5F97A56746"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01/03-combat1000-producer-on/report.json.request.json",
+      "exists": true,
+      "sha": "E8E20C1B102581A1239CA828320975822344C3FF064469894B5F35FDC4B4D03C"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0000.json",
+      "exists": true,
+      "sha": "F4ACDA84C9D0A5E075D5A3847300599829FFFB5863B4146EF4DB9948E99C9C2B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0001.json",
+      "exists": true,
+      "sha": "1D941FC8D618CFBB7E9B415164DA49850F2599761B6B45668913BBDBE0C312FC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0002.json",
+      "exists": true,
+      "sha": "3573DA999EA1F4A43A006B77EDFCC68696DB117DCEA0875EE2FAD0F9C0EAD3C5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/progress-0003.json",
+      "exists": true,
+      "sha": "C0846FAF58A18D99AB94470AA9DC207CEB633C5653C45495D1B4A36C08E9E119"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/suite-result.json",
+      "exists": true,
+      "sha": "027A6B10CA9D9257971F4E6997AC86E93287E8ADA3FBEF5CAA68465DEF1996DF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json",
+      "exists": true,
+      "sha": "36E554C9CEB96C07F74F910901F087A80E55364D73536AFF276EB982C29C92BC"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "7AC94C1791DACAC2EC94B56DE45325376F624CAC1464A2C7DF1FE1FF758D68CF"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.observation.json",
+      "exists": true,
+      "sha": "A731EC982FC467ACF4FB7880259CCEB6E48C47F293E5D74C59133D92FD94BAEE"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.request.json",
+      "exists": true,
+      "sha": "1D5954AD6E91708DB68AB18C62DD75535E967D0D41A3FFF738E9A45AC1B01117"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "1FE207B05CF9D69A5553B962358C2E6160D80D92FF27AB47458E66FF808D3A09"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/00-dispersed1000-producer-off/report.json.terminal.txt",
+      "exists": true,
+      "sha": "2F659AD4B21B2C86BC708A91505BB23D58C94C37841EA8F8A262B46CE2E8152B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json",
+      "exists": true,
+      "sha": "8592D315EFB25359121D72DB07FF7E5293B46834C98D9B500FFF2345A9F7E374"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "6BA058D87C23DDD8185ACEE2AC61CBBD6A95546E68C2C04AF7BA5BBA68EF16E2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.observation.json",
+      "exists": true,
+      "sha": "95F6B7BDB86B553FA25B2DF74CD1CB937447011096E85E4D7206B76C437E3E8A"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.request.json",
+      "exists": true,
+      "sha": "D32DCD365A155207C47E9B5C14142357EF73C2CD84F45E598510BDF0D5153A3B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "2F659AD4B21B2C86BC708A91505BB23D58C94C37841EA8F8A262B46CE2E8152B"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/01-dispersed1000-producer-on/report.json.terminal.txt",
+      "exists": true,
+      "sha": "BCAAA98AF1AB1ECC92BCF51E390EB1E8E2A4F19F208259107013EF465D997125"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json",
+      "exists": true,
+      "sha": "97C6B1153F115A4BB6D4E99245B1D643D4BCA9A4FA2E409B9B16E3E8905403D5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "DBA01A636D2EF1B28C80561D98911AD89198DD774C282365414E82A665A93D7D"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.observation.json",
+      "exists": true,
+      "sha": "B17DD9B5AD3DA86A9FAEEBD33297EC9A8A8A876112D355CF759168A05EB985CB"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.request.json",
+      "exists": true,
+      "sha": "292A48AFBC545D388C7D3DFEFBA3D504D96AF3F807B4302DE25C9A85D1440131"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "BCAAA98AF1AB1ECC92BCF51E390EB1E8E2A4F19F208259107013EF465D997125"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/02-combat1000-producer-off/report.json.terminal.txt",
+      "exists": true,
+      "sha": "4C40B9108491F3D84B61E5405F9426E3FEA68B0BFD6C6209EB3B3DE5EDD81361"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json",
+      "exists": true,
+      "sha": "4C2A3D6E97853024BD50D198A916FBD2418876EDD7664D5053DF5387E681CF60"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "6BA058D87C23DDD8185ACEE2AC61CBBD6A95546E68C2C04AF7BA5BBA68EF16E2"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.observation.json",
+      "exists": true,
+      "sha": "4DF76CDD27E0CDF10E70AC549AAA8A326739411AB6C433B16BD9DD22BF4274A1"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.request.json",
+      "exists": true,
+      "sha": "E92467FBAD793BD26F0866599AADF69A0FDDBFD1BCA44B2C6DAB9E8C1A96FE90"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "4C40B9108491F3D84B61E5405F9426E3FEA68B0BFD6C6209EB3B3DE5EDD81361"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/03-combat1000-producer-on/report.json.terminal.txt",
+      "exists": true,
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "BFCBEBD55485873D5E874B7B8809CE91F3EFBA5E4E4D826C6EF7895CE98640EC"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/RECORD.md",
+      "exists": true,
+      "sha": "5702E4D635EDFE03617D500362DDB8582ED110F6919F676955D3EC10F7AC5216"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "BAF4A931D9F882D11B07AD8F2D9224B00527F899CF95FFB12F3AA7CBCB3F75B9"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "20D514A47E8C5BBDCA4A808CE98ABDAB41502267FF9FDA2793C389CB11411DB5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleBruteProductionAdmissionEditorTests.cs",
+      "exists": true,
+      "sha": "4055C38E182B554F9A1C179B13A001993365BB4D026FD4F77743DD3625CEDBC5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "204168602D54A530718072E5440381EB9EC2AE432F72A483CEA5EBB2734F0A98"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "exists": true,
+      "sha": "36C67998004C0AF5B4C96CD0EE4DF5EBDCA2A612A812AA32085BE03F21B501F9"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/docs__ai__STATE.md",
+      "exists": true,
+      "sha": "E163D40D506EB3738ECC1D112A111CEBE0602E89F030DFF054F891C17B972D51"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "D4694E6304E8D61ED4716424EA7E6D60BCF8D6F09376EC440B158883903320D8"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-01/Temp__NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/before-02/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "D656A86671F492FD024417F08CC2E9D57EB82B9B2070450585793A66B81614F8"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009.md",
+      "exists": true,
+      "sha": "175B618693DAEB1175D8667B15F2070D13D76AF3F1EA9FBCA2600BD1B6A01DF3"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088.md",
+      "exists": true,
+      "sha": "AC5E54C9ACCFC607D8BC45142659525ACF3DFEB07A3FA1A485D5DD5DF5FE3D38"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs.meta",
+      "exists": true,
+      "sha": "73C54321B7C4059FB3E9FDB8E4A620E5053807F99FB8F6B93773DD374A780605"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs.meta",
+      "exists": true,
+      "sha": "2C56FDD8FA698B2D0EDBCDA66D16123CB1BB7C9D9469C96262F766CC7E4CA6FF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs.meta",
+      "exists": true,
+      "sha": "C841DD3A1E5145D990E7A43F933CF0166273B7E859A0D5CE0F50DA0E602ECBB2"
+    },
+    {
+      "path": "AGENTS.md",
+      "exists": true,
+      "sha": "4C8CAE02DFCF6B2365F724A7FCD60F90B7BE17F67E319EEEB0BCE1C656169F1F"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "exists": true,
+      "sha": "335747D833A5CAC9B58B5F6D910E11750457B58A040154CF736D07875C831AFF"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "exists": true,
+      "sha": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "sha": "2046B3B181DBE610D2F1185364290E826B7B28E7CFDB6DBC49F0BF00C7951F8C",
+      "bytes": 397177,
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHitCandidatePairSnapshotFactory.cs",
+      "exists": true,
+      "sha": "591911ACDEE23817678FFC7071AAE8CB240416E6E4B374D7FE30F7DE2231A200",
+      "bytes": 2678,
+      "gitStatus": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Simulation__Ecs__Writers__BattleHitCandidatePairSnapshotFactory.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "sha": "6731710FB44BDABC04CCEE3F550EE1C49895E4F471EC12F92703C9559F2D0039",
+      "bytes": 441666,
+      "gitStatus": [
+        " M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "sha": "F3147F35CC5DE5FCC963F903F9A995ABF1B9FFBB91F6AF43B4E1CF8450AF8975",
+      "bytes": 1641836,
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/docs__ai__STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "7475120631B8F8C8BB08E525B01D3537CAB8DBF205D8451CCA8C604205EA8CC8",
+      "bytes": 736321,
+      "gitStatus": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/docs__ai__CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "sha": "65530153AAF8D7B7DC787FF7F4794A32BD6ADEB5DEE55A8C8B6934905E1A3E85",
+      "bytes": 122407,
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "A7513E36614B4133F48D7D9BEEE1990138D24017E6E47BBD3CF224DCEC7EC265",
+      "bytes": 1575671,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "35D0172E56C5F0A7819C1E4E0A94269373065BBAEEE4FB6451160D99577B3DB4",
+      "bytes": 193957,
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "2D214207E9D106B67FF9215C089F4456A31BB49E4FBA7F3BC4F871C8B5C769D2",
+      "bytes": 5092,
+      "gitStatus": [],
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Temp__Goal18_LastTestResults.xml"
+    }
+  ],
+  "expectedAbsence": [
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009.md",
+    "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.md",
+    "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/RECORD.md",
+    "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-manifest-01.json",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/REPORT.md"
+  ],
+  "sharedRequestMustRemainAbsent": "Temp/NTSD_ProductionEntityStress.request",
+  "parentAfter": {
+    "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/after-manifest-01.json",
+    "sha": "07604E72864B5C7635E8C4740196AC32F30B727C02F04D95A6502131C7A84BB3",
+    "checked": 91
+  },
+  "plannedActions": [
+    "apply_patch exact new Task/Change/Operation/manifest plus five existing governance documents; Copy-Item -LiteralPath to new absent before-01 destinations, verify SHA",
+    "apply_patch only three declared C# source files; exact manage_asset import through original Editor/MCP6402",
+    "one run_tests for new SnapshotFrameReuse_ cases RED, then affected/new cases GREEN and local alternating cost; copy public XML only to new absent phase destinations",
+    "No Play/1000AI/performance windows in this package; local cost is not actual AI/FPS and not H07 stage pass",
+    "read-only guards, source comparison, Validate-ChangeLedger.ps1 and git diff --check; exact report and audit outputs created by apply_patch"
+  ]
+}

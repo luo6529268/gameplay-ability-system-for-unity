@@ -1,0 +1,170 @@
+{
+  "utc": "2026-10-08T18:31:51.4069633Z",
+  "guards": 748,
+  "guardDrift": 0,
+  "drift": [
+    null
+  ],
+  "beforeCopies": 12,
+  "beforeDrift": 0,
+  "sourceDrift": 0,
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "publicXmlSha": "7922C6C560B966AC6EE8D25E3575EBD77DB343316A31DAC60791B6B6F3188EFA",
+  "source": [
+    {
+      "sha": "1C567A303CDDF13097F6F8CA5DF75D6A5A4A76DF41E13D7040F11ACFA81A7DD0",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+    },
+    {
+      "sha": "6E813E31E91659BE21949EAE5AE7F4BFBB4810C432C9B1CCC3169C15B41122E6",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs"
+    },
+    {
+      "sha": "12483474FC50D8A751010C1A67AEB16D44877B123AFA74CC2A65FEE25F2F392E",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs"
+    }
+  ],
+  "old33TailUnchanged": true,
+  "runtimeProfileDiff": [],
+  "scenario": {
+    "afterCalibration": false,
+    "orderedShutdown": true,
+    "remainingBorrowers": 0,
+    "observerAfterCalibration": false,
+    "startedUtc": "2026-10-08T18:18:49.3832163Z",
+    "status": "FAIL",
+    "sceneClean": true,
+    "remainingSlots": 0,
+    "sampleCount": 0,
+    "phase": "DONE",
+    "error": "System.InvalidOperationException: Late capture requires an initialized history capacity from 8 to 300; it will not initialize or change user settings.\r\n  at NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.BeginLateCameraWindow (System.String outputRoot) [0x0012f] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs:291 \r\n  at NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor.Poll () [0x005e5] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs:796 ",
+    "sceneBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "remainingObjects": 0,
+    "injected": false,
+    "sceneAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "observerBeforeCalibration": true,
+    "startTick": 8,
+    "beforeCalibration": true
+  },
+  "capture": {
+    "stopReason": "late-capture-start-error",
+    "settingsRestored": true,
+    "triggerOrdinal": 0,
+    "recording": false,
+    "status": "PARTIAL",
+    "settingsEqual": true,
+    "completedCameras": 0,
+    "historyCapacity": 0
+  },
+  "postPaths": [
+    {
+      "sha": "1C567A303CDDF13097F6F8CA5DF75D6A5A4A76DF41E13D7040F11ACFA81A7DD0",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+    },
+    {
+      "sha": "6E813E31E91659BE21949EAE5AE7F4BFBB4810C432C9B1CCC3169C15B41122E6",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs"
+    },
+    {
+      "sha": "12483474FC50D8A751010C1A67AEB16D44877B123AFA74CC2A65FEE25F2F392E",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs"
+    },
+    {
+      "sha": "C58768A605044FB79E6FBE01EAC8B27B961A00AD7A913625EE0919C0935E12C2",
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "sha": "D841A006F638B00823C9ADCB65E0766504E0C55162083AFEAD8641F8F2970383",
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "sha": "AAD7A27A9996CCCADDB47539ABEA406F2BCA6F53FDA96B5ECBDE90A9DE1DD9EB",
+      "path": "docs/ai/STATE.md"
+    },
+    {
+      "sha": "6FE37F67498F7EFFC4E84254D221F12A976D4FC9A24ACBDF1CB0E582C52E9B1B",
+      "path": "docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "sha": "1E09C94BB5D48DA4504226222324C0DE956E020092C38BDD9C9BB4622B6CB206",
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "sha": "7922C6C560B966AC6EE8D25E3575EBD77DB343316A31DAC60791B6B6F3188EFA",
+      "path": "Temp/Goal18_LastTestResults.xml"
+    },
+    {
+      "sha": "FEFF31D3D501024D7BE044199C73A48D3A1A66594A57412911B0CA363A18EEF9",
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md"
+    },
+    {
+      "sha": "7122FAB451A462217E92DBAF8C84B385E71F482CAC3B381B1DC09CAB68E09310",
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md"
+    },
+    {
+      "sha": "79959B99B4C00676FD3C8EFEB262990A2DFC500DBDF0A33EBC5BA1866CAAE98B",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/RECORD.md"
+    },
+    {
+      "sha": "0B8030164EBBFAC0D46EB4CCEE0941767161C810D9B7F8907CE7061B416911FE",
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/REPORT.md"
+    },
+    {
+      "sha": "A7DF94F2BBA1D05354B63ED20DE2C66EAB571A2873646C02023AB4B86181C747",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/before-manifest-02.json"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\camera-01\\cpu-gc-state.json",
+      "sha": "29DEC340187578AB71866E6585EE5CCCF45E95CEC07EEA3BF75C4F2B7FA6914F",
+      "bytes": 4383
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\camera-01\\production-window-01.json",
+      "sha": "F414EBE816E6C461EF385293E67594DE7E3265E4990EC15E9A47E4A41DEF1DD8",
+      "bytes": 7856
+    }
+  ],
+  "notCreated": [
+    {
+      "name": "cpu-gc.raw",
+      "exists": false
+    },
+    {
+      "name": "profiler-history-before.raw",
+      "exists": false
+    },
+    {
+      "name": "cpu-gc-state-recovered.json",
+      "exists": false
+    },
+    {
+      "name": "camera-gc-callstacks.json",
+      "exists": false
+    },
+    {
+      "name": "materialization-window-01.json",
+      "exists": false
+    }
+  ],
+  "validatorExit": 0,
+  "validatorSummary": [
+    "  Records: 1377",
+    "  Governed code files in diff: 9"
+  ],
+  "warnings": 4315,
+  "diffCheckExit": 0,
+  "diffErrors": [],
+  "sceneSHA": [
+    {
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity"
+    },
+    {
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    }
+  ]
+}

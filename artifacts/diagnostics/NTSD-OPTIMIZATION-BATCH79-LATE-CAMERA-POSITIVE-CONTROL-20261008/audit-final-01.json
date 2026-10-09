@@ -1,0 +1,112 @@
+{
+  "utc": "2026-10-08T18:24:10.3876423Z",
+  "guards": 748,
+  "guardDrift": 0,
+  "drift": [
+    null
+  ],
+  "beforeCopies": 12,
+  "beforeDrift": 0,
+  "sourceDrift": 0,
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "publicXmlSha": "7922C6C560B966AC6EE8D25E3575EBD77DB343316A31DAC60791B6B6F3188EFA",
+  "source": [
+    {
+      "sha": "1C567A303CDDF13097F6F8CA5DF75D6A5A4A76DF41E13D7040F11ACFA81A7DD0",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs"
+    },
+    {
+      "sha": "6E813E31E91659BE21949EAE5AE7F4BFBB4810C432C9B1CCC3169C15B41122E6",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs"
+    },
+    {
+      "sha": "12483474FC50D8A751010C1A67AEB16D44877B123AFA74CC2A65FEE25F2F392E",
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs"
+    }
+  ],
+  "old33TailUnchanged": true,
+  "runtimeProfileDiff": [],
+  "scenario": {
+    "afterCalibration": false,
+    "observerAfterCalibration": false,
+    "observerBeforeCalibration": true,
+    "sceneAfter": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "remainingBorrowers": 0,
+    "phase": "DONE",
+    "injected": false,
+    "remainingObjects": 0,
+    "error": "System.InvalidOperationException: Late capture requires an initialized history capacity from 8 to 300; it will not initialize or change user settings.\r\n  at NTSD.Test.Editor.BattleOptimizationCpuGcCaptureEditor.BeginLateCameraWindow (System.String outputRoot) [0x0012f] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationCpuGcCaptureEditor.cs:291 \r\n  at NTSD.Test.Editor.BattleCentralProductionWindowSceneProbeEditor.Poll () [0x005e5] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleCentralProductionWindowSceneProbeEditor.cs:796 ",
+    "remainingSlots": 0,
+    "sampleCount": 0,
+    "startTick": 8,
+    "sceneBefore": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+    "sceneClean": true,
+    "startedUtc": "2026-10-08T18:18:49.3832163Z",
+    "beforeCalibration": true,
+    "orderedShutdown": true,
+    "status": "FAIL"
+  },
+  "capture": {
+    "recording": false,
+    "settingsRestored": true,
+    "historyCapacity": 0,
+    "settingsEqual": true,
+    "status": "PARTIAL",
+    "completedCameras": 0,
+    "triggerOrdinal": 0,
+    "stopReason": "late-capture-start-error"
+  },
+  "outputs": [
+    {
+      "bytes": 4383,
+      "sha": "29DEC340187578AB71866E6585EE5CCCF45E95CEC07EEA3BF75C4F2B7FA6914F",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\camera-01\\cpu-gc-state.json"
+    },
+    {
+      "bytes": 7856,
+      "sha": "F414EBE816E6C461EF385293E67594DE7E3265E4990EC15E9A47E4A41DEF1DD8",
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008\\camera-01\\production-window-01.json"
+    }
+  ],
+  "notCreated": [
+    {
+      "exists": false,
+      "name": "cpu-gc.raw"
+    },
+    {
+      "exists": false,
+      "name": "profiler-history-before.raw"
+    },
+    {
+      "exists": false,
+      "name": "cpu-gc-state-recovered.json"
+    },
+    {
+      "exists": false,
+      "name": "camera-gc-callstacks.json"
+    },
+    {
+      "exists": false,
+      "name": "materialization-window-01.json"
+    }
+  ],
+  "validatorExit": 0,
+  "validatorSummary": [
+    "  Records: 1377",
+    "  Governed code files in diff: 9"
+  ],
+  "warnings": 4315,
+  "diffCheckExit": 0,
+  "diffErrors": [],
+  "sceneSHA": [
+    {
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity"
+    },
+    {
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity"
+    }
+  ]
+}

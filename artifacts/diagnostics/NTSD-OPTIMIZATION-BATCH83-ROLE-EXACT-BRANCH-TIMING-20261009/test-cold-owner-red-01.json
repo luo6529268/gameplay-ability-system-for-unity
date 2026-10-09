@@ -1,0 +1,119 @@
+{
+  "job_id": "80c956c57ba54b75bcc7299f8f1189ef",
+  "facts": {
+    "failed": null,
+    "suiteSha": "04233D23A2E9AD2583656F887B27B8C61AF44A442AABAB602B4379C92EF78B20",
+    "total": null,
+    "start": null,
+    "sha": "83C0715B3FDBBCB5612157D73CEFF2804AF4CC8ADA8EE03A304A2DD3E240A38D",
+    "passed": null,
+    "end": null
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "80c956c57ba54b75bcc7299f8f1189ef",
+        "status": "failed",
+        "mode": "EditMode",
+        "started_unix_ms": 1791486420282,
+        "finished_unix_ms": 1791486431850,
+        "last_update_unix_ms": 1791486431850,
+        "progress": {
+          "completed": 19,
+          "total": 10244,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1791486429535,
+          "last_finished_test_full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_SessionIsBackwardCompatible",
+          "last_finished_unix_ms": 1791486429535,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_AppliesRestoresPriorValuesAndReleasesReference(0,False)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_AppliesRestoresPriorValuesAndReleasesReference(0,True)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_AppliesRestoresPriorValuesAndReleasesReference(1,False)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_AppliesRestoresPriorValuesAndReleasesReference(1,True)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_InvalidOwnerRejectedBeforeFlagMutation(0)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_InvalidOwnerRejectedBeforeFlagMutation(1)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_InvalidOwnerRejectedBeforeFlagMutation(2)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_InvalidOwnerRejectedBeforeFlagMutation(3)",
+              "message": "  ApplyRoleBranchTiming required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_ObservationRequiresStableOwnerAndCoverage(False,True,True)",
+              "message": "  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_ObservationRequiresStableOwnerAndCoverage(True,True,True)",
+              "message": "  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_ObservationRequiresStableOwnerAndCoverage(True,False,False)",
+              "message": "  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_ObservationRequiresStableOwnerAndCoverage(False,False,False)",
+              "message": "  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestChangesOnlyCollectorAndOutput(0)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestChangesOnlyCollectorAndOutput(1)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestChangesOnlyCollectorAndOutput(2)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestChangesOnlyCollectorAndOutput(3)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestRejectsOutsideMatrix(-1)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_RequestRejectsOutsideMatrix(4)",
+              "message": "  BuildRoleBranchTimingRequest required for the candidate family.\r\n  Expected: not null\r\n  But was:  null\r\n"
+            },
+            {
+              "full_name": "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RoleBranchOwner_SessionIsBackwardCompatible",
+              "message": "  Expected: not null\r\n  But was:  null\r\n"
+            }
+          ],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": null
+      }
+    }
+  }
+}

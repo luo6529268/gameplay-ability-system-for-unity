@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -104,6 +105,10 @@ namespace NTSD.Test.Editor
             public bool cameraGcCallstackCapture;
             public bool lateCameraGcCallstackCapture;
             public bool lateCameraStopRequested;
+            public bool lateCameraPositiveControl;
+            public bool lateCameraPositiveControlInjected;
+            public int lateCameraPositiveControlOrdinal;
+            public int lateCameraPositiveControlBytes;
             public bool observerLiteralReadinessPrepared;
             public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcBefore;
             public BattleScopedGcAllocationRecorder.CalibrationResult observerStageGcAfter;
@@ -512,6 +517,18 @@ namespace NTSD.Test.Editor
             StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH35-OBSERVER-LITERAL-READINESS-20261007/camera-01/", true, true, true);
         }
 
+        [MenuItem("NTSD/Validation/Optimization/Batch86 Direct Bindings Full GC 1800 Cameras")]
+        private static void StartBatch86DirectBindingsGc()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-01/", true, true, true);
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch86 Direct Bindings Reentry Full GC 1800 Cameras")]
+        private static void StartBatch86DirectBindingsGcReentry()
+        {
+            StartCalibratedGc("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/camera-02/", true, true, true);
+        }
+
         [MenuItem("NTSD/Validation/Optimization/Batch43 Foot Texture Readiness 1800 Cameras")]
         private static void StartBatch43FootTextureReadiness()
         {
@@ -558,6 +575,51 @@ namespace NTSD.Test.Editor
             report.sceneHashBefore = HashScene();
             SaveSession();
             EditorApplication.EnterPlaymode();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch79 Late Camera Known Positive Control")]
+        private static void StartBatch79LateCameraPositiveControl()
+        {
+            const string root = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/camera-01/";
+            Require(report == null && string.IsNullOrEmpty(SessionState.GetString(SessionKey, string.Empty)),
+                "Another production-window probe is active.");
+            RequireIdleOriginalScene();
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            Require(!Directory.Exists(root), "Refuses to reuse positive camera evidence directory.");
+            Directory.CreateDirectory(root);
+            report = CreateLateCameraPositiveControlReport(root);
+            report.renderPipeline = DetectPipeline();
+            report.startedUtc = DateTime.UtcNow.ToString("O");
+            report.sceneHashBefore = HashScene();
+            SaveSession();
+            EditorApplication.EnterPlaymode();
+        }
+
+        private static Report CreateLateCameraPositiveControlReport(string root)
+        {
+            Report positive = CreateLateCameraCallstackReport(root);
+            positive.targetCameraFrames = 16;
+            positive.lateCameraPositiveControl = true;
+            positive.lateCameraPositiveControlOrdinal = 9;
+            positive.lateCameraPositiveControlBytes = 1024 * 1024;
+            positive.allocationScope = "KNOWN_POSITIVE_CONTROL_DIAGNOSTIC_ONLY; one named allocation at camera 9, at most 16 complete cameras; " +
+                "stop on an earlier natural event; attribution qualification only, never production zero-GC acceptance";
+            return positive;
+        }
+
+        private static bool ShouldInjectLateCameraPositiveControl(bool enabled, bool injected,
+            int ordinal, int injectionOrdinal, int cameraLimit)
+        {
+            return enabled && !injected && ordinal > 0 && ordinal <= cameraLimit && ordinal == injectionOrdinal;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private static void InjectKnownLateCameraAllocation(int bytes)
+        {
+            // Diagnostic-only positive control; retain a resolvable allocation callsite.
+            byte[] allocation = new byte[bytes];
+            allocation[0] = 1;
+            GC.KeepAlive(allocation);
         }
 
         private static Report CreateLateCameraCallstackReport(string root)
@@ -781,6 +843,13 @@ namespace NTSD.Test.Editor
             if (report.sampleTiming)
                 cameraBeginTimestamp = System.Diagnostics.Stopwatch.GetTimestamp();
             cameraAllocationStart = GC.GetAllocatedBytesForCurrentThread();
+            if (ShouldInjectLateCameraPositiveControl(report.lateCameraPositiveControl,
+                report.lateCameraPositiveControlInjected, report.sampleCount + 1,
+                report.lateCameraPositiveControlOrdinal, report.targetCameraFrames))
+            {
+                report.lateCameraPositiveControlInjected = true;
+                InjectKnownLateCameraAllocation(report.lateCameraPositiveControlBytes);
+            }
         }
 
         private static void EndCamera(ScriptableRenderContext context, Camera camera)

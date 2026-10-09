@@ -62,7 +62,13 @@ namespace NTSD.Simulation
         CandidateCollectBruteRejectedBinding = 45,
         CandidateCollectBrutePairAllowed = 46,
         CandidateCollectBruteExactWork = 47,
-        Count = 48,
+        CandidateCollectRolePairAllowed = 48,
+        CandidateCollectRoleCoarse = 49,
+        CandidateCollectRoleItrAllowed = 50,
+        CandidateCollectRoleBodyGeometry = 51,
+        CandidateCollectRoleCandidateAccepts = 52,
+        CandidateCollectRoleCandidateRecord = 53,
+        Count = 54,
     }
 
     /// <summary>
@@ -533,6 +539,18 @@ namespace NTSD.Simulation
                     return "CandidateCollect/BrutePairAllowed";
                 case BattleTickDetailPhase.CandidateCollectBruteExactWork:
                     return "CandidateCollect/BruteExactWork";
+                case BattleTickDetailPhase.CandidateCollectRolePairAllowed:
+                    return "CandidateCollect/RolePairAllowed";
+                case BattleTickDetailPhase.CandidateCollectRoleCoarse:
+                    return "CandidateCollect/RoleCoarse";
+                case BattleTickDetailPhase.CandidateCollectRoleItrAllowed:
+                    return "CandidateCollect/RoleItrAllowed";
+                case BattleTickDetailPhase.CandidateCollectRoleBodyGeometry:
+                    return "CandidateCollect/RoleBodyGeometry";
+                case BattleTickDetailPhase.CandidateCollectRoleCandidateAccepts:
+                    return "CandidateCollect/RoleCandidateAccepts";
+                case BattleTickDetailPhase.CandidateCollectRoleCandidateRecord:
+                    return "CandidateCollect/RoleCandidateRecord";
                 default:
                     return string.Empty;
             }
@@ -631,7 +649,19 @@ namespace NTSD.Simulation
         ActionComboDirectResolve = 27,
         ActionReleaseResolve = 28,
         ActionProgressCommit = 29,
-        Count = 30,
+        ProducerFreeze = 30,
+        ProducerSnapshotRefresh = 31,
+        ProxyApply = 32,
+        NativeSampledState = 33,
+        NativeSamplePreprocess = 34,
+        NativeComboRoute = 35,
+        NativeThreeButtonRoute = 36,
+        NativeDirectionRoute = 37,
+        NativeBuiltinsRoute = 38,
+        NativeLegacyProjection = 39,
+        NativeCanonicalAiSync = 40,
+        NativeInputStateSync = 41,
+        Count = 42,
     }
 
     /// <summary>
@@ -806,6 +836,30 @@ namespace NTSD.Simulation
                     return "CharacterInput/AI/ComboUpdate/ReleaseResolve";
                 case BattleAiInputDetailPhase.ActionProgressCommit:
                     return "CharacterInput/AI/ComboUpdate/ProgressCommit";
+                case BattleAiInputDetailPhase.ProducerFreeze:
+                    return "CharacterInput/Boundary/ProducerFreeze";
+                case BattleAiInputDetailPhase.ProducerSnapshotRefresh:
+                    return "CharacterInput/Boundary/ProducerSnapshotRefresh";
+                case BattleAiInputDetailPhase.ProxyApply:
+                    return "CharacterInput/Boundary/ProxyApply";
+                case BattleAiInputDetailPhase.NativeSampledState:
+                    return "CharacterInput/Boundary/NativeSampledState";
+                case BattleAiInputDetailPhase.NativeSamplePreprocess:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeSamplePreprocess";
+                case BattleAiInputDetailPhase.NativeComboRoute:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeComboRoute";
+                case BattleAiInputDetailPhase.NativeThreeButtonRoute:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeThreeButtonRoute";
+                case BattleAiInputDetailPhase.NativeDirectionRoute:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeDirectionRoute";
+                case BattleAiInputDetailPhase.NativeBuiltinsRoute:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeBuiltinsRoute";
+                case BattleAiInputDetailPhase.NativeLegacyProjection:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeLegacyProjection";
+                case BattleAiInputDetailPhase.NativeCanonicalAiSync:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeCanonicalAiSync";
+                case BattleAiInputDetailPhase.NativeInputStateSync:
+                    return "CharacterInput/Boundary/NativeSampledState/NativeInputStateSync";
                 default:
                     return string.Empty;
             }

@@ -1,0 +1,193 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009",
+  "change": "NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089",
+  "status": "FOCUSED_TEST_PASS / NO_CONSISTENT_GAIN / NOT_ADMITTED / DEFAULT_OFF",
+  "goal": "active; H07 remains FAIL; selected phase 5/6",
+  "guardResult": {
+    "utc": "2026-10-09T00:32:11.1317588Z",
+    "guards": 904,
+    "drift": [],
+    "backups": 9,
+    "backupDrift": [],
+    "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+    "staged": [],
+    "sharedRequestExists": false,
+    "after": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+        "sha": "CD68A227AB23F9BEFE91ADCA3B7F749EE35DD790813DD9EED8625DFCFC10C216",
+        "bytes": 398293
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+        "sha": "1888ADFC288F3FBDC61367CEFA095BAB9C39703BD2384595849BF70F0BAA380D",
+        "bytes": 4259
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+        "sha": "B769A7B3D31B84235089662CECAC3A483043050AB4B37B7728DA04EC1C8B858A",
+        "bytes": 458039
+      },
+      {
+        "path": "docs/ai/STATE.md",
+        "sha": "D0E4C58D8F5185050217B51CA34D5739CA19476325277A68654EBF2D1F3EB9FD",
+        "bytes": 1642890
+      },
+      {
+        "path": "docs/ai/CHANGE-LEDGER.md",
+        "sha": "76EE78D4B78140D84965754394A0B701E0091436413FC51DC593EF9E8036D089",
+        "bytes": 737328
+      },
+      {
+        "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+        "sha": "1CE989EAE0E5B4EC0CB5A4B669B6D5039E0CE84F6CD1CC52CDB4B7AF16A14AE9",
+        "bytes": 123434
+      },
+      {
+        "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+        "sha": "A011EA95E0967EE6DD24123F8054D13696234201C1BD42B26C175B1606B0B72F",
+        "bytes": 1576745
+      },
+      {
+        "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+        "sha": "A4398B371895959BB034FD0D6423FF56CBF77421C2A2D1A1BC689C1A68B00172",
+        "bytes": 195603
+      },
+      {
+        "path": "Temp/Goal18_LastTestResults.xml",
+        "sha": "F5E865E35693B028D2FFEBE83ED8F283A4EDC59A5957C17D4E039D9A3DCED16B",
+        "bytes": 23997
+      }
+    ]
+  },
+  "guardSource": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-manifest-02.json",
+  "guardCorrection": {
+    "utc": "2026-10-09T00:27:19.6297774Z",
+    "guards": 904,
+    "drift": [],
+    "excluded": [
+      "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "docs/ai/STATE.md",
+      "docs/ai/CHANGE-LEDGER.md",
+      "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "Temp/Goal18_LastTestResults.xml"
+    ],
+    "correctionSha": "F819AC3A499622E65874238261E61DDA60359E01E847EEFD6B84E54498817086"
+  },
+  "initialGuardScan": {
+    "utc": "2026-10-09T00:26:31.5737623Z",
+    "guards": 910,
+    "guardDrift": [
+      "docs/ai/STATE.md",
+      "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "docs/ai/CHANGE-LEDGER.md",
+      "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "Temp/Goal18_LastTestResults.xml"
+    ],
+    "backups": 9,
+    "backupDrift": [],
+    "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+    "headUnchanged": true,
+    "staged": [],
+    "sharedRequestExists": false,
+    "code": [
+      {
+        "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+        "sha": "CD68A227AB23F9BEFE91ADCA3B7F749EE35DD790813DD9EED8625DFCFC10C216",
+        "numstat": [
+          "21\t2\tdocs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs => Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+        "sha": "1888ADFC288F3FBDC61367CEFA095BAB9C39703BD2384595849BF70F0BAA380D",
+        "numstat": [
+          "36\t0\tdocs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Simulation__Ecs__Writers__BattleHitCandidatePairSnapshotFactory.cs => Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs"
+        ]
+      },
+      {
+        "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+        "sha": "B769A7B3D31B84235089662CECAC3A483043050AB4B37B7728DA04EC1C8B858A",
+        "numstat": [
+          "269\t0\tdocs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs => Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs"
+        ]
+      }
+    ],
+    "scene": [
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+      },
+      {
+        "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+        "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+      }
+    ]
+  },
+  "validation": {
+    "utc": "2026-10-09T00:33:38.0250240Z",
+    "validatorExit": 0,
+    "summary": [
+      "Change ledger validation PASSED.",
+      "  Records: 1384",
+      "  Governed code files in diff: 16"
+    ],
+    "warningStrings": 4177,
+    "errorStrings": 0,
+    "diffExit": 0,
+    "diffSummary": [
+      "warning: in the working copy of 'Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Docs/battle-optimization-progress-tracker.md', LF will be replaced by CRLF the next time Git touches it",
+      "warning: in the working copy of 'Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs', LF will be replaced by CRLF the next time Git touches it"
+    ]
+  },
+  "tests": {
+    "redJob": "f1ff2f67ef124b388018274ba829e845",
+    "greenJob": "95abe2f98fcd431eb610d718fb1be407",
+    "green": {
+      "total": "33",
+      "passed": "33",
+      "failed": "0",
+      "skipped": "0",
+      "duration": "16.038938",
+      "start": "2026-10-09 00:19:38Z",
+      "end": "2026-10-09 00:19:54Z",
+      "sha": "F5E865E35693B028D2FFEBE83ED8F283A4EDC59A5957C17D4E039D9A3DCED16B",
+      "failures": [],
+      "costs": [
+        "SNAPSHOT_FRAME_REUSE_COST participants=1000 concentrated=False warmup=8 sample=16 offMeanMs=14.935725 onMeanMs=14.515693749999999 onReuses=15360 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n",
+        "SNAPSHOT_FRAME_REUSE_COST participants=1000 concentrated=True warmup=8 sample=16 offMeanMs=194.41716250000002 onMeanMs=205.60508124999998 onReuses=614400 scope=collector_fixture_not_AI_or_FPS gc=UNKNOWN\n"
+      ]
+    },
+    "testFirstCases": 20,
+    "knownRedFailures": 20
+  },
+  "editorLastObservedProtocol": "{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"Retrieved editor state.\",\"data\":{\"schema_version\":\"unity-mcp/editor_state@2\",\"observed_at_unix_ms\":1791505662956,\"sequence\":13,\"unity\":{\"instance_id\":null,\"unity_version\":\"2022.3.62f3\",\"project_id\":null,\"platform\":\"WindowsEditor\",\"is_batch_mode\":false},\"editor\":{\"is_focused\":false,\"play_mode\":{\"is_playing\":false,\"is_paused\":false,\"is_changing\":false},\"active_scene\":{\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"guid\":\"132c934aff207b048833ab33c1961278\",\"name\":\"NTSD_Menu\"}},\"activity\":{\"phase\":\"idle\",\"since_unix_ms\":1791505517842,\"reasons\":[\"tick\"]},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_started_unix_ms\":null,\"last_compile_finished_unix_ms\":null,\"last_domain_reload_before_unix_ms\":null,\"last_domain_reload_after_unix_ms\":1791505121978},\"assets\":{\"is_updating\":false,\"external_changes_dirty\":false,\"external_changes_last_seen_unix_ms\":null,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":null,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_requested_unix_ms\":null,\"last_refresh_finished_unix_ms\":null}},\"tests\":{\"is_running\":false,\"mode\":null,\"current_job_id\":null,\"started_unix_ms\":1791505166507,\"started_by\":\"unknown\",\"last_run\":{\"finished_unix_ms\":1791505201399,\"result\":\"unknown\",\"counts\":null}},\"transport\":{\"unity_bridge_connected\":null,\"last_message_unix_ms\":null},\"settings\":{\"batch_execute_max_commands\":25}}}}\r\n{\"status\":\"success\",\"result\":{\"success\":true,\"message\":\"1 scene(s) loaded.\",\"data\":{\"scenes\":[{\"name\":\"NTSD_Menu\",\"path\":\"Assets/NTSD/Scene/NTSD_Menu.unity\",\"buildIndex\":0,\"isLoaded\":true,\"isDirty\":false,\"isActive\":true,\"rootCount\":8}]}}}\r\n",
+  "notRun": [
+    "Play",
+    "Driver qualification",
+    "actual 1000 AI",
+    "formal native trace",
+    "Android",
+    "1800 stress",
+    "Profiler or GPU capture",
+    "EXT1 M0"
+  ],
+  "manualReview": [
+    "Query exactly three hunks against dirty before; default-off candidate",
+    "Factory previous/payload normalized tail identical",
+    "Old tests normalized full text identical after removing only this inserted block"
+  ],
+  "toolLimits": [
+    "Same-process validator Write-Host output was not fully captured; zero warnings from that parse is invalid. Child-pwsh validation above is actual result.",
+    "Original before-manifest-01 additionalGuards reintroduced 6 own declared write paths. New before-manifest-02 removes exact 9 writes after all inherited entries, preserving original manifest and initial legitimate drifts.",
+    "One run_tests attempt disconnected before response header without job ID. Not counted as execution; original Editor subsequently idle with RED XML before confirmed GREEN job.",
+    "Global narrow Editor.log includes old unrelated C# errors; no fresh global Console CS0 claim."
+  ],
+  "decision": "No consistent local cost gain; do not promote; do not repeat costs to find PASS; next existing NativeSampledState input hotspot"
+}

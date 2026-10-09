@@ -1,0 +1,24 @@
+{
+  "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-manifest-02.json",
+  "operation": "NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009",
+  "utc": "2026-10-09T00:27:15.8349427Z",
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/before-manifest-01.json",
+      "sha": "886D206E587241A84B9A04DBCEE9BC476ED8B41860E53D73A94A3FF08C478D73"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "additionalGuards": [],
+  "correction": "Original helper removes exclusions before adding additionalGuards, so six already-declared write paths were re-added from batch88 after. Keep original before manifest intact; this child applies final write exclusions and does not suppress any out-of-scope path."
+}

@@ -1,0 +1,113 @@
+{
+  "id": "NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008",
+  "utc": "2026-10-08T15:49:59.9713210Z",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "expectedHead": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "guardCount": 611,
+  "guardChanges": [],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "beforeSha": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "afterSha": "E90FACD3E95F815F9266D124086096032B9796C91D4ADC5987857901DCF93F99",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CharacterAnimtorManager.cs",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "beforeSha": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9",
+      "afterSha": "332CCBA5A5C41B7961312691AD48D624F29CF4825226AE01C926DA0AC85B34CF",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/AppManager.cs",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "beforeSha": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928",
+      "afterSha": "4DE75AE969F9F398469D3BDC8B8DD68409F575DA99A49AE7377174DBA7305802",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/ProductionEntityStressHarness.cs",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "beforeSha": "6DD26240F424ACC52FD99A9F5B88DC325236B0769D37E2E2C5767694C44A6139",
+      "afterSha": "73F518E7ED04D99895CFF3EA493864456485FADEC96215B11B0A91AC5D3C4AF6",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleCommonAtlasBindingEditorTests.cs",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "beforeSha": "6FE1054C0FE8F02223B706E218D559E90C9215B35001EC274A733591DA8470E7",
+      "afterSha": "6E1E59FB46596F4D05021AA91B70BCCA17820800B2838707D45879C0F2AD87E2",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeSha": "4C3DD53ED6A46683DD85AAF15D0DEF9AB0A4D69AF4C182E3F67520D3EA276E1F",
+      "afterSha": "34FFAF2F19F47FD1E362E04DF2049870C43C6C7A13D6F8CDF5CE1389D78333CE",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/battle-optimization-progress-tracker.md",
+      "backupSame": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeSha": "D7F31A027C41CC5030DC1070237E42F4FB047FB68D2360F3A747F4C18D444859",
+      "afterSha": "D1534F0A5A75B54897361F297BEA1D0C7472AAB25AE6384CD985028C1EA2B99C",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CODEX-CURRENT-HANDOFF.md",
+      "backupSame": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeSha": "B96622A2F57819AFF1408A518BA0E1CB2390EB5C2CCDB0F62C953BE797464744",
+      "afterSha": "3293E6A5D77055F7D15577950C5E7ECCD7C84DA336ED17C51FF63F3E0A085E84",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/STATE.md",
+      "backupSame": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "beforeSha": "BC95EDCDE99EB9112967C9E26D3A865A6A74D17D49A4D711BDC7D5B0372847C8",
+      "afterSha": "0570A76DE97D4959C7A3F347A44509F482C346298E74F3771FD844E73EDD1116",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CHANGE-LEDGER.md",
+      "backupSame": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeSha": "CBEFAB44A9359E4B30F77FA7B14ACEA5F5F20BDAA345F1EF97FC7D99F7DB5901",
+      "afterSha": "1B85D54CC509EB5793DA48F6476B2EBB629B80EA0D8ADE0C5B442AF21917529F",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/INDEX.md",
+      "backupSame": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "beforeSha": "5D9A625DDF59E7EA78EED3398214C0705AFBA1300B71277B0FF5BB89DE517268",
+      "afterSha": "E2209C489320898B91B2D123F25C2D6321C6079DE7E82BC2FE97D05C5ADDFA51",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/Goal18_LastTestResults.xml",
+      "backupSame": true
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result.txt",
+      "wasAbsent": true,
+      "stillAbsent": true
+    }
+  ],
+  "scenes": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    }
+  ],
+  "goalStatus": "active",
+  "scriptChangeRecord": "NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080",
+  "scriptChangeStatus": "RUNTIME_PENDING",
+  "focused": "44/44",
+  "runtimeScope": "Combat1000, two120warm+180sample, SetPass1995->5, endchecksum byte equal",
+  "validatorExit": 0,
+  "validatorRecords": 1375,
+  "validatorCodeDiff": 5,
+  "validatorWarnings": 4350,
+  "diffCheckExit": 0
+}

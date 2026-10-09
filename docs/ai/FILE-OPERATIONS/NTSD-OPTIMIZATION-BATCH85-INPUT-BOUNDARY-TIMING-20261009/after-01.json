@@ -1,0 +1,298 @@
+{
+  "observed": "2026-10-09T05:08:06.9694285+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "stagedCount": 0,
+  "guardCount": 770,
+  "expectedAbsenceCount": 10,
+  "guardDriftCount": 0,
+  "backupCount": 11,
+  "backupDriftCount": 0,
+  "sourceFrozenCount": 4,
+  "sourceDriftCount": 0,
+  "diffCheck": 0,
+  "editedCurrent": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha": "45C3B7ADE316FE44120EC19999B2DF20852BDB38F47B29CF6E5954EB90D9BF4F",
+      "bytes": 313292
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "sha": "C569EAC16518E6DA967595CDC4DADB059B2DA5E94EB66F9CD697E7C47F260A20",
+      "bytes": 41724
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "0F9F040B3C5756B6F98FB7D27890CF2E53B48A7B52A0288FE2B76F7011A499C8",
+      "bytes": 62496
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha": "996A80CE3C3E69BA5985B59EF5B88DC92DD43656097440D46F64018994DEBEE5",
+      "bytes": 406977
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha": "DC333C3A5C8FFA5E7DA6B25205F90D97446EAE6DAE2CFFC840BD37E0F78098C9",
+      "bytes": 1637801
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "EEB535A33370A1CA1ACD9B58101D0215A1BB20AE835C0F0697A05BD185EDF797",
+      "bytes": 732340
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "0C7F97184CDDB866B3BCBFA3ED92FF0546421820472C80B9030045B86BA6BFB7",
+      "bytes": 118397
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "4D4C5BBF20EC2A5A2863CDFC581B573732222A37F2CC450C4ADF16A5D1106687",
+      "bytes": 1571514
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "006623EF791551BE49395B33606EAF2AFAAD0F2FBBE5D2E490DCF65014183688",
+      "bytes": 188185
+    }
+  ],
+  "governance": [
+    {
+      "path": "docs/ai/STATE.md",
+      "currentHeaderVerified": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "currentHeaderVerified": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "currentHeaderVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "currentHeaderVerified": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "currentHeaderVerified": true
+    }
+  ],
+  "windowArtifactCount": 33,
+  "windowArtifacts": [
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json",
+      "sha": "7141396F4389F375D75FB0DE50A013B9ED3EBE525C08867B02E96DCBD4406201",
+      "bytes": 150999
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.final-checksum.json",
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.logic-gc.json",
+      "sha": "4F712452E67F07DB5BCCC038ED102E38454231D1F2CE9E047B44746D5450BE10",
+      "bytes": 1915
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.observation.json",
+      "sha": "A4848E15B39C4B629D111596030F5F25CBB4A74498BE21605B3B0A072A559075",
+      "bytes": 9562
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.request.json",
+      "sha": "D571310601E71C85B67CBBDBFA802B7143CE2D1267CAF3EEE3AF016CE94B9536",
+      "bytes": 2748
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.shared-terminal-before.txt",
+      "sha": "67C4A3FC61654DC39EC1E99CE4C0591A467D3586C23DD360B17228C039E09352",
+      "bytes": 535
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/00-dispersed1000-boundary-off/report.json.terminal.txt",
+      "sha": "4F2E62EF3A0122A9B097A67720062C4B4FE24406796E8CC58882D85BF4CAAF34",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json",
+      "sha": "17A7ECA49AAB4814B7F2915FC3B7785D12A73C944B63748EF7BEE97F4C227111",
+      "bytes": 151104
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.final-checksum.json",
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.logic-gc.json",
+      "sha": "52809657786AC6878B0C0A80B14686B086C50AA6291109B760DCDDD889AEEA5E",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.observation.json",
+      "sha": "E675AA33E9CD07EA6AECD339CE95F1B62F3A3A8C95AB2FEDEC52A21201D32B29",
+      "bytes": 9577
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.request.json",
+      "sha": "AAB289E0EE8D56BED243FAA3EF68F1E02E0873A45765F1F831E2D719E556C932",
+      "bytes": 2747
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.shared-terminal-before.txt",
+      "sha": "4F2E62EF3A0122A9B097A67720062C4B4FE24406796E8CC58882D85BF4CAAF34",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/01-dispersed1000-boundary-on/report.json.terminal.txt",
+      "sha": "157D9C5D540D4847690400FCFE05DD36D1A477F5A54D7AD17A4D2B46461DE521",
+      "bytes": 532
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json",
+      "sha": "42920B022A3B56501C3584BA9938A71E09B2D78EDE3758A587B32D0C81B6D672",
+      "bytes": 150742
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.logic-gc.json",
+      "sha": "7AFF628A1C668407DF57BBCA0DCFBD3D22C5F37AAD92D7837B1467B9C30927D0",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.observation.json",
+      "sha": "A530695D984A56F25D51B236434F362043B78204B7E8821CDB49DDEF5AAEBF70",
+      "bytes": 9555
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.request.json",
+      "sha": "E3AB7B49D52E7E0EDC5A43E7E1560942AC1E488A5C30B64075B1CC60548A5F45",
+      "bytes": 2742
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.shared-terminal-before.txt",
+      "sha": "157D9C5D540D4847690400FCFE05DD36D1A477F5A54D7AD17A4D2B46461DE521",
+      "bytes": 532
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/02-combat1000-boundary-off/report.json.terminal.txt",
+      "sha": "3B1A506D0FD06041DC037F80C5134FBB166181D3162A377680F3BAB060E2BB39",
+      "bytes": 530
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json",
+      "sha": "F493323C628BCEB26A872FBF657305B7C3BC7306ACFBD077EF9F82DBD8B366B2",
+      "bytes": 150954
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.final-checksum.json",
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.logic-gc.json",
+      "sha": "FD69494A8D97FC0B9B01E14AEB658C9BB935BBD05FDD1AFD4A1D9AA4D084B62A",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.observation.json",
+      "sha": "A38FB001B40574440010D146406764A987FAC9F3DC2A9876067B442FF2827DD5",
+      "bytes": 9573
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.request.json",
+      "sha": "AA792DF4C87A6CAA6BA1A542F762DA92EE8F012B18464D3AE8D48233864A1A16",
+      "bytes": 2741
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.shared-terminal-before.txt",
+      "sha": "3B1A506D0FD06041DC037F80C5134FBB166181D3162A377680F3BAB060E2BB39",
+      "bytes": 530
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/03-combat1000-boundary-on/report.json.terminal.txt",
+      "sha": "C1467C15754DAE408D45E155EAECDFD2F8110ACD4855A484B2E0014B7F239E93",
+      "bytes": 529
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/progress-0000.json",
+      "sha": "A582F6617749870EBFDC16D3347684CBB72FF84BA14523100475390F8FA927EA",
+      "bytes": 9485
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/progress-0001.json",
+      "sha": "6CBE8F4320523316BBD12C20A29C86363DC7C65794DEE60E7060FAC08D859411",
+      "bytes": 9483
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/progress-0002.json",
+      "sha": "BFE017403A6A5E9CBF7E0308CC0D1E3AA4BF9DE869B47FD20C69C26402E3BE51",
+      "bytes": 9479
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/progress-0003.json",
+      "sha": "2E38D8934A23DBBA0F93305B14CF73C243020D9D9E206D298F69900399AA27D5",
+      "bytes": 9477
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/suite-result.json",
+      "sha": "4D682C2E272B6FBAF2C5D62B0E2C116822806D8E83730B4B915784267C3783B5",
+      "bytes": 48180
+    }
+  ],
+  "retainedTestArtifacts": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/empty-01/tests.xml",
+      "sha": "D00E9EEC0B04CFD5AC5A3B70B6839A71350BB864E93BA81EBA92C7CE72129BD7",
+      "bytes": 312
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/red-01/tests.xml",
+      "sha": "A6068ED3690B231936960B5FD612FEBCC043FB356CC8F64A596E244FBE30EF98",
+      "bytes": 45121
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/green-01/tests.xml",
+      "sha": "634DBB5DFA168566827A591AC67C53C1E81290FFC6407DBC54F94EB788EC54E5",
+      "bytes": 27411
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/green-02/tests.xml",
+      "sha": "B29BE7D8A9481AF738F5DA194089AD195C6F890FF70E6FE72295529CBB0EA4A3",
+      "bytes": 55302
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/test-version-01/CharacterInputLiveSlotLoopEditorTests.cs",
+      "sha": "B19A5ABA0A008803A292E09AD7416EF63442FA8E1E7CD40C046B8B1374DFAD4B",
+      "bytes": 62429
+    }
+  ],
+  "publicXmlSha": "B29BE7D8A9481AF738F5DA194089AD195C6F890FF70E6FE72295529CBB0EA4A3",
+  "sharedRequestAbsent": true,
+  "suiteStatus": "MEASUREMENTS_COMPLETED",
+  "suitePhase": "DONE",
+  "completedRuns": 4,
+  "orderedShutdown": true,
+  "remainingObjects": 0,
+  "remainingSlots": 0,
+  "remainingBorrowers": 0,
+  "battleSceneUnchanged": true,
+  "originalSceneRestored": true,
+  "menuSceneSha": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+  "battleSceneSha": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+  "validator": {
+    "exitCode": 0,
+    "records": 1380,
+    "governedCodeDiff": 14,
+    "warnings": 4191,
+    "errors": 0,
+    "status": "PASSED"
+  }
+}

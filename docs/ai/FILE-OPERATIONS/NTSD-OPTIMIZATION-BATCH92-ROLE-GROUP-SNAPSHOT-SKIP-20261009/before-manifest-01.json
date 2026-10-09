@@ -1,0 +1,441 @@
+{
+  "protectedCount": 1000,
+  "started": "2026-10-09T10:23:40.8017648+08:00",
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml"
+  ],
+  "staged": [],
+  "sharedRequestMustRemainAbsent": "Temp/NTSD_ProductionEntityStress.request.json",
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha": "CD68A227AB23F9BEFE91ADCA3B7F749EE35DD790813DD9EED8625DFCFC10C216",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "bytes": 398293,
+      "git": [
+        " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs"
+      ],
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "sha": "AF8050EDA5A9473BA4B4266D47AA0A28172449AEDE5C066E90E2C88BBA681BA0",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitGroupEligibilityResolver.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHitGroupEligibilityResolver.cs",
+      "bytes": 5103,
+      "git": [],
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha": "B769A7B3D31B84235089662CECAC3A483043050AB4B37B7728DA04EC1C8B858A",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "bytes": 458039,
+      "git": [
+        " M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs"
+      ],
+      "exists": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha": "E8AB5339C60F56178A37E1E518FC5BAFD5C747D7A83198943F3D2213B24AC4FC",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1645809,
+      "git": [
+        " M docs/ai/STATE.md"
+      ],
+      "exists": true
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha": "1B55FDD71A1DE89EE5AD8B37D1C5376ABA6DC735493FBD83C3F9F258271CEF7A",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 740247,
+      "git": [
+        " M docs/ai/CHANGE-LEDGER.md"
+      ],
+      "exists": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha": "4E5873DDDEBB00500B86D87A7A0EBB1BC818F949EA44B80574F65284A8012AC7",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 126362,
+      "git": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha": "58FDF586F708649346B58069355A1FB0B58D65DDD868C3F6B2780FB2EBB97A44",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1579687,
+      "git": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "exists": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha": "5094ECEE7F4C12A22C8C064773BE6E285053933B158DC7AB087CF438A6DFCC4B",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 200311,
+      "git": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "exists": true
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "sha": "BE8683DD5599F1E58C1451BAB0C4F4B83255AEF7EFF9685E645B243697EAFD96",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009/before-01/Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "bytes": 51268,
+      "git": [],
+      "exists": true
+    }
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "6B01A2B69E84A74E09DCA4FB35AAB4CE7070622340494FA9A2FD79D3D13D52FE",
+      "bytes": 436633
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha": "9C3AC5FC6C3B18D2DC37106A505F8911C4A555DC66B77DDD9A9253887AE6686C",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/audit-final-01.json",
+      "exists": true,
+      "sha": "E1B59AB6802BBD04543F012812BCDE475F3AE3E5856A299328CD45162E669345",
+      "bytes": 4175
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/green-01/tests.xml",
+      "exists": true,
+      "sha": "BE8683DD5599F1E58C1451BAB0C4F4B83255AEF7EFF9685E645B243697EAFD96",
+      "bytes": 51268
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/red-01/tests.xml",
+      "exists": true,
+      "sha": "3675B1036D3A3320C488AA0EFDA68D386288A9CB8D93569EB83026198A3ECC45",
+      "bytes": 18727
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+      "exists": true,
+      "sha": "865866DC5FA7A61BDDEAD2950E6F79E09F422777F3B1AF9C0B41470D511BBAED",
+      "bytes": 7556
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/selection-before-reload-01/tests.xml",
+      "exists": true,
+      "sha": "AC7CD0CFAD8E1E98BAEA55313E4F5E4EC1297E408A124A6925581BA99C50CC65",
+      "bytes": 312
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json",
+      "exists": true,
+      "sha": "0EF51C1A9CAC48430EB4EB6A4E480F3A5A39D8432F90E8AF3F980AE56B11FC84",
+      "bytes": 156578
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "DD6E80613806C8330CA85DBB77F7D6753649FB4884B5F669605CAE2F927BECC6",
+      "bytes": 1915
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.observation.json",
+      "exists": true,
+      "sha": "2905DD60729A11D997158C75786C577792841FF1C510ABDBBE076FDF069738F1",
+      "bytes": 10038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.request.json",
+      "exists": true,
+      "sha": "6DB699381181740E48975725DF9E2DA8FFEF98A74D667F45A3E1C2F010654C56",
+      "bytes": 2753
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821",
+      "bytes": 533
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/00-dispersed1000-native-off/report.json.terminal.txt",
+      "exists": true,
+      "sha": "91D89546DB2CE3EA323F925D0D3CBA315BB87685371CCC4352B8E3CDDCEE3126",
+      "bytes": 539
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json",
+      "exists": true,
+      "sha": "5FA6A437D608DD8D22D80B43D417F27DD6A903A39870B68C9CA5009EE634CD65",
+      "bytes": 156998
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "F1A2CAC863D1AA995D49BEF7DA2D5C1B30337465FA846DB0CEFAF86D8AD7B6AA",
+      "bytes": 4210038
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "227612AA4CB113C8FCEF963F6784DB03749EB741AADE874DEC06B611B9487ACD",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.observation.json",
+      "exists": true,
+      "sha": "06FF8969E6D657AD0BAF9FF4B83F6C037373C8BFAFFA40C32F062E7F5AF136A4",
+      "bytes": 10055
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.request.json",
+      "exists": true,
+      "sha": "D918A3DF91E84A8912469DA96A38D944EE7298788045FB8D1E67DA0FEF7B040E",
+      "bytes": 2752
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "91D89546DB2CE3EA323F925D0D3CBA315BB87685371CCC4352B8E3CDDCEE3126",
+      "bytes": 539
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/01-dispersed1000-native-on/report.json.terminal.txt",
+      "exists": true,
+      "sha": "09D136970472A7835BF031F28BEF5D006AEE7FADC0322C686CA0BF2946DE159C",
+      "bytes": 537
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json",
+      "exists": true,
+      "sha": "672364F351E18EC4D82E857DF9C4C7F96C2901CCD9AE036FF88647D395FAA065",
+      "bytes": 156337
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "227612AA4CB113C8FCEF963F6784DB03749EB741AADE874DEC06B611B9487ACD",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.observation.json",
+      "exists": true,
+      "sha": "00BB2D02D655A3DFA61FFD08C4F7DBCFDFDE54FAF250F09DDE0FBAF620482BB7",
+      "bytes": 10031
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.request.json",
+      "exists": true,
+      "sha": "751F9BE6FC2258105C91568EB85F40C352081AB7F7AAD3A8303551144B433D6A",
+      "bytes": 2747
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "09D136970472A7835BF031F28BEF5D006AEE7FADC0322C686CA0BF2946DE159C",
+      "bytes": 537
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/02-combat1000-native-off/report.json.terminal.txt",
+      "exists": true,
+      "sha": "A41BFFC3D662AA3A90117FA1DA0FB51EB4414C8D66EA6D0BEE43BA8E8498E6ED",
+      "bytes": 535
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json",
+      "exists": true,
+      "sha": "896D848E6D6BC0651B4EBD41BFF83658038E0B9946FDCAF848783F4B18DD972E",
+      "bytes": 156987
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.final-checksum.json",
+      "exists": true,
+      "sha": "E4916ACA8C5BE675B8192D5A6C1429029FD94DB6F838CF6C82E532B030836B12",
+      "bytes": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.logic-gc.json",
+      "exists": true,
+      "sha": "1A69CB17A5C93369997718536C0B471E1FA2D0741CCE48DDB95BA4E15A15317E",
+      "bytes": 1914
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.observation.json",
+      "exists": true,
+      "sha": "BEE74B88A92ECCF1195897187B41C90AC9B20EBFD11C069F0F281F52974D87CC",
+      "bytes": 10050
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.request.json",
+      "exists": true,
+      "sha": "98D82BB56F099E0D0B9E59FB549B42A4FD1BF2693DB46062DB149B2608B2B84E",
+      "bytes": 2746
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha": "A41BFFC3D662AA3A90117FA1DA0FB51EB4414C8D66EA6D0BEE43BA8E8498E6ED",
+      "bytes": 535
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json.terminal.txt",
+      "exists": true,
+      "sha": "9C3AC5FC6C3B18D2DC37106A505F8911C4A555DC66B77DDD9A9253887AE6686C",
+      "bytes": 534
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/progress-0000.json",
+      "exists": true,
+      "sha": "7287CAE4AA7BE6319832B084AB02168C699C8F50D011B9F67BE205A016CE07D7",
+      "bytes": 9968
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/progress-0001.json",
+      "exists": true,
+      "sha": "D6206A3646E37A896D6769EF034390840BFC109D5BDA7441E6D1B34C06D84307",
+      "bytes": 9958
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/progress-0002.json",
+      "exists": true,
+      "sha": "0E6B89F8008105F05BBF1E5D2274321E5438A9ECBD32DEFE29C2153B1A1FB425",
+      "bytes": 9955
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/progress-0003.json",
+      "exists": true,
+      "sha": "482D5B532D929840C530F94F9629082511E578598E81E772AA2FF12A9F776B1C",
+      "bytes": 9953
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/suite-result.json",
+      "exists": true,
+      "sha": "497EBDE34C56CBDD036F5220D55A2544E2A17837E5D443D8002CA6D9B9803D05",
+      "bytes": 50436
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091.md",
+      "exists": true,
+      "sha": "1F9D9E89153217E85F98EF68CF90AD04890763582F0CD62ABA32AEC16568B7F7",
+      "bytes": 4757
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha": "6BA80A0F038CD93473F915EDA123F67E36B4DBCBC0B027955BD2381C06E936F0",
+      "bytes": 197569
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha": "C7696D0E2D235CC198B262BFE905EAC4A6D8AE122E9B67F67836DD76D07B2D58",
+      "bytes": 1577888
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "20EFAE60D9079F1645161149B063253B020D596C457A3F2D818B967DFDB9BD96",
+      "bytes": 428751
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/docs__ai__CHANGE-LEDGER.md",
+      "exists": true,
+      "sha": "B92326A3D403F8CA0FA982AA80C296C7FDEEB6EE600469A7B02D8583651D4D31",
+      "bytes": 738451
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md",
+      "exists": true,
+      "sha": "D382B872014D02FEE64D467A7D569BFBC67E92AFA815BB20437B4DDC42AD98BE",
+      "bytes": 124563
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/docs__ai__STATE.md",
+      "exists": true,
+      "sha": "3446F78079D4A50D1601B64A4A48AD07AD76287204C381F201E2736DA94DE09F",
+      "bytes": 1644013
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/Temp__Goal18_LastTestResults.xml",
+      "exists": true,
+      "sha": "3FE36B7A088ED3590FDD5C59AEB6B336BC2405C9D0F56E1C7D14DFA1E50CE609",
+      "bytes": 36123
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-01/Temp__NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha": "CA6E50E7F191D9A77A6F3028E82111D81151B293CE779829640DBDF119439821",
+      "bytes": 533
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-manifest-01.json",
+      "exists": true,
+      "sha": "80FCCD4F8B2EB38D98E5A7376853E2162D847705C4F38648310BA0C7CC6DA7C5",
+      "bytes": 11708
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/RECORD.md",
+      "exists": true,
+      "sha": "966F383F1652BF882754400D7C4ED6E6BD626E7A9974EAA07AEAAAD5BF5DDE4A",
+      "bytes": 2967
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009.md",
+      "exists": true,
+      "sha": "61BBF5CD4B9EF7A767B1803FAEA46D9FCD70CC0D20825917D229C5A2EB386725",
+      "bytes": 5517
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-manifest-01.json",
+      "sha": "80FCCD4F8B2EB38D98E5A7376853E2162D847705C4F38648310BA0C7CC6DA7C5"
+    }
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/before-manifest-01.json",
+      "sha": "80FCCD4F8B2EB38D98E5A7376853E2162D847705C4F38648310BA0C7CC6DA7C5"
+    }
+  ],
+  "parentAfter": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/after-manifest-01.json",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "operation": "NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009"
+}

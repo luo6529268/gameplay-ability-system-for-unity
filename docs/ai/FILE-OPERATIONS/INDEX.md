@@ -1,3 +1,54 @@
+> 第92批进行中：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092，V2局部125/125 PASS（D -5.54%、C -13.64%仅collector夹具），默认OFF。第4准确C# Driver冷资格扩展已事前留痕/dirty备份/999范围外保护；Driver RED5有效，GREEN资格待。累计71执行/阶段5of6/34父0/H07 FAIL/Goal active，无生产推广/真实耗时或完整Driver 0GC新验收。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009；下方为历史快照。
+
+> 第92批 PLANNED：NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092；现有Role几何相交后的纯阵营拒绝前置，避免无用完整payload，default OFF/不换索引或生产默认。3准确C#、9当前dirty副本及1000保护已核；test-first/两布局managed交替成本待，无实际AI/FPS新证据。70执行/阶段5of6/34父0/H07 FAIL/Goal active。Task/Operation NTSD-OPTIMIZATION-BATCH92-ROLE-GROUP-SNAPSHOT-SKIP-20261009，下方为历史快照。
+
+> 第91批 ATTRIBUTION_COMPLETE / DIAGNOSTIC_ONLY / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091 / VERIFIED仅冷诊断与归因。原Editor71/71 PASS、四actual1000AI120+180，八ON各180000call/非0time、OFF全0；最大子Builtins约1.09/1.04ms，较大CandidateCollect15.7/16.2ms。ON logic P9560.104435/57.298315ms、drop315/308仍FAIL，不称计时开关收益；四校准fullDriver180steady0event/0B、终态两对同、十一阶段三0/Menu clean8。SetPass5/CPUdraw2非GPU batch；70执行/阶段5of6/34父0/H07 FAIL/Goal active。下一有证较大热点，不刷1800/重试89/解冻专项；下方为历史快照。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md)。
+
+> 第91批 FOCUSED_TEST_PASS / DIAGNOSTIC_ONLY：NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091。原Editor独立冷入口10新＋61相邻共71/71 PASS、0skip；8dirty副本与950保护核同；即将一次四窗NativeSampledState八子步骤归因，未改运行时算法/默认。70执行/阶段5of6/34父0/H07 FAIL/Goal active，Task/Change/Operation同名回链，下方PLANNED为事前快照。
+
+> 第91批 PLANNED / DIAGNOSTIC_ONLY：NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091；Operation/Task NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009。8份当前dirty原件已新路径备份核SHA；仅SuiteEditor独立冷入口及10test-first，后续四个NativeSampledState千人OFF/ON窗口；90运行时计时不改。当前69执行/阶段5of6/34父0/H07 FAIL/Goal active；无候选推广、专项解冻或性能结论。docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-NATIVE-SAMPLED-STATE-WINDOWS-091.md；docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/RECORD.md。
+
+> 第90批 FOCUSED_TEST_PASS / ATTRIBUTION_READY / DIAGNOSTIC_ONLY / DEFAULT_OFF：NTSD-OPT-H07-NATIVE-SAMPLED-STATE-TIMING-090。原Editor23新case＋33相邻共56/56 PASS，0skip；只新增NativeSampledState八子步骤计时，未删同步/改变collector，尚无本批千人归因或性能收益。局部直接输入1024次0B不替代整条logic证书；69执行/阶段5of6/34父0/H07 FAIL/Goal active，下一具名实际输入子阶段归因，不重采89或解冻Grid/Burst/专项。 [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009/REPORT.md)。
+
+> 第90批 PLANNED / DIAGNOSTIC_ONLY / DEFAULT_OFF：NTSD-OPT-H07-NATIVE-SAMPLED-STATE-TIMING-090。仅既有NativeSampledState八子步骤计时/条件计数及必要test-first，不改动作/同步顺序或默认collector；9个dirty before副本已核同。Packages两外部变化保留并精确重基线；69执行/阶段5of6/34父0/H07 FAIL/Goal active，测试通过后准备新鲜实际归因，不将诊断当收益。 [Task](../TASKS/NTSD-OPTIMIZATION-BATCH90-NATIVE-SAMPLED-STATE-TIMING-20261009.md)。
+
+> 第89批 FOCUSED_TEST_PASS / NO_CONSISTENT_GAIN / NOT_ADMITTED / DEFAULT_OFF：NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089；20有效RED→33/33 GREEN，已校验四帧引用复用的局部成本分散-2.8123%、集中+5.7546%，没有一致收益，不进入真实千人/Driver或推广。68已执行/阶段5of6/34父0/Goal active；H07仍FAIL，下一既有NativeSampledState输入热点，已过五项及专项不重开。 [留痕](NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/RECORD.md)。
+
+> 第89批 PLANNED / DEFAULT_OFF / PERFORMANCE_PENDING：NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089。仅三个声明C#的已校验四帧引用复用及必要测试，910保护/9当前dirty before已核同；无新container/owner、生产默认/规则/Scene/资源/专项改变。67已执行/阶段5of6/34父0/Goal active；先有效RED、完整payload/原序/RNG和局部交错成本，不把局部成本当千人AI或FPS。 [留痕](NTSD-OPTIMIZATION-BATCH89-ROLE-SNAPSHOT-FRAME-REUSE-20261009/RECORD.md)。
+
+> 第88批 VERIFIED（限定诊断）/ GAIN_SIGNAL / H07_PERFORMANCE_FAIL / DEFAULT_OFF：NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088；87去重具名PASS与02四actual1000AI窗有效，小幅1.62%/1.67%信号但ON P9547.182/50.517ms/drop257/259未达。SetPass5/中央CPUdraw2、同步logic稳态0event/末snapshot同/关闭三0/818保护保持，失败原件保留。67执行/阶段5of6/34父0/Goal active；下一剩余exact记录重复状态访问读链，不重采本候选、切默认或重开已过5项/专项。[留痕](NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/RECORD.md)。
+
+> 第88批 FOCUSED_TEST_PASS / WINDOWS_RETRY_PENDING / DEFAULT_OFF：NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088；冷79＋受影响4补验、Driver4共87去重具名PASS，两真实千人32tick各skip32000/逐tick同。首窗01新owner生命周期误拒绝，原件保留并补三冷回归；旧生产/Admission资格保持，新02四窗待。67已执行/阶段5of6/34父0/Goal active，H07未过，无新性能收益；不重开H11/H06或专项。 [留痕](NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/RECORD.md)。
+
+> 第88批 PLANNED / DEFAULT_OFF / PERFORMANCE_PENDING：NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088。准确2个Editor脚本的87候选实际Driver资格与同版四窗；World及87测试保持，候选没有性能证书，Role生产默认未推广。事前818保护/9当前before已核同，5of6阶段/66执行/34父0/Goal active。新执行前不增计数；先RED与千人actual skip/逐tick，后窗口，不重开H11/H06或专项。 [Operation](NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/RECORD.md)。
+
+> 第87批 FOCUSED_TEST_PASS / DEFAULT_OFF / PERFORMANCE_PENDING：NTSD-OPT-H07-PRODUCER-SNAPSHOT-REUSE-087。仅World生产者Runtime自复制候选与原fixture；15有效RED、首GREEN63/64新夹具profile错→最终64/64（新15/旧49）0skip，旧测试及AI行刷新原文保持，局部delegate0B不外推千人。800保护/8当前before/双Scene/HEAD保持，0CS/Menu clean8；66执行/阶段5of6/34父0/Goal active。H07仍FAIL，无新耗时收益或默认推广；下一准确Suite冷接线/四窗须新scope+before，Role默认待授权，H11及专项不重开。[Operation](NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/RECORD.md)。
+
+> 第87批 PLANNED / DEFAULT_OFF：NTSD-OPT-H07-PRODUCER-SNAPSHOT-REUSE-087；仅World生产者重复快照候选及准确聚焦测试，事前准确8路径/当前before与86递归保护。无新收益，H07 OPEN/阶段5of6/Goal active；Role默认/资源/Q06/专项不变。[Operation](NTSD-OPTIMIZATION-BATCH87-PRODUCER-SNAPSHOT-REUSE-20261009/RECORD.md)。
+
+> 第86批 SCOPED_DIRECT_BINDINGS_ACCEPTANCE_PASS / VERIFIED（本Task）：NTSD-OPT-H11-DIRECT-BATTLE-SHARED-BINDINGS-086。直接Battle首次/原地重开补共享binding冷接线，新13及同域79of79、原地rematch最终XML1of1、两完整1800camera均校准0event/双slot/FootHealth2/growth0/lease0/CPUdraw5840录制=执行/11阶段三0/Scene同/Menu clean8。H11选定CPU阶段通过，65执行/六项5of6/34父0，H07仍FAIL、Goal active；首个transport失败/0用例job及桥接orphan保留，非GPU/native/千人/120FPS证书；Role默认待准确授权、资源/Q06/专项不变。 [报告](../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/REPORT.md) [Operation](NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009/RECORD.md)。
+
+> 第86批 FOCUSED_TEST_PASS / RUNTIME_PENDING：NTSD-OPT-H11-DIRECT-BATTLE-SHARED-BINDINGS-086；直接Battle首次/原地重开补既有共享binding冷接线，13新有效RED→同域79/79 GREEN，原probe热代码保持。65已执行、阶段4/6、H07H11 OPEN、34父0/Goal active；重开作业与两完整camera待，未称收益或0GC通过；782保护/9准确before保持，默认/Scene/资源/Q06/专项不变。 [Task](TASKS/NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009.md)。
+
+> 第85批 VERIFIED / ATTRIBUTION_COMPLETE / DIAGNOSTIC_ONLY / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-INPUT-BOUNDARY-TIMING-085。新32合并GREEN/必要回归86of86、同源4of4千人窗有效，开关恢复/校准logic0GC/两对tick300完整checksum同/11阶段三0/原Menu clean8。最贵新边界NativeSampledState约2.25ms，producer refresh约0.95ms；OFF logic mean42.478598/42.985574、P9547.443065/51.347850ms、全run dropped397/258，仍FAIL；SetPass5/CPUdraw2。旧失败/84不适用保留，非性能收益/完整camera通过；生产默认/Scene/资源/Q06/专项不改。64执行/阶段4of6/H07H11 OPEN/34父0/Goal active。[Task](../TASKS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009.md) / [报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/REPORT.md)。
+
+> 第84批 NOT_APPLICABLE_FOR_FROZEN_WORKLOAD / NOT_ADMITTED / DEFAULT_OFF：NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084（COMPILE_PASS，不是全部资格PASS）。40去重具名38PASS/2千人准入失败，两实际1000 Sakura 32tick候选skip均0；保持>0断言与失败原件，两手工探针Explicit隔离，不追加本候选性能窗或默认推广。原冷接口last回归仅移动新增nullable参数，旧断言保持、受影响2/2。局部夹具收益不外推。754保护0漂移/9操作前副本同/Menu soleclean8/CS0/HEAD同staged空；63执行/阶段4of6/H07H11 OPEN/34父0/Goal active，转已有输入/AI实际热点，Role生产冷选择仍待准确授权、专项不解冻。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/REPORT.md)。
+
+> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。
+
+> 第79批 FOCUSED_TEST_PASS / PRECONDITION_REJECTED / RAW_NOT_CAPTURED：NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079（RUNTIME_PENDING：真实正事件归因未通过）。12有效RED→53/53 GREEN/0skip；仅3Editor默认OFF正对照/固定root恢复接线，旧33测试全文保持。唯一Play在tick8因现有历史capacity0触发原guard拒绝：camera0/未注入/无raw/未执行恢复，不能称工具归因通过或生产0GC/性能收益。Profiler before/after全同、关闭三0/双Scene SHA同/原Menu sole clean8 idle；748保护、12current before-02核同，旧before-01九计划副本缺失已更正，不猜删除。61执行/阶段4of6/H07H11 OPEN/34父关闭0/Goal active；原43自然12event FAIL保留。此工具前置只拦79续测，不停止其它优化；Role默认推广仍待人类精确授权，81性能P9550.438/52.710ms/drop276/271未达。
+
+> NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009 / SCOPED_AUDIT_PASS：739保护项无漂移、7原before副本核同、各XML及两helper版副本保留。5RED→9/7/2夹具入口FAIL→仅受影响2/2，去重9PASS；严格owned adapter不改Raw正式校验/原默认，无新性能测量。4对88paired、受检3数组同/关闭三0，Menu sole clean8/非Play idle及Scene恢复；不删除或推广，H07/H11 OPEN、Goal active。[Operation](NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/RECORD.md)。
+
+> NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009 / SCOPED_AUDIT_PASS：8原before副本、680保护及冻结源保持；39具名PASS/0skip，错误筛选0用例和RED保留。唯一四冻结千人诊断已自然完成/退出，各Run旧terminal先副本；原Menu clean8/双Scene SHA同，不删结果、不改runtime/default/Scene/资源。性能仍FAIL，不以审计通过关闭H07。 [Operation](NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/RECORD.md)。
+
+> 第80批 SCOPED_RENDER_RUNTIME_PASS / SETPASS_1995_TO_5 / H07_PERFORMANCE_FAIL：NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080（RUNTIME_PENDING：正常App/多角色/设备视觉验收未覆盖）；人类批准的本局完整catalog＋预算内共享绑定冷脚本已接入。最终44/44GREEN；02真实Combat1000两120+180、最小AI1000/末tick300完整checksum bytes同，SetPass平均1995→5（ON max5）、中央segment均值1990.494→1（tick128 2024→1、1chunk、2026源/解析、unresolved0）、中央CPU Draw均值1991.494→2，不等GPUcapture batch。ON4页64MiB/预算512MiB/array，fla超尺寸fallback保持；logic均值87.920ms/P95112.167ms、drop725仍未达33ms/0drop。正常清理全0/Menu clean8/CS0/原Scene恢复；01失败保留。58执行、阶段4/6/H07H11 OPEN/34父关闭0/Goal active，79仍DEFERRED未执行。下一据CandidateCollect均值57.166ms与CharacterInput11.383ms继续逻辑优化，不因计数停Goal，不重开已过4项/专项。
+
+本批恢复：[Task](../TASKS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008.md) · [Change Record](../CHANGE-RECORDS/NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080.md) · [实测报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/REPORT.md) · [文件操作审计](../FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/RECORD.md)。审计611保护路径0变化、原副本核同、5脚本留痕覆盖；不以SetPass子项通过关闭H07/H11或停止Goal。
+
+历史本批准备快照（保留）：
+> 第80批 IN_PROGRESS / SETPASS_FIRST / HUMAN_APPROVED：NTSD-OPT-H07-SETPASS-MATCH-BINDINGS-080；人类已明确批准本局完整视觉依赖＋既有预算内共享绑定冷脚本。5准确源＋聚焦测试/两actual1000AI窗留痕；逻辑/UI/全catalog、排序/segment/fail-closed/预算/格式/资源/Q06保持。79仍DEFERRED未执行；57执行＋80准备，阶段4/6/H07H11 OPEN/Goal active；旧1995未有新收益。
+
 > NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008 / VERIFIED（仅文档操作/只读前置）：六准确dirty备份与旧正文保持，16新鲜输入/615递归保护0变化，HEAD/staged同，diff和ChangeLedger exit0。确认阴影现有可读配置与common atlas重绑能力，无C#/资源/Unity/测试/测量或SetPass下降；79仅PLANNED/未执行。57执行/阶段4of6/H07H11 OPEN，实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/RECORD.md)。
 
 > NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008 / VERIFIED（仅文档操作/只读取证）：13对象22sheet/1超大源；4准确dirty备份与旧正文、48输入及604旧guard核同，HEAD/staged同、diff与ChangeLedger exit0。无代码/资源/Unity/测量，57执行/4of6/H07H11 OPEN不变；共享绑定实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-VISUAL-INPUT-AUDIT-20261008/RECORD.md)。
@@ -547,4 +598,6 @@ Operation TMP-VERTEX-EFFECTS-SHARED-20261008 / PREPARED：[RECORD](TMP-VERTEX-EF
 
 
 Operation TMP-VERTEX-EFFECTS-SHARED-20261008 / VERIFIED（限定定向编辑/资源新增/备份及渲染；旧失败保留）：[RECORD](TMP-VERTEX-EFFECTS-SHARED-20261008/RECORD.md)。
+
+本批操作索引：NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009，SCOPED_EXECUTED / QUALIFICATION_REJECTED；[Record](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/RECORD.md) / [原manifest](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-01.json) / [Driver精确源扩展](NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-02.json)。只保留本批增量、原件及失败，不删除/移动或破坏性Git；SaveNew Guid文件名更正见Record/报告。
 

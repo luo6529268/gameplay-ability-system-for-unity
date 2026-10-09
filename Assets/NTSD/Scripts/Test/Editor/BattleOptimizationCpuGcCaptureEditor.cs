@@ -424,11 +424,21 @@ namespace NTSD.Test.Editor
         [MenuItem("NTSD/Validation/Optimization/Batch47 Recover Late Camera GC Raw")]
         private static void RecoverLateCameraRaw()
         {
+            RecoverLateCameraRawAtRoot("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01");
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch79 Recover Known Positive Camera GC Raw")]
+        private static void RecoverLateCameraPositiveControlRaw()
+        {
+            RecoverLateCameraRawAtRoot("artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/camera-01");
+        }
+
+        private static void RecoverLateCameraRawAtRoot(string relativeRoot)
+        {
             RequireAvailable();
             if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
                 throw new InvalidOperationException("Late camera parsing requires idle Edit Mode; no recapture.");
-            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "..",
-                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH47-LATE-CAMERA-GC-CALLSTACK-20261007/camera-01"));
+            string root = Path.GetFullPath(Path.Combine(Application.dataPath, "..", relativeRoot));
             string output = Path.Combine(root, "cpu-gc-state-recovered.json");
             if (File.Exists(output) || File.Exists(Path.Combine(root, "camera-gc-callstacks.json")))
                 throw new InvalidOperationException("Late camera output must be fresh; retained evidence is preserved.");

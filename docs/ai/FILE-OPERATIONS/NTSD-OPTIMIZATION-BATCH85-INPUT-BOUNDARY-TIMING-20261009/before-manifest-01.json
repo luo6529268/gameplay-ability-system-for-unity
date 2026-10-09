@@ -1,0 +1,196 @@
+{
+  "operation": "NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009",
+  "started": "2026-10-09T04:41:57.5364566+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": null,
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-manifest-02.json",
+      "sha": "EE91D8D583A252CA58A23714D55D6882AD2BF0DA585314AA1CCC9F5A741C65B2"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+    "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result"
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha": "2046B3B181DBE610D2F1185364290E826B7B28E7CFDB6DBC49F0BF00C7951F8C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha": "6731710FB44BDABC04CCEE3F550EE1C49895E4F471EC12F92703C9559F2D0039"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "sha": "4055C38E182B554F9A1C179B13A001993365BB4D026FD4F77743DD3625CEDBC5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+      "sha": "3AFAE97FFF32302F043875B4D46838C8858D7A48AC1E1975287D882D7DB05996"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha": "1E8F3EE9E096770DEF7704CF61B5EF24C7FE0BD8FBAEF6C6D3C5EA06D36CCBEA"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "sha": "7E59A58765DBCCD2C214AD976DC177C76A5F54FEF34164145395EDB59A89FD3C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterInputPass.cs",
+      "sha": "BE2CFFB3B5E9A471E9DE5C3CA7FE085A45413171A542D75C8668D3D5EBABDFF5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha": "4DE75AE969F9F398469D3BDC8B8DD68409F575DA99A49AE7377174DBA7305802"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSD28NativeRandom.cs",
+      "sha": "E92579DE4076F437B87AA2854492410FE9CF6632E98372853318935F70EC8B25"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01/00-dispersed1000-role-timing-off/report.json",
+      "sha": "3C85C974F0EA6C6D9A3E60B5B2B3E9546ABEF86BC46085AB219FDEC624EA3D84"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01/02-combat1000-role-timing-off/report.json",
+      "sha": "CBE0ED5EC11B83D7263710BA6168B9976C566A5AC42505D827AB0EA1FFEA5B28"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/REPORT.md",
+      "sha": "185EDC8E1D856639A847CB436E45A26B56D2A41C35A57639AD0B9933BA0C9357"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009.md",
+      "sha": "3A925A4B431AB7E7A7AA09245B3D97BE2A4E52F2C94A1B77A422975D13186D30"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.md",
+      "sha": "2A5F282049E76F9879D7D73EEC10472EF627BC3D655150515EE47B426B6ED0F6"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/RECORD.md",
+      "sha": "73A06A22A0F29B1BE5CAC87C7853DFAB3CB23E032475C8E1E6528DFF1E8495B7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs.meta",
+      "sha": "5FDA237CF8612E7DF37DB4DECC6536341E4D79302DA234836ED4810C9F8B0E09"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs.meta",
+      "sha": "902600D9A34CE0904E15DAAA1EAE34ECE12E06DB8247148CEA84E8972EAB4E02"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs.meta",
+      "sha": "BD16F99D856EA3684B1EEF975AF11E61E94B3C45363872EF6B27B68BC4D94949"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs.meta",
+      "sha": "B4FAB4CEA9943B6E1641049BD3DB1C2F0A794DA0E6E00F4C44952B441A5F9066"
+    }
+  ],
+  "before": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+      "bytes": 311007,
+      "sha256": "AEC731CE3E155031FED1507D8870BE0CC8D947E39C192C05F3A3AC92FE3F5D35",
+      "gitStatus": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Diagnostics\\SimulationWorld.DetailTimingDiagnostics.cs",
+      "bytes": 41045,
+      "sha256": "8F5979E0AFF5381E9C90B20DAC8E278C8922CC5B92C5F92414B5CE5368EB6B70",
+      "gitStatus": " M Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\CharacterInputLiveSlotLoopEditorTests.cs",
+      "bytes": 55620,
+      "sha256": "662549E7D0BA0479F39318245D9DA6C20FFA9A62F0E515D3F6E6AB19C75B34AE",
+      "gitStatus": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 391966,
+      "sha256": "7FE46EFC3AB6878967FC6F4D70898BECA817040AD081938B8B0904B60DDA36B3",
+      "gitStatus": " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1636977,
+      "sha256": "4D81F2E1053DFECDB1FA967286E8B424CA83752A8232D60A12A342AB13305793",
+      "gitStatus": " M docs/ai/STATE.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/docs/ai/STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 731516,
+      "sha256": "D1E35B1E77A63DCA6977AD3C9F4D46ED6B734446B5A233BC84170C674EFF6090",
+      "gitStatus": " M docs/ai/CHANGE-LEDGER.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 117567,
+      "sha256": "B3A296993C16FBEF3E72EE397FEE300DDB61154BBC071ECAF47CF13FD1392F95",
+      "gitStatus": " M docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1570670,
+      "sha256": "B3A14C799F6AD76B83492137D04CDB097E1293F671259F39FE9B2C234C96C124",
+      "gitStatus": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 187203,
+      "sha256": "998DCCF12F804A2790C23ED4A02BEFC63EA5309E9124317B7517F72CF374F98F",
+      "gitStatus": " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "bytes": 3384,
+      "sha256": "177B2108E03804F33D931DFE5C0A4CBBB7F6134F125B0D7EEBDA43AFD511CD9B",
+      "gitStatus": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Temp/Goal18_LastTestResults.xml"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+      "bytes": 535,
+      "sha256": "67C4A3FC61654DC39EC1E99CE4C0591A467D3586C23DD360B17228C039E09352",
+      "gitStatus": null,
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/before-01/Temp/NTSD_ProductionEntityStress.result"
+    }
+  ],
+  "inheritedGuardCount": 754,
+  "preexistingDriftCount": 0,
+  "sharedRequestAbsent": true
+}

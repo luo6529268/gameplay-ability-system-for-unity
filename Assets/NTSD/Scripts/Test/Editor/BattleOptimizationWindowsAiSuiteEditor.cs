@@ -51,6 +51,31 @@ namespace NTSD.Test.Editor
         private const string SharedResult = "Temp/NTSD_ProductionEntityStress.result";
         private const string CentralSegmentReadbackOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH75-CENTRAL-SEGMENT-READBACK-20261008/windows-02";
         private static bool startingCentralSegmentReadback;
+        private const string MatchCentralBindingsEvidenceRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008";
+        private const string MatchCentralBindingsOutputRoot = MatchCentralBindingsEvidenceRoot + "/windows-02";
+        private static bool startingMatchCentralBindings;
+        private const string PostBindingsRoleOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01";
+        private static bool startingPostBindingsRoleWindow;
+        private const string RoleBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01";
+        private static bool startingRoleBranchTimingWindow;
+        private static BruteForceSceneQuery roleBranchTimingQuery;
+        private static bool previousRoleBranchTiming;
+        private static int previousRoleBranchTimingStride = 64;
+        private const string InputBoundaryTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01";
+        private static bool startingInputBoundaryTimingWindow;
+        private static SimulationWorld inputBoundaryTimingWorld;
+        private static bool previousInputBoundaryTiming;
+        private const string NativeSampledStateOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01";
+        private static bool startingNativeSampledStateTimingWindow;
+        private const string ProducerSnapshotReuseOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-01";
+        private const string ProducerSnapshotReuseRetryOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02";
+        private static bool startingProducerSnapshotReuseWindow;
+        private static SimulationWorld producerSnapshotReuseWorld;
+        private static bool previousProducerSnapshotReuse;
+        private static bool previousProducerSnapshotBoundaryTiming;
+        private static readonly PropertyInfo MatchBindingsEnabled =
+            typeof(CharacterAnimtorManager).GetProperty("MatchCentralBindingsEnabledForDiagnostics",
+                BindingFlags.NonPublic | BindingFlags.Static);
         private static RunState centralSegmentReadbackRun;
         private static readonly Type ConfigType = typeof(ProductionEntityStressRunner).Assembly.GetType(
             "NTSD.Animation.Rendering.Editor.ProductionEntityStressConfig", true);
@@ -126,6 +151,28 @@ namespace NTSD.Test.Editor
         [Serializable]
         private sealed class RunState
         {
+            public bool producerSnapshotReuseEnabled;
+            public bool producerSnapshotReuseFlagApplied;
+            public bool producerSnapshotReuseUnchanged;
+            public bool producerSnapshotReuseRestored;
+            public int producerSnapshotReuseObservedPasses;
+            public int producerSnapshotReuseMaximumObservedSkips;
+            public int producerSnapshotReuseMaximumObservedRefreshes;
+            public string producerSnapshotReuseObservationScope = "Last completed input pass at sampled Editor observations; maxima are not all-tick totals.";
+            public bool postBindingsRoleConfigured;
+            public bool inputBoundaryTimingEnabled;
+            public bool inputBoundaryTimingFlagApplied;
+            public bool inputBoundaryTimingUnchanged;
+            public bool inputBoundaryTimingRestored;
+            public bool inputBoundaryTimingCountsAvailable;
+            public long[] inputBoundaryTimingPhaseCalls = new long[4];
+            public bool postBindingsRoleUnchanged;
+            public int postBindingsRoleObservedCollections;
+            public bool postBindingsRoleActualMismatch;
+            public int postBindingsRoleExpectedCollector;
+            public int postBindingsRoleLastActualCollector;
+            public int postBindingsRoleMaximumPairCount;
+            public string postBindingsRoleObservationScope = "Last collection at sampled Editor observations only; not an all-tick fallback-free proof.";
             public bool centralSegmentReadbackCaptured;
             public bool centralSegmentReadbackDetached;
             public string centralSegmentReadbackError;
@@ -185,6 +232,13 @@ namespace NTSD.Test.Editor
             public int bruteBranchTimingSampleStride;
             public BruteForceSceneQuery.BruteBranchTimingCoverage bruteBranchTimingCoverage;
             public string bruteBranchTimingCoverageScope;
+            public bool roleBranchTimingEnabled;
+            public bool roleBranchTimingFlagApplied;
+            public bool roleBranchTimingUnchanged;
+            public bool roleBranchTimingRestored;
+            public int roleBranchTimingSampleStride;
+            public BruteForceSceneQuery.RoleBranchTimingCoverage roleBranchTimingCoverage;
+            public string roleBranchTimingCoverageScope;
             public bool bruteKind5PresenceFlagApplied;
             public bool bruteKind5PresenceEnabled;
             public bool bruteKind5PresenceRestored;
@@ -314,6 +368,12 @@ namespace NTSD.Test.Editor
             public bool bruteOrdinalPacketCandidate;
             public bool bruteDepthRejectCandidate;
             public bool centralSegmentReadbackOnly;
+            public bool matchCentralBindingsWindow;
+            public bool postBindingsRoleWindow;
+            public bool roleBranchTimingWindow;
+            public bool inputBoundaryTimingWindow;
+            public bool nativeSampledStateTimingWindow;
+            public bool producerSnapshotReuseWindow;
             public string originalScene;
             public string originalSceneHash;
             public string battleSceneHash;
@@ -582,6 +642,56 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [MenuItem("NTSD/Validation/Optimization/Batch80 Match Central Bindings 1000 AI OFF ON")]
+        private static void BeginMatchCentralBindings()
+        {
+            Require(!startingMatchCentralBindings && !startingCentralSegmentReadback &&
+                centralSegmentReadbackRun == null && MatchBindingsEnabled != null,
+                "The match binding window requires exclusive cold/readback ownership.");
+            startingMatchCentralBindings = true;
+            startingCentralSegmentReadback = true;
+            try
+            {
+                BeginSuite(false, bruteProductionOnly: true);
+            }
+            finally
+            {
+                startingMatchCentralBindings = false;
+                startingCentralSegmentReadback = false;
+            }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/Batch81 Post Bindings Brute Role 1000 AI")]
+        private static void BeginPostBindingsRole()
+        {
+            Require(!startingPostBindingsRoleWindow, "The post-bindings role window already owns the cold entry.");
+            startingPostBindingsRoleWindow = true;
+            try
+            {
+                BeginSuite(false, logicGcScopeOnly: true);
+            }
+            finally
+            {
+                startingPostBindingsRoleWindow = false;
+            }
+        }
+
+        [MenuItem("NTSD/Optimization/Run Batch83 Role Exact Branch Timing Windows")]
+        private static void BeginRoleBranchTiming()
+        {
+            Require(!startingRoleBranchTimingWindow && roleBranchTimingQuery == null,
+                "The role branch timing cold entry already has an owner.");
+            startingRoleBranchTimingWindow = true;
+            try
+            {
+                BeginPostBindingsRole();
+            }
+            finally
+            {
+                startingRoleBranchTimingWindow = false;
+            }
+        }
+
         private static void BeginSuite(bool roleCandidate, bool roleFormalCandidate = false,
             bool pairSnapshotCandidate = false, bool emptyItrGuardCandidate = false,
             bool emptyItrRosterCandidate = false, bool bruteExactCacheCandidate = false,
@@ -592,6 +702,38 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            Require(!startingNativeSampledStateTimingWindow || startingInputBoundaryTimingWindow,
+                "Native sampled state timing requires the existing input boundary owner.");
+            Require(!startingProducerSnapshotReuseWindow || startingPostBindingsRoleWindow &&
+                !startingInputBoundaryTimingWindow && inputBoundaryTimingWorld == null &&
+                !startingRoleBranchTimingWindow && roleBranchTimingQuery == null && producerSnapshotReuseWorld == null,
+                "Producer snapshot reuse requires exclusive post-bindings ownership.");
+            Require(!startingInputBoundaryTimingWindow || !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null,
+                "Input boundary timing cannot share the producer snapshot reuse owner.");
+            Require(!startingRoleBranchTimingWindow || !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null,
+                "Role branch timing cannot share the producer snapshot reuse owner.");
+            Require(!startingInputBoundaryTimingWindow || startingPostBindingsRoleWindow &&
+                !startingRoleBranchTimingWindow && roleBranchTimingQuery == null && inputBoundaryTimingWorld == null,
+                "Input boundary timing requires exclusive post-bindings ownership.");
+            Require(!startingRoleBranchTimingWindow || !startingInputBoundaryTimingWindow && inputBoundaryTimingWorld == null,
+                "Role branch timing cannot share the input boundary timing owner.");
+            Require(!startingRoleBranchTimingWindow || startingPostBindingsRoleWindow && roleBranchTimingQuery == null,
+                "Role branch timing requires the post-bindings owner and no previous query lease.");
+            // Alignment contract: NTSD-OPT-H07-POST-BINDINGS-ROLE-WINDOWS-081; diagnostic Worlds only.
+            Require(!startingPostBindingsRoleWindow || logicGcScopeOnly &&
+                !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
+                !emptyItrRosterCandidate && !bruteExactCacheCandidate && !bruteGeometryFirstCandidate &&
+                !cpuGcCaptureOnly && !bruteProductionOnly && !bruteBranchTimingOnly && !bruteBranchTimingSampled &&
+                !bruteKind5PresenceCandidate && !bruteEligibilityReuseCandidate && !bruteCombinedCacheCandidate &&
+                !logicGcCallsiteOnly && !labelPrewarmValidation && !startingDepthRejectWindow &&
+                !startingMatchCentralBindings && !startingCentralSegmentReadback && !startingOrdinalPacketWindow &&
+                !startingCoarseEnvelopeWindow && !startingEnvelopeBindingWindow &&
+                !startingEnvelopeBindingEligibilityWindow && !startingEnvelopeBranchTimingWindow &&
+                !startingRenderTextureBindingWindow && productionQuery == null &&
+                centralSegmentReadbackRun == null && MatchBindingsEnabled != null &&
+                (bool)MatchBindingsEnabled.GetValue(null) &&
+                !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics,
+                "The post-bindings role window requires the calibrated scope, shared bindings and no other mode or owner.");
             // Alignment contract: NTSD-OPT-H07-BRUTE-DEPTH-WINDOWS-077; explicit cold owner, no default promotion.
             Require(!startingDepthRejectWindow || bruteProductionOnly && logicGcScopeOnly &&
                 !roleCandidate && !roleFormalCandidate && !pairSnapshotCandidate && !emptyItrGuardCandidate &&
@@ -701,7 +843,13 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingCentralSegmentReadback ? CentralSegmentReadbackOutputRoot :
+            string outputRoot = startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
+                startingProducerSnapshotReuseWindow ? ProducerSnapshotReuseRetryOutputRoot :
+                startingInputBoundaryTimingWindow ? InputBoundaryTimingOutputRoot :
+                startingRoleBranchTimingWindow ? RoleBranchTimingOutputRoot :
+                startingPostBindingsRoleWindow ? PostBindingsRoleOutputRoot :
+                startingMatchCentralBindings ? MatchCentralBindingsOutputRoot :
+                startingCentralSegmentReadback ? CentralSegmentReadbackOutputRoot :
                 startingDepthRejectWindow ? BruteDepthRejectOutputRoot :
                 startingOrdinalPacketWindow ? BruteOrdinalPacketOutputRoot :
                 startingRenderTextureBindingWindow ? RenderTextureBindingOutputRoot :
@@ -755,7 +903,13 @@ namespace NTSD.Test.Editor
                 bruteOrdinalPacketCandidate = startingOrdinalPacketWindow,
                 bruteDepthRejectCandidate = startingDepthRejectWindow,
                 centralSegmentReadbackOnly = startingCentralSegmentReadback,
-                runs = new RunState[startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                matchCentralBindingsWindow = startingMatchCentralBindings,
+                postBindingsRoleWindow = startingPostBindingsRoleWindow,
+                roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+                producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                runs = new RunState[startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -837,6 +991,18 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.nativeSampledStateTimingWindow)
+                return BuildNativeSampledStateTimingRequest(index);
+            if (state.producerSnapshotReuseWindow)
+                return BuildProducerSnapshotReuseRequest(index);
+            if (state.inputBoundaryTimingWindow)
+                return BuildInputBoundaryTimingRequest(index);
+            if (state.roleBranchTimingWindow)
+                return BuildRoleBranchTimingRequest(index);
+            if (state.postBindingsRoleWindow)
+                return BuildPostBindingsRoleRequest(index);
+            if (state.matchCentralBindingsWindow)
+                return BuildMatchCentralBindingsRequest(index);
             if (state.centralSegmentReadbackOnly)
                 return BuildCentralSegmentReadbackRequest(index);
             if (state.bruteOrdinalPacketCandidate)
@@ -1053,6 +1219,112 @@ namespace NTSD.Test.Editor
             return request;
         }
 
+        private static ProductionEntityStressRequest BuildRoleBranchTimingRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
+            request.formalCollectorMode = "role";
+            request.outputPath = RoleBranchTimingOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-role-timing-off" : "-role-timing-on") + "/report.json";
+            return request;
+        }
+
+        [MenuItem("NTSD/Optimization/Run Batch88 Producer Snapshot Reuse Windows")]
+        private static void BeginProducerSnapshotReuse()
+        {
+            Require(!startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null &&
+                !startingInputBoundaryTimingWindow && inputBoundaryTimingWorld == null &&
+                !startingRoleBranchTimingWindow && roleBranchTimingQuery == null,
+                "Producer snapshot reuse requires an unowned cold entry.");
+            startingProducerSnapshotReuseWindow = true;
+            try
+            {
+                BeginPostBindingsRole();
+            }
+            finally
+            {
+                startingProducerSnapshotReuseWindow = false;
+            }
+        }
+
+        private static ProductionEntityStressRequest BuildProducerSnapshotReuseRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
+            request.formalCollectorMode = "role";
+            request.outputPath = ProducerSnapshotReuseRetryOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-producer-off" : "-producer-on") + "/report.json";
+            return request;
+        }
+
+        [MenuItem("NTSD/Optimization/Run Batch91 Native Sampled State Timing Windows")]
+        private static void BeginNativeSampledStateTiming()
+        {
+            Require(!startingNativeSampledStateTimingWindow, "The native sampled state cold entry already has an owner.");
+            startingNativeSampledStateTimingWindow = true;
+            try
+            {
+                BeginInputBoundaryTiming();
+            }
+            finally
+            {
+                startingNativeSampledStateTimingWindow = false;
+            }
+        }
+
+        private static ProductionEntityStressRequest BuildNativeSampledStateTimingRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildInputBoundaryTimingRequest(index);
+            request.outputPath = NativeSampledStateOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-native-off" : "-native-on") + "/report.json";
+            return request;
+        }
+
+        [MenuItem("NTSD/Optimization/Run Batch85 Input Boundary Timing Windows")]
+        private static void BeginInputBoundaryTiming()
+        {
+            Require(!startingInputBoundaryTimingWindow && inputBoundaryTimingWorld == null &&
+                !startingRoleBranchTimingWindow && roleBranchTimingQuery == null,
+                "The input boundary timing cold entry already has an owner.");
+            startingInputBoundaryTimingWindow = true;
+            try
+            {
+                BeginPostBindingsRole();
+            }
+            finally
+            {
+                startingInputBoundaryTimingWindow = false;
+            }
+        }
+
+        private static ProductionEntityStressRequest BuildInputBoundaryTimingRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
+            request.formalCollectorMode = "role";
+            request.outputPath = InputBoundaryTimingOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-boundary-off" : "-boundary-on") + "/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildPostBindingsRoleRequest(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(index / 2);
+            request.formalCollectorMode = index % 2 == 0 ? "brute" : "role";
+            request.outputPath = PostBindingsRoleOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + "-" + request.formalCollectorMode + "/report.json";
+            return request;
+        }
+
+        private static ProductionEntityStressRequest BuildMatchCentralBindingsRequest(int index)
+        {
+            if (index < 0 || index > 1)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildBruteProductionRequest(1);
+            request.outputPath = MatchCentralBindingsOutputRoot +
+                (index == 0 ? "/00-combat1000-off/report.json" : "/01-combat1000-on/report.json");
+            return request;
+        }
+
         internal static ProductionEntityStressRequest BuildRolePairSnapshotReuseRequest(int index)
         {
             ProductionEntityStressRequest request = BuildRoleCandidateRequest(index);
@@ -1195,6 +1467,42 @@ namespace NTSD.Test.Editor
                     CompleteBruteCombinedCache(run);
                 if (state.bruteEligibilityReuseCandidate)
                     CompleteBruteEligibilityReuse(run);
+                if (state.postBindingsRoleWindow)
+                {
+                    run.postBindingsRoleUnchanged &= CurrentPostBindingsRoleQueryValid(productionQuery, state.runIndex);
+                    if (state.producerSnapshotReuseWindow)
+                    {
+                        run.producerSnapshotReuseUnchanged &= ProducerSnapshotReuseQueryValid(productionQuery, state.runIndex);
+                        run.inputBoundaryTimingUnchanged &= run.producerSnapshotReuseUnchanged;
+                        ProductionEntityStressAiInputDetailCounters counters = currentReport.aiInputDetailCounters;
+                        run.inputBoundaryTimingCountsAvailable = counters != null && counters.available &&
+                            counters.phaseCallCounts != null && counters.phaseCallCounts.Length == BattleAiInputDetailDiagnostics.PhaseCount;
+                        if (run.inputBoundaryTimingCountsAvailable)
+                            Array.Copy(counters.phaseCallCounts, (int)BattleAiInputDetailPhase.ProducerFreeze,
+                                run.inputBoundaryTimingPhaseCalls, 0, 4);
+                        run.producerSnapshotReuseRestored = RestoreProducerSnapshotReuse();
+                        run.inputBoundaryTimingRestored = run.producerSnapshotReuseRestored;
+                    }
+                    if (state.inputBoundaryTimingWindow)
+                    {
+                        run.inputBoundaryTimingUnchanged &= InputBoundaryTimingQueryValid(productionQuery, state.runIndex);
+                        ProductionEntityStressAiInputDetailCounters counters = currentReport.aiInputDetailCounters;
+                        run.inputBoundaryTimingCountsAvailable = counters != null && counters.available &&
+                            counters.phaseCallCounts != null && counters.phaseCallCounts.Length == BattleAiInputDetailDiagnostics.PhaseCount;
+                        if (run.inputBoundaryTimingCountsAvailable)
+                            Array.Copy(counters.phaseCallCounts, (int)BattleAiInputDetailPhase.ProducerFreeze,
+                                run.inputBoundaryTimingPhaseCalls, 0, 4);
+                        run.inputBoundaryTimingRestored = RestoreInputBoundaryTiming();
+                    }
+                    if (state.roleBranchTimingWindow)
+                    {
+                        run.roleBranchTimingUnchanged &= RoleBranchTimingQueryValid(productionQuery, state.runIndex);
+                        run.roleBranchTimingCoverage = productionQuery.TotalRoleBranchTimingCoverageForDiagnostics;
+                        run.roleBranchTimingCoverageScope = "Query totals for all warmup and sampled collections; not steady-only, sampled direction clocks are not a full-cost estimate.";
+                        run.roleBranchTimingRestored = RestoreRoleBranchTiming();
+                    }
+                    productionQuery = null;
+                }
                 if ((state.bruteProductionOnly || state.bruteBranchTimingOnly) && productionQuery != null)
                 {
                     run.bruteExactCacheAppliedDelta = productionQuery.TotalBruteExactCacheAppliedForDiagnostics -
@@ -1297,6 +1605,10 @@ namespace NTSD.Test.Editor
                     (!state.bruteCoarseEnvelopeCandidate || CoarseEnvelopeObservationValid(run)) &&
                     (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
                     (!state.bruteDepthRejectCandidate || DepthRejectObservationValid(run)) &&
+                    (!state.postBindingsRoleWindow || PostBindingsRoleObservationValid(run)) &&
+                    (!state.roleBranchTimingWindow || RoleBranchTimingObservationValid(run)) &&
+                    (!state.inputBoundaryTimingWindow || InputBoundaryTimingObservationValid(run)) &&
+                    (!state.producerSnapshotReuseWindow || ProducerSnapshotReuseObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingCandidate || EnvelopeBindingObservationValid(run)) &&
                     (!state.bruteEnvelopeBindingEligibilityCandidate || EnvelopeBindingEligibilityObservationValid(run)) &&
                     (!state.bruteEnvelopeBranchTimingCandidate || EnvelopeBranchTimingObservationValid(run)) &&
@@ -1352,11 +1664,56 @@ namespace NTSD.Test.Editor
             Require(JsonUtility.ToJson(JsonUtility.FromJson<ProductionEntityStressRequest>(frozen)) ==
                 JsonUtility.ToJson(request), "Frozen request drifted.");
             object config = FromRequest.Invoke(null, new object[] { request, PathFor(string.Empty) });
+            if ((state.matchCentralBindingsWindow || state.postBindingsRoleWindow) && File.Exists(PathFor(SharedResult)))
+            {
+                string backup = PathFor(request.outputPath + ".shared-terminal-before.txt");
+                Require(!File.Exists(backup), "The shared terminal backup must be new.");
+                File.Copy(PathFor(SharedResult), backup, false);
+            }
             state.phase = "RUNNING";
             state.deadline = Now() + 7200d;
             Persist();
-            var runner = (ProductionEntityStressRunner)StartRun.Invoke(null, new[] { config });
+            bool previousMatchBindings = state.matchCentralBindingsWindow &&
+                (bool)MatchBindingsEnabled.GetValue(null);
+            ProductionEntityStressRunner runner;
+            try
+            {
+                Require(!state.postBindingsRoleWindow || MatchBindingsEnabled != null &&
+                    (bool)MatchBindingsEnabled.GetValue(null), "The post-bindings role window lost its shared bindings.");
+                if (state.matchCentralBindingsWindow)
+                    MatchBindingsEnabled.SetValue(null, state.runIndex != 0);
+                runner = (ProductionEntityStressRunner)StartRun.Invoke(null, new[] { config });
+            }
+            finally
+            {
+                if (state.matchCentralBindingsWindow)
+                    MatchBindingsEnabled.SetValue(null, previousMatchBindings);
+            }
             currentReport = runner.Report;
+            if (state.postBindingsRoleWindow)
+            {
+                Require(currentReport.warmupTicksCompleted == 0 && currentReport.sampledLogicTicks == 0,
+                    "The post-bindings role observation must start before any tick.");
+                productionQuery = SimulationTickDriver.Instance.World.SceneQuery as BruteForceSceneQuery;
+                if (state.nativeSampledStateTimingWindow)
+                {
+                    Require(!SimulationTickDriver.Instance.World.EnableCharacterInputProducerSnapshotReuseForDiagnostics &&
+                        productionQuery != null && !productionQuery.EnableRoleSnapshotFrameReuseForDiagnostics,
+                        "Native sampled state attribution requires producer and frame snapshot reuse OFF.");
+                }
+                if (state.producerSnapshotReuseWindow)
+                    ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                if (state.inputBoundaryTimingWindow)
+                    ApplyInputBoundaryTiming(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                if (state.roleBranchTimingWindow)
+                    ApplyRoleBranchTiming(productionQuery, state.runs[state.runIndex], state.runIndex);
+                Require(CurrentPostBindingsRoleQueryValid(productionQuery, state.runIndex),
+                    "The post-bindings role window requires its requested collector and unchanged production defaults.");
+                RunState run = state.runs[state.runIndex];
+                run.postBindingsRoleConfigured = true;
+                run.postBindingsRoleUnchanged = true;
+                run.postBindingsRoleExpectedCollector = (int)productionQuery.FormalCollectorMode;
+            }
             if (state.bruteProductionOnly || state.bruteBranchTimingOnly)
             {
                 Require(currentReport.warmupTicksCompleted == 0 && currentReport.sampledLogicTicks == 0,
@@ -1537,6 +1894,30 @@ namespace NTSD.Test.Editor
             run.minimumObservedActiveAi = Math.Min(run.minimumObservedActiveAi, report.baseAiActiveCount);
             run.minimumObservedBaseRoster = Math.Min(run.minimumObservedBaseRoster, report.baseRosterActiveCount);
             run.observedSampleWindows++;
+            if (state.postBindingsRoleWindow)
+            {
+                run.postBindingsRoleUnchanged &= CurrentPostBindingsRoleQueryValid(productionQuery, state.runIndex);
+                if (state.producerSnapshotReuseWindow)
+                    ObserveProducerSnapshotReuse(run, state.runIndex);
+                if (state.roleBranchTimingWindow)
+                    run.roleBranchTimingUnchanged &= RoleBranchTimingQueryValid(productionQuery, state.runIndex);
+                if (state.inputBoundaryTimingWindow)
+                    run.inputBoundaryTimingUnchanged &= InputBoundaryTimingQueryValid(productionQuery, state.runIndex) &&
+                        inputBoundaryTimingWorld.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null;
+                if (productionQuery == null)
+                {
+                    run.postBindingsRoleActualMismatch = true;
+                }
+                else
+                {
+                    run.postBindingsRoleObservedCollections++;
+                    run.postBindingsRoleLastActualCollector = (int)productionQuery.LastFormalCollectorModeForDiagnostics;
+                    run.postBindingsRoleActualMismatch |= productionQuery.LastFormalCollectionAbortedForDiagnostics ||
+                        run.postBindingsRoleLastActualCollector != run.postBindingsRoleExpectedCollector;
+                    run.postBindingsRoleMaximumPairCount = Math.Max(run.postBindingsRoleMaximumPairCount,
+                        productionQuery.LastFormalPairCountForDiagnostics);
+                }
+            }
             if (state.bruteOrdinalPacketCandidate)
                 ObserveBruteOrdinalPacket(run, report.logicTicksExecuted);
             if (state.bruteDepthRejectCandidate)
@@ -1583,6 +1964,173 @@ namespace NTSD.Test.Editor
             }
         }
 
+        private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
+            state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
+            state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
+            state.roleBranchTimingWindow ? RoleBranchTimingQueryValid(query, index) : PostBindingsRoleQueryValid(query, index);
+
+
+        private static bool ProducerSnapshotReuseQueryValid(BruteForceSceneQuery query, int index) =>
+            producerSnapshotReuseWorld != null && producerSnapshotReuseWorld.SceneQuery == query &&
+            inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+            PostBindingsRoleQueryValid(query, 1) && !query.EnableRoleBranchTimingForDiagnostics &&
+            !query.EnableRoleCapacityRecordGuardForDiagnostics &&
+            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == (index % 2 != 0) &&
+            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics;
+
+        private static void ApplyProducerSnapshotReuse(SimulationWorld world, BruteForceSceneQuery query, RunState run, int index)
+        {
+            // Alignment contract: NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088; diagnostic World owner only.
+            Require(index >= 0 && index < 4 && run != null && producerSnapshotReuseWorld == null &&
+                inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+                world != null && world.SceneQuery == query && PostBindingsRoleQueryValid(query, 1) &&
+                !query.EnableRoleBranchTimingForDiagnostics && !query.EnableRoleCapacityRecordGuardForDiagnostics &&
+                world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null,
+                "Producer snapshot reuse requires an unowned recording World and its unchanged Role query.");
+            previousProducerSnapshotReuse = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics;
+            previousProducerSnapshotBoundaryTiming = world.EnableCharacterInputBoundaryTimingForDiagnostics;
+            producerSnapshotReuseWorld = world;
+            run.producerSnapshotReuseEnabled = index % 2 != 0;
+            world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = run.producerSnapshotReuseEnabled;
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+            run.producerSnapshotReuseFlagApplied = ProducerSnapshotReuseQueryValid(query, index);
+            run.producerSnapshotReuseUnchanged = run.producerSnapshotReuseFlagApplied;
+            run.inputBoundaryTimingEnabled = true;
+            run.inputBoundaryTimingFlagApplied = run.producerSnapshotReuseFlagApplied;
+            run.inputBoundaryTimingUnchanged = run.producerSnapshotReuseFlagApplied;
+        }
+
+        private static void ObserveProducerSnapshotReuse(RunState run, int index)
+        {
+            bool valid = ProducerSnapshotReuseQueryValid(productionQuery, index) &&
+                producerSnapshotReuseWorld.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null;
+            run.producerSnapshotReuseUnchanged &= valid;
+            run.inputBoundaryTimingUnchanged &= valid;
+            if (!valid)
+                return;
+            run.producerSnapshotReuseObservedPasses++;
+            run.producerSnapshotReuseMaximumObservedSkips = Math.Max(run.producerSnapshotReuseMaximumObservedSkips,
+                producerSnapshotReuseWorld.LastCharacterInputProducerSnapshotReuseSkipCountForDiagnostics);
+            run.producerSnapshotReuseMaximumObservedRefreshes = Math.Max(run.producerSnapshotReuseMaximumObservedRefreshes,
+                producerSnapshotReuseWorld.LastCharacterInputProducerSnapshotRefreshCountForDiagnostics);
+        }
+
+        private static bool ProducerSnapshotReuseObservationValid(RunState run) =>
+            run != null && run.producerSnapshotReuseFlagApplied && run.producerSnapshotReuseUnchanged &&
+            run.producerSnapshotReuseRestored && run.producerSnapshotReuseObservedPasses > 0 &&
+            (run.producerSnapshotReuseEnabled ? run.producerSnapshotReuseMaximumObservedSkips > 0 :
+                run.producerSnapshotReuseMaximumObservedSkips == 0) && InputBoundaryTimingObservationValid(run);
+
+        private static bool RestoreProducerSnapshotReuse()
+        {
+            if (producerSnapshotReuseWorld == null)
+                return true;
+            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics = previousProducerSnapshotReuse;
+            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics = previousProducerSnapshotBoundaryTiming;
+            bool restored = producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == previousProducerSnapshotReuse &&
+                producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics == previousProducerSnapshotBoundaryTiming;
+            producerSnapshotReuseWorld = null;
+            return restored;
+        }
+
+        private static bool InputBoundaryTimingQueryValid(BruteForceSceneQuery query, int index) =>
+            inputBoundaryTimingWorld != null && inputBoundaryTimingWorld.SceneQuery == query &&
+            PostBindingsRoleQueryValid(query, 1) && !query.EnableRoleBranchTimingForDiagnostics &&
+            inputBoundaryTimingWorld.EnableCharacterInputBoundaryTimingForDiagnostics == (index % 2 != 0);
+
+        private static bool InputBoundaryTimingObservationValid(RunState run)
+        {
+            if (run == null || !run.inputBoundaryTimingFlagApplied || !run.inputBoundaryTimingUnchanged ||
+                !run.inputBoundaryTimingRestored || !run.inputBoundaryTimingCountsAvailable ||
+                run.inputBoundaryTimingPhaseCalls == null || run.inputBoundaryTimingPhaseCalls.Length != 4)
+                return false;
+            for (int i = 0; i < run.inputBoundaryTimingPhaseCalls.Length; i++)
+            {
+                if (run.inputBoundaryTimingEnabled ? run.inputBoundaryTimingPhaseCalls[i] <= 0 : run.inputBoundaryTimingPhaseCalls[i] != 0)
+                    return false;
+            }
+            return true;
+        }
+
+        private static void ApplyInputBoundaryTiming(SimulationWorld world, BruteForceSceneQuery query, RunState run, int index)
+        {
+            // Alignment contract: NTSD-OPT-H07-INPUT-BOUNDARY-TIMING-085; cold diagnostic owner only.
+            Require(index >= 0 && index < 4 && run != null && inputBoundaryTimingWorld == null && producerSnapshotReuseWorld == null &&
+                world != null && world.SceneQuery == query && PostBindingsRoleQueryValid(query, 1) &&
+                !query.EnableRoleBranchTimingForDiagnostics && world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics != null,
+                "Input boundary timing requires an unowned recording World and its unchanged Role query.");
+            previousInputBoundaryTiming = world.EnableCharacterInputBoundaryTimingForDiagnostics;
+            inputBoundaryTimingWorld = world;
+            run.inputBoundaryTimingEnabled = index % 2 != 0;
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = run.inputBoundaryTimingEnabled;
+            run.inputBoundaryTimingFlagApplied = InputBoundaryTimingQueryValid(query, index);
+            run.inputBoundaryTimingUnchanged = run.inputBoundaryTimingFlagApplied;
+        }
+
+        private static bool RestoreInputBoundaryTiming()
+        {
+            if (inputBoundaryTimingWorld == null)
+                return true;
+            inputBoundaryTimingWorld.EnableCharacterInputBoundaryTimingForDiagnostics = previousInputBoundaryTiming;
+            bool restored = inputBoundaryTimingWorld.EnableCharacterInputBoundaryTimingForDiagnostics == previousInputBoundaryTiming;
+            inputBoundaryTimingWorld = null;
+            return restored;
+        }
+
+        private static bool RoleBranchTimingQueryValid(BruteForceSceneQuery query, int index) =>
+            query == roleBranchTimingQuery && PostBindingsRoleQueryValid(query, 1) &&
+            query.EnableRoleBranchTimingForDiagnostics == (index % 2 != 0) &&
+            query.RoleBranchTimingSampleStrideForDiagnostics == 64;
+
+        private static bool RoleBranchTimingObservationValid(RunState run) =>
+            run != null && run.roleBranchTimingFlagApplied && run.roleBranchTimingUnchanged &&
+            run.roleBranchTimingRestored && (run.roleBranchTimingEnabled
+                ? run.roleBranchTimingCoverage.eligibleDirections > 0 && run.roleBranchTimingCoverage.timedDirections > 0
+                : run.roleBranchTimingCoverage.eligibleDirections == 0 && run.roleBranchTimingCoverage.timedDirections == 0);
+
+        private static void ApplyRoleBranchTiming(BruteForceSceneQuery query, RunState run, int index)
+        {
+            // Alignment contract: NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083; cold diagnostic owner only.
+            Require(index >= 0 && index < 4 && run != null && roleBranchTimingQuery == null && producerSnapshotReuseWorld == null &&
+                PostBindingsRoleQueryValid(query, 1), "Role branch timing requires an unowned production Role query.");
+            previousRoleBranchTiming = query.EnableRoleBranchTimingForDiagnostics;
+            previousRoleBranchTimingStride = query.RoleBranchTimingSampleStrideForDiagnostics;
+            roleBranchTimingQuery = query;
+            run.roleBranchTimingEnabled = index % 2 != 0;
+            run.roleBranchTimingSampleStride = 64;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 64;
+            query.EnableRoleBranchTimingForDiagnostics = run.roleBranchTimingEnabled;
+            run.roleBranchTimingFlagApplied = RoleBranchTimingQueryValid(query, index);
+            run.roleBranchTimingUnchanged = run.roleBranchTimingFlagApplied;
+        }
+
+        private static bool RestoreRoleBranchTiming()
+        {
+            if (roleBranchTimingQuery == null)
+                return true;
+            roleBranchTimingQuery.EnableRoleBranchTimingForDiagnostics = previousRoleBranchTiming;
+            roleBranchTimingQuery.RoleBranchTimingSampleStrideForDiagnostics = previousRoleBranchTimingStride;
+            bool restored = roleBranchTimingQuery.EnableRoleBranchTimingForDiagnostics == previousRoleBranchTiming &&
+                roleBranchTimingQuery.RoleBranchTimingSampleStrideForDiagnostics == previousRoleBranchTimingStride;
+            roleBranchTimingQuery = null;
+            return restored;
+        }
+
+        private static bool PostBindingsRoleObservationValid(RunState run) =>
+            run != null && run.postBindingsRoleConfigured && run.postBindingsRoleUnchanged &&
+            run.postBindingsRoleObservedCollections > 0 && !run.postBindingsRoleActualMismatch;
+
+        private static bool PostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
+            query != null && query.FormalCollectorMode == (index % 2 == 0
+                ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware) &&
+            ProductionDefaultsEnabled(query) && !query.EnableBruteKind5PresenceForDiagnostics &&
+            !query.EnableBruteEligibilityReuseForDiagnostics && !query.EnableBruteCoarseEnvelopeForDiagnostics &&
+            !query.EnableBruteRejectedBindingReuseForDiagnostics && !query.EnableBruteCoarseDispatchForDiagnostics &&
+            !query.EnableBruteCoarseProofReuseForDiagnostics && !query.EnableBruteBranchTimingForDiagnostics &&
+            !query.EnableBruteEnvelopeBranchTimingForDiagnostics && !query.EnableBruteOrdinalPacketForDiagnostics &&
+            !query.EnableBruteDepthRejectForDiagnostics && !BattleRenderFeature.EnableSegmentTextureBindingReuseForDiagnostics &&
+            MatchBindingsEnabled != null && (bool)MatchBindingsEnabled.GetValue(null);
+
         private static bool ProductionDefaultsEnabled(BruteForceSceneQuery query) =>
             query.EnableEmptyItrPairGuardForDiagnostics && query.EnableBruteEmptyItrRosterForDiagnostics &&
             query.EnableBruteExactCacheForDiagnostics && query.EnableBruteGeometryFirstForDiagnostics;
@@ -1596,6 +2144,9 @@ namespace NTSD.Test.Editor
 
         private static void ShutdownAndExit()
         {
+            Require(RestoreProducerSnapshotReuse(), "Producer snapshot reuse must be restored before owner shutdown.");
+            Require(RestoreInputBoundaryTiming(), "Input boundary timing must be restored before owner shutdown.");
+            Require(RestoreRoleBranchTiming(), "Role branch timing must be restored before owner shutdown.");
             RestoreCentralSegmentReadback();
             Require(RestoreBruteOrdinalPacket(), "The owned ordinal packet flag must be restored before shutdown.");
             Require(RestoreBruteDepthReject(), "The owned depth reject flag must be restored before shutdown.");
@@ -1650,6 +2201,12 @@ namespace NTSD.Test.Editor
         {
             if (state == null)
                 return;
+            if (state.producerSnapshotReuseWindow && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreProducerSnapshotReuse(), "Producer snapshot reuse must also be restored on external Play exit.");
+            if (state.inputBoundaryTimingWindow && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreInputBoundaryTiming(), "Input boundary timing must also be restored on external Play exit.");
+            if (state.roleBranchTimingWindow && change == PlayModeStateChange.ExitingPlayMode)
+                Require(RestoreRoleBranchTiming(), "Role branch timing must also be restored on external Play exit.");
             if (change == PlayModeStateChange.ExitingPlayMode)
                 RestoreCentralSegmentReadback();
             if (state.bruteOrdinalPacketCandidate && change == PlayModeStateChange.ExitingPlayMode)
@@ -1804,7 +2361,21 @@ namespace NTSD.Test.Editor
                     PathFor(lines[1]).StartsWith(renderTextureBindingOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(ordinalPacketOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
                      PathFor(lines[1]).StartsWith(depthRejectOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
-                    PathFor(lines[1]).StartsWith(centralReadbackOwnerRoot, StringComparison.OrdinalIgnoreCase));
+                    PathFor(lines[1]).StartsWith(centralReadbackOwnerRoot, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(MatchCentralBindingsEvidenceRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseRetryOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(InputBoundaryTimingOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(NativeSampledStateOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(PostBindingsRoleOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
         }
 
         private static bool EnvelopeBindingQueryDefaultsValid(BruteForceSceneQuery query) =>
@@ -2654,6 +3225,625 @@ namespace NTSD.Test.Editor
 #if UNITY_INCLUDE_TESTS
     public sealed class BattleOptimizationWindowsAiSuiteRequestTests
     {
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void NativeSampleWindow_RequestChangesOnlyOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildNativeSampledStateTimingRequest")
+                .Invoke(null, new object[] { index });
+            var expected = (ProductionEntityStressRequest)EligibilityMethod("BuildInputBoundaryTimingRequest")
+                .Invoke(null, new object[] { index });
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-native-off" : "-native-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void NativeSampleWindow_RequestRejectsOutsideMatrix(int index)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("BuildNativeSampledStateTimingRequest").Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.Test]
+        public void NativeSampleWindow_StateDefaultsFalseAndRoundTripsWithoutSignatureChange()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(type, NUnit.Framework.Is.Not.Null);
+            FieldInfo flag = type.GetField("nativeSampledStateTimingWindow", BindingFlags.Instance | BindingFlags.Public);
+            NUnit.Framework.Assert.That(flag, NUnit.Framework.Is.Not.Null);
+            object old = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(flag.GetValue(old), NUnit.Framework.Is.False);
+            flag.SetValue(old, true);
+            object restored = JsonUtility.FromJson(JsonUtility.ToJson(old), type);
+            NUnit.Framework.Assert.That(flag.GetValue(restored), NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(EligibilityMethod("BeginSuite").GetParameters().Length, NUnit.Framework.Is.EqualTo(17));
+        }
+
+        [NUnit.Framework.Test]
+        public void NativeSampleWindow_CurrentRequestRoutesToIndependentRoot()
+        {
+            FieldInfo stateField = CoarseEnvelopeStaticField("state");
+            object previous = stateField.GetValue(null);
+            object current = Activator.CreateInstance(stateField.FieldType, true);
+            FieldInfo flag = current.GetType().GetField("nativeSampledStateTimingWindow", BindingFlags.Instance | BindingFlags.Public);
+            NUnit.Framework.Assert.That(flag, NUnit.Framework.Is.Not.Null);
+            flag.SetValue(current, true);
+            try
+            {
+                stateField.SetValue(null, current);
+                var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildCurrentRequest").Invoke(null, new object[] { 2 });
+                var expected = (ProductionEntityStressRequest)EligibilityMethod("BuildNativeSampledStateTimingRequest")
+                    .Invoke(null, new object[] { 2 });
+                NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+            }
+            finally
+            {
+                stateField.SetValue(null, previous);
+            }
+        }
+
+        [NUnit.Framework.TestCase(false)]
+        [NUnit.Framework.TestCase(true)]
+        public void NativeSampleWindow_RejectedBeginRestoresSelectorWithoutStartingSuite(bool roleBusy)
+        {
+            FieldInfo native = CoarseEnvelopeStaticField("startingNativeSampledStateTimingWindow");
+            FieldInfo input = CoarseEnvelopeStaticField("startingInputBoundaryTimingWindow");
+            FieldInfo role = CoarseEnvelopeStaticField("startingRoleBranchTimingWindow");
+            object previousNative = native.GetValue(null);
+            object previousInput = input.GetValue(null);
+            object previousRole = role.GetValue(null);
+            try
+            {
+                native.SetValue(null, false);
+                input.SetValue(null, !roleBusy);
+                role.SetValue(null, roleBusy);
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    EligibilityMethod("BeginNativeSampledStateTiming").Invoke(null, null)).InnerException,
+                    NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(native.GetValue(null), NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(input.GetValue(null), NUnit.Framework.Is.EqualTo(!roleBusy));
+                NUnit.Framework.Assert.That(role.GetValue(null), NUnit.Framework.Is.EqualTo(roleBusy));
+            }
+            finally
+            {
+                native.SetValue(null, previousNative);
+                input.SetValue(null, previousInput);
+                role.SetValue(null, previousRole);
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void ProducerSnapshotOwner_RequestChangesOnlyCollectorAndOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildProducerSnapshotReuseRequest")
+                .Invoke(null, new object[] { index });
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH88-PRODUCER-SNAPSHOT-WINDOWS-20261009/windows-02/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-producer-off" : "-producer-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            actual.formalCollectorMode = expected.formalCollectorMode;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void ProducerSnapshotOwner_RequestRejectsOutsideMatrix(int index)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("BuildProducerSnapshotReuseRequest").Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.TestCase(0, false)]
+        [NUnit.Framework.TestCase(0, true)]
+        [NUnit.Framework.TestCase(1, false)]
+        [NUnit.Framework.TestCase(1, true)]
+        public void ProducerSnapshotOwner_AppliesRestoresBothFlagsAndReleasesWorld(int index, bool prior)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = prior;
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = !prior;
+            object run = NewEligibilityRun();
+            var restore = EligibilityMethod("RestoreProducerSnapshotReuse");
+            try
+            {
+                EligibilityMethod("ApplyProducerSnapshotReuse").Invoke(null, new object[] { world, query, run, index });
+                NUnit.Framework.Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics,
+                    NUnit.Framework.Is.EqualTo(index % 2 != 0));
+                NUnit.Framework.Assert.That(world.EnableCharacterInputBoundaryTimingForDiagnostics, NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "producerSnapshotReuseFlagApplied"), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, NUnit.Framework.Is.EqualTo(prior));
+                NUnit.Framework.Assert.That(world.EnableCharacterInputBoundaryTimingForDiagnostics, NUnit.Framework.Is.EqualTo(!prior));
+                NUnit.Framework.Assert.That(typeof(BattleOptimizationWindowsAiSuiteEditor).GetField(
+                    "producerSnapshotReuseWorld", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void ProducerSnapshotOwner_StructuralOwnerSurvivesStoppedRecording()
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var restore = EligibilityMethod("RestoreProducerSnapshotReuse");
+            try
+            {
+                object run = NewEligibilityRun();
+                EligibilityMethod("ApplyProducerSnapshotReuse").Invoke(null, new object[] { world, query, run, 0 });
+                world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+                NUnit.Framework.Assert.That(EligibilityMethod("ProducerSnapshotReuseQueryValid").Invoke(null,
+                    new object[] { query, 0 }), NUnit.Framework.Is.True,
+                    "normal runner teardown stops recording before the structural owner is restored");
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(true)]
+        [NUnit.Framework.TestCase(false)]
+        public void ProducerSnapshotOwner_LiveObservationRequiresRecording(bool recording)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var queryField = typeof(BattleOptimizationWindowsAiSuiteEditor).GetField("productionQuery", BindingFlags.NonPublic | BindingFlags.Static);
+            object previousQuery = queryField.GetValue(null);
+            var restore = EligibilityMethod("RestoreProducerSnapshotReuse");
+            try
+            {
+                object run = NewEligibilityRun();
+                EligibilityMethod("ApplyProducerSnapshotReuse").Invoke(null, new object[] { world, query, run, 0 });
+                queryField.SetValue(null, query);
+                if (!recording)
+                    world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+                EligibilityMethod("ObserveProducerSnapshotReuse").Invoke(null, new object[] { run, 0 });
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "producerSnapshotReuseUnchanged"), NUnit.Framework.Is.EqualTo(recording));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "producerSnapshotReuseObservedPasses"), NUnit.Framework.Is.EqualTo(recording ? 1 : 0));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+                queryField.SetValue(null, previousQuery);
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        public void ProducerSnapshotOwner_InvalidOwnerRejectedBeforeMutation(int defect)
+        {
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = defect == 1 ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware;
+            if (defect != 3)
+                world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var apply = EligibilityMethod("ApplyProducerSnapshotReuse");
+            var restore = EligibilityMethod("RestoreProducerSnapshotReuse");
+            try
+            {
+                if (defect == 4)
+                    apply.Invoke(null, new object[] { world, query, NewEligibilityRun(), 0 });
+                bool before = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics;
+                bool timingBefore = world.EnableCharacterInputBoundaryTimingForDiagnostics;
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { defect == 0 ? null : defect == 2 ? new SimulationWorld() : world,
+                        query, NewEligibilityRun(), 1 })).InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, NUnit.Framework.Is.EqualTo(before));
+                NUnit.Framework.Assert.That(world.EnableCharacterInputBoundaryTimingForDiagnostics, NUnit.Framework.Is.EqualTo(timingBefore));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void ProducerSnapshotOwner_SessionIsBackwardCompatible()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            FieldInfo field = type.GetField("producerSnapshotReuseWindow");
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            object session = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(field.GetValue(session), NUnit.Framework.Is.False);
+            field.SetValue(session, true);
+            NUnit.Framework.Assert.That(field.GetValue(JsonUtility.FromJson(JsonUtility.ToJson(session), type)), NUnit.Framework.Is.True);
+        }
+
+        [NUnit.Framework.TestCase(false, true, true)]
+        [NUnit.Framework.TestCase(true, true, true)]
+        [NUnit.Framework.TestCase(false, false, false)]
+        [NUnit.Framework.TestCase(true, false, false)]
+        public void ProducerSnapshotOwner_ObservationRequiresStableOwnerAndActualSkip(bool enabled, bool valid, bool expected)
+        {
+            object run = NewEligibilityRun();
+            foreach (string name in new[] { "producerSnapshotReuseFlagApplied", "producerSnapshotReuseRestored",
+                "inputBoundaryTimingFlagApplied", "inputBoundaryTimingUnchanged", "inputBoundaryTimingRestored",
+                "inputBoundaryTimingCountsAvailable", "inputBoundaryTimingEnabled" })
+            {
+                FieldInfo field = run.GetType().GetField(name);
+                NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+                field.SetValue(run, true);
+            }
+            run.GetType().GetField("producerSnapshotReuseEnabled").SetValue(run, enabled);
+            run.GetType().GetField("producerSnapshotReuseUnchanged").SetValue(run, valid);
+            run.GetType().GetField("producerSnapshotReuseObservedPasses").SetValue(run, 1);
+            run.GetType().GetField("producerSnapshotReuseMaximumObservedSkips").SetValue(run, enabled ? 1000 : 0);
+            run.GetType().GetField("inputBoundaryTimingPhaseCalls").SetValue(run, new long[] { 1000, 1000, 1000, 1000 });
+            NUnit.Framework.Assert.That(EligibilityMethod("ProducerSnapshotReuseObservationValid").Invoke(null, new[] { run }),
+                NUnit.Framework.Is.EqualTo(expected));
+        }
+
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void InputBoundaryOwner_RequestChangesOnlyCollectorAndOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildInputBoundaryTimingRequest").Invoke(null, new object[] { index });
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH85-INPUT-BOUNDARY-TIMING-20261009/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-boundary-off" : "-boundary-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            actual.formalCollectorMode = expected.formalCollectorMode;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void InputBoundaryOwner_RequestRejectsOutsideMatrix(int index)
+        {
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                EligibilityMethod("BuildInputBoundaryTimingRequest").Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.TestCase(0, false)]
+        [NUnit.Framework.TestCase(0, true)]
+        [NUnit.Framework.TestCase(1, false)]
+        [NUnit.Framework.TestCase(1, true)]
+        public void InputBoundaryOwner_AppliesRestoresAndReleasesWorld(int index, bool prior)
+        {
+            var property = typeof(SimulationWorld).GetProperty("EnableCharacterInputBoundaryTimingForDiagnostics");
+            NUnit.Framework.Assert.That(property, NUnit.Framework.Is.Not.Null);
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            property.SetValue(world, prior);
+            object run = NewEligibilityRun();
+            var restore = EligibilityMethod("RestoreInputBoundaryTiming");
+            try
+            {
+                EligibilityMethod("ApplyInputBoundaryTiming").Invoke(null, new object[] { world, query, run, index });
+                NUnit.Framework.Assert.That(property.GetValue(world), NUnit.Framework.Is.EqualTo(index % 2 != 0));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "inputBoundaryTimingFlagApplied"), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(property.GetValue(world), NUnit.Framework.Is.EqualTo(prior));
+                NUnit.Framework.Assert.That(typeof(BattleOptimizationWindowsAiSuiteEditor).GetField(
+                    "inputBoundaryTimingWorld", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        public void InputBoundaryOwner_InvalidOwnerRejectedBeforeMutation(int defect)
+        {
+            var property = typeof(SimulationWorld).GetProperty("EnableCharacterInputBoundaryTimingForDiagnostics");
+            NUnit.Framework.Assert.That(property, NUnit.Framework.Is.Not.Null);
+            var world = new SimulationWorld();
+            var query = (BruteForceSceneQuery)world.SceneQuery;
+            query.FormalCollectorMode = defect == 1 ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware;
+            if (defect != 3)
+                world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var apply = EligibilityMethod("ApplyInputBoundaryTiming");
+            var restore = EligibilityMethod("RestoreInputBoundaryTiming");
+            try
+            {
+                if (defect == 4)
+                    apply.Invoke(null, new object[] { world, query, NewEligibilityRun(), 0 });
+                bool before = (bool)property.GetValue(world);
+                NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { defect == 0 ? null : defect == 2 ? new SimulationWorld() : world,
+                        query, NewEligibilityRun(), 1 })).InnerException, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(property.GetValue(world), NUnit.Framework.Is.EqualTo(before));
+            }
+            finally { restore.Invoke(null, null); }
+        }
+
+        [NUnit.Framework.Test]
+        public void InputBoundaryOwner_SessionIsBackwardCompatible()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            FieldInfo field = type.GetField("inputBoundaryTimingWindow");
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            object state = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(field.GetValue(state), NUnit.Framework.Is.False);
+            field.SetValue(state, true);
+            NUnit.Framework.Assert.That(field.GetValue(JsonUtility.FromJson(JsonUtility.ToJson(state), type)), NUnit.Framework.Is.True);
+        }
+
+        [NUnit.Framework.TestCase(false, true, true)]
+        [NUnit.Framework.TestCase(true, true, true)]
+        [NUnit.Framework.TestCase(false, false, false)]
+        [NUnit.Framework.TestCase(true, false, false)]
+        public void InputBoundaryOwner_ObservationRequiresStableOwner(bool enabled, bool valid, bool expected)
+        {
+            object run = NewEligibilityRun();
+            foreach (string name in new[] { "inputBoundaryTimingFlagApplied", "inputBoundaryTimingRestored" })
+            {
+                FieldInfo field = run.GetType().GetField(name);
+                NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+                field.SetValue(run, true);
+            }
+            run.GetType().GetField("inputBoundaryTimingEnabled").SetValue(run, enabled);
+            run.GetType().GetField("inputBoundaryTimingUnchanged").SetValue(run, valid);
+            run.GetType().GetField("inputBoundaryTimingCountsAvailable").SetValue(run, true);
+            run.GetType().GetField("inputBoundaryTimingPhaseCalls").SetValue(run,
+                enabled ? new long[] { 1000, 1000, 1000, 1000 } : new long[4]);
+            NUnit.Framework.Assert.That(EligibilityMethod("InputBoundaryTimingObservationValid").Invoke(null, new[] { run }),
+                NUnit.Framework.Is.EqualTo(expected));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void RoleBranchOwner_RequestChangesOnlyCollectorAndOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildRoleBranchTimingRequest")
+                .Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-role-timing-off" : "-role-timing-on") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            actual.formalCollectorMode = expected.formalCollectorMode;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void RoleBranchOwner_RequestRejectsOutsideMatrix(int index)
+        {
+            MethodInfo method = EligibilityMethod("BuildRoleBranchTimingRequest");
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.TestCase(0, false)]
+        [NUnit.Framework.TestCase(0, true)]
+        [NUnit.Framework.TestCase(1, false)]
+        [NUnit.Framework.TestCase(1, true)]
+        public void RoleBranchOwner_AppliesRestoresPriorValuesAndReleasesReference(int index, bool previous)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRoleBranchTiming");
+            MethodInfo restore = EligibilityMethod("RestoreRoleBranchTiming");
+            FieldInfo owned = typeof(BattleOptimizationWindowsAiSuiteEditor).GetField(
+                "roleBranchTimingQuery", BindingFlags.Static | BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(owned, NUnit.Framework.Is.Not.Null);
+            NUnit.Framework.Assert.That(owned.GetValue(null), NUnit.Framework.Is.Null);
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+            query.EnableRoleBranchTimingForDiagnostics = previous;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 8;
+            object run = NewEligibilityRun();
+            try
+            {
+                apply.Invoke(null, new object[] { query, run, index });
+                NUnit.Framework.Assert.That(query.EnableRoleBranchTimingForDiagnostics, NUnit.Framework.Is.EqualTo(index % 2 != 0));
+                NUnit.Framework.Assert.That(query.RoleBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(64));
+                NUnit.Framework.Assert.That(EligibilityRunField(run, "roleBranchTimingFlagApplied"), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(query.EnableRoleBranchTimingForDiagnostics, NUnit.Framework.Is.EqualTo(previous));
+                NUnit.Framework.Assert.That(query.RoleBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(8));
+                NUnit.Framework.Assert.That(owned.GetValue(null), NUnit.Framework.Is.Null);
+                NUnit.Framework.Assert.That(restore.Invoke(null, null), NUnit.Framework.Is.True);
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+            }
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void RoleBranchOwner_InvalidOwnerRejectedBeforeFlagMutation(int defect)
+        {
+            MethodInfo apply = EligibilityMethod("ApplyRoleBranchTiming");
+            MethodInfo restore = EligibilityMethod("RestoreRoleBranchTiming");
+            var query = (BruteForceSceneQuery)new SimulationWorld().SceneQuery;
+            query.FormalCollectorMode = defect == 1 ? CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware;
+            query.EnableBruteBranchTimingForDiagnostics = defect == 2;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 8;
+            object run = NewEligibilityRun();
+            try
+            {
+                if (defect == 3)
+                    apply.Invoke(null, new object[] { query, run, 0 });
+                bool prior = query.EnableRoleBranchTimingForDiagnostics;
+                int stride = query.RoleBranchTimingSampleStrideForDiagnostics;
+                Exception error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                    apply.Invoke(null, new object[] { defect == 0 ? null : query, run, 1 })).InnerException;
+                NUnit.Framework.Assert.That(error, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(query.EnableRoleBranchTimingForDiagnostics, NUnit.Framework.Is.EqualTo(prior));
+                NUnit.Framework.Assert.That(query.RoleBranchTimingSampleStrideForDiagnostics, NUnit.Framework.Is.EqualTo(stride));
+            }
+            finally
+            {
+                restore.Invoke(null, null);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void RoleBranchOwner_SessionIsBackwardCompatible()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            FieldInfo field = type.GetField("roleBranchTimingWindow");
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            object old = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(field.GetValue(old), NUnit.Framework.Is.False);
+            field.SetValue(old, true);
+            NUnit.Framework.Assert.That(field.GetValue(JsonUtility.FromJson(JsonUtility.ToJson(old), type)), NUnit.Framework.Is.True);
+        }
+
+        [NUnit.Framework.TestCase(false, true, true)]
+        [NUnit.Framework.TestCase(true, true, true)]
+        [NUnit.Framework.TestCase(true, false, false)]
+        [NUnit.Framework.TestCase(false, false, false)]
+        public void RoleBranchOwner_ObservationRequiresStableOwnerAndCoverage(bool enabled, bool valid, bool expected)
+        {
+            object run = NewEligibilityRun();
+            Type type = run.GetType();
+            FieldInfo applied = type.GetField("roleBranchTimingFlagApplied");
+            NUnit.Framework.Assert.That(applied, NUnit.Framework.Is.Not.Null);
+            applied.SetValue(run, true);
+            type.GetField("roleBranchTimingEnabled").SetValue(run, enabled);
+            type.GetField("roleBranchTimingRestored").SetValue(run, true);
+            type.GetField("roleBranchTimingUnchanged").SetValue(run, enabled || valid);
+            var coverage = new BruteForceSceneQuery.RoleBranchTimingCoverage();
+            coverage.eligibleDirections = enabled && valid ? 64 : 0;
+            coverage.timedDirections = enabled && valid ? 1 : 0;
+            type.GetField("roleBranchTimingCoverage").SetValue(run, coverage);
+            NUnit.Framework.Assert.That(EligibilityMethod("RoleBranchTimingObservationValid").Invoke(null, new[] { run }),
+                NUnit.Framework.Is.EqualTo(expected));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        public void PostBindingsRole_RequestChangesOnlyCollectorAndOutput(int index)
+        {
+            var actual = (ProductionEntityStressRequest)EligibilityMethod("BuildPostBindingsRoleRequest")
+                .Invoke(null, new object[] { index });
+            ProductionEntityStressRequest expected = BattleOptimizationWindowsAiSuiteEditor.BuildBruteProductionRequest(index / 2);
+            NUnit.Framework.Assert.That(actual.formalCollectorMode,
+                NUnit.Framework.Is.EqualTo(index % 2 == 0 ? "brute" : "role"));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Is.EqualTo(
+                "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01/" +
+                index.ToString("D2") + "-" + expected.action + (index % 2 == 0 ? "-brute" : "-role") + "/report.json"));
+            actual.outputPath = expected.outputPath;
+            actual.formalCollectorMode = expected.formalCollectorMode;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(4)]
+        public void PostBindingsRole_OutsideFrozenMatrix(int index)
+        {
+            MethodInfo method = EligibilityMethod("BuildPostBindingsRoleRequest");
+            NUnit.Framework.Assert.That(NUnit.Framework.Assert.Throws<TargetInvocationException>(() =>
+                method.Invoke(null, new object[] { index })).InnerException,
+                NUnit.Framework.Is.TypeOf<ArgumentOutOfRangeException>());
+        }
+
+        [NUnit.Framework.Test]
+        public void PostBindingsRole_SessionFieldIsBackwardCompatible()
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor).GetNestedType("SuiteState", BindingFlags.NonPublic);
+            FieldInfo field = type.GetField("postBindingsRoleWindow");
+            NUnit.Framework.Assert.That(field, NUnit.Framework.Is.Not.Null);
+            object old = JsonUtility.FromJson("{}", type);
+            NUnit.Framework.Assert.That(field.GetValue(old), NUnit.Framework.Is.EqualTo(false));
+            field.SetValue(old, true);
+            NUnit.Framework.Assert.That(field.GetValue(JsonUtility.FromJson(JsonUtility.ToJson(old), type)), NUnit.Framework.Is.EqualTo(true));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        public void PostBindingsRole_InvalidColdModeFailsBeforeSideEffects(int defect)
+        {
+            Type type = typeof(BattleOptimizationWindowsAiSuiteEditor);
+            FieldInfo starting = type.GetField("startingPostBindingsRoleWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            NUnit.Framework.Assert.That(starting, NUnit.Framework.Is.Not.Null);
+            FieldInfo depth = type.GetField("startingDepthRejectWindow", BindingFlags.Static | BindingFlags.NonPublic);
+            PropertyInfo binding = typeof(CharacterAnimtorManager).GetProperty("MatchCentralBindingsEnabledForDiagnostics",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            bool priorStarting = (bool)starting.GetValue(null);
+            bool priorDepth = (bool)depth.GetValue(null);
+            bool priorBinding = (bool)binding.GetValue(null);
+            MethodInfo method = EligibilityMethod("BeginSuite");
+            object[] arguments = new object[17];
+            ParameterInfo[] parameters = method.GetParameters();
+            for (int i = 0; i < arguments.Length; i++)
+                arguments[i] = parameters[i].Name == "logicGcScopeOnly" && defect != 0 ||
+                    parameters[i].Name == "roleCandidate" && defect == 1 ||
+                    parameters[i].Name == "bruteProductionOnly" && defect == 2;
+            try
+            {
+                starting.SetValue(null, true);
+                depth.SetValue(null, defect == 3);
+                binding.SetValue(null, defect != 4);
+                Exception error = NUnit.Framework.Assert.Throws<TargetInvocationException>(() => method.Invoke(null, arguments)).InnerException;
+                NUnit.Framework.Assert.That(error, NUnit.Framework.Is.TypeOf<InvalidOperationException>());
+                NUnit.Framework.Assert.That(error.Message, NUnit.Framework.Does.Contain("post-bindings role"));
+            }
+            finally
+            {
+                starting.SetValue(null, priorStarting);
+                depth.SetValue(null, priorDepth);
+                binding.SetValue(null, priorBinding);
+            }
+        }
+
+        [NUnit.Framework.TestCase("valid", true)]
+        [NUnit.Framework.TestCase("null", false)]
+        [NUnit.Framework.TestCase("unconfigured", false)]
+        [NUnit.Framework.TestCase("drift", false)]
+        [NUnit.Framework.TestCase("unobserved", false)]
+        [NUnit.Framework.TestCase("mismatch", false)]
+        public void PostBindingsRole_ObservationRequiresActualRouteAndStableConfiguration(string defect, bool expected)
+        {
+            object run = defect == "null" ? null : NewEligibilityRun();
+            if (run != null)
+            {
+                Type type = run.GetType();
+                FieldInfo configured = type.GetField("postBindingsRoleConfigured");
+                NUnit.Framework.Assert.That(configured, NUnit.Framework.Is.Not.Null);
+                configured.SetValue(run, defect != "unconfigured");
+                type.GetField("postBindingsRoleUnchanged").SetValue(run, defect != "drift");
+                type.GetField("postBindingsRoleObservedCollections").SetValue(run, defect == "unobserved" ? 0 : 4);
+                type.GetField("postBindingsRoleActualMismatch").SetValue(run, defect == "mismatch");
+            }
+            NUnit.Framework.Assert.That(EligibilityMethod("PostBindingsRoleObservationValid").Invoke(null, new[] { run }),
+                NUnit.Framework.Is.EqualTo(expected));
+        }
+
+
         [NUnit.Framework.TestCase(null)]
         [NUnit.Framework.TestCase("")]
         public void CentralSegmentReadback_ErrorSessionRoundTrip(string error)

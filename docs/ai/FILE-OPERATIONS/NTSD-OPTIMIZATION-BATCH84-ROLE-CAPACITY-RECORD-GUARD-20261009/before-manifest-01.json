@@ -1,0 +1,181 @@
+{
+  "id": "NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009",
+  "change": "NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084",
+  "started": "2026-10-09T03:38:23.5778173+08:00",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "trackedStatus": [
+    " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    " M Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    " M Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+    " M Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+    " M Assets/NTSD/Scripts/App/AppManager.cs",
+    " M Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCameraGcCallstackCaptureEditorTests.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleCentralProductionWindowSceneProbeEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationCpuGcCaptureEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    " M Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    " M docs/ai/CHANGE-LEDGER.md",
+    " M docs/ai/CHANGE-RECORDS/NTSD-OPT-H11-LATE-CAMERA-POSITIVE-CONTROL-079.md",
+    " M docs/ai/FILE-OPERATIONS/INDEX.md",
+    " M docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008/RECORD.md",
+    " M docs/ai/STATE.md",
+    " M docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH79-LATE-CAMERA-POSITIVE-CONTROL-20261008.md"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\BruteForceSceneQuery.cs",
+      "exists": true,
+      "bytes": 396037,
+      "sha": "60C67447C6DF89142A94C8CAF1188C88A1769F5E4B8A5CE28CFC6D67FD9CC49E",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs",
+      "exists": true,
+      "bytes": 424523,
+      "sha": "DF9BA2B29698A958F44EA4DE81C5EA7A0DEB062391AEA62E5C0FD5FBDB8EA68C",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "exists": true,
+      "bytes": 185744,
+      "sha": "8A0A1C865C6948010A80F43A201E5AE6D203B0061E8455EB83A4FC964092CCC7",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/Assets__NTSD__Docs__battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "bytes": 1569852,
+      "sha": "5265E1D7F770DC576C24B827B00AB546A8C7660E7BB8170D612F29C6B7CC5C37",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "exists": true,
+      "bytes": 1636162,
+      "sha": "F8E3CDBC3F0C399E8E3063865FDD6CF86A164C74894C4FF37EBC1F9355A349C8",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/docs__ai__STATE.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "exists": true,
+      "bytes": 730396,
+      "sha": "FA6936B505ABCAE128FD3FF6AAB9715B723D0618A578B9F4FD479288BDAA9F52",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/docs__ai__CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "exists": true,
+      "bytes": 116195,
+      "sha": "572D4A3796F5EE85F5488D0B0CB01C09A0F212A5AA8B359E6CE6BB6516B9AA68",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/docs__ai__FILE-OPERATIONS__INDEX.md"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "exists": true,
+      "bytes": 27790,
+      "sha": "567BDE450FDE6CE6D86D489C65CE05714379CD352C6BA3228BC9043DBC0053DF",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/before-01/Temp__Goal18_LastTestResults.xml"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009.md",
+      "exists": false,
+      "bytes": 0,
+      "sha": null,
+      "backup": null
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-RECORDS\\NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.md",
+      "exists": false,
+      "bytes": 0,
+      "sha": null,
+      "backup": null
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/RECORD.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009\\RECORD.md",
+      "exists": false,
+      "bytes": 0,
+      "sha": null,
+      "backup": null
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009.md",
+    "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.md",
+    "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH84-ROLE-CAPACITY-RECORD-GUARD-20261009/RECORD.md"
+  ],
+  "guardSources": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/before-manifest-01.json",
+      "sha": "7120F1C9808D17868D8E3B4923A59C6D9B9109A99178CA5FFDFAA1893824DD83"
+    }
+  ],
+  "additionalGuards": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+      "exists": true,
+      "sha": "8F5979E0AFF5381E9C90B20DAC8E278C8922CC5B92C5F92414B5CE5368EB6B70"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha": "7FE46EFC3AB6878967FC6F4D70898BECA817040AD081938B8B0904B60DDA36B3"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009.md",
+      "exists": true,
+      "sha": "96325F5E43FAB4B0FACC5816533E087F658397C3802696BDBF735316F879C429"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083.md",
+      "exists": true,
+      "sha": "F14461BC1127FE4F7B78FD2B5302E8C5FD27DCA2CD78B11D99B91A0663571A82"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/RECORD.md",
+      "exists": true,
+      "sha": "9C39A109342070137E3AC9556CD4C129A6431A74E41960D8A9E997AD176FBEF7"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md",
+      "exists": true,
+      "sha": "C97D78671E00364A1B9234B9CFF55ADF4FA3049B476076AFAAD78F344917B2D3"
+    }
+  ],
+  "inheritedGuardCount": 749,
+  "drift": [],
+  "heads": {
+    "docs/ai/STATE.md": "> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": "> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md": "> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。",
+    "docs/ai/FILE-OPERATIONS/INDEX.md": "> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。",
+    "docs/ai/CHANGE-LEDGER.md": "> 第83批 DIAGNOSTIC_ATTRIBUTION_VERIFIED / SCOPED_WINDOWS_COMPLETED / PERFORMANCE_FAIL / NO_DEFAULT_PROMOTION：NTSD-OPT-H07-ROLE-EXACT-BRANCH-TIMING-083。88去重具名PASS；唯一四actual1000AI120+180，OFF mean42.458058/43.187729ms、P9547.148750/51.420515ms/drop263/262仍未达，SetPass四窗5/中央CPU draw2非GPUbatch。六采样分支CandidateRecord最高，只作后继规则/复制热点线索、不乘64或称收益；20末态hash/完整tick300bytes同、同步StepOneTick steady0event、owned恢复/关闭三0/Menu clean8/749保护/10before/四源冻结保持。只收口计时空白；H07/H11 OPEN、阶段4/6、62执行/34父关闭0、Goal active。下一现有候选记录/输入热点有据优化，默认推广待精确授权，不重跑本资格或旧H06/已过4项，不解冻专项。[报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/REPORT.md)。"
+  },
+  "newRootExists": false,
+  "artifactRootExists": false
+}

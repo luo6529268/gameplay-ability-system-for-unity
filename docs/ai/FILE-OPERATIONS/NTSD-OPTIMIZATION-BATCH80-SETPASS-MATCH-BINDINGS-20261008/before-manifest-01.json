@@ -1,0 +1,144 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008",
+  "utc": "2026-10-08T14:53:39.2222690Z",
+  "head": "a10c358eeb956f2153e7d5bfbb60c3c1b353fd50",
+  "staged": [],
+  "existing": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Manager\\CharacterAnimtorManager.cs",
+      "bytes": 186337,
+      "sha256": "235BB5E74EB599CA63C016C3EED8FC2B714C1ED28E0531E4D9FF9EE4AF513976",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CharacterAnimtorManager.cs",
+      "gitStatus": [],
+      "gitBlob": "100644 58656f93eec08e2478f297be6f51037bd959a98a 0\tAssets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "firstLine": "using Cysharp.Threading.Tasks;"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\App\\AppManager.cs",
+      "bytes": 19983,
+      "sha256": "AFE95938388DF429D1368E6121E901C02D32DF4709D1E353D63E165660B459B9",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/AppManager.cs",
+      "gitStatus": [],
+      "gitBlob": "100644 e59d43aca091a30106dd508f8ef3ffa22a8f4c4e 0\tAssets/NTSD/Scripts/App/AppManager.cs",
+      "firstLine": "using UnityEngine;"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+      "bytes": 554934,
+      "sha256": "B07CEBD190BAE9FA43A7C0C24D7D7A35D2890112DD37FAF904A498011A4AD928",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/ProductionEntityStressHarness.cs",
+      "gitStatus": [],
+      "gitBlob": "100644 d90abf30b275d1645ca8dc4d8d8ed97442da90eb 0\tAssets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "firstLine": "#if UNITY_EDITOR || DEVELOPMENT_BUILD"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\Editor\\BattleCommonAtlasBindingEditorTests.cs",
+      "bytes": 39761,
+      "sha256": "6DD26240F424ACC52FD99A9F5B88DC325236B0769D37E2E2C5767694C44A6139",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleCommonAtlasBindingEditorTests.cs",
+      "gitStatus": [],
+      "gitBlob": "100644 f96d7a4c5f6636314f49f251c5b16a1b4c10ded0 0\tAssets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+      "firstLine": "#if UNITY_EDITOR && UNITY_INCLUDE_TESTS"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 360229,
+      "sha256": "6FE1054C0FE8F02223B706E218D559E90C9215B35001EC274A733591DA8470E7",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "gitStatus": [],
+      "gitBlob": "100644 86257b8103543634fbc9f5faa984976fa775653c 0\tAssets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "firstLine": "#if UNITY_EDITOR"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 175783,
+      "sha256": "4C3DD53ED6A46683DD85AAF15D0DEF9AB0A4D69AF4C182E3F67520D3EA276E1F",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/battle-optimization-progress-tracker.md",
+      "gitStatus": [],
+      "gitBlob": "100644 b2d2a1a71701d2410a232b9e69f716bc7408a822 0\tAssets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "firstLine": "> SetPass必要静态前置已核：GameConfig→ShadowPrefab→s.png GUID链一致，s.png.meta isReadable=1；既有统一准备会读shadow像素并与角色共用atlas resources重绑。无需凭猜测改阴影PNG/importer或新增GPU读回；实际可读/完整本局闭包/绑定成功与预算仍待候选验证，OrderedPages异页不能保证合批。无C#/Unity/测试/测量/新收益，57执行、阶段4/6、H07/H11 OPEN；SetPass修复优先，准确冷准备链范围仍待人类确认。 [证据](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1564075,
+      "sha256": "D7F31A027C41CC5030DC1070237E42F4FB047FB68D2360F3A747F4C18D444859",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": [],
+      "gitBlob": "100644 9a71139d584550d03e8425fe2f027acf4f619764 0\tAssets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "firstLine": "> SetPass必要静态前置已核：GameConfig→ShadowPrefab→s.png GUID链一致，s.png.meta isReadable=1；既有统一准备会读shadow像素并与角色共用atlas resources重绑。无需凭猜测改阴影PNG/importer或新增GPU读回；实际可读/完整本局闭包/绑定成功与预算仍待候选验证，OrderedPages异页不能保证合批。无C#/Unity/测试/测量/新收益，57执行、阶段4/6、H07/H11 OPEN；SetPass修复优先，准确冷准备链范围仍待人类确认。 [证据](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1630433,
+      "sha256": "B96622A2F57819AFF1408A518BA0E1CB2390EB5C2CCDB0F62C953BE797464744",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/STATE.md",
+      "gitStatus": [],
+      "gitBlob": "100644 2260fb92fc6a9a97b81e306d3888b750c8d2690b 0\tdocs/ai/STATE.md",
+      "firstLine": "> SetPass必要静态前置已核：GameConfig→ShadowPrefab→s.png GUID链一致，s.png.meta isReadable=1；既有统一准备会读shadow像素并与角色共用atlas resources重绑。无需凭猜测改阴影PNG/importer或新增GPU读回；实际可读/完整本局闭包/绑定成功与预算仍待候选验证，OrderedPages异页不能保证合批。无C#/Unity/测试/测量/新收益，57执行、阶段4/6、H07/H11 OPEN；SetPass修复优先，准确冷准备链范围仍待人类确认。 [证据](../../artifacts/diagnostics/NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/REPORT.md)。"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+      "bytes": 724515,
+      "sha256": "BC95EDCDE99EB9112967C9E26D3A865A6A74D17D49A4D711BDC7D5B0372847C8",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/CHANGE-LEDGER.md",
+      "gitStatus": [],
+      "gitBlob": "100644 2645939aad6479876ea9fa99babd8d99b8563121 0\tdocs/ai/CHANGE-LEDGER.md",
+      "firstLine": "> SetPass为下一实施主线；79仅事前准备，未改脚本或运行，不推广、不新增已执行批次。下表补齐此前新建Record的恢复索引，PLANNED不表示授权新增视觉准备链或执行工具正对照。"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 111369,
+      "sha256": "CBEFAB44A9359E4B30F77FA7B14ACEA5F5F20BDAA345F1EF97FC7D99F7DB5901",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/INDEX.md",
+      "gitStatus": [],
+      "gitBlob": "100644 00b4df896db13b164698e2458016a0e4cbbd1341 0\tdocs/ai/FILE-OPERATIONS/INDEX.md",
+      "firstLine": "> NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008 / VERIFIED（仅文档操作/只读前置）：六准确dirty备份与旧正文保持，16新鲜输入/615递归保护0变化，HEAD/staged同，diff和ChangeLedger exit0。确认阴影现有可读配置与common atlas重绑能力，无C#/资源/Unity/测试/测量或SetPass下降；79仅PLANNED/未执行。57执行/阶段4of6/H07H11 OPEN，实施仍待人类确认。[Record](NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/RECORD.md)。"
+    },
+    {
+      "path": "Temp/Goal18_LastTestResults.xml",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Goal18_LastTestResults.xml",
+      "bytes": 32636,
+      "sha256": "5D9A625DDF59E7EA78EED3398214C0705AFBA1300B71277B0FF5BB89DE517268",
+      "backup": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH80-SETPASS-MATCH-BINDINGS-20261008/before-01/Goal18_LastTestResults.xml",
+      "gitStatus": [],
+      "gitBlob": "",
+      "firstLine": ""
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result.txt",
+      "absent": true
+    }
+  ],
+  "guardSources": [
+    {
+      "sha": "C4ABB6B789344D0F3D810E57555CED97F377F6D3282705B3D63BB8FABA669A18",
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-SETPASS-SHADOW-READINESS-AUDIT-20261008/before-manifest-01.json"
+    }
+  ],
+  "excludedGuardPaths": [
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/App/AppManager.cs",
+    "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+    "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCommonAtlasBindingEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/STATE.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "Temp/Goal18_LastTestResults.xml",
+    "Temp/NTSD_ProductionEntityStress.result.txt"
+  ],
+  "codeChangesAuthorized": true,
+  "unityActionsAuthorized": true
+}

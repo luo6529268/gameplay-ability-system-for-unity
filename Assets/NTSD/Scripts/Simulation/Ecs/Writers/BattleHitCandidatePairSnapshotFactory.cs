@@ -28,6 +28,42 @@ namespace NTSD.Simulation.Ecs
                 return default;
             }
 
+            return CapturePayload(attacker, target, world,
+                attackerCurrentFrame, targetCurrentFrame, attackerTickFrame, targetTickFrame);
+        }
+
+        internal static BattleHitCandidatePairSnapshot CaptureWithResolvedFrames(
+            LF2Entity attacker,
+            LF2Entity target,
+            SimulationWorld world,
+            LF2FrameData attackerCurrentFrame,
+            LF2FrameData targetCurrentFrame,
+            LF2FrameData attackerTickFrame,
+            LF2FrameData targetTickFrame)
+        {
+            if (attacker?.Runtime == null || target?.Runtime == null ||
+                attacker.Frame == null || target.Frame == null ||
+                attacker.FrameCache == null || target.FrameCache == null ||
+                attackerTickFrame == null || targetTickFrame == null)
+            {
+                return default;
+            }
+
+            // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
+            // Only authored frame references are reused; all live pair fields keep their capture point.
+            return CapturePayload(attacker, target, world,
+                attackerCurrentFrame, targetCurrentFrame, attackerTickFrame, targetTickFrame);
+        }
+
+        private static BattleHitCandidatePairSnapshot CapturePayload(
+            LF2Entity attacker,
+            LF2Entity target,
+            SimulationWorld world,
+            LF2FrameData attackerCurrentFrame,
+            LF2FrameData targetCurrentFrame,
+            LF2FrameData attackerTickFrame,
+            LF2FrameData targetTickFrame)
+        {
             LF2FrameData attackerPreviousFrame =
                 attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.Prev);
             LF2FrameData targetPreviousFrame =

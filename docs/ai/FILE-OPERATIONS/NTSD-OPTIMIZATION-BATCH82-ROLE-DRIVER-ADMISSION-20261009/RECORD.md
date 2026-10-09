@@ -1,0 +1,11 @@
+# NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009
+状态 SCOPED_AUDIT_PASS；执行者/root；批准根I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity；UTC开始2026-10-08T17:23:03.2334936Z；HEAD a10c358eeb956f2153e7d5bfbb60c3c1b353fd50。
+现行Goal§0—8必要准入，不推广默认/重开H06。准确7既有path、绝对路径、SHA/git及before路径见before-manifest-01.json；先Task/Record/Operation/索引，Copy-Item -LiteralPath无Force到新before-01核同，才C#先行5tests/import/RED。每公共XML自然替换前副本，helper/GREEN及新UUID输出只本ABSENT目录。准确矩阵和schema见Task，无删除/移动/Gitmutation。
+新Task/Record/manifest/REPORT/fixture由apply_patch，不覆盖原件；root meta/Scene/资源/settings/Q06/Gen/Plugins/Server不写；当前原Editor6402 Menu clean8/idle，现有MCP不装Pipeline/不启动第二Editor/不Profiler/capture/M0。source回滚需精确批准，7原副本复制前不编辑源。
+初次构造记录的JavaScript因未转义文档反引号TypeError而终止，未调用apply_patch、未写任何文件；本次改正文构造后才落盘，不产生脚本/测试操作。
+
+RED实际公共XML5/0/5，全部缺RunRoleDriver预期断言；连接job45b11d348be54fb29668e753190a3126初始化超时与实际XML结果分别记录。Helper修改及下一次公共XML自然替换前，Copy-Item无Force保存red-01/tests.xml、before-02-red.xml并核同SHA3D2F5F37C1B108E9DC12C38C16283B3DC351655556B36747926F80F116B95903；先行C#before-02-test-first.cs核同SHA8476A81A6DB9A60904B9836E0FC86D34E8CF86190FF844631A33C4C927DE12CD。原before-01及81证据均不覆盖。
+
+首次GREEN9/7/2，fixture schema在正式Raw入口不被接受，尚未千人tick；修复前无Force双保存green-01-fixture-fail/tests.xml、before-03-fixture-fail.xml，SHA BAC374212C2D200763B853387DD8CFC9BF5E1D98BDF345A38AC613D77CD47552。before-03-invalid-schema.json名称描述入口拒绝（并非JSON语法非法）；副本及原owned fixture SHA3ACBF13FB9442F47656BB6D952A0F063337F444F144C210BE74A630FB7CF79DF，正文不改。继续只本Admission helper严格接本诊断格式，正式Raw校验和739guards不变；代码前准确Task/Change纠正，先保存本次C#，仅受影响两case复验。
+
+最终两case实际2/2，public XML自然完成后无Force双保存green-02/tests.xml、before-04-green.xml，SHA C783774A94C688D9FA39CD384AA58C2CBF4468007BC2E23CCB54DB520719FB0F；首轮7＋最后2去重9，不重跑native/旧门。四Driver UUID输出保留。最终源码SHA9A94EC007A00AB51C9841E9813FFBC01330B12D7C79BA89BA1A246810CA0B389，原7before及额外4XML/fixture副本核同、两中间源副本分别8476A81A…12CD/EF978016…C7923保持；739guard0漂移、HEAD/staged及public stress terminal81末值同，Menu唯一clean8/idle、Scene SHA同。实际validator0/1377Record/6governed diff/4339旧warnings、diffcheck0。中途只读审计命令曾有括号ParserError，未执行验证或写文件；修正后实际执行通过。最终原件artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH82-ROLE-DRIVER-ADMISSION-20261009/audit-final-01.json，无删除/移动/破坏性Git或runtime/资源/默认/专项变更；本资格PASS不关闭H07/H11/Goal。
