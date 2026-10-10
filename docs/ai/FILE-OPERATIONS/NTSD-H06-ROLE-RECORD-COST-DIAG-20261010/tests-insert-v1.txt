@@ -1,0 +1,107 @@
+        [TestCase(0, false)]
+        [TestCase(4, false)]
+        [TestCase(5, false)]
+        [TestCase(0, true)]
+        public void RecordCost_MultiBodySequencePayloadRngAndSideEffects(int kind, bool nearest)
+        {
+            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            if (nearest)
+                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs) itr.vrest = 0;
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            int count = attacker.Runtime.Kind4SourceCount92;
+            Assert.That(query.EnableRoleRecordCostDiagnostics, Is.False);
+            query.EnableRoleRecordCostDiagnostics = true;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
+            var detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            detail.BeginTick(77);
+            attacker.Runtime.Kind4SourceCount92 = 0;
+            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, observed);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(count));
+            var costs = query.LastRoleRecordCostCounters;
+            Assert.That(costs.completedRecords, Is.EqualTo(costs.timedRecords));
+            Assert.That(costs.timedRecords, Is.GreaterThan(0));
+            Assert.That(costs.snapshotCaptures, Is.EqualTo(1));
+            Assert.That(costs.repeatDirectionRecords, Is.EqualTo(costs.timedRecords - 1));
+            if (kind == 4) Assert.That(costs.kind4Increments, Is.EqualTo(count));
+            if (nearest)
+            {
+                Assert.That(costs.nearestTieDraws, Is.GreaterThan(0));
+                Assert.That(costs.replaces, Is.EqualTo(costs.nearestReplacements));
+            }
+            long childSum = 0;
+            for (int phase = 54; phase <= 60; phase++)
+                childSum += detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase);
+            Assert.That(childSum, Is.GreaterThan(0).And.LessThanOrEqualTo(costs.recordParentTicks));
+            for (int phase = 48; phase <= 53; phase++)
+                Assert.That(detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase), Is.Zero);
+            Assert.That(query.LastRoleBranchTimingCoverageForDiagnostics.eligibleDirections, Is.Zero);
+        }
+
+        [TestCase(1)]
+        [TestCase(64)]
+        public void RecordCost_IndependentSamplingDisabledResetAndFreshOwner(int stride)
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            query.PrepareBattleCapacity(2, 8, 8);
+            query.EnableRoleRecordCostDiagnostics = true;
+            query.RoleBranchTimingSampleStrideForDiagnostics = stride;
+            var detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+            long eligible = 0, timed = 0;
+            for (int tick = 0; tick < 64; tick++)
+            {
+                detail.BeginTick(tick);
+                RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+                eligible += query.LastRoleRecordCostCounters.eligibleDirections;
+                timed += query.LastRoleRecordCostCounters.timedDirections;
+            }
+            Assert.That(eligible, Is.EqualTo(64));
+            Assert.That(timed, Is.EqualTo(64 / stride));
+            Assert.That(query.LastRoleBranchTimingCoverageForDiagnostics.eligibleDirections, Is.Zero);
+            query.EnableRoleRecordCostDiagnostics = false;
+            detail.BeginTick(65);
+            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            Assert.That(query.LastRoleRecordCostCounters.records, Is.Zero);
+            Assert.That(query.LastRoleRecordCostCounters.recordParentTicks, Is.Zero);
+            var fresh = GetQuery(new SimulationWorld());
+            Assert.That(fresh.EnableRoleRecordCostDiagnostics, Is.False);
+            Assert.That(fresh.LastRoleRecordCostCounters.records, Is.Zero);
+        }
+
+        [Test]
+        public void RecordCost_CapacityDoesNotSkipRecordSideEffects()
+        {
+            CreateRoleCapacityGuardFixture(24, 0, 1, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            query.EnableRoleRecordCostDiagnostics = true;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
+            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
+            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, observed);
+            Assert.That(query.LastRoleRecordCostCounters.capacityRejects, Is.GreaterThan(0));
+            Assert.That(query.LastRoleRecordCostCounters.appends, Is.EqualTo(20));
+        }
+
+        [Test]
+        public void RecordCost_GroupRejectedHasNoKind4OrWrites()
+        {
+            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
+                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
+            target.RelationTeam = attacker.RelationTeam;
+            query.PrepareBattleCapacity(2, 8, 8);
+            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            query.EnableRoleRecordCostDiagnostics = true;
+            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
+            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
+            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
+            AssertPairSnapshotRunsEqual(baseline, observed);
+            Assert.That(query.LastRoleRecordCostCounters.groupRejects, Is.GreaterThan(0));
+            Assert.That(query.LastRoleRecordCostCounters.kind4Increments, Is.Zero);
+            Assert.That(query.LastRoleRecordCostCounters.appends, Is.Zero);
+        }
+

@@ -6,11 +6,11 @@
 | 字段 | 本轮整理 |
 |---|---|
 | 类别 / 建议优先级 | 验收 / 高 |
-| 当前状态 | PERFORMANCE_FAIL／执行已取消；本轮仅文档，未实施/复测 |
+| 当前状态 | PERFORMANCE_FAIL；Role限定准入完成；producer USER_DEFERRED/生产OFF；新ABBA首OFF完整Driver GC失败保留 |
 | 依赖的最小范围 | 所选优化的实际成果；M-09/M-15指纹与H-09正确性，Android阶段另需H-02/H-04 |
-| 下一步与具体方向 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| 下一步与具体方向 | 2026-10-10用户选择暂缓producer并推进下一项；先准备[H06-ROLE-EXACT方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，具体改法/新测量未授权，原33ms与0GC门不变 |
 | 完成边界 | Windows两布局120+180冒烟后120+1800；P95<33ms、drop0、暖0GC及原容量/表现/关闭门；Android另判 |
-| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 方案成熟度 | 本次具名冷测量完成、未准入生产；其它优化仍须独立Task/准确写域及验证 |
 | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
 
 [跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)

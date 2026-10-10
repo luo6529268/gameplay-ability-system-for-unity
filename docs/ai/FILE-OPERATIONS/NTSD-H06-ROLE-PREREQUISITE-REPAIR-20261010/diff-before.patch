@@ -1,0 +1,947 @@
+diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+index 52348992..918b91d6 100644
+--- a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
++++ b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+@@ -1,3 +1,29 @@
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
++
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 / IN_PROGRESS；NTSD-H06-ROLE-PREREQUISITE-DIAG-001 IN_PROGRESS。用户授权当前讨论会话诊断完整Driver分配与组合状态门子条件，明确后交执行会话修复。仅Editor三写域、一次同combat1000 120+180及tick130附近八帧调用栈；原硬门不降低、七段计时OFF、不改生产/Q06。原Editor39108/TCP6402复用，不启动第二实例。旧Task失败保留，producer USER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放及旧Goal取消保持。
++
++> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 / IN_PROGRESS，Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN。四写域默认OFF诊断已写、已有focused及失败原件保留；待最新store计数器位置修复编译/最窄focused，前置通过才执行唯一combat1000 OFF→ON各120+180，随后报告/保护/Ledger收口。历史Editor重启问答不替代此任务。无实景窗口已启动，不恢复旧Goal/生产优化；producer USER_DEFERRED/OFF，95/84/89/92/94 OFF，Role默认保持，旧ABBA2event/tick130未知独立保留，H06父/H07/Android开放。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-ANALYSIS-20261010已完成静态收口：B / DIAGNOSTIC_DESIGN_ONLY。83六分支归因已足够缩到候选record，唯一缺口是首次snapshot/纯筛选与必要nearest-RNG/写入的内部成本及同scope重复覆盖；不重跑83/91、不换名重试31/84/89/92/93/94。下一只输出具名NTSD-H06-ROLE-RECORD-COST-DIAG-20261010有限指令（一个combat1000 OFF→ON、各120+180的七子段诊断；本轮未实施/未运行/未发送到其它会话）。 producer USER_DEFERRED/生产OFF；ABBA首OFF完整Driver2event/首tick130调用点未知独立挂账；Role空配置生产默认及Brute回退保持，95OFF，H06父/H07/Android开放，34父项及旧包数不变，旧Goal不恢复。 恢复同IDTask/REPORT；不要把历史弹窗回复替换本次目标。本轮实际已建/更新文档，未改脚本、未运行Unity。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md。
++
++> 2026-10-10 用户决定：producer Runtime快照复用 USER_DEFERRED / PRODUCTION_DEFAULT_OFF，保留原准入与ABBA证据，不自动重测/修复/推广。ABBA首OFF完整Driver稳态2次分配、首tick130调用点未知仍挂账，不抵消旧0GC范围，也不自动归因95。下一项选择 H06-ROLE-EXACT（现有Role精确配对成本），本轮只静态分析与方案整理；尚未批准具体代码改法/测试测量，不自动发送执行指令或恢复监测。Role默认保持，H06父/H07/Android开放；34父项及旧包数不变、旧Goal不恢复。恢复入口：docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md；记录/审计Task NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010。下方状态按原日期保留历史。
++
++> 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
++
++> 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
++
++> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
++
++> 2026-10-09 第二项生产者快照复用准入 IN_PROGRESS / NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001；Task NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009。Role限定准入已完成，固定Role只切复用；生产复用暂OFF，不恢复旧Goal。
++
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+@@ -5881,3 +5907,7 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
+ 
+ > 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。
+ 
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 IN_PROGRESS / NTSD-H06-ROLE-RECORD-COST-DIAG-001 PLANNED；当前只四写域诊断，见同IDTask，未运行窗口。
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN；四路径默认OFF诊断已写，原Editor编译中，未运行实景。
+diff --git a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+index d27c107b..90f95f4c 100644
+--- a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
++++ b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+@@ -1,13 +1,23 @@
+-> **已完成问题的代码对照记录：** [优化点 A：FindEffect 临时分配修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。本次只补说明，不新增完成包；下方H07-INPUT建议及H06准入待办保持。
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
++
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 / IN_PROGRESS；NTSD-H06-ROLE-PREREQUISITE-DIAG-001 IN_PROGRESS。用户授权当前讨论会话诊断完整Driver分配与组合状态门子条件，明确后交执行会话修复。仅Editor三写域、一次同combat1000 120+180及tick130附近八帧调用栈；原硬门不降低、七段计时OFF、不改生产/Q06。原Editor39108/TCP6402复用，不启动第二实例。旧Task失败保留，producer USER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放及旧Goal取消保持。
++
++> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
++
++> 当前有限诊断已结束，当前路线尚无A/C结论；下一项不自动实施。若另行授权恢复，先解决完整Driver分配资格及组合观察门子条件证据，不能以其它窗口0GC豁免或把fallback峰值直接认作规则错误。一般H07-INPUT保留独立评审、producer仍暂缓。[本Task报告](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 当前/下一项更正（同H06-ROLE-EXACT，不新增父项）：** 当前 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 静态分析已完成，结论 **B**。83已定位record，无需再跑六分支；只缺record内纯读取/筛选与必要选择/写入的互斥成本和重复覆盖。下一有限指令为 `NTSD-H06-ROLE-RECORD-COST-DIAG-20261010`，一个combat1000匹配OFF→ON、各120+180、七段同scope诊断，本轮未实施/未运行；准确写域、owner、门、停止条件见[分析报告第6—7节](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md)。用户授权整理完成后直接输出指令，不逐步再问；本任务不跨会话发送或恢复监测。producer暂缓/OFF、ABBA首OFF2event/首tick130未知、Role默认、95OFF和H06/H07/Android开放保持，旧计数不变。下方旧“当前/下一项”是此前方案快照。
++
++> **具体问题的代码对照记录：** [FindEffect已修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [Role已限定准入](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-ROLE-DEFAULT-ADMISSION.md) · [producer快照复用用户暂缓](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md) · [索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。不增加父项或旧完成包。
+ 
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+-# 优化进度：当前工作入口（2026-10-09）
++# 优化进度：当前工作入口（2026-10-10）
+ 
+-当前任务：**FindEffect单点分配修复 / VERIFIED（仅本Task）**。2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
++当前决定：**producer快照复用 USER_DEFERRED / 生产OFF；下一项选择现有Role精确配对成本，先到方案阶段**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
+ 
+-- 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。限定准入未完成，未新增完成包；详当前H06报告。34项文档结构、D1=A和旧证据边界保留。
++- 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。Role限定准入已完成，实际生产接线13/13通过；第二项44+1+1及四窗正确性/0GC/容量/关闭通过但混战tick回退14.448675%，保持OFF。未新增旧批次完成包；详两个具名报告。34项文档结构、D1=A和旧证据边界保留。
+ - 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+-- 下一项建议：本次H06具名任务交付后H07-INPUT；消费91已有归因，先形成准确热点/字段/失效方案，由用户决定后继实施。Role默认不是硬前置，未授权队列不自动续跑。
++- 下一项：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
+ - 首阶段六项：H11/M03选定实现范围、H06/M13/M14选定评估共5/6；H07性能FAIL。34父项完整关闭0。
+ - 批次：最新完成94/73包；95第74包未验收、默认OFF且执行停止；没有本轮新96。
+ 
+@@ -22,8 +32,8 @@
+ | [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+ | [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+ | [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+-| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | GC局部修复VERIFIED / ADMISSION_PENDING / NO_DEFAULT_PROMOTION；父项OPEN | 四场景强一致证据复用；混合collector234→0 events/sample，待同配置收益及接线必要门，非33ms阻塞 |
+-| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL／执行已取消 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
++| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | ROLE_SCOPED_ADMISSION_COMPLETED / 默认Role；父项OPEN | 当前双布局同配置收益/稳态Driver0GC及实际生产接线通过；最终33ms/drop等未过仍开放 |
++| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 基线GC130独立挂账；先准备H06-ROLE-EXACT方案，不恢复自动目标 |
+ | [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+ | [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+ | [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+@@ -55,7 +65,7 @@
+ ## 已有成果及不再机械重做的工作
+ 
+ - 生产成果：四Brute fast path；80/86共享绑定和冷接线；H11容量预热与选定CPU域；13 metadata、15camera物化消重；Foot配置冷接线；生成准入/名字预热局部分配修复。准确范围见[取消时交接](../../../docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md)及下面原记录。
+-- 候选：Role实际窗口有收益、未推广；95仅局部0.35ms信号且GC资格FAIL；94 LOCAL_ONLY。默认均不因本轮改变。
++- 候选：producer已由用户暂缓、生产OFF；95仅局部0.35ms信号且GC资格FAIL；94 LOCAL_ONLY。Role现已完成限定准入并成为空配置生产默认，不再列作未推广候选。
+ - 不再原样重试：89无一致收益、92/93无整tick收益、84同条件skip0、无新前提的微缓存和三次同构envelope导出。结束的是具名版本，不删除代码/历史，不永久否定技术类别。
+ - 诊断：91八子阶段已归因；不重新从零采样。81/82/86/91/93及已有像素/关闭证据未受影响即复用，默认接线实际影响另补。
+ - 95 GC不是全局门；91/93有效实景0事件仍保留。父子计时不相加，局部与整tick/显示FPS分开。
+@@ -64,7 +74,8 @@
+ 
+ | 子项 | 当前 | 后继条件 |
+ |---|---|---|
+-| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
++| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 下一项方案；静态分析完成，具体实施未授权 | 具名可消除成本、准确改法和最小证据明确后决定实施；否则结束本路线 |
++| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | producer用户暂缓；一般输入方案保留 | 本轮静态复核不支持继续堆零点几毫秒省读；有新成本证据再选择 |
+ | [H07-LATE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+ | [H07-GC95](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+ | [H06-SPATIAL](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+diff --git a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+index 11bc2a71..bea268fe 100644
+--- a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -21,6 +21,248 @@ namespace NTSD.Test.Editor
+     [InitializeOnLoad]
+     internal static class BattleOptimizationWindowsAiSuiteEditor
+     {
++        private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
++        private static bool startingRoleRecordCostDiagnostic;
++        private static bool startingRoleRecordPrerequisiteDiagnostic;
++
++        [MenuItem("NTSD/Validation/Optimization/H06 Role Prerequisite Diagnostic")]
++        private static void BeginRoleRecordPrerequisiteDiagnostic()
++        {
++            Require(!startingRoleRecordCostDiagnostic && !startingRoleRecordPrerequisiteDiagnostic && roleRecordTickObserver == null,
++                "The prerequisite diagnostic already has an owner.");
++            startingRoleRecordCostDiagnostic = true;
++            startingRoleRecordPrerequisiteDiagnostic = true;
++            roleRecordBaseline = null;
++            try { BeginPostBindingsRole(); }
++            finally
++            {
++                startingRoleRecordPrerequisiteDiagnostic = false;
++                startingRoleRecordCostDiagnostic = false;
++            }
++        }
++        private static RoleRecordTickObserver roleRecordTickObserver;
++        private static RoleRecordTick[] roleRecordBaseline;
++
++        [MenuItem("NTSD/Validation/Optimization/H06 Role Record Cost Diagnostic")]
++        private static void BeginRoleRecordCostDiagnostic()
++        {
++            Require(!startingRoleRecordCostDiagnostic && roleRecordTickObserver == null,
++                "The finite record diagnostic already has an owner.");
++            startingRoleRecordCostDiagnostic = true;
++            roleRecordBaseline = null;
++            try { BeginPostBindingsRole(); }
++            finally { startingRoleRecordCostDiagnostic = false; }
++        }
++
++        internal static ProductionEntityStressRequest BuildRoleRecordCostRequest(int index)
++        {
++            if (index < 0 || index > 1) throw new ArgumentOutOfRangeException(nameof(index));
++            ProductionEntityStressRequest request = BuildScopedRoleAdmissionRequest(3);
++            request.outputPath = RoleRecordCostOutputRoot + (index == 0
++                ? "/00-combat1000-off/report.json" : "/01-combat1000-on/report.json");
++            return request;
++        }
++
++        [Serializable]
++        private sealed class RoleRecordTick
++        {
++            public int tick, playerInputCount;
++            public bool steady, actualFlagsValid;
++            public ulong fullRuntimeChecksum, rngCalls;
++            public uint rngState, crtState, tableSeed, lastSynchronizedCallSite;
++            public ulong crtCalls, synchronizedCalls, synchronizedTableHash;
++            public int synchronizedCounter, synchronizedIndex;
++            public BruteForceSceneQuery.RoleRecordCostCounters counters;
++            public long[] elapsed = new long[7];
++        }
++
++        [Serializable]
++        private sealed class RoleRecordEvidence
++        {
++            public string checksumScope = "Existing CaptureRuntimeChecksum64 schema after completed Driver, including full applied FrameInputSet and runtime AI input fields; not canonical JSON snapshots.";
++            public string counterScope = "Per collection. Eligibility counts all directions/records; remaining counters and seven clocks sampled directions only. Warm1-120, steady121-300. No extrapolation.";
++            public long stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency;
++            public bool enabled, settingsRestored;
++            public int ticks, parityMismatches, actualFlagFailures;
++            public RoleRecordTick[] observations = new RoleRecordTick[300];
++            public long[] emptyBoundaryTicks = new long[1024];
++            public long[] sevenBoundaryWallTicks = new long[1024];
++            public long[] sevenBoundaryRecordedTicks = new long[1024];
++        }
++
++        private sealed class RoleRecordTickObserver : IDisposable
++        {
++            private readonly ProductionEntityStressRunner runner;
++            private readonly SimulationTickDriver driver;
++            private readonly SimulationWorld world;
++            private readonly BruteForceSceneQuery query;
++            private readonly BattleLogicTickGcObserverEditor gc;
++            private readonly BattleTickDetailPhaseDiagnostics detail;
++            private readonly bool previousEnabled;
++            private readonly int previousStride;
++            private bool attached, disposed;
++            internal readonly RoleRecordEvidence evidence = new RoleRecordEvidence();
++
++            internal RoleRecordTickObserver(ProductionEntityStressRunner runner, SimulationTickDriver driver,
++                BruteForceSceneQuery query, BattleLogicTickGcObserverEditor gc, bool enabled)
++            {
++                this.runner = runner;
++                this.driver = driver;
++                world = driver.World;
++                this.query = query;
++                this.gc = gc;
++                detail = world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
++                Require(detail != null && detail.Enabled && !runner.DriverTickObserverAttachedForDiagnostics &&
++                    runner.Report.logicTicksExecuted == 0, "Record observation requires an unowned first-tick boundary.");
++                Require(!query.EnableRoleRecordCostDiagnostics && !query.EnableRoleBranchTimingForDiagnostics &&
++                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
++                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
++                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
++                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics,
++                    "Record diagnosis cannot enable previous candidates or input instrumentation.");
++                if (state.roleRecordPrerequisiteDiagnostic)
++                    H06RolePrerequisiteDiagnostics.Start();
++                previousEnabled = query.EnableRoleRecordCostDiagnostics;
++                previousStride = query.RoleBranchTimingSampleStrideForDiagnostics;
++                evidence.enabled = enabled;
++                for (int index = 0; index < evidence.observations.Length; index++)
++                    evidence.observations[index] = new RoleRecordTick();
++                MeasureBoundaryOverhead(evidence);
++                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
++                query.EnableRoleRecordCostDiagnostics = enabled;
++                try
++                {
++                    runner.ConfigureDriverTickObserverForDiagnostics(BeginObservedDriverStep, EndObservedDriverStep, Accept);
++                    attached = true;
++                }
++                catch { Dispose(); throw; }
++            }
++
++            private void BeginObservedDriverStep()
++            {
++                gc.BeginDriverStep();
++                if (state.roleRecordPrerequisiteDiagnostic)
++                    H06RolePrerequisiteDiagnostics.BeginDriver(evidence.ticks + 1);
++            }
++
++            private void EndObservedDriverStep(bool stepped)
++            {
++                try
++                {
++                    if (state.roleRecordPrerequisiteDiagnostic)
++                        H06RolePrerequisiteDiagnostics.EndDriver();
++                }
++                finally { gc.EndDriverStep(stepped); }
++            }
++
++            private void Accept(int tick, bool steady)
++            {
++                gc.AcceptCompletedTick(tick, steady);
++                if (tick != evidence.ticks + 1 || tick > 300)
++                    throw new InvalidOperationException("Record observation lost the fixed 300-tick boundary.");
++                RoleRecordTick row = evidence.observations[tick - 1];
++                row.tick = tick;
++                row.steady = steady;
++                row.playerInputCount = driver.LastAppliedFrameInput.Players?.Count ?? 0;
++                row.fullRuntimeChecksum = world.CaptureRuntimeChecksum64(driver.CurrentTickIndex, driver.LastAppliedFrameInput);
++                row.rngState = world.Rng.State;
++                row.rngCalls = world.Rng.CallCount;
++                var native = world.NativeRandom.CaptureScalarState();
++                row.crtState = native.CrtState;
++                row.crtCalls = native.CrtCalls;
++                row.tableSeed = native.TableSeed;
++                row.synchronizedCounter = native.SynchronizedCounter;
++                row.synchronizedIndex = native.SynchronizedIndex;
++                row.synchronizedCalls = native.SynchronizedCalls;
++                row.lastSynchronizedCallSite = native.LastSynchronizedCallSite;
++                row.synchronizedTableHash = native.SynchronizedTableHash;
++                row.counters = query.LastRoleRecordCostCounters;
++                for (int phase = 0; phase < 7; phase++)
++                    row.elapsed[phase] = detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + phase));
++                row.actualFlagsValid = query.EnableRoleRecordCostDiagnostics == evidence.enabled &&
++                    query.RoleBranchTimingSampleStrideForDiagnostics == 64 && !query.EnableRoleBranchTimingForDiagnostics &&
++                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
++                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
++                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
++                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics &&
++                    query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware &&
++                    !query.LastFormalCollectionAbortedForDiagnostics && query.LastFormalFallbackParticipantCountForDiagnostics == 0 &&
++                    steady == (tick > 120);
++                for (int phase = 48; phase <= 53; phase++)
++                    row.actualFlagsValid &= detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) == 0;
++                if (!row.actualFlagsValid) evidence.actualFlagFailures++;
++                if (state.roleRecordPrerequisiteDiagnostic)
++                    H06RolePrerequisiteDiagnostics.Observe(tick, steady, evidence.enabled, row.actualFlagsValid,
++                        world, query, detail, gc.LastCompletedScopeForDiagnostics, runner.Report);
++                if (evidence.enabled && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
++                    evidence.parityMismatches++;
++                evidence.ticks++;
++            }
++
++            public void Dispose()
++            {
++                if (disposed) return;
++                try { if (attached) runner.ConfigureDriverTickObserverForDiagnostics(null, null, null); }
++                finally
++                {
++                    query.EnableRoleRecordCostDiagnostics = previousEnabled;
++                    query.RoleBranchTimingSampleStrideForDiagnostics = previousStride;
++                    evidence.settingsRestored = query.EnableRoleRecordCostDiagnostics == previousEnabled &&
++                        query.RoleBranchTimingSampleStrideForDiagnostics == previousStride;
++                    attached = false;
++                    disposed = true;
++                    if (state.roleRecordPrerequisiteDiagnostic)
++                        H06RolePrerequisiteDiagnostics.Finish("prerequisite-observer-dispose");
++                }
++            }
++        }
++
++        private static bool RoleRecordTicksEqual(RoleRecordTick left, RoleRecordTick right) =>
++            left.tick == right.tick && left.steady == right.steady && left.playerInputCount == right.playerInputCount &&
++            left.fullRuntimeChecksum == right.fullRuntimeChecksum && left.rngState == right.rngState && left.rngCalls == right.rngCalls &&
++            left.crtState == right.crtState && left.crtCalls == right.crtCalls && left.tableSeed == right.tableSeed &&
++            left.synchronizedCounter == right.synchronizedCounter && left.synchronizedIndex == right.synchronizedIndex &&
++            left.synchronizedCalls == right.synchronizedCalls && left.lastSynchronizedCallSite == right.lastSynchronizedCallSite &&
++            left.synchronizedTableHash == right.synchronizedTableHash;
++
++        private static void MeasureBoundaryOverhead(RoleRecordEvidence evidence)
++        {
++            var calibration = new BattleTickDetailPhaseDiagnostics();
++            calibration.SetEnabled(true);
++            for (int sample = 0; sample < 1024; sample++)
++            {
++                long start = System.Diagnostics.Stopwatch.GetTimestamp();
++                evidence.emptyBoundaryTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - start;
++                calibration.BeginTick(sample);
++                long wall = System.Diagnostics.Stopwatch.GetTimestamp();
++                long segment = System.Diagnostics.Stopwatch.GetTimestamp();
++                for (int index = 0; index < 7; index++)
++                {
++                    long now = System.Diagnostics.Stopwatch.GetTimestamp();
++                    calibration.RecordPhaseElapsed((BattleTickDetailPhase)(54 + index), now - segment);
++                    segment = System.Diagnostics.Stopwatch.GetTimestamp();
++                }
++                evidence.sevenBoundaryWallTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - wall;
++                for (int index = 0; index < 7; index++)
++                    evidence.sevenBoundaryRecordedTicks[sample] += calibration.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + index));
++            }
++            calibration.SetEnabled(false);
++        }
++
++        private static void FinishRoleRecordObservation(RunState run, bool aborted)
++        {
++            RoleRecordTickObserver owned = roleRecordTickObserver;
++            roleRecordTickObserver = null;
++            if (owned == null) return;
++            owned.Dispose();
++            RoleRecordEvidence evidence = owned.evidence;
++            run.roleRecordObservationValid = !aborted && evidence.ticks == 300 && evidence.settingsRestored &&
++                evidence.actualFlagFailures == 0 && evidence.parityMismatches == 0;
++            if (!evidence.enabled && run.roleRecordObservationValid && run.zeroGcPassed)
++                roleRecordBaseline = evidence.observations;
++            SaveNew(run.reportPath + (aborted ? ".record-cost.aborted.json" : ".record-cost.json"), JsonUtility.ToJson(evidence, true));
++        }
++
+         private const string SessionKey = "NTSD.Optimization.Batch26.WindowsAiSuite";
+         private const string BattleScene = "Assets/NTSD/Scene/NTSD_Battle.unity";
+         private const string OutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01";
+@@ -56,6 +298,22 @@ namespace NTSD.Test.Editor
+         private static bool startingMatchCentralBindings;
+         private const string PostBindingsRoleOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01";
+         private static bool startingPostBindingsRoleWindow;
++        private const string ScopedRoleAdmissionOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/windows";
++        private static bool startingScopedRoleAdmissionWindow;
++        private const string ScopedProducerAdmissionOutputRoot = "artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/windows";
++        private static bool startingScopedProducerAdmissionWindow;
++        private const string ProducerAbbaOutputRoot = "artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/windows";
++        private static bool startingProducerAbbaDiagnostic;
++        private static ProducerSnapshotExperimentCase producerSnapshotReuseCase;
++
++        [Serializable]
++        internal sealed class ProducerSnapshotExperimentCase
++        {
++            public int sequenceIndex;
++            public string action;
++            public bool reuseEnabled;
++            public bool inputBoundaryTimingEnabled;
++        }
+         private const string RoleBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01";
+         private static bool startingRoleBranchTimingWindow;
+         private static BruteForceSceneQuery roleBranchTimingQuery;
+@@ -164,6 +422,7 @@ namespace NTSD.Test.Editor
+             public long roleGroupSnapshotSkipMaximumObservedRejects;
+             public string roleGroupSnapshotSkipObservationScope = "Last completed collection at sampled Editor observations; maxima are not all-tick totals.";
+             public bool producerSnapshotReuseEnabled;
++            public ProducerSnapshotExperimentCase producerExperimentCase;
+             public bool producerSnapshotReuseFlagApplied;
+             public bool producerSnapshotReuseUnchanged;
+             public bool producerSnapshotReuseRestored;
+@@ -181,6 +440,7 @@ namespace NTSD.Test.Editor
+             public bool postBindingsRoleUnchanged;
+             public int postBindingsRoleObservedCollections;
+             public bool postBindingsRoleActualMismatch;
++            public bool roleRecordObservationValid;
+             public int postBindingsRoleExpectedCollector;
+             public int postBindingsRoleLastActualCollector;
+             public int postBindingsRoleMaximumPairCount;
+@@ -382,6 +642,11 @@ namespace NTSD.Test.Editor
+             public bool centralSegmentReadbackOnly;
+             public bool matchCentralBindingsWindow;
+             public bool postBindingsRoleWindow;
++            public bool scopedRoleAdmissionWindow;
++            public bool scopedProducerAdmissionWindow;
++            public bool roleRecordCostDiagnostic;
++            public bool roleRecordPrerequisiteDiagnostic;
++            public bool producerAbbaDiagnostic;
+             public bool roleBranchTimingWindow;
+             public bool inputBoundaryTimingWindow;
+             public bool nativeSampledStateTimingWindow;
+@@ -674,6 +939,89 @@ namespace NTSD.Test.Editor
+             }
+         }
+ 
++        [MenuItem("NTSD/Validation/Optimization/H06 Scoped Role Admission")]
++        private static void BeginScopedRoleAdmission()
++        {
++            Require(!startingScopedRoleAdmissionWindow, "Scoped Role admission already owns the cold entry.");
++            startingScopedRoleAdmissionWindow = true;
++            try
++            {
++                BeginPostBindingsRole();
++            }
++            finally
++            {
++                startingScopedRoleAdmissionWindow = false;
++            }
++        }
++
++        internal static ProductionEntityStressRequest BuildScopedRoleAdmissionRequest(int index)
++        {
++            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
++            request.outputPath = ScopedRoleAdmissionOutputRoot + "/" + index.ToString("D2") + "-" +
++                request.action + "-" + request.formalCollectorMode + "/report.json";
++            return request;
++        }
++
++        [MenuItem("NTSD/Validation/Optimization/H07 Producer Snapshot ABBA Diagnostic")]
++        private static void BeginProducerAbbaDiagnostic()
++        {
++            Require(!startingProducerAbbaDiagnostic, "Producer ABBA diagnostic already owns the cold entry.");
++            startingProducerAbbaDiagnostic = true;
++            try
++            {
++                BeginProducerSnapshotReuse();
++            }
++            finally
++            {
++                startingProducerAbbaDiagnostic = false;
++            }
++        }
++
++        internal static ProducerSnapshotExperimentCase BuildProducerAbbaCase(int index)
++        {
++            if (index < 0 || index >= 4)
++                throw new ArgumentOutOfRangeException(nameof(index));
++            return new ProducerSnapshotExperimentCase
++            {
++                sequenceIndex = index,
++                action = "combat1000",
++                reuseEnabled = index == 1 || index == 2,
++                inputBoundaryTimingEnabled = false,
++            };
++        }
++
++        internal static ProductionEntityStressRequest BuildProducerAbbaRequest(int index)
++        {
++            ProducerSnapshotExperimentCase experiment = BuildProducerAbbaCase(index);
++            ProductionEntityStressRequest request = BuildProducerSnapshotReuseRequest(2);
++            request.outputPath = ProducerAbbaOutputRoot + "/" + index.ToString("D2") + "-" +
++                experiment.action + (experiment.reuseEnabled ? "-on" : "-off") + "/report.json";
++            return request;
++        }
++
++        [MenuItem("NTSD/Validation/Optimization/H07 Scoped Producer Snapshot Admission")]
++        private static void BeginScopedProducerAdmission()
++        {
++            Require(!startingScopedProducerAdmissionWindow, "Scoped producer admission already owns the cold entry.");
++            startingScopedProducerAdmissionWindow = true;
++            try
++            {
++                BeginProducerSnapshotReuse();
++            }
++            finally
++            {
++                startingScopedProducerAdmissionWindow = false;
++            }
++        }
++
++        internal static ProductionEntityStressRequest BuildScopedProducerAdmissionRequest(int index)
++        {
++            ProductionEntityStressRequest request = BuildProducerSnapshotReuseRequest(index);
++            request.outputPath = ScopedProducerAdmissionOutputRoot + "/" + index.ToString("D2") + "-" +
++                request.action + (index % 2 == 0 ? "-off" : "-on") + "/report.json";
++            return request;
++        }
++
+         [MenuItem("NTSD/Validation/Optimization/Batch81 Post Bindings Brute Role 1000 AI")]
+         private static void BeginPostBindingsRole()
+         {
+@@ -735,6 +1083,22 @@ namespace NTSD.Test.Editor
+             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
+             bool labelPrewarmValidation = false)
+         {
++            Require(!startingProducerAbbaDiagnostic || startingProducerSnapshotReuseWindow &&
++                startingPostBindingsRoleWindow && !startingScopedProducerAdmissionWindow &&
++                !startingScopedRoleAdmissionWindow && !startingRoleGroupSnapshotSkipWindow &&
++                !startingInputBoundaryTimingWindow && !startingRoleBranchTimingWindow &&
++                !startingNativeSampledStateTimingWindow,
++                "Producer ABBA diagnostic requires its exclusive existing producer owner.");
++            Require(!startingScopedRoleAdmissionWindow || startingPostBindingsRoleWindow &&
++                !startingRoleGroupSnapshotSkipWindow && !startingProducerSnapshotReuseWindow &&
++                !startingInputBoundaryTimingWindow && !startingRoleBranchTimingWindow &&
++                !startingNativeSampledStateTimingWindow,
++                "Scoped Role admission must not share another candidate window.");
++            Require(!startingScopedProducerAdmissionWindow || startingProducerSnapshotReuseWindow &&
++                startingPostBindingsRoleWindow && !startingScopedRoleAdmissionWindow &&
++                !startingRoleGroupSnapshotSkipWindow && !startingInputBoundaryTimingWindow &&
++                !startingRoleBranchTimingWindow && !startingNativeSampledStateTimingWindow,
++                "Scoped producer admission requires its exclusive existing producer owner.");
+             Require(!startingRoleGroupSnapshotSkipWindow || startingPostBindingsRoleWindow &&
+                 roleGroupSnapshotSkipWorld == null && roleGroupSnapshotSkipQuery == null &&
+                 !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null &&
+@@ -887,7 +1251,12 @@ namespace NTSD.Test.Editor
+                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
++            string outputRoot = startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
++                startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
++                startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
++                startingScopedProducerAdmissionWindow ? ScopedProducerAdmissionOutputRoot :
++                startingScopedRoleAdmissionWindow ? ScopedRoleAdmissionOutputRoot :
++                startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
+                 startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
+                 startingProducerSnapshotReuseWindow ? ProducerSnapshotReuseRetryOutputRoot :
+                 startingInputBoundaryTimingWindow ? InputBoundaryTimingOutputRoot :
+@@ -950,12 +1319,17 @@ namespace NTSD.Test.Editor
+                 centralSegmentReadbackOnly = startingCentralSegmentReadback,
+                 matchCentralBindingsWindow = startingMatchCentralBindings,
+                 postBindingsRoleWindow = startingPostBindingsRoleWindow,
++                scopedRoleAdmissionWindow = startingScopedRoleAdmissionWindow,
++                scopedProducerAdmissionWindow = startingScopedProducerAdmissionWindow,
++                roleRecordCostDiagnostic = startingRoleRecordCostDiagnostic,
++                roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,
++                producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
+-                runs = new RunState[startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                 originalScene = scene.path,
+                 originalSceneHash = HashFile(scene.path),
+                 battleSceneHash = HashFile(BattleScene),
+@@ -972,6 +1346,11 @@ namespace NTSD.Test.Editor
+                     reportPath = request.outputPath,
+                 };
+                 SaveNew(request.outputPath + ".request.json", JsonUtility.ToJson(request, true));
++                if (state.producerAbbaDiagnostic)
++                {
++                    state.runs[i].producerExperimentCase = BuildProducerAbbaCase(i);
++                    SaveNew(request.outputPath + ".case.json", JsonUtility.ToJson(state.runs[i].producerExperimentCase, true));
++                }
+             }
+             Persist();
+             BattleTestBootstrap.SuppressEntityCreationForProductionStress = true;
+@@ -1037,6 +1416,16 @@ namespace NTSD.Test.Editor
+ 
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.roleRecordPrerequisiteDiagnostic)
++                return H06RolePrerequisiteDiagnostics.BuildRequest(index);
++            if (state.roleRecordCostDiagnostic)
++                return BuildRoleRecordCostRequest(index);
++            if (state.producerAbbaDiagnostic)
++                return BuildProducerAbbaRequest(index);
++            if (state.scopedProducerAdmissionWindow)
++                return BuildScopedProducerAdmissionRequest(index);
++            if (state.scopedRoleAdmissionWindow)
++                return BuildScopedRoleAdmissionRequest(index);
+             if (state.roleGroupSnapshotSkipWindow)
+                 return BuildRoleGroupSnapshotSkipRequest(index);
+             if (state.nativeSampledStateTimingWindow)
+@@ -1697,6 +2086,8 @@ namespace NTSD.Test.Editor
+                 currentReport = null;
+                 if (run.retainedFailedGcMeasurement)
+                     state.retainedFailedGcMeasurements++;
++                if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
++                    throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
+                 if (!run.workloadValid && !run.retainedFailedGcMeasurement)
+                     throw new InvalidOperationException("Fixed workload/cleanup admission failed for " + run.action + "; original report retained.");
+                 state.runIndex++;
+@@ -1769,7 +2160,13 @@ namespace NTSD.Test.Editor
+                 if (state.roleGroupSnapshotSkipWindow)
+                     ApplyRoleGroupSnapshotSkip(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                 if (state.producerSnapshotReuseWindow)
+-                    ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
++                {
++                    if (state.producerAbbaDiagnostic)
++                        ApplyProducerSnapshotReuseCase(SimulationTickDriver.Instance.World, productionQuery,
++                            state.runs[state.runIndex], BuildProducerAbbaCase(state.runIndex));
++                    else
++                        ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
++                }
+                 if (state.inputBoundaryTimingWindow)
+                     ApplyInputBoundaryTiming(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                 if (state.roleBranchTimingWindow)
+@@ -1949,7 +2346,10 @@ namespace NTSD.Test.Editor
+                     logicGcObserver == null,
+                     "The calibrated scope requires the existing production path before the first tick.");
+                 logicGcObserver = new BattleLogicTickGcObserverEditor();
+-                logicGcObserver.Attach(runner);
++                if (state.roleRecordCostDiagnostic)
++                    roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
++                else
++                    logicGcObserver.Attach(runner);
+             }
+         }
+ 
+@@ -2034,6 +2434,7 @@ namespace NTSD.Test.Editor
+         }
+ 
+         private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
++            state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
+             state.roleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipQueryValid(query, index) :
+             state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
+             state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
+@@ -2109,13 +2510,27 @@ namespace NTSD.Test.Editor
+             inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+             PostBindingsRoleQueryValid(query, 1) && !query.EnableRoleBranchTimingForDiagnostics &&
+             !query.EnableRoleCapacityRecordGuardForDiagnostics &&
+-            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == (index % 2 != 0) &&
+-            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics;
++            producerSnapshotReuseCase != null && producerSnapshotReuseCase.sequenceIndex == index &&
++            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == producerSnapshotReuseCase.reuseEnabled &&
++            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics == producerSnapshotReuseCase.inputBoundaryTimingEnabled;
+ 
+         private static void ApplyProducerSnapshotReuse(SimulationWorld world, BruteForceSceneQuery query, RunState run, int index)
+         {
+-            // Alignment contract: NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088; diagnostic World owner only.
+-            Require(index >= 0 && index < 4 && run != null && producerSnapshotReuseWorld == null &&
++            ApplyProducerSnapshotReuseCase(world, query, run, new ProducerSnapshotExperimentCase
++            {
++                sequenceIndex = index,
++                action = index < 2 ? "dispersed1000" : "combat1000",
++                reuseEnabled = index % 2 != 0,
++                inputBoundaryTimingEnabled = true,
++            });
++        }
++
++        private static void ApplyProducerSnapshotReuseCase(SimulationWorld world, BruteForceSceneQuery query,
++            RunState run, ProducerSnapshotExperimentCase experiment)
++        {
++            // Alignment contract: NTSD-H07-PRODUCER-ABBA-DIAG-001; cold case owner, historical wrapper unchanged.
++            Require(experiment != null && experiment.sequenceIndex >= 0 && experiment.sequenceIndex < 4 &&
++                run != null && producerSnapshotReuseWorld == null && producerSnapshotReuseCase == null &&
+                 inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
+                 world != null && world.SceneQuery == query && PostBindingsRoleQueryValid(query, 1) &&
+                 !query.EnableRoleBranchTimingForDiagnostics && !query.EnableRoleCapacityRecordGuardForDiagnostics &&
+@@ -2124,12 +2539,14 @@ namespace NTSD.Test.Editor
+             previousProducerSnapshotReuse = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics;
+             previousProducerSnapshotBoundaryTiming = world.EnableCharacterInputBoundaryTimingForDiagnostics;
+             producerSnapshotReuseWorld = world;
+-            run.producerSnapshotReuseEnabled = index % 2 != 0;
++            producerSnapshotReuseCase = experiment;
++            run.producerExperimentCase = experiment;
++            run.producerSnapshotReuseEnabled = experiment.reuseEnabled;
+             world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = run.producerSnapshotReuseEnabled;
+-            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
+-            run.producerSnapshotReuseFlagApplied = ProducerSnapshotReuseQueryValid(query, index);
++            world.EnableCharacterInputBoundaryTimingForDiagnostics = experiment.inputBoundaryTimingEnabled;
++            run.producerSnapshotReuseFlagApplied = ProducerSnapshotReuseQueryValid(query, experiment.sequenceIndex);
+             run.producerSnapshotReuseUnchanged = run.producerSnapshotReuseFlagApplied;
+-            run.inputBoundaryTimingEnabled = true;
++            run.inputBoundaryTimingEnabled = experiment.inputBoundaryTimingEnabled;
+             run.inputBoundaryTimingFlagApplied = run.producerSnapshotReuseFlagApplied;
+             run.inputBoundaryTimingUnchanged = run.producerSnapshotReuseFlagApplied;
+         }
+@@ -2164,6 +2581,7 @@ namespace NTSD.Test.Editor
+             bool restored = producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == previousProducerSnapshotReuse &&
+                 producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics == previousProducerSnapshotBoundaryTiming;
+             producerSnapshotReuseWorld = null;
++            producerSnapshotReuseCase = null;
+             return restored;
+         }
+ 
+@@ -2293,6 +2711,8 @@ namespace NTSD.Test.Editor
+             Require(RestoreBruteEligibilityReuse(), "Eligibility reuse must be restored before owner shutdown.");
+             Require(RestoreBruteBranchTiming(), "Branch timing must be restored before owner shutdown.");
+             Require(RestoreBruteKind5Presence(), "Kind5 presence must be restored before owner shutdown.");
++            if (roleRecordTickObserver != null) FinishRoleRecordObservation(state.runs[state.runIndex], true);
++            roleRecordBaseline = null;
+             productionQuery = null;
+             if (state.cpuGcCaptureOnly)
+                 BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("owner-shutdown");
+@@ -2418,7 +2838,7 @@ namespace NTSD.Test.Editor
+             try
+             {
+                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
+-                if (state.logicGcCallsiteOnly)
++                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic)
+                 {
+                     run.logicGcEvidence.zeroAllocationPassed = false;
+                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
+@@ -2435,7 +2855,11 @@ namespace NTSD.Test.Editor
+                 SaveNew(run.reportPath + (aborted ? ".logic-gc.aborted.json" : ".logic-gc.json"),
+                     JsonUtility.ToJson(run.logicGcEvidence, true));
+             }
+-            finally { observer.Dispose(); }
++            finally
++            {
++                observer.Dispose();
++                if (state.roleRecordCostDiagnostic) FinishRoleRecordObservation(run, aborted);
++            }
+         }
+         private static string PathFor(string path) => Path.GetFullPath(Path.Combine(Application.dataPath, "..", path));
+ 
+@@ -2503,6 +2927,12 @@ namespace NTSD.Test.Editor
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(RoleRecordCostOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                     PathFor(lines[1]).StartsWith(PathFor(ProducerAbbaOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseRetryOutputRoot) +
+@@ -2513,6 +2943,10 @@ namespace NTSD.Test.Editor
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(NativeSampledStateOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(ScopedProducerAdmissionOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(ScopedRoleAdmissionOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(PostBindingsRoleOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
+         }
+@@ -3364,6 +3798,30 @@ namespace NTSD.Test.Editor
+ #if UNITY_INCLUDE_TESTS
+     public sealed class BattleOptimizationWindowsAiSuiteRequestTests
+     {
++        [NUnit.Framework.TestCase(0)]
++        [NUnit.Framework.TestCase(1)]
++        public void RecordCost_RequestUsesOneFixedCombatFixture(int index)
++        {
++            var actual = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index);
++            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(3);
++            NUnit.Framework.Assert.That(actual.action, NUnit.Framework.Is.EqualTo("combat1000"));
++            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
++            NUnit.Framework.Assert.That(actual.warmupTicks, NUnit.Framework.Is.EqualTo(120));
++            NUnit.Framework.Assert.That(actual.sampleTicks, NUnit.Framework.Is.EqualTo(180));
++            NUnit.Framework.Assert.That(actual.seed, NUnit.Framework.Is.EqualTo(1314149188));
++            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain(index == 0 ? "00-combat1000-off" : "01-combat1000-on"));
++            actual.outputPath = expected.outputPath;
++            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
++        }
++
++        [NUnit.Framework.TestCase(-1)]
++        [NUnit.Framework.TestCase(2)]
++        public void RecordCost_RequestRejectsExtraWindows(int index)
++        {
++            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() =>
++                BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index));
++        }
++
+         [NUnit.Framework.TestCase(0)]
+         [NUnit.Framework.TestCase(1)]
+         [NUnit.Framework.TestCase(2)]
+diff --git a/docs/ai/CHANGE-LEDGER.md b/docs/ai/CHANGE-LEDGER.md
+index 3c1af5a6..a03c2bd8 100644
+--- a/docs/ai/CHANGE-LEDGER.md
++++ b/docs/ai/CHANGE-LEDGER.md
+@@ -1,3 +1,17 @@
++> 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
++
++> 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
++
++> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
++
++> 2026-10-09 第二项生产者快照复用准入 IN_PROGRESS / NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001；Task NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009。Role限定准入已完成，固定Role只切复用；生产复用暂OFF，不恢复旧Goal。
++
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+@@ -2246,3 +2260,11 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
+ 
+ > 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。
+ 
++
++| NTSD-H06-ROLE-RECORD-COST-DIAG-001 | BLOCKED | [Record](CHANGE-RECORDS/NTSD-H06-ROLE-RECORD-COST-DIAG-001.md) | bounded Role record diagnostic, default OFF |
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN；四路径默认OFF诊断已写，原Editor编译中，未运行实景。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED / Task FAILED有限停止；唯一OFF完整Driver2event/130、组合113false，ON未跑；诊断默认OFF保留。编译/最窄focused2/2与容量/关闭/保护通过，非生产/H07/Android完成；详同Task REPORT，旧CODE_WRITTEN为历史。
++
++| NTSD-H06-ROLE-PREREQUISITE-DIAG-001 | IN_PROGRESS | [Record](CHANGE-RECORDS/NTSD-H06-ROLE-PREREQUISITE-DIAG-001.md) | Role prerequisite diagnosis, editor only |
+diff --git a/docs/ai/CURRENT-AUTHORITY.md b/docs/ai/CURRENT-AUTHORITY.md
+index a43a9592..87334d64 100644
+--- a/docs/ai/CURRENT-AUTHORITY.md
++++ b/docs/ai/CURRENT-AUTHORITY.md
+@@ -1,3 +1,29 @@
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
++
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 / IN_PROGRESS；NTSD-H06-ROLE-PREREQUISITE-DIAG-001 IN_PROGRESS。用户授权当前讨论会话诊断完整Driver分配与组合状态门子条件，明确后交执行会话修复。仅Editor三写域、一次同combat1000 120+180及tick130附近八帧调用栈；原硬门不降低、七段计时OFF、不改生产/Q06。原Editor39108/TCP6402复用，不启动第二实例。旧Task失败保留，producer USER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放及旧Goal取消保持。
++
++> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 / IN_PROGRESS，Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN。四写域默认OFF诊断已写、已有focused及失败原件保留；待最新store计数器位置修复编译/最窄focused，前置通过才执行唯一combat1000 OFF→ON各120+180，随后报告/保护/Ledger收口。历史Editor重启问答不替代此任务。无实景窗口已启动，不恢复旧Goal/生产优化；producer USER_DEFERRED/OFF，95/84/89/92/94 OFF，Role默认保持，旧ABBA2event/tick130未知独立保留，H06父/H07/Android开放。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-ANALYSIS-20261010已完成静态收口：B / DIAGNOSTIC_DESIGN_ONLY。83六分支归因已足够缩到候选record，唯一缺口是首次snapshot/纯筛选与必要nearest-RNG/写入的内部成本及同scope重复覆盖；不重跑83/91、不换名重试31/84/89/92/93/94。下一只输出具名NTSD-H06-ROLE-RECORD-COST-DIAG-20261010有限指令（一个combat1000 OFF→ON、各120+180的七子段诊断；本轮未实施/未运行/未发送到其它会话）。 producer USER_DEFERRED/生产OFF；ABBA首OFF完整Driver2event/首tick130调用点未知独立挂账；Role空配置生产默认及Brute回退保持，95OFF，H06父/H07/Android开放，34父项及旧包数不变，旧Goal不恢复。 报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md。下方“尚未发送/等待输出/监测暂停”保留原时点；用户已授权整理完成后直接输出下一有限指令，本任务不操作监测。
++
++> 2026-10-10 用户决定：producer Runtime快照复用 USER_DEFERRED / PRODUCTION_DEFAULT_OFF，保留原准入与ABBA证据，不自动重测/修复/推广。ABBA首OFF完整Driver稳态2次分配、首tick130调用点未知仍挂账，不抵消旧0GC范围，也不自动归因95。下一项选择 H06-ROLE-EXACT（现有Role精确配对成本），本轮只静态分析与方案整理；尚未批准具体代码改法/测试测量，不自动发送执行指令或恢复监测。Role默认保持，H06父/H07/Android开放；34父项及旧包数不变、旧Goal不恢复。恢复入口：docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md；记录/审计Task NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010。下方状态按原日期保留历史。
++
++> 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
++
++> 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
++
++> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
++
++> 2026-10-09 第二项生产者快照复用准入 IN_PROGRESS / NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001；Task NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009。Role限定准入已完成，固定Role只切复用；生产复用暂OFF，不恢复旧Goal。
++
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md
+index ed698de6..fd15cf55 100644
+--- a/docs/ai/FILE-OPERATIONS/INDEX.md
++++ b/docs/ai/FILE-OPERATIONS/INDEX.md
+@@ -656,3 +656,28 @@ Operation NTSD-OPTIMIZATION-D1-A-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATIO
+ 
+ 
+ > 2026-10-09 Operation `NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009` / VERIFIED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/RECORD.md)。两份独立实施说明/格式已建立、四处导航已补；3014保护文件及五份dirty备份SHA一致，代码前后片段/链接检查通过。没有代码修改、测试或后继执行。
++
++- [NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009](NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/RECORD.md) RUNNING，第一项Role限定准入，真实备份与保护指纹已登记。
++
++- NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009：Role限定准入/默认接线已通过；四窗+生产13/13，validator exit0。后续用户点击未知弹窗退出并手动重启Editor，启动状态待安全核验；未由代理重启。
++
++- [NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009](NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/RECORD.md) RUNNING；第二项独立登记，保留第一项dirty；PID39108安全核验通过。
++
++- NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009 / COMPLETED_NOT_ADMITTED：原Editor44+1+1 PASS及四窗，混战tick回退未解释/生产OFF；保留原件/2390保护，详同名RECORD。
++
++- NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / PLANNED：独立ABBA诊断，准确dirty备份/范围见 [NTSD-H07-PRODUCER-ABBA-DIAG-20261009/RECORD.md](NTSD-H07-PRODUCER-ABBA-DIAG-20261009/RECORD.md)。
++
++- NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / SCOPED_DIAGNOSIS_COMPLETED：一次ABBA，首OFF GC_FAIL，因果未闭合，生产OFF；33+1+1 PASS、原件与2452保护保持。详同名RECORD及REPORT。
++
++- NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010 / VERIFIED（仅文档）：producer用户暂缓/生产OFF；下一H06-ROLE-EXACT方案已建立、未实施。13份dirty备份核同、56保护0变化、43链接及文档diff检查通过，详[Record](NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010/RECORD.md)。
++
++- NTSD-H06-ROLE-RECORD-ANALYSIS-20261010 / PLANNED：文档限定record链分析；七文档真实dirty备份，见 [NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/RECORD.md](NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/RECORD.md)。
++
++- 2026-10-10 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010`：同ID继续完成文档分析，B/七段有限诊断设计；六治理文档前置更正、旧字节全部保留，Task/Operation/报告见同ID路径。无脚本/资源/Unity运行。最终操作验证见本Operation的verification.json。
++- `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 最终Operation VERIFIED（文档限定），2514保护/7备份/24指纹检查通过，diff-check exit0；Task B分析收口，下一诊断未执行。
++
++- NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 PLANNED：四脚本/必要治理文档，11份真实dirty备份；[Operation](NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/RECORD.md)。
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 本次操作收口：四脚本及具名治理增量；最新counter纠错/原失败原件、11初始dirty备份/10收口备份和patch均保留。OFF一窗GC/观察FAIL后停止ON；无删除/新实验，窗口前后四源和2510保护稳定。见同Operation RECORD与本Task REPORT。
++
++| NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 | IN_PROGRESS | User-authorized Role prerequisite diagnosis only | [NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010](NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/RECORD.md) |
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+index 0e8dce94..922aaefc 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+@@ -1,7 +1,17 @@
++> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
++
++> 当前有限诊断已结束，当前路线尚无A/C结论；下一项不自动实施。若另行授权恢复，先解决完整Driver分配资格及组合观察门子条件证据，不能以其它窗口0GC豁免或把fallback峰值直接认作规则错误。一般H07-INPUT保留独立评审、producer仍暂缓。[本Task报告](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md)。
++
++> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
++
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
+ 
++> 2026-10-10 用户决定：producer复用USER_DEFERRED/生产OFF。下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)只进入静态分析/方案；不依赖producer先准入，也不依赖95全部闭合。新ABBA首OFF完整Driver2event/首tick130问题只阻塞使用该失败fixture/相关路径的0GC资格，不能把旧0GC或collector0GC当豁免；不阻塞独立只读分析。
++
+ # 优化依赖与阶段顺序
+ 
+ 状态：DOCUMENTED / IMPLEMENTATION_STOPPED。依赖依据为34单项方案、共同启动门、PERF/ATLAS/MONO相关合同及2026-10-09交接；具体代码依赖进入具名实施前再次核对。以下为方案层依赖，不冒充已运行证明。
+@@ -67,7 +77,7 @@
+ 
+ ## 当前Windows主线
+ 
+-- H06 Role候选准入：D1=A已批准→准确写域/受影响门冻结→候选验证→满足批准门后默认切换。83—86到约44ms是历史比较，不是本轮收益承诺。
++- H06 Role限定准入已完成，当前空配置生产默认Role。下一H06-ROLE-EXACT：现有成本/计数→可消除工作与authority副作用证明→具名方案获批→必要验证；不因producer暂缓而等待，不自动切网格。
+ - H07-INPUT：已有91归因/字段合同→具名热点方案→获批实施；Role默认不是它的硬前置，但A/B必须固定同一种collector。
+ - H07-GC95只阻塞使用该失败fixture或相关分配生产路径的资格门，不全局阻塞Input只读分析或已有实景证据。
+ - H07-LATE先细分成本与读范围授权，不能靠publication只读推断缓存安全。
+diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md
+index 5fb20ef0..4530273f 100644
+--- a/docs/ai/STATE.md
++++ b/docs/ai/STATE.md
+@@ -1,3 +1,29 @@
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
++
++> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 / IN_PROGRESS；NTSD-H06-ROLE-PREREQUISITE-DIAG-001 IN_PROGRESS。用户授权当前讨论会话诊断完整Driver分配与组合状态门子条件，明确后交执行会话修复。仅Editor三写域、一次同combat1000 120+180及tick130附近八帧调用栈；原硬门不降低、七段计时OFF、不改生产/Q06。原Editor39108/TCP6402复用，不启动第二实例。旧Task失败保留，producer USER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放及旧Goal取消保持。
++
++> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 / IN_PROGRESS，Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN。四写域默认OFF诊断已写、已有focused及失败原件保留；待最新store计数器位置修复编译/最窄focused，前置通过才执行唯一combat1000 OFF→ON各120+180，随后报告/保护/Ledger收口。历史Editor重启问答不替代此任务。无实景窗口已启动，不恢复旧Goal/生产优化；producer USER_DEFERRED/OFF，95/84/89/92/94 OFF，Role默认保持，旧ABBA2event/tick130未知独立保留，H06父/H07/Android开放。
++
++> 2026-10-10 NTSD-H06-ROLE-RECORD-ANALYSIS-20261010已完成静态收口：B / DIAGNOSTIC_DESIGN_ONLY。83六分支归因已足够缩到候选record，唯一缺口是首次snapshot/纯筛选与必要nearest-RNG/写入的内部成本及同scope重复覆盖；不重跑83/91、不换名重试31/84/89/92/93/94。下一只输出具名NTSD-H06-ROLE-RECORD-COST-DIAG-20261010有限指令（一个combat1000 OFF→ON、各120+180的七子段诊断；本轮未实施/未运行/未发送到其它会话）。 producer USER_DEFERRED/生产OFF；ABBA首OFF完整Driver2event/首tick130调用点未知独立挂账；Role空配置生产默认及Brute回退保持，95OFF，H06父/H07/Android开放，34父项及旧包数不变，旧Goal不恢复。 报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md；当前Task分析完成即停止，下一诊断未执行。
++
++> 2026-10-10 用户决定：producer Runtime快照复用 USER_DEFERRED / PRODUCTION_DEFAULT_OFF，保留原准入与ABBA证据，不自动重测/修复/推广。ABBA首OFF完整Driver稳态2次分配、首tick130调用点未知仍挂账，不抵消旧0GC范围，也不自动归因95。下一项选择 H06-ROLE-EXACT（现有Role精确配对成本），本轮只静态分析与方案整理；尚未批准具体代码改法/测试测量，不自动发送执行指令或恢复监测。Role默认保持，H06父/H07/Android开放；34父项及旧包数不变、旧Goal不恢复。恢复入口：docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md；记录/审计Task NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010。下方状态按原日期保留历史。
++
++> 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
++
++> 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
++
++> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
++
++> 2026-10-09 第二项生产者快照复用准入 IN_PROGRESS / NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001；Task NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009。Role限定准入已完成，固定Role只切复用；生产复用暂OFF，不恢复旧Goal。
++
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+@@ -6721,3 +6747,7 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
+ 
+ > 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。
+ 
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 IN_PROGRESS / NTSD-H06-ROLE-RECORD-COST-DIAG-001 PLANNED，默认OFF有限诊断，旧分析Task完成历史保持。
++
++> NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN；四路径默认OFF诊断已写，原Editor编译中，未运行实景。

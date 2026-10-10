@@ -1,0 +1,290 @@
+{
+  "utc": "2026-10-09T17:35:19.497099+00:00",
+  "files": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\after-window-editor.json",
+      "bytes": 2122,
+      "sha256": "0a4032c8ea55f7d819f08ecfe6ba6bbcfcc4248d79b9b94d92a52f443e7d0780"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\after-window-scenes.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\analysis.json",
+      "bytes": 8746,
+      "sha256": "b6e44ec5e54fd236bcea412ff1dbc74f0c55febca76ec1d944bcf05d59096a4a"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-errors-01.json",
+      "bytes": 130,
+      "sha256": "b21abdd93106dc4f9fd3b6f688e83f05441fd1a4ea45669ba6102f6f1ad2e36d"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-errors-02.json",
+      "bytes": 335,
+      "sha256": "0e4605d97e87105a96dc49b2440c26591138987cbe56648aef5807bedf8db09a"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-evidence.json",
+      "bytes": 946,
+      "sha256": "0f7c672d7c0688f1df3fe4ebeaef91b97cea506752b712286d68ebf6c031a898"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-import-02.json",
+      "bytes": 654,
+      "sha256": "85a66e1847fb7b5c12a466c19b0e15727c47470400a34097b5cad99c3cc16f12"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-import-03.json",
+      "bytes": 710,
+      "sha256": "9196e50ac0debff311a3161d2ddcc29e367a250b12c944bdb5fb7272e7a6a939"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-import.json",
+      "bytes": 710,
+      "sha256": "49ba45fe96e152dc0da18ea35c1de0d53f4b5a20d80eb2ea6a5d04021baad994"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-request-04.json",
+      "bytes": 516,
+      "sha256": "571438896aa2bb5b0c154f3498b8994347e164fccb97847d4973ebb079a4fb4e"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-request-05.json",
+      "bytes": 347,
+      "sha256": "b1d9320d65e0b9b91575fb57079b3f36e28ba225e9ae5c2d532e02dba8e62220"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-request-06.json",
+      "bytes": 347,
+      "sha256": "b1d9320d65e0b9b91575fb57079b3f36e28ba225e9ae5c2d532e02dba8e62220"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-request-07.json",
+      "bytes": 347,
+      "sha256": "b1d9320d65e0b9b91575fb57079b3f36e28ba225e9ae5c2d532e02dba8e62220"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-01.json",
+      "bytes": 2257,
+      "sha256": "8c741383a9ffd9b72d06a17fd6cd567a9a54f515c6423812fdf19c61f2619284"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-02.json",
+      "bytes": 2122,
+      "sha256": "7756993ab16d8c40fa720e2b3949a43e2efc0b9388a3cb890d82c040152d4398"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-03.json",
+      "bytes": 2122,
+      "sha256": "a86f1830f2320b76ec341e2aba44433b43846dedf7e00f8a224f36bd98f7e065"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-04.json",
+      "bytes": 2261,
+      "sha256": "ed28ef35a1cf4ef8217f097a0cbf42b2e7ed3558299921d15a6f2292c721f939"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-05.json",
+      "bytes": 2262,
+      "sha256": "28971cdf2bdf83d85038ebba33ac15ebc0fa9c7c482896cfe88acd9342678485"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-06.json",
+      "bytes": 2122,
+      "sha256": "2f503b18db7c68d801cf578df2d58177d1c2ae4bdb68dbbc511001fabf54e876"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\compile-state-07.json",
+      "bytes": 2122,
+      "sha256": "3dbf23dee49f973bac58c6e361b543dfab7c76f26482ddcbc454309f7fd7e2d2"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\editor-before-compile.json",
+      "bytes": 2244,
+      "sha256": "844f8eacbdb29aca728d8fce7ad92a1588703bd146034625d52b4b3fbea63021"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\final-git-diff-check.txt",
+      "bytes": 1648,
+      "sha256": "ac9822dbc2a366d07c48d45d890766a050145b7e4a35fff25fd434cdb8685c7b"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\final-git-status.txt",
+      "bytes": 4609,
+      "sha256": "0e0c7f951254e93ae3e754c3c39e5399eddf46b68dd7b63a2a438e1129b0565b"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-result-01.json",
+      "bytes": 3604,
+      "sha256": "e593b5685104c63c62a48de2ce5459fbe0664e7f5c76e9ae6939286d4eb39294"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-result-02.json",
+      "bytes": 6199,
+      "sha256": "ce30f70bd20dffe23d3c7c507b9bd119a05d1b0014a5f083a0d56a19f17de248"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-result-03.json",
+      "bytes": 1208,
+      "sha256": "db94a93cb9b528daa7092d3c9dc9acee62a3db99d936cffda670943aa8c0d9f7"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-result-04.json",
+      "bytes": 1208,
+      "sha256": "a9701ec66f8e4bdb6bb39f651df02b7e46345167abfcd97e351f18fdbee8ea21"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-result-05.json",
+      "bytes": 2024,
+      "sha256": "bff72210a0b7b2091ac688689db55e7d2d5937bbd48d1d040c5c975a8e874031"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-start-01.json",
+      "bytes": 1787,
+      "sha256": "4cb7bb69f2ec2500ea5bc95d75668526eb2a31801fe5f8b3e426d3a7da2c5ff0"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-start-02.json",
+      "bytes": 1718,
+      "sha256": "52b36035e426d3512c2b39cc4fc24e3fddc447c3667004723cc096de9b3c5a91"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-start-03.json",
+      "bytes": 1119,
+      "sha256": "52c3639310b44c0d7a44f182f485abe38a28f69b26c8c27260d98d3f799ccc08"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-start-04.json",
+      "bytes": 1119,
+      "sha256": "6e6f6b3720e0b42df5b617d2ec9da793b34085af5798313282041e003dcc45f4"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\focused-start-05.json",
+      "bytes": 307,
+      "sha256": "754eb14d0c9e9d2b9a2cc2250918560bfea6000dc1e30fc50933c71b03b49eee"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\git-diff-check.txt",
+      "bytes": 1648,
+      "sha256": "ac9822dbc2a366d07c48d45d890766a050145b7e4a35fff25fd434cdb8685c7b"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\post-window-protection.json",
+      "bytes": 1588,
+      "sha256": "699666a9ec1ba0e0daabaacebd4e49483495188e94e784ee469674ca2ac2aafb"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\pre-window-editor.json",
+      "bytes": 2243,
+      "sha256": "5ad432e4f91072634b2055d326f9d9685151684640ec78f7b959a160de0d7b50"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\pre-window-fingerprints.json",
+      "bytes": 1086,
+      "sha256": "6a70bf6d0cf08e715327a8b5f6fdd5bb23d9aed201e63454848e12f790ad41a7"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\pre-window-scenes.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\REPORT.md",
+      "bytes": 11664,
+      "sha256": "97874d333d2081a5b984a898ae65a10042265dfc08b434730fa81fef961f884a"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\resume-editor-state.json",
+      "bytes": 2122,
+      "sha256": "508af706493bb9cad2f3524f712c9ded886d43f8edb113226e28343dbba6208c"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\resume-git-status.txt",
+      "bytes": 4609,
+      "sha256": "0e0c7f951254e93ae3e754c3c39e5399eddf46b68dd7b63a2a438e1129b0565b"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\resume-scenes.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\scenes-before-compile.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\validator.txt",
+      "bytes": 790210,
+      "sha256": "1dbce5749a118d397cbef5578bf17c2d97b96e4e5c94ced406392989f0ed41fc"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\window-start.json",
+      "bytes": 229,
+      "sha256": "5b6eba925853135216076e6e45b1621db34ddaa930a93422c92aabe7908109aa"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\window-state-01.json",
+      "bytes": 2139,
+      "sha256": "21626cc77290f8063715411a3d6f5f03266522844c04f28a2f7f70a2383583b3"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json",
+      "bytes": 160854,
+      "sha256": "64fb77a68368c82b1b4ba1d6e8b7f06d323c81659fc93089fc63ed2d3455ff66"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.final-checksum.json",
+      "bytes": 4208480,
+      "sha256": "e4916aca8c5be675b8192d5a6c1429029fd94db6f838cf6c82e532b030836b12"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.logic-gc.json",
+      "bytes": 1924,
+      "sha256": "6cd660e903c042b0a5d41fcd205fed5e35b164157c001b728cdb4c780e8f5122"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.observation.json",
+      "bytes": 10643,
+      "sha256": "6fe7182df4df4597be6c994b9ad87449fd56ee51544f7f23fe5a7c39ff653454"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.record-cost.json",
+      "bytes": 601264,
+      "sha256": "e304d396e191ed3f876fc5d29ca3fdcd953b92d6a8ad4b5579164a9aee5b3021"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.request.json",
+      "bytes": 2713,
+      "sha256": "c64ea011b3d4716218edb0ca1fdeceed81244cd6da4b3fd82e2a34338231240e"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.shared-terminal-before.txt",
+      "bytes": 498,
+      "sha256": "c510b4fe1ebc9f4406f9ee40397cbd7258842d92b40c1a6820ba198a9b665baa"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\00-combat1000-off\\report.json.terminal.txt",
+      "bytes": 502,
+      "sha256": "8dea26f940bbc8fe7a0c01199e2bc111fc6f3bad2dcd90334f8bc3ceae96c6b8"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\01-combat1000-on\\report.json.request.json",
+      "bytes": 2712,
+      "sha256": "32e50433e5b21358429c6c84e030304417048f256740186d1e48198a7dc1d815"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\progress-0000.json",
+      "bytes": 10550,
+      "sha256": "42eef79a46cc01b6013c1b8a58c0e15c0ea2802487b83fa0b08bfcf67e2b2241"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\\windows\\suite-result.json",
+      "bytes": 28076,
+      "sha256": "99bfb562f72e85fbcf97d08f7a071720811b75e83b80ca6e78dceda353d693b7"
+    }
+  ]
+}

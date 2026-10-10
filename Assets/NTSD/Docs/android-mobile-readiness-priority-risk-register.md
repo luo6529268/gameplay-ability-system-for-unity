@@ -16,8 +16,8 @@
 | H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
 | H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
 | H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
-| H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | FindEffect局部修复已验证：100结果一致且0GC、原千人混合234→0事件/样本；限定准入待收益/接线，默认Brute，H06/H07最终门不变 |
-| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | Role限定准入完成：当前收益/完整Driver稳态0GC/默认接线通过；空配置Role、显式Brute与非法回退保留，H06/H07最终门不变 |
+| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，下一方案见H06-ROLE-EXACT |
 | H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
 | H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
 | H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
@@ -46,10 +46,11 @@
 | L-07 | [AI profile说明一致性](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 维护 | 低 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
 | L-08 | [发布包装](android-mobile-readiness/l-08-release-packaging.md) | 发布 | 低 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
 
-## 新热点与条件候选：5个父项子方案
+## 新热点与条件候选：6个父项子方案
 
 | 子ID | 父项 | 优先级 | 独立方案 |
 |---|---|---|---|
+| H06-ROLE-EXACT | H-06 | 高／下一方案 | [现有Role精确配对成本](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，2026-10-10静态分析/方案，具体实施未授权 |
 | H07-INPUT | H-07 | 高 | [CharacterInput等价优化](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) |
 | H07-LATE | H-07 | 中 | [后续实体更新](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) |
 | H07-GC95 | H-07 | 限定问题 | [第95批分配调用点](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) |

@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "4ff1921248c24d499497bca12fad14f0",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791595070597,
+      "finished_unix_ms": 1791595086813,
+      "last_update_unix_ms": 1791595086813,
+      "progress": {
+        "completed": 4,
+        "total": 10585,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791595080151,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.RequestChangesOnlyFreshOutputFromOriginalOffFixture",
+        "last_finished_unix_ms": 1791595080154,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.8689686,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "state": "Passed",
+            "durationSeconds": 0.0166203,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "state": "Passed",
+            "durationSeconds": 0.0042671,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CompletedGcScopeRemainsReadableAfterAccept",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.CompletedGcScopeRemainsReadableAfterAccept",
+            "state": "Passed",
+            "durationSeconds": 0.0262746,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RequestChangesOnlyFreshOutputFromOriginalOffFixture",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.RequestChangesOnlyFreshOutputFromOriginalOffFixture",
+            "state": "Passed",
+            "durationSeconds": 0.002366,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

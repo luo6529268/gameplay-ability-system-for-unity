@@ -1,0 +1,229 @@
+#if UNITY_EDITOR
+using System;
+using System.IO;
+using NTSD.Animation;
+using NTSD.Animation.Rendering.Editor;
+using NTSD.Simulation;
+using Unity.Profiling;
+using UnityEditor;
+using UnityEngine;
+
+namespace NTSD.Test.Editor
+{
+    internal static class H06RolePrerequisiteDiagnostics
+    {
+        internal const string OutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/windows";
+        private static Evidence evidence;
+        private static ProfilerMarker[] tickMarkers;
+        private static int openMarker = -1;
+
+        [Serializable]
+        private struct TickObservation
+        {
+            public int tick, unityFrame, failureMask, oldTimerMask;
+            public bool steady, originalAggregate, maskMatchesOriginal, scopeValid;
+            public long allocationEvents, rawValue;
+            public int collector, fallbackParticipants, inertParticipants;
+            public int bodyOrdinals, fallbackAttackOrdinals, exactAttackOrdinals, fallbackBodyOrdinals;
+        }
+
+        [Serializable]
+        private sealed class Evidence
+        {
+            public string purpose = "PREREQUISITE_DIAGNOSTIC_ONLY; original admission assertion is unchanged; instrumented run is not a zero-GC/performance certificate";
+            public string[] failureBits =
+            {
+                "record gate", "stride64", "old branch timer", "84 capacity guard", "89 frame reuse",
+                "92 group skip", "94 endpoint reuse", "95 source coordinates", "producer reuse",
+                "input boundary timer", "actual Role collector", "collection aborted",
+                "fallback participant count", "steady boundary", "old six elapsed slots"
+            };
+            public int ticks, aggregateFailures, maskDisagreements, captureRequestedAfterTick;
+            public string finishReason;
+            public TickObservation[] observations = new TickObservation[300];
+        }
+
+        internal static ProductionEntityStressRequest BuildRequest(int index)
+        {
+            if (index != 0)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
+            request.outputPath = OutputRoot + "/00-combat1000-prerequisites/report.json";
+            return request;
+        }
+
+        internal static int AddFailure(int mask, bool conditionPassed, int bit)
+        {
+            return conditionPassed ? mask : mask | (1 << bit);
+        }
+
+        internal static void Start()
+        {
+            if (evidence != null)
+                throw new InvalidOperationException("Prerequisite observer already has an owner.");
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            evidence = new Evidence();
+            tickMarkers = new ProfilerMarker[300];
+            for (int index = 0; index < tickMarkers.Length; index++)
+            {
+                tickMarkers[index] = new ProfilerMarker("NTSD.H06.Prerequisite.Driver.Tick" + (index + 1).ToString("D3"));
+                tickMarkers[index].Begin();
+                tickMarkers[index].End();
+            }
+            try
+            {
+                BattleOptimizationCpuGcCaptureEditor.Arm(Path.GetFullPath(OutputRoot + "/capture"));
+                AssemblyReloadEvents.beforeAssemblyReload += BeforeReload;
+            }
+            catch
+            {
+                evidence = null;
+                tickMarkers = null;
+                throw;
+            }
+        }
+
+        internal static void BeginDriver(int tick)
+        {
+            if (evidence == null)
+                return;
+            if (openMarker != -1 || tick < 1 || tick > 300)
+                throw new InvalidOperationException("Prerequisite marker sequence invalid.");
+            openMarker = tick - 1;
+            tickMarkers[openMarker].Begin();
+        }
+
+        internal static void EndDriver()
+        {
+            if (openMarker == -1)
+                return;
+            tickMarkers[openMarker].End();
+            openMarker = -1;
+        }
+
+        internal static void Observe(int tick, bool steady, bool expectedRecordGate, bool originalAggregate,
+            SimulationWorld world, BruteForceSceneQuery query, BattleTickDetailPhaseDiagnostics detail,
+            BattleScopedGcAllocationRecorder.ScopeResult scope, ProductionEntityStressReport report)
+        {
+            if (evidence == null)
+                return;
+            if (tick != evidence.ticks + 1 || tick > 300)
+                throw new InvalidOperationException("Prerequisite observation lost a completed tick.");
+            int mask = 0;
+            mask = AddFailure(mask, query.EnableRoleRecordCostDiagnostics == expectedRecordGate, 0);
+            mask = AddFailure(mask, query.RoleBranchTimingSampleStrideForDiagnostics == 64, 1);
+            mask = AddFailure(mask, !query.EnableRoleBranchTimingForDiagnostics, 2);
+            mask = AddFailure(mask, !query.EnableRoleCapacityRecordGuardForDiagnostics, 3);
+            mask = AddFailure(mask, !query.EnableRoleSnapshotFrameReuseForDiagnostics, 4);
+            mask = AddFailure(mask, !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, 5);
+            mask = AddFailure(mask, !query.EnableRoleEndpointSnapshotReuseForDiagnostics, 6);
+            mask = AddFailure(mask, !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics, 7);
+            mask = AddFailure(mask, !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, 8);
+            mask = AddFailure(mask, !world.EnableCharacterInputBoundaryTimingForDiagnostics, 9);
+            mask = AddFailure(mask, query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware, 10);
+            mask = AddFailure(mask, !query.LastFormalCollectionAbortedForDiagnostics, 11);
+            mask = AddFailure(mask, query.LastFormalFallbackParticipantCountForDiagnostics == 0, 12);
+            mask = AddFailure(mask, steady == (tick > 120), 13);
+            int timerMask = 0;
+            for (int phase = 48; phase <= 53; phase++)
+                if (detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) != 0)
+                    timerMask |= 1 << (phase - 48);
+            mask = AddFailure(mask, timerMask == 0, 14);
+            query.GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(out int bodies,
+                out int fallbackAttacks, out int exactAttacks, out int fallbackBodies);
+            evidence.observations[tick - 1] = new TickObservation
+            {
+                tick = tick, unityFrame = Time.frameCount, steady = steady,
+                failureMask = mask, oldTimerMask = timerMask, originalAggregate = originalAggregate,
+                maskMatchesOriginal = (mask == 0) == originalAggregate,
+                scopeValid = scope.valid && scope.calibratedBefore && !scope.saturated && !scope.wrapped,
+                allocationEvents = scope.allocationEvents, rawValue = scope.rawValueTotal,
+                collector = (int)query.LastFormalCollectorModeForDiagnostics,
+                fallbackParticipants = query.LastFormalFallbackParticipantCountForDiagnostics,
+                inertParticipants = query.LastRoleAwareInertParticipantCountForDiagnostics,
+                bodyOrdinals = bodies, fallbackAttackOrdinals = fallbackAttacks,
+                exactAttackOrdinals = exactAttacks, fallbackBodyOrdinals = fallbackBodies
+            };
+            if (!originalAggregate)
+                evidence.aggregateFailures++;
+            if ((mask == 0) != originalAggregate)
+                evidence.maskDisagreements++;
+            evidence.ticks++;
+            // Capture setup/export is outside the synchronous Driver allocation/timing scopes.
+            if (tick == 124)
+            {
+                evidence.captureRequestedAfterTick = tick;
+                BattleOptimizationCpuGcCaptureEditor.Observe(report);
+            }
+        }
+
+        internal static void Finish(string reason)
+        {
+            if (evidence == null)
+                return;
+            Evidence finished = evidence;
+            evidence = null;
+            AssemblyReloadEvents.beforeAssemblyReload -= BeforeReload;
+            try
+            {
+                EndDriver();
+                BattleOptimizationCpuGcCaptureEditor.FinishAndRestore(reason);
+            }
+            finally
+            {
+                tickMarkers = null;
+                finished.finishReason = reason;
+                string path = Path.GetFullPath(OutputRoot + "/prerequisite-observations.json");
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write))
+                using (var writer = new StreamWriter(stream))
+                    writer.Write(JsonUtility.ToJson(finished, true));
+            }
+        }
+
+        private static void BeforeReload()
+        {
+            Finish("assembly-reload-abort");
+        }
+    }
+
+#if UNITY_INCLUDE_TESTS
+    public sealed class H06RolePrerequisiteDiagnosticsTests
+    {
+        [NUnit.Framework.Test]
+        public void RequestChangesOnlyFreshOutputFromOriginalOffFixture()
+        {
+            var actual = H06RolePrerequisiteDiagnostics.BuildRequest(0);
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain("ROLE-PREREQUISITE-DIAG"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() => H06RolePrerequisiteDiagnostics.BuildRequest(1));
+        }
+
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        [NUnit.Framework.TestCase(2)]
+        [NUnit.Framework.TestCase(3)]
+        [NUnit.Framework.TestCase(4)]
+        [NUnit.Framework.TestCase(5)]
+        [NUnit.Framework.TestCase(6)]
+        [NUnit.Framework.TestCase(7)]
+        [NUnit.Framework.TestCase(8)]
+        [NUnit.Framework.TestCase(9)]
+        [NUnit.Framework.TestCase(10)]
+        [NUnit.Framework.TestCase(11)]
+        [NUnit.Framework.TestCase(12)]
+        [NUnit.Framework.TestCase(13)]
+        [NUnit.Framework.TestCase(14)]
+        public void FailureBitsAreDistinctAndPreserveEarlierFailures(int bit)
+        {
+            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.AddFailure(0, true, bit), NUnit.Framework.Is.Zero);
+            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.AddFailure(0, false, bit), NUnit.Framework.Is.EqualTo(1 << bit));
+            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.AddFailure(1 << 20, false, bit),
+                NUnit.Framework.Is.EqualTo((1 << 20) | (1 << bit)));
+        }
+    }
+#endif
+}
+#endif

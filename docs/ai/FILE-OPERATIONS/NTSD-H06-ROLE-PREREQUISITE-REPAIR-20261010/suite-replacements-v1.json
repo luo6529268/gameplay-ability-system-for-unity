@@ -1,0 +1,50 @@
+[
+  [
+    "        private static bool startingRoleRecordPrerequisiteDiagnostic;",
+    "        private static bool startingRoleRecordPrerequisiteDiagnostic;\n        private static bool startingRolePrerequisiteQualification;\n\n        [MenuItem(\"NTSD/Validation/Optimization/H06 Role Prerequisite Qualification\")]\n        private static void BeginRolePrerequisiteQualification()\n        {\n            Require(!startingRoleRecordCostDiagnostic && !startingRoleRecordPrerequisiteDiagnostic &&\n                !startingRolePrerequisiteQualification && roleRecordTickObserver == null,\n                \"The prerequisite qualification already has an owner.\");\n            Require(!UnityEngine.Profiling.Profiler.enabled, \"Qualification requires Profiler recording OFF.\");\n            startingRolePrerequisiteQualification = true;\n            startingRoleRecordCostDiagnostic = true;\n            roleRecordBaseline = null;\n            try { BeginPostBindingsRole(); }\n            finally { startingRolePrerequisiteQualification = false; startingRoleRecordCostDiagnostic = false; }\n        }"
+  ],
+  [
+    "            public bool steady, actualFlagsValid;",
+    "            public bool steady, actualFlagsValid;\n            public H06RolePrerequisiteDiagnostics.QualificationGate qualificationGate;"
+  ],
+  [
+    "            public string checksumScope =",
+    "            public int gateVersion = 2;\n            public string gateContract = \"v2: original bits0..11/13..14; bit12 true attack/body fallback zero; bit15 total equals nonnegative inert; forensic entry remains v1.\";\n            public H06RolePrerequisiteDiagnostics.ColdPreparation coldPreparation;\n            public string comparisonBaseline;\n            public bool qualificationNoProfiler;\n            public string checksumScope ="
+  ],
+  [
+    "                previousEnabled = query.EnableRoleRecordCostDiagnostics;",
+    "                evidence.gateVersion = state.roleRecordPrerequisiteDiagnostic ? 1 : 2;\n                if (state.rolePrerequisiteQualification)\n                {\n                    Require(!enabled && !UnityEngine.Profiling.Profiler.enabled, \"Qualification must remain OFF without Profiler capture.\");\n                    var baseline = JsonUtility.FromJson<RoleRecordEvidence>(File.ReadAllText(PathFor(H06RolePrerequisiteDiagnostics.QualificationBaseline)));\n                    Require(baseline != null && baseline.ticks == 300 && baseline.observations.Length == 300,\n                        \"The fixed 300-tick prerequisite baseline is required.\");\n                    for (int index = 0; index < 300; index++)\n                        Require(baseline.observations[index] != null && baseline.observations[index].tick == index + 1,\n                            \"Prerequisite baseline sequence is incomplete.\");\n                    roleRecordBaseline = baseline.observations;\n                    evidence.comparisonBaseline = H06RolePrerequisiteDiagnostics.QualificationBaseline;\n                    evidence.coldPreparation = H06RolePrerequisiteDiagnostics.PrepareCapturedMethods();\n                    evidence.qualificationNoProfiler = true;\n                }\n                previousEnabled = query.EnableRoleRecordCostDiagnostics;"
+  ],
+  [
+    "                if (!row.actualFlagsValid) evidence.actualFlagFailures++;",
+    "                if (!state.roleRecordPrerequisiteDiagnostic)\n                {\n                    row.qualificationGate = H06RolePrerequisiteDiagnostics.ReadQualificationGate(\n                        tick, steady, evidence.enabled, world, query, detail);\n                    row.actualFlagsValid = row.qualificationGate.failureMask == 0;\n                }\n                if (state.rolePrerequisiteQualification)\n                {\n                    evidence.qualificationNoProfiler &= !UnityEngine.Profiling.Profiler.enabled;\n                    row.actualFlagsValid &= evidence.qualificationNoProfiler;\n                }\n                if (!row.actualFlagsValid) evidence.actualFlagFailures++;"
+  ],
+  [
+    "                if (evidence.enabled && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))",
+    "                if ((evidence.enabled || state.rolePrerequisiteQualification) && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))"
+  ],
+  [
+    "            public bool roleRecordPrerequisiteDiagnostic;",
+    "            public bool roleRecordPrerequisiteDiagnostic;\n            public bool rolePrerequisiteQualification;"
+  ],
+  [
+    "            string outputRoot = startingRoleRecordPrerequisiteDiagnostic ?",
+    "            string outputRoot = startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :\n                startingRoleRecordPrerequisiteDiagnostic ?"
+  ],
+  [
+    "                roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,",
+    "                roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,\n                rolePrerequisiteQualification = startingRolePrerequisiteQualification,"
+  ],
+  [
+    "runs = new RunState[startingRoleRecordPrerequisiteDiagnostic ? 1 :",
+    "runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 :"
+  ],
+  [
+    "            if (state.roleRecordPrerequisiteDiagnostic)\n                return H06RolePrerequisiteDiagnostics.BuildRequest(index);",
+    "            if (state.rolePrerequisiteQualification)\n                return H06RolePrerequisiteDiagnostics.BuildQualificationRequest(index);\n            if (state.roleRecordPrerequisiteDiagnostic)\n                return H06RolePrerequisiteDiagnostics.BuildRequest(index);"
+  ],
+  [
+    "PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +",
+    "PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +\n                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||\n                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +"
+  ]
+]

@@ -1,0 +1,463 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010",
+  "status": "PLANNED",
+  "startedAt": "2026-10-10T00:24:07.537464+08:00",
+  "cwd": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "targets": [
+    {
+      "relativePath": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "type": "document",
+      "bytes": 7866,
+      "sha256": "F9632E9D59C40D803D7A96AEDEC14787B2452C2638621102371A99D89D6D1491",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "backupSha256": "F9632E9D59C40D803D7A96AEDEC14787B2452C2638621102371A99D89D6D1491",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "type": "document",
+      "bytes": 34304,
+      "sha256": "B46101ED26C9A70B7DF84093236062786FA5148BCB63325983D5E53350B4B7DF",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "backupSha256": "B46101ED26C9A70B7DF84093236062786FA5148BCB63325983D5E53350B4B7DF",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "type": "document",
+      "bytes": 41171,
+      "sha256": "23DAFC1B2B3CC55F11D5C639A03A7F817F5F649CC26E994B80E9867F4A79B55D",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "backupSha256": "23DAFC1B2B3CC55F11D5C639A03A7F817F5F649CC26E994B80E9867F4A79B55D",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "type": "document",
+      "bytes": 221701,
+      "sha256": "353D28ECAD83E8354DEFB95BDFC046AB495A248CF4FB1F301A0852E0E8108377",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "backupSha256": "353D28ECAD83E8354DEFB95BDFC046AB495A248CF4FB1F301A0852E0E8108377",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "type": "document",
+      "bytes": 1598088,
+      "sha256": "36B287986948E71F68688799E05B947CCA500E13AF0C589222D80D4EB2E3F6C2",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "backupSha256": "36B287986948E71F68688799E05B947CCA500E13AF0C589222D80D4EB2E3F6C2",
+      "gitStatus": [
+        " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "type": "document",
+      "bytes": 378244,
+      "sha256": "3C04CF8E183AE807BD731F0A2C0C16B0A6D6D9E4BF16DE3FBEA3BD8FC4318A12",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "backupSha256": "3C04CF8E183AE807BD731F0A2C0C16B0A6D6D9E4BF16DE3FBEA3BD8FC4318A12",
+      "gitStatus": [
+        " M docs/ai/CURRENT-AUTHORITY.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "type": "document",
+      "bytes": 139699,
+      "sha256": "D87A91FAC2BF7FB8412FB96EFC5911F1BEB547AD20211C64F6BEB3DF99F55E78",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "backupSha256": "D87A91FAC2BF7FB8412FB96EFC5911F1BEB547AD20211C64F6BEB3DF99F55E78",
+      "gitStatus": [
+        " M docs/ai/FILE-OPERATIONS/INDEX.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "type": "document",
+      "bytes": 13683,
+      "sha256": "AE3EDD8DB3C32B765709BBBA5BBE8106635A404886727503C1A8B21C081AA273",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "backupSha256": "AE3EDD8DB3C32B765709BBBA5BBE8106635A404886727503C1A8B21C081AA273",
+      "gitStatus": [
+        " M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "type": "document",
+      "bytes": 4249,
+      "sha256": "AB350AF5663C83FDC805AF08C9E5A259DEFA829EC7703911CBB3333BDA7C1201",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "backupSha256": "AB350AF5663C83FDC805AF08C9E5A259DEFA829EC7703911CBB3333BDA7C1201",
+      "gitStatus": [
+        " M docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "type": "document",
+      "bytes": 6000,
+      "sha256": "FBC189E2E7898E9D27E3DF4E7860DB6BC17F3D499060A54EAFD5D7257C379601",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "backupSha256": "FBC189E2E7898E9D27E3DF4E7860DB6BC17F3D499060A54EAFD5D7257C379601",
+      "gitStatus": [
+        "?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md"
+      ],
+      "tracked": false
+    },
+    {
+      "relativePath": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\README.md",
+      "type": "document",
+      "bytes": 3195,
+      "sha256": "2F84BB242F507BE797146117663F8CF4700B66DFA2C60527D3D98F18E4888CC6",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\README.md",
+      "backupSha256": "2F84BB242F507BE797146117663F8CF4700B66DFA2C60527D3D98F18E4888CC6",
+      "gitStatus": [
+        " M docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md"
+      ],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "type": "document",
+      "bytes": 6975,
+      "sha256": "3D0D7D2F945C61C83E51DE806AB1F9B45A25BB5AE4C79DCE97DEF053991589E0",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "backupSha256": "3D0D7D2F945C61C83E51DE806AB1F9B45A25BB5AE4C79DCE97DEF053991589E0",
+      "gitStatus": [],
+      "tracked": true
+    },
+    {
+      "relativePath": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "type": "document",
+      "bytes": 1659511,
+      "sha256": "B975961F0F6C4009FAD748AA3E384DB757526EDF4EA6784E572AE4CC928632BE",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\before\\docs\\ai\\STATE.md",
+      "backupSha256": "B975961F0F6C4009FAD748AA3E384DB757526EDF4EA6784E572AE4CC928632BE",
+      "gitStatus": [
+        " M docs/ai/STATE.md"
+      ],
+      "tracked": true
+    }
+  ],
+  "newDestinations": [
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md",
+    "docs/ai/TASKS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md"
+  ],
+  "protected": [
+    {
+      "path": "Assets/NTSD/MoreMountains/MMFeedbacks/Demos/MMFeedbacksDemo/MMF_PlayerDemo.unity",
+      "bytes": 10640351,
+      "sha256": "1BBBC5944D3A44B32DEF0C168CA72CE05CA1A651E695EF133F9BEAFB172749D0"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMFeedbacks/Demos/SequencingDemo/SequencerDemo.unity",
+      "bytes": 1554513,
+      "sha256": "77CFB7649895B59A76F56B2D79EA82C8A33BD54F6E29AA06976ABBBF9A928E2B"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/1-StyleguideIntro.unity",
+      "bytes": 166669,
+      "sha256": "9C7ACCD01A089C1D80D99E6A561CF4C472507AFBD1E53F15C36228260C340474"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/2-StyleguideButtons.unity",
+      "bytes": 336987,
+      "sha256": "27952183CC9AC9022A92A9475370ADDAF54CC4C09939A7A31A84186AE5E332BA"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/3-StyleguideButtonsAnimations.unity",
+      "bytes": 288699,
+      "sha256": "650041A22AE50B75BE9AA2D3BCACE7DDBEB38F57FEB82E09E7EF00530E22B327"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/4-StyleguideForms.unity",
+      "bytes": 144613,
+      "sha256": "7465525DE3AB3D4911B62A17C0812A48F683978FC02C3F8BF68E9182AA35449C"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/5-StyleguideDark.unity",
+      "bytes": 170895,
+      "sha256": "AB5F100DF502946385309570770217691174DAEA61CEFC41D3DAE9EED8A8A1F9"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/AllButtons.unity",
+      "bytes": 2146682,
+      "sha256": "D554AA95BE3AE413DF8EA939A56E437026B66CD695C02AAC85F6492DAA304286"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMInterface/Styles/Mini/Carousel.unity",
+      "bytes": 223767,
+      "sha256": "C10CAEAA8255E80F01BBC36CF0B599BCEAC7EADCC45D2543A0B42E80BD41DD62"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSaveLoad/MMSaveLoadTestScene.unity",
+      "bytes": 38815,
+      "sha256": "08C5978CECEC88927B908319FF492339054AD393D19EC2B581A6A4A17081E450"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSceneLoading/LoadingScreens/LoadingScreen.unity",
+      "bytes": 34525,
+      "sha256": "B80D96B7FE0EC7C290F6238AE767DF3265784F8383DD2CE1A5252C31808E99EE"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreen.unity",
+      "bytes": 36449,
+      "sha256": "B1E21FE473E120F7DD39AFD82BC1086DA48D242066C82A8F5195BAB54DD8432F"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenBigText.unity",
+      "bytes": 34384,
+      "sha256": "9A048616E447C2FE2A7118D87962D4E786E89944E5452C98C86F9573ACAFB5AB"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenFastFade.unity",
+      "bytes": 19449,
+      "sha256": "D380E8EB6BE35C1FC9C341503D0568E65CC4053C71451AE8EBB714D79668453F"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Core/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenSimple.unity",
+      "bytes": 34391,
+      "sha256": "195DA47AB6D97C90BF685FF822F2DC9C9C4FA02A1103FD4462A65115A1164759"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMBezierLineRenderer/MMBezierLineRenderer.unity",
+      "bytes": 159251,
+      "sha256": "14A7BCFF1B84392CF0A24B135FD8A5AB235A33A4533B0AE86578805B90DE4F69"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMControls/MMControlsDemo.unity",
+      "bytes": 106291,
+      "sha256": "FAD5D30FA92EB2B2A8D58E706D69890303B59F8C295B8C12B69A5474E738C7BE"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMDebugMenu/MMDebugMenu.unity",
+      "bytes": 300542,
+      "sha256": "72D2AF0165DF7C803D5BA6E1476D559A77103B7CFEEF45E00AC9F2D734D47CD8"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMFollowTarget/MMFollowTargetDemo.unity",
+      "bytes": 75341,
+      "sha256": "0EE0EB682B67088119BC1F917976918AB80034EA4D464E053BC00140FCA304E5"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMGhostCamera/MMGhostCameraDemo.unity",
+      "bytes": 514842,
+      "sha256": "F5F11D98D99346AA961FB1A8138DCDA928501175C22C1603DFC77A093C0100CD"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMGizmos/MMGizmoDemo.unity",
+      "bytes": 77685,
+      "sha256": "ED04DE4206FDC7A6BA02FDB5ACE112627D50D28E3719278FE0188438554441FB"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMObservable/MMObservableDemo.unity",
+      "bytes": 30022,
+      "sha256": "7A5D7F7ADD6E375DBBFBB83F6DDBD286393137B7BE6B3C2EC5B598FFBC30ED0C"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMPrototypeTextures/MMPrototypeTexturesDemo.unity",
+      "bytes": 375306,
+      "sha256": "3128A49169F7A52C3D98A2397291DC90AF7B4D809117BF51963969AE47B8451A"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMRadio/MMRadioDemo.unity",
+      "bytes": 653960,
+      "sha256": "1D5C2F44784E037AAB638DBB4F71703AD380E02E9B4F10B46BDFE19BEECF7337"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMSceneLoading/MMSceneLoadingDemoSceneA.unity",
+      "bytes": 34949,
+      "sha256": "49D1C7ED437C3AC0C3930C0AC7CDFAEE0AFE3B739F320A5005EFE921CA908146"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMSceneLoading/MMSceneLoadingDemoSceneB.unity",
+      "bytes": 34185,
+      "sha256": "7D85304499CCD6B499D2B6F18A060C38FA8745A3173E339892BFF7BAC966A531"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMTween/MMTweenPlotter.unity",
+      "bytes": 43750,
+      "sha256": "30FD3BD7A0B6A1A2EC49010FBD300CBEEB0BFC35C7F278C57477FD8709BBE9ED"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "bytes": 109282,
+      "sha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "bytes": 652229,
+      "sha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Test.unity",
+      "bytes": 28726,
+      "sha256": "EBB8380742402DBCCF282928086649EEF93D1D8E28C7C4B6CEB5A8FD8F9D8EF7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "bytes": 407759,
+      "sha256": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "bytes": 9726,
+      "sha256": "822F372E00A6CDC2001B19DBF5B1B08242FB12C1472B8ADD558649A7F2B85C54"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "bytes": 297920,
+      "sha256": "7FB62EA1F3910D4352297423359DE9F9A92824668DA663B11B13BC88BF4983F6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "bytes": 315126,
+      "sha256": "026823D0070C236E4EB352AC92777471470B6DED80FC3890AF15FD66262EF842"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+      "bytes": 24072,
+      "sha256": "1B2B0C469365DE2821C7C87C05A648A2E314365CE4E5199C2A3BF1D9E3C0E589"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterInputWriter.cs",
+      "bytes": 17040,
+      "sha256": "0154A07B27569252D0BB19B2D97157B6ABF8034094BDA93786158AAE94873B08"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+      "bytes": 10127,
+      "sha256": "38569AA92C5BBBB237298963D21F717D8FE808D22D12BFB605297FBCCBE4562E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs",
+      "bytes": 10213,
+      "sha256": "B0753C55E10AB3566A3B22F098AB37B44AE4F02F8C4CB89EC99A7D0666DA3EBC"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs",
+      "bytes": 173119,
+      "sha256": "F439E4EB689AD8BEEFC0737C0DD6D21D2EB03CE6F641D63F7E6C72416FFF3D69"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "bytes": 476003,
+      "sha256": "70EB4B413E37C13A3F1C92CBDD22F4B8D6F406B8F0E8E61A2645A142001AC57F"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H06RoleDefaultAdmissionEditorTests.cs",
+      "bytes": 9905,
+      "sha256": "756DCD7B8EEC5CD112B285854901BF5E35F571DD0A8C0655295E904B46909132"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H06RoleDefaultAdmissionEditorTests.cs.meta",
+      "bytes": 243,
+      "sha256": "83FA63CC3CB0485F99B70197FB4F143C93BA13337C7FF42E681676437A4D293E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07ProducerAbbaDiagnosticEditorTests.cs",
+      "bytes": 8866,
+      "sha256": "95405C9748F0CCE4DAB4BB7F297BE2A703748A01C374D7F7C5BB153AFA965201"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07ProducerAbbaDiagnosticEditorTests.cs.meta",
+      "bytes": 243,
+      "sha256": "0F1A4749C2BB9A81980F0820EF45985DA733EE26DFBBE26A272EF407654CEE77"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07ProducerSnapshotAdmissionEditorTests.cs",
+      "bytes": 3197,
+      "sha256": "AF07E3E14A53D3E705A1409F2D03D9735CFD1255652292F7A4A2C5F9B5E06E60"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07ProducerSnapshotAdmissionEditorTests.cs.meta",
+      "bytes": 243,
+      "sha256": "FD1A8188C14D50A8B13D2602F8AB4112260F46A23B6341A13878BB7675F20760"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "bytes": 2789,
+      "sha256": "21D93B83F18D354050EA0965165806001563DE7AC2E974841279AFF63EDB2705"
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "bytes": 18609,
+      "sha256": "2F106073218B01F2B70676DF173B6F1F791FAB8F15A6957E9C41E509AA3DF06E"
+    },
+    {
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "bytes": 24229,
+      "sha256": "25475E98DDF5AE903C1CE4685353715F843D004485D088E0BED33BEA98792338"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "bytes": 87,
+      "sha256": "B51E896AA269E68A1A2EDC32ED0920B7C15973E9775F9C03967074BF5854CA73"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md",
+      "bytes": 7539,
+      "sha256": "50313B629629C9E9E54D63B31A048322AB43D6C37ECACA8B8DD7910055C79F3E"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md",
+      "bytes": 11757,
+      "sha256": "378B7AB0DD011788AE1B03760827303245B83F7DE896F2B0F927AAFCF6614A66"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md",
+      "bytes": 7641,
+      "sha256": "EE98F35A6C3C7C6B6BDE8FFC7E9520FE58B2EBC6164993431FBF3B278E544DB5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+      "bytes": 7556,
+      "sha256": "865866DC5FA7A61BDDEAD2950E6F79E09F422777F3B1AF9C0B41470D511BBAED"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json",
+      "bytes": 156987,
+      "sha256": "896D848E6D6BC0651B4EBD41BFF83658038E0B9946FDCAF848783F4B18DD972E"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "bytes": 752024,
+      "sha256": "2DA9135C73B0A489E5CCB415928878C9DE4AE2B0FDB2EC4C7D89D31FD6684A87"
+    }
+  ],
+  "protectionScope": "Exact analyzed runtime source, existing dirty/untracked scripts/meta, NTSD scenes, selected settings/packages, Change Ledger and named evidence. Not a whole-repository content hash audit.",
+  "preparationNote": "First read-only full-Assets hash helper stopped by this task after scope proved excessive (65034 files/1.4GB). Existing 13 dirty-byte backups retained and reverified; no target had been changed."
+}

@@ -1,0 +1,99 @@
+
+        internal const string QualificationRoot = "artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/windows";
+        internal const string QualificationBaseline = OutputRoot + "/00-combat1000-prerequisites/report.json.record-cost.json";
+
+        [Serializable]
+        internal struct QualificationGate
+        {
+            public int failureMask, oldTimerMask;
+            public int fallbackParticipants, inertParticipants, fallbackAttackOrdinals, fallbackBodyOrdinals, collector;
+            public bool aborted;
+        }
+
+        internal static QualificationGate ReadQualificationGate(int tick, bool steady, bool expectedGate,
+            SimulationWorld world, BruteForceSceneQuery query, BattleTickDetailPhaseDiagnostics detail)
+        {
+            var row = new QualificationGate();
+            int mask = 0;
+            mask = AddFailure(mask, query.EnableRoleRecordCostDiagnostics == expectedGate, 0);
+            mask = AddFailure(mask, query.RoleBranchTimingSampleStrideForDiagnostics == 64, 1);
+            mask = AddFailure(mask, !query.EnableRoleBranchTimingForDiagnostics, 2);
+            mask = AddFailure(mask, !query.EnableRoleCapacityRecordGuardForDiagnostics, 3);
+            mask = AddFailure(mask, !query.EnableRoleSnapshotFrameReuseForDiagnostics, 4);
+            mask = AddFailure(mask, !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, 5);
+            mask = AddFailure(mask, !query.EnableRoleEndpointSnapshotReuseForDiagnostics, 6);
+            mask = AddFailure(mask, !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics, 7);
+            mask = AddFailure(mask, !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, 8);
+            mask = AddFailure(mask, !world.EnableCharacterInputBoundaryTimingForDiagnostics, 9);
+            row.collector = (int)query.LastFormalCollectorModeForDiagnostics;
+            row.aborted = query.LastFormalCollectionAbortedForDiagnostics;
+            mask = AddFailure(mask, query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware, 10);
+            mask = AddFailure(mask, !row.aborted, 11);
+            query.GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(out _, out row.fallbackAttackOrdinals,
+                out _, out row.fallbackBodyOrdinals);
+            row.fallbackParticipants = query.LastFormalFallbackParticipantCountForDiagnostics;
+            row.inertParticipants = query.LastRoleAwareInertParticipantCountForDiagnostics;
+            mask = AddFailure(mask, row.fallbackAttackOrdinals == 0 && row.fallbackBodyOrdinals == 0, 12);
+            mask = AddFailure(mask, steady == (tick > 120), 13);
+            for (int phase = 48; phase <= 53; phase++)
+                if (detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) != 0)
+                    row.oldTimerMask |= 1 << (phase - 48);
+            mask = AddFailure(mask, row.oldTimerMask == 0, 14);
+            mask = AddFailure(mask, row.inertParticipants >= 0 && row.fallbackParticipants == row.inertParticipants, 15);
+            row.failureMask = mask;
+            return row;
+        }
+
+        [Serializable]
+        internal sealed class ColdPreparation
+        {
+            public string api = "RuntimeHelpers.PrepareMethod + MethodHandle.GetFunctionPointer; no Invoke/delegate/business call";
+            public string[] methods = new string[2];
+            public int[] metadataTokens = new int[2];
+            public string assemblyModuleVersion;
+            public bool completed;
+        }
+
+        internal static IntPtr PrepareMethodWithoutInvocation(MethodInfo method)
+        {
+            if (method == null || method.IsAbstract || method.ContainsGenericParameters ||
+                method.DeclaringType == null || method.DeclaringType.ContainsGenericParameters)
+                throw new ArgumentException("Cold preparation requires a concrete closed method.", nameof(method));
+            System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
+            IntPtr pointer = method.MethodHandle.GetFunctionPointer();
+            if (pointer == IntPtr.Zero)
+                throw new InvalidOperationException("Cold preparation returned no entry point.");
+            return pointer;
+        }
+
+        internal static ColdPreparation PrepareCapturedMethods()
+        {
+            // Alignment contract: NTSD-H06-ROLE-PREREQUISITE-REPAIR-001. Two captured targets only; never invoke.
+            Assembly assembly = typeof(SimulationWorld).Assembly;
+            var methods = new[]
+            {
+                assembly.GetType("NTSD.Simulation.Ecs.BattleDamageWriter", true).GetMethod(
+                    "RecordAlternateLeadSound", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly),
+                assembly.GetType("NTSD.Simulation.Ecs.BattleCharacterActionWriter", true).GetMethod(
+                    "RouteNativeRunning", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+            };
+            if (methods[0] == null || methods[1] == null)
+                throw new MissingMethodException("Captured JIT targets changed; no alternate targets permitted.");
+            var result = new ColdPreparation { assemblyModuleVersion = assembly.ManifestModule.ModuleVersionId.ToString() };
+            for (int index = 0; index < methods.Length; index++)
+            {
+                PrepareMethodWithoutInvocation(methods[index]);
+                result.methods[index] = methods[index].DeclaringType.FullName + "." + methods[index].Name;
+                result.metadataTokens[index] = methods[index].MetadataToken;
+            }
+            result.completed = true;
+            return result;
+        }
+
+        internal static ProductionEntityStressRequest BuildQualificationRequest(int index)
+        {
+            if (index != 0) throw new ArgumentOutOfRangeException(nameof(index));
+            var request = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
+            request.outputPath = QualificationRoot + "/00-combat1000-off/report.json";
+            return request;
+        }

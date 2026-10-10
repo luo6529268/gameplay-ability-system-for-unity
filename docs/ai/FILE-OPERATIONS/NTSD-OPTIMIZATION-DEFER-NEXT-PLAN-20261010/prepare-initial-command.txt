@@ -1,0 +1,59 @@
+$env:PYTHONIOENCODING='utf-8'
+@'
+import pathlib, hashlib, json, subprocess, datetime
+root=pathlib.Path.cwd().resolve()
+opid="NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010"
+op=root/"docs/ai/FILE-OPERATIONS"/opid
+if op.exists(): raise SystemExit("Operation already exists; refusing to overwrite")
+targets=[
+"docs/ai/FILE-OPERATIONS/INDEX.md",
+"docs/ai/CURRENT-AUTHORITY.md",
+"docs/ai/STATE.md",
+"Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+"Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+"Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+"Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+"Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+"docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+"docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+"docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+"docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+"docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md"
+]
+newfiles=["docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md","docs/ai/TASKS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md"]
+for rel in targets:
+ p=root/rel
+ if not p.is_file() or p.is_symlink() or not p.resolve().is_relative_to(root): raise SystemExit("Unsafe/missing target: "+rel)
+for rel in newfiles:
+ if (root/rel).exists(): raise SystemExit("New destination already exists: "+rel)
+op.mkdir(parents=True)
+def git(*args): return subprocess.check_output(["git",*args],cwd=root)
+def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest().upper()
+status=git("status","--porcelain=v1","--untracked-files=all").decode("utf-8")
+(op/"git-status-before.txt").write_text(status,encoding="utf-8")
+(op/"head-before.txt").write_bytes(git("rev-parse","HEAD"))
+(op/"staged-before.diff").write_bytes(git("diff","--cached","--binary"))
+(op/"working-before.diff").write_bytes(git("diff","--binary"))
+entries=[]
+for rel in targets:
+ p=root/rel; b=op/"before"/rel
+ b.parent.mkdir(parents=True,exist_ok=True)
+ with b.open("xb") as f: f.write(p.read_bytes())
+ if sha(p)!=sha(b): raise SystemExit("Backup mismatch")
+ entries.append(dict(relativePath=rel,absolutePath=str(p.resolve()),type="document",bytes=p.stat().st_size,sha256=sha(p),backup=str(b),backupSha256=sha(b),gitStatus=[l for l in status.splitlines() if l[3:]==rel],tracked=bool(git("ls-files","--",rel).strip())))
+paths=git("ls-files","--cached","--others","--exclude-standard","-z","--","Assets","ProjectSettings","Packages","Tools").decode("utf-8").split("\0")
+protected=[]
+for rel in sorted(set(p for p in paths if p and p not in targets)):
+ p=root/rel
+ if p.is_file(): protected.append(dict(path=rel,bytes=p.stat().st_size,sha256=sha(p)))
+for rel in [
+"artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json"]:
+ p=root/rel; protected.append(dict(path=rel,bytes=p.stat().st_size,sha256=sha(p)))
+manifest=dict(operationId=opid,status="PLANNED",startedAt=datetime.datetime.now().astimezone().isoformat(),cwd=str(root),targets=entries,newDestinations=newfiles,protected=protected)
+(op/"before-manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
+print(json.dumps(dict(operationId=opid,backedUp=len(entries),protected=len(protected),newDestinationsChecked=len(newfiles),status="PREPARED"),ensure_ascii=False))
+'@ | python -

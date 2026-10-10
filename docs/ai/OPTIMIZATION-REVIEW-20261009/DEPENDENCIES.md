@@ -1,6 +1,18 @@
+> **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+
+> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
+
+> 当前有限诊断已结束，当前路线尚无A/C结论；下一项不自动实施。若另行授权恢复，先解决完整Driver分配资格及组合观察门子条件证据，不能以其它窗口0GC豁免或把fallback峰值直接认作规则错误。一般H07-INPUT保留独立评审、producer仍暂缓。[本Task报告](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md)。
+
+> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
+
+> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
+
 > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
 
 > 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
+
+> 2026-10-10 用户决定：producer复用USER_DEFERRED/生产OFF。下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)只进入静态分析/方案；不依赖producer先准入，也不依赖95全部闭合。新ABBA首OFF完整Driver2event/首tick130问题只阻塞使用该失败fixture/相关路径的0GC资格，不能把旧0GC或collector0GC当豁免；不阻塞独立只读分析。
 
 # 优化依赖与阶段顺序
 
@@ -67,7 +79,7 @@
 
 ## 当前Windows主线
 
-- H06 Role候选准入：D1=A已批准→准确写域/受影响门冻结→候选验证→满足批准门后默认切换。83—86到约44ms是历史比较，不是本轮收益承诺。
+- H06 Role限定准入已完成，当前空配置生产默认Role。下一H06-ROLE-EXACT：现有成本/计数→可消除工作与authority副作用证明→具名方案获批→必要验证；不因producer暂缓而等待，不自动切网格。
 - H07-INPUT：已有91归因/字段合同→具名热点方案→获批实施；Role默认不是它的硬前置，但A/B必须固定同一种collector。
 - H07-GC95只阻塞使用该失败fixture或相关分配生产路径的资格门，不全局阻塞Input只读分析或已有实景证据。
 - H07-LATE先细分成本与读范围授权，不能靠publication只读推断缓存安全。

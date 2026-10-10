@@ -1,0 +1,406 @@
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\before\Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -25,4 +25,19 @@
+         private static bool startingRoleRecordCostDiagnostic;
+         private static bool startingRoleRecordPrerequisiteDiagnostic;
++        private static bool startingRolePrerequisiteQualification;
++
++        [MenuItem("NTSD/Validation/Optimization/H06 Role Prerequisite Qualification")]
++        private static void BeginRolePrerequisiteQualification()
++        {
++            Require(!startingRoleRecordCostDiagnostic && !startingRoleRecordPrerequisiteDiagnostic &&
++                !startingRolePrerequisiteQualification && roleRecordTickObserver == null,
++                "The prerequisite qualification already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Qualification requires Profiler recording OFF.");
++            startingRolePrerequisiteQualification = true;
++            startingRoleRecordCostDiagnostic = true;
++            roleRecordBaseline = null;
++            try { BeginPostBindingsRole(); }
++            finally { startingRolePrerequisiteQualification = false; startingRoleRecordCostDiagnostic = false; }
++        }
+ 
+         [MenuItem("NTSD/Validation/Optimization/H06 Role Prerequisite Diagnostic")]
+@@ -69,4 +84,5 @@
+             public int tick, playerInputCount;
+             public bool steady, actualFlagsValid;
++            public H06RolePrerequisiteDiagnostics.QualificationGate qualificationGate;
+             public ulong fullRuntimeChecksum, rngCalls;
+             public uint rngState, crtState, tableSeed, lastSynchronizedCallSite;
+@@ -80,4 +96,9 @@
+         private sealed class RoleRecordEvidence
+         {
++            public int gateVersion = 2;
++            public string gateContract = "v2: original bits0..11/13..14; bit12 true attack/body fallback zero; bit15 total equals nonnegative inert; forensic entry remains v1.";
++            public H06RolePrerequisiteDiagnostics.ColdPreparation coldPreparation;
++            public string comparisonBaseline;
++            public bool qualificationNoProfiler;
+             public string checksumScope = "Existing CaptureRuntimeChecksum64 schema after completed Driver, including full applied FrameInputSet and runtime AI input fields; not canonical JSON snapshots.";
+             public string counterScope = "Per collection. Eligibility counts all directions/records; remaining counters and seven clocks sampled directions only. Warm1-120, steady121-300. No extrapolation.";
+@@ -123,4 +144,19 @@
+                 if (state.roleRecordPrerequisiteDiagnostic)
+                     H06RolePrerequisiteDiagnostics.Start();
++                evidence.gateVersion = state.roleRecordPrerequisiteDiagnostic ? 1 : 2;
++                if (state.rolePrerequisiteQualification)
++                {
++                    Require(!enabled && !UnityEngine.Profiling.Profiler.enabled, "Qualification must remain OFF without Profiler capture.");
++                    var baseline = JsonUtility.FromJson<RoleRecordEvidence>(File.ReadAllText(PathFor(H06RolePrerequisiteDiagnostics.QualificationBaseline)));
++                    Require(baseline != null && baseline.ticks == 300 && baseline.observations.Length == 300,
++                        "The fixed 300-tick prerequisite baseline is required.");
++                    for (int index = 0; index < 300; index++)
++                        Require(baseline.observations[index] != null && baseline.observations[index].tick == index + 1,
++                            "Prerequisite baseline sequence is incomplete.");
++                    roleRecordBaseline = baseline.observations;
++                    evidence.comparisonBaseline = H06RolePrerequisiteDiagnostics.QualificationBaseline;
++                    evidence.coldPreparation = H06RolePrerequisiteDiagnostics.PrepareCapturedMethods();
++                    evidence.qualificationNoProfiler = true;
++                }
+                 previousEnabled = query.EnableRoleRecordCostDiagnostics;
+                 previousStride = query.RoleBranchTimingSampleStrideForDiagnostics;
+@@ -191,9 +227,20 @@
+                 for (int phase = 48; phase <= 53; phase++)
+                     row.actualFlagsValid &= detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) == 0;
++                if (!state.roleRecordPrerequisiteDiagnostic)
++                {
++                    row.qualificationGate = H06RolePrerequisiteDiagnostics.ReadQualificationGate(
++                        tick, steady, evidence.enabled, world, query, detail);
++                    row.actualFlagsValid = row.qualificationGate.failureMask == 0;
++                }
++                if (state.rolePrerequisiteQualification)
++                {
++                    evidence.qualificationNoProfiler &= !UnityEngine.Profiling.Profiler.enabled;
++                    row.actualFlagsValid &= evidence.qualificationNoProfiler;
++                }
+                 if (!row.actualFlagsValid) evidence.actualFlagFailures++;
+                 if (state.roleRecordPrerequisiteDiagnostic)
+                     H06RolePrerequisiteDiagnostics.Observe(tick, steady, evidence.enabled, row.actualFlagsValid,
+                         world, query, detail, gc.LastCompletedScopeForDiagnostics, runner.Report);
+-                if (evidence.enabled && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
++                if ((evidence.enabled || state.rolePrerequisiteQualification) && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
+                     evidence.parityMismatches++;
+                 evidence.ticks++;
+@@ -647,4 +694,5 @@
+             public bool roleRecordCostDiagnostic;
+             public bool roleRecordPrerequisiteDiagnostic;
++            public bool rolePrerequisiteQualification;
+             public bool producerAbbaDiagnostic;
+             public bool roleBranchTimingWindow;
+@@ -1252,5 +1300,6 @@
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
++            string outputRoot = startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
++                startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
+                 startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
+                 startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
+@@ -1324,4 +1373,5 @@
+                 roleRecordCostDiagnostic = startingRoleRecordCostDiagnostic,
+                 roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,
++                rolePrerequisiteQualification = startingRolePrerequisiteQualification,
+                 producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+@@ -1330,5 +1380,5 @@
+                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
+-                runs = new RunState[startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                 originalScene = scene.path,
+                 originalSceneHash = HashFile(scene.path),
+@@ -1417,4 +1467,6 @@
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.rolePrerequisiteQualification)
++                return H06RolePrerequisiteDiagnostics.BuildQualificationRequest(index);
+             if (state.roleRecordPrerequisiteDiagnostic)
+                 return H06RolePrerequisiteDiagnostics.BuildRequest(index);
+@@ -2928,4 +2980,6 @@
+                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\before\Assets__NTSD__Scripts__Test__Editor__H06RolePrerequisiteDiagnostics.cs
++++ Assets/NTSD/Scripts/Test/Editor/H06RolePrerequisiteDiagnostics.cs
+@@ -15,4 +15,104 @@
+     {
+         internal const string OutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/windows";
++
++        internal const string QualificationRoot = "artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/windows";
++        internal const string QualificationBaseline = OutputRoot + "/00-combat1000-prerequisites/report.json.record-cost.json";
++
++        [Serializable]
++        internal struct QualificationGate
++        {
++            public int failureMask, oldTimerMask;
++            public int fallbackParticipants, inertParticipants, fallbackAttackOrdinals, fallbackBodyOrdinals, collector;
++            public bool aborted;
++        }
++
++        internal static QualificationGate ReadQualificationGate(int tick, bool steady, bool expectedGate,
++            SimulationWorld world, BruteForceSceneQuery query, BattleTickDetailPhaseDiagnostics detail)
++        {
++            var row = new QualificationGate();
++            int mask = 0;
++            mask = AddFailure(mask, query.EnableRoleRecordCostDiagnostics == expectedGate, 0);
++            mask = AddFailure(mask, query.RoleBranchTimingSampleStrideForDiagnostics == 64, 1);
++            mask = AddFailure(mask, !query.EnableRoleBranchTimingForDiagnostics, 2);
++            mask = AddFailure(mask, !query.EnableRoleCapacityRecordGuardForDiagnostics, 3);
++            mask = AddFailure(mask, !query.EnableRoleSnapshotFrameReuseForDiagnostics, 4);
++            mask = AddFailure(mask, !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics, 5);
++            mask = AddFailure(mask, !query.EnableRoleEndpointSnapshotReuseForDiagnostics, 6);
++            mask = AddFailure(mask, !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics, 7);
++            mask = AddFailure(mask, !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics, 8);
++            mask = AddFailure(mask, !world.EnableCharacterInputBoundaryTimingForDiagnostics, 9);
++            row.collector = (int)query.LastFormalCollectorModeForDiagnostics;
++            row.aborted = query.LastFormalCollectionAbortedForDiagnostics;
++            mask = AddFailure(mask, query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware, 10);
++            mask = AddFailure(mask, !row.aborted, 11);
++            query.GetLastRoleAwareFallbackOrdinalCountsForSelfCheck(out _, out row.fallbackAttackOrdinals,
++                out _, out row.fallbackBodyOrdinals);
++            row.fallbackParticipants = query.LastFormalFallbackParticipantCountForDiagnostics;
++            row.inertParticipants = query.LastRoleAwareInertParticipantCountForDiagnostics;
++            mask = AddFailure(mask, row.fallbackAttackOrdinals == 0 && row.fallbackBodyOrdinals == 0, 12);
++            mask = AddFailure(mask, steady == (tick > 120), 13);
++            for (int phase = 48; phase <= 53; phase++)
++                if (detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) != 0)
++                    row.oldTimerMask |= 1 << (phase - 48);
++            mask = AddFailure(mask, row.oldTimerMask == 0, 14);
++            mask = AddFailure(mask, row.inertParticipants >= 0 && row.fallbackParticipants == row.inertParticipants, 15);
++            row.failureMask = mask;
++            return row;
++        }
++
++        [Serializable]
++        internal sealed class ColdPreparation
++        {
++            public string api = "RuntimeHelpers.PrepareMethod + MethodHandle.GetFunctionPointer; no Invoke/delegate/business call";
++            public string[] methods = new string[2];
++            public int[] metadataTokens = new int[2];
++            public string assemblyModuleVersion;
++            public bool completed;
++        }
++
++        internal static IntPtr PrepareMethodWithoutInvocation(MethodInfo method)
++        {
++            if (method == null || method.IsAbstract || method.ContainsGenericParameters ||
++                method.DeclaringType == null || method.DeclaringType.ContainsGenericParameters)
++                throw new ArgumentException("Cold preparation requires a concrete closed method.", nameof(method));
++            System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
++            IntPtr pointer = method.MethodHandle.GetFunctionPointer();
++            if (pointer == IntPtr.Zero)
++                throw new InvalidOperationException("Cold preparation returned no entry point.");
++            return pointer;
++        }
++
++        internal static ColdPreparation PrepareCapturedMethods()
++        {
++            // Alignment contract: NTSD-H06-ROLE-PREREQUISITE-REPAIR-001. Two captured targets only; never invoke.
++            Assembly assembly = typeof(SimulationWorld).Assembly;
++            var methods = new[]
++            {
++                assembly.GetType("NTSD.Simulation.Ecs.BattleDamageWriter", true).GetMethod(
++                    "RecordAlternateLeadSound", BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.DeclaredOnly),
++                assembly.GetType("NTSD.Simulation.Ecs.BattleCharacterActionWriter", true).GetMethod(
++                    "RouteNativeRunning", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
++            };
++            if (methods[0] == null || methods[1] == null)
++                throw new MissingMethodException("Captured JIT targets changed; no alternate targets permitted.");
++            var result = new ColdPreparation { assemblyModuleVersion = assembly.ManifestModule.ModuleVersionId.ToString() };
++            for (int index = 0; index < methods.Length; index++)
++            {
++                PrepareMethodWithoutInvocation(methods[index]);
++                result.methods[index] = methods[index].DeclaringType.FullName + "." + methods[index].Name;
++                result.metadataTokens[index] = methods[index].MetadataToken;
++            }
++            result.completed = true;
++            return result;
++        }
++
++        internal static ProductionEntityStressRequest BuildQualificationRequest(int index)
++        {
++            if (index != 0) throw new ArgumentOutOfRangeException(nameof(index));
++            var request = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
++            request.outputPath = QualificationRoot + "/00-combat1000-off/report.json";
++            return request;
++        }
++
+         private static Evidence evidence;
+         private static ProfilerMarker[] tickMarkers;
+@@ -264,4 +364,177 @@
+     public sealed class H06RolePrerequisiteDiagnosticsTests
+     {
++
++        private static int preparationSideEffects;
++
++        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
++        private static void ColdSentinel() { preparationSideEffects++; }
++
++        private sealed class ColdInstanceSentinel
++        {
++            public ColdInstanceSentinel() { preparationSideEffects++; }
++            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
++            public void Run() { preparationSideEffects++; }
++        }
++
++        private static void OpenGenericSentinel<T>() { preparationSideEffects++; }
++
++        [NUnit.Framework.Test]
++        public void Qualification_ColdPreparationDoesNotInvokeStaticOrInstanceBusiness()
++        {
++            preparationSideEffects = 0;
++            var method = typeof(H06RolePrerequisiteDiagnosticsTests).GetMethod("ColdSentinel", BindingFlags.NonPublic | BindingFlags.Static);
++            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method), NUnit.Framework.Is.Not.EqualTo(IntPtr.Zero));
++            method = typeof(ColdInstanceSentinel).GetMethod("Run");
++            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method), NUnit.Framework.Is.Not.EqualTo(IntPtr.Zero));
++            NUnit.Framework.Assert.That(preparationSideEffects, NUnit.Framework.Is.Zero);
++        }
++
++        [NUnit.Framework.Test]
++        public void Qualification_ColdPreparationRejectsMissingOrOpenTargets()
++        {
++            preparationSideEffects = 0;
++            NUnit.Framework.Assert.Throws<ArgumentException>(() => H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(null));
++            var method = typeof(H06RolePrerequisiteDiagnosticsTests).GetMethod("OpenGenericSentinel", BindingFlags.NonPublic | BindingFlags.Static);
++            NUnit.Framework.Assert.Throws<ArgumentException>(() => H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method));
++            NUnit.Framework.Assert.That(preparationSideEffects, NUnit.Framework.Is.Zero);
++        }
++
++        [NUnit.Framework.Test]
++        public void Qualification_RequestIsExactlyOneOriginalOffFixture()
++        {
++            var actual = H06RolePrerequisiteDiagnostics.BuildQualificationRequest(0);
++            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
++            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain("ROLE-PREREQUISITE-REPAIR"));
++            actual.outputPath = expected.outputPath;
++            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
++            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() => H06RolePrerequisiteDiagnostics.BuildQualificationRequest(1));
++            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() => H06RolePrerequisiteDiagnostics.BuildQualificationRequest(-1));
++        }
++
++        private sealed class QualificationFixture : IDisposable
++        {
++            internal readonly SimulationWorld world;
++            internal readonly BruteForceSceneQuery query;
++            internal readonly NTSD.Animation.LF2Objects.LF2Character attacker, target, inert;
++            internal readonly BattleTickDetailPhaseDiagnostics detail;
++            private static object FixtureCall(string name, params object[] args) =>
++                typeof(NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests).GetMethod(name,
++                    BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, args);
++
++            internal QualificationFixture()
++            {
++                object[] args = { 0, null, null, null, null };
++                FixtureCall("CreatePairSnapshotReuseScenario", args);
++                world = (SimulationWorld)args[1];
++                query = (BruteForceSceneQuery)args[2];
++                attacker = (NTSD.Animation.LF2Objects.LF2Character)args[3];
++                target = (NTSD.Animation.LF2Objects.LF2Character)args[4];
++                object frame = FixtureCall("MakeFrame", null, null);
++                inert = (NTSD.Animation.LF2Objects.LF2Character)FixtureCall("CreateEndpointSnapshotCharacter",
++                    "Prerequisite_Inert", 3332, frame, null);
++                FixtureCall("Register", world, inert, 2, 3, 123);
++                query.PrepareBattleCapacity(3, 8, 8);
++                query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
++                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
++                detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
++                Collect();
++            }
++
++            internal void Collect()
++            {
++                detail.BeginTick(1);
++                world.CaptureCollisionFrameSnapshotsAll();
++                world.CollectCollisionCandidatesAll();
++                world.EndCollisionCandidateConsumption();
++            }
++
++            internal H06RolePrerequisiteDiagnostics.QualificationGate Read() =>
++                H06RolePrerequisiteDiagnostics.ReadQualificationGate(1, false, false, world, query, detail);
++
++            public void Dispose()
++            {
++                query.BeforeRoleAwareFormalInputValidationForSelfCheck = null;
++                world.Unregister(attacker);
++                world.Unregister(target);
++                world.Unregister(inert);
++            }
++        }
++
++        [NUnit.Framework.Test]
++        public void Qualification_ActualInertOnlyCollectionPasses()
++        {
++            using (var f = new QualificationFixture())
++            {
++                var row = f.Read();
++                NUnit.Framework.Assert.That(row.inertParticipants, NUnit.Framework.Is.EqualTo(1));
++                NUnit.Framework.Assert.That(row.fallbackParticipants, NUnit.Framework.Is.EqualTo(1));
++                NUnit.Framework.Assert.That(row.fallbackAttackOrdinals + row.fallbackBodyOrdinals, NUnit.Framework.Is.Zero);
++                NUnit.Framework.Assert.That(row.failureMask, NUnit.Framework.Is.Zero);
++            }
++        }
++
++        [NUnit.Framework.TestCase(true)]
++        [NUnit.Framework.TestCase(false)]
++        public void Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(bool attack)
++        {
++            using (var f = new QualificationFixture())
++            {
++                // Controlled ordinal-list fault at a valid registered participant; do not invent a geometry cause.
++                string name = attack ? "_roleFormalFallbackAttackOrdinals" : "_roleFormalFallbackBodyOrdinals";
++                var ordinals = (System.Collections.Generic.List<int>)typeof(BruteForceSceneQuery).GetField(name,
++                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(f.query);
++                ordinals.Add(attack ? 0 : 1);
++                try
++                {
++                    var row = f.Read();
++                    NUnit.Framework.Assert.That(row.fallbackParticipants, NUnit.Framework.Is.EqualTo(row.inertParticipants));
++                    NUnit.Framework.Assert.That(attack ? row.fallbackAttackOrdinals : row.fallbackBodyOrdinals, NUnit.Framework.Is.EqualTo(1));
++                    NUnit.Framework.Assert.That(row.failureMask, NUnit.Framework.Is.EqualTo(1 << 12));
++                }
++                finally { ordinals.RemoveAt(ordinals.Count - 1); }
++            }
++        }
++
++        [NUnit.Framework.Test]
++        public void Qualification_AbortedCollectionAndWrongFlagsRemainRejected()
++        {
++            using (var f = new QualificationFixture())
++            {
++                f.query.EnableRoleSnapshotFrameReuseForDiagnostics = true;
++                NUnit.Framework.Assert.That(f.Read().failureMask, NUnit.Framework.Is.EqualTo(1 << 4));
++                f.query.EnableRoleSnapshotFrameReuseForDiagnostics = false;
++                f.query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
++                {
++                    f.target.Runtime.SetPosition(11, 0, 0);
++                    f.target.Runtime.SyncIntegerPosition();
++                };
++                f.Collect();
++                NUnit.Framework.Assert.That(f.query.LastFormalCollectionAbortedForDiagnostics, NUnit.Framework.Is.True);
++                NUnit.Framework.Assert.That(f.Read().failureMask & (1 << 11), NUnit.Framework.Is.Not.Zero);
++            }
++        }
++
++        [NUnit.Framework.Test]
++        public void Qualification_TwoCapturedMethodsPrepareWithoutWorldOrRngChanges()
++        {
++            using (var f = new QualificationFixture())
++            {
++                ulong before = f.world.CaptureRuntimeChecksum64(1, default);
++                uint rngState = f.world.Rng.State;
++                ulong rngCalls = f.world.Rng.CallCount;
++                string native = JsonUtility.ToJson(f.world.NativeRandom.CaptureScalarState());
++                var prepared = H06RolePrerequisiteDiagnostics.PrepareCapturedMethods();
++                NUnit.Framework.Assert.That(prepared.completed, NUnit.Framework.Is.True);
++                NUnit.Framework.Assert.That(prepared.methods.Length, NUnit.Framework.Is.EqualTo(2));
++                NUnit.Framework.Assert.That(prepared.methods[0], NUnit.Framework.Does.EndWith(".RecordAlternateLeadSound"));
++                NUnit.Framework.Assert.That(prepared.methods[1], NUnit.Framework.Does.EndWith(".RouteNativeRunning"));
++                NUnit.Framework.Assert.That(f.world.CaptureRuntimeChecksum64(1, default), NUnit.Framework.Is.EqualTo(before));
++                NUnit.Framework.Assert.That(f.world.Rng.State, NUnit.Framework.Is.EqualTo(rngState));
++                NUnit.Framework.Assert.That(f.world.Rng.CallCount, NUnit.Framework.Is.EqualTo(rngCalls));
++                NUnit.Framework.Assert.That(JsonUtility.ToJson(f.world.NativeRandom.CaptureScalarState()), NUnit.Framework.Is.EqualTo(native));
++            }
++        }
++
++
+         [NUnit.Framework.Test]
+         public void RequestChangesOnlyFreshOutputFromOriginalOffFixture()

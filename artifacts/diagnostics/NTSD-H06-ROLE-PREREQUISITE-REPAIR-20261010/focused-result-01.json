@@ -1,0 +1,132 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5be3b7010c004bdabc6c6fd90b53059f",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791596302738,
+      "finished_unix_ms": 1791596322928,
+      "last_update_unix_ms": 1791596322928,
+      "progress": {
+        "completed": 10,
+        "total": 10593,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791596309610,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_TwoCapturedMethodsPrepareWithoutWorldOrRngChanges",
+        "last_finished_unix_ms": 1791596309631,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.8442337,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DefaultHookIsEmptyAndDetachIsIdempotent",
+            "state": "Passed",
+            "durationSeconds": 0.0113237,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "fullName": "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+            "state": "Passed",
+            "durationSeconds": 0.0037965,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_AbortedCollectionAndWrongFlagsRemainRejected",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_AbortedCollectionAndWrongFlagsRemainRejected",
+            "state": "Passed",
+            "durationSeconds": 0.0740366,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(True)",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0021562,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(False)",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0025908,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_ActualInertOnlyCollectionPasses",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_ActualInertOnlyCollectionPasses",
+            "state": "Passed",
+            "durationSeconds": 0.0024384,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_ColdPreparationDoesNotInvokeStaticOrInstanceBusiness",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_ColdPreparationDoesNotInvokeStaticOrInstanceBusiness",
+            "state": "Passed",
+            "durationSeconds": 0.0019338,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_ColdPreparationRejectsMissingOrOpenTargets",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_ColdPreparationRejectsMissingOrOpenTargets",
+            "state": "Passed",
+            "durationSeconds": 0.0006006,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_RequestIsExactlyOneOriginalOffFixture",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_RequestIsExactlyOneOriginalOffFixture",
+            "state": "Passed",
+            "durationSeconds": 0.001543,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "Qualification_TwoCapturedMethodsPrepareWithoutWorldOrRngChanges",
+            "fullName": "NTSD.Test.Editor.H06RolePrerequisiteDiagnosticsTests.Qualification_TwoCapturedMethodsPrepareWithoutWorldOrRngChanges",
+            "state": "Passed",
+            "durationSeconds": 0.0212021,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

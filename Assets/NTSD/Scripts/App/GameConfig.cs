@@ -20,7 +20,7 @@ namespace NTSD.App
         public string BattleAiExecutionProfileName = "";
         [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
         public int DesktopInitialRuntimeSlotCapacity = 512;
-        [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]
+        [Tooltip("Collision broadphase backend. Empty uses the admitted Role-aware path (LooseQuadtree). Explicit BruteForce remains available; invalid values fall back to BruteForce.")]
         public string BattleCollisionBroadphaseName = "";
         [Tooltip("Battle presentation backend. Empty uses CentralOnly. Valid values: LegacyOnly, CentralShadowBuild, CentralOnly. CentralOnly owns battle pixels and fails closed without enabling legacy presenters.")]
         public string BattlePresentationBackendName = "CentralOnly";

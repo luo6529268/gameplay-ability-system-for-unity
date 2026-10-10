@@ -68,7 +68,14 @@ namespace NTSD.Simulation
         CandidateCollectRoleBodyGeometry = 51,
         CandidateCollectRoleCandidateAccepts = 52,
         CandidateCollectRoleCandidateRecord = 53,
-        Count = 54,
+        RoleRecordSnapshot = 54,
+        RoleRecordGroup = 55,
+        RoleRecordInitialReject = 56,
+        RoleRecordNearest = 57,
+        RoleRecordOrdinarySelect = 58,
+        RoleRecordStore = 59,
+        RoleRecordLegacy = 60,
+        Count = 61,
     }
 
     /// <summary>
@@ -551,6 +558,20 @@ namespace NTSD.Simulation
                     return "CandidateCollect/RoleCandidateAccepts";
                 case BattleTickDetailPhase.CandidateCollectRoleCandidateRecord:
                     return "CandidateCollect/RoleCandidateRecord";
+                case BattleTickDetailPhase.RoleRecordSnapshot:
+                    return "CandidateCollect/RoleRecordSnapshot";
+                case BattleTickDetailPhase.RoleRecordGroup:
+                    return "CandidateCollect/RoleRecordGroup";
+                case BattleTickDetailPhase.RoleRecordInitialReject:
+                    return "CandidateCollect/RoleRecordInitialReject";
+                case BattleTickDetailPhase.RoleRecordNearest:
+                    return "CandidateCollect/RoleRecordNearest";
+                case BattleTickDetailPhase.RoleRecordOrdinarySelect:
+                    return "CandidateCollect/RoleRecordOrdinarySelect";
+                case BattleTickDetailPhase.RoleRecordStore:
+                    return "CandidateCollect/RoleRecordStore";
+                case BattleTickDetailPhase.RoleRecordLegacy:
+                    return "CandidateCollect/RoleRecordLegacy";
                 default:
                     return string.Empty;
             }

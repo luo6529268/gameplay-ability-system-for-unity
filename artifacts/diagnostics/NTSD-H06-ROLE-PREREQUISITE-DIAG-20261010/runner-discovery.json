@@ -1,0 +1,17 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Found GameObjects",
+    "data": {
+      "instanceIDs": [
+        -331142
+      ],
+      "pageSize": 50,
+      "cursor": 0,
+      "nextCursor": null,
+      "totalCount": 1,
+      "hasMore": false
+    }
+  }
+}

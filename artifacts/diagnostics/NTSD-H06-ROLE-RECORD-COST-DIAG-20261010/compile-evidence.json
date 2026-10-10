@@ -1,0 +1,29 @@
+{
+  "lastHistoricalCsErrors": [
+    [
+      335740,
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs(1648,88): error CS0117: 'LF2States' does not contain a definition for 'Falling12'"
+    ],
+    [
+      335741,
+      "Assets\\NTSD\\Scripts\\Test\\Editor\\RoleAwareCollisionShadowSelfCheckTests.cs(6981,41): error CS0266: Cannot implicitly convert type 'int' to 'byte'. An explicit conversion exists (are you missing a cast?)"
+    ]
+  ],
+  "lastScriptReload": [
+    [
+      337213,
+      "Reloading assemblies after finishing script compilation."
+    ]
+  ],
+  "csErrorsAfterLastScriptReload": [],
+  "assemblies": [
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+      "mtimeUtc": "2026-10-09T17:20:19.535447+00:00"
+    },
+    {
+      "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+      "mtimeUtc": "2026-10-09T17:18:04.336439+00:00"
+    }
+  ]
+}

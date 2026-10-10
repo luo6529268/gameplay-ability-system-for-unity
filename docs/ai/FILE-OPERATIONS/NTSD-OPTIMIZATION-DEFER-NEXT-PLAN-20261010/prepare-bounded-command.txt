@@ -1,0 +1,42 @@
+$env:PYTHONIOENCODING='utf-8'
+@'
+import pathlib,hashlib,json,datetime
+r=pathlib.Path.cwd().resolve()
+o=r/"docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010"
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest().upper()
+status=(o/"git-status-before.txt").read_text(encoding="utf-8")
+entries=[]
+for b in sorted((o/"before").rglob("*")):
+ if not b.is_file():continue
+ rel=b.relative_to(o/"before").as_posix();p=r/rel
+ if sha(b)!=sha(p):raise SystemExit("Document drift before edit: "+rel)
+ entries.append(dict(relativePath=rel,absolutePath=str(p.resolve()),type="document",bytes=p.stat().st_size,sha256=sha(p),backup=str(b),backupSha256=sha(b),gitStatus=[l for l in status.splitlines() if l[3:]==rel],tracked=not any(l.startswith("?? ") and l[3:]==rel for l in status.splitlines())))
+paths=set([
+"Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+"Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+"Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+"Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+"Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterInputWriter.cs",
+"Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+"ProjectSettings/ProjectVersion.txt",
+"ProjectSettings/ProjectSettings.asset",
+"Packages/manifest.json","Packages/packages-lock.json",
+"docs/ai/CHANGE-LEDGER.md",
+"artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+"artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json"
+])
+for l in status.splitlines():
+ rel=l[3:]
+ if rel.startswith("Assets/") and pathlib.Path(rel).suffix in (".cs",".meta",".unity",".prefab",".asset"):paths.add(rel)
+for p in (r/"Assets/NTSD").rglob("*.unity"):paths.add(p.relative_to(r).as_posix())
+protected=[]
+for rel in sorted(paths):
+ p=r/rel
+ if p.is_file():protected.append(dict(path=rel,bytes=p.stat().st_size,sha256=sha(p)))
+m=dict(operationId=o.name,status="PLANNED",startedAt=datetime.datetime.now().astimezone().isoformat(),cwd=str(r),targets=entries,newDestinations=["docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md","docs/ai/TASKS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md"],protected=protected,protectionScope="Exact analyzed runtime source, existing dirty/untracked scripts/meta, NTSD scenes, selected settings/packages, Change Ledger and named evidence. Not a whole-repository content hash audit.",preparationNote="First read-only full-Assets hash helper stopped by this task after scope proved excessive (65034 files/1.4GB). Existing 13 dirty-byte backups retained and reverified; no target had been changed.")
+with (o/"before-manifest.json").open("x",encoding="utf-8") as f:json.dump(m,f,ensure_ascii=False,indent=2)
+print(json.dumps(dict(documents=len(entries),protected=len(protected),backupsVerified=True,status="PREPARED"),ensure_ascii=False))
+'@ | python -

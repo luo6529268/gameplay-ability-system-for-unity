@@ -51,6 +51,8 @@ namespace NTSD.Test.Editor
         private bool recordingStarted;
         private bool disposed;
 
+        internal BattleScopedGcAllocationRecorder.ScopeResult LastCompletedScopeForDiagnostics => pending;
+
         internal BattleLogicTickGcObserverEditor(int capacity = BattleScopedGcAllocationRecorder.DefaultCapacity)
         {
             ownerThread = Thread.CurrentThread.ManagedThreadId;

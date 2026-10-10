@@ -1,0 +1,172 @@
+
+        private static int preparationSideEffects;
+
+        [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+        private static void ColdSentinel() { preparationSideEffects++; }
+
+        private sealed class ColdInstanceSentinel
+        {
+            public ColdInstanceSentinel() { preparationSideEffects++; }
+            [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+            public void Run() { preparationSideEffects++; }
+        }
+
+        private static void OpenGenericSentinel<T>() { preparationSideEffects++; }
+
+        [NUnit.Framework.Test]
+        public void Qualification_ColdPreparationDoesNotInvokeStaticOrInstanceBusiness()
+        {
+            preparationSideEffects = 0;
+            var method = typeof(H06RolePrerequisiteDiagnosticsTests).GetMethod("ColdSentinel", BindingFlags.NonPublic | BindingFlags.Static);
+            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method), NUnit.Framework.Is.Not.EqualTo(IntPtr.Zero));
+            method = typeof(ColdInstanceSentinel).GetMethod("Run");
+            NUnit.Framework.Assert.That(H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method), NUnit.Framework.Is.Not.EqualTo(IntPtr.Zero));
+            NUnit.Framework.Assert.That(preparationSideEffects, NUnit.Framework.Is.Zero);
+        }
+
+        [NUnit.Framework.Test]
+        public void Qualification_ColdPreparationRejectsMissingOrOpenTargets()
+        {
+            preparationSideEffects = 0;
+            NUnit.Framework.Assert.Throws<ArgumentException>(() => H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(null));
+            var method = typeof(H06RolePrerequisiteDiagnosticsTests).GetMethod("OpenGenericSentinel", BindingFlags.NonPublic | BindingFlags.Static);
+            NUnit.Framework.Assert.Throws<ArgumentException>(() => H06RolePrerequisiteDiagnostics.PrepareMethodWithoutInvocation(method));
+            NUnit.Framework.Assert.That(preparationSideEffects, NUnit.Framework.Is.Zero);
+        }
+
+        [NUnit.Framework.Test]
+        public void Qualification_RequestIsExactlyOneOriginalOffFixture()
+        {
+            var actual = H06RolePrerequisiteDiagnostics.BuildQualificationRequest(0);
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(0);
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain("ROLE-PREREQUISITE-REPAIR"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() => H06RolePrerequisiteDiagnostics.BuildQualificationRequest(1));
+            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() => H06RolePrerequisiteDiagnostics.BuildQualificationRequest(-1));
+        }
+
+        private sealed class QualificationFixture : IDisposable
+        {
+            internal readonly SimulationWorld world;
+            internal readonly BruteForceSceneQuery query;
+            internal readonly NTSD.Animation.LF2Objects.LF2Character attacker, target, inert;
+            internal readonly BattleTickDetailPhaseDiagnostics detail;
+            private static object FixtureCall(string name, params object[] args) =>
+                typeof(NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests).GetMethod(name,
+                    BindingFlags.NonPublic | BindingFlags.Static).Invoke(null, args);
+
+            internal QualificationFixture()
+            {
+                object[] args = { 0, null, null, null, null };
+                FixtureCall("CreatePairSnapshotReuseScenario", args);
+                world = (SimulationWorld)args[1];
+                query = (BruteForceSceneQuery)args[2];
+                attacker = (NTSD.Animation.LF2Objects.LF2Character)args[3];
+                target = (NTSD.Animation.LF2Objects.LF2Character)args[4];
+                object frame = FixtureCall("MakeFrame", null, null);
+                inert = (NTSD.Animation.LF2Objects.LF2Character)FixtureCall("CreateEndpointSnapshotCharacter",
+                    "Prerequisite_Inert", 3332, frame, null);
+                FixtureCall("Register", world, inert, 2, 3, 123);
+                query.PrepareBattleCapacity(3, 8, 8);
+                query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
+                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
+                detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
+                Collect();
+            }
+
+            internal void Collect()
+            {
+                detail.BeginTick(1);
+                world.CaptureCollisionFrameSnapshotsAll();
+                world.CollectCollisionCandidatesAll();
+                world.EndCollisionCandidateConsumption();
+            }
+
+            internal H06RolePrerequisiteDiagnostics.QualificationGate Read() =>
+                H06RolePrerequisiteDiagnostics.ReadQualificationGate(1, false, false, world, query, detail);
+
+            public void Dispose()
+            {
+                query.BeforeRoleAwareFormalInputValidationForSelfCheck = null;
+                world.Unregister(attacker);
+                world.Unregister(target);
+                world.Unregister(inert);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void Qualification_ActualInertOnlyCollectionPasses()
+        {
+            using (var f = new QualificationFixture())
+            {
+                var row = f.Read();
+                NUnit.Framework.Assert.That(row.inertParticipants, NUnit.Framework.Is.EqualTo(1));
+                NUnit.Framework.Assert.That(row.fallbackParticipants, NUnit.Framework.Is.EqualTo(1));
+                NUnit.Framework.Assert.That(row.fallbackAttackOrdinals + row.fallbackBodyOrdinals, NUnit.Framework.Is.Zero);
+                NUnit.Framework.Assert.That(row.failureMask, NUnit.Framework.Is.Zero);
+            }
+        }
+
+        [NUnit.Framework.TestCase(true)]
+        [NUnit.Framework.TestCase(false)]
+        public void Qualification_ActualFallbackOrdinalListsFailDespiteInertEquality(bool attack)
+        {
+            using (var f = new QualificationFixture())
+            {
+                // Controlled ordinal-list fault at a valid registered participant; do not invent a geometry cause.
+                string name = attack ? "_roleFormalFallbackAttackOrdinals" : "_roleFormalFallbackBodyOrdinals";
+                var ordinals = (System.Collections.Generic.List<int>)typeof(BruteForceSceneQuery).GetField(name,
+                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(f.query);
+                ordinals.Add(attack ? 0 : 1);
+                try
+                {
+                    var row = f.Read();
+                    NUnit.Framework.Assert.That(row.fallbackParticipants, NUnit.Framework.Is.EqualTo(row.inertParticipants));
+                    NUnit.Framework.Assert.That(attack ? row.fallbackAttackOrdinals : row.fallbackBodyOrdinals, NUnit.Framework.Is.EqualTo(1));
+                    NUnit.Framework.Assert.That(row.failureMask, NUnit.Framework.Is.EqualTo(1 << 12));
+                }
+                finally { ordinals.RemoveAt(ordinals.Count - 1); }
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void Qualification_AbortedCollectionAndWrongFlagsRemainRejected()
+        {
+            using (var f = new QualificationFixture())
+            {
+                f.query.EnableRoleSnapshotFrameReuseForDiagnostics = true;
+                NUnit.Framework.Assert.That(f.Read().failureMask, NUnit.Framework.Is.EqualTo(1 << 4));
+                f.query.EnableRoleSnapshotFrameReuseForDiagnostics = false;
+                f.query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
+                {
+                    f.target.Runtime.SetPosition(11, 0, 0);
+                    f.target.Runtime.SyncIntegerPosition();
+                };
+                f.Collect();
+                NUnit.Framework.Assert.That(f.query.LastFormalCollectionAbortedForDiagnostics, NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(f.Read().failureMask & (1 << 11), NUnit.Framework.Is.Not.Zero);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void Qualification_TwoCapturedMethodsPrepareWithoutWorldOrRngChanges()
+        {
+            using (var f = new QualificationFixture())
+            {
+                ulong before = f.world.CaptureRuntimeChecksum64(1, default);
+                uint rngState = f.world.Rng.State;
+                ulong rngCalls = f.world.Rng.CallCount;
+                string native = JsonUtility.ToJson(f.world.NativeRandom.CaptureScalarState());
+                var prepared = H06RolePrerequisiteDiagnostics.PrepareCapturedMethods();
+                NUnit.Framework.Assert.That(prepared.completed, NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(prepared.methods.Length, NUnit.Framework.Is.EqualTo(2));
+                NUnit.Framework.Assert.That(prepared.methods[0], NUnit.Framework.Does.EndWith(".RecordAlternateLeadSound"));
+                NUnit.Framework.Assert.That(prepared.methods[1], NUnit.Framework.Does.EndWith(".RouteNativeRunning"));
+                NUnit.Framework.Assert.That(f.world.CaptureRuntimeChecksum64(1, default), NUnit.Framework.Is.EqualTo(before));
+                NUnit.Framework.Assert.That(f.world.Rng.State, NUnit.Framework.Is.EqualTo(rngState));
+                NUnit.Framework.Assert.That(f.world.Rng.CallCount, NUnit.Framework.Is.EqualTo(rngCalls));
+                NUnit.Framework.Assert.That(JsonUtility.ToJson(f.world.NativeRandom.CaptureScalarState()), NUnit.Framework.Is.EqualTo(native));
+            }
+        }
+

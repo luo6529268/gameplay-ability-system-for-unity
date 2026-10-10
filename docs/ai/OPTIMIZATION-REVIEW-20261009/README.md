@@ -1,3 +1,5 @@
+> **2026-10-10 最新决定：** producer快照复用[用户暂缓/生产OFF](IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)，下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)仅静态分析/方案；Role限定准入成果保持。当前排程以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准，下方旧状态按日期保留；不恢复旧自动目标。
+
 > **2026-10-09 独立实施说明已补充：** [代码前后对照记录与固定格式](IMPLEMENTATION-RECORDS/README.md) · [优化点 A：FindEffect 临时分配修复](IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。记录已完成的具体改法及验证范围；当前排程仍以唯一进度为准，不恢复执行。
 
 > 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
@@ -9,7 +11,7 @@
 ## 唯一职责与恢复顺序
 
 1. 先读[当前权威](../CURRENT-AUTHORITY.md)及[AGENTS](../../../AGENTS.md)。
-2. [总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)文首是全部34父项及5个子工作包的导航，不能以数量代表收益。
+2. [总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)文首是全部34父项及6个子方案的导航（2026-10-10增加H06-ROLE-EXACT方案），不能以数量代表收益。
 3. [进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)文首是当前/完成范围/下一项。下面批次原文为历史证据。
 4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。新热点作为父项子方案，不伪装成新增父项。
 5. [依赖](DEPENDENCIES.md)统一描述跨项前置；方案卡只摘要。先满足需要的前置阶段，不要求前置父项全关闭。

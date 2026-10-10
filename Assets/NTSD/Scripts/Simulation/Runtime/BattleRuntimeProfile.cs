@@ -21,6 +21,8 @@ namespace NTSD.Simulation
                 return backend;
             if (TryParse(configuredBackend, out backend))
                 return backend;
+            if (string.IsNullOrEmpty(explicitOverride) && string.IsNullOrEmpty(configuredBackend))
+                return CollisionBroadphaseBackend.LooseQuadtree;
             return CollisionBroadphaseBackend.BruteForce;
         }
 

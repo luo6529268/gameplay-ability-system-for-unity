@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-10T01:40:31.694953+00:00",
+  "code": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "sha256": "b3310021c620d07e60b45dbda6c20c23c2bfb90fd48b63fc276be78768bd555a"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H06RolePrerequisiteDiagnostics.cs",
+      "sha256": "ed3742a8ebc95077e64c0bf377cc8b33c71322590dc860758591ad435f85be09"
+    }
+  ],
+  "baseline": {
+    "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010\\windows\\00-combat1000-prerequisites\\report.json.record-cost.json",
+    "sha256": "1c213880aeb5feceb722a735d75013c3e17acd2df5d629e98c48b806e16af1a3"
+  },
+  "protectedUnchanged": 2514
+}

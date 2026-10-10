@@ -1,0 +1,165 @@
+{
+  "utc": "2026-10-10T01:46:55.409472+00:00",
+  "files": [
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\after-window-editor.json",
+      "bytes": 2122,
+      "sha256": "b512abffd2641ddc8d2dede217174135e8cecf4e605789e89c7330c3b31b72bf"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\after-window-scenes.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\compile-evidence.json",
+      "bytes": 614,
+      "sha256": "ecf3926caa3538cd51e93d322a1c3c5684a02d6539609b8c0394d0dddd1c2e42"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\compile-request-01.json",
+      "bytes": 347,
+      "sha256": "b1d9320d65e0b9b91575fb57079b3f36e28ba225e9ae5c2d532e02dba8e62220"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\compile-state-01.json",
+      "bytes": 2135,
+      "sha256": "f0870b0ec9d06013e89f0c2a2abeca5712e93972ec0b7a2a8ae6d13490714683"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\compile-state-02.json",
+      "bytes": 2122,
+      "sha256": "21eef8f2b3cf1a7e6f55ab023f45b6e7caf4bbb63adc6ae76897bdba1c67630d"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\editor-before-compile.json",
+      "bytes": 2122,
+      "sha256": "ddfa330a938cd9db9b8c71dcb1ddf35ce089d42781882302dd3da3bde329e5fa"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\final-git-status.txt",
+      "bytes": 5354,
+      "sha256": "a17d30205638512526041334e960d34c56d0deac0bfec14b9bc4a4eaedbb24d1"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\final-protection.json",
+      "bytes": 155,
+      "sha256": "5836860947f2200707e4a8a0164446576914fe89f4efee284c51bec726e8b860"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\focused-result-01.json",
+      "bytes": 5384,
+      "sha256": "9f281e5ed0e3cd1844312ff0c7eefc421b26fb9e33bfe1d75505e6b58ee62413"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\focused-start-01.json",
+      "bytes": 307,
+      "sha256": "47960a85dd430ccb1c3a8e033f6a25abc9edfcf1f758e2a10a9ad8525f562549"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\git-diff-check.txt",
+      "bytes": 1531,
+      "sha256": "1c1a069e1e65d9cb3d6e033c00f0e61da61eb45d087f409295c5852f8c4c723d"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\pre-window-editor.json",
+      "bytes": 2243,
+      "sha256": "c899014075577c7f0c4fad228ab912d1cba40767d5e55bce39c8ada94df65aeb"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\pre-window-fingerprints.json",
+      "bytes": 726,
+      "sha256": "7853b40f9528b52710effb3fc959db96101f4dbf4bd9b0f320b6752c0841e785"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\pre-window-scenes.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\qualification-summary.json",
+      "bytes": 3733,
+      "sha256": "19e7a76436bef21031a6884758b79d6631220550629d5250ac3df2fd0244dadf"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\REPORT.md",
+      "bytes": 11179,
+      "sha256": "4ce6b641005bc49192894cd9a2db1b2d3ad03efa38b3fbc6891ace35631978f3"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\scene-before-compile.json",
+      "bytes": 409,
+      "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\validator.txt",
+      "bytes": 790426,
+      "sha256": "d77cce6c2795378d21e66f884ed8cff368f6d4ad32d27c36c321084fcd131054"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\window-start.json",
+      "bytes": 233,
+      "sha256": "d10f6d4287d78f2a2b62f106c1398831489afe4374fd4de726b5ee64b06733da"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\window-state-01.json",
+      "bytes": 2139,
+      "sha256": "5c0f8fcf65c6845d5ad837c3691c97e0346c0201b8f728549832854812c8440e"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json",
+      "bytes": 160984,
+      "sha256": "c1bfeb3a16fd2f78a9d373ddb5e5f1b72c7ab3b2bd475c3d614a1d810881a451"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.final-checksum.json",
+      "bytes": 4208480,
+      "sha256": "e4916aca8c5be675b8192d5a6c1429029fd94db6f838cf6c82e532b030836b12"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.logic-gc.json",
+      "bytes": 1924,
+      "sha256": "338c57755207e2fb8b098d4a4ab79b582eb194a20663d9c5a2d28126408d2c8d"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.observation.json",
+      "bytes": 10645,
+      "sha256": "79ffa23844f69d7241782331d00a92652ad92057d46dd40c1fdbc835099d96a1"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.record-cost.json",
+      "bytes": 708542,
+      "sha256": "026b197d7ca6b0b6555a005b26e5b70e21254c5a3f0d64ea523ab81d1efc5457"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.request.json",
+      "bytes": 2716,
+      "sha256": "3551fe3f4718d8df5e3b098eb84165003f0d18176ae2ca56ccdbfd344252a7d5"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.shared-terminal-before.txt",
+      "bytes": 513,
+      "sha256": "ebe92daddb677a7404cf88675f3f80aeaf400c4612ce10db9a477a6b3abce951"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\00-combat1000-off\\report.json.terminal.txt",
+      "bytes": 505,
+      "sha256": "a9036a3708457f6d338198733fd94134444d632372271b37df604cac28f18d4a"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\progress-0000.json",
+      "bytes": 10551,
+      "sha256": "2bd23eb1a92099254ed391889fc6f4edca9cfc02f551a2a05c6ce3017a5376e3"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\progress-0001.json",
+      "bytes": 10558,
+      "sha256": "c569c23be886f86ae9d31832bc28b33e699bbfa2e2876d670558f2fb1b56ebac"
+    },
+    {
+      "path": "artifacts\\diagnostics\\NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010\\windows\\suite-result.json",
+      "bytes": 15454,
+      "sha256": "f626e733a6287cd660bcc529d76c47b4d3c99e2cb7e5617a486b9d6ece2aa32d"
+    }
+  ]
+}

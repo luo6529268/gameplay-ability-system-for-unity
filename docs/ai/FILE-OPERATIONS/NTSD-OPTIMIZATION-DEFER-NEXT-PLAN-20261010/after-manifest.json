@@ -1,0 +1,105 @@
+{
+  "operationId": "NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010",
+  "status": "VERIFIED_DOCUMENTATION_ONLY",
+  "completedAt": "2026-10-10T00:32:25.433776+08:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1598841,
+      "sha256": "C766555CC7E0B9C7CFC55848A22B2226F2664CE0F45FD8ED175E4B36E7D3046F"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 41366,
+      "sha256": "4A84ABB91BFE5C85E0D960073B393AB6728BE7CB3E0AB9438B55EBFDCF55D7E2"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "bytes": 8068,
+      "sha256": "404BFFE6272BAA3F9FA308B710B891BB37E6CC5AF0F53F79D327C25EA24B1EA7"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "bytes": 34411,
+      "sha256": "B9536D189AF6B4BB65EDE7BCBE85655DA41B972CBB8C42E7AB1398BBE6D64200"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 222454,
+      "sha256": "2CBB4F5233B6EC1F385547D541CC62EDEA74785918B439A41940AEC6E3B288BF"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 378997,
+      "sha256": "DD02D745D0CE7207137A5C81D39F2BB64A44D70FB521D5B83ABC20F1770D0B28"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 140006,
+      "sha256": "999463545E21F6640AD2F928B8480FCB0F65E3E5D34181194BD5A7D1E0CBAB72"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010/RECORD.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010\\RECORD.md",
+      "bytes": 4289,
+      "sha256": "5B5EB725C01A73B2EB4FEF9D0E3A63FB7F929D02FD96CC3D00FB824F278BBB52"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "bytes": 14125,
+      "sha256": "9E39CC622DF1A2AA7D557F533174AAF9F1700AECBD20488CB86634422F382648"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H06-ROLE-EXACT.md",
+      "bytes": 8650,
+      "sha256": "DAEA2B96632160170A6E93313A993FEAD5B4AC84D0C36765AC5F467FACE21EA5"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "bytes": 5382,
+      "sha256": "7D7621407782440CD131A7E2DDE0C9908C6574E51E5033C4F4BD9F9451B982C1"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "bytes": 8092,
+      "sha256": "74E32AFD518B6115316F0FD4B41BBC392825E13CFA0B935021ABC54497819454"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\README.md",
+      "bytes": 3232,
+      "sha256": "7AB362D89D24903D6AA27405E63F6C6EEEDEDE96C49C81A33AD5C508ECB5D40D"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "bytes": 7415,
+      "sha256": "ACD7F2325300AD3F246B20A84962D487D32CF9E2713D3842CDFC564D199A9B0C"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1660264,
+      "sha256": "7501FC7774E35809F86662438225CCE1032A160B5F0115A22BAAD5D201F8E81C"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md",
+      "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\TASKS\\NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md",
+      "bytes": 2155,
+      "sha256": "DF6D2A6688F110BD2BD1C202416DA8176578C6E73783772360C1A482BBFF084C"
+    }
+  ],
+  "protectedRechecked": 56,
+  "runtimeTestsExecuted": false
+}

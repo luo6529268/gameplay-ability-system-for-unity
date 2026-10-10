@@ -1,3 +1,7 @@
+> **2026-10-10 有限下一指令约定与状态更正。** 直接人类授权由讨论会话传达：“等你整理出下一个优化点后，直接出输出指令即可，不需要等我回复”。允许整理完成后直接输出已界定的下一有限执行指令，例行已授权步骤无需重复问A/B或许可；不授予跨红线规则变更、Q06禁读、资源/Scene/Settings写入、专项解冻或旧自动Goal。当前执行会话只完成 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 静态分析，结论B；[报告第7节](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md)已有单一record内部诊断指令草案，本Task未运行、未向其它会话发送，也未操作监测。下方“等待发送/未批准具体步骤”按原日期保留，不再阻止组织这条有限指令。
+>
+> Role限定准入已由独立证据完成；下方旧BLOCKED/Brute默认为修复前历史。producer USER_DEFERRED/OFF、ABBA首OFF完整Driver2event/首tick130调用点未知仍独立，95OFF，H06父/H07/Android开放；D1=A及所有最终门不变。
+
 > 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
 
 # 优化决策记录

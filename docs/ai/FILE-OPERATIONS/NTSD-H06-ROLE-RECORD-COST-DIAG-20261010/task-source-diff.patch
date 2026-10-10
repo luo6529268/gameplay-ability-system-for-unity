@@ -1,0 +1,938 @@
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\before\Assets__NTSD__Scripts__Animation__Character__BruteForceSceneQuery.cs
++++ Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+@@ -65,0 +66,96 @@
++        }
++
++        // Alignment contract: NTSD-H06-ROLE-RECORD-COST-DIAG-001.
++        private bool enableRoleRecordCostDiagnostics;
++        public bool EnableRoleRecordCostDiagnostics
++        {
++            get => enableRoleRecordCostDiagnostics;
++            set
++            {
++                enableRoleRecordCostDiagnostics = value;
++                if (!value)
++                {
++                    roleRecordCosts = default;
++                    roleRecordDiagnostics = null;
++                    roleRecordDirectionSelected = false;
++                    roleRecordActive = false;
++                    roleRecordSegment = BattleTickDetailPhase.Count;
++                }
++            }
++        }
++        [Serializable]
++        public struct RoleRecordCostCounters
++        {
++            public long eligibleDirections;
++            public long timedDirections;
++            public long records;
++            public long timedRecords;
++            public long snapshotCaptures;
++            public long repeatDirectionRecords;
++            public long repeatItrRecords;
++            public long groupRejects;
++            public long kind4Increments;
++            public long initialRejects;
++            public long nearestVisits;
++            public long nearestPrev2Reads;
++            public long nearestNotSelected;
++            public long nearestReplacements;
++            public long nearestTieDraws;
++            public long ordinaryVisits;
++            public long ordinaryPrev2Reads;
++            public long capacityRejects;
++            public long groundRejects;
++            public long selectRejects;
++            public long kind1TieDraws;
++            public long appends;
++            public long replaces;
++            public long storeInvalids;
++            public long legacyTouches;
++            public long fallbackRecords;
++            public long completedRecords;
++            public long recordParentTicks;
++            public long segmentCount;
++        }
++        private RoleRecordCostCounters roleRecordCosts;
++        public RoleRecordCostCounters LastRoleRecordCostCounters => roleRecordCosts;
++        private BattleTickDetailPhaseDiagnostics roleRecordDiagnostics;
++        private bool roleRecordDirectionSelected;
++        private bool roleRecordActive;
++        private long roleRecordParentStart;
++        private long roleRecordSegmentStart;
++        private BattleTickDetailPhase roleRecordSegment = BattleTickDetailPhase.Count;
++
++        private void BeginRoleRecordSegment(BattleTickDetailPhase phase)
++        {
++            if (!roleRecordActive) return;
++            long now = System.Diagnostics.Stopwatch.GetTimestamp();
++            if (roleRecordSegment != BattleTickDetailPhase.Count)
++                roleRecordDiagnostics.RecordPhaseElapsed(roleRecordSegment, now - roleRecordSegmentStart);
++            roleRecordSegment = phase;
++            roleRecordSegmentStart = System.Diagnostics.Stopwatch.GetTimestamp();
++            roleRecordCosts.segmentCount++;
++        }
++
++        private void BeginRoleRecord(bool captured, bool repeatedBody)
++        {
++            if (!EnableRoleRecordCostDiagnostics || roleRecordDiagnostics == null) return;
++            roleRecordCosts.records++;
++            if (!roleRecordDirectionSelected) return;
++            roleRecordCosts.timedRecords++;
++            if (captured) roleRecordCosts.repeatDirectionRecords++;
++            if (repeatedBody) roleRecordCosts.repeatItrRecords++;
++            roleRecordActive = true;
++            roleRecordParentStart = System.Diagnostics.Stopwatch.GetTimestamp();
++            roleRecordSegment = BattleTickDetailPhase.Count;
++        }
++
++        private void EndRoleRecord()
++        {
++            if (!roleRecordActive) return;
++            long now = System.Diagnostics.Stopwatch.GetTimestamp();
++            if (roleRecordSegment != BattleTickDetailPhase.Count)
++                roleRecordDiagnostics.RecordPhaseElapsed(roleRecordSegment, now - roleRecordSegmentStart);
++            roleRecordCosts.recordParentTicks += System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordParentStart;
++            roleRecordCosts.completedRecords++;
++            roleRecordActive = false;
++            roleRecordSegment = BattleTickDetailPhase.Count;
+@@ -1707 +1803,6 @@
+-            if (EnableRoleBranchTimingForDiagnostics &&
++            roleRecordCosts = default;
++            roleRecordDiagnostics = null;
++            roleRecordActive = false;
++            roleRecordDirectionSelected = false;
++            roleRecordSegment = BattleTickDetailPhase.Count;
++            if ((EnableRoleBranchTimingForDiagnostics || EnableRoleRecordCostDiagnostics) &&
+@@ -6275,5 +6376,10 @@
+-            _lastRoleBranchTimingCoverage.eligibleDirections++;
+-            _totalRoleBranchTimingCoverage.eligibleDirections++;
+-            timing = ((_lastRoleBranchTimingCoverage.eligibleDirections - 1 +
+-                _roleBranchTimingSampleOffset) & (_roleBranchTimingSampleStride - 1)) == 0;
+-            if (timing)
++            long ordinal;
++            if (EnableRoleBranchTimingForDiagnostics)
++            {
++                _lastRoleBranchTimingCoverage.eligibleDirections++;
++                _totalRoleBranchTimingCoverage.eligibleDirections++;
++                ordinal = _lastRoleBranchTimingCoverage.eligibleDirections;
++            }
++            else ordinal = roleRecordCosts.eligibleDirections + 1;
++            timing = ((ordinal - 1 + _roleBranchTimingSampleOffset) & (_roleBranchTimingSampleStride - 1)) == 0;
++            if (EnableRoleBranchTimingForDiagnostics && timing)
+@@ -6282,0 +6389,5 @@
++            }
++            if (EnableRoleRecordCostDiagnostics)
++            {
++                roleRecordCosts.eligibleDirections++;
++                if (timing) roleRecordCosts.timedDirections++;
+@@ -6365 +6476,2 @@
+-            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics = roleDirection && EnableRoleBranchTimingForDiagnostics
++            BattleTickDetailPhaseDiagnostics selectedRoleDiagnostics = roleDirection &&
++                (EnableRoleBranchTimingForDiagnostics || EnableRoleRecordCostDiagnostics)
+@@ -6366,0 +6479,5 @@
++            roleRecordDiagnostics = roleDirection && EnableRoleRecordCostDiagnostics ? selectedRoleDiagnostics : null;
++            roleRecordDirectionSelected = roleRecordDiagnostics != null && roleBranchTiming;
++            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics = EnableRoleBranchTimingForDiagnostics
++                ? selectedRoleDiagnostics : null;
++            roleBranchTiming &= roleBranchDiagnostics != null;
+@@ -6603,0 +6721 @@
++            bool recordedBody = false;
+@@ -6639,2 +6757,6 @@
+-                long roleRecordStart = roleBranchDiagnostics != null
+-                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord, roleBranchTiming) : 0;
++                BeginRoleRecord(pairSnapshotCaptured, recordedBody);
++                recordedBody = true;
++                try
++                {
++                    long roleRecordStart = roleBranchDiagnostics != null
++                        ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord, roleBranchTiming) : 0;
+@@ -6642,6 +6764,88 @@
+-                if (ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics)
+-                {
+-                    _lastRoleAwareCachedPairSnapshotCaptureCount++;
+-                    TryRecordReleaseCandidate(
+-                        attacker, target, itr, targetCurrentFrame, bodyX,
+-                        itrEntry.ItrIndex, attackerParticipant.Handle);
++                    if (ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics)
++                    {
++                        if (roleRecordActive) roleRecordCosts.fallbackRecords++;
++                        BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordSnapshot);
++                        if (roleRecordActive) roleRecordCosts.snapshotCaptures++;
++                        _lastRoleAwareCachedPairSnapshotCaptureCount++;
++                        TryRecordReleaseCandidate(
++                            attacker, target, itr, targetCurrentFrame, bodyX,
++                            itrEntry.ItrIndex, attackerParticipant.Handle);
++                        if (roleBranchTiming)
++                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
++                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
++                        continue;
++                    }
++#endif
++                    // Alignment contract: NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.
++                    // Ordinary multiple-candidate records are read-only once the producer is full.
++                    if (roleDirection && EnableRoleCapacityRecordGuardForDiagnostics &&
++                        itr.kind == 0 && itr.vrest != 0 &&
++                        GetCollisionCandidateProducerCount(attacker, attackerParticipant.Handle) >= HitCandidateMax)
++                    {
++                        LastRoleCapacityRecordGuardSkipCountForDiagnostics++;
++                        if (roleBranchTiming)
++                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
++                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
++                        continue;
++                    }
++                    // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
++                    bool rejectGroupBeforeCapture = roleDirection &&
++                        EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !pairSnapshotCaptured;
++#if UNITY_INCLUDE_TESTS
++                    rejectGroupBeforeCapture &= AfterRoleAwareExactPairForSelfCheck == null;
++#endif
++                    if (rejectGroupBeforeCapture &&
++                        RejectRoleGroupBeforePairSnapshot(in attackerParticipant, in targetParticipant, itr,
++                            ref groupWitness, ref groupWitnessCaptured))
++                    {
++                        LastRoleRejectedGroupSnapshotSkipCountForDiagnostics++;
++                        if (roleBranchTiming)
++                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
++                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
++                        // Group rejection is body-independent and precedes every record side effect.
++                        return;
++                    }
++                    // Alignment contract: NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.
++                    // Record writes candidates/counts/RNG, not this direction's snapshot inputs.
++                    if (!pairSnapshotCaptured)
++                    {
++                        BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordSnapshot);
++                        if (roleRecordActive) roleRecordCosts.snapshotCaptures++;
++                        bool reuseFrames = roleDirection && EnableRoleSnapshotFrameReuseForDiagnostics;
++#if UNITY_INCLUDE_TESTS
++                        reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
++#endif
++                        if (roleDirection && EnableRoleEndpointSnapshotReuseForDiagnostics &&
++                            TryCaptureRoleEndpointPairSnapshot(in attackerParticipant,
++                                in targetParticipant, out pairSnapshot))
++                        {
++                            LastRoleEndpointSnapshotComposeCountForDiagnostics++;
++                        }
++                        else if (reuseFrames)
++                        {
++                            // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
++                            pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
++                                attacker, target, _world, attackerParticipant.CurrentFrame,
++                                targetParticipant.CurrentFrame, attackerParticipant.CollisionFrame,
++                                targetParticipant.CollisionFrame);
++                            LastRoleSnapshotFrameReuseCountForDiagnostics++;
++                        }
++                        else
++                        {
++                            pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
++                                attacker, target, _world);
++                        }
++                        pairSnapshotCaptured = true;
++#if UNITY_INCLUDE_TESTS
++                        _lastRoleAwareCachedPairSnapshotCaptureCount++;
++#endif
++                    }
++                    TryRecordReleaseCandidateFromSnapshot(
++                        attacker,
++                        target,
++                        itr,
++                        targetCurrentFrame,
++                        bodyX,
++                        itrEntry.ItrIndex,
++                        in pairSnapshot,
++                        attackerParticipant.Handle);
+@@ -6651,77 +6855,2 @@
+-                    continue;
+-                }
+-#endif
+-                // Alignment contract: NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.
+-                // Ordinary multiple-candidate records are read-only once the producer is full.
+-                if (roleDirection && EnableRoleCapacityRecordGuardForDiagnostics &&
+-                    itr.kind == 0 && itr.vrest != 0 &&
+-                    GetCollisionCandidateProducerCount(attacker, attackerParticipant.Handle) >= HitCandidateMax)
+-                {
+-                    LastRoleCapacityRecordGuardSkipCountForDiagnostics++;
+-                    if (roleBranchTiming)
+-                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+-                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+-                    continue;
+-                }
+-                // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
+-                bool rejectGroupBeforeCapture = roleDirection &&
+-                    EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !pairSnapshotCaptured;
+-#if UNITY_INCLUDE_TESTS
+-                rejectGroupBeforeCapture &= AfterRoleAwareExactPairForSelfCheck == null;
+-#endif
+-                if (rejectGroupBeforeCapture &&
+-                    RejectRoleGroupBeforePairSnapshot(in attackerParticipant, in targetParticipant, itr,
+-                        ref groupWitness, ref groupWitnessCaptured))
+-                {
+-                    LastRoleRejectedGroupSnapshotSkipCountForDiagnostics++;
+-                    if (roleBranchTiming)
+-                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+-                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+-                    // Group rejection is body-independent and precedes every record side effect.
+-                    return;
+-                }
+-                // Alignment contract: NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.
+-                // Record writes candidates/counts/RNG, not this direction's snapshot inputs.
+-                if (!pairSnapshotCaptured)
+-                {
+-                    bool reuseFrames = roleDirection && EnableRoleSnapshotFrameReuseForDiagnostics;
+-#if UNITY_INCLUDE_TESTS
+-                    reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
+-#endif
+-                    if (roleDirection && EnableRoleEndpointSnapshotReuseForDiagnostics &&
+-                        TryCaptureRoleEndpointPairSnapshot(in attackerParticipant,
+-                            in targetParticipant, out pairSnapshot))
+-                    {
+-                        LastRoleEndpointSnapshotComposeCountForDiagnostics++;
+-                    }
+-                    else if (reuseFrames)
+-                    {
+-                        // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
+-                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
+-                            attacker, target, _world, attackerParticipant.CurrentFrame,
+-                            targetParticipant.CurrentFrame, attackerParticipant.CollisionFrame,
+-                            targetParticipant.CollisionFrame);
+-                        LastRoleSnapshotFrameReuseCountForDiagnostics++;
+-                    }
+-                    else
+-                    {
+-                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
+-                            attacker, target, _world);
+-                    }
+-                    pairSnapshotCaptured = true;
+-#if UNITY_INCLUDE_TESTS
+-                    _lastRoleAwareCachedPairSnapshotCaptureCount++;
+-#endif
+-                }
+-                TryRecordReleaseCandidateFromSnapshot(
+-                    attacker,
+-                    target,
+-                    itr,
+-                    targetCurrentFrame,
+-                    bodyX,
+-                    itrEntry.ItrIndex,
+-                    in pairSnapshot,
+-                    attackerParticipant.Handle);
+-                if (roleBranchTiming)
+-                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+-                        System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
++                }
++                finally { EndRoleRecord(); }
+@@ -7064,0 +7194 @@
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordGroup);
+@@ -7073,0 +7204 @@
++                if (roleRecordActive) roleRecordCosts.groupRejects++;
+@@ -7076,0 +7208 @@
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordInitialReject);
+@@ -7084,0 +7217 @@
++                if (roleRecordActive) roleRecordCosts.kind4Increments++;
+@@ -7090,0 +7224,2 @@
++            {
++                if (roleRecordActive) roleRecordCosts.initialRejects++;
+@@ -7092 +7227,3 @@
+-
++            }
++
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordNearest);
+@@ -7104,0 +7242,2 @@
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordOrdinarySelect);
++            if (roleRecordActive) roleRecordCosts.ordinaryVisits++;
+@@ -7108,0 +7248,2 @@
++            {
++                if (roleRecordActive) roleRecordCosts.capacityRejects++;
+@@ -7110 +7251,3 @@
+-
++            }
++
++            if (roleRecordActive) roleRecordCosts.ordinaryPrev2Reads++;
+@@ -7112,0 +7256,2 @@
++            {
++                if (roleRecordActive) roleRecordCosts.groundRejects++;
+@@ -7113,0 +7259 @@
++            }
+@@ -7115,0 +7262,2 @@
++            {
++                if (roleRecordActive) roleRecordCosts.selectRejects++;
+@@ -7117 +7265,4 @@
+-
++            }
++
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordStore);
++            if (roleRecordActive) roleRecordCosts.appends++;
+@@ -7130,0 +7282 @@
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordLegacy);
+@@ -7139,0 +7292 @@
++                if (roleRecordActive) roleRecordCosts.legacyTouches++;
+@@ -7202,0 +7356,5 @@
++            if (roleRecordActive)
++            {
++                roleRecordCosts.nearestVisits++;
++                roleRecordCosts.nearestPrev2Reads++;
++            }
+@@ -7216,0 +7375,2 @@
++                {
++                    if (roleRecordActive) roleRecordCosts.nearestTieDraws++;
+@@ -7217,0 +7378 @@
++                }
+@@ -7218,0 +7380,2 @@
++                {
++                    if (roleRecordActive) roleRecordCosts.nearestNotSelected++;
+@@ -7219,0 +7383 @@
++                }
+@@ -7224,0 +7389,3 @@
++            if (roleRecordActive) roleRecordCosts.nearestReplacements++;
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordStore);
++            if (roleRecordActive) roleRecordCosts.replaces++;
+@@ -7236,0 +7404 @@
++            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordLegacy);
+@@ -7243,0 +7412 @@
++                if (roleRecordActive) roleRecordCosts.legacyTouches++;
+@@ -7344,0 +7514 @@
++                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
+@@ -7355,0 +7526 @@
++                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
+@@ -7368,0 +7540 @@
++                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
+@@ -7390,0 +7563 @@
++                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
+@@ -7412,0 +7586 @@
++                if (roleRecordActive) roleRecordCosts.storeInvalids++;
+@@ -7704,0 +7879,2 @@
++                {
++                    if (roleRecordActive) roleRecordCosts.kind1TieDraws++;
+@@ -7705,0 +7882 @@
++                }
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\before\Assets__NTSD__Scripts__Simulation__Diagnostics__SimulationWorld.DetailTimingDiagnostics.cs
++++ Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs
+@@ -71 +71,8 @@
+-        Count = 54,
++        RoleRecordSnapshot = 54,
++        RoleRecordGroup = 55,
++        RoleRecordInitialReject = 56,
++        RoleRecordNearest = 57,
++        RoleRecordOrdinarySelect = 58,
++        RoleRecordStore = 59,
++        RoleRecordLegacy = 60,
++        Count = 61,
+@@ -553,0 +561,14 @@
++                case BattleTickDetailPhase.RoleRecordSnapshot:
++                    return "CandidateCollect/RoleRecordSnapshot";
++                case BattleTickDetailPhase.RoleRecordGroup:
++                    return "CandidateCollect/RoleRecordGroup";
++                case BattleTickDetailPhase.RoleRecordInitialReject:
++                    return "CandidateCollect/RoleRecordInitialReject";
++                case BattleTickDetailPhase.RoleRecordNearest:
++                    return "CandidateCollect/RoleRecordNearest";
++                case BattleTickDetailPhase.RoleRecordOrdinarySelect:
++                    return "CandidateCollect/RoleRecordOrdinarySelect";
++                case BattleTickDetailPhase.RoleRecordStore:
++                    return "CandidateCollect/RoleRecordStore";
++                case BattleTickDetailPhase.RoleRecordLegacy:
++                    return "CandidateCollect/RoleRecordLegacy";
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\before\Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -23,0 +24,201 @@
++        private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
++        private static bool startingRoleRecordCostDiagnostic;
++        private static RoleRecordTickObserver roleRecordTickObserver;
++        private static RoleRecordTick[] roleRecordBaseline;
++
++        [MenuItem("NTSD/Validation/Optimization/H06 Role Record Cost Diagnostic")]
++        private static void BeginRoleRecordCostDiagnostic()
++        {
++            Require(!startingRoleRecordCostDiagnostic && roleRecordTickObserver == null,
++                "The finite record diagnostic already has an owner.");
++            startingRoleRecordCostDiagnostic = true;
++            roleRecordBaseline = null;
++            try { BeginPostBindingsRole(); }
++            finally { startingRoleRecordCostDiagnostic = false; }
++        }
++
++        internal static ProductionEntityStressRequest BuildRoleRecordCostRequest(int index)
++        {
++            if (index < 0 || index > 1) throw new ArgumentOutOfRangeException(nameof(index));
++            ProductionEntityStressRequest request = BuildScopedRoleAdmissionRequest(3);
++            request.outputPath = RoleRecordCostOutputRoot + (index == 0
++                ? "/00-combat1000-off/report.json" : "/01-combat1000-on/report.json");
++            return request;
++        }
++
++        [Serializable]
++        private sealed class RoleRecordTick
++        {
++            public int tick, playerInputCount;
++            public bool steady, actualFlagsValid;
++            public ulong fullRuntimeChecksum, rngCalls;
++            public uint rngState, crtState, tableSeed, lastSynchronizedCallSite;
++            public ulong crtCalls, synchronizedCalls, synchronizedTableHash;
++            public int synchronizedCounter, synchronizedIndex;
++            public BruteForceSceneQuery.RoleRecordCostCounters counters;
++            public long[] elapsed = new long[7];
++        }
++
++        [Serializable]
++        private sealed class RoleRecordEvidence
++        {
++            public string checksumScope = "Existing CaptureRuntimeChecksum64 schema after completed Driver, including full applied FrameInputSet and runtime AI input fields; not canonical JSON snapshots.";
++            public string counterScope = "Per collection. Eligibility counts all directions/records; remaining counters and seven clocks sampled directions only. Warm1-120, steady121-300. No extrapolation.";
++            public long stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency;
++            public bool enabled, settingsRestored;
++            public int ticks, parityMismatches, actualFlagFailures;
++            public RoleRecordTick[] observations = new RoleRecordTick[300];
++            public long[] emptyBoundaryTicks = new long[1024];
++            public long[] sevenBoundaryWallTicks = new long[1024];
++            public long[] sevenBoundaryRecordedTicks = new long[1024];
++        }
++
++        private sealed class RoleRecordTickObserver : IDisposable
++        {
++            private readonly ProductionEntityStressRunner runner;
++            private readonly SimulationTickDriver driver;
++            private readonly SimulationWorld world;
++            private readonly BruteForceSceneQuery query;
++            private readonly BattleLogicTickGcObserverEditor gc;
++            private readonly BattleTickDetailPhaseDiagnostics detail;
++            private readonly bool previousEnabled;
++            private readonly int previousStride;
++            private bool attached, disposed;
++            internal readonly RoleRecordEvidence evidence = new RoleRecordEvidence();
++
++            internal RoleRecordTickObserver(ProductionEntityStressRunner runner, SimulationTickDriver driver,
++                BruteForceSceneQuery query, BattleLogicTickGcObserverEditor gc, bool enabled)
++            {
++                this.runner = runner;
++                this.driver = driver;
++                world = driver.World;
++                this.query = query;
++                this.gc = gc;
++                detail = world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
++                Require(detail != null && detail.Enabled && !runner.DriverTickObserverAttachedForDiagnostics &&
++                    runner.Report.logicTicksExecuted == 0, "Record observation requires an unowned first-tick boundary.");
++                Require(!query.EnableRoleRecordCostDiagnostics && !query.EnableRoleBranchTimingForDiagnostics &&
++                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
++                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
++                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
++                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics,
++                    "Record diagnosis cannot enable previous candidates or input instrumentation.");
++                previousEnabled = query.EnableRoleRecordCostDiagnostics;
++                previousStride = query.RoleBranchTimingSampleStrideForDiagnostics;
++                evidence.enabled = enabled;
++                for (int index = 0; index < evidence.observations.Length; index++)
++                    evidence.observations[index] = new RoleRecordTick();
++                MeasureBoundaryOverhead(evidence);
++                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
++                query.EnableRoleRecordCostDiagnostics = enabled;
++                try
++                {
++                    runner.ConfigureDriverTickObserverForDiagnostics(gc.BeginDriverStep, gc.EndDriverStep, Accept);
++                    attached = true;
++                }
++                catch { Dispose(); throw; }
++            }
++
++            private void Accept(int tick, bool steady)
++            {
++                gc.AcceptCompletedTick(tick, steady);
++                if (tick != evidence.ticks + 1 || tick > 300)
++                    throw new InvalidOperationException("Record observation lost the fixed 300-tick boundary.");
++                RoleRecordTick row = evidence.observations[tick - 1];
++                row.tick = tick;
++                row.steady = steady;
++                row.playerInputCount = driver.LastAppliedFrameInput.Players?.Count ?? 0;
++                row.fullRuntimeChecksum = world.CaptureRuntimeChecksum64(driver.CurrentTickIndex, driver.LastAppliedFrameInput);
++                row.rngState = world.Rng.State;
++                row.rngCalls = world.Rng.CallCount;
++                var native = world.NativeRandom.CaptureScalarState();
++                row.crtState = native.CrtState;
++                row.crtCalls = native.CrtCalls;
++                row.tableSeed = native.TableSeed;
++                row.synchronizedCounter = native.SynchronizedCounter;
++                row.synchronizedIndex = native.SynchronizedIndex;
++                row.synchronizedCalls = native.SynchronizedCalls;
++                row.lastSynchronizedCallSite = native.LastSynchronizedCallSite;
++                row.synchronizedTableHash = native.SynchronizedTableHash;
++                row.counters = query.LastRoleRecordCostCounters;
++                for (int phase = 0; phase < 7; phase++)
++                    row.elapsed[phase] = detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + phase));
++                row.actualFlagsValid = query.EnableRoleRecordCostDiagnostics == evidence.enabled &&
++                    query.RoleBranchTimingSampleStrideForDiagnostics == 64 && !query.EnableRoleBranchTimingForDiagnostics &&
++                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
++                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
++                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
++                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics &&
++                    query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware &&
++                    !query.LastFormalCollectionAbortedForDiagnostics && query.LastFormalFallbackParticipantCountForDiagnostics == 0 &&
++                    steady == (tick > 120);
++                for (int phase = 48; phase <= 53; phase++)
++                    row.actualFlagsValid &= detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) == 0;
++                if (!row.actualFlagsValid) evidence.actualFlagFailures++;
++                if (evidence.enabled && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
++                    evidence.parityMismatches++;
++                evidence.ticks++;
++            }
++
++            public void Dispose()
++            {
++                if (disposed) return;
++                try { if (attached) runner.ConfigureDriverTickObserverForDiagnostics(null, null, null); }
++                finally
++                {
++                    query.EnableRoleRecordCostDiagnostics = previousEnabled;
++                    query.RoleBranchTimingSampleStrideForDiagnostics = previousStride;
++                    evidence.settingsRestored = query.EnableRoleRecordCostDiagnostics == previousEnabled &&
++                        query.RoleBranchTimingSampleStrideForDiagnostics == previousStride;
++                    attached = false;
++                    disposed = true;
++                }
++            }
++        }
++
++        private static bool RoleRecordTicksEqual(RoleRecordTick left, RoleRecordTick right) =>
++            left.tick == right.tick && left.steady == right.steady && left.playerInputCount == right.playerInputCount &&
++            left.fullRuntimeChecksum == right.fullRuntimeChecksum && left.rngState == right.rngState && left.rngCalls == right.rngCalls &&
++            left.crtState == right.crtState && left.crtCalls == right.crtCalls && left.tableSeed == right.tableSeed &&
++            left.synchronizedCounter == right.synchronizedCounter && left.synchronizedIndex == right.synchronizedIndex &&
++            left.synchronizedCalls == right.synchronizedCalls && left.lastSynchronizedCallSite == right.lastSynchronizedCallSite &&
++            left.synchronizedTableHash == right.synchronizedTableHash;
++
++        private static void MeasureBoundaryOverhead(RoleRecordEvidence evidence)
++        {
++            var calibration = new BattleTickDetailPhaseDiagnostics();
++            calibration.SetEnabled(true);
++            for (int sample = 0; sample < 1024; sample++)
++            {
++                long start = System.Diagnostics.Stopwatch.GetTimestamp();
++                evidence.emptyBoundaryTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - start;
++                calibration.BeginTick(sample);
++                long wall = System.Diagnostics.Stopwatch.GetTimestamp();
++                long segment = System.Diagnostics.Stopwatch.GetTimestamp();
++                for (int index = 0; index < 7; index++)
++                {
++                    long now = System.Diagnostics.Stopwatch.GetTimestamp();
++                    calibration.RecordPhaseElapsed((BattleTickDetailPhase)(54 + index), now - segment);
++                    segment = System.Diagnostics.Stopwatch.GetTimestamp();
++                }
++                evidence.sevenBoundaryWallTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - wall;
++                for (int index = 0; index < 7; index++)
++                    evidence.sevenBoundaryRecordedTicks[sample] += calibration.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + index));
++            }
++            calibration.SetEnabled(false);
++        }
++
++        private static void FinishRoleRecordObservation(RunState run, bool aborted)
++        {
++            RoleRecordTickObserver owned = roleRecordTickObserver;
++            roleRecordTickObserver = null;
++            if (owned == null) return;
++            owned.Dispose();
++            RoleRecordEvidence evidence = owned.evidence;
++            run.roleRecordObservationValid = !aborted && evidence.ticks == 300 && evidence.settingsRestored &&
++                evidence.actualFlagFailures == 0 && evidence.parityMismatches == 0;
++            if (!evidence.enabled && run.roleRecordObservationValid && run.zeroGcPassed)
++                roleRecordBaseline = evidence.observations;
++            SaveNew(run.reportPath + (aborted ? ".record-cost.aborted.json" : ".record-cost.json"), JsonUtility.ToJson(evidence, true));
++        }
++
+@@ -200,0 +402 @@
++            public bool roleRecordObservationValid;
+@@ -403,0 +606 @@
++            public bool roleRecordCostDiagnostic;
+@@ -1009 +1212,2 @@
+-            string outputRoot = startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
++            string outputRoot = startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
++                startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
+@@ -1076,0 +1281 @@
++                roleRecordCostDiagnostic = startingRoleRecordCostDiagnostic,
+@@ -1083 +1288 @@
+-                runs = new RunState[startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+@@ -1169,0 +1375,2 @@
++            if (state.roleRecordCostDiagnostic)
++                return BuildRoleRecordCostRequest(index);
+@@ -1835,0 +2043,2 @@
++                if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
++                    throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
+@@ -2094 +2303,4 @@
+-                logicGcObserver.Attach(runner);
++                if (state.roleRecordCostDiagnostic)
++                    roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
++                else
++                    logicGcObserver.Attach(runner);
+@@ -2178,0 +2391 @@
++            state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
+@@ -2454,0 +2668,2 @@
++            if (roleRecordTickObserver != null) FinishRoleRecordObservation(state.runs[state.runIndex], true);
++            roleRecordBaseline = null;
+@@ -2597 +2812,5 @@
+-            finally { observer.Dispose(); }
++            finally
++            {
++                observer.Dispose();
++                if (state.roleRecordCostDiagnostic) FinishRoleRecordObservation(run, aborted);
++            }
+@@ -2665 +2884,3 @@
+-                    PathFor(lines[1]).StartsWith(PathFor(ProducerAbbaOutputRoot) +
++                    PathFor(lines[1]).StartsWith(PathFor(RoleRecordCostOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                     PathFor(lines[1]).StartsWith(PathFor(ProducerAbbaOutputRoot) +
+@@ -3533,0 +3755,24 @@
++        public void RecordCost_RequestUsesOneFixedCombatFixture(int index)
++        {
++            var actual = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index);
++            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(3);
++            NUnit.Framework.Assert.That(actual.action, NUnit.Framework.Is.EqualTo("combat1000"));
++            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
++            NUnit.Framework.Assert.That(actual.warmupTicks, NUnit.Framework.Is.EqualTo(120));
++            NUnit.Framework.Assert.That(actual.sampleTicks, NUnit.Framework.Is.EqualTo(180));
++            NUnit.Framework.Assert.That(actual.seed, NUnit.Framework.Is.EqualTo(1314149188));
++            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain(index == 0 ? "00-combat1000-off" : "01-combat1000-on"));
++            actual.outputPath = expected.outputPath;
++            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
++        }
++
++        [NUnit.Framework.TestCase(-1)]
++        [NUnit.Framework.TestCase(2)]
++        public void RecordCost_RequestRejectsExtraWindows(int index)
++        {
++            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() =>
++                BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index));
++        }
++
++        [NUnit.Framework.TestCase(0)]
++        [NUnit.Framework.TestCase(1)]
+--- docs\ai\FILE-OPERATIONS\NTSD-H06-ROLE-RECORD-COST-DIAG-20261010\before\Assets__NTSD__Scripts__Test__Editor__RoleAwareCollisionShadowSelfCheckTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs
+@@ -1565,0 +1566,163 @@
++        }
++
++        [TestCase(0, false)]
++        [TestCase(4, false)]
++        [TestCase(5, false)]
++        [TestCase(0, true)]
++        public void RecordCost_MultiBodySequencePayloadRngAndSideEffects(int kind, bool nearest)
++        {
++            CreatePairSnapshotReuseScenario(kind, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            query.PrepareBattleCapacity(2, 8, 8);
++            if (nearest)
++                foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs) itr.vrest = 0;
++            attacker.Runtime.Kind4SourceCount92 = 0;
++            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            int count = attacker.Runtime.Kind4SourceCount92;
++            Assert.That(query.EnableRoleRecordCostDiagnostics, Is.False);
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++            var detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
++            detail.BeginTick(77);
++            attacker.Runtime.Kind4SourceCount92 = 0;
++            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            AssertPairSnapshotRunsEqual(baseline, observed);
++            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(count));
++            var costs = query.LastRoleRecordCostCounters;
++            Assert.That(costs.completedRecords, Is.EqualTo(costs.timedRecords));
++            Assert.That(costs.timedRecords, Is.GreaterThan(0));
++            Assert.That(costs.snapshotCaptures, Is.EqualTo(1));
++            Assert.That(costs.repeatDirectionRecords, Is.EqualTo(costs.timedRecords - 1));
++            if (kind == 4) Assert.That(costs.kind4Increments, Is.EqualTo(count));
++            if (nearest)
++            {
++                Assert.That(costs.nearestTieDraws, Is.GreaterThan(0));
++                Assert.That(costs.replaces, Is.EqualTo(costs.nearestReplacements));
++            }
++            long childSum = 0;
++            for (int phase = 54; phase <= 60; phase++)
++                childSum += detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase);
++            Assert.That(childSum, Is.GreaterThan(0).And.LessThanOrEqualTo(costs.recordParentTicks));
++            for (int phase = 48; phase <= 53; phase++)
++                Assert.That(detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase), Is.Zero);
++            Assert.That(query.LastRoleBranchTimingCoverageForDiagnostics.eligibleDirections, Is.Zero);
++        }
++
++        [TestCase(1)]
++        [TestCase(64)]
++        public void RecordCost_IndependentSamplingDisabledResetAndFreshOwner(int stride)
++        {
++            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            query.PrepareBattleCapacity(2, 8, 8);
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = stride;
++            var detail = world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics();
++            long eligible = 0, timed = 0;
++            for (int tick = 0; tick < 64; tick++)
++            {
++                detail.BeginTick(tick);
++                RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++                eligible += query.LastRoleRecordCostCounters.eligibleDirections;
++                timed += query.LastRoleRecordCostCounters.timedDirections;
++            }
++            Assert.That(eligible, Is.EqualTo(64));
++            Assert.That(timed, Is.EqualTo(64 / stride));
++            Assert.That(query.LastRoleBranchTimingCoverageForDiagnostics.eligibleDirections, Is.Zero);
++            query.EnableRoleRecordCostDiagnostics = false;
++            detail.BeginTick(65);
++            RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            Assert.That(query.LastRoleRecordCostCounters.records, Is.Zero);
++            Assert.That(query.LastRoleRecordCostCounters.recordParentTicks, Is.Zero);
++            var fresh = GetQuery(new SimulationWorld());
++            Assert.That(fresh.EnableRoleRecordCostDiagnostics, Is.False);
++            Assert.That(fresh.LastRoleRecordCostCounters.records, Is.Zero);
++        }
++
++        [Test]
++        public void RecordCost_Kind4CountPrecedesLowFallRejection()
++        {
++            CreatePairSnapshotReuseScenario(4, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            query.PrepareBattleCapacity(2, 8, 8);
++            target.FrameCache.GetNativeFrameDataById(target.Frame.N).state = 12;
++            foreach (InteractionArea itr in attacker.GetCollisionFrameData().itrs) itr.fall = 20;
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            attacker.Runtime.Kind4SourceCount92 = 0;
++            CandidateRun result = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            Assert.That(result.Sequences[0].Count, Is.Zero);
++            Assert.That(query.LastRoleRecordCostCounters.initialRejects, Is.GreaterThan(0));
++            Assert.That(query.LastRoleRecordCostCounters.kind4Increments,
++                Is.EqualTo(query.LastRoleRecordCostCounters.initialRejects));
++            Assert.That(attacker.Runtime.Kind4SourceCount92,
++                Is.EqualTo(query.LastRoleRecordCostCounters.kind4Increments));
++        }
++
++        [Test]
++        public void RecordCost_WarmedCollectorZeroAllocation()
++        {
++            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++            query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
++            query.PrepareBattleCapacity(2, 8, 8);
++            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            world.CaptureCollisionFrameSnapshotsAll();
++            Assert.That(query.MeasureWarmedRoleAwareCollectAllocationsForSelfCheck(16), Is.Zero);
++            Assert.That(query.LastRoleRecordCostCounters.timedRecords, Is.GreaterThan(0));
++        }
++
++        [Test]
++        public void RecordCost_InputInvalidationFallbackDoesNotSample()
++        {
++            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            query.PrepareBattleCapacity(2, 8, 8);
++            query.ForceRoleAwareDirectForDiagnostics = true;
++            query.EnableRoleRecordCostDiagnostics = true;
++            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            query.BeforeRoleAwareFormalInputValidationForSelfCheck = () =>
++            {
++                target.Runtime.SetPosition(11, 0, 0);
++                target.Runtime.SyncIntegerPosition();
++            };
++            CandidateRun result = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            Assert.That(result.CollectionAborted, Is.True);
++            Assert.That(query.LastRoleRecordCostCounters.eligibleDirections, Is.Zero);
++            Assert.That(query.LastRoleRecordCostCounters.timedRecords, Is.Zero);
++        }
++
++        [Test]
++        public void RecordCost_CapacityDoesNotSkipRecordSideEffects()
++        {
++            CreateRoleCapacityGuardFixture(24, 0, 1, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character[] targets);
++            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            AssertPairSnapshotRunsEqual(baseline, observed);
++            Assert.That(query.LastRoleRecordCostCounters.capacityRejects, Is.GreaterThan(0));
++            Assert.That(query.LastRoleRecordCostCounters.appends, Is.EqualTo(20));
++        }
++
++        [Test]
++        public void RecordCost_GroupRejectedHasNoKind4OrWrites()
++        {
++            CreatePairSnapshotReuseScenario(0, out SimulationWorld world,
++                out BruteForceSceneQuery query, out LF2Character attacker, out LF2Character target);
++            target.RelationTeam = attacker.RelationTeam;
++            query.PrepareBattleCapacity(2, 8, 8);
++            CandidateRun baseline = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            query.EnableRoleRecordCostDiagnostics = true;
++            query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++            world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            CandidateRun observed = RunCollection(world, query, CollisionFormalCollectorMode.ForceRoleAware, attacker);
++            AssertPairSnapshotRunsEqual(baseline, observed);
++            Assert.That(query.LastRoleRecordCostCounters.groupRejects, Is.GreaterThan(0));
++            Assert.That(query.LastRoleRecordCostCounters.kind4Increments, Is.Zero);
++            Assert.That(query.LastRoleRecordCostCounters.appends, Is.Zero);
+@@ -6760,0 +6924,19 @@
++            RunKind1TieParity(seed, false);
++        }
++
++        [TestCase(1)]
++        [TestCase(2)]
++        public void RecordCost_Kind1TiePreservesBestAndRng(int seed)
++        {
++            RunKind1TieParity(seed, true);
++        }
++
++        [TestCase(1)]
++        [TestCase(2)]
++        public void RecordCost_Kind1RejectedDirectionStillUpdatesBestAndRng(int seed)
++        {
++            RunKind1TieParity(seed, true, true);
++        }
++
++        private void RunKind1TieParity(int seed, bool recordDiagnostic, bool rejectDirection = false)
++        {
+@@ -6799 +6981 @@
+-            attacker.Runtime.KeyRight = 1;
++            attacker.Runtime.KeyRight = (byte)(rejectDirection ? 0 : 1);
+@@ -6807,0 +6990,6 @@
++            query.EnableRoleRecordCostDiagnostics = recordDiagnostic;
++            if (recordDiagnostic)
++            {
++                query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            }
+@@ -6828,0 +7017,2 @@
++            if (recordDiagnostic)
++                Assert.That(query.LastRoleRecordCostCounters.kind1TieDraws, Is.EqualTo(1));
+@@ -6829,0 +7020,7 @@
++            if (rejectDirection)
++            {
++                Assert.That(direct.Sequences[0].Count, Is.Zero);
++                Assert.That(target.Runtime.HitCandidateKind1Distance, Is.EqualTo(10));
++                Assert.That(query.LastRoleRecordCostCounters.selectRejects, Is.EqualTo(2));
++                return;
++            }
+@@ -8578,0 +8776,11 @@
++            RunRecordCostStoreFault(false);
++        }
++
++        [Test]
++        public void RecordCost_StoreFaultPreservesOriginalFailClosedPath()
++        {
++            RunRecordCostStoreFault(true);
++        }
++
++        private void RunRecordCostStoreFault(bool recordDiagnostic)
++        {
+@@ -8603,0 +8812,8 @@
++            if (recordDiagnostic)
++            {
++                query.PrepareBattleCapacity(3, 3, 3);
++                query.FormalCollectorMode = CollisionFormalCollectorMode.ForceRoleAware;
++                query.EnableRoleRecordCostDiagnostics = true;
++                query.RoleBranchTimingSampleStrideForDiagnostics = 1;
++                world.EnableBattleTickDetailPhaseDiagnosticsForDiagnostics().BeginTick(1);
++            }
+@@ -8608,0 +8825,2 @@
++            if (recordDiagnostic)
++                Assert.That(query.LastRoleRecordCostCounters.storeInvalids, Is.GreaterThan(0));

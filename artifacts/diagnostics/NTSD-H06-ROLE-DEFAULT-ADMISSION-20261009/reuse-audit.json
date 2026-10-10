@@ -1,0 +1,8 @@
+{
+  "baseline": "FindEffect protected-before",
+  "changed": [
+    "Assets\\NTSD\\Scripts\\DatParser\\Runtime\\Models\\LoganKindCatalog.cs",
+    "Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs"
+  ],
+  "reuse": "Four-scene Driver and unaffected capacity/shutdown domain; FindEffect equivalent lookup separately verified; Suite only new output/cold entry"
+}

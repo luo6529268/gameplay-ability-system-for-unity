@@ -1,0 +1,261 @@
+{
+  "task": "NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010",
+  "status": "SCOPED_DIAGNOSIS_COMPLETED",
+  "ticks": 300,
+  "steadyTicks": 180,
+  "aggregateFailures": 113,
+  "soleFailureBit": 12,
+  "maskDisagreements": 0,
+  "fallbackEqualsInertAllTicks": true,
+  "trueFallbackAttackOrBodyTicks": 0,
+  "steadyEvents": 2,
+  "capturedSteadyEvents": [
+    {
+      "tick": 130,
+      "frame": 3,
+      "thread": "Main Thread",
+      "metadataBytes": 36,
+      "ancestors": [
+        "Main Thread",
+        "Application.Tick",
+        "Application.UpdateScene",
+        "UpdateSceneIfNeeded",
+        "UpdateScene",
+        "PlayerLoop",
+        "Update.ScriptRunBehaviourUpdate",
+        "BehaviourUpdate",
+        "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update() [Invoke]",
+        "NTSD.ProductionEntityStress.Runner.Update",
+        "NTSD.ProductionEntityStress.StepMeasuredTick",
+        "NTSD.ProductionEntityStress.Driver.StepOneTick",
+        "NTSD.H06.Prerequisite.Driver.Tick130",
+        "NTSD.BattleTick.CharacterHitConsumePostInteraction",
+        "Mono.JIT"
+      ],
+      "insideMonoJit": true,
+      "firstResolvedManagedFrame": {
+        "address": "000001C041A724F3",
+        "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleDamageWriter.RecordAlternateLeadSound()",
+        "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+        "line": 2643
+      },
+      "resolvedManagedFrames": [
+        {
+          "address": "000001C041A724F3",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleDamageWriter.RecordAlternateLeadSound()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+          "line": 2643
+        },
+        {
+          "address": "000001C041A70323",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleDamageWriter.ApplyAlternateDamage()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+          "line": 1725
+        },
+        {
+          "address": "000001C0419107A3",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleDamageWriter.ApplyStandardCharacterDamage()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+          "line": 1115
+        },
+        {
+          "address": "000001C04190B833",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2CharacterDatHitResolver.ResolveHit()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterDatHitResolver.cs",
+          "line": 376
+        },
+        {
+          "address": "000001C04190A0CB",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2Entity.TryResolveCharacterDatHit()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs",
+          "line": 86
+        },
+        {
+          "address": "000001C041909D33",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2CharacterDatHitResolver.TryResolveHit()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterDatHitResolver.cs",
+          "line": 368
+        },
+        {
+          "address": "000001C041909923",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2Character.Hit()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.cs",
+          "line": 213
+        },
+        {
+          "address": "000001C041908ED6",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleDamageWriter.TryApplyCurrentDatTargetHit()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleDamageWriter.cs",
+          "line": 858
+        },
+        {
+          "address": "000001C0419085DB",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2CharacterInteractionResolver.NTSD.Animation.LF2Objects.IBattleHitCandidateConsumer.Dispatch()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterInteractionResolver.cs",
+          "line": 56
+        },
+        {
+          "address": "000001C0418542B2",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::BattleHitCandidateSequenceRunner.TryConsumeCandidate()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\BattleHitCandidateSequenceRunner.cs",
+          "line": 90
+        },
+        {
+          "address": "000001C04184BCD3",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::BattleHitCandidateSequenceRunner.TryConsumeCaptured()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\BattleHitCandidateSequenceRunner.cs",
+          "line": 53
+        },
+        {
+          "address": "000001C041849AF3",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::BattleHitCandidateSequenceRunner.TryConsume()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\BattleHitCandidateSequenceRunner.cs",
+          "line": 33
+        },
+        {
+          "address": "000001C04184977B",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2CharacterInteractionResolver.TryConsumeUnifiedStep7CandidateSequence()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2CharacterInteractionResolver.cs",
+          "line": 36
+        },
+        {
+          "address": "000001C041849653",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.LF2Objects::LF2Character.SimPostInteraction()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Character.cs",
+          "line": 1545
+        },
+        {
+          "address": "000001C03F2762AD",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::BattleInteractionPipeline.ConsumeCharacterHitParticipant()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Passes\\Interaction\\BattleInteractionPipeline.cs",
+          "line": 379
+        }
+      ]
+    },
+    {
+      "tick": 162,
+      "frame": 19,
+      "thread": "Main Thread",
+      "metadataBytes": 30,
+      "ancestors": [
+        "Main Thread",
+        "Application.Tick",
+        "Application.UpdateScene",
+        "UpdateSceneIfNeeded",
+        "UpdateScene",
+        "PlayerLoop",
+        "Update.ScriptRunBehaviourUpdate",
+        "BehaviourUpdate",
+        "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update() [Invoke]",
+        "NTSD.ProductionEntityStress.Runner.Update",
+        "NTSD.ProductionEntityStress.StepMeasuredTick",
+        "NTSD.ProductionEntityStress.Driver.StepOneTick",
+        "NTSD.H06.Prerequisite.Driver.Tick162",
+        "NTSD.BattleTick.CharacterInput",
+        "NTSD.BattleTick.Detail.CharacterInput/EntityInputPass",
+        "Mono.JIT"
+      ],
+      "insideMonoJit": true,
+      "firstResolvedManagedFrame": {
+        "address": "000001C0418411B3",
+        "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeRunning()",
+        "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+        "line": 1210
+      },
+      "resolvedManagedFrames": [
+        {
+          "address": "000001C0418411B3",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeRunning()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+          "line": 1210
+        },
+        {
+          "address": "000001C03DE190C3",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation.Ecs::BattleCharacterActionWriter.RouteNativeGroundBuiltins()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleCharacterActionWriter.cs",
+          "line": 573
+        },
+        {
+          "address": "000001C03DE0C0BB",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSD28InputTwoPassModule.ProcessNativeSampledState()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Input\\NTSD28InputTwoPassModule.cs",
+          "line": 83
+        },
+        {
+          "address": "000001C03D063253",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.RunCharacterInputPasses()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+          "line": 3040
+        },
+        {
+          "address": "000001C03D060E83",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationWorld.NativeProducerSampleAndInputRouteAll()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs",
+          "line": 3029
+        },
+        {
+          "address": "000001C03D060D73",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.NativeProducerSampleAndInputRoute()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+          "line": 650
+        },
+        {
+          "address": "000001C03D057273",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunTick()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+          "line": 310
+        },
+        {
+          "address": "000001C03D055CE3",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+          "line": 286
+        },
+        {
+          "address": "000001C03D055B1B",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::NTSDBattleTickSystem.RunReleaseTick()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs",
+          "line": 275
+        },
+        {
+          "address": "000001C03A3CE333",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+          "line": 637
+        },
+        {
+          "address": "000001C03A3CAC93",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTickInternal()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+          "line": 581
+        },
+        {
+          "address": "000001C03A3CA33B",
+          "method": "Assembly-CSharp.dll!NTSD.Simulation::SimulationTickDriver.StepOneTick()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Host\\SimulationTickDriver.cs",
+          "line": 2394
+        },
+        {
+          "address": "000001C03A3C83E3",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.StepMeasuredTick()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+          "line": 6151
+        },
+        {
+          "address": "000001C037ED2B43",
+          "method": "Assembly-CSharp.dll!NTSD.Animation.Rendering.Editor::ProductionEntityStressRunner.Update()",
+          "file": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Rendering\\ProductionEntityStressHarness.cs",
+          "line": 5722
+        }
+      ]
+    }
+  ],
+  "capturedMetadataBytes": 66,
+  "attribution": "Both observed current-run events are nested in Mono.JIT. No proof of repeated hot allocation or managed object concrete type; do not retroactively attribute old95/ABBA events.",
+  "certificate": false,
+  "sevenPhaseOnRan": false,
+  "liveCaptureCallbackFrames": 0,
+  "retainedImportTargetFrames": 2,
+  "retainedExportThreadLimitReached": true,
+  "mainThreadTargetEvidenceComplete": true
+}

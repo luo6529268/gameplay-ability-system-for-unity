@@ -21,6 +21,295 @@ namespace NTSD.Test.Editor
     [InitializeOnLoad]
     internal static class BattleOptimizationWindowsAiSuiteEditor
     {
+        private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
+        private static bool startingRoleRecordCostDiagnostic;
+        private static bool startingRoleRecordPrerequisiteDiagnostic;
+        private static bool startingRolePrerequisiteQualification;
+
+        [MenuItem("NTSD/Validation/Optimization/H06 Role Prerequisite Qualification")]
+        private static void BeginRolePrerequisiteQualification()
+        {
+            Require(!startingRoleRecordCostDiagnostic && !startingRoleRecordPrerequisiteDiagnostic &&
+                !startingRolePrerequisiteQualification && roleRecordTickObserver == null,
+                "The prerequisite qualification already has an owner.");
+            Require(!UnityEngine.Profiling.Profiler.enabled, "Qualification requires Profiler recording OFF.");
+            startingRolePrerequisiteQualification = true;
+            startingRoleRecordCostDiagnostic = true;
+            roleRecordBaseline = null;
+            try { BeginPostBindingsRole(); }
+            finally { startingRolePrerequisiteQualification = false; startingRoleRecordCostDiagnostic = false; }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/H06 Role Prerequisite Diagnostic")]
+        private static void BeginRoleRecordPrerequisiteDiagnostic()
+        {
+            Require(!startingRoleRecordCostDiagnostic && !startingRoleRecordPrerequisiteDiagnostic && roleRecordTickObserver == null,
+                "The prerequisite diagnostic already has an owner.");
+            startingRoleRecordCostDiagnostic = true;
+            startingRoleRecordPrerequisiteDiagnostic = true;
+            roleRecordBaseline = null;
+            try { BeginPostBindingsRole(); }
+            finally
+            {
+                startingRoleRecordPrerequisiteDiagnostic = false;
+                startingRoleRecordCostDiagnostic = false;
+            }
+        }
+        private static RoleRecordTickObserver roleRecordTickObserver;
+        private static RoleRecordTick[] roleRecordBaseline;
+
+        [MenuItem("NTSD/Validation/Optimization/H06 Role Record Cost Diagnostic")]
+        private static void BeginRoleRecordCostDiagnostic()
+        {
+            Require(!startingRoleRecordCostDiagnostic && roleRecordTickObserver == null,
+                "The finite record diagnostic already has an owner.");
+            startingRoleRecordCostDiagnostic = true;
+            roleRecordBaseline = null;
+            try { BeginPostBindingsRole(); }
+            finally { startingRoleRecordCostDiagnostic = false; }
+        }
+
+        internal static ProductionEntityStressRequest BuildRoleRecordCostRequest(int index)
+        {
+            if (index < 0 || index > 1) throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildScopedRoleAdmissionRequest(3);
+            request.outputPath = RoleRecordCostOutputRoot + (index == 0
+                ? "/00-combat1000-off/report.json" : "/01-combat1000-on/report.json");
+            return request;
+        }
+
+        [Serializable]
+        private sealed class RoleRecordTick
+        {
+            public int tick, playerInputCount;
+            public bool steady, actualFlagsValid;
+            public H06RolePrerequisiteDiagnostics.QualificationGate qualificationGate;
+            public ulong fullRuntimeChecksum, rngCalls;
+            public uint rngState, crtState, tableSeed, lastSynchronizedCallSite;
+            public ulong crtCalls, synchronizedCalls, synchronizedTableHash;
+            public int synchronizedCounter, synchronizedIndex;
+            public BruteForceSceneQuery.RoleRecordCostCounters counters;
+            public long[] elapsed = new long[7];
+        }
+
+        [Serializable]
+        private sealed class RoleRecordEvidence
+        {
+            public int gateVersion = 2;
+            public string gateContract = "v2: original bits0..11/13..14; bit12 true attack/body fallback zero; bit15 total equals nonnegative inert; forensic entry remains v1.";
+            public H06RolePrerequisiteDiagnostics.ColdPreparation coldPreparation;
+            public string comparisonBaseline;
+            public bool qualificationNoProfiler;
+            public string checksumScope = "Existing CaptureRuntimeChecksum64 schema after completed Driver, including full applied FrameInputSet and runtime AI input fields; not canonical JSON snapshots.";
+            public string counterScope = "Per collection. Eligibility counts all directions/records; remaining counters and seven clocks sampled directions only. Warm1-120, steady121-300. No extrapolation.";
+            public long stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency;
+            public bool enabled, settingsRestored;
+            public int ticks, parityMismatches, actualFlagFailures;
+            public RoleRecordTick[] observations = new RoleRecordTick[300];
+            public long[] emptyBoundaryTicks = new long[1024];
+            public long[] sevenBoundaryWallTicks = new long[1024];
+            public long[] sevenBoundaryRecordedTicks = new long[1024];
+        }
+
+        private sealed class RoleRecordTickObserver : IDisposable
+        {
+            private readonly ProductionEntityStressRunner runner;
+            private readonly SimulationTickDriver driver;
+            private readonly SimulationWorld world;
+            private readonly BruteForceSceneQuery query;
+            private readonly BattleLogicTickGcObserverEditor gc;
+            private readonly BattleTickDetailPhaseDiagnostics detail;
+            private readonly bool previousEnabled;
+            private readonly int previousStride;
+            private bool attached, disposed;
+            internal readonly RoleRecordEvidence evidence = new RoleRecordEvidence();
+
+            internal RoleRecordTickObserver(ProductionEntityStressRunner runner, SimulationTickDriver driver,
+                BruteForceSceneQuery query, BattleLogicTickGcObserverEditor gc, bool enabled)
+            {
+                this.runner = runner;
+                this.driver = driver;
+                world = driver.World;
+                this.query = query;
+                this.gc = gc;
+                detail = world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                Require(detail != null && detail.Enabled && !runner.DriverTickObserverAttachedForDiagnostics &&
+                    runner.Report.logicTicksExecuted == 0, "Record observation requires an unowned first-tick boundary.");
+                Require(!query.EnableRoleRecordCostDiagnostics && !query.EnableRoleBranchTimingForDiagnostics &&
+                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
+                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics,
+                    "Record diagnosis cannot enable previous candidates or input instrumentation.");
+                if (state.roleRecordPrerequisiteDiagnostic)
+                    H06RolePrerequisiteDiagnostics.Start();
+                evidence.gateVersion = state.roleRecordPrerequisiteDiagnostic ? 1 : 2;
+                if (state.rolePrerequisiteQualification)
+                {
+                    Require(!enabled && !UnityEngine.Profiling.Profiler.enabled, "Qualification must remain OFF without Profiler capture.");
+                    var baseline = JsonUtility.FromJson<RoleRecordEvidence>(File.ReadAllText(PathFor(H06RolePrerequisiteDiagnostics.QualificationBaseline)));
+                    Require(baseline != null && baseline.ticks == 300 && baseline.observations.Length == 300,
+                        "The fixed 300-tick prerequisite baseline is required.");
+                    for (int index = 0; index < 300; index++)
+                        Require(baseline.observations[index] != null && baseline.observations[index].tick == index + 1,
+                            "Prerequisite baseline sequence is incomplete.");
+                    roleRecordBaseline = baseline.observations;
+                    evidence.comparisonBaseline = H06RolePrerequisiteDiagnostics.QualificationBaseline;
+                    evidence.coldPreparation = H06RolePrerequisiteDiagnostics.PrepareCapturedMethods();
+                    evidence.qualificationNoProfiler = true;
+                }
+                previousEnabled = query.EnableRoleRecordCostDiagnostics;
+                previousStride = query.RoleBranchTimingSampleStrideForDiagnostics;
+                evidence.enabled = enabled;
+                for (int index = 0; index < evidence.observations.Length; index++)
+                    evidence.observations[index] = new RoleRecordTick();
+                MeasureBoundaryOverhead(evidence);
+                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
+                query.EnableRoleRecordCostDiagnostics = enabled;
+                try
+                {
+                    runner.ConfigureDriverTickObserverForDiagnostics(BeginObservedDriverStep, EndObservedDriverStep, Accept);
+                    attached = true;
+                }
+                catch { Dispose(); throw; }
+            }
+
+            private void BeginObservedDriverStep()
+            {
+                gc.BeginDriverStep();
+                if (state.roleRecordPrerequisiteDiagnostic)
+                    H06RolePrerequisiteDiagnostics.BeginDriver(evidence.ticks + 1);
+            }
+
+            private void EndObservedDriverStep(bool stepped)
+            {
+                try
+                {
+                    if (state.roleRecordPrerequisiteDiagnostic)
+                        H06RolePrerequisiteDiagnostics.EndDriver();
+                }
+                finally { gc.EndDriverStep(stepped); }
+            }
+
+            private void Accept(int tick, bool steady)
+            {
+                gc.AcceptCompletedTick(tick, steady);
+                if (tick != evidence.ticks + 1 || tick > 300)
+                    throw new InvalidOperationException("Record observation lost the fixed 300-tick boundary.");
+                RoleRecordTick row = evidence.observations[tick - 1];
+                row.tick = tick;
+                row.steady = steady;
+                row.playerInputCount = driver.LastAppliedFrameInput.Players?.Count ?? 0;
+                row.fullRuntimeChecksum = world.CaptureRuntimeChecksum64(driver.CurrentTickIndex, driver.LastAppliedFrameInput);
+                row.rngState = world.Rng.State;
+                row.rngCalls = world.Rng.CallCount;
+                var native = world.NativeRandom.CaptureScalarState();
+                row.crtState = native.CrtState;
+                row.crtCalls = native.CrtCalls;
+                row.tableSeed = native.TableSeed;
+                row.synchronizedCounter = native.SynchronizedCounter;
+                row.synchronizedIndex = native.SynchronizedIndex;
+                row.synchronizedCalls = native.SynchronizedCalls;
+                row.lastSynchronizedCallSite = native.LastSynchronizedCallSite;
+                row.synchronizedTableHash = native.SynchronizedTableHash;
+                row.counters = query.LastRoleRecordCostCounters;
+                for (int phase = 0; phase < 7; phase++)
+                    row.elapsed[phase] = detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + phase));
+                row.actualFlagsValid = query.EnableRoleRecordCostDiagnostics == evidence.enabled &&
+                    query.RoleBranchTimingSampleStrideForDiagnostics == 64 && !query.EnableRoleBranchTimingForDiagnostics &&
+                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                    !world.AiUnifiedSnapshotSourceCoordinateRefreshForDiagnostics &&
+                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics &&
+                    query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware &&
+                    !query.LastFormalCollectionAbortedForDiagnostics && query.LastFormalFallbackParticipantCountForDiagnostics == 0 &&
+                    steady == (tick > 120);
+                for (int phase = 48; phase <= 53; phase++)
+                    row.actualFlagsValid &= detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) == 0;
+                if (!state.roleRecordPrerequisiteDiagnostic)
+                {
+                    row.qualificationGate = H06RolePrerequisiteDiagnostics.ReadQualificationGate(
+                        tick, steady, evidence.enabled, world, query, detail);
+                    row.actualFlagsValid = row.qualificationGate.failureMask == 0;
+                }
+                if (state.rolePrerequisiteQualification)
+                {
+                    evidence.qualificationNoProfiler &= !UnityEngine.Profiling.Profiler.enabled;
+                    row.actualFlagsValid &= evidence.qualificationNoProfiler;
+                }
+                if (!row.actualFlagsValid) evidence.actualFlagFailures++;
+                if (state.roleRecordPrerequisiteDiagnostic)
+                    H06RolePrerequisiteDiagnostics.Observe(tick, steady, evidence.enabled, row.actualFlagsValid,
+                        world, query, detail, gc.LastCompletedScopeForDiagnostics, runner.Report);
+                if ((evidence.enabled || state.rolePrerequisiteQualification) && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
+                    evidence.parityMismatches++;
+                evidence.ticks++;
+            }
+
+            public void Dispose()
+            {
+                if (disposed) return;
+                try { if (attached) runner.ConfigureDriverTickObserverForDiagnostics(null, null, null); }
+                finally
+                {
+                    query.EnableRoleRecordCostDiagnostics = previousEnabled;
+                    query.RoleBranchTimingSampleStrideForDiagnostics = previousStride;
+                    evidence.settingsRestored = query.EnableRoleRecordCostDiagnostics == previousEnabled &&
+                        query.RoleBranchTimingSampleStrideForDiagnostics == previousStride;
+                    attached = false;
+                    disposed = true;
+                    if (state.roleRecordPrerequisiteDiagnostic)
+                        H06RolePrerequisiteDiagnostics.Finish("prerequisite-observer-dispose");
+                }
+            }
+        }
+
+        private static bool RoleRecordTicksEqual(RoleRecordTick left, RoleRecordTick right) =>
+            left.tick == right.tick && left.steady == right.steady && left.playerInputCount == right.playerInputCount &&
+            left.fullRuntimeChecksum == right.fullRuntimeChecksum && left.rngState == right.rngState && left.rngCalls == right.rngCalls &&
+            left.crtState == right.crtState && left.crtCalls == right.crtCalls && left.tableSeed == right.tableSeed &&
+            left.synchronizedCounter == right.synchronizedCounter && left.synchronizedIndex == right.synchronizedIndex &&
+            left.synchronizedCalls == right.synchronizedCalls && left.lastSynchronizedCallSite == right.lastSynchronizedCallSite &&
+            left.synchronizedTableHash == right.synchronizedTableHash;
+
+        private static void MeasureBoundaryOverhead(RoleRecordEvidence evidence)
+        {
+            var calibration = new BattleTickDetailPhaseDiagnostics();
+            calibration.SetEnabled(true);
+            for (int sample = 0; sample < 1024; sample++)
+            {
+                long start = System.Diagnostics.Stopwatch.GetTimestamp();
+                evidence.emptyBoundaryTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - start;
+                calibration.BeginTick(sample);
+                long wall = System.Diagnostics.Stopwatch.GetTimestamp();
+                long segment = System.Diagnostics.Stopwatch.GetTimestamp();
+                for (int index = 0; index < 7; index++)
+                {
+                    long now = System.Diagnostics.Stopwatch.GetTimestamp();
+                    calibration.RecordPhaseElapsed((BattleTickDetailPhase)(54 + index), now - segment);
+                    segment = System.Diagnostics.Stopwatch.GetTimestamp();
+                }
+                evidence.sevenBoundaryWallTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - wall;
+                for (int index = 0; index < 7; index++)
+                    evidence.sevenBoundaryRecordedTicks[sample] += calibration.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + index));
+            }
+            calibration.SetEnabled(false);
+        }
+
+        private static void FinishRoleRecordObservation(RunState run, bool aborted)
+        {
+            RoleRecordTickObserver owned = roleRecordTickObserver;
+            roleRecordTickObserver = null;
+            if (owned == null) return;
+            owned.Dispose();
+            RoleRecordEvidence evidence = owned.evidence;
+            run.roleRecordObservationValid = !aborted && evidence.ticks == 300 && evidence.settingsRestored &&
+                evidence.actualFlagFailures == 0 && evidence.parityMismatches == 0;
+            if (!evidence.enabled && run.roleRecordObservationValid && run.zeroGcPassed)
+                roleRecordBaseline = evidence.observations;
+            SaveNew(run.reportPath + (aborted ? ".record-cost.aborted.json" : ".record-cost.json"), JsonUtility.ToJson(evidence, true));
+        }
+
         private const string SessionKey = "NTSD.Optimization.Batch26.WindowsAiSuite";
         private const string BattleScene = "Assets/NTSD/Scene/NTSD_Battle.unity";
         private const string OutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH26-H07-CONTINUE-20261007/windows-01";
@@ -56,6 +345,22 @@ namespace NTSD.Test.Editor
         private static bool startingMatchCentralBindings;
         private const string PostBindingsRoleOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01";
         private static bool startingPostBindingsRoleWindow;
+        private const string ScopedRoleAdmissionOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/windows";
+        private static bool startingScopedRoleAdmissionWindow;
+        private const string ScopedProducerAdmissionOutputRoot = "artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/windows";
+        private static bool startingScopedProducerAdmissionWindow;
+        private const string ProducerAbbaOutputRoot = "artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/windows";
+        private static bool startingProducerAbbaDiagnostic;
+        private static ProducerSnapshotExperimentCase producerSnapshotReuseCase;
+
+        [Serializable]
+        internal sealed class ProducerSnapshotExperimentCase
+        {
+            public int sequenceIndex;
+            public string action;
+            public bool reuseEnabled;
+            public bool inputBoundaryTimingEnabled;
+        }
         private const string RoleBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01";
         private static bool startingRoleBranchTimingWindow;
         private static BruteForceSceneQuery roleBranchTimingQuery;
@@ -164,6 +469,7 @@ namespace NTSD.Test.Editor
             public long roleGroupSnapshotSkipMaximumObservedRejects;
             public string roleGroupSnapshotSkipObservationScope = "Last completed collection at sampled Editor observations; maxima are not all-tick totals.";
             public bool producerSnapshotReuseEnabled;
+            public ProducerSnapshotExperimentCase producerExperimentCase;
             public bool producerSnapshotReuseFlagApplied;
             public bool producerSnapshotReuseUnchanged;
             public bool producerSnapshotReuseRestored;
@@ -181,6 +487,7 @@ namespace NTSD.Test.Editor
             public bool postBindingsRoleUnchanged;
             public int postBindingsRoleObservedCollections;
             public bool postBindingsRoleActualMismatch;
+            public bool roleRecordObservationValid;
             public int postBindingsRoleExpectedCollector;
             public int postBindingsRoleLastActualCollector;
             public int postBindingsRoleMaximumPairCount;
@@ -382,6 +689,12 @@ namespace NTSD.Test.Editor
             public bool centralSegmentReadbackOnly;
             public bool matchCentralBindingsWindow;
             public bool postBindingsRoleWindow;
+            public bool scopedRoleAdmissionWindow;
+            public bool scopedProducerAdmissionWindow;
+            public bool roleRecordCostDiagnostic;
+            public bool roleRecordPrerequisiteDiagnostic;
+            public bool rolePrerequisiteQualification;
+            public bool producerAbbaDiagnostic;
             public bool roleBranchTimingWindow;
             public bool inputBoundaryTimingWindow;
             public bool nativeSampledStateTimingWindow;
@@ -674,6 +987,89 @@ namespace NTSD.Test.Editor
             }
         }
 
+        [MenuItem("NTSD/Validation/Optimization/H06 Scoped Role Admission")]
+        private static void BeginScopedRoleAdmission()
+        {
+            Require(!startingScopedRoleAdmissionWindow, "Scoped Role admission already owns the cold entry.");
+            startingScopedRoleAdmissionWindow = true;
+            try
+            {
+                BeginPostBindingsRole();
+            }
+            finally
+            {
+                startingScopedRoleAdmissionWindow = false;
+            }
+        }
+
+        internal static ProductionEntityStressRequest BuildScopedRoleAdmissionRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
+            request.outputPath = ScopedRoleAdmissionOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + "-" + request.formalCollectorMode + "/report.json";
+            return request;
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/H07 Producer Snapshot ABBA Diagnostic")]
+        private static void BeginProducerAbbaDiagnostic()
+        {
+            Require(!startingProducerAbbaDiagnostic, "Producer ABBA diagnostic already owns the cold entry.");
+            startingProducerAbbaDiagnostic = true;
+            try
+            {
+                BeginProducerSnapshotReuse();
+            }
+            finally
+            {
+                startingProducerAbbaDiagnostic = false;
+            }
+        }
+
+        internal static ProducerSnapshotExperimentCase BuildProducerAbbaCase(int index)
+        {
+            if (index < 0 || index >= 4)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return new ProducerSnapshotExperimentCase
+            {
+                sequenceIndex = index,
+                action = "combat1000",
+                reuseEnabled = index == 1 || index == 2,
+                inputBoundaryTimingEnabled = false,
+            };
+        }
+
+        internal static ProductionEntityStressRequest BuildProducerAbbaRequest(int index)
+        {
+            ProducerSnapshotExperimentCase experiment = BuildProducerAbbaCase(index);
+            ProductionEntityStressRequest request = BuildProducerSnapshotReuseRequest(2);
+            request.outputPath = ProducerAbbaOutputRoot + "/" + index.ToString("D2") + "-" +
+                experiment.action + (experiment.reuseEnabled ? "-on" : "-off") + "/report.json";
+            return request;
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/H07 Scoped Producer Snapshot Admission")]
+        private static void BeginScopedProducerAdmission()
+        {
+            Require(!startingScopedProducerAdmissionWindow, "Scoped producer admission already owns the cold entry.");
+            startingScopedProducerAdmissionWindow = true;
+            try
+            {
+                BeginProducerSnapshotReuse();
+            }
+            finally
+            {
+                startingScopedProducerAdmissionWindow = false;
+            }
+        }
+
+        internal static ProductionEntityStressRequest BuildScopedProducerAdmissionRequest(int index)
+        {
+            ProductionEntityStressRequest request = BuildProducerSnapshotReuseRequest(index);
+            request.outputPath = ScopedProducerAdmissionOutputRoot + "/" + index.ToString("D2") + "-" +
+                request.action + (index % 2 == 0 ? "-off" : "-on") + "/report.json";
+            return request;
+        }
+
         [MenuItem("NTSD/Validation/Optimization/Batch81 Post Bindings Brute Role 1000 AI")]
         private static void BeginPostBindingsRole()
         {
@@ -735,6 +1131,22 @@ namespace NTSD.Test.Editor
             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
             bool labelPrewarmValidation = false)
         {
+            Require(!startingProducerAbbaDiagnostic || startingProducerSnapshotReuseWindow &&
+                startingPostBindingsRoleWindow && !startingScopedProducerAdmissionWindow &&
+                !startingScopedRoleAdmissionWindow && !startingRoleGroupSnapshotSkipWindow &&
+                !startingInputBoundaryTimingWindow && !startingRoleBranchTimingWindow &&
+                !startingNativeSampledStateTimingWindow,
+                "Producer ABBA diagnostic requires its exclusive existing producer owner.");
+            Require(!startingScopedRoleAdmissionWindow || startingPostBindingsRoleWindow &&
+                !startingRoleGroupSnapshotSkipWindow && !startingProducerSnapshotReuseWindow &&
+                !startingInputBoundaryTimingWindow && !startingRoleBranchTimingWindow &&
+                !startingNativeSampledStateTimingWindow,
+                "Scoped Role admission must not share another candidate window.");
+            Require(!startingScopedProducerAdmissionWindow || startingProducerSnapshotReuseWindow &&
+                startingPostBindingsRoleWindow && !startingScopedRoleAdmissionWindow &&
+                !startingRoleGroupSnapshotSkipWindow && !startingInputBoundaryTimingWindow &&
+                !startingRoleBranchTimingWindow && !startingNativeSampledStateTimingWindow,
+                "Scoped producer admission requires its exclusive existing producer owner.");
             Require(!startingRoleGroupSnapshotSkipWindow || startingPostBindingsRoleWindow &&
                 roleGroupSnapshotSkipWorld == null && roleGroupSnapshotSkipQuery == null &&
                 !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null &&
@@ -887,7 +1299,13 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
+            string outputRoot = startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
+                startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
+                startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
+                startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
+                startingScopedProducerAdmissionWindow ? ScopedProducerAdmissionOutputRoot :
+                startingScopedRoleAdmissionWindow ? ScopedRoleAdmissionOutputRoot :
+                startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
                 startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
                 startingProducerSnapshotReuseWindow ? ProducerSnapshotReuseRetryOutputRoot :
                 startingInputBoundaryTimingWindow ? InputBoundaryTimingOutputRoot :
@@ -950,12 +1368,18 @@ namespace NTSD.Test.Editor
                 centralSegmentReadbackOnly = startingCentralSegmentReadback,
                 matchCentralBindingsWindow = startingMatchCentralBindings,
                 postBindingsRoleWindow = startingPostBindingsRoleWindow,
+                scopedRoleAdmissionWindow = startingScopedRoleAdmissionWindow,
+                scopedProducerAdmissionWindow = startingScopedProducerAdmissionWindow,
+                roleRecordCostDiagnostic = startingRoleRecordCostDiagnostic,
+                roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,
+                rolePrerequisiteQualification = startingRolePrerequisiteQualification,
+                producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
-                runs = new RunState[startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -972,6 +1396,11 @@ namespace NTSD.Test.Editor
                     reportPath = request.outputPath,
                 };
                 SaveNew(request.outputPath + ".request.json", JsonUtility.ToJson(request, true));
+                if (state.producerAbbaDiagnostic)
+                {
+                    state.runs[i].producerExperimentCase = BuildProducerAbbaCase(i);
+                    SaveNew(request.outputPath + ".case.json", JsonUtility.ToJson(state.runs[i].producerExperimentCase, true));
+                }
             }
             Persist();
             BattleTestBootstrap.SuppressEntityCreationForProductionStress = true;
@@ -1037,6 +1466,18 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.rolePrerequisiteQualification)
+                return H06RolePrerequisiteDiagnostics.BuildQualificationRequest(index);
+            if (state.roleRecordPrerequisiteDiagnostic)
+                return H06RolePrerequisiteDiagnostics.BuildRequest(index);
+            if (state.roleRecordCostDiagnostic)
+                return BuildRoleRecordCostRequest(index);
+            if (state.producerAbbaDiagnostic)
+                return BuildProducerAbbaRequest(index);
+            if (state.scopedProducerAdmissionWindow)
+                return BuildScopedProducerAdmissionRequest(index);
+            if (state.scopedRoleAdmissionWindow)
+                return BuildScopedRoleAdmissionRequest(index);
             if (state.roleGroupSnapshotSkipWindow)
                 return BuildRoleGroupSnapshotSkipRequest(index);
             if (state.nativeSampledStateTimingWindow)
@@ -1697,6 +2138,8 @@ namespace NTSD.Test.Editor
                 currentReport = null;
                 if (run.retainedFailedGcMeasurement)
                     state.retainedFailedGcMeasurements++;
+                if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
+                    throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
                 if (!run.workloadValid && !run.retainedFailedGcMeasurement)
                     throw new InvalidOperationException("Fixed workload/cleanup admission failed for " + run.action + "; original report retained.");
                 state.runIndex++;
@@ -1769,7 +2212,13 @@ namespace NTSD.Test.Editor
                 if (state.roleGroupSnapshotSkipWindow)
                     ApplyRoleGroupSnapshotSkip(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
                 if (state.producerSnapshotReuseWindow)
-                    ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                {
+                    if (state.producerAbbaDiagnostic)
+                        ApplyProducerSnapshotReuseCase(SimulationTickDriver.Instance.World, productionQuery,
+                            state.runs[state.runIndex], BuildProducerAbbaCase(state.runIndex));
+                    else
+                        ApplyProducerSnapshotReuse(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
+                }
                 if (state.inputBoundaryTimingWindow)
                     ApplyInputBoundaryTiming(SimulationTickDriver.Instance.World, productionQuery, state.runs[state.runIndex], state.runIndex);
                 if (state.roleBranchTimingWindow)
@@ -1949,7 +2398,10 @@ namespace NTSD.Test.Editor
                     logicGcObserver == null,
                     "The calibrated scope requires the existing production path before the first tick.");
                 logicGcObserver = new BattleLogicTickGcObserverEditor();
-                logicGcObserver.Attach(runner);
+                if (state.roleRecordCostDiagnostic)
+                    roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
+                else
+                    logicGcObserver.Attach(runner);
             }
         }
 
@@ -2034,6 +2486,7 @@ namespace NTSD.Test.Editor
         }
 
         private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
+            state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
             state.roleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipQueryValid(query, index) :
             state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
             state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
@@ -2109,13 +2562,27 @@ namespace NTSD.Test.Editor
             inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
             PostBindingsRoleQueryValid(query, 1) && !query.EnableRoleBranchTimingForDiagnostics &&
             !query.EnableRoleCapacityRecordGuardForDiagnostics &&
-            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == (index % 2 != 0) &&
-            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics;
+            producerSnapshotReuseCase != null && producerSnapshotReuseCase.sequenceIndex == index &&
+            producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == producerSnapshotReuseCase.reuseEnabled &&
+            producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics == producerSnapshotReuseCase.inputBoundaryTimingEnabled;
 
         private static void ApplyProducerSnapshotReuse(SimulationWorld world, BruteForceSceneQuery query, RunState run, int index)
         {
-            // Alignment contract: NTSD-OPT-H07-PRODUCER-SNAPSHOT-WINDOWS-088; diagnostic World owner only.
-            Require(index >= 0 && index < 4 && run != null && producerSnapshotReuseWorld == null &&
+            ApplyProducerSnapshotReuseCase(world, query, run, new ProducerSnapshotExperimentCase
+            {
+                sequenceIndex = index,
+                action = index < 2 ? "dispersed1000" : "combat1000",
+                reuseEnabled = index % 2 != 0,
+                inputBoundaryTimingEnabled = true,
+            });
+        }
+
+        private static void ApplyProducerSnapshotReuseCase(SimulationWorld world, BruteForceSceneQuery query,
+            RunState run, ProducerSnapshotExperimentCase experiment)
+        {
+            // Alignment contract: NTSD-H07-PRODUCER-ABBA-DIAG-001; cold case owner, historical wrapper unchanged.
+            Require(experiment != null && experiment.sequenceIndex >= 0 && experiment.sequenceIndex < 4 &&
+                run != null && producerSnapshotReuseWorld == null && producerSnapshotReuseCase == null &&
                 inputBoundaryTimingWorld == null && roleBranchTimingQuery == null &&
                 world != null && world.SceneQuery == query && PostBindingsRoleQueryValid(query, 1) &&
                 !query.EnableRoleBranchTimingForDiagnostics && !query.EnableRoleCapacityRecordGuardForDiagnostics &&
@@ -2124,12 +2591,14 @@ namespace NTSD.Test.Editor
             previousProducerSnapshotReuse = world.EnableCharacterInputProducerSnapshotReuseForDiagnostics;
             previousProducerSnapshotBoundaryTiming = world.EnableCharacterInputBoundaryTimingForDiagnostics;
             producerSnapshotReuseWorld = world;
-            run.producerSnapshotReuseEnabled = index % 2 != 0;
+            producerSnapshotReuseCase = experiment;
+            run.producerExperimentCase = experiment;
+            run.producerSnapshotReuseEnabled = experiment.reuseEnabled;
             world.EnableCharacterInputProducerSnapshotReuseForDiagnostics = run.producerSnapshotReuseEnabled;
-            world.EnableCharacterInputBoundaryTimingForDiagnostics = true;
-            run.producerSnapshotReuseFlagApplied = ProducerSnapshotReuseQueryValid(query, index);
+            world.EnableCharacterInputBoundaryTimingForDiagnostics = experiment.inputBoundaryTimingEnabled;
+            run.producerSnapshotReuseFlagApplied = ProducerSnapshotReuseQueryValid(query, experiment.sequenceIndex);
             run.producerSnapshotReuseUnchanged = run.producerSnapshotReuseFlagApplied;
-            run.inputBoundaryTimingEnabled = true;
+            run.inputBoundaryTimingEnabled = experiment.inputBoundaryTimingEnabled;
             run.inputBoundaryTimingFlagApplied = run.producerSnapshotReuseFlagApplied;
             run.inputBoundaryTimingUnchanged = run.producerSnapshotReuseFlagApplied;
         }
@@ -2164,6 +2633,7 @@ namespace NTSD.Test.Editor
             bool restored = producerSnapshotReuseWorld.EnableCharacterInputProducerSnapshotReuseForDiagnostics == previousProducerSnapshotReuse &&
                 producerSnapshotReuseWorld.EnableCharacterInputBoundaryTimingForDiagnostics == previousProducerSnapshotBoundaryTiming;
             producerSnapshotReuseWorld = null;
+            producerSnapshotReuseCase = null;
             return restored;
         }
 
@@ -2293,6 +2763,8 @@ namespace NTSD.Test.Editor
             Require(RestoreBruteEligibilityReuse(), "Eligibility reuse must be restored before owner shutdown.");
             Require(RestoreBruteBranchTiming(), "Branch timing must be restored before owner shutdown.");
             Require(RestoreBruteKind5Presence(), "Kind5 presence must be restored before owner shutdown.");
+            if (roleRecordTickObserver != null) FinishRoleRecordObservation(state.runs[state.runIndex], true);
+            roleRecordBaseline = null;
             productionQuery = null;
             if (state.cpuGcCaptureOnly)
                 BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("owner-shutdown");
@@ -2418,7 +2890,7 @@ namespace NTSD.Test.Editor
             try
             {
                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
-                if (state.logicGcCallsiteOnly)
+                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic)
                 {
                     run.logicGcEvidence.zeroAllocationPassed = false;
                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
@@ -2435,7 +2907,11 @@ namespace NTSD.Test.Editor
                 SaveNew(run.reportPath + (aborted ? ".logic-gc.aborted.json" : ".logic-gc.json"),
                     JsonUtility.ToJson(run.logicGcEvidence, true));
             }
-            finally { observer.Dispose(); }
+            finally
+            {
+                observer.Dispose();
+                if (state.roleRecordCostDiagnostic) FinishRoleRecordObservation(run, aborted);
+            }
         }
         private static string PathFor(string path) => Path.GetFullPath(Path.Combine(Application.dataPath, "..", path));
 
@@ -2503,6 +2979,14 @@ namespace NTSD.Test.Editor
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(RoleRecordCostOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(ProducerAbbaOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(ProducerSnapshotReuseRetryOutputRoot) +
@@ -2512,6 +2996,10 @@ namespace NTSD.Test.Editor
                     PathFor(lines[1]).StartsWith(PathFor(RoleGroupSnapshotSkipOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(NativeSampledStateOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(ScopedProducerAdmissionOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(ScopedRoleAdmissionOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(PostBindingsRoleOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
@@ -3364,6 +3852,30 @@ namespace NTSD.Test.Editor
 #if UNITY_INCLUDE_TESTS
     public sealed class BattleOptimizationWindowsAiSuiteRequestTests
     {
+        [NUnit.Framework.TestCase(0)]
+        [NUnit.Framework.TestCase(1)]
+        public void RecordCost_RequestUsesOneFixedCombatFixture(int index)
+        {
+            var actual = BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index);
+            var expected = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(3);
+            NUnit.Framework.Assert.That(actual.action, NUnit.Framework.Is.EqualTo("combat1000"));
+            NUnit.Framework.Assert.That(actual.formalCollectorMode, NUnit.Framework.Is.EqualTo("role"));
+            NUnit.Framework.Assert.That(actual.warmupTicks, NUnit.Framework.Is.EqualTo(120));
+            NUnit.Framework.Assert.That(actual.sampleTicks, NUnit.Framework.Is.EqualTo(180));
+            NUnit.Framework.Assert.That(actual.seed, NUnit.Framework.Is.EqualTo(1314149188));
+            NUnit.Framework.Assert.That(actual.outputPath, NUnit.Framework.Does.Contain(index == 0 ? "00-combat1000-off" : "01-combat1000-on"));
+            actual.outputPath = expected.outputPath;
+            NUnit.Framework.Assert.That(JsonUtility.ToJson(actual), NUnit.Framework.Is.EqualTo(JsonUtility.ToJson(expected)));
+        }
+
+        [NUnit.Framework.TestCase(-1)]
+        [NUnit.Framework.TestCase(2)]
+        public void RecordCost_RequestRejectsExtraWindows(int index)
+        {
+            NUnit.Framework.Assert.Throws<ArgumentOutOfRangeException>(() =>
+                BattleOptimizationWindowsAiSuiteEditor.BuildRoleRecordCostRequest(index));
+        }
+
         [NUnit.Framework.TestCase(0)]
         [NUnit.Framework.TestCase(1)]
         [NUnit.Framework.TestCase(2)]

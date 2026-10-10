@@ -1,0 +1,22 @@
+[
+  {
+    "run": "00-dispersed1000-brute",
+    "fallbackPeak": 0,
+    "abortedTicks": 0
+  },
+  {
+    "run": "01-dispersed1000-role",
+    "fallbackPeak": 4,
+    "abortedTicks": 0
+  },
+  {
+    "run": "02-combat1000-brute",
+    "fallbackPeak": 0,
+    "abortedTicks": 0
+  },
+  {
+    "run": "03-combat1000-role",
+    "fallbackPeak": 3,
+    "abortedTicks": 0
+  }
+]

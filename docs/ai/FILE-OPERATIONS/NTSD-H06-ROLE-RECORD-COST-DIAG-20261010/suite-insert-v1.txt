@@ -1,0 +1,199 @@
+        private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
+        private static bool startingRoleRecordCostDiagnostic;
+        private static RoleRecordTickObserver roleRecordTickObserver;
+        private static RoleRecordTick[] roleRecordBaseline;
+
+        [MenuItem("NTSD/Validation/Optimization/H06 Role Record Cost Diagnostic")]
+        private static void BeginRoleRecordCostDiagnostic()
+        {
+            Require(!startingRoleRecordCostDiagnostic && roleRecordTickObserver == null,
+                "The finite record diagnostic already has an owner.");
+            startingRoleRecordCostDiagnostic = true;
+            roleRecordBaseline = null;
+            try { BeginPostBindingsRole(); }
+            finally { startingRoleRecordCostDiagnostic = false; }
+        }
+
+        internal static ProductionEntityStressRequest BuildRoleRecordCostRequest(int index)
+        {
+            if (index < 0 || index > 1) throw new ArgumentOutOfRangeException(nameof(index));
+            ProductionEntityStressRequest request = BuildScopedRoleAdmissionRequest(3);
+            request.outputPath = RoleRecordCostOutputRoot + (index == 0
+                ? "/00-combat1000-off/report.json" : "/01-combat1000-on/report.json");
+            return request;
+        }
+
+        [Serializable]
+        private sealed class RoleRecordTick
+        {
+            public int tick, playerInputCount;
+            public bool steady, actualFlagsValid;
+            public ulong fullRuntimeChecksum, rngCalls;
+            public uint rngState, crtState, tableSeed, lastSynchronizedCallSite;
+            public ulong crtCalls, synchronizedCalls, synchronizedTableHash;
+            public int synchronizedCounter, synchronizedIndex;
+            public BruteForceSceneQuery.RoleRecordCostCounters counters;
+            public long[] elapsed = new long[7];
+        }
+
+        [Serializable]
+        private sealed class RoleRecordEvidence
+        {
+            public string checksumScope = "Existing CaptureRuntimeChecksum64 schema after completed Driver, including full applied FrameInputSet and runtime AI input fields; not canonical JSON snapshots.";
+            public string counterScope = "Per collection. Eligibility counts all directions/records; remaining counters and seven clocks sampled directions only. Warm1-120, steady121-300. No extrapolation.";
+            public long stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency;
+            public bool enabled, settingsRestored;
+            public int ticks, parityMismatches, actualFlagFailures;
+            public RoleRecordTick[] observations = new RoleRecordTick[300];
+            public long[] emptyBoundaryTicks = new long[1024];
+            public long[] sevenBoundaryWallTicks = new long[1024];
+            public long[] sevenBoundaryRecordedTicks = new long[1024];
+        }
+
+        private sealed class RoleRecordTickObserver : IDisposable
+        {
+            private readonly ProductionEntityStressRunner runner;
+            private readonly SimulationTickDriver driver;
+            private readonly SimulationWorld world;
+            private readonly BruteForceSceneQuery query;
+            private readonly BattleLogicTickGcObserverEditor gc;
+            private readonly BattleTickDetailPhaseDiagnostics detail;
+            private readonly bool previousEnabled;
+            private readonly int previousStride;
+            private bool attached, disposed;
+            internal readonly RoleRecordEvidence evidence = new RoleRecordEvidence();
+
+            internal RoleRecordTickObserver(ProductionEntityStressRunner runner, SimulationTickDriver driver,
+                BruteForceSceneQuery query, BattleLogicTickGcObserverEditor gc, bool enabled)
+            {
+                this.runner = runner;
+                this.driver = driver;
+                world = driver.World;
+                this.query = query;
+                this.gc = gc;
+                detail = world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                Require(detail != null && detail.Enabled && !runner.DriverTickObserverAttachedForDiagnostics &&
+                    runner.Report.logicTicksExecuted == 0, "Record observation requires an unowned first-tick boundary.");
+                Require(!query.EnableRoleRecordCostDiagnostics && !query.EnableRoleBranchTimingForDiagnostics &&
+                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics,
+                    "Record diagnosis cannot enable previous candidates or input instrumentation.");
+                previousEnabled = query.EnableRoleRecordCostDiagnostics;
+                previousStride = query.RoleBranchTimingSampleStrideForDiagnostics;
+                evidence.enabled = enabled;
+                for (int index = 0; index < evidence.observations.Length; index++)
+                    evidence.observations[index] = new RoleRecordTick();
+                MeasureBoundaryOverhead(evidence);
+                query.RoleBranchTimingSampleStrideForDiagnostics = 64;
+                query.EnableRoleRecordCostDiagnostics = enabled;
+                try
+                {
+                    runner.ConfigureDriverTickObserverForDiagnostics(gc.BeginDriverStep, gc.EndDriverStep, Accept);
+                    attached = true;
+                }
+                catch { Dispose(); throw; }
+            }
+
+            private void Accept(int tick, bool steady)
+            {
+                gc.AcceptCompletedTick(tick, steady);
+                if (tick != evidence.ticks + 1 || tick > 300)
+                    throw new InvalidOperationException("Record observation lost the fixed 300-tick boundary.");
+                RoleRecordTick row = evidence.observations[tick - 1];
+                row.tick = tick;
+                row.steady = steady;
+                row.playerInputCount = driver.LastAppliedFrameInput.Players?.Count ?? 0;
+                row.fullRuntimeChecksum = world.CaptureRuntimeChecksum64(driver.CurrentTickIndex, driver.LastAppliedFrameInput);
+                row.rngState = world.Rng.State;
+                row.rngCalls = world.Rng.CallCount;
+                var native = world.NativeRandom.CaptureScalarState();
+                row.crtState = native.CrtState;
+                row.crtCalls = native.CrtCalls;
+                row.tableSeed = native.TableSeed;
+                row.synchronizedCounter = native.SynchronizedCounter;
+                row.synchronizedIndex = native.SynchronizedIndex;
+                row.synchronizedCalls = native.SynchronizedCalls;
+                row.lastSynchronizedCallSite = native.LastSynchronizedCallSite;
+                row.synchronizedTableHash = native.SynchronizedTableHash;
+                row.counters = query.LastRoleRecordCostCounters;
+                for (int phase = 0; phase < 7; phase++)
+                    row.elapsed[phase] = detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + phase));
+                row.actualFlagsValid = query.EnableRoleRecordCostDiagnostics == evidence.enabled &&
+                    query.RoleBranchTimingSampleStrideForDiagnostics == 64 && !query.EnableRoleBranchTimingForDiagnostics &&
+                    !query.EnableRoleCapacityRecordGuardForDiagnostics && !query.EnableRoleSnapshotFrameReuseForDiagnostics &&
+                    !query.EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !query.EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                    !world.EnableCharacterInputProducerSnapshotReuseForDiagnostics && !world.EnableCharacterInputBoundaryTimingForDiagnostics &&
+                    query.LastFormalCollectorModeForDiagnostics == CollisionFormalCollectorMode.ForceRoleAware &&
+                    !query.LastFormalCollectionAbortedForDiagnostics && query.LastFormalFallbackParticipantCountForDiagnostics == 0 &&
+                    steady == (tick > 120);
+                for (int phase = 48; phase <= 53; phase++)
+                    row.actualFlagsValid &= detail.GetLastElapsedTimestampTicks((BattleTickDetailPhase)phase) == 0;
+                if (!row.actualFlagsValid) evidence.actualFlagFailures++;
+                if (evidence.enabled && (roleRecordBaseline == null || !RoleRecordTicksEqual(roleRecordBaseline[tick - 1], row)))
+                    evidence.parityMismatches++;
+                evidence.ticks++;
+            }
+
+            public void Dispose()
+            {
+                if (disposed) return;
+                try { if (attached) runner.ConfigureDriverTickObserverForDiagnostics(null, null, null); }
+                finally
+                {
+                    query.EnableRoleRecordCostDiagnostics = previousEnabled;
+                    query.RoleBranchTimingSampleStrideForDiagnostics = previousStride;
+                    evidence.settingsRestored = query.EnableRoleRecordCostDiagnostics == previousEnabled &&
+                        query.RoleBranchTimingSampleStrideForDiagnostics == previousStride;
+                    attached = false;
+                    disposed = true;
+                }
+            }
+        }
+
+        private static bool RoleRecordTicksEqual(RoleRecordTick left, RoleRecordTick right) =>
+            left.tick == right.tick && left.steady == right.steady && left.playerInputCount == right.playerInputCount &&
+            left.fullRuntimeChecksum == right.fullRuntimeChecksum && left.rngState == right.rngState && left.rngCalls == right.rngCalls &&
+            left.crtState == right.crtState && left.crtCalls == right.crtCalls && left.tableSeed == right.tableSeed &&
+            left.synchronizedCounter == right.synchronizedCounter && left.synchronizedIndex == right.synchronizedIndex &&
+            left.synchronizedCalls == right.synchronizedCalls && left.lastSynchronizedCallSite == right.lastSynchronizedCallSite &&
+            left.synchronizedTableHash == right.synchronizedTableHash;
+
+        private static void MeasureBoundaryOverhead(RoleRecordEvidence evidence)
+        {
+            var calibration = new BattleTickDetailPhaseDiagnostics();
+            calibration.SetEnabled(true);
+            for (int sample = 0; sample < 1024; sample++)
+            {
+                long start = System.Diagnostics.Stopwatch.GetTimestamp();
+                evidence.emptyBoundaryTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - start;
+                calibration.BeginTick(sample);
+                long wall = System.Diagnostics.Stopwatch.GetTimestamp();
+                long segment = System.Diagnostics.Stopwatch.GetTimestamp();
+                for (int index = 0; index < 7; index++)
+                {
+                    long now = System.Diagnostics.Stopwatch.GetTimestamp();
+                    calibration.RecordPhaseElapsed((BattleTickDetailPhase)(54 + index), now - segment);
+                    segment = System.Diagnostics.Stopwatch.GetTimestamp();
+                }
+                evidence.sevenBoundaryWallTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - wall;
+                for (int index = 0; index < 7; index++)
+                    evidence.sevenBoundaryRecordedTicks[sample] += calibration.GetLastElapsedTimestampTicks((BattleTickDetailPhase)(54 + index));
+            }
+            calibration.SetEnabled(false);
+        }
+
+        private static void FinishRoleRecordObservation(RunState run, bool aborted)
+        {
+            RoleRecordTickObserver owned = roleRecordTickObserver;
+            roleRecordTickObserver = null;
+            if (owned == null) return;
+            owned.Dispose();
+            RoleRecordEvidence evidence = owned.evidence;
+            run.roleRecordObservationValid = !aborted && evidence.ticks == 300 && evidence.settingsRestored &&
+                evidence.actualFlagFailures == 0 && evidence.parityMismatches == 0;
+            if (!evidence.enabled && run.roleRecordObservationValid && run.zeroGcPassed)
+                roleRecordBaseline = evidence.observations;
+            SaveNew(run.reportPath + (aborted ? ".record-cost.aborted.json" : ".record-cost.json"), JsonUtility.ToJson(evidence, true));
+        }
+

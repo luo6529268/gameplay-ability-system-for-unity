@@ -1,0 +1,68 @@
+$env:PYTHONIOENCODING='utf-8'
+@'
+import pathlib,json,hashlib,re,subprocess,difflib,datetime
+r=pathlib.Path.cwd().resolve();o=r/"docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010"
+m=json.loads((o/"before-manifest.json").read_text(encoding="utf-8"))
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest().upper()
+def git(*a):return subprocess.run(["git",*a],cwd=r,capture_output=True,check=False)
+allowed={e["relativePath"] for e in m["targets"]}|set(m["newDestinations"])
+errors=[];changed=[];lineend=[]
+for e in m["targets"]:
+ p=r/e["relativePath"];b=pathlib.Path(e["backup"])
+ if sha(b)!=e["backupSha256"]:errors.append("Backup changed: "+e["relativePath"])
+ if sha(p)!=e["sha256"]:changed.append(e["relativePath"])
+ old=b.read_bytes();new=p.read_bytes()
+ lineend.append(dict(path=e["relativePath"],beforeCRLF=old.count(b"\r\n"),afterCRLF=new.count(b"\r\n")))
+for e in m["protected"]:
+ if not (r/e["path"]).is_file() or sha(r/e["path"])!=e["sha256"]:errors.append("Protected drift: "+e["path"])
+links=[]
+for patch in sorted(o.glob("planned-*.patch")):
+ current=None
+ for line in patch.read_text(encoding="utf-8").splitlines():
+  if line.startswith("*** Update File: ") or line.startswith("*** Add File: "):current=line.split(": ",1)[1]
+  elif current and line.startswith("+") and not line.startswith("+++"):
+   for match in re.finditer(r'\[[^\]]*\]\(([^)]+)\)',line[1:]):
+    url=match.group(1).strip("<>")
+    if url.startswith(("http:","https:","#","codex:")):continue
+    dest=(r/current).parent/url.split("#",1)[0]
+    links.append(dict(source=current,target=url,exists=dest.is_file()))
+badlinks=[e for e in links if not e["exists"]]
+errors.extend("Missing link: "+str(e) for e in badlinks)
+def chunks(data):
+ text=data.decode("utf-8");out={}
+ for chunk in text.split("diff --git ")[1:]:
+  name=chunk.splitlines()[0].split(" b/",1)[1]
+  if name not in allowed:out[name]=chunk
+ return out
+beforechunks=chunks((o/"working-before.diff").read_bytes());nowdiff=git("diff","--binary")
+if nowdiff.returncode:errors.append("Cannot inspect working diff")
+if beforechunks!=chunks(nowdiff.stdout):errors.append("Out-of-scope tracked diff changed")
+if git("rev-parse","HEAD").stdout!=(o/"head-before.txt").read_bytes():errors.append("HEAD changed")
+if git("diff","--cached","--binary").stdout!=(o/"staged-before.diff").read_bytes():errors.append("Staged state changed")
+status=git("status","--porcelain=v1","--untracked-files=all")
+(o/"git-status-final.txt").write_bytes(status.stdout)
+beforepaths={l[3:] for l in (o/"git-status-before.txt").read_text(encoding="utf-8").splitlines()}
+newpaths=[l[3:] for l in status.stdout.decode("utf-8").splitlines() if l[3:] not in beforepaths]
+unexpected=[p for p in newpaths if p not in allowed and not p.startswith("docs/ai/FILE-OPERATIONS/"+o.name+"/")]
+errors.extend("Unexpected new path: "+p for p in unexpected)
+check=git("diff","--check","--",*sorted(allowed))
+(o/"diff-check-final.txt").write_bytes(check.stdout+check.stderr)
+if check.returncode:errors.append("git diff --check failed")
+preserved={}
+for path,marker in [
+("Assets/NTSD/Docs/battle-optimization-progress-tracker.md","## 下方原批次记录（历史只读证据，不代表恢复执行）"),
+("Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md","## 原登记正文（历史快照与原验收链接保留）")]:
+ old=(o/"before"/path).read_text(encoding="utf-8")
+ new=(r/path).read_text(encoding="utf-8")
+ preserved[path]=old.split(marker,1)[1]==new.split(marker,1)[1]
+ if not preserved[path]:errors.append("Historical text changed: "+path)
+result=dict(checkedAt=datetime.datetime.now().astimezone().isoformat(),changedExistingDocuments=changed,newTaskAndPlanPresent=all((r/p).is_file() for p in m["newDestinations"]),backupCount=len(m["targets"]),protectedCount=len(m["protected"]),protectedDriftCount=sum(e.startswith("Protected drift") for e in errors),linksChecked=len(links),brokenLinks=badlinks,outsideTrackedDiffUnchanged=beforechunks==chunks(nowdiff.stdout),headAndStagedUnchanged=not any("HEAD changed"==e or "Staged state changed"==e for e in errors),historicalTextPreserved=preserved,lineEndings=lineend,diffCheckExitCode=check.returncode,errors=errors,executedTests="None; documentation and read-only source/report review only.")
+with (o/"final-check.json").open("x",encoding="utf-8") as f:json.dump(result,f,ensure_ascii=False,indent=2)
+print(json.dumps({k:v for k,v in result.items() if k not in ("lineEndings","changedExistingDocuments")},ensure_ascii=False))
+print("Changed existing documents:",len(changed))
+if errors:raise SystemExit(1)
+afterPaths=sorted(allowed|{"docs/ai/FILE-OPERATIONS/"+o.name+"/RECORD.md"})
+after=dict(operationId=o.name,status="VERIFIED_DOCUMENTATION_ONLY",completedAt=datetime.datetime.now().astimezone().isoformat(),files=[dict(path=p,absolutePath=str((r/p).resolve()),bytes=(r/p).stat().st_size,sha256=sha(r/p)) for p in afterPaths],protectedRechecked=len(m["protected"]),runtimeTestsExecuted=False)
+with (o/"after-manifest.json").open("x",encoding="utf-8") as f:json.dump(after,f,ensure_ascii=False,indent=2)
+print("FINAL_DOCUMENTATION_AUDIT_PASS")
+'@ | python -

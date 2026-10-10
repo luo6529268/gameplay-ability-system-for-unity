@@ -1,13 +1,25 @@
-> **已完成问题的代码对照记录：** [优化点 A：FindEffect 临时分配修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。本次只补说明，不新增完成包；下方H07-INPUT建议及H06准入待办保持。
+> **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+
+> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
+
+> 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 / IN_PROGRESS；NTSD-H06-ROLE-PREREQUISITE-DIAG-001 IN_PROGRESS。用户授权当前讨论会话诊断完整Driver分配与组合状态门子条件，明确后交执行会话修复。仅Editor三写域、一次同combat1000 120+180及tick130附近八帧调用栈；原硬门不降低、七段计时OFF、不改生产/Q06。原Editor39108/TCP6402复用，不启动第二实例。旧Task失败保留，producer USER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放及旧Goal取消保持。
+
+> **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
+
+> 当前有限诊断已结束，当前路线尚无A/C结论；下一项不自动实施。若另行授权恢复，先解决完整Driver分配资格及组合观察门子条件证据，不能以其它窗口0GC豁免或把fallback峰值直接认作规则错误。一般H07-INPUT保留独立评审、producer仍暂缓。[本Task报告](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md)。
+
+> **2026-10-10 当前/下一项更正（同H06-ROLE-EXACT，不新增父项）：** 当前 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 静态分析已完成，结论 **B**。83已定位record，无需再跑六分支；只缺record内纯读取/筛选与必要选择/写入的互斥成本和重复覆盖。下一有限指令为 `NTSD-H06-ROLE-RECORD-COST-DIAG-20261010`，一个combat1000匹配OFF→ON、各120+180、七段同scope诊断，本轮未实施/未运行；准确写域、owner、门、停止条件见[分析报告第6—7节](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md)。用户授权整理完成后直接输出指令，不逐步再问；本任务不跨会话发送或恢复监测。producer暂缓/OFF、ABBA首OFF2event/首tick130未知、Role默认、95OFF和H06/H07/Android开放保持，旧计数不变。下方旧“当前/下一项”是此前方案快照。
+
+> **具体问题的代码对照记录：** [FindEffect已修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [Role已限定准入](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-ROLE-DEFAULT-ADMISSION.md) · [producer快照复用用户暂缓](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md) · [索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。不增加父项或旧完成包。
 
 <!-- OPTIMIZATION-REVIEW-20261009 -->
-# 优化进度：当前工作入口（2026-10-09）
+# 优化进度：当前工作入口（2026-10-10）
 
-当前任务：**FindEffect单点分配修复 / VERIFIED（仅本Task）**。2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+当前决定：**producer快照复用 USER_DEFERRED / 生产OFF；下一项选择现有Role精确配对成本，先到方案阶段**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
 
-- 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。限定准入未完成，未新增完成包；详当前H06报告。34项文档结构、D1=A和旧证据边界保留。
+- 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。Role限定准入已完成，实际生产接线13/13通过；第二项44+1+1及四窗正确性/0GC/容量/关闭通过但混战tick回退14.448675%，保持OFF。未新增旧批次完成包；详两个具名报告。34项文档结构、D1=A和旧证据边界保留。
 - 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
-- 下一项建议：本次H06具名任务交付后H07-INPUT；消费91已有归因，先形成准确热点/字段/失效方案，由用户决定后继实施。Role默认不是硬前置，未授权队列不自动续跑。
+- 下一项：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
 - 首阶段六项：H11/M03选定实现范围、H06/M13/M14选定评估共5/6；H07性能FAIL。34父项完整关闭0。
 - 批次：最新完成94/73包；95第74包未验收、默认OFF且执行停止；没有本轮新96。
 
@@ -22,8 +34,8 @@
 | [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
 | [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
 | [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
-| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | GC局部修复VERIFIED / ADMISSION_PENDING / NO_DEFAULT_PROMOTION；父项OPEN | 四场景强一致证据复用；混合collector234→0 events/sample，待同配置收益及接线必要门，非33ms阻塞 |
-| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL／执行已取消 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | ROLE_SCOPED_ADMISSION_COMPLETED / 默认Role；父项OPEN | 当前双布局同配置收益/稳态Driver0GC及实际生产接线通过；最终33ms/drop等未过仍开放 |
+| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 基线GC130独立挂账；先准备H06-ROLE-EXACT方案，不恢复自动目标 |
 | [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
 | [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
 | [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
@@ -55,7 +67,7 @@
 ## 已有成果及不再机械重做的工作
 
 - 生产成果：四Brute fast path；80/86共享绑定和冷接线；H11容量预热与选定CPU域；13 metadata、15camera物化消重；Foot配置冷接线；生成准入/名字预热局部分配修复。准确范围见[取消时交接](../../../docs/ai/HANDOFFS/NTSD-OPTIMIZATION-REVIEW-HANDOFF-20261009.md)及下面原记录。
-- 候选：Role实际窗口有收益、未推广；95仅局部0.35ms信号且GC资格FAIL；94 LOCAL_ONLY。默认均不因本轮改变。
+- 候选：producer已由用户暂缓、生产OFF；95仅局部0.35ms信号且GC资格FAIL；94 LOCAL_ONLY。Role现已完成限定准入并成为空配置生产默认，不再列作未推广候选。
 - 不再原样重试：89无一致收益、92/93无整tick收益、84同条件skip0、无新前提的微缓存和三次同构envelope导出。结束的是具名版本，不删除代码/历史，不永久否定技术类别。
 - 诊断：91八子阶段已归因；不重新从零采样。81/82/86/91/93及已有像素/关闭证据未受影响即复用，默认接线实际影响另补。
 - 95 GC不是全局门；91/93有效实景0事件仍保留。父子计时不相加，局部与整tick/显示FPS分开。
@@ -64,7 +76,8 @@
 
 | 子项 | 当前 | 后继条件 |
 |---|---|---|
-| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 下一项方案；静态分析完成，具体实施未授权 | 具名可消除成本、准确改法和最小证据明确后决定实施；否则结束本路线 |
+| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | producer用户暂缓；一般输入方案保留 | 本轮静态复核不支持继续堆零点几毫秒省读；有新成本证据再选择 |
 | [H07-LATE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
 | [H07-GC95](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
 | [H06-SPATIAL](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |

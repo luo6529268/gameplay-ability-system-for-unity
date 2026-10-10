@@ -1,0 +1,13 @@
+# NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010
+IN_PROGRESS. Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001.
+User authorization: “那这部分你来处理，有明确结果后，再让另一个会话来修复”. This discussion agent diagnoses; production repairs go to execution chat after evidence.
+Operation docs/ai/FILE-OPERATIONS/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/RECORD.md and before-manifest.json preserve real dirty work.
+Exact code paths: Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs; Assets/NTSD/Scripts/Test/Editor/BattleLogicTickGcObserverEditor.cs; Assets/NTSD/Scripts/Test/Editor/H06RolePrerequisiteDiagnostics.cs plus new script meta.
+Purpose: identify original aggregate assertion failure bits, distinguish inert participants from true fallback; localize fullDriver allocations near tick130. No production optimization or seven-phase ON run.
+Reuse existing Suite/runner/GC owner. One combat1000 Role/DataOrientedCanonical Sakura1000 seed1314149188 window120warm+180sample with same configuration; fresh output only. All previous candidates/producer/95/record/branch/input timers OFF. Keep original assertion and stop condition. Add after-tick failure bits, fallback/inert/ordinal counts and fullDriver per-tick events/raw. Reuse existing complete checksum and dual RNG capture.
+Existing CPU/GC capture is armed cold and starts after tick124 for eight frames; prewarmed fixed tick markers map raw nested driver events. No history clearing, no hot reflection/string names, no extra Profiler system. Instrumented times/GC are diagnostics only, never certificate or production benefit.
+Owner fixed300 rows and markers cold; callbacks remain one group. Restore capture/settings and detach before existing shutdown; no new runtime manager/cache or stage reorder. Abort/reload/play-exit retain data/restore.
+Validation: compile; focused request/mask/marker validation only; reuse unaffected existing evidence; one bounded real window; capacity/cleanup/originalcleanScene/protection and ChangeLedger validator. Failure/no captured callsite yields explicit unknown and no blind repeat. Only a concrete evidenced repair may be handed to execution chat.
+No reading active Q06 bodies, no edits to query/World/Host/AI/store/Scene/Prefab/resources/Settings/Server/Gen/Plugins, no producer/95 revival or oldGoal/34queue. Formal33ms/determinism/publication/transparentorder/capacity/0GC/11shutdown gates unchanged.
+
+SCOPED_DIAGNOSIS_COMPLETED; supersedes initial IN_PROGRESS. See REPORT. No production fix/second real window. Live eight-frame callback failed, retained raw recovered exact2 target frames/main events. Focused actually2 new +2 owner tests; trivial mask mirror tests removed before run.

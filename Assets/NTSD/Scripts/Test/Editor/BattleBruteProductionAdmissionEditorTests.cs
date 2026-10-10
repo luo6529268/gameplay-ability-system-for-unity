@@ -43,16 +43,16 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void H06RoleAdmission_EditorReleasedAndDefaultStillBrute()
+        public void H06RoleAdmission_EditorReleasedAndDefaultUsesRole()
         {
             BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Assert.That(h06CollectorCallsiteCapture, Is.False);
             var backend = CollisionBroadphaseBackendResolver.Resolve(null, null);
-            Assert.That(backend, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
+            Assert.That(backend, Is.EqualTo(CollisionBroadphaseBackend.LooseQuadtree));
             object settings = typeof(BattleOptimizationCpuGcCaptureEditor)
                 .GetMethod("ReadSettings", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
             SaveNew("editor-release-and-default.json", new { settings, backend,
-                scope = "read-only release/default verification after blocked admission" }, H06AdmissionOutput);
+                scope = "read-only release/default verification after scoped Role admission" }, H06AdmissionOutput);
         }
 
         [UnityEngine.TestTools.UnityTest]

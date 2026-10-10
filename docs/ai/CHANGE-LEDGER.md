@@ -1,3 +1,17 @@
+> 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
+
+> 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
+
+> 2026-10-09 两项具名任务收口：Role限定准入完成，空配置正常生产默认Role、显式Brute/非法回退保留；第二项producer快照复用 NOT_ADMITTED/生产OFF，当前混战tick50.428→57.714ms（+14.448675%）原因未闭合，不重复同窗找PASS。第二项44+1+1测试、四窗正确性/完整Driver稳态0GC/容量/关闭及设置恢复通过，仅冷测量Change NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001 VERIFIED。H06父项/H07/Android开放，95OFF、旧Goal不恢复、无第三项。报告 artifacts/diagnostics/NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009/REPORT.md；下方pending/IN_PROGRESS为历史。
+
+> 2026-10-09 第二项生产者快照复用准入 IN_PROGRESS / NTSD-H07-PRODUCER-ADMISSION-WINDOWS-001；Task NTSD-H07-PRODUCER-SNAPSHOT-ADMISSION-20261009。Role限定准入已完成，固定Role只切复用；生产复用暂OFF，不恢复旧Goal。
+
+> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
+
+> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
+
+> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
+
 > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
 
 > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
@@ -2245,4 +2259,17 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
 > 第94批事前PLANNED记录现已由文首结果与94报告更新；旧93/72数字仅为开始时快照。本包未建立真实千人收益，默认关闭、H07仍FAIL，编号100仅方案清晰度检查。
 
 > 第95批PLANNED：NTSD-OPT-H07-SOURCE-COORDINATE-INCREMENTAL-095，源坐标使AI行每producer/routing边界强制full recapture；候选default OFF，只在exact/source初始化/无force-full时补源X/Z到既有pending publisher，保留Y/其它字段/原可见时点、未知派生回退与初态/roll-forward保护。Task NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009；Operation docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-BATCH95-SOURCE-COORDINATE-INCREMENTAL-20261009/RECORD.md。latest完成94/73执行/阶段5of6/H07 FAIL/Goal active，100只检查方案落实清楚。
+
+
+| NTSD-H06-ROLE-RECORD-COST-DIAG-001 | BLOCKED | [Record](CHANGE-RECORDS/NTSD-H06-ROLE-RECORD-COST-DIAG-001.md) | bounded Role record diagnostic, default OFF |
+
+> NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN；四路径默认OFF诊断已写，原Editor编译中，未运行实景。
+
+> 2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED / Task FAILED有限停止；唯一OFF完整Driver2event/130、组合113false，ON未跑；诊断默认OFF保留。编译/最窄focused2/2与容量/关闭/保护通过，非生产/H07/Android完成；详同Task REPORT，旧CODE_WRITTEN为历史。
+
+| NTSD-H06-ROLE-PREREQUISITE-DIAG-001 | IN_PROGRESS | [Record](CHANGE-RECORDS/NTSD-H06-ROLE-PREREQUISITE-DIAG-001.md) | Role prerequisite diagnosis, editor only |
+
+| NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 | BLOCKED | [Record](CHANGE-RECORDS/NTSD-H06-ROLE-PREREQUISITE-REPAIR-001.md) | Editor prerequisite repair only |
+
+> **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
 

@@ -1,0 +1,71 @@
+{
+  "sourceComparisons": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "beforeSha256": "5F5C97BE197929D2AE7829BD4F68769733D153AE4EBBF44DC4E391AAA769B708",
+      "currentSha256": "70EB4B413E37C13A3F1C92CBDD22F4B8D6F406B8F0E8E61A2645A142001AC57F",
+      "same": false
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H06RoleDefaultAdmissionEditorTests.cs",
+      "beforeSha256": "756DCD7B8EEC5CD112B285854901BF5E35F571DD0A8C0655295E904B46909132",
+      "currentSha256": "756DCD7B8EEC5CD112B285854901BF5E35F571DD0A8C0655295E904B46909132",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/DatParser/Runtime/Models/LoganKindCatalog.cs",
+      "beforeSha256": "CC7409790933E446CB0F45BDA7681AF70CE674B27FBED7B6FB133B54FEF65D47",
+      "currentSha256": "CC7409790933E446CB0F45BDA7681AF70CE674B27FBED7B6FB133B54FEF65D47",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "beforeSha256": "026823D0070C236E4EB352AC92777471470B6DED80FC3890AF15FD66262EF842",
+      "currentSha256": "026823D0070C236E4EB352AC92777471470B6DED80FC3890AF15FD66262EF842",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "beforeSha256": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "currentSha256": "3DD59431EE5516FA15449CE4364C272CDD5741D5857E374C085397EBFD3AEF61",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "beforeSha256": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335",
+      "currentSha256": "7D29757F773E3F5F24DBDAFF4ABC0628630032632BDE4F23C69BC0B1A0B81335",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs",
+      "beforeSha256": "B0753C55E10AB3566A3B22F098AB37B44AE4F02F8C4CB89EC99A7D0666DA3EBC",
+      "currentSha256": "B0753C55E10AB3566A3B22F098AB37B44AE4F02F8C4CB89EC99A7D0666DA3EBC",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "beforeSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "currentSha256": "25C8E08F4D1BE55EE55D0404AAF4E46D099AFC6C2BA3D9040E1C5203F654D9FF",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "beforeSha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "currentSha256": "F2EE25D075548B78380BE817209152047B919C4C15DA8743D75D2E0C165CBEA1",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "beforeSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "currentSha256": "253B2EBAD322AA6EC18488DFBBF555BB93AD897940A342E4130E77CE778F9010",
+      "same": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07ProducerSnapshotAdmissionEditorTests.cs",
+      "beforeSha256": "AF07E3E14A53D3E705A1409F2D03D9735CFD1255652292F7A4A2C5F9B5E06E60",
+      "currentSha256": "AF07E3E14A53D3E705A1409F2D03D9735CFD1255652292F7A4A2C5F9B5E06E60",
+      "same": true
+    }
+  ],
+  "scope": "Unchanged production guard, fields, AI row update, full Driver correctness and prior 15 guard tests reused; only cold owner tests rerun"
+}

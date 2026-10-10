@@ -1,0 +1,15 @@
+<!-- CHANGE-RECORD
+id: NTSD-H06-ROLE-RECORD-COST-DIAG-001
+status: CODE_WRITTEN
+code-path: Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
+code-path: Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs
+authority: User authorized bounded default-OFF Role record diagnostic, no production optimization
+evidence: docs/ai/TASKS/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010.md
+-->
+
+# Role record诊断
+脚本前登记。准确符号/前后职责、容量/owner/关闭、风险、验证及真实dirty回滚见Task与Operation。当前生产未改，尚无编译/运行结论。
+
+CODE_WRITTEN：四个声明路径已写入；七段54..60、独立record门/selector、固定29标量计数、Suite独立两窗与300tick组合owner/完整RuntimeChecksum64、14个新focused case。原方法业务语义保留；未改其它脚本。原Editor39108新鲜idle/Menu clean8/无测试确认后import，当前compile in progress，无编译结论。

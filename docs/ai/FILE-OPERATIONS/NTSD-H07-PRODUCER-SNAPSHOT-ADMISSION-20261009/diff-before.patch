@@ -1,0 +1,300 @@
+diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+index 52348992..a2fec744 100644
+--- a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
++++ b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+@@ -1,3 +1,9 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+diff --git a/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md b/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+index 25694d81..09024ac2 100644
+--- a/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
++++ b/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+@@ -16,7 +16,7 @@
+ | H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+ | H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+ | H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+-| H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | FindEffect局部修复已验证：100结果一致且0GC、原千人混合234→0事件/样本；限定准入待收益/接线，默认Brute，H06/H07最终门不变 |
++| H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | Role限定准入完成：当前收益/完整Driver稳态0GC/默认接线通过；空配置Role、显式Brute与非法回退保留，H06/H07最终门不变 |
+ | H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+ | H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+ | H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+diff --git a/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md b/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+index b8e1f532..14b32631 100644
+--- a/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
++++ b/Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md
+@@ -1,3 +1,5 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。
++
+ > **已完成单点的独立说明：** [优化点 A：FindEffect 从原代码到修复后代码、效果与边界](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。单点完成不等于本父项或Role默认推广完成。
+ 
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。
+@@ -10,11 +12,11 @@
+ | 字段 | 本轮整理 |
+ |---|---|
+ | 类别 / 建议优先级 | CPU / 高 |
+-| 当前状态 | D1=A已批准／FindEffect局部修复VERIFIED，原千人混合collector八次0GC；限定准入待收益/接线，生产默认Brute |
++| 当前状态 | D1=A／Role限定准入完成，空配置生产默认Role；父项/H07最终门开放 |
+ | 依赖的最小范围 | H-09受影响正确性、H-11适用容量、M-09/M-15基线；不依赖Mono整体 |
+-| 下一步与具体方向 | 已消除已知FindEffect分配；接续必要门核对、实际同配置收益及默认接线。不重复已PASS三场景，不以未33ms阻断D1=A；空间分区仍独立 |
++| 下一步与具体方向 | 当前收益、完整Driver稳态0GC及实际默认接线已通过；下一仅已批准生产者快照复用。不重复已PASS三场景，不以未33ms阻断D1=A；空间分区仍独立 |
+ | 完成边界 | 限定准入必要门通过后可先推广；H06父项/H07整体P95等门未过仍开放 |
+-| 方案成熟度 | FindEffect单点生产修复及聚焦验证完成；100结果一致/0GC、原千人混合0GC通过，Profile/Suite未改；限定准入未完成 |
++| 方案成熟度 | 独立窗口/生产Change已VERIFIED，实际Role/Brute/Role关闭重建通过；仅限定准入，非最终性能认证 |
+ | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+ 
+ [跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+diff --git a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+index d27c107b..010957fb 100644
+--- a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
++++ b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+@@ -3,7 +3,7 @@
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+ # 优化进度：当前工作入口（2026-10-09）
+ 
+-当前任务：**FindEffect单点分配修复 / VERIFIED（仅本Task）**。2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
++当前任务：**两项具名授权：第一项Role限定准入完成；第二项生产者快照复用待独立实施**。2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。
+ 
+ - 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。限定准入未完成，未新增完成包；详当前H06报告。34项文档结构、D1=A和旧证据边界保留。
+ - 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+@@ -22,7 +22,7 @@
+ | [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+ | [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+ | [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+-| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | GC局部修复VERIFIED / ADMISSION_PENDING / NO_DEFAULT_PROMOTION；父项OPEN | 四场景强一致证据复用；混合collector234→0 events/sample，待同配置收益及接线必要门，非33ms阻塞 |
++| [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | ROLE_SCOPED_ADMISSION_COMPLETED / 默认Role；父项OPEN | 当前双布局同配置收益/稳态Driver0GC及实际生产接线通过；最终33ms/drop等未过仍开放 |
+ | [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL／执行已取消 | 已有窗口按父子计时整理；按需补缺，不把诊断当优化，不恢复旧自动目标 |
+ | [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+ | [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+diff --git a/Assets/NTSD/Scripts/App/GameConfig.cs b/Assets/NTSD/Scripts/App/GameConfig.cs
+index 3f6c37fa..0c421883 100644
+--- a/Assets/NTSD/Scripts/App/GameConfig.cs
++++ b/Assets/NTSD/Scripts/App/GameConfig.cs
+@@ -20,7 +20,7 @@ namespace NTSD.App
+         public string BattleAiExecutionProfileName = "";
+         [Tooltip("DesktopExtended initial runtime slot capacity. Rounded up to 256-slot pages.")]
+         public int DesktopInitialRuntimeSlotCapacity = 512;
+-        [Tooltip("Collision broadphase backend. Empty uses the production default BruteForce.")]
++        [Tooltip("Collision broadphase backend. Empty uses the admitted Role-aware path (LooseQuadtree). Explicit BruteForce remains available; invalid values fall back to BruteForce.")]
+         public string BattleCollisionBroadphaseName = "";
+         [Tooltip("Battle presentation backend. Empty uses CentralOnly. Valid values: LegacyOnly, CentralShadowBuild, CentralOnly. CentralOnly owns battle pixels and fails closed without enabling legacy presenters.")]
+         public string BattlePresentationBackendName = "CentralOnly";
+diff --git a/Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs b/Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs
+index 7d454b32..a30ad99b 100644
+--- a/Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs
++++ b/Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeProfile.cs
+@@ -21,6 +21,8 @@ namespace NTSD.Simulation
+                 return backend;
+             if (TryParse(configuredBackend, out backend))
+                 return backend;
++            if (string.IsNullOrEmpty(explicitOverride) && string.IsNullOrEmpty(configuredBackend))
++                return CollisionBroadphaseBackend.LooseQuadtree;
+             return CollisionBroadphaseBackend.BruteForce;
+         }
+ 
+diff --git a/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs b/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+index 8fccf940..98877408 100644
+--- a/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleBruteProductionAdmissionEditorTests.cs
+@@ -43,16 +43,16 @@ namespace NTSD.Test.Editor
+         }
+ 
+         [Test]
+-        public void H06RoleAdmission_EditorReleasedAndDefaultStillBrute()
++        public void H06RoleAdmission_EditorReleasedAndDefaultUsesRole()
+         {
+             BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Assert.That(h06CollectorCallsiteCapture, Is.False);
+             var backend = CollisionBroadphaseBackendResolver.Resolve(null, null);
+-            Assert.That(backend, Is.EqualTo(CollisionBroadphaseBackend.BruteForce));
++            Assert.That(backend, Is.EqualTo(CollisionBroadphaseBackend.LooseQuadtree));
+             object settings = typeof(BattleOptimizationCpuGcCaptureEditor)
+                 .GetMethod("ReadSettings", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
+             SaveNew("editor-release-and-default.json", new { settings, backend,
+-                scope = "read-only release/default verification after blocked admission" }, H06AdmissionOutput);
++                scope = "read-only release/default verification after scoped Role admission" }, H06AdmissionOutput);
+         }
+ 
+         [UnityEngine.TestTools.UnityTest]
+diff --git a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+index 11bc2a71..63284f07 100644
+--- a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -56,6 +56,8 @@ namespace NTSD.Test.Editor
+         private static bool startingMatchCentralBindings;
+         private const string PostBindingsRoleOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH81-POST-BINDINGS-ROLE-WINDOWS-20261009/windows-01";
+         private static bool startingPostBindingsRoleWindow;
++        private const string ScopedRoleAdmissionOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/windows";
++        private static bool startingScopedRoleAdmissionWindow;
+         private const string RoleBranchTimingOutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH83-ROLE-EXACT-BRANCH-TIMING-20261009/windows-01";
+         private static bool startingRoleBranchTimingWindow;
+         private static BruteForceSceneQuery roleBranchTimingQuery;
+@@ -382,6 +384,7 @@ namespace NTSD.Test.Editor
+             public bool centralSegmentReadbackOnly;
+             public bool matchCentralBindingsWindow;
+             public bool postBindingsRoleWindow;
++            public bool scopedRoleAdmissionWindow;
+             public bool roleBranchTimingWindow;
+             public bool inputBoundaryTimingWindow;
+             public bool nativeSampledStateTimingWindow;
+@@ -674,6 +677,29 @@ namespace NTSD.Test.Editor
+             }
+         }
+ 
++        [MenuItem("NTSD/Validation/Optimization/H06 Scoped Role Admission")]
++        private static void BeginScopedRoleAdmission()
++        {
++            Require(!startingScopedRoleAdmissionWindow, "Scoped Role admission already owns the cold entry.");
++            startingScopedRoleAdmissionWindow = true;
++            try
++            {
++                BeginPostBindingsRole();
++            }
++            finally
++            {
++                startingScopedRoleAdmissionWindow = false;
++            }
++        }
++
++        internal static ProductionEntityStressRequest BuildScopedRoleAdmissionRequest(int index)
++        {
++            ProductionEntityStressRequest request = BuildPostBindingsRoleRequest(index);
++            request.outputPath = ScopedRoleAdmissionOutputRoot + "/" + index.ToString("D2") + "-" +
++                request.action + "-" + request.formalCollectorMode + "/report.json";
++            return request;
++        }
++
+         [MenuItem("NTSD/Validation/Optimization/Batch81 Post Bindings Brute Role 1000 AI")]
+         private static void BeginPostBindingsRole()
+         {
+@@ -735,6 +761,11 @@ namespace NTSD.Test.Editor
+             bool logicGcScopeOnly = false, bool logicGcCallsiteOnly = false,
+             bool labelPrewarmValidation = false)
+         {
++            Require(!startingScopedRoleAdmissionWindow || startingPostBindingsRoleWindow &&
++                !startingRoleGroupSnapshotSkipWindow && !startingProducerSnapshotReuseWindow &&
++                !startingInputBoundaryTimingWindow && !startingRoleBranchTimingWindow &&
++                !startingNativeSampledStateTimingWindow,
++                "Scoped Role admission must not share another candidate window.");
+             Require(!startingRoleGroupSnapshotSkipWindow || startingPostBindingsRoleWindow &&
+                 roleGroupSnapshotSkipWorld == null && roleGroupSnapshotSkipQuery == null &&
+                 !startingProducerSnapshotReuseWindow && producerSnapshotReuseWorld == null &&
+@@ -887,7 +918,8 @@ namespace NTSD.Test.Editor
+                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
++            string outputRoot = startingScopedRoleAdmissionWindow ? ScopedRoleAdmissionOutputRoot :
++                startingRoleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipOutputRoot :
+                 startingNativeSampledStateTimingWindow ? NativeSampledStateOutputRoot :
+                 startingProducerSnapshotReuseWindow ? ProducerSnapshotReuseRetryOutputRoot :
+                 startingInputBoundaryTimingWindow ? InputBoundaryTimingOutputRoot :
+@@ -950,6 +982,7 @@ namespace NTSD.Test.Editor
+                 centralSegmentReadbackOnly = startingCentralSegmentReadback,
+                 matchCentralBindingsWindow = startingMatchCentralBindings,
+                 postBindingsRoleWindow = startingPostBindingsRoleWindow,
++                scopedRoleAdmissionWindow = startingScopedRoleAdmissionWindow,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+@@ -1037,6 +1070,8 @@ namespace NTSD.Test.Editor
+ 
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.scopedRoleAdmissionWindow)
++                return BuildScopedRoleAdmissionRequest(index);
+             if (state.roleGroupSnapshotSkipWindow)
+                 return BuildRoleGroupSnapshotSkipRequest(index);
+             if (state.nativeSampledStateTimingWindow)
+@@ -2513,6 +2548,8 @@ namespace NTSD.Test.Editor
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(NativeSampledStateOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(ScopedRoleAdmissionOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(PostBindingsRoleOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase));
+         }
+diff --git a/docs/ai/CHANGE-LEDGER.md b/docs/ai/CHANGE-LEDGER.md
+index 3c1af5a6..70a2c481 100644
+--- a/docs/ai/CHANGE-LEDGER.md
++++ b/docs/ai/CHANGE-LEDGER.md
+@@ -1,3 +1,9 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+diff --git a/docs/ai/CURRENT-AUTHORITY.md b/docs/ai/CURRENT-AUTHORITY.md
+index a43a9592..99fc0e91 100644
+--- a/docs/ai/CURRENT-AUTHORITY.md
++++ b/docs/ai/CURRENT-AUTHORITY.md
+@@ -1,3 +1,9 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。
+diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md
+index ed698de6..7b72440b 100644
+--- a/docs/ai/FILE-OPERATIONS/INDEX.md
++++ b/docs/ai/FILE-OPERATIONS/INDEX.md
+@@ -656,3 +656,7 @@ Operation NTSD-OPTIMIZATION-D1-A-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATIO
+ 
+ 
+ > 2026-10-09 Operation `NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009` / VERIFIED / DOCUMENTATION_ONLY：[记录](NTSD-OPTIMIZATION-SOLUTION-RECORDS-20261009/RECORD.md)。两份独立实施说明/格式已建立、四处导航已补；3014保护文件及五份dirty备份SHA一致，代码前后片段/链接检查通过。没有代码修改、测试或后继执行。
++
++- [NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009](NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/RECORD.md) RUNNING，第一项Role限定准入，真实备份与保护指纹已登记。
++
++- NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009：Role限定准入/默认接线已通过；四窗+生产13/13，validator exit0。后续用户点击未知弹窗退出并手动重启Editor，启动状态待安全核验；未由代理重启。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+index 0e8dce94..8be857a0 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+@@ -1,3 +1,5 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md
+index bfc17c90..48f7b398 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md
+@@ -12,6 +12,8 @@
+ 
+ “A”是本次给用户阅读的展示名称。稳定标识用于检索和回链；不把它算成新增第35个父项，也不增加旧优化批次完成数量。该记录的完成状态只覆盖 FindEffect 单点，不覆盖整个 H-06。
+ 
++- [H06 Role默认准入：真实代码前后、收益、验证和边界](H06-ROLE-DEFAULT-ADMISSION.md)（稳定标识H06-ROLE-DEFAULT，不增父项/旧批次数）。
++
+ ## 以后每份记录采用的格式
+ 
+ 1. **优化点和要解决的问题**：写明父项、具体方法、复现条件、问题表现及定位证据。
+diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md
+index 5fb20ef0..0ea37ddd 100644
+--- a/docs/ai/STATE.md
++++ b/docs/ai/STATE.md
+@@ -1,3 +1,9 @@
++> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。 Change NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 / NTSD-H06-ROLE-ADMISSION-WINDOWS-001 VERIFIED。证据 artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/REPORT.md；下方旧pending为历史。
++
++> 2026-10-09 NTSD-H06-ROLE-PRODUCTION-DEFAULT-001 IN_PROGRESS：当前Role必要收益/完整Driver0GC/关闭门通过，开始空配置生产默认接线；H06父项/H07/Android仍开放。Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。
++
++> 2026-10-09 两项具名授权，第一项Role限定准入当前窗口 IN_PROGRESS / NTSD-H06-ROLE-ADMISSION-WINDOWS-001；Task NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009。FindEffect复用，未切默认，第二项尚未实施，旧Goal不恢复。
++
+ > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。 下方旧GC_FAIL为修复前历史；证据 artifacts/diagnostics/NTSD-H06-FIND-EFFECT-ZEROGC-20261009/REPORT.md。
+ 
+ > 2026-10-09 FindEffect单点分配修复具名授权：NTSD-H06-FIND-EFFECT-ZEROGC-001 / IN_PROGRESS；先同100语义/结果/0GC，再原千人混合collector；不读Q06、不清旧数据、不改默认、不恢复Goal。Task NTSD-H06-FIND-EFFECT-ZEROGC-20261009。

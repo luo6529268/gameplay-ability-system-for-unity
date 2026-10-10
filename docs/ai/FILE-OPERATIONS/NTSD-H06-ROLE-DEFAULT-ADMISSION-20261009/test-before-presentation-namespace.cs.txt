@@ -1,0 +1,167 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System.Reflection;
+using System.IO;
+using System;
+using Newtonsoft.Json.Linq;
+using NTSD.Animation.Rendering.Editor;
+using NTSD.Animation.Rendering;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.App;
+using NTSD.Simulation;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class H06RoleDefaultAdmissionEditorTests
+    {
+        [TestCase(null, null, CollisionBroadphaseBackend.LooseQuadtree)]
+        [TestCase("", "", CollisionBroadphaseBackend.LooseQuadtree)]
+        [TestCase("BruteForce", "LooseQuadtree", CollisionBroadphaseBackend.BruteForce)]
+        [TestCase("LooseQuadtree", "BruteForce", CollisionBroadphaseBackend.LooseQuadtree)]
+        [TestCase(null, "BruteForce", CollisionBroadphaseBackend.BruteForce)]
+        [TestCase("invalid", "LooseQuadtree", CollisionBroadphaseBackend.LooseQuadtree)]
+        [TestCase("invalid", null, CollisionBroadphaseBackend.BruteForce)]
+        [TestCase(null, "invalid", CollisionBroadphaseBackend.BruteForce)]
+        [TestCase(" ", "", CollisionBroadphaseBackend.BruteForce)]
+        public void ProductionResolverPreservesPriorityAndInvalidFallback(string argument, string configured,
+            CollisionBroadphaseBackend expected)
+        {
+            Assert.That(CollisionBroadphaseBackendResolver.Resolve(argument, configured), Is.EqualTo(expected));
+            var config = ScriptableObject.CreateInstance<GameConfig>();
+            try
+            {
+                config.BattleCollisionBroadphaseName = configured;
+                var args = argument == null ? Array.Empty<string>() :
+                    new[] { CollisionBroadphaseBackendResolver.BackendArgument + "=" + argument };
+                Assert.That(BattleRuntimeProfileProductionSource.Resolve(config, args).CollisionBroadphase, Is.EqualTo(expected));
+            }
+            finally { UnityEngine.Object.DestroyImmediate(config); }
+        }
+
+        [Test]
+        public void ProductionWorldRoutesDefaultAndExplicitBruteAcrossOrderedShutdownAndRecreate()
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+            var scopeType = typeof(NTSD.Test.BattleRuntimeOrderedShutdownEditorTests).GetNestedType("DriverScope", BindingFlags.NonPublic);
+            using var scope = (IDisposable)Activator.CreateInstance(scopeType, flags, null, Array.Empty<object>(), null);
+            var driver = (SimulationTickDriver)scopeType.GetProperty("Driver", flags).GetValue(scope);
+            var rows = new System.Collections.Generic.List<object>();
+            for (int cycle = 0; cycle < 3; cycle++)
+            {
+                if (cycle > 0) driver.RecreateWorld();
+                bool forceBrute = cycle == 1;
+                if (forceBrute)
+                {
+                    var settings = BattleRuntimeProfileProductionSource.Resolve(GameConfig.Instance,
+                        new[] { "-ntsdCollisionBroadphase=BruteForce" });
+                    typeof(SimulationTickDriver).GetMethod("CreateProductionWorld", flags, null,
+                        new[] { typeof(BattleRuntimeWorldSettings), typeof(BattlePresentationBackendMode), typeof(BattleAiExecutionProfile) }, null)
+                        .Invoke(driver, new object[] { settings, driver.PresentationBackendMode, driver.AiExecutionProfile });
+                }
+                var world = driver.World;
+                var expected = forceBrute ? CollisionBroadphaseBackend.BruteForce : CollisionBroadphaseBackend.LooseQuadtree;
+                Assert.That(world.CollisionBroadphaseForServices, Is.EqualTo(expected));
+                var query = (BruteForceSceneQuery)world.SceneQuery;
+                var fixture = typeof(NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests);
+                const BindingFlags statics = BindingFlags.Static | BindingFlags.NonPublic;
+                var frame = (LF2FrameData)fixture.GetMethod("MakeFrame", statics).Invoke(null, new object[]
+                {
+                    new InteractionArea { kind = 0, vrest = 1, x = -16, y = -5, w = 32, h = 10, zwidth = 15 },
+                    new BodyBox { kind = 0, x = 0, y = -5, w = 10, h = 10 },
+                });
+                var entities = new LF2Entity[2];
+                try
+                {
+                    for (int slot = 0; slot < 2; slot++)
+                    {
+                        entities[slot] = (LF2Entity)fixture.GetMethod("CreateCharacter", statics).Invoke(null,
+                            new object[] { "H06Default" + slot, 1, frame, false });
+                        fixture.GetMethod("Register", statics).Invoke(null, new object[] { world, entities[slot], slot, slot + 1, slot * 2 });
+                    }
+                    query.PrepareBattleCapacity(2, 3, 2);
+                    world.CaptureCollisionFrameSnapshotsAll();
+                    world.CollectCollisionCandidatesAll();
+                    Assert.That(query.FormalCollectorMode, Is.EqualTo(CollisionFormalCollectorMode.Configured));
+                    Assert.That(query.LastFormalCollectorModeForDiagnostics, Is.EqualTo(forceBrute ?
+                        CollisionFormalCollectorMode.ForceBruteForce : CollisionFormalCollectorMode.ForceRoleAware));
+                    Assert.That(query.LastFormalCollectionAbortedForDiagnostics, Is.False);
+                    rows.Add(new { cycle, expected, actual = query.LastFormalCollectorModeForDiagnostics });
+                    world.EndCollisionCandidateConsumption();
+                }
+                finally
+                {
+                    world.RuntimeCapacity.Unseal();
+                    foreach (var entity in entities) if (entity != null) world.Unregister(entity);
+                }
+                driver.ShutdownBattleRuntime();
+                var closed = driver.CompleteBattleRuntimeShutdownAfterMapCleanup(true);
+                Assert.That(closed.IsComplete, Is.True);
+                Assert.That(driver.World, Is.Null);
+                Assert.That(world.ObjectCount, Is.Zero);
+                Assert.That(world.ClaimedRuntimeSlotCountForDiagnostics, Is.Zero);
+                Assert.That(driver.StepOneTick(ignorePaused: true), Is.False);
+                Assert.That(driver.ShutdownBattleRuntime().IsComplete, Is.True);
+            }
+            using (var stream = new FileStream("artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/production-route.json", FileMode.CreateNew))
+            using (var writer = new StreamWriter(stream)) writer.Write(Newtonsoft.Json.JsonConvert.SerializeObject(rows));
+        }
+
+        [TestCase("before")]
+        [TestCase("after")]
+        [Explicit("Capture this authorized window's exact Editor settings without changing them.")]
+        public void AdmissionEditorSettings(string phase)
+        {
+            Assert.That(EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating, Is.False);
+            var scene = SceneManager.GetSceneByPath("Assets/NTSD/Scene/NTSD_Menu.unity");
+            Assert.That(scene.isLoaded, Is.True);
+            Assert.That(scene.isDirty, Is.False);
+            BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+            var snapshot = (JObject)typeof(H06CollectorPreparationEditorTests).GetMethod("Snapshot",
+                BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, null);
+            snapshot["scene"] = scene.path;
+            snapshot["roots"] = scene.rootCount;
+            const string root = "artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/";
+            using (var stream = new FileStream(root + "editor-" + phase + ".json", FileMode.CreateNew))
+            using (var writer = new StreamWriter(stream)) writer.Write(snapshot.ToString());
+            if (phase == "after")
+                Assert.That(JToken.DeepEquals(snapshot, JObject.Parse(File.ReadAllText(root + "editor-before.json"))), Is.True);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void ScopedRequestPreservesHistoricalConfiguration(int index)
+        {
+            var method = typeof(BattleOptimizationWindowsAiSuiteEditor).GetMethod("BuildPostBindingsRoleRequest",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            var historical = (ProductionEntityStressRequest)method.Invoke(null, new object[] { index });
+            var actual = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(index);
+            Assert.That(actual.outputPath, Does.StartWith("artifacts/diagnostics/NTSD-H06-ROLE-DEFAULT-ADMISSION-20261009/windows/"));
+            Assert.That(actual.outputPath, Is.Not.EqualTo(historical.outputPath));
+            actual.outputPath = historical.outputPath;
+            Assert.That(JsonUtility.ToJson(actual), Is.EqualTo(JsonUtility.ToJson(historical)));
+        }
+
+        [TestCase(0)]
+        [TestCase(2)]
+        public void ScopedPairChangesOnlyCollectorAndOutput(int index)
+        {
+            var brute = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(index);
+            var role = BattleOptimizationWindowsAiSuiteEditor.BuildScopedRoleAdmissionRequest(index + 1);
+            Assert.That(brute.formalCollectorMode, Is.EqualTo("brute"));
+            Assert.That(role.formalCollectorMode, Is.EqualTo("role"));
+            var a = JObject.Parse(JsonUtility.ToJson(brute));
+            var b = JObject.Parse(JsonUtility.ToJson(role));
+            a.Remove("formalCollectorMode"); b.Remove("formalCollectorMode");
+            a.Remove("outputPath"); b.Remove("outputPath");
+            Assert.That(JToken.DeepEquals(a, b), Is.True);
+        }
+    }
+}
+#endif

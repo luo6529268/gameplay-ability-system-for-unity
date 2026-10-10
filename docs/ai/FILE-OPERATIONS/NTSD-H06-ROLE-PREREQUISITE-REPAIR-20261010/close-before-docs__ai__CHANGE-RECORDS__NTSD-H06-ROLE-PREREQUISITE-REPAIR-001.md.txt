@@ -1,0 +1,15 @@
+<!-- CHANGE-RECORD
+id: NTSD-H06-ROLE-PREREQUISITE-REPAIR-001
+status: CODE_WRITTEN
+code-path: Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/H06RolePrerequisiteDiagnostics.cs
+authority: User authorized Editor-only prerequisite gate and two captured-method cold JIT repair
+evidence: docs/ai/TASKS/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010.md
+-->
+
+# Editor前置资格修复
+脚本前PLANNED。需求/原状/准确符号/owner与容量/退出/风险/验证/真实dirty回滚见Task和Operation；无生产写域。
+
+CODE_WRITTEN：两Editor路径/准确新增符号按Task与Operation；冷API/测试尚待原Editor实测，未启动资格窗。
+
+COMPILE_PASS / FOCUSED_TEST_PASS证据：compile-evidence.json新CS error0，job5be3b7010c004bdabc6c6fd90b53059f 10/10。原Editor资格单窗已启动，尚无最终实景结论。Mono编译代码归原AppDomain所有，不建立自有缓存；同域JIT不能反向卸载单方法，正常domain reload失效，不为此强制重载。准备异常最多保留已编译native code，不提交业务调用/World写入，首tick前fail-closed。

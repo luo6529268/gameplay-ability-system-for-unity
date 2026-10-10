@@ -1,0 +1,24 @@
+# NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010
+Status: PLANNED
+UTC 2026-10-10T01:11:48.131038+00:00
+User authorization: current discussion chat: “那这部分你来处理，有明确结果后，再让另一个会话来修复”. This grants diagnostic-only code, compile, focused tests and one bounded reproduction. Production fixes are reserved for the other chat after evidence.
+Exact existing write paths and real dirty backups: before-manifest.json. New paths: Task/Change/this Operation and artifacts; Assets/NTSD/Scripts/Test/Editor/H06RolePrerequisiteDiagnostics.cs and .meta.
+Planned mutations: append operation index; prepend current task state to authority/state/handoff/progress/H06; append Ledger; patch only editor Suite routing/observer, expose read-only completed GC scope in existing editor observer; add editor-only prerequisite observer/tests. No runtime/query/AI logic or contracts changed.
+One fresh combat1000 Role/DataOrientedCanonical seed1314149188 window,120warm+180sample; all old candidates and record clocks OFF. Split the original assertion into identical condition bits, retain original aggregate and fail-stop; capture fallback/inert/ordinal counts, per-tick fullDriver scope events/raw and checksum/dualRNG. Reuse existing eight-frame CPU/GC capture starting after tick124, plus prewarmed tick markers. No extra window, no 0GC or cost/benefit certificate from instrumented recording. If no event is captured, report inconclusive rather than repeat.
+Lifecycle owner is existing Suite/GC owner; diagnostic helper fixed300 rows and tick markers are cold prepared. Stage1 ends ticks; existing stage2 join unchanged; restore profiler and dispose helper before existing shutdown stage5/8; no new runtime module. Abort/reload/play exit preserve data and restore settings.
+Commands: apply_patch or precise Python edits for named paths; exact2022.3.62f3 Editor single-instance launch if none running; existing MCP compile/focused/menu; existing Validate-ChangeLedger and git diff --check. No delete/move/reset/clean/stash/checkout. Startup Temp content is preserved in temp-before; generated Library/Logs output is regenerable, no explicit cleanup command.
+Rollback: separately audited removal of only this change using real before, never HEAD.
+
+Preflight correction: initial Win32_Process filter and CLI discovery did not enumerate existing Editor. Get-Process confirms PID39108 and original TCP6402 returns2022.3.62f3 idle/Menu/nonPlay/noncompile/nontest. NO Editor launch executed. Temp backup partial: four locked/cache files could not be copied; error retained here, no startup/Temp cleanup will be performed. Shared terminal and all intended existing write paths are backed up in before-manifest. Partial extra cache backups retained, not deleted.
+
+CODE_WRITTEN: apply_patch new editor helper and precise Python Suite/GC accessor edits. Original aggregate expression and failed-stop unchanged; one fresh prereq mode, forced instrumented-callsite noncertificate status, fixed300 explanatory rows and prewarmed tick markers, reuse existing eight-frame capture. New16 focused cases. No runtime files edited. Compile/tests/window not yet run.
+
+Pre-runtime test review: replaced15 trivial bit-arithmetic mirror cases with one real calibrated-completed-scope provenance test; two new meaningful cases (fixture unchanged and real scope after Accept), plus existing owner cases. Backup helper-before-test-review retained. No runtime launched.
+
+Original Editor compile/reload passed after full asset refresh imported new file; initial script-only compile CS0103 evidence retained. Focused4/4 PASS job4ff1921248c24d499497bca12fad14f0: two new meaningful cases + existing owner detach/reject cases. Pre-window review added cold capture directory creation because reused Arm expects an existing output directory; only Start changed, tests unaffected. Needs final compile before unique window.
+
+Unique window completed300: failure bit12 only113; steady events at130/162. Existing capture generated retained raw but frame callbacks0; settings restored. Add idle retained-binary parser in same helper, reuse existing CaptureState/ReadSettings/ExportSamples/RestoreSettings through cold reflection. No new measurement; preserve original raw/empty export; append import, never clear history; fresh recovered outputs.
+
+SCOPED_DIAGNOSIS_COMPLETED. Retained parser compiled/executed2 target frames; exact2 main events bothMono.JIT metadata36/30B, thread cap128 reached not all-thread certificate. Original profiler settings restored both times, append import only. Source window proof and2512 protected0drift saved. Diagnostic gate113misclassifiedinert all300trace matches; no production edit. REPORT and current pointers updated; validator pending.
+
+Operation final status COMPLETED_SCOPED_DIAGNOSIS. ValidatorPASSED1399, diff-check0; originalEditor idle/Menu8clean, no production modification, no second measurement.

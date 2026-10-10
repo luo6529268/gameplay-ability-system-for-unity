@@ -1,0 +1,20 @@
+*** Begin Patch
+*** Update File: docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md
+@@
+-本轮静态复核：当前CaptureSharedOwnedSnapshot已有unified/shared及direct-canonical分支；producer刷新后和native routing后的AI行/状态同步处于不同可见边界。不能把同名capture/sync当成同一份可直接删除的复制。91混战同窗IndexedCanonicalCapture约0.210ms、UnifiedSnapshotExecutionRowRefresh约0.241ms、NativeCanonicalAiSync约0.360ms、NativeInputStateSync约0.069ms；这些是历史嵌套计时，不相加、不当当前新鲜耗时或可节省量。IndexedCanonicalKernel约3.118ms（内含Nearest约1.511ms）也不能被上述省读整体覆盖。因此本轮不据“CharacterInput总12ms”继续提出无证微缓存；一般输入路线保留，优先核Role精确配对这块较大的已有热点。
++本轮静态复核：当前CaptureSharedOwnedSnapshot已有unified/shared及direct-canonical分支；producer刷新后和native routing后的AI行/状态同步处于不同可见边界。不能把同名capture/sync当成同一份可直接删除的复制。91混战同窗IndexedCanonicalCapture约0.209ms、UnifiedSnapshotExecutionRowRefresh约0.245ms、NativeCanonicalAiSync约0.360ms、NativeInputStateSync约0.069ms；这些是历史嵌套计时，不相加、不当当前新鲜耗时或可节省量。IndexedCanonicalKernel约3.118ms（内含Nearest约1.507ms）也不能被上述省读整体覆盖。因此本轮不据“CharacterInput总12ms”继续提出无证微缓存；一般输入路线保留，优先核Role精确配对这块较大的已有热点。
+*** Update File: docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md
+@@
+-相比之下，91混战IndexedCanonicalCapture约0.210ms、unified行刷新约0.241ms、native canonical同步约0.360ms、InputState同步约0.069ms；producer现已由用户暂缓。先不把这些零点几毫秒重复省读当主线。Nearest约1.511ms只是kernel内部一段，不能拿12ms输入总成本为某个小改动承诺收益。
++相比之下，91混战IndexedCanonicalCapture约0.209ms、unified行刷新约0.245ms、native canonical同步约0.360ms、InputState同步约0.069ms；producer现已由用户暂缓。先不把这些零点几毫秒重复省读当主线。Nearest约1.507ms只是kernel内部一段，不能拿12ms输入总成本为某个小改动承诺收益。
+*** Update File: docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
+@@
+-> **2026-10-09 独立实施说明已补充：** [代码前后对照记录与固定格式](IMPLEMENTATION-RECORDS/README.md) · [优化点 A：FindEffect 临时分配修复](IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。记录已完成的具体改法及验证范围；当前排程仍以唯一进度为准，不恢复执行。
++> **2026-10-10 最新决定：** producer快照复用[用户暂缓/生产OFF](IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)，下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)仅静态分析/方案；Role限定准入成果保持。当前排程以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准，下方旧状态按日期保留；不恢复旧自动目标。
++
++> **2026-10-09 独立实施说明已补充：** [代码前后对照记录与固定格式](IMPLEMENTATION-RECORDS/README.md) · [优化点 A：FindEffect 临时分配修复](IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。记录已完成的具体改法及验证范围；当前排程仍以唯一进度为准，不恢复执行。
+*** Update File: Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+@@
+-| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer本次44+1+1/四窗验证后收益门未过，生产OFF；H07性能仍FAIL，后继新方案由用户决定 |
++| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，下一方案见H06-ROLE-EXACT |
+*** End Patch

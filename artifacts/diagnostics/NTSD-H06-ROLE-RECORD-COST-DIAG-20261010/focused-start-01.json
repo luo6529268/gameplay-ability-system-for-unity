@@ -1,0 +1,33 @@
+{
+  "request": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RecordCost_IndependentSamplingDisabledResetAndFreshOwner",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RecordCost_CapacityDoesNotSkipRecordSideEffects",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RecordCost_GroupRejectedHasNoKind4OrWrites",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RecordCost_Kind1TiePreservesBestAndRng",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RoleBranchTiming_RotationCountsAndDisabledResetAreBounded",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.RoleBranchTiming_InputInvalidationFallbackRemainsConservative",
+      "NTSD.Test.RoleAwareCollisionShadowSelfCheckTests.CandidateStoreAuthority_StoreOnlyProducerFaultFailsClosedWithoutCollectorRerun",
+      "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RecordCost_RequestUsesOneFixedCombatFixture",
+      "NTSD.Test.Editor.BattleOptimizationWindowsAiSuiteRequestTests.RecordCost_RequestRejectsExtraWindows",
+      "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_RejectsSecondOwnerAndAttachAfterFirstTick",
+      "NTSD.Test.Editor.BattleLogicTickGcObserverEditorTests.Runner_DefaultHookIsEmptyAndDetachIsIdempotent"
+    ]
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "6ba411a79507462bbd2bf067ffc0bd72",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

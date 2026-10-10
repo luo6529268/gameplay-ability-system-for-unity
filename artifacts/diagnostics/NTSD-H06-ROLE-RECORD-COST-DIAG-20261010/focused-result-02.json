@@ -1,0 +1,150 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c103224c5ead4193bdf7bf293fb0cd98",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791566034818,
+      "finished_unix_ms": 1791566044655,
+      "last_update_unix_ms": 1791566044655,
+      "progress": {
+        "completed": 12,
+        "total": 10577,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791566043435,
+        "last_finished_test_full_name": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(64)",
+        "last_finished_unix_ms": 1791566043449,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 12,
+          "passed": 12,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.3653323,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "RecordCost_CapacityDoesNotSkipRecordSideEffects",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_CapacityDoesNotSkipRecordSideEffects",
+            "state": "Passed",
+            "durationSeconds": 0.1564532,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_GroupRejectedHasNoKind4OrWrites",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_GroupRejectedHasNoKind4OrWrites",
+            "state": "Passed",
+            "durationSeconds": 0.01814,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_IndependentSamplingDisabledResetAndFreshOwner(1)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_IndependentSamplingDisabledResetAndFreshOwner(1)",
+            "state": "Passed",
+            "durationSeconds": 0.1283166,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_IndependentSamplingDisabledResetAndFreshOwner(64)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_IndependentSamplingDisabledResetAndFreshOwner(64)",
+            "state": "Passed",
+            "durationSeconds": 0.0230408,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_Kind1TiePreservesBestAndRng(1)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_Kind1TiePreservesBestAndRng(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0222991,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_Kind1TiePreservesBestAndRng(2)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_Kind1TiePreservesBestAndRng(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0034955,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_MultiBodySequencePayloadRngAndSideEffects(0,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects(0,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0050227,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_MultiBodySequencePayloadRngAndSideEffects(4,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects(4,False)",
+            "state": "Passed",
+            "durationSeconds": 0.0043736,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_MultiBodySequencePayloadRngAndSideEffects(5,False)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects(5,False)",
+            "state": "Passed",
+            "durationSeconds": 0.003286,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RecordCost_MultiBodySequencePayloadRngAndSideEffects(0,True)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects(0,True)",
+            "state": "Passed",
+            "durationSeconds": 0.0028194,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(1)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0335455,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(64)",
+            "fullName": "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RoleBranchTiming_RotationCountsAndDisabledResetAreBounded(64)",
+            "state": "Passed",
+            "durationSeconds": 0.0133157,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

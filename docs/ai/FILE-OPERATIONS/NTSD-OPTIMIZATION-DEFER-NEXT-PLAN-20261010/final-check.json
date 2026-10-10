@@ -1,0 +1,100 @@
+{
+  "checkedAt": "2026-10-10T00:32:25.431776+08:00",
+  "changedExistingDocuments": [
+    "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+    "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "docs/ai/CURRENT-AUTHORITY.md",
+    "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+    "docs/ai/STATE.md"
+  ],
+  "newTaskAndPlanPresent": true,
+  "backupCount": 13,
+  "protectedCount": 56,
+  "protectedDriftCount": 0,
+  "linksChecked": 45,
+  "brokenLinks": [],
+  "outsideTrackedDiffUnchanged": true,
+  "headAndStagedUnchanged": true,
+  "historicalTextPreserved": {
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md": true,
+    "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md": true
+  },
+  "lineEndings": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "beforeCRLF": 78,
+      "afterCRLF": 78
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "beforeCRLF": 167,
+      "afterCRLF": 167
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "beforeCRLF": 284,
+      "afterCRLF": 285
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "beforeCRLF": 801,
+      "afterCRLF": 802
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "beforeCRLF": 5889,
+      "afterCRLF": 5889
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "beforeCRLF": 1366,
+      "afterCRLF": 1366
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "beforeCRLF": 635,
+      "afterCRLF": 637
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "beforeCRLF": 126,
+      "afterCRLF": 124
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "beforeCRLF": 32,
+      "afterCRLF": 36
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "beforeCRLF": 59,
+      "afterCRLF": 73
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md",
+      "beforeCRLF": 34,
+      "afterCRLF": 34
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "beforeCRLF": 55,
+      "afterCRLF": 54
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "beforeCRLF": 6725,
+      "afterCRLF": 6725
+    }
+  ],
+  "diffCheckExitCode": 0,
+  "errors": [],
+  "executedTests": "None; documentation and read-only source/report review only."
+}

@@ -1,3 +1,5 @@
+> 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。
+
 > **已完成单点的独立说明：** [优化点 A：FindEffect 从原代码到修复后代码、效果与边界](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。单点完成不等于本父项或Role默认推广完成。
 
 > 2026-10-09 FindEffect单点修复 VERIFIED（仅本Task范围）：100对象语义/候选顺序/载荷/双RNG/checksum一致，collector三次22→0事件；原千人混合collector八次234→0事件，容量与清理门PASS。H06限定准入仍未完成/未切默认，当前待同配置收益和接线门；D1=A不变，H06父项/H07/Android开放、95OFF、旧Goal不恢复。Change NTSD-H06-FIND-EFFECT-ZEROGC-001。
@@ -10,16 +12,16 @@
 | 字段 | 本轮整理 |
 |---|---|
 | 类别 / 建议优先级 | CPU / 高 |
-| 当前状态 | D1=A已批准／FindEffect局部修复VERIFIED，原千人混合collector八次0GC；限定准入待收益/接线，生产默认Brute |
+| 当前状态 | D1=A／Role限定准入完成，空配置生产默认Role；父项/H07最终门开放 |
 | 依赖的最小范围 | H-09受影响正确性、H-11适用容量、M-09/M-15基线；不依赖Mono整体 |
-| 下一步与具体方向 | 已消除已知FindEffect分配；接续必要门核对、实际同配置收益及默认接线。不重复已PASS三场景，不以未33ms阻断D1=A；空间分区仍独立 |
+| 下一步与具体方向 | 2026-10-10 producer由用户暂缓；下一[现有Role精确配对成本方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，仅静态分析/方案、具体实施未授权。复用准入证据，不重试无收益微候选；空间分区仍独立 |
 | 完成边界 | 限定准入必要门通过后可先推广；H06父项/H07整体P95等门未过仍开放 |
-| 方案成熟度 | FindEffect单点生产修复及聚焦验证完成；100结果一致/0GC、原千人混合0GC通过，Profile/Suite未改；限定准入未完成 |
+| 方案成熟度 | 独立窗口/生产Change已VERIFIED，实际Role/Brute/Role关闭重建通过；仅限定准入，非最终性能认证 |
 | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
 
 [跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
 
-子方案（不增加父项数量）：[H06-SPATIAL 保守空间候选裁剪](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md)。
+子方案（不增加父项数量）：[H06-ROLE-EXACT 现有Role精确配对成本](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) · [H06-SPATIAL 保守空间候选裁剪](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md)。
 
 **D1=A已批准：** 用户确认可先用安全有效的Role方案。限定准入通过四场景强一致、受影响完整0GC/容量/关闭及可追溯收益门后，允许默认推广，不必先达到整tick P95<33ms。原33ms、无持续backlog、正常drop0等仍是H06父项/H07最终性能门，未通过不得关闭。下方旧“完成性能门后才切配置”对这个限定子阶段被本决定取代；其他正确性和最终验收不变。2026-10-09用户已授权具名实施；[Task](../../../../docs/ai/TASKS/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009.md)、[当前证据](../../../../artifacts/diagnostics/NTSD-H06-ROLE-SCOPED-ADMISSION-20261009/REPORT.md)。尚未通过全部门，未切默认。
 

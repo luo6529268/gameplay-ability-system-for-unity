@@ -1,0 +1,32 @@
+*** Begin Patch
+*** Update File: docs/ai/FILE-OPERATIONS/INDEX.md
+@@
+-- NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010 / PLANNED：按用户决定暂缓producer快照复用，生产OFF；仅文档记录与下一项Role精确配对方案，详[Record](NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010/RECORD.md)。
++- NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010 / VERIFIED（仅文档）：producer用户暂缓/生产OFF；下一H06-ROLE-EXACT方案已建立、未实施。13份dirty备份核同、56保护0变化、43链接及文档diff检查通过，详[Record](NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010/RECORD.md)。
+*** Update File: docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010/RECORD.md
+@@
+-状态：PLANNED。类型：具名文档局部更新、追加记录及新方案；不删除、移动文件。
++状态：VERIFIED（仅文档记录与静态方案）。类型：具名文档局部更新、追加记录及新方案；不删除、移动文件。以下执行前计划与备份说明保留。
+@@
+ 开始时间、实际文件前身份见manifest。结束时间、退出码、范围外保护和链接检查将在本Record追加；当前不提前声明通过。
++
++## 执行后追加
++
++2026-10-10T00:30:44+08:00已完成内容核对。实际以tools.apply_patch执行保存的planned-01/02/03.patch；planned-03为原JSON数值精度复核及总导航状态同步。planned-04.patch仅收口本Task/索引/Record，不改变方案和任何生产状态。准备与验证工具正常退出0；第一次过宽hash helper主动停止exit1仅准备过程，不是本Task失败。
++
++[verification-01.json](verification-01.json)：13份实际dirty备份SHA全部保持；56份准确保护文件0变化；43个新增/修改行中的本地链接有效；HEAD/暂存保持；范围外已跟踪diff逐块相同；进度和总清单原历史正文保持；git diff --check退出0。原始输出见diff-check.txt，完整检查命令见verify-command.txt。不是全仓65034文件内容审计。
++
++实际触及：manifest中的13份已有文档，以及新H06-ROLE-EXACT方案、本Task和本Operation审计文件。没有修改脚本、Scene、Prefab、资源、ProjectSettings或Packages；没有调用Unity/测试/Profiler/性能测量、读取活跃Q06方法体、发送目标会话消息或修改自动监测。未运行Change Ledger validator：本Task无脚本变更，不将文档检查宣称编译或运行验收。
++
++已交付：producer USER_DEFERRED/生产OFF及准确重开条件；Role精确配对成本独立方案和导航；保留新ABBA完整Driver基线GC失败，不把它与95/FindEffect自动合并。静态分析并未确认可消除比例，未声明新候选已可实施或有收益。
++
++收口后逐文件身份、再次保护/HEAD/暂存/diff检查见after-manifest.json及final-check.json；本次所有补丁和命令原文保留，不覆盖原报告或旧失败。
+*** Update File: docs/ai/TASKS/NTSD-OPTIMIZATION-DEFER-NEXT-PLAN-20261010.md
+@@
+-状态：IN_PROGRESS / DOCUMENTATION_AND_READONLY_PLAN。需求来源：用户2026-10-10在方案讨论会话要求记录本优化点、推进下一项。
++状态：COMPLETED / DOCUMENTATION_AND_READONLY_PLAN_ONLY。需求来源：用户2026-10-10在方案讨论会话要求记录本优化点、推进下一项。
+@@
+ 本Task完成只证明记录和方案整理完毕，不证明新优化已可实施、产生收益、H06/H07通过或Android认证完成。实施指令仍待讨论明确后的“输出指令”请求。
++
++实际结果：producer独立记录追加用户暂缓/恢复条件；H06-ROLE-EXACT独立方案建立，现有代码和既有实测区分清楚，具体可消除成本尚待有限归因；唯一进度/总清单/依赖/当前恢复入口同步。13份dirty备份核同、56保护0变化、43链接有效、范围外diff/HEAD/暂存未变，文档diff检查退出0；没有测试或测量。证据和收口检查见Operation。
+*** End Patch

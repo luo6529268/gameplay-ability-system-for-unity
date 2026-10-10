@@ -1,0 +1,32 @@
+{
+  "request": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_MultiBodySequencePayloadRngAndSideEffects",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_IndependentSamplingDisabledResetAndFreshOwner",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_CapacityDoesNotSkipRecordSideEffects",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_GroupRejectedHasNoKind4OrWrites",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_Kind1TiePreservesBestAndRng",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_Kind1RejectedDirectionStillUpdatesBestAndRng",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_Kind4CountPrecedesLowFallRejection",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_WarmedCollectorZeroAllocation",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_InputInvalidationFallbackDoesNotSample",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RecordCost_StoreFaultPreservesOriginalFailClosedPath",
+      "NTSD.Test.RoleAwareCollisionFormalCollectorSelfCheckTests.RoleBranchTiming_RotationCountsAndDisabledResetAreBounded"
+    ]
+  },
+  "response": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "c103224c5ead4193bdf7bf293fb0cd98",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

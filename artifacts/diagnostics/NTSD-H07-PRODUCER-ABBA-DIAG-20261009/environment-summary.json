@@ -1,0 +1,2005 @@
+{
+  "beforeUtc": "2026-10-09T15:54:48.5880519Z",
+  "afterUtc": "2026-10-09T16:03:16.8391021Z",
+  "matchedProcessesByCpuDelta": [
+    {
+      "id": 82096,
+      "name": "explorer",
+      "cpuSecondsDelta": 2164.765625,
+      "workingSetAfter": 656916480
+    },
+    {
+      "id": 93016,
+      "name": "Everything",
+      "cpuSecondsDelta": 1615.578125,
+      "workingSetAfter": 1334738944
+    },
+    {
+      "id": 39108,
+      "name": "Unity",
+      "cpuSecondsDelta": 534.96875,
+      "workingSetAfter": 8030932992
+    },
+    {
+      "id": 78440,
+      "name": "sysclean",
+      "cpuSecondsDelta": 438.546875,
+      "workingSetAfter": 908013568
+    },
+    {
+      "id": 26972,
+      "name": "msedge",
+      "cpuSecondsDelta": 267.46875,
+      "workingSetAfter": 1377517568
+    },
+    {
+      "id": 51836,
+      "name": "codenotch",
+      "cpuSecondsDelta": 114.546875,
+      "workingSetAfter": 31748096
+    },
+    {
+      "id": 55524,
+      "name": "chrome",
+      "cpuSecondsDelta": 104.515625,
+      "workingSetAfter": 843423744
+    },
+    {
+      "id": 24784,
+      "name": "msedge",
+      "cpuSecondsDelta": 68.828125,
+      "workingSetAfter": 168742912
+    },
+    {
+      "id": 36644,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 65.78125,
+      "workingSetAfter": 1219338240
+    },
+    {
+      "id": 6488,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 49.734375,
+      "workingSetAfter": 440762368
+    },
+    {
+      "id": 37628,
+      "name": "codex",
+      "cpuSecondsDelta": 47.359375,
+      "workingSetAfter": 585445376
+    },
+    {
+      "id": 52516,
+      "name": "chrome",
+      "cpuSecondsDelta": 40.28125,
+      "workingSetAfter": 153686016
+    },
+    {
+      "id": 58332,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 29.9375,
+      "workingSetAfter": 177876992
+    },
+    {
+      "id": 43188,
+      "name": "OneDrive.Sync.Service",
+      "cpuSecondsDelta": 21.03125,
+      "workingSetAfter": 88014848
+    },
+    {
+      "id": 32404,
+      "name": "Unity Hub",
+      "cpuSecondsDelta": 20.03125,
+      "workingSetAfter": 143159296
+    },
+    {
+      "id": 73676,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 19.71875,
+      "workingSetAfter": 79097856
+    },
+    {
+      "id": 101764,
+      "name": "QQ",
+      "cpuSecondsDelta": 19.65625,
+      "workingSetAfter": 558628864
+    },
+    {
+      "id": 7780,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 17.015625,
+      "workingSetAfter": 24498176
+    },
+    {
+      "id": 10412,
+      "name": "chrome",
+      "cpuSecondsDelta": 15.5,
+      "workingSetAfter": 297144320
+    },
+    {
+      "id": 27816,
+      "name": "QQ",
+      "cpuSecondsDelta": 15.21875,
+      "workingSetAfter": 361902080
+    },
+    {
+      "id": 56308,
+      "name": "chrome",
+      "cpuSecondsDelta": 14.515625,
+      "workingSetAfter": 207601664
+    },
+    {
+      "id": 18880,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 12.140625,
+      "workingSetAfter": 64823296
+    },
+    {
+      "id": 74348,
+      "name": "devenv",
+      "cpuSecondsDelta": 12.109375,
+      "workingSetAfter": 873353216
+    },
+    {
+      "id": 132128,
+      "name": "PerfWatson2",
+      "cpuSecondsDelta": 12.046875,
+      "workingSetAfter": 54853632
+    },
+    {
+      "id": 53516,
+      "name": "chrome",
+      "cpuSecondsDelta": 11.125,
+      "workingSetAfter": 490598400
+    },
+    {
+      "id": 78808,
+      "name": "PerfWatson2",
+      "cpuSecondsDelta": 10.71875,
+      "workingSetAfter": 56545280
+    },
+    {
+      "id": 60804,
+      "name": "SndVol",
+      "cpuSecondsDelta": 10.1875,
+      "workingSetAfter": 23687168
+    },
+    {
+      "id": 53352,
+      "name": "PerfWatson2",
+      "cpuSecondsDelta": 9.921875,
+      "workingSetAfter": 54734848
+    },
+    {
+      "id": 26544,
+      "name": "Weixin",
+      "cpuSecondsDelta": 9.484375,
+      "workingSetAfter": 371499008
+    },
+    {
+      "id": 22444,
+      "name": "audiodg",
+      "cpuSecondsDelta": 8.484375,
+      "workingSetAfter": 13234176
+    },
+    {
+      "id": 7612,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 8.453125,
+      "workingSetAfter": 11460608
+    },
+    {
+      "id": 28896,
+      "name": "chrome",
+      "cpuSecondsDelta": 8.046875,
+      "workingSetAfter": 112795648
+    },
+    {
+      "id": 17204,
+      "name": "msedge",
+      "cpuSecondsDelta": 7.0625,
+      "workingSetAfter": 360943616
+    },
+    {
+      "id": 62348,
+      "name": "droid",
+      "cpuSecondsDelta": 6.453125,
+      "workingSetAfter": 289345536
+    },
+    {
+      "id": 27360,
+      "name": "chrome",
+      "cpuSecondsDelta": 6.421875,
+      "workingSetAfter": 156155904
+    },
+    {
+      "id": 124060,
+      "name": "devenv",
+      "cpuSecondsDelta": 6.328125,
+      "workingSetAfter": 1283366912
+    },
+    {
+      "id": 72100,
+      "name": "QQ",
+      "cpuSecondsDelta": 6.125,
+      "workingSetAfter": 124133376
+    },
+    {
+      "id": 27364,
+      "name": "chrome",
+      "cpuSecondsDelta": 5.96875,
+      "workingSetAfter": 48402432
+    },
+    {
+      "id": 37900,
+      "name": "OneDrive",
+      "cpuSecondsDelta": 5.9375,
+      "workingSetAfter": 75280384
+    },
+    {
+      "id": 131564,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 5.90625,
+      "workingSetAfter": 393801728
+    },
+    {
+      "id": 5884,
+      "name": "bun",
+      "cpuSecondsDelta": 5.421875,
+      "workingSetAfter": 139157504
+    },
+    {
+      "id": 136328,
+      "name": "UnityPackageManager",
+      "cpuSecondsDelta": 3.96875,
+      "workingSetAfter": 67588096
+    },
+    {
+      "id": 50000,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 3.859375,
+      "workingSetAfter": 171630592
+    },
+    {
+      "id": 24792,
+      "name": "msedge",
+      "cpuSecondsDelta": 3.71875,
+      "workingSetAfter": 50270208
+    },
+    {
+      "id": 60524,
+      "name": "QQLiveService",
+      "cpuSecondsDelta": 3.09375,
+      "workingSetAfter": 70680576
+    },
+    {
+      "id": 140956,
+      "name": "Anycast",
+      "cpuSecondsDelta": 3.03125,
+      "workingSetAfter": 86462464
+    },
+    {
+      "id": 20664,
+      "name": "msedge",
+      "cpuSecondsDelta": 2.578125,
+      "workingSetAfter": 11321344
+    },
+    {
+      "id": 1848,
+      "name": "devenv",
+      "cpuSecondsDelta": 2.546875,
+      "workingSetAfter": 415535104
+    },
+    {
+      "id": 22536,
+      "name": "lghub_agent",
+      "cpuSecondsDelta": 2.515625,
+      "workingSetAfter": 30937088
+    },
+    {
+      "id": 33552,
+      "name": "wps",
+      "cpuSecondsDelta": 1.890625,
+      "workingSetAfter": 77463552
+    },
+    {
+      "id": 13400,
+      "name": "webwallpaper64",
+      "cpuSecondsDelta": 1.734375,
+      "workingSetAfter": 94859264
+    },
+    {
+      "id": 53948,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 1.65625,
+      "workingSetAfter": 92131328
+    },
+    {
+      "id": 58252,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 1.5,
+      "workingSetAfter": 64806912
+    },
+    {
+      "id": 110896,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 1.5,
+      "workingSetAfter": 258408448
+    },
+    {
+      "id": 31832,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 1.46875,
+      "workingSetAfter": 92143616
+    },
+    {
+      "id": 4072,
+      "name": "codex",
+      "cpuSecondsDelta": 1.40625,
+      "workingSetAfter": 103993344
+    },
+    {
+      "id": 93208,
+      "name": "QQ",
+      "cpuSecondsDelta": 1.40625,
+      "workingSetAfter": 37720064
+    },
+    {
+      "id": 25916,
+      "name": "wpscloudsvr",
+      "cpuSecondsDelta": 1.34375,
+      "workingSetAfter": 16883712
+    },
+    {
+      "id": 5784,
+      "name": "sihost",
+      "cpuSecondsDelta": 1.25,
+      "workingSetAfter": 35926016
+    },
+    {
+      "id": 17376,
+      "name": "nvcontainer",
+      "cpuSecondsDelta": 1.21875,
+      "workingSetAfter": 10543104
+    },
+    {
+      "id": 17396,
+      "name": "nvcontainer",
+      "cpuSecondsDelta": 1.203125,
+      "workingSetAfter": 73035776
+    },
+    {
+      "id": 89640,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 1.125,
+      "workingSetAfter": 216903680
+    },
+    {
+      "id": 21596,
+      "name": "wallpaper32",
+      "cpuSecondsDelta": 1.09375,
+      "workingSetAfter": 40177664
+    },
+    {
+      "id": 56724,
+      "name": "chrome",
+      "cpuSecondsDelta": 1.078125,
+      "workingSetAfter": 11796480
+    },
+    {
+      "id": 45312,
+      "name": "wps",
+      "cpuSecondsDelta": 0.875,
+      "workingSetAfter": 60063744
+    },
+    {
+      "id": 40968,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.84375,
+      "workingSetAfter": 36597760
+    },
+    {
+      "id": 19820,
+      "name": "ctfmon",
+      "cpuSecondsDelta": 0.765625,
+      "workingSetAfter": 69603328
+    },
+    {
+      "id": 32316,
+      "name": "wps",
+      "cpuSecondsDelta": 0.765625,
+      "workingSetAfter": 50753536
+    },
+    {
+      "id": 84416,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.71875,
+      "workingSetAfter": 128139264
+    },
+    {
+      "id": 4752,
+      "name": "Unity Hub",
+      "cpuSecondsDelta": 0.6875,
+      "workingSetAfter": 32464896
+    },
+    {
+      "id": 100416,
+      "name": "droid",
+      "cpuSecondsDelta": 0.671875,
+      "workingSetAfter": 117874688
+    },
+    {
+      "id": 7456,
+      "name": "lghub_system_tray",
+      "cpuSecondsDelta": 0.65625,
+      "workingSetAfter": 15040512
+    },
+    {
+      "id": 15752,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.65625,
+      "workingSetAfter": 51408896
+    },
+    {
+      "id": 62116,
+      "name": "QQLiveLCService",
+      "cpuSecondsDelta": 0.59375,
+      "workingSetAfter": 15859712
+    },
+    {
+      "id": 90192,
+      "name": "ServiceHub.Host.dotnet.x64",
+      "cpuSecondsDelta": 0.578125,
+      "workingSetAfter": 261488640
+    },
+    {
+      "id": 19048,
+      "name": "nvsphelper64",
+      "cpuSecondsDelta": 0.5625,
+      "workingSetAfter": 2449408
+    },
+    {
+      "id": 13324,
+      "name": "GameViewer",
+      "cpuSecondsDelta": 0.546875,
+      "workingSetAfter": 82866176
+    },
+    {
+      "id": 143308,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.5,
+      "workingSetAfter": 82804736
+    },
+    {
+      "id": 16676,
+      "name": "taskhostw",
+      "cpuSecondsDelta": 0.5,
+      "workingSetAfter": 28717056
+    },
+    {
+      "id": 48436,
+      "name": "tunnel-client",
+      "cpuSecondsDelta": 0.453125,
+      "workingSetAfter": 23040000
+    },
+    {
+      "id": 10548,
+      "name": "CastSrv",
+      "cpuSecondsDelta": 0.421875,
+      "workingSetAfter": 8916992
+    },
+    {
+      "id": 25396,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.390625,
+      "workingSetAfter": 24928256
+    },
+    {
+      "id": 19068,
+      "name": "NVIDIA Overlay",
+      "cpuSecondsDelta": 0.375,
+      "workingSetAfter": 68837376
+    },
+    {
+      "id": 3228,
+      "name": "ServiceHub.Host.dotnet.x64",
+      "cpuSecondsDelta": 0.375,
+      "workingSetAfter": 171192320
+    },
+    {
+      "id": 58616,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.359375,
+      "workingSetAfter": 54910976
+    },
+    {
+      "id": 46332,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.34375,
+      "workingSetAfter": 24096768
+    },
+    {
+      "id": 141608,
+      "name": "ServiceHub.Host.dotnet.x64",
+      "cpuSecondsDelta": 0.34375,
+      "workingSetAfter": 357236736
+    },
+    {
+      "id": 52248,
+      "name": "Weixin",
+      "cpuSecondsDelta": 0.328125,
+      "workingSetAfter": 7012352
+    },
+    {
+      "id": 107856,
+      "name": "codex-code-mode-host",
+      "cpuSecondsDelta": 0.3125,
+      "workingSetAfter": 33996800
+    },
+    {
+      "id": 118224,
+      "name": "codex-computer-use-swift",
+      "cpuSecondsDelta": 0.265625,
+      "workingSetAfter": 33902592
+    },
+    {
+      "id": 27048,
+      "name": "Unity.Licensing.Client",
+      "cpuSecondsDelta": 0.234375,
+      "workingSetAfter": 51687424
+    },
+    {
+      "id": 63760,
+      "name": "notepad++",
+      "cpuSecondsDelta": 0.21875,
+      "workingSetAfter": 21983232
+    },
+    {
+      "id": 91236,
+      "name": "TextInputHost",
+      "cpuSecondsDelta": 0.21875,
+      "workingSetAfter": 82358272
+    },
+    {
+      "id": 105724,
+      "name": "WindowsTerminal",
+      "cpuSecondsDelta": 0.21875,
+      "workingSetAfter": 81383424
+    },
+    {
+      "id": 72280,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.203125,
+      "workingSetAfter": 276054016
+    },
+    {
+      "id": 26404,
+      "name": "codex",
+      "cpuSecondsDelta": 0.171875,
+      "workingSetAfter": 20799488
+    },
+    {
+      "id": 44524,
+      "name": "ServiceHub.IdentityHost",
+      "cpuSecondsDelta": 0.171875,
+      "workingSetAfter": 94728192
+    },
+    {
+      "id": 19092,
+      "name": "TabTip",
+      "cpuSecondsDelta": 0.171875,
+      "workingSetAfter": 9236480
+    },
+    {
+      "id": 17560,
+      "name": "HipsTray",
+      "cpuSecondsDelta": 0.15625,
+      "workingSetAfter": 1404928
+    },
+    {
+      "id": 69884,
+      "name": "wps",
+      "cpuSecondsDelta": 0.15625,
+      "workingSetAfter": 59834368
+    },
+    {
+      "id": 117336,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.140625,
+      "workingSetAfter": 121802752
+    },
+    {
+      "id": 102796,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.140625,
+      "workingSetAfter": 102187008
+    },
+    {
+      "id": 5096,
+      "name": "GitHubDesktop",
+      "cpuSecondsDelta": 0.125,
+      "workingSetAfter": 57552896
+    },
+    {
+      "id": 20556,
+      "name": "NVIDIA Overlay",
+      "cpuSecondsDelta": 0.125,
+      "workingSetAfter": 37781504
+    },
+    {
+      "id": 17000,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.125,
+      "workingSetAfter": 24055808
+    },
+    {
+      "id": 31940,
+      "name": "adb",
+      "cpuSecondsDelta": 0.109375,
+      "workingSetAfter": 10170368
+    },
+    {
+      "id": 24224,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.09375,
+      "workingSetAfter": 60682240
+    },
+    {
+      "id": 140208,
+      "name": "copilot-language-server",
+      "cpuSecondsDelta": 0.09375,
+      "workingSetAfter": 58417152
+    },
+    {
+      "id": 39928,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.09375,
+      "workingSetAfter": 158822400
+    },
+    {
+      "id": 40220,
+      "name": "ServiceHub.RoslynCodeAnalysisService",
+      "cpuSecondsDelta": 0.09375,
+      "workingSetAfter": 254627840
+    },
+    {
+      "id": 23300,
+      "name": "unsecapp",
+      "cpuSecondsDelta": 0.09375,
+      "workingSetAfter": 6488064
+    },
+    {
+      "id": 3248,
+      "name": "GitHubDesktop",
+      "cpuSecondsDelta": 0.078125,
+      "workingSetAfter": 15560704
+    },
+    {
+      "id": 25080,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.078125,
+      "workingSetAfter": 8998912
+    },
+    {
+      "id": 108816,
+      "name": "ServiceHub.VSDetouredHost",
+      "cpuSecondsDelta": 0.078125,
+      "workingSetAfter": 102055936
+    },
+    {
+      "id": 18168,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.078125,
+      "workingSetAfter": 17350656
+    },
+    {
+      "id": 52764,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.078125,
+      "workingSetAfter": 28766208
+    },
+    {
+      "id": 44676,
+      "name": "bun",
+      "cpuSecondsDelta": 0.0625,
+      "workingSetAfter": 25288704
+    },
+    {
+      "id": 11100,
+      "name": "copilot-language-server",
+      "cpuSecondsDelta": 0.0625,
+      "workingSetAfter": 56471552
+    },
+    {
+      "id": 109048,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0625,
+      "workingSetAfter": 13512704
+    },
+    {
+      "id": 41072,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 22020096
+    },
+    {
+      "id": 47080,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 8904704
+    },
+    {
+      "id": 85800,
+      "name": "crashpad_handler",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 13975552
+    },
+    {
+      "id": 21248,
+      "name": "NVIDIA Overlay",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 17698816
+    },
+    {
+      "id": 73504,
+      "name": "OpenConsole",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 7639040
+    },
+    {
+      "id": 4488,
+      "name": "promecefpluginhost",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 47652864
+    },
+    {
+      "id": 124168,
+      "name": "ServiceHub.IntellicodeModelService",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 39510016
+    },
+    {
+      "id": 110392,
+      "name": "ServiceHub.RoslynCodeAnalysisService",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 238895104
+    },
+    {
+      "id": 140584,
+      "name": "ServiceHub.RoslynCodeAnalysisService",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 782131200
+    },
+    {
+      "id": 52196,
+      "name": "ServiceHub.VSDetouredHost",
+      "cpuSecondsDelta": 0.046875,
+      "workingSetAfter": 44081152
+    },
+    {
+      "id": 63796,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 308748288
+    },
+    {
+      "id": 138632,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 84819968
+    },
+    {
+      "id": 65256,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 5189632
+    },
+    {
+      "id": 35948,
+      "name": "crashpad_handler",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 8413184
+    },
+    {
+      "id": 2844,
+      "name": "GitHubDesktop",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 28078080
+    },
+    {
+      "id": 26804,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 16183296
+    },
+    {
+      "id": 15500,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 38748160
+    },
+    {
+      "id": 88648,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 34635776
+    },
+    {
+      "id": 139244,
+      "name": "PhoneExperienceHost",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 133849088
+    },
+    {
+      "id": 90180,
+      "name": "powershell",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 39333888
+    },
+    {
+      "id": 19116,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 80240640
+    },
+    {
+      "id": 87928,
+      "name": "ServiceHub.VSDetouredHost",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 102998016
+    },
+    {
+      "id": 47688,
+      "name": "ShellExperienceHost",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 71667712
+    },
+    {
+      "id": 17184,
+      "name": "Unity Hub",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 14442496
+    },
+    {
+      "id": 45092,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.03125,
+      "workingSetAfter": 61104128
+    },
+    {
+      "id": 69836,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 59273216
+    },
+    {
+      "id": 100008,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 47218688
+    },
+    {
+      "id": 24432,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 2891776
+    },
+    {
+      "id": 42540,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 36339712
+    },
+    {
+      "id": 52840,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 13438976
+    },
+    {
+      "id": 57312,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 6983680
+    },
+    {
+      "id": 68844,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 196087808
+    },
+    {
+      "id": 125740,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 6807552
+    },
+    {
+      "id": 39020,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 2600960
+    },
+    {
+      "id": 121708,
+      "name": "copilot-language-server",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 63127552
+    },
+    {
+      "id": 101816,
+      "name": "dllhost",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 11722752
+    },
+    {
+      "id": 122900,
+      "name": "douyin_guard",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 9064448
+    },
+    {
+      "id": 33960,
+      "name": "GitHubDesktop",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 73932800
+    },
+    {
+      "id": 40672,
+      "name": "Microsoft.ServiceHub.Controller",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 70266880
+    },
+    {
+      "id": 99544,
+      "name": "Microsoft.ServiceHub.Controller",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 53460992
+    },
+    {
+      "id": 67372,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 21676032
+    },
+    {
+      "id": 69644,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 22110208
+    },
+    {
+      "id": 83540,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 42467328
+    },
+    {
+      "id": 104708,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 26497024
+    },
+    {
+      "id": 127060,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 19734528
+    },
+    {
+      "id": 8732,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 17932288
+    },
+    {
+      "id": 91156,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 68030464
+    },
+    {
+      "id": 143988,
+      "name": "ServiceHub.IdentityHost",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 53231616
+    },
+    {
+      "id": 39440,
+      "name": "ServiceHub.IndexingService",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 72204288
+    },
+    {
+      "id": 39116,
+      "name": "ServiceHub.IntellicodeModelService",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 105156608
+    },
+    {
+      "id": 65988,
+      "name": "ServiceHub.IntellicodeModelService",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 36618240
+    },
+    {
+      "id": 82752,
+      "name": "ServiceHub.TestWindowStoreHost",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 21786624
+    },
+    {
+      "id": 106800,
+      "name": "StartMenuExperienceHost",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 69992448
+    },
+    {
+      "id": 18636,
+      "name": "Unity Hub",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 69451776
+    },
+    {
+      "id": 40432,
+      "name": "Unity.ILPP.Runner",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 246157312
+    },
+    {
+      "id": 48380,
+      "name": "webwallpaper64",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 83779584
+    },
+    {
+      "id": 56164,
+      "name": "webwallpaper64",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 14262272
+    },
+    {
+      "id": 125600,
+      "name": "webwallpaper64",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 87359488
+    },
+    {
+      "id": 39968,
+      "name": "Weixin",
+      "cpuSecondsDelta": 0.015625,
+      "workingSetAfter": 5758976
+    },
+    {
+      "id": 123392,
+      "name": "ApplicationFrameHost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 20836352
+    },
+    {
+      "id": 45920,
+      "name": "backgroundTaskHost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5193728
+    },
+    {
+      "id": 74740,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 9285632
+    },
+    {
+      "id": 82224,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 25444352
+    },
+    {
+      "id": 91672,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 6770688
+    },
+    {
+      "id": 100012,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 51200000
+    },
+    {
+      "id": 114900,
+      "name": "ChatGPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 20094976
+    },
+    {
+      "id": 53712,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 23195648
+    },
+    {
+      "id": 59472,
+      "name": "chrome",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 24756224
+    },
+    {
+      "id": 20088,
+      "name": "ChsIME",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1077248
+    },
+    {
+      "id": 4060,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4243456
+    },
+    {
+      "id": 28840,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 31656,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4104192
+    },
+    {
+      "id": 37196,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 39000,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 53248
+    },
+    {
+      "id": 96616,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 102064,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 107752,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 135900,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4206592
+    },
+    {
+      "id": 142108,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4104192
+    },
+    {
+      "id": 142172,
+      "name": "cmd",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4153344
+    },
+    {
+      "id": 47424,
+      "name": "Codex Web GPT",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 93786112
+    },
+    {
+      "id": 15080,
+      "name": "CompPkgSrv",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3682304
+    },
+    {
+      "id": 4252,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7413760
+    },
+    {
+      "id": 16072,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5857280
+    },
+    {
+      "id": 27368,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7458816
+    },
+    {
+      "id": 29940,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 233472
+    },
+    {
+      "id": 39244,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5754880
+    },
+    {
+      "id": 40268,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5746688
+    },
+    {
+      "id": 40956,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5849088
+    },
+    {
+      "id": 52304,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 233472
+    },
+    {
+      "id": 63492,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5828608
+    },
+    {
+      "id": 72112,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7376896
+    },
+    {
+      "id": 73924,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5742592
+    },
+    {
+      "id": 76396,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5656576
+    },
+    {
+      "id": 76756,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5754880
+    },
+    {
+      "id": 82672,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5775360
+    },
+    {
+      "id": 84868,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5578752
+    },
+    {
+      "id": 87444,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5754880
+    },
+    {
+      "id": 91356,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5689344
+    },
+    {
+      "id": 93248,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5836800
+    },
+    {
+      "id": 100864,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5656576
+    },
+    {
+      "id": 103360,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5857280
+    },
+    {
+      "id": 105520,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5689344
+    },
+    {
+      "id": 105608,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5832704
+    },
+    {
+      "id": 112216,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5754880
+    },
+    {
+      "id": 112556,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5750784
+    },
+    {
+      "id": 114868,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5832704
+    },
+    {
+      "id": 118772,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5685248
+    },
+    {
+      "id": 118980,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5615616
+    },
+    {
+      "id": 121996,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5746688
+    },
+    {
+      "id": 125652,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5660672
+    },
+    {
+      "id": 134460,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5832704
+    },
+    {
+      "id": 135316,
+      "name": "conhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5750784
+    },
+    {
+      "id": 29548,
+      "name": "crashpad_handler",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1138688
+    },
+    {
+      "id": 54084,
+      "name": "crashpad_handler",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1929216
+    },
+    {
+      "id": 20164,
+      "name": "dllhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 6205440
+    },
+    {
+      "id": 120176,
+      "name": "dllhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4378624
+    },
+    {
+      "id": 136076,
+      "name": "dllhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 17092608
+    },
+    {
+      "id": 45688,
+      "name": "Everything",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1478656
+    },
+    {
+      "id": 136628,
+      "name": "GameInputRedistService",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 2846720
+    },
+    {
+      "id": 25216,
+      "name": "jusched",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8163328
+    },
+    {
+      "id": 25592,
+      "name": "jusched",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7958528
+    },
+    {
+      "id": 39556,
+      "name": "LockApp",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 63823872
+    },
+    {
+      "id": 23272,
+      "name": "logi_crashpad_handler",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 970752
+    },
+    {
+      "id": 85380,
+      "name": "Microsoft.ServiceHub.Controller",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 70504448
+    },
+    {
+      "id": 9124,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7053312
+    },
+    {
+      "id": 24208,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 2867200
+    },
+    {
+      "id": 29456,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 10403840
+    },
+    {
+      "id": 51404,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 9625600
+    },
+    {
+      "id": 65564,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 16928768
+    },
+    {
+      "id": 89944,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 27148288
+    },
+    {
+      "id": 117052,
+      "name": "msedge",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 26370048
+    },
+    {
+      "id": 8484,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3301376
+    },
+    {
+      "id": 13912,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 6983680
+    },
+    {
+      "id": 17704,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 19054592
+    },
+    {
+      "id": 18160,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1048576
+    },
+    {
+      "id": 132784,
+      "name": "msedgewebview2",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 9539584
+    },
+    {
+      "id": 14724,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28930048
+    },
+    {
+      "id": 32216,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28499968
+    },
+    {
+      "id": 35264,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 266240
+    },
+    {
+      "id": 45132,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28856320
+    },
+    {
+      "id": 74492,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28823552
+    },
+    {
+      "id": 75440,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28495872
+    },
+    {
+      "id": 82996,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 39596032
+    },
+    {
+      "id": 87224,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 32579584
+    },
+    {
+      "id": 96292,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28753920
+    },
+    {
+      "id": 100696,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28860416
+    },
+    {
+      "id": 101108,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28884992
+    },
+    {
+      "id": 105744,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28815360
+    },
+    {
+      "id": 137208,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28569600
+    },
+    {
+      "id": 137228,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 34213888
+    },
+    {
+      "id": 140136,
+      "name": "node",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 35680256
+    },
+    {
+      "id": 19424,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7589888
+    },
+    {
+      "id": 49876,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8462336
+    },
+    {
+      "id": 66576,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8265728
+    },
+    {
+      "id": 76076,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8269824
+    },
+    {
+      "id": 77628,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8470528
+    },
+    {
+      "id": 95500,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8294400
+    },
+    {
+      "id": 129424,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8253440
+    },
+    {
+      "id": 142440,
+      "name": "node_repl",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 7593984
+    },
+    {
+      "id": 21228,
+      "name": "NVIDIA Overlay",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 17960960
+    },
+    {
+      "id": 21284,
+      "name": "NVIDIA Overlay",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4284416
+    },
+    {
+      "id": 86948,
+      "name": "prevhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 12636160
+    },
+    {
+      "id": 128472,
+      "name": "prevhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 14729216
+    },
+    {
+      "id": 34204,
+      "name": "promecefpluginhost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 38633472
+    },
+    {
+      "id": 21264,
+      "name": "python",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 13635584
+    },
+    {
+      "id": 44720,
+      "name": "python",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 13713408
+    },
+    {
+      "id": 92064,
+      "name": "python",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3145728
+    },
+    {
+      "id": 133340,
+      "name": "python",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3149824
+    },
+    {
+      "id": 7076,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 60989440
+    },
+    {
+      "id": 50840,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 61046784
+    },
+    {
+      "id": 64404,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 81203200
+    },
+    {
+      "id": 110404,
+      "name": "QQ",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 18870272
+    },
+    {
+      "id": 21008,
+      "name": "RAVCpl64",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3383296
+    },
+    {
+      "id": 114012,
+      "name": "rundll32",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4837376
+    },
+    {
+      "id": 18108,
+      "name": "RuntimeBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 21569536
+    },
+    {
+      "id": 18640,
+      "name": "RuntimeBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 40640512
+    },
+    {
+      "id": 19224,
+      "name": "RuntimeBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 28450816
+    },
+    {
+      "id": 75948,
+      "name": "RuntimeBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 33497088
+    },
+    {
+      "id": 77348,
+      "name": "RuntimeBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 24211456
+    },
+    {
+      "id": 117324,
+      "name": "SearchApp",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 131010560
+    },
+    {
+      "id": 10552,
+      "name": "SecurityHealthSystray",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3272704
+    },
+    {
+      "id": 61824,
+      "name": "ServiceHub.IdentityHost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 91303936
+    },
+    {
+      "id": 27948,
+      "name": "ServiceHub.IndexingService",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 87986176
+    },
+    {
+      "id": 119588,
+      "name": "ServiceHub.IndexingService",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 69214208
+    },
+    {
+      "id": 9032,
+      "name": "ServiceHub.TestWindowStoreHost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 66666496
+    },
+    {
+      "id": 111152,
+      "name": "ServiceHub.TestWindowStoreHost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 67125248
+    },
+    {
+      "id": 14944,
+      "name": "ServiceHub.ThreadedWaitDialog",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 115097600
+    },
+    {
+      "id": 31080,
+      "name": "ServiceHub.ThreadedWaitDialog",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 52936704
+    },
+    {
+      "id": 79480,
+      "name": "ServiceHub.ThreadedWaitDialog",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 114225152
+    },
+    {
+      "id": 16976,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 29757440
+    },
+    {
+      "id": 17404,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 12865536
+    },
+    {
+      "id": 29404,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1605632
+    },
+    {
+      "id": 43744,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1785856
+    },
+    {
+      "id": 65572,
+      "name": "svchost",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 2924544
+    },
+    {
+      "id": 37272,
+      "name": "taskhostw",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5414912
+    },
+    {
+      "id": 30776,
+      "name": "Unity Hub",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1224704
+    },
+    {
+      "id": 115540,
+      "name": "UnityAutoQuitter",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4411392
+    },
+    {
+      "id": 143840,
+      "name": "UnityCrashHandler64",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 5853184
+    },
+    {
+      "id": 29544,
+      "name": "UnityShaderCompiler",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 8306688
+    },
+    {
+      "id": 133792,
+      "name": "unreal-agent-mcp",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 3223552
+    },
+    {
+      "id": 34872,
+      "name": "UserOOBEBroker",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4980736
+    },
+    {
+      "id": 83696,
+      "name": "webwallpaper64",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 29044736
+    },
+    {
+      "id": 11704,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 14716928
+    },
+    {
+      "id": 40144,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 68665344
+    },
+    {
+      "id": 54180,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 49582080
+    },
+    {
+      "id": 55200,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 47173632
+    },
+    {
+      "id": 88636,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 29114368
+    },
+    {
+      "id": 106420,
+      "name": "WeChatAppEx",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 60891136
+    },
+    {
+      "id": 47268,
+      "name": "Weixin",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 4444160
+    },
+    {
+      "id": 50288,
+      "name": "Weixin",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 1871872
+    },
+    {
+      "id": 53048,
+      "name": "Weixin",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 6225920
+    },
+    {
+      "id": 77000,
+      "name": "WindowsPackageManagerServer",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 19423232
+    },
+    {
+      "id": 81716,
+      "name": "YunDetectService",
+      "cpuSecondsDelta": 0.0,
+      "workingSetAfter": 6856704
+    }
+  ],
+  "limits": "Cumulative process CPU across initialization and all windows, not tick-thread execution or scheduling. No inference of preemption/thermal throttling/GC pauses."
+}

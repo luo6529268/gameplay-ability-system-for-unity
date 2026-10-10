@@ -65,6 +65,102 @@ namespace NTSD.Animation
             public long candidateRecordTimed;
         }
 
+        // Alignment contract: NTSD-H06-ROLE-RECORD-COST-DIAG-001.
+        private bool enableRoleRecordCostDiagnostics;
+        public bool EnableRoleRecordCostDiagnostics
+        {
+            get => enableRoleRecordCostDiagnostics;
+            set
+            {
+                enableRoleRecordCostDiagnostics = value;
+                if (!value)
+                {
+                    roleRecordCosts = default;
+                    roleRecordDiagnostics = null;
+                    roleRecordDirectionSelected = false;
+                    roleRecordActive = false;
+                    roleRecordSegment = BattleTickDetailPhase.Count;
+                }
+            }
+        }
+        [Serializable]
+        public struct RoleRecordCostCounters
+        {
+            public long eligibleDirections;
+            public long timedDirections;
+            public long records;
+            public long timedRecords;
+            public long snapshotCaptures;
+            public long repeatDirectionRecords;
+            public long repeatItrRecords;
+            public long groupRejects;
+            public long kind4Increments;
+            public long initialRejects;
+            public long nearestVisits;
+            public long nearestPrev2Reads;
+            public long nearestNotSelected;
+            public long nearestReplacements;
+            public long nearestTieDraws;
+            public long ordinaryVisits;
+            public long ordinaryPrev2Reads;
+            public long capacityRejects;
+            public long groundRejects;
+            public long selectRejects;
+            public long kind1TieDraws;
+            public long appends;
+            public long replaces;
+            public long storeInvalids;
+            public long legacyTouches;
+            public long fallbackRecords;
+            public long completedRecords;
+            public long recordParentTicks;
+            public long segmentCount;
+        }
+        private RoleRecordCostCounters roleRecordCosts;
+        public RoleRecordCostCounters LastRoleRecordCostCounters => roleRecordCosts;
+        private BattleTickDetailPhaseDiagnostics roleRecordDiagnostics;
+        private bool roleRecordDirectionSelected;
+        private bool roleRecordActive;
+        private long roleRecordParentStart;
+        private long roleRecordSegmentStart;
+        private BattleTickDetailPhase roleRecordSegment = BattleTickDetailPhase.Count;
+
+        private void BeginRoleRecordSegment(BattleTickDetailPhase phase)
+        {
+            if (!roleRecordActive) return;
+            long now = System.Diagnostics.Stopwatch.GetTimestamp();
+            if (roleRecordSegment != BattleTickDetailPhase.Count)
+                roleRecordDiagnostics.RecordPhaseElapsed(roleRecordSegment, now - roleRecordSegmentStart);
+            roleRecordSegment = phase;
+            roleRecordSegmentStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            roleRecordCosts.segmentCount++;
+        }
+
+        private void BeginRoleRecord(bool captured, bool repeatedBody)
+        {
+            if (!EnableRoleRecordCostDiagnostics || roleRecordDiagnostics == null) return;
+            roleRecordCosts.records++;
+            if (!roleRecordDirectionSelected) return;
+            roleRecordCosts.timedRecords++;
+            if (captured) roleRecordCosts.repeatDirectionRecords++;
+            if (repeatedBody) roleRecordCosts.repeatItrRecords++;
+            roleRecordActive = true;
+            roleRecordParentStart = System.Diagnostics.Stopwatch.GetTimestamp();
+            roleRecordSegment = BattleTickDetailPhase.Count;
+        }
+
+        private void EndRoleRecord()
+        {
+            if (!roleRecordActive) return;
+            long now = System.Diagnostics.Stopwatch.GetTimestamp();
+            if (roleRecordSegment != BattleTickDetailPhase.Count)
+                roleRecordDiagnostics.RecordPhaseElapsed(roleRecordSegment, now - roleRecordSegmentStart);
+            roleRecordCosts.recordParentTicks += System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordParentStart;
+            roleRecordCosts.completedRecords++;
+            roleRecordActive = false;
+            roleRecordSegment = BattleTickDetailPhase.Count;
+        }
+
         private RoleBranchTimingCoverage _lastRoleBranchTimingCoverage;
         private RoleBranchTimingCoverage _totalRoleBranchTimingCoverage;
         private int _roleBranchTimingSampleStride = 64;
@@ -1704,7 +1800,12 @@ namespace NTSD.Animation
                 Array.Clear(_roleSnapshotEndpointStates, 0, _roleSnapshotEndpointStates.Length);
             _lastBruteBranchTimingCoverage = default;
             _lastRoleBranchTimingCoverage = default;
-            if (EnableRoleBranchTimingForDiagnostics &&
+            roleRecordCosts = default;
+            roleRecordDiagnostics = null;
+            roleRecordActive = false;
+            roleRecordDirectionSelected = false;
+            roleRecordSegment = BattleTickDetailPhase.Count;
+            if ((EnableRoleBranchTimingForDiagnostics || EnableRoleRecordCostDiagnostics) &&
                 _world?.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics?.Enabled == true &&
                 ResolveFormalCollectorMode() == CollisionFormalCollectorMode.ForceRoleAware)
             {
@@ -6272,14 +6373,24 @@ namespace NTSD.Animation
             if (diagnostics == null || !diagnostics.Enabled)
                 return null;
 
-            _lastRoleBranchTimingCoverage.eligibleDirections++;
-            _totalRoleBranchTimingCoverage.eligibleDirections++;
-            timing = ((_lastRoleBranchTimingCoverage.eligibleDirections - 1 +
-                _roleBranchTimingSampleOffset) & (_roleBranchTimingSampleStride - 1)) == 0;
-            if (timing)
+            long ordinal;
+            if (EnableRoleBranchTimingForDiagnostics)
+            {
+                _lastRoleBranchTimingCoverage.eligibleDirections++;
+                _totalRoleBranchTimingCoverage.eligibleDirections++;
+                ordinal = _lastRoleBranchTimingCoverage.eligibleDirections;
+            }
+            else ordinal = roleRecordCosts.eligibleDirections + 1;
+            timing = ((ordinal - 1 + _roleBranchTimingSampleOffset) & (_roleBranchTimingSampleStride - 1)) == 0;
+            if (EnableRoleBranchTimingForDiagnostics && timing)
             {
                 _lastRoleBranchTimingCoverage.timedDirections++;
                 _totalRoleBranchTimingCoverage.timedDirections++;
+            }
+            if (EnableRoleRecordCostDiagnostics)
+            {
+                roleRecordCosts.eligibleDirections++;
+                if (timing) roleRecordCosts.timedDirections++;
             }
             return diagnostics;
         }
@@ -6362,8 +6473,14 @@ namespace NTSD.Animation
             if (attacker == null || target == null || attacker == target)
                 return;
             bool roleBranchTiming = false;
-            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics = roleDirection && EnableRoleBranchTimingForDiagnostics
+            BattleTickDetailPhaseDiagnostics selectedRoleDiagnostics = roleDirection &&
+                (EnableRoleBranchTimingForDiagnostics || EnableRoleRecordCostDiagnostics)
                 ? SelectRoleBranchTiming(out roleBranchTiming) : null;
+            roleRecordDiagnostics = roleDirection && EnableRoleRecordCostDiagnostics ? selectedRoleDiagnostics : null;
+            roleRecordDirectionSelected = roleRecordDiagnostics != null && roleBranchTiming;
+            BattleTickDetailPhaseDiagnostics roleBranchDiagnostics = EnableRoleBranchTimingForDiagnostics
+                ? selectedRoleDiagnostics : null;
+            roleBranchTiming &= roleBranchDiagnostics != null;
             // Reuse the envelope entry's sample for survivors; never count or select the direction twice.
             bool timing = envelopeBranchTiming;
             BattleTickDetailPhaseDiagnostics branchDiagnostics = envelopeBranchDiagnostics ??
@@ -6601,6 +6718,7 @@ namespace NTSD.Animation
 
             int bodyRectEnd = targetParticipant.ExactBodyRectOffset +
                               targetParticipant.ExactBodyRectCount;
+            bool recordedBody = false;
             for (int bodyRectIndex = targetParticipant.ExactBodyRectOffset;
                  bodyRectIndex < bodyRectEnd;
                  bodyRectIndex++)
@@ -6636,95 +6754,106 @@ namespace NTSD.Animation
                     continue;
                 }
 
-                long roleRecordStart = roleBranchDiagnostics != null
-                    ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord, roleBranchTiming) : 0;
-#if UNITY_INCLUDE_TESTS
-                if (ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics)
+                BeginRoleRecord(pairSnapshotCaptured, recordedBody);
+                recordedBody = true;
+                try
                 {
-                    _lastRoleAwareCachedPairSnapshotCaptureCount++;
-                    TryRecordReleaseCandidate(
-                        attacker, target, itr, targetCurrentFrame, bodyX,
-                        itrEntry.ItrIndex, attackerParticipant.Handle);
+                    long roleRecordStart = roleBranchDiagnostics != null
+                        ? BeginRoleBranchPhase(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord, roleBranchTiming) : 0;
+#if UNITY_INCLUDE_TESTS
+                    if (ForceLegacyRoleAwarePairSnapshotCaptureForDiagnostics)
+                    {
+                        if (roleRecordActive) roleRecordCosts.fallbackRecords++;
+                        BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordSnapshot);
+                        if (roleRecordActive) roleRecordCosts.snapshotCaptures++;
+                        _lastRoleAwareCachedPairSnapshotCaptureCount++;
+                        TryRecordReleaseCandidate(
+                            attacker, target, itr, targetCurrentFrame, bodyX,
+                            itrEntry.ItrIndex, attackerParticipant.Handle);
+                        if (roleBranchTiming)
+                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                        continue;
+                    }
+#endif
+                    // Alignment contract: NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.
+                    // Ordinary multiple-candidate records are read-only once the producer is full.
+                    if (roleDirection && EnableRoleCapacityRecordGuardForDiagnostics &&
+                        itr.kind == 0 && itr.vrest != 0 &&
+                        GetCollisionCandidateProducerCount(attacker, attackerParticipant.Handle) >= HitCandidateMax)
+                    {
+                        LastRoleCapacityRecordGuardSkipCountForDiagnostics++;
+                        if (roleBranchTiming)
+                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                        continue;
+                    }
+                    // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
+                    bool rejectGroupBeforeCapture = roleDirection &&
+                        EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !pairSnapshotCaptured;
+#if UNITY_INCLUDE_TESTS
+                    rejectGroupBeforeCapture &= AfterRoleAwareExactPairForSelfCheck == null;
+#endif
+                    if (rejectGroupBeforeCapture &&
+                        RejectRoleGroupBeforePairSnapshot(in attackerParticipant, in targetParticipant, itr,
+                            ref groupWitness, ref groupWitnessCaptured))
+                    {
+                        LastRoleRejectedGroupSnapshotSkipCountForDiagnostics++;
+                        if (roleBranchTiming)
+                            roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
+                                System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                        // Group rejection is body-independent and precedes every record side effect.
+                        return;
+                    }
+                    // Alignment contract: NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.
+                    // Record writes candidates/counts/RNG, not this direction's snapshot inputs.
+                    if (!pairSnapshotCaptured)
+                    {
+                        BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordSnapshot);
+                        if (roleRecordActive) roleRecordCosts.snapshotCaptures++;
+                        bool reuseFrames = roleDirection && EnableRoleSnapshotFrameReuseForDiagnostics;
+#if UNITY_INCLUDE_TESTS
+                        reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
+#endif
+                        if (roleDirection && EnableRoleEndpointSnapshotReuseForDiagnostics &&
+                            TryCaptureRoleEndpointPairSnapshot(in attackerParticipant,
+                                in targetParticipant, out pairSnapshot))
+                        {
+                            LastRoleEndpointSnapshotComposeCountForDiagnostics++;
+                        }
+                        else if (reuseFrames)
+                        {
+                            // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
+                            pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
+                                attacker, target, _world, attackerParticipant.CurrentFrame,
+                                targetParticipant.CurrentFrame, attackerParticipant.CollisionFrame,
+                                targetParticipant.CollisionFrame);
+                            LastRoleSnapshotFrameReuseCountForDiagnostics++;
+                        }
+                        else
+                        {
+                            pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
+                                attacker, target, _world);
+                        }
+                        pairSnapshotCaptured = true;
+#if UNITY_INCLUDE_TESTS
+                        _lastRoleAwareCachedPairSnapshotCaptureCount++;
+#endif
+                    }
+                    TryRecordReleaseCandidateFromSnapshot(
+                        attacker,
+                        target,
+                        itr,
+                        targetCurrentFrame,
+                        bodyX,
+                        itrEntry.ItrIndex,
+                        in pairSnapshot,
+                        attackerParticipant.Handle);
                     if (roleBranchTiming)
                         roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
                             System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
-                    continue;
                 }
-#endif
-                // Alignment contract: NTSD-OPT-H07-ROLE-CAPACITY-RECORD-GUARD-084.
-                // Ordinary multiple-candidate records are read-only once the producer is full.
-                if (roleDirection && EnableRoleCapacityRecordGuardForDiagnostics &&
-                    itr.kind == 0 && itr.vrest != 0 &&
-                    GetCollisionCandidateProducerCount(attacker, attackerParticipant.Handle) >= HitCandidateMax)
-                {
-                    LastRoleCapacityRecordGuardSkipCountForDiagnostics++;
-                    if (roleBranchTiming)
-                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
-                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
-                    continue;
-                }
-                // Alignment contract: NTSD-OPT-H07-ROLE-GROUP-SNAPSHOT-SKIP-092.
-                bool rejectGroupBeforeCapture = roleDirection &&
-                    EnableRoleRejectedGroupSnapshotSkipForDiagnostics && !pairSnapshotCaptured;
-#if UNITY_INCLUDE_TESTS
-                rejectGroupBeforeCapture &= AfterRoleAwareExactPairForSelfCheck == null;
-#endif
-                if (rejectGroupBeforeCapture &&
-                    RejectRoleGroupBeforePairSnapshot(in attackerParticipant, in targetParticipant, itr,
-                        ref groupWitness, ref groupWitnessCaptured))
-                {
-                    LastRoleRejectedGroupSnapshotSkipCountForDiagnostics++;
-                    if (roleBranchTiming)
-                        roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
-                            System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
-                    // Group rejection is body-independent and precedes every record side effect.
-                    return;
-                }
-                // Alignment contract: NTSD-OPT-H07-PAIR-SNAPSHOT-REUSE-031.
-                // Record writes candidates/counts/RNG, not this direction's snapshot inputs.
-                if (!pairSnapshotCaptured)
-                {
-                    bool reuseFrames = roleDirection && EnableRoleSnapshotFrameReuseForDiagnostics;
-#if UNITY_INCLUDE_TESTS
-                    reuseFrames &= AfterRoleAwareExactPairForSelfCheck == null;
-#endif
-                    if (roleDirection && EnableRoleEndpointSnapshotReuseForDiagnostics &&
-                        TryCaptureRoleEndpointPairSnapshot(in attackerParticipant,
-                            in targetParticipant, out pairSnapshot))
-                    {
-                        LastRoleEndpointSnapshotComposeCountForDiagnostics++;
-                    }
-                    else if (reuseFrames)
-                    {
-                        // Alignment contract: NTSD-OPT-H07-ROLE-SNAPSHOT-FRAME-REUSE-089.
-                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.CaptureWithResolvedFrames(
-                            attacker, target, _world, attackerParticipant.CurrentFrame,
-                            targetParticipant.CurrentFrame, attackerParticipant.CollisionFrame,
-                            targetParticipant.CollisionFrame);
-                        LastRoleSnapshotFrameReuseCountForDiagnostics++;
-                    }
-                    else
-                    {
-                        pairSnapshot = BattleHitCandidatePairSnapshotFactory.Capture(
-                            attacker, target, _world);
-                    }
-                    pairSnapshotCaptured = true;
-#if UNITY_INCLUDE_TESTS
-                    _lastRoleAwareCachedPairSnapshotCaptureCount++;
-#endif
-                }
-                TryRecordReleaseCandidateFromSnapshot(
-                    attacker,
-                    target,
-                    itr,
-                    targetCurrentFrame,
-                    bodyX,
-                    itrEntry.ItrIndex,
-                    in pairSnapshot,
-                    attackerParticipant.Handle);
-                if (roleBranchTiming)
-                    roleBranchDiagnostics.RecordPhaseElapsed(BattleTickDetailPhase.CandidateCollectRoleCandidateRecord,
-                        System.Diagnostics.Stopwatch.GetTimestamp() - roleRecordStart);
+                finally { EndRoleRecord(); }
             }
         }
 
@@ -7062,6 +7191,7 @@ namespace NTSD.Animation
             in BattleHitCandidatePairSnapshot pairSnapshot,
             RuntimeEntityHandle validatedAttackerHandle)
         {
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordGroup);
             int activeModeHitGroupGate18 =
                 _world.Runtime?.NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
                 NTSD28HitResourceRulesRuntimeState.DefaultActiveModeHitGroupGate18;
@@ -7071,9 +7201,11 @@ namespace NTSD.Animation
                     in pairSnapshot,
                     activeModeHitGroupGate18).Accepted)
             {
+                if (roleRecordActive) roleRecordCosts.groupRejects++;
                 return;
             }
 
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordInitialReject);
             // Alignment contract: NTSD28-B5-KIND4-ATOMIC-PRODUCTION-INTEGRATION-001.
             // Native candidate production consumes one low-16-bit source-count
             // increment for every geometrically overlapping body before its
@@ -7082,14 +7214,19 @@ namespace NTSD.Animation
                 attacker.Runtime != null &&
                 attacker.Runtime.EnvironmentState320 > 0)
             {
+                if (roleRecordActive) roleRecordCosts.kind4Increments++;
                 attacker.Runtime.Kind4SourceCount92 =
                     (attacker.Runtime.Kind4SourceCount92 + 1) & 0xFFFF;
             }
 
             int rejectFlag = ResolveReleaseRejectFlag(attacker, itr, target, targetFrame, bodyX);
             if (rejectFlag == 2)
+            {
+                if (roleRecordActive) roleRecordCosts.initialRejects++;
                 return;
+            }
 
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordNearest);
             if (TryRecordNearestPathCandidate(
                     attacker,
                     target,
@@ -7102,19 +7239,33 @@ namespace NTSD.Animation
                     validatedAttackerHandle))
                 return;
 
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordOrdinarySelect);
+            if (roleRecordActive) roleRecordCosts.ordinaryVisits++;
             int candidateCount = GetCollisionCandidateProducerCount(
                 attacker,
                 validatedAttackerHandle);
             if (candidateCount >= HitCandidateMax)
+            {
+                if (roleRecordActive) roleRecordCosts.capacityRejects++;
                 return;
+            }
 
+            if (roleRecordActive) roleRecordCosts.ordinaryPrev2Reads++;
             rejectFlag = ApplyPrev2GroundRejectFlag(attacker, target, itr, targetFrame, rejectFlag);
             if (rejectFlag == 2)
+            {
+                if (roleRecordActive) roleRecordCosts.groundRejects++;
                 return;
+            }
 
             if (!AcceptReleaseSelectFlagCandidate(attacker, target, itr, targetFrame, rejectFlag))
+            {
+                if (roleRecordActive) roleRecordCosts.selectRejects++;
                 return;
+            }
 
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordStore);
+            if (roleRecordActive) roleRecordCosts.appends++;
             SceneQueryHit candidate = new SceneQueryHit(
                 target,
                 bodyX,
@@ -7128,6 +7279,7 @@ namespace NTSD.Animation
                 in candidate,
                 replaceSingle: false);
 
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordLegacy);
             if (LegacyCandidateListsEnabledForCurrentTick &&
                 _candidateCache.TryGetValue(
                     attacker,
@@ -7137,6 +7289,7 @@ namespace NTSD.Animation
                     legacyCandidates[candidateCount] = candidate;
                 else
                     legacyCandidates.Add(candidate);
+                if (roleRecordActive) roleRecordCosts.legacyTouches++;
                 RecordLegacyCandidateListTouchForAuthority();
             }
 
@@ -7200,6 +7353,11 @@ namespace NTSD.Animation
             if (!IsReleaseNearestCandidatePath(itr))
                 return false;
 
+            if (roleRecordActive)
+            {
+                roleRecordCosts.nearestVisits++;
+                roleRecordCosts.nearestPrev2Reads++;
+            }
             int targetPrev2State = GetAuthoredPrev2Frame(target)?.state ?? 0;
             if (targetPrev2State == LF2States.WeaponOnGround)
             {
@@ -7214,14 +7372,23 @@ namespace NTSD.Animation
             {
                 bool replace = distance < bestDistance;
                 if (!replace && distance == bestDistance)
+                {
+                    if (roleRecordActive) roleRecordCosts.nearestTieDraws++;
                     replace = (attacker.Match?.Rng?.NextInt(0, 2) ?? 0) == 0;
+                }
                 if (!replace)
+                {
+                    if (roleRecordActive) roleRecordCosts.nearestNotSelected++;
                     return true;
+                }
             }
 
             attacker.Runtime.HitCandidateNearestDistance = distance;
             // C++ release 在 nearest path 接管并替换更近目标时，
             // 会把 cand0 写成当前目标并把 candidate_count 直接重置为 1。
+            if (roleRecordActive) roleRecordCosts.nearestReplacements++;
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordStore);
+            if (roleRecordActive) roleRecordCosts.replaces++;
             var candidate = new SceneQueryHit(
                 target,
                 bodyX,
@@ -7234,6 +7401,7 @@ namespace NTSD.Animation
                 0,
                 in candidate,
                 replaceSingle: true);
+            BeginRoleRecordSegment(BattleTickDetailPhase.RoleRecordLegacy);
             if (LegacyCandidateListsEnabledForCurrentTick &&
                 _candidateCache.TryGetValue(
                     attacker,
@@ -7241,6 +7409,7 @@ namespace NTSD.Animation
             {
                 legacyCandidates.Clear();
                 legacyCandidates.Add(candidate);
+                if (roleRecordActive) roleRecordCosts.legacyTouches++;
                 RecordLegacyCandidateListTouchForAuthority();
             }
 
@@ -7342,6 +7511,7 @@ namespace NTSD.Animation
                 {
                     _candidateStoreShadow.RecordInvalid(
                         CollisionCandidateStoreMismatchReason.AttackerHandleNotCurrent);
+                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
                     _candidateStoreShadow.AbortBuild();
                     _candidateStoreProducerHealthyForCurrentTick = false;
                     return;
@@ -7353,6 +7523,7 @@ namespace NTSD.Animation
                 {
                     _candidateStoreShadow.RecordInvalid(
                         CollisionCandidateStoreMismatchReason.TargetSlotOutOfRange);
+                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
                     _candidateStoreShadow.AbortBuild();
                     _candidateStoreProducerHealthyForCurrentTick = false;
                     return;
@@ -7366,6 +7537,7 @@ namespace NTSD.Animation
                     // the authoritative slot-based candidate cache or consumption.
                     _candidateStoreShadow.RecordInvalid(
                         CollisionCandidateStoreMismatchReason.TargetHandleNotCurrent);
+                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
                     _candidateStoreShadow.AbortBuild();
                     _candidateStoreProducerHealthyForCurrentTick = false;
                     return;
@@ -7388,6 +7560,7 @@ namespace NTSD.Animation
                         in entry);
                 if (!wrote)
                 {
+                    if (roleRecordActive) roleRecordCosts.storeInvalids++;
                     _candidateStoreShadow.AbortBuild();
                     _candidateStoreProducerHealthyForCurrentTick = false;
                     return;
@@ -7410,6 +7583,7 @@ namespace NTSD.Animation
             {
                 _candidateStoreShadow.RecordInvalid(
                     CollisionCandidateStoreMismatchReason.UnexpectedShadowException);
+                if (roleRecordActive) roleRecordCosts.storeInvalids++;
                 _candidateStoreShadow.AbortBuild();
                 _candidateStoreProducerHealthyForCurrentTick = false;
             }
@@ -7702,7 +7876,10 @@ namespace NTSD.Animation
             {
                 bool replace = distance < bestDistance;
                 if (!replace && distance == bestDistance)
+                {
+                    if (roleRecordActive) roleRecordCosts.kind1TieDraws++;
                     replace = (attacker.Match?.Rng?.NextInt(0, 2) ?? 0) == 0;
+                }
                 if (!replace)
                     return false;
             }
