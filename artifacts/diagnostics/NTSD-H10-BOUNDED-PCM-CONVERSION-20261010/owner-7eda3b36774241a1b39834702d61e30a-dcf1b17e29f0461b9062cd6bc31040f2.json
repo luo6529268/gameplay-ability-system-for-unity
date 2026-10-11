@@ -1,0 +1,24 @@
+{
+  "test": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionPcmMatchesFrozenOriginalForFourWavs",
+  "released": true,
+  "explicitOwnerCleanup": true,
+  "naturalCallbackCertified": false,
+  "baselineCount": 5,
+  "allObservedDestroyed": true,
+  "resources": [
+    {
+      "instanceId": -1221338,
+      "name": "",
+      "samples": 236265,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1221336,
+      "name": "",
+      "samples": 236265,
+      "channels": 2,
+      "frequency": 44100
+    }
+  ]
+}

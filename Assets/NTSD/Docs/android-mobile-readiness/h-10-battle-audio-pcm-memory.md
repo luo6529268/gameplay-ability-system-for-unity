@@ -1,3 +1,31 @@
+> **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+
+> 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+
+> **2026-10-11 H10 正式音频源每局所有权已接入：H10_FORMAL_SESSION_OWNERSHIP_APPLIED。** Task NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 / Change NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 VERIFIED（限定生产接入）。三生产脚本+一Editor测试；实际生命周期7/7、失败清理1/1、唯一资源组1/1、唯一实际隔离Play1/1通过。固定5音频distinct native对象9→5、bytes7,626,693→6,778,456，输出PCM位不变、owned关闭归零；非RSS/整局峰值/CPU收益。旧兼容组13/14，既有mono引用断言FAIL保留，未冒称全通过。Menu恢复clean8。报告 artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/REPORT.md。H10父项producer音频闭包/整局预算仍OPEN；下一仅讨论审阅，不自动后继/Goal/34项；H08 ON/M03 OFF/H07及producer暂缓/95OFF/H06不续保持。下方为此前时点。
+
+> 2026-10-10 NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 IN_PROGRESS / NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 PLANNED. Exact four-script formal audio session ownership and existing stage1/stage5 release; cold serialization and stale local recycling. H10 full producer closure/budget remains OPEN, no other task/Goal resumed. See Task and Operation.
+
+> 2026-10-10 User resumed entire current-stage H10: NTSD-H10-RESIDENT-CLOSURE-20261010 / NTSD-H10-RESIDENT-CLOSURE-001 IN_PROGRESS. Temporary PCM reduction is already production-applied; old-path spike retained as timing limitation after independent review, not a new-path failure. Now audit remaining resident dependencies, cache/owner and load memory before accurate implementation. No next point/device/build/old queue.
+
+> **2026-10-10 H10有界PCM转换：CORRECTNESS_PASS_COST_SPIKE_REVIEW_REQUIRED / FINITE_TASK_STOPPED。** Task NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 / Change NTSD-H10-BOUNDED-PCM-CONVERSION-001 BLOCKED。两脚本生产分块已写入并接原调用、无新flag/未回滚；真实失败资格1/1、正确性及原声音规则10/10、唯一成本1/1程序断言PASS，临时float payload长源<98304B、最终clip/逐样本不变。但大尺寸首个旧算法窗有46.8822ms尖峰，按“异常尖峰明显则交回”条款停止，不重测/归因/称准入成功。新均值1.5964/1.5734ms低于另一个旧均值2.1918ms，此事实保留。19owner/191资源记录释放，Menu clean8。报告 artifacts/diagnostics/NTSD-H10-BOUNDED-PCM-CONVERSION-20261010/REPORT.md；下一仅审阅尖峰与接入状态，不自动新实验/后继；H10/H07/Android仍OPEN、H08默认ON保持。
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H10-AUDIO-MEMORY-REVIEW-001 VERIFIED (Editor diagnostic only): final2/2 plus unique cost1/1, 4 WAV exact PCM; long-clip bounded temporary arrays <98304B, final stereo resident unchanged. Production unchanged; exact two-script handoff ready, dispatch receipt authoritative. H10 parent OPEN/H08 default ON retained.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H10-AUDIO-MEMORY-REVIEW-001 IN_PROGRESS: user approved H10 independent audio memory review; one Editor-only diagnostic, production unchanged. Prior H08 default admission remains verified; no other queue/goal resumed.
+
+## 2026-10-10 当前阶段更正：H-10
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| P1／当前优先评审 | 3 | 高 |
+
+第3项：先核原clip、PCM、播放副本与暂存占用；不预设已有泄漏或收益，不改变声音语义。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # H-10 当前评审卡（2026-10-09）
 
@@ -6,9 +34,9 @@
 | 字段 | 本轮整理 |
 |---|---|
 | 类别 / 建议优先级 | 内存 / 中 |
-| 当前状态 | 方案待预算与载体决策；本轮仅文档，未实施/复测 |
+| 当前状态 | FULL_CATALOG_AUDIO_ENVELOPE_MEASURED；有界PCM/formal每局所有权已接入，完整目录两轮各218.313758MiB、formal释放/generic复用与精确恢复通过；预算UNDECIDED、producer闭包OPEN，非整项H10完成 |
 | 依赖的最小范围 | 共享H-01/H-08保守闭包接口，不依赖纹理烘焙全部完成 |
-| 下一步与具体方向 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+| 下一步与具体方向 | 审阅完整目录账本并决定音频对象预算/过渡峰值口径；明确producer根与动态目标合同，完整回退保持，不自动裁剪/改格式/lazy load |
 | 完成边界 | 样本/增益/retrigger/voice不变，实际预算与关闭通过；约210MiB仅历史payload估算 |
 | 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
 | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
@@ -82,3 +110,9 @@
 
 2026-10-06：登记待批方案，复用报告且静态重扫；没有改代码/音频或运行测试。
 每个闭合行为独立Change；保留现有播放路径作A/B和批准后的回退，回退不等于低内存达标。
+
+## 2026-10-11 本轮有限测量与剩余门
+
+真实330定义/1000cue/978formal/72generic；每轮formal对象225935120B，generic2983447B，distinct228918567B。13个非mono已包含在formal中，不能重复相加。第一轮formal清零/第二轮复用同72generic，最终仅清理本夹具新增项，原4clips保留。全程29采样点不证明decoder/staging或Player延迟销毁的绝对峰值；不作0GC/CPU/设备证书。首次资格FAIL及恢复历史保留。
+
+数字预算未批准；256/320MiB仅报告里的对象域讨论示例，非平台总预算/新拒绝阈值。producer按局子集未准入，旧144100664B估算不当实得收益。下一同H10合同审阅；完整证据见 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md 与 docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H10-FULL-CATALOG-AUDIO-ENVELOPE.md。

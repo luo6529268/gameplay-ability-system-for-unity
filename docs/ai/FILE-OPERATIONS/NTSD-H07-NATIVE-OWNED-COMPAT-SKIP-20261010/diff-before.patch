@@ -1,0 +1,592 @@
+diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+index 1288638c..11df58cd 100644
+--- a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
++++ b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+@@ -1,3 +1,19 @@
++> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
++
++> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前恢复：按实际优先级，先讨论H07-INPUT角色/AI输入计算。** H-01本地AB后移Android阶段；原ID不等于执行次序。具体成本块与等价改法待确认，不可从本次排序直接启动实施/测试/测量或派发消息。额外方向不跟进；Role默认/FindEffect、producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及原最终门保持。未恢复监测/旧Goal。[首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [唯一进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。下方旧当前项只保留原时点。
++
++> **2026-10-10 恢复入口：先确认H-01内容部署策略，禁止按历史“下一项”自动执行。** 最新用户要求所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待确认；不改代码/资源/设置，不运行Unity/测试/构建，不发执行指令、不恢复监测。H06-ROLE-EXACT不再续办，旧结果保留；已准入Role默认/FindEffect修复、producer暂缓/OFF、95 OFF和最终门保持。H-08/H-10是原方案既有依赖，仅解释范围，不自动解冻。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [当前进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。
+diff --git a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+index 17c61b51..08974fd6 100644
+--- a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
++++ b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+@@ -1,3 +1,19 @@
++> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
++
++> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前：按优先级重排，首个讨论项 H07-INPUT / STRATEGY_DISCUSSION_PENDING。** H-07千人整tick性能是当前高优先主线；只讨论既有“角色输入与AI输入计算”方案，具体成本块/等价改法待确认，不改代码、不运行测试/测量、不发实施指令。H-01本地AB草案保留并后移到Android阶段；Role默认/FindEffect成果保留，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持。额外发现方向一律不跟进。下方H-01/Role历史“当前项”不再构成排程。[优先级总清单](android-mobile-readiness-priority-risk-register.md) · [首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [文档Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。
++
++> **2026-10-10 当前工作：H-01 Android生产内容部署 / STRATEGY_REVIEW_PENDING。** 已记录用户要求：所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待用户确认，未实施、未测试/构建、未发送指令。H06-ROLE-EXACT不再续办；旧诊断结果保留，Role默认、FindEffect修复、producer暂缓/OFF与95 OFF保持。下方按原日期保留历史，任何旧“下一项”不构成当前排程。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [本轮文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
+@@ -13,13 +29,13 @@
+ > **具体问题的代码对照记录：** [FindEffect已修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [Role已限定准入](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-ROLE-DEFAULT-ADMISSION.md) · [producer快照复用用户暂缓](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md) · [索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。不增加父项或旧完成包。
+ 
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+-# 优化进度：当前工作入口（2026-10-10）
++# 优化进度：状态索引（2026-10-10；文首决定优先）
+ 
+-当前决定：**producer快照复用 USER_DEFERRED / 生产OFF；下一项选择现有Role精确配对成本，先到方案阶段**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
++历史决定（已由文首优先级排程取代）：**producer快照复用 USER_DEFERRED / 生产OFF；当时下一项选择现有Role精确配对成本**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
+ 
+ - 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。Role限定准入已完成，实际生产接线13/13通过；第二项44+1+1及四窗正确性/0GC/容量/关闭通过但混战tick回退14.448675%，保持OFF。未新增旧批次完成包；详两个具名报告。34项文档结构、D1=A和旧证据边界保留。
+ - 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+-- 下一项：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
++- 原下一项（不再续办）：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
+ - 首阶段六项：H11/M03选定实现范围、H06/M13/M14选定评估共5/6；H07性能FAIL。34父项完整关闭0。
+ - 批次：最新完成94/73包；95第74包未验收、默认OFF且执行停止；没有本轮新96。
+ 
+@@ -29,40 +45,40 @@
+ 
+ | ID | 当前状态（按范围） | 下一步 |
+ |---|---|---|
+-| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 待方案决策 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
+-| [H-02](android-mobile-readiness/h-02-android-build-scene-closure.md) | 待授权与前置 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+-| [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+-| [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+-| [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
++| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 首项讨论H07-INPUT的AI输入计算等价方案；基线GC问题按原范围保留，不恢复自动目标 |
+ | [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | ROLE_SCOPED_ADMISSION_COMPLETED / 默认Role；父项OPEN | 当前双布局同配置收益/稳态Driver0GC及实际生产接线通过；最终33ms/drop等未过仍开放 |
+-| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 基线GC130独立挂账；先准备H06-ROLE-EXACT方案，不恢复自动目标 |
+-| [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+-| [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+-| [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+-| [H-11](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 选定CPU域已通过／父项开放 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
+ | [M-01](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | 候选待归因／专项边界保持 | 先核eligible/active/fallback/等待；不将worker默认true当实际并行 |
++| [M-05](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 待归因 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
+ | [M-02](android-mobile-readiness/m-02-central-render-draw-segmentation.md) | 共享绑定成果保留／设备开放 | 保留80同Sakura SetPass1995→5、CPU DrawMesh约2；多资源场景有证再优化 |
+ | [M-03](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 选定阶段通过／父项开放 | 保留13 metadata和15每camera消重；脏区优化先区分publication/alpha/完全重复显示 |
+-| [M-04](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 已有诊断／设备矩阵待验 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
+-| [M-05](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 待归因 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
+ | [M-06](android-mobile-readiness/m-06-pool-capacity-prewarm.md) | 已有预热／峰值待评估 | 按slot/command/shell分别清点峰值，不能用GameConfig旧10/200判断现容量 |
++| [M-12](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 方案待容量预算 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
++| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 后续Android部署阶段；策略草案保留、未实施 | 本地AB方向可讨论；到平台阶段确认准确范围，不作为当前首项 |
++| [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
++| [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
++| [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
++| [H-02](android-mobile-readiness/h-02-android-build-scene-closure.md) | 待授权与前置 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
++| [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
++| [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
++| [H-11](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 选定CPU域已通过／父项开放 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
++| [M-09](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 复用现有manifest／缺字段补齐 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
++| [M-15](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 证书集成待完善 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
++| [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
++| [M-04](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 已有诊断／设备矩阵待验 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
+ | [M-07](android-mobile-readiness/m-07-android-graphics-api-policy.md) | 设备策略待决定 | 先候选Vulkan/GLES矩阵后定策略；Automatic并非已证错误 |
+ | [M-08](android-mobile-readiness/m-08-sustained-thermal-performance.md) | 设备前置未满足 | 固定温度/功耗等环境，按原10—20分钟门评价 |
+-| [M-09](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 复用现有manifest／缺字段补齐 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
+ | [M-10](android-mobile-readiness/m-10-mobile-viewport-safe-area.md) | 待产品与设备条件 | 先viewport/Safe Area合同后触控适配；保留用户底部黑区和平台取景 |
+-| [M-11](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | USER_HOLD | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
+-| [M-12](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 方案待容量预算 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
++| [L-04](android-mobile-readiness/l-04-orientation-policy.md) | 待用户决策 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
+ | [M-13](android-mobile-readiness/m-13-sound-event-aggregation.md) | 选定评估结束／不实施 | 现有评估未建立真实热点，冻结原算法；不因二次复杂度描述直接改 |
+ | [M-14](android-mobile-readiness/m-14-content-verification-io.md) | 评估结束／前置未就绪 | 保留可变Editor stale守卫；前置成立后才评估同epoch复用 |
+-| [M-15](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 证书集成待完善 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
+ | [L-01](android-mobile-readiness/l-01-application-identifier.md) | 待产品值 | 冻结dev/release命名与Manifest一致性 |
+ | [L-02](android-mobile-readiness/l-02-signing-keystore.md) | 待安全配置 | 用户安全环境配置；文档只公开证书指纹，不读取私钥/口令 |
+ | [L-03](android-mobile-readiness/l-03-target-api.md) | 待发布周期 | 实施时查询官方要求并冻结min/target；本轮不写未经核实的政策值 |
+-| [L-04](android-mobile-readiness/l-04-orientation-policy.md) | 待用户决策 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
+ | [L-05](android-mobile-readiness/l-05-graphics-jobs-frame-timing.md) | 待设备A/B | 采集开销与Jobs性能分开；不能盲开开关 |
+ | [L-06](android-mobile-readiness/l-06-urp-hdr.md) | 待画面与设备决策 | 保持其他配置做HDR对照；先有GPU成本再定 |
+ | [L-07](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 方案明确／未执行 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
+ | [L-08](android-mobile-readiness/l-08-release-packaging.md) | 待发布阶段 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
++| [M-11](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | USER_HOLD | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
+ 
+ ## 已有成果及不再机械重做的工作
+ 
+@@ -76,12 +92,12 @@
+ 
+ | 子项 | 当前 | 后继条件 |
+ |---|---|---|
+-| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 下一项方案；静态分析完成，具体实施未授权 | 具名可消除成本、准确改法和最小证据明确后决定实施；否则结束本路线 |
+-| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | producer用户暂缓；一般输入方案保留 | 本轮静态复核不支持继续堆零点几毫秒省读；有新成本证据再选择 |
++| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | 第1讨论项／STRATEGY_DISCUSSION_PENDING；producer仍暂缓 | 优先讨论已有AI计算/查询成本与数据访问；不重试小快照候选，具体等价改法未确认 |
+ | [H07-LATE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+-| [H07-GC95](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+ | [H06-SPATIAL](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
+ | [H07-AI-MODE](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
++| [H07-GC95](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) | 文档草案；无实施授权 | 按子方案的热点/依赖/授权条件进入，未满足则保持待分析 |
++| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 不再续办；历史诊断与失败保留 | 不自动补测/修复，不作为下一项 |
+ 
+ ## 下方原批次记录（历史只读证据，不代表恢复执行）
+ 
+diff --git a/Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs b/Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs
+index 196e48dc..cc5a8612 100644
+--- a/Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs
++++ b/Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs
+@@ -706,6 +706,27 @@ namespace NTSD.Simulation
+         private readonly long[] activePhaseTimestamps = new long[4];
+         private readonly long[] radiusHistogram = new long[RadiusHistogramBucketCount];
+         private int activePhaseDepth;
++        private Func<ulong> threadCycleCounterForDiagnostics;
++        private ulong threadCyclePhaseMaskForDiagnostics;
++        private readonly ulong[] activeThreadCyclesForDiagnostics = new ulong[4];
++        private readonly ulong[] threadCyclesForDiagnostics = new ulong[(int)BattleAiInputDetailPhase.Count];
++        private readonly long[] threadCyclePairsForDiagnostics = new long[(int)BattleAiInputDetailPhase.Count];
++        public int ThreadCycleInvalidsForDiagnostics { get; private set; }
++        public bool ThreadCycleCounterAttachedForDiagnostics => threadCycleCounterForDiagnostics != null;
++
++        public void SetThreadCycleCounterForDiagnostics(Func<ulong> counter, ulong phaseMask = 0)
++        {
++            if (activePhaseDepth != 0)
++                throw new InvalidOperationException("Thread cycle owner can change only outside input phases.");
++            threadCycleCounterForDiagnostics = counter;
++            threadCyclePhaseMaskForDiagnostics = phaseMask;
++        }
++
++        public ulong GetLastThreadCyclesForDiagnostics(BattleAiInputDetailPhase phase) =>
++            (uint)phase < (uint)threadCyclesForDiagnostics.Length ? threadCyclesForDiagnostics[(int)phase] : 0;
++
++        public long GetLastThreadCyclePairsForDiagnostics(BattleAiInputDetailPhase phase) =>
++            (uint)phase < (uint)threadCyclePairsForDiagnostics.Length ? threadCyclePairsForDiagnostics[(int)phase] : 0;
+ 
+         public static int PhaseCount => (int)BattleAiInputDetailPhase.Count;
+         public static long TimestampFrequency => Stopwatch.Frequency;
+@@ -743,6 +764,9 @@ namespace NTSD.Simulation
+ 
+             activePhases[activePhaseDepth] = phase;
+             activePhaseTimestamps[activePhaseDepth] = Stopwatch.GetTimestamp();
++            if (threadCycleCounterForDiagnostics != null &&
++                (threadCyclePhaseMaskForDiagnostics & (1UL << (int)phase)) != 0)
++                activeThreadCyclesForDiagnostics[activePhaseDepth] = threadCycleCounterForDiagnostics();
+             activePhaseDepth++;
+         }
+ 
+@@ -755,6 +779,16 @@ namespace NTSD.Simulation
+             }
+ 
+             activePhaseDepth--;
++            if (threadCycleCounterForDiagnostics != null &&
++                (threadCyclePhaseMaskForDiagnostics & (1UL << (int)phase)) != 0)
++            {
++                ulong end = threadCycleCounterForDiagnostics();
++                ulong begin = activeThreadCyclesForDiagnostics[activePhaseDepth];
++                if (end < begin) ThreadCycleInvalidsForDiagnostics++;
++                else threadCyclesForDiagnostics[(int)phase] += end - begin;
++                threadCyclePairsForDiagnostics[(int)phase]++;
++                activeThreadCyclesForDiagnostics[activePhaseDepth] = 0;
++            }
+             elapsedTimestampTicks[(int)phase] +=
+                 Stopwatch.GetTimestamp() - activePhaseTimestamps[activePhaseDepth];
+             activePhaseTimestamps[activePhaseDepth] = 0;
+@@ -936,6 +970,10 @@ namespace NTSD.Simulation
+             Array.Clear(phaseRngCallCounts, 0, phaseRngCallCounts.Length);
+             Array.Clear(activePhaseTimestamps, 0, activePhaseTimestamps.Length);
+             Array.Clear(radiusHistogram, 0, radiusHistogram.Length);
++            Array.Clear(activeThreadCyclesForDiagnostics, 0, activeThreadCyclesForDiagnostics.Length);
++            Array.Clear(threadCyclesForDiagnostics, 0, threadCyclesForDiagnostics.Length);
++            Array.Clear(threadCyclePairsForDiagnostics, 0, threadCyclePairsForDiagnostics.Length);
++            ThreadCycleInvalidsForDiagnostics = 0;
+             activePhaseDepth = 0;
+             LastTickIndex = tickIndex;
+             AiCount = 0;
+diff --git a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+index 36a30d72..31c26454 100644
+--- a/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
++++ b/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -21,6 +21,49 @@ namespace NTSD.Test.Editor
+     [InitializeOnLoad]
+     internal static class BattleOptimizationWindowsAiSuiteEditor
+     {
++        private static bool startingInputCpuDiagnostic;
++        [MenuItem("NTSD/Validation/Optimization/H07 Input CPU Diagnostic")]
++        private static void BeginInputCpuDiagnostic()
++        {
++            Require(inputCostObserver == null && !startingInputCostDiagnostic,
++                "Input CPU diagnosis already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Input CPU diagnosis requires Profiler OFF.");
++            startingInputCpuDiagnostic = true;
++            startingInputCostDiagnostic = true;
++            H07InputCostDiagnostics.ResetBaseline();
++            try { BeginPostBindingsRole(); }
++            finally { startingInputCostDiagnostic = false; startingInputCpuDiagnostic = false; }
++        }
++
++        private static bool startingInputFlowDiagnostic;
++        [MenuItem("NTSD/Validation/Optimization/H07 Full Input Flow Diagnostic")]
++        private static void BeginInputFlowDiagnostic()
++        {
++            Require(!startingInputCostDiagnostic && inputCostObserver == null,
++                "Input flow diagnosis already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Input flow diagnosis requires Profiler initially OFF.");
++            startingInputFlowDiagnostic = true;
++            startingInputCostDiagnostic = true;
++            H07InputCostDiagnostics.ResetBaseline();
++            try { BeginPostBindingsRole(); }
++            finally { startingInputCostDiagnostic = false; startingInputFlowDiagnostic = false; }
++        }
++
++        private static bool startingInputCostDiagnostic;
++        private static H07InputCostDiagnostics inputCostObserver;
++
++        [MenuItem("NTSD/Validation/Optimization/H07 Input Cost Diagnostic")]
++        private static void BeginInputCostDiagnostic()
++        {
++            Require(!startingInputCostDiagnostic && inputCostObserver == null,
++                "Input cost diagnosis already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Input cost diagnosis requires Profiler OFF.");
++            startingInputCostDiagnostic = true;
++            H07InputCostDiagnostics.ResetBaseline();
++            try { BeginPostBindingsRole(); }
++            finally { startingInputCostDiagnostic = false; }
++        }
++
+         private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
+         private static bool startingRoleRecordCostDiagnostic;
+         private static bool startingRoleRecordPrerequisiteDiagnostic;
+@@ -461,6 +504,7 @@ namespace NTSD.Test.Editor
+         [Serializable]
+         private sealed class RunState
+         {
++            public bool inputCostObservationValid;
+             public bool roleGroupSnapshotSkipEnabled;
+             public bool roleGroupSnapshotSkipFlagApplied;
+             public bool roleGroupSnapshotSkipUnchanged;
+@@ -695,6 +739,9 @@ namespace NTSD.Test.Editor
+             public bool roleRecordPrerequisiteDiagnostic;
+             public bool rolePrerequisiteQualification;
+             public bool producerAbbaDiagnostic;
++            public bool inputCostDiagnostic;
++            public bool inputFlowDiagnostic;
++            public bool inputCpuDiagnostic;
+             public bool roleBranchTimingWindow;
+             public bool inputBoundaryTimingWindow;
+             public bool nativeSampledStateTimingWindow;
+@@ -1299,7 +1346,10 @@ namespace NTSD.Test.Editor
+                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
++            string outputRoot = startingInputCpuDiagnostic ? H07InputCostDiagnostics.CpuOutputRoot :
++                startingInputFlowDiagnostic ? H07InputCostDiagnostics.FlowOutputRoot :
++                startingInputCostDiagnostic ? H07InputCostDiagnostics.OutputRoot :
++                startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
+                 startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
+                 startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
+                 startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
+@@ -1374,12 +1424,15 @@ namespace NTSD.Test.Editor
+                 roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,
+                 rolePrerequisiteQualification = startingRolePrerequisiteQualification,
+                 producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
++                inputCostDiagnostic = startingInputCostDiagnostic,
++                inputFlowDiagnostic = startingInputFlowDiagnostic,
++                inputCpuDiagnostic = startingInputCpuDiagnostic,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
+-                runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingInputCpuDiagnostic ? 2 : startingInputFlowDiagnostic || startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                 originalScene = scene.path,
+                 originalSceneHash = HashFile(scene.path),
+                 battleSceneHash = HashFile(BattleScene),
+@@ -1466,6 +1519,12 @@ namespace NTSD.Test.Editor
+ 
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.inputCpuDiagnostic)
++                return H07InputCostDiagnostics.BuildCpuRequest(index);
++            if (state.inputFlowDiagnostic)
++                return H07InputCostDiagnostics.BuildFlowRequest(index);
++            if (state.inputCostDiagnostic)
++                return H07InputCostDiagnostics.BuildRequest(index);
+             if (state.rolePrerequisiteQualification)
+                 return H06RolePrerequisiteDiagnostics.BuildQualificationRequest(index);
+             if (state.roleRecordPrerequisiteDiagnostic)
+@@ -2111,6 +2170,7 @@ namespace NTSD.Test.Editor
+                     (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
+                     (!state.bruteDepthRejectCandidate || DepthRejectObservationValid(run)) &&
+                     (!state.postBindingsRoleWindow || PostBindingsRoleObservationValid(run)) &&
++                    (!state.inputCostDiagnostic || run.inputCostObservationValid) &&
+                     (!state.roleGroupSnapshotSkipWindow || RoleGroupSnapshotSkipObservationValid(run)) &&
+                     (!state.roleBranchTimingWindow || RoleBranchTimingObservationValid(run)) &&
+                     (!state.inputBoundaryTimingWindow || InputBoundaryTimingObservationValid(run)) &&
+@@ -2138,6 +2198,8 @@ namespace NTSD.Test.Editor
+                 currentReport = null;
+                 if (run.retainedFailedGcMeasurement)
+                     state.retainedFailedGcMeasurements++;
++                if (state.inputCostDiagnostic && (!run.workloadValid || (!state.inputCpuDiagnostic && !run.zeroGcPassed) || !run.inputCostObservationValid))
++                    throw new InvalidOperationException("Finite input diagnosis gate failed; no next window is authorized.");
+                 if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
+                     throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
+                 if (!run.workloadValid && !run.retainedFailedGcMeasurement)
+@@ -2398,7 +2460,9 @@ namespace NTSD.Test.Editor
+                     logicGcObserver == null,
+                     "The calibrated scope requires the existing production path before the first tick.");
+                 logicGcObserver = new BattleLogicTickGcObserverEditor();
+-                if (state.roleRecordCostDiagnostic)
++                if (state.inputCostDiagnostic)
++                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex, state.inputFlowDiagnostic, state.inputCpuDiagnostic);
++                else if (state.roleRecordCostDiagnostic)
+                     roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
+                 else
+                     logicGcObserver.Attach(runner);
+@@ -2486,7 +2550,7 @@ namespace NTSD.Test.Editor
+         }
+ 
+         private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
+-            state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
++            state.inputCostDiagnostic || state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
+             state.roleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipQueryValid(query, index) :
+             state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
+             state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
+@@ -2765,6 +2829,8 @@ namespace NTSD.Test.Editor
+             Require(RestoreBruteKind5Presence(), "Kind5 presence must be restored before owner shutdown.");
+             if (roleRecordTickObserver != null) FinishRoleRecordObservation(state.runs[state.runIndex], true);
+             roleRecordBaseline = null;
++            if (inputCostObserver != null) FinishInputCostObservation(state.runs[state.runIndex], true);
++            H07InputCostDiagnostics.ResetBaseline();
+             productionQuery = null;
+             if (state.cpuGcCaptureOnly)
+                 BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("owner-shutdown");
+@@ -2890,11 +2956,11 @@ namespace NTSD.Test.Editor
+             try
+             {
+                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
+-                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic)
++                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic || state.inputFlowDiagnostic || state.inputCpuDiagnostic)
+                 {
+                     run.logicGcEvidence.zeroAllocationPassed = false;
+                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
+-                    run.logicGcEvidence.status = "INSTRUMENTED_CALLSITE_ONLY / " + run.logicGcEvidence.status;
++                    run.logicGcEvidence.status = (state.inputCpuDiagnostic ? "CPU_DIAGNOSTIC_NOT_CERTIFICATE / " : "INSTRUMENTED_CALLSITE_ONLY / ") + run.logicGcEvidence.status;
+                 }
+                 if (aborted)
+                 {
+@@ -2911,8 +2977,23 @@ namespace NTSD.Test.Editor
+             {
+                 observer.Dispose();
+                 if (state.roleRecordCostDiagnostic) FinishRoleRecordObservation(run, aborted);
++                if (state.inputCostDiagnostic) FinishInputCostObservation(run, aborted);
+             }
+         }
++        private static void FinishInputCostObservation(RunState run, bool aborted)
++        {
++            H07InputCostDiagnostics observer = inputCostObserver;
++            inputCostObserver = null;
++            if (observer == null) return;
++            try
++            {
++                run.inputCostObservationValid = observer.Finish(aborted);
++                SaveNew(run.reportPath + (aborted ? ".input-cost.aborted.json" : ".input-cost.json"),
++                    JsonUtility.ToJson(observer.evidence, true));
++            }
++            finally { observer.Dispose(); }
++        }
++
+         private static string PathFor(string path) => Path.GetFullPath(Path.Combine(Application.dataPath, "..", path));
+ 
+         private static bool IsOwnedTerminalOrAbsent()
+@@ -2979,7 +3060,13 @@ namespace NTSD.Test.Editor
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+-                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
++                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.CpuOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.FlowOutputRoot) +
++                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.OutputRoot) +
++                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                     PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+diff --git a/docs/ai/CHANGE-LEDGER.md b/docs/ai/CHANGE-LEDGER.md
+index ab155e65..fe0b7f6c 100644
+--- a/docs/ai/CHANGE-LEDGER.md
++++ b/docs/ai/CHANGE-LEDGER.md
+@@ -2273,3 +2273,15 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
+ 
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
++
++- NTSD-H07-INPUT-COST-DIAG-001 / PLANNED：[Record](CHANGE-RECORDS/NTSD-H07-INPUT-COST-DIAG-001.md)，NTSD-H07-INPUT-COST-DIAG-20261010，仅Editor有限诊断。
++
++- 2026-10-10 NTSD-H07-INPUT-COST-DIAG-001 → VERIFIED仅Editor有限诊断/失败停止/恢复；首OFF0GC FAIL，ABBA未完成，生产无修改；报告 artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md。
++
++- `NTSD-H07-INPUT-FLOW-DIAG-001` / PLANNED — [Record](CHANGE-RECORDS/NTSD-H07-INPUT-FLOW-DIAG-001.md)，当前H07输入补充诊断、非生产实现。
++
++- `NTSD-H07-INPUT-FLOW-DIAG-001` 最新 FOCUSED_TEST_PASS，8/8；仅Editor诊断，单窗实景待运行，原PLANNED保留为前时点。
++
++- NTSD-H07-INPUT-FLOW-DIAG-001 最新 VERIFIED仅Editor诊断工具与单窗采集；8/8及300tick状态一致，完整Driver稳态2event/0GC FAIL、尖峰未全归因；NO_PRODUCTION_HANDOFF，不升格生产/父项。详[Record](CHANGE-RECORDS/NTSD-H07-INPUT-FLOW-DIAG-001.md)与同Task REPORT；旧PLANNED/FOCUSED为历史。
++
++- NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 / VERIFIED — [Record](CHANGE-RECORDS/NTSD-H07-INPUT-SPIKE-CPU-DIAG-001.md)，当前点CPU归因，非生产优化。
+diff --git a/docs/ai/CURRENT-AUTHORITY.md b/docs/ai/CURRENT-AUTHORITY.md
+index fd8ea3f8..4ff30f7d 100644
+--- a/docs/ai/CURRENT-AUTHORITY.md
++++ b/docs/ai/CURRENT-AUTHORITY.md
+@@ -1,3 +1,19 @@
++> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
++
++> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 最新排程：PRIORITY_ORDER_FIRST；H07-INPUT / STRATEGY_DISCUSSION_PENDING。** 用户要求按优先级重整并讨论首项实现。现有高优先H-07主线下，角色输入/AI输入计算为首个讨论项；具体等价改法未确认，未授权代码/资源/设置修改或Unity/测试/测量/任务派发。H-01本地AB草案后移到Android阶段。OPTIMIZATION_PLAN_ONLY继续有效，额外方向一律不跟进；Role默认/FindEffect成果、producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF和最终门保持。不恢复监测/旧Goal/自动队列。下方按编号选择H-01等旧排程为历史。入口：docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md、Assets/NTSD/Docs/battle-optimization-progress-tracker.md；文档Task：docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md。
++
++> **2026-10-10 最新用户范围：OPTIMIZATION_PLAN_ONLY；当前H-01 / STRATEGY_REVIEW_PENDING。** 所有优化仅按既有方案，额外发现方向一律不跟进；本轮只确认原第一项Android生产内容部署策略，不改代码/资源/设置、不运行Unity/测试/构建，不发送执行指令或恢复监测。H06-ROLE-EXACT不再续办，原失败/证据保留；Role默认、FindEffect修复、producer暂缓/OFF、95 OFF及H06/H07/Android未关闭保持。既有依赖只说明，不自动解冻专项。当前唯一进度文首与 docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md 优先于下方历史排程。文档Task：docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md；H-01草案：Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md。战斗authority与红线不变。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。
+diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md
+index ddbf05cc..8b9b3142 100644
+--- a/docs/ai/FILE-OPERATIONS/INDEX.md
++++ b/docs/ai/FILE-OPERATIONS/INDEX.md
+@@ -685,3 +685,22 @@ Operation NTSD-OPTIMIZATION-D1-A-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATIO
+ | NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 | PLANNED | [Record](NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/RECORD.md) | two Editor files, true dirty backups |
+ 
+ | NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 | VERIFIED operations / FAILED qualification | [Record](NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/RECORD.md) | two Editor sources stable; protected2514; no repeat |
++
++
++> Operation NTSD-H01-STRATEGY-AND-SCOPE-20261010 / PLANNED / DOCUMENTATION_ONLY：[Record](NTSD-H01-STRATEGY-AND-SCOPE-20261010/RECORD.md)。用户要求只按既有优化方案、额外方向不跟进；本轮仅H-01策略确认草案，不实施。
++
++> Operation NTSD-H01-STRATEGY-AND-SCOPE-20261010 / VERIFIED（仅文档）：[Record](NTSD-H01-STRATEGY-AND-SCOPE-20261010/RECORD.md) · [验证](NTSD-H01-STRATEGY-AND-SCOPE-20261010/verification-02.json)。只按既有方案规则及H-01策略草案已记录；29链接/17保护/11备份与diff检查通过，策略仍待确认，未实施/运行/发送任务。
++
++
++> Operation NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010 / PLANNED / DOCUMENTATION_ONLY：[Record](NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/RECORD.md)。用户要求按优先级整理；原ID/历史保留，首项H07-INPUT仅讨论，H-01后移，不实施/运行/派发任务。
++
++
++> Operation NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010 / VERIFIED（仅文档）：[Record](NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/RECORD.md) · [验证](NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/verification.json)。34父/6子排序与唯一性、122链接、15备份/21保护、HEAD/暂存/范围外diff和diff-check通过；首项H07-INPUT仅讨论，H-01后移，无实施/运行/任务派发。
++
++> NTSD-H07-INPUT-COST-DIAG-20261010 / RUNNING：H07角色输入有限诊断，用户当前直接授权；[Record](NTSD-H07-INPUT-COST-DIAG-20261010/RECORD.md)。
++
++- `NTSD-H07-INPUT-FLOW-DIAG-20261010` / RUNNING — [Record](NTSD-H07-INPUT-FLOW-DIAG-20261010/RECORD.md)，H07输入检测两Editor与文档精确备份。
++
++- NTSD-H07-INPUT-FLOW-DIAG-20261010 / VERIFIED限定操作审计：10原dirty备份匹配、15563非声明文档保护一致、2声明文档计划变化，Scene/settings/关闭已恢复；不等于0GC或生产通过。[记录](NTSD-H07-INPUT-FLOW-DIAG-20261010/RECORD.md)。
++
++- NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 / COMPLETED — [记录](NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/RECORD.md)，原dirty备份/三域声明。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+index b7079446..248fa79e 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+@@ -1,3 +1,7 @@
++> **2026-10-10 当前先讨论H07-INPUT，H-01后移。** 排序按当前优先级、实际状态和最小依赖，原ID不变。H07-INPUT依赖当前内容/Kernel指纹与受影响正确性，不依赖先完成H-01、H-08、M-11、producer准入或95全部闭合；实际选择到失败fixture/路径时仍须满足原0GC等门，不能豁免。producer暂缓、H06-ROLE-EXACT不续办，AI降频/疏散及新空间算法未获批准。H-01/H-08/H-10共同接口及H-02/H-04运行前置留在后续Android阶段，不自动启动。[决定](DECISIONS.md) · [首项](H07-INPUT.md)。
++
++> **2026-10-10 当前仅H-01策略确认。** 用户限定只按既有方案处理，额外方向一律不跟进。H-01先确认Manifest/key/Provider/Lease与资源载体；原方案的预烘焙视觉接入依赖H-08相关产物，声音共享H-10内容合同，但不要求H-08/H-10所有内存优化先完成。接口阶段不自动解冻H-08/ATLAS或H-10实施；未接入原方案所需产物时只能记子阶段，不能关闭H-01。H-02/H-04提供最后Android验收的可运行包与配置，当前不改设置。下方Windows路线为历史待选路线，不恢复H06-ROLE-EXACT诊断。[决定](DECISIONS.md) · [H-01](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
+@@ -77,10 +81,10 @@
+ - `L03-SDK -> L08-RELEASE`
+ - `H02-BUILD -> L08-RELEASE`
+ 
+-## 当前Windows主线
++## Windows主线与既有条件方案（2026-10-10文首排程优先）
+ 
+-- H06 Role限定准入已完成，当前空配置生产默认Role。下一H06-ROLE-EXACT：现有成本/计数→可消除工作与authority副作用证明→具名方案获批→必要验证；不因producer暂缓而等待，不自动切网格。
+-- H07-INPUT：已有91归因/字段合同→具名热点方案→获批实施；Role默认不是它的硬前置，但A/B必须固定同一种collector。
++- H06 Role限定准入已完成，当前空配置生产默认Role；成果保留。H06-ROLE-EXACT不再续办，不自动切网格。
++- H07-INPUT是第1讨论项：复用91归因/当前调用链→明确一块成本及等价实现→用户确认具体范围后才实施。producer复用仍暂缓；若后续A/B，必须固定已准入Role、AI配置及内容。
+ - H07-GC95只阻塞使用该失败fixture或相关分配生产路径的资格门，不全局阻塞Input只读分析或已有实景证据。
+ - H07-LATE先细分成本与读范围授权，不能靠publication只读推断缓存安全。
+ - H06-SPATIAL是Role比较基线下的条件候选；不依赖必须把Input优化完才允许评估。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md
+index 7b24585e..0a0fdf05 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md
+@@ -1,3 +1,44 @@
++> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
++
++> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](../TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](../TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](../TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前第1讨论项：角色输入与AI输入计算 / STRATEGY_DISCUSSION_PENDING。** 用户要求按优先级重整并讨论具体实现，本项是原有H-07高优先子方案，不是新增方向。H-01部署后移；producer复用仍USER_DEFERRED/OFF，H06-ROLE-EXACT不续办，95 OFF。本次仅文档及窄源码核对，没有新优化实现或运行证据。下方旧“优先Role/下一Role”结论只保留原时点。[总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [文档Task](../TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。
++
++## 为什么排在第一
++
++当前主目标是减少千人战斗整tick耗时。H-06既有Role限定准入已完成；原方案中的H07-INPUT优先级高，并有历史实景成本和当前代码入口。H-07父项的33ms证书是最终验收目标，不能靠继续生成报告代替优化。H-01等Android部署工作后移，未受影响的正确性/容量/关闭证据复用。
++
++| 证据范围 | 已确认内容 | 决策限制 |
++|---|---|---|
++| 91历史千人窗口，报告第41行 | CharacterInput约12.1—12.6ms/tick；RemainingAiDecision约4.94—5.11ms/tick | 是整个输入阶段及嵌套AI阶段，不是可消除收益，也不是当前工作树新鲜测量 |
++| 91混战ON原JSON，180样本 | IndexedCanonicalKernel均值3.117646ms，其中NearestSearch均值1.506964ms | nearest包含在kernel内，kernel又在上级阶段内，不能直接相加；已存在Indexed策略，不能假设仍是全量平方扫描 |
++| 本轮窄源码静态核对 | SimulationAiDecisionModule在DataOrientedCanonical/direct模式调用inputWriter.TryEvaluateCanonicalDecision，其它分支调用AiDecisionKernel.TryEvaluate；AiDecisionKernel内部调用AiSensingKernel.TryFindNearest | 需沿实际生效分支讨论，不能只改一个未生效旁路；静态调用链不证明有新收益 |
++| 原小快照方向 | producer复用已被用户暂缓；capture/sync处于不同可见边界，旧局部省读未证明当前整tick收益 | 不把本次排序当成重开producer、95或换名微缓存的授权 |
++
++原证据：[91报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md)；[混战ON JSON](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json)。这里只复用相位归因，不把旧工作树性能当当前证书。
++
++## 当前具体讨论范围
++
++优先讨论原方案“AI决策计算/目标查询及其数据访问”这一分支，目标是寻找可以等价减少的计算或访问工作。暂不选定新的算法、缓存或预期节省毫秒数；准确改法需要由当前讨论确定。
++
++- 主要代码入口：Simulation/Ai/Runtime/SimulationAiDecisionModule.cs的IndexedCanonicalKernel实际分支；Simulation/Ai/Kernel/AiDecisionKernel.cs及其AiSensingKernel查询；CharacterInput发布/读取边界只按相关性核对。
++- 现有DataOrientedCanonical/Indexed/canonical writer能力优先复用；不重建一套SoA，不直接认定“再加空间索引”就是缺口。
++- 输入逐tick结果、目标选择和遍历/tie-break顺序、双RNG及完整checksum必须保持；本项不包含AI降频/疏散/迁区攻击行为改变。
++- producer Runtime自复制复用保持暂缓，95候选仍OFF；不回到H06-ROLE-EXACT七段诊断，不重跑91八子阶段或无信息量旧窗口。
++- 当前只讨论：明确优化哪一块、消除什么工作、为何等价、准确所有者/失效条件、最小验证和停止条件。没有安全且足够有价值的改法就保持“待方案/不实施”，不把排序升格为READY，不自动加实验或新优化点。
++
++实施与最终性能验收仍使用下方原合同；具体方案确认后才另立准确Task/Change和备份，不因本次文档重排启动Unity/测试/Profiler/测量或发送消息。
++
++---
++
+ # H07-INPUT：CharacterInput等价优化子方案
+ 
+ > 用户决定（2026-10-10）：87/88 producer复用 USER_DEFERRED / 生产OFF，原准入失败和ABBA GC失败保留，恢复条件见[单项记录](IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。下一项选择[H06-ROLE-EXACT](H06-ROLE-EXACT.md)进入静态分析/方案；下方“由用户作决定”已有本次答复，不自动恢复旧候选。
+diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md
+index 5622f53e..ca1a68d4 100644
+--- a/docs/ai/STATE.md
++++ b/docs/ai/STATE.md
+@@ -1,3 +1,19 @@
++> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
++
++> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
++
++> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
++
++> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
++
++> **2026-10-10 当前：按优先级整理完成后，首项H07-INPUT仅讨论具体实现。** H-07当前性能主线优先；H-01本地AB草案后移Android阶段。具体等价改法未确认/无实施授权，额外方向不跟进；Role默认/FindEffect成果保留，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持。未运行Unity/测试/测量，未发任务/恢复监测或Goal。[首项方案](OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [当前进度](../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [文档Task](TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。下方H-01等“当前项”为历史。
++
++> **2026-10-10 当前优化范围：OPTIMIZATION_PLAN_ONLY；H-01 / STRATEGY_REVIEW_PENDING。** 用户要求只按既有方案处理，额外发现方向一律不跟进；当前仅确认Android生产内容部署策略，未授权实施/测试/构建，未派发任务或恢复监测。H06-ROLE-EXACT不再续办，历史结果不删除；Role默认/FindEffect成果、producer暂缓/OFF、95 OFF保持。H-08/H-10既有依赖不自动启动，H06父/H07/Android仍开放。参见[决定](OPTIMIZATION-REVIEW-20261009/DECISIONS.md)、[H-01草案](../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)、[本轮文档Task](TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。下方旧排程为历史。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。

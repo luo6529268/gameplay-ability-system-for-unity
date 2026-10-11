@@ -1,0 +1,657 @@
+{
+  "rows": [
+    {
+      "group": "frozen-retained-formal",
+      "cues": [
+        {
+          "relative": "c/jira/w/e3.wav",
+          "sourceId": -1239152,
+          "outputId": -1239154,
+          "frames": 329244,
+          "channels": 1,
+          "hz": 96000,
+          "sourceObjectBytes": 332084,
+          "outputObjectBytes": 2636720,
+          "tempFloatPayload": 67920,
+          "hash": "D1283BBAD00B03C764CD674986F948A3096309813EA45253CBF655D1524DFDBF",
+          "metadata": "e3:329244:2:96000",
+          "loadElapsedMs": 18.810000000000002,
+          "conversionElapsedMs": 2.1915,
+          "sourceRetired": false
+        },
+        {
+          "relative": "c/kar/w/t.wav",
+          "sourceId": -1239156,
+          "outputId": -1239158,
+          "frames": 259584,
+          "channels": 1,
+          "hz": 48000,
+          "sourceObjectBytes": 262424,
+          "outputObjectBytes": 2079440,
+          "tempFloatPayload": 67584,
+          "hash": "846742F5583DB6380E0C2A7523FF5EC024797B467F90038F5280CDD56E5590DF",
+          "metadata": "t:259584:2:48000",
+          "loadElapsedMs": 60.438300000000005,
+          "conversionElapsedMs": 1.3209,
+          "sourceRetired": false
+        },
+        {
+          "relative": "c/dan/w/t.wav",
+          "sourceId": -1239160,
+          "outputId": -1239162,
+          "frames": 236265,
+          "channels": 1,
+          "hz": 44100,
+          "sourceObjectBytes": 239105,
+          "outputObjectBytes": 1892888,
+          "tempFloatPayload": 82668,
+          "hash": "37B0959184AF07877D77AF1317883942F1187B5A07B88499C057387A90557438",
+          "metadata": "t:236265:2:44100",
+          "loadElapsedMs": 5.3249,
+          "conversionElapsedMs": 1.2510000000000001,
+          "sourceRetired": false
+        },
+        {
+          "relative": "data/001.wav",
+          "sourceId": -1239164,
+          "outputId": -1239166,
+          "frames": 11784,
+          "channels": 1,
+          "hz": 44100,
+          "sourceObjectBytes": 14624,
+          "outputObjectBytes": 97040,
+          "tempFloatPayload": 92256,
+          "hash": "D4AF4C422AD4A667358FEC3CA2614F490152DC1A433019B7B7F1DD568A402251",
+          "metadata": "001:11784:2:44100",
+          "loadElapsedMs": 10.189400000000001,
+          "conversionElapsedMs": 0.0839,
+          "sourceRetired": false
+        },
+        {
+          "relative": "c/kim/w/a1.wav",
+          "sourceId": -1239168,
+          "outputId": -1239168,
+          "frames": 17370,
+          "channels": 2,
+          "hz": 48000,
+          "sourceObjectBytes": 72368,
+          "outputObjectBytes": 72368,
+          "tempFloatPayload": 0,
+          "hash": "96AA9F0F25E0EA2A2DBAFE585E3DABC2F8CC0AE067C558622FBEE5916963C921",
+          "metadata": "a1:17370:2:48000",
+          "loadElapsedMs": 7.6925000000000008,
+          "conversionElapsedMs": 0.0017000000000000001,
+          "sourceRetired": false
+        }
+      ],
+      "stages": [
+        {
+          "stage": "before",
+          "sourceIds": [],
+          "outputIds": [],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 0,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/jira/w/e3.wav",
+          "sourceIds": [
+            -1239152
+          ],
+          "outputIds": [],
+          "sourceObjectBytes": 332084,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 332084,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/jira/w/e3.wav",
+          "sourceIds": [
+            -1239152
+          ],
+          "outputIds": [
+            -1239154
+          ],
+          "sourceObjectBytes": 332084,
+          "outputObjectBytes": 2636720,
+          "distinctObjectBytes": 2968804,
+          "temporaryFloatPayload": 67920,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/kar/w/t.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156
+          ],
+          "outputIds": [
+            -1239154
+          ],
+          "sourceObjectBytes": 594508,
+          "outputObjectBytes": 2636720,
+          "distinctObjectBytes": 3231228,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/kar/w/t.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158
+          ],
+          "sourceObjectBytes": 594508,
+          "outputObjectBytes": 4716160,
+          "distinctObjectBytes": 5310668,
+          "temporaryFloatPayload": 67584,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/dan/w/t.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158
+          ],
+          "sourceObjectBytes": 833613,
+          "outputObjectBytes": 4716160,
+          "distinctObjectBytes": 5549773,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/dan/w/t.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162
+          ],
+          "sourceObjectBytes": 833613,
+          "outputObjectBytes": 6609048,
+          "distinctObjectBytes": 7442661,
+          "temporaryFloatPayload": 82668,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:data/001.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160,
+            -1239164
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162
+          ],
+          "sourceObjectBytes": 848237,
+          "outputObjectBytes": 6609048,
+          "distinctObjectBytes": 7457285,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:data/001.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160,
+            -1239164
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162,
+            -1239166
+          ],
+          "sourceObjectBytes": 848237,
+          "outputObjectBytes": 6706088,
+          "distinctObjectBytes": 7554325,
+          "temporaryFloatPayload": 92256,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/kim/w/a1.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160,
+            -1239164,
+            -1239168
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162,
+            -1239166
+          ],
+          "sourceObjectBytes": 920605,
+          "outputObjectBytes": 6706088,
+          "distinctObjectBytes": 7626693,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/kim/w/a1.wav",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160,
+            -1239164,
+            -1239168
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162,
+            -1239166,
+            -1239168
+          ],
+          "sourceObjectBytes": 920605,
+          "outputObjectBytes": 6778456,
+          "distinctObjectBytes": 7626693,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "steady",
+          "sourceIds": [
+            -1239152,
+            -1239156,
+            -1239160,
+            -1239164,
+            -1239168
+          ],
+          "outputIds": [
+            -1239154,
+            -1239158,
+            -1239162,
+            -1239166,
+            -1239168
+          ],
+          "sourceObjectBytes": 920605,
+          "outputObjectBytes": 6778456,
+          "distinctObjectBytes": 7626693,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "released-and-drained",
+          "sourceIds": [],
+          "outputIds": [],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 0,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        }
+      ],
+      "ownedReleased": true
+    },
+    {
+      "group": "actual-production",
+      "cues": [
+        {
+          "relative": "c/jira/w/e3.wav",
+          "sourceId": -1239176,
+          "outputId": -1239178,
+          "frames": 329244,
+          "channels": 1,
+          "hz": 96000,
+          "sourceObjectBytes": 332084,
+          "outputObjectBytes": 2636720,
+          "tempFloatPayload": 67920,
+          "hash": "D1283BBAD00B03C764CD674986F948A3096309813EA45253CBF655D1524DFDBF",
+          "metadata": "e3:329244:2:96000",
+          "loadElapsedMs": 7.6085,
+          "conversionElapsedMs": 1.7499,
+          "sourceRetired": true
+        },
+        {
+          "relative": "c/kar/w/t.wav",
+          "sourceId": -1239180,
+          "outputId": -1239182,
+          "frames": 259584,
+          "channels": 1,
+          "hz": 48000,
+          "sourceObjectBytes": 262424,
+          "outputObjectBytes": 2079440,
+          "tempFloatPayload": 67584,
+          "hash": "846742F5583DB6380E0C2A7523FF5EC024797B467F90038F5280CDD56E5590DF",
+          "metadata": "t:259584:2:48000",
+          "loadElapsedMs": 15.4999,
+          "conversionElapsedMs": 2.0707,
+          "sourceRetired": true
+        },
+        {
+          "relative": "c/dan/w/t.wav",
+          "sourceId": -1239184,
+          "outputId": -1239186,
+          "frames": 236265,
+          "channels": 1,
+          "hz": 44100,
+          "sourceObjectBytes": 239105,
+          "outputObjectBytes": 1892888,
+          "tempFloatPayload": 82668,
+          "hash": "37B0959184AF07877D77AF1317883942F1187B5A07B88499C057387A90557438",
+          "metadata": "t:236265:2:44100",
+          "loadElapsedMs": 6.8778000000000006,
+          "conversionElapsedMs": 1.1404,
+          "sourceRetired": true
+        },
+        {
+          "relative": "data/001.wav",
+          "sourceId": -1239188,
+          "outputId": -1239190,
+          "frames": 11784,
+          "channels": 1,
+          "hz": 44100,
+          "sourceObjectBytes": 14624,
+          "outputObjectBytes": 97040,
+          "tempFloatPayload": 92256,
+          "hash": "D4AF4C422AD4A667358FEC3CA2614F490152DC1A433019B7B7F1DD568A402251",
+          "metadata": "001:11784:2:44100",
+          "loadElapsedMs": 4.9625,
+          "conversionElapsedMs": 0.1275,
+          "sourceRetired": true
+        },
+        {
+          "relative": "c/kim/w/a1.wav",
+          "sourceId": -1239192,
+          "outputId": -1239192,
+          "frames": 17370,
+          "channels": 2,
+          "hz": 48000,
+          "sourceObjectBytes": 72368,
+          "outputObjectBytes": 72368,
+          "tempFloatPayload": 0,
+          "hash": "96AA9F0F25E0EA2A2DBAFE585E3DABC2F8CC0AE067C558622FBEE5916963C921",
+          "metadata": "a1:17370:2:48000",
+          "loadElapsedMs": 9.4148,
+          "conversionElapsedMs": 0.020200000000000003,
+          "sourceRetired": false
+        }
+      ],
+      "stages": [
+        {
+          "stage": "before",
+          "sourceIds": [],
+          "outputIds": [],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 0,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/jira/w/e3.wav",
+          "sourceIds": [
+            -1239176
+          ],
+          "outputIds": [],
+          "sourceObjectBytes": 332084,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 332084,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/jira/w/e3.wav",
+          "sourceIds": [],
+          "outputIds": [
+            -1239178
+          ],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 2636720,
+          "distinctObjectBytes": 2636720,
+          "temporaryFloatPayload": 67920,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/kar/w/t.wav",
+          "sourceIds": [
+            -1239180
+          ],
+          "outputIds": [
+            -1239178
+          ],
+          "sourceObjectBytes": 262424,
+          "outputObjectBytes": 2636720,
+          "distinctObjectBytes": 2899144,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/kar/w/t.wav",
+          "sourceIds": [],
+          "outputIds": [
+            -1239178,
+            -1239182
+          ],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 4716160,
+          "distinctObjectBytes": 4716160,
+          "temporaryFloatPayload": 67584,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/dan/w/t.wav",
+          "sourceIds": [
+            -1239184
+          ],
+          "outputIds": [
+            -1239178,
+            -1239182
+          ],
+          "sourceObjectBytes": 239105,
+          "outputObjectBytes": 4716160,
+          "distinctObjectBytes": 4955265,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/dan/w/t.wav",
+          "sourceIds": [],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186
+          ],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 6609048,
+          "distinctObjectBytes": 6609048,
+          "temporaryFloatPayload": 82668,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:data/001.wav",
+          "sourceIds": [
+            -1239188
+          ],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186
+          ],
+          "sourceObjectBytes": 14624,
+          "outputObjectBytes": 6609048,
+          "distinctObjectBytes": 6623672,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:data/001.wav",
+          "sourceIds": [],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186,
+            -1239190
+          ],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 6706088,
+          "distinctObjectBytes": 6706088,
+          "temporaryFloatPayload": 92256,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "loaded:c/kim/w/a1.wav",
+          "sourceIds": [
+            -1239192
+          ],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186,
+            -1239190
+          ],
+          "sourceObjectBytes": 72368,
+          "outputObjectBytes": 6706088,
+          "distinctObjectBytes": 6778456,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "converted:c/kim/w/a1.wav",
+          "sourceIds": [
+            -1239192
+          ],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186,
+            -1239190,
+            -1239192
+          ],
+          "sourceObjectBytes": 72368,
+          "outputObjectBytes": 6778456,
+          "distinctObjectBytes": 6778456,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "steady",
+          "sourceIds": [
+            -1239192
+          ],
+          "outputIds": [
+            -1239178,
+            -1239182,
+            -1239186,
+            -1239190,
+            -1239192
+          ],
+          "sourceObjectBytes": 72368,
+          "outputObjectBytes": 6778456,
+          "distinctObjectBytes": 6778456,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        },
+        {
+          "stage": "released-and-drained",
+          "sourceIds": [],
+          "outputIds": [],
+          "sourceObjectBytes": 0,
+          "outputObjectBytes": 0,
+          "distinctObjectBytes": 0,
+          "temporaryFloatPayload": 0,
+          "pendingLocalLoads": 0,
+          "destroyRequestedButAliveCount": 0,
+          "scope": "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+        }
+      ],
+      "ownedReleased": true
+    }
+  ],
+  "allResourceIds": [
+    -1239152,
+    -1239154,
+    -1239156,
+    -1239158,
+    -1239160,
+    -1239162,
+    -1239164,
+    -1239166,
+    -1239168,
+    -1239168,
+    -1239176,
+    -1239178,
+    -1239180,
+    -1239182,
+    -1239184,
+    -1239186,
+    -1239188,
+    -1239190,
+    -1239192,
+    -1239192
+  ],
+  "globalCacheUnchanged": true,
+  "finalOwnedZero": true,
+  "scope": "One fixed serial five-file resource group. No cost ABBA, full-catalog decode, Driver GC, RSS, device or full H10 certification."
+}

@@ -1,0 +1,20 @@
+{
+  "status": "UNKNOWN_TOOL_QUERY_UNAVAILABLE_REUSED",
+  "previousTask": "NTSD-H10-MENU-COMPONENT-PASSIVE-VERIFY-20261011",
+  "requiredCapabilities": [
+    "noncreating enumeration of existing loaded-scene components including inactive",
+    "GlobalObjectId or Scene GUID plus local fileID for GO/component/Transform",
+    "specific serialized field reads for m_Script,m_Enabled,AutomaticallyUnparentOnAwake,settingsSo,AudioSourcePoolSize,PoolCanExpand",
+    "settings asset GUID/localID; raw localTransform and missing-script count",
+    "SceneSetup/root/GO/manager instance sets and proven passive Current before-after"
+  ],
+  "whyExistingFallbackNotEnough": "Root/name/nativeID data cannot prove stable serialized identity. Generic component property serialization can call arbitrary getters.",
+  "errorFacts": "execute_code inner success=false, compiler launch filename/extension too long, invocation not reached. Code length alone does not establish reference argument length cause or justify shortening retry.",
+  "actionsThisTask": {
+    "editorCalls": 0,
+    "toolRetries": 0,
+    "pluginChanges": 0,
+    "newScripts": 0,
+    "newMeasurement": 0
+  }
+}

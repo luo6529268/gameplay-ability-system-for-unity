@@ -1,0 +1,58 @@
+{
+  "provenance": "Reconstructed from actual read-only tool calls in this task; no per-command timestamps invented",
+  "editorCalls": 0,
+  "projectCompile": 0,
+  "tests": 0,
+  "measurements": 0,
+  "subagents": 0,
+  "reads": [
+    {
+      "command": "rg --files Assets/NTSD/Scripts | rg selected model/resolver/player/manager file names",
+      "purpose": "resolve exact allowed paths"
+    },
+    {
+      "command": "rg -n sound/armor/type patterns in the exact LF2CharacterData, LF2FrameData, LoganCombatRecordDecoder and two allowed resolver files",
+      "purpose": "find definitions, field assignment and audio helper ranges",
+      "contextFlags": false
+    },
+    {
+      "command": "Python numbered extraction of exact allowed ranges and brace-bounded CharacterAnimtorManager.CollectBattleSoundIds",
+      "output": "allowed-source-excerpts.txt"
+    },
+    {
+      "command": "rg -n exact field patterns in eight allowlisted files",
+      "exactArguments": "exact-field-reference-command.json",
+      "output": "exact-field-reference-lines.txt"
+    },
+    {
+      "command": "rg -n method declaration or direct QueueBattleSound(sound/cue) patterns in exact BattleDamageWriter.cs and LF2Entity.cs",
+      "purpose": "declaration and direct call line only; no body contexts",
+      "contextFlags": false
+    },
+    {
+      "command": "rg --files ... old LF2Character.States/Generic partial names; rg -n declarations at those paths",
+      "result": "file paths absent; no source returned"
+    },
+    {
+      "command": "rg --files Assets/NTSD/Scripts/Animation; rg -n StateExitEvent/State_Frozen declarations in LF2Character.cs and LF2CharacterStateResolver.cs",
+      "result": "two declarations in LF2Character.cs only; no bodies"
+    },
+    {
+      "command": "Get-Content permitted NTSDSoundPlayer.cs lines1-48 and497-581",
+      "purpose": "builtins, sealed rejection and exact SFX mapping"
+    },
+    {
+      "command": "Get-Content current H10 card, previous reports, selected ChangeRecords; parse saved request-sites and other JSON",
+      "purpose": "historical evidence and current decision boundary, no old unauthorized source excerpts"
+    },
+    {
+      "command": "git status --short --branch; git rev-parse HEAD; git diff --cached --binary; git diff --binary",
+      "purpose": "read-only before/after preservation checks"
+    },
+    {
+      "command": "Python hashlib.sha256 of named source, assemblies, scene/settings and old evidence",
+      "purpose": "fingerprints only; not a source-body inspection"
+    }
+  ],
+  "restrictions": "No -C/-A/-B, no broad runtime body scan, no exact query retry or new tool search."
+}

@@ -72,6 +72,7 @@ namespace NTSD.App
         private void EnsureRuntimeModules()
         {
             soundPlayer = gameObject.MMGetOrAddComponent<NTSDSoundPlayer>();
+            SimulationTickDriver.Instance?.BindBattleSoundPreparationOwner(soundPlayer);
             sparkRenderer = gameObject.MMGetOrAddComponent<SparkRenderer>();
             inputModule = new InputModule();
         }
@@ -479,6 +480,8 @@ namespace NTSD.App
             SimulationTickDriver driver = SimulationTickDriver.Instance;
             if (driver == null)
             {
+                soundPlayer?.BeginBattleSoundShutdown();
+                soundPlayer?.CompleteBattleSoundShutdown();
                 bootstrap?.DisablePresentation();
                 report = default;
                 return bootstrap == null || bootstrap.IsRuntimeMapCleared;

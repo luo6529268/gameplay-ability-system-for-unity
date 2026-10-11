@@ -1,0 +1,16 @@
+<!-- CHANGE-RECORD
+id: NTSD-H07-NATIVE-ROUTING-COST-PROBE-001
+status: CODE_WRITTEN
+code-path: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/probe-body.cs
+code-path: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/bridge.py
+code-path: Assets/NTSD/Scripts/Test/Editor/H07NativeRoutingCostProbeEditorTests.cs
+authority: User authorizes same-input causal-chain investigation before complete implementation handoff
+evidence: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/REPORT.md
+-->
+# H07 native routing isolated cost probe
+Current: raw native state parsed per builtin call; missing/invalid=-1 differs from typed0. This is an unmeasured clue, not an optimization result.
+Change: artifact-only in-memory Editor diagnostic, existing compiled methods via cold reflection delegates. No production code, no optimization candidate, no fullDriver qualification. Exact bounded group and cleanup: Task checkpoint / Operation NTSD-H07-NATIVE-ROUTING-COST-PROBE-20261010.
+Validation: semantic exact raw/typed valid-fixture checks, warmed per-loop thread allocated0/capacity; fullRuntimeChecksum outside timer; scenes/source fingerprints unchanged. Result not yet run.
+Rollback: remove only newly added diagnostic after approval, backups for docs; no existing dirty work touched.
+
+Editor entry added after in-memory compiler failed before execution; same finite group, no production change.

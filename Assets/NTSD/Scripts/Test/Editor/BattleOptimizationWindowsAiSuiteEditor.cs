@@ -21,6 +21,64 @@ namespace NTSD.Test.Editor
     [InitializeOnLoad]
     internal static class BattleOptimizationWindowsAiSuiteEditor
     {
+        private static bool startingNativeOwnedCompatibilityQualification;
+
+        [MenuItem("NTSD/Validation/Optimization/H07 Native Owned Compatibility Qualification")]
+        private static void BeginNativeOwnedCompatibilityQualification()
+        {
+            Require(inputCostObserver == null && !startingInputCostDiagnostic,
+                "Native-owned qualification already has an owner.");
+            Require(!UnityEngine.Profiling.Profiler.enabled, "Qualification requires Profiler OFF.");
+            startingNativeOwnedCompatibilityQualification = true;
+            startingInputCostDiagnostic = true;
+            H07InputCostDiagnostics.ResetBaseline();
+            try { BeginPostBindingsRole(); }
+            finally { startingInputCostDiagnostic = false; startingNativeOwnedCompatibilityQualification = false; }
+        }
+
+        private static bool startingInputCpuDiagnostic;
+        [MenuItem("NTSD/Validation/Optimization/H07 Input CPU Diagnostic")]
+        private static void BeginInputCpuDiagnostic()
+        {
+            Require(inputCostObserver == null && !startingInputCostDiagnostic,
+                "Input CPU diagnosis already has an owner.");
+            Require(!UnityEngine.Profiling.Profiler.enabled, "Input CPU diagnosis requires Profiler OFF.");
+            startingInputCpuDiagnostic = true;
+            startingInputCostDiagnostic = true;
+            H07InputCostDiagnostics.ResetBaseline();
+            try { BeginPostBindingsRole(); }
+            finally { startingInputCostDiagnostic = false; startingInputCpuDiagnostic = false; }
+        }
+
+        private static bool startingInputFlowDiagnostic;
+        [MenuItem("NTSD/Validation/Optimization/H07 Full Input Flow Diagnostic")]
+        private static void BeginInputFlowDiagnostic()
+        {
+            Require(!startingInputCostDiagnostic && inputCostObserver == null,
+                "Input flow diagnosis already has an owner.");
+            Require(!UnityEngine.Profiling.Profiler.enabled, "Input flow diagnosis requires Profiler initially OFF.");
+            startingInputFlowDiagnostic = true;
+            startingInputCostDiagnostic = true;
+            H07InputCostDiagnostics.ResetBaseline();
+            try { BeginPostBindingsRole(); }
+            finally { startingInputCostDiagnostic = false; startingInputFlowDiagnostic = false; }
+        }
+
+        private static bool startingInputCostDiagnostic;
+        private static H07InputCostDiagnostics inputCostObserver;
+
+        [MenuItem("NTSD/Validation/Optimization/H07 Input Cost Diagnostic")]
+        private static void BeginInputCostDiagnostic()
+        {
+            Require(!startingInputCostDiagnostic && inputCostObserver == null,
+                "Input cost diagnosis already has an owner.");
+            Require(!UnityEngine.Profiling.Profiler.enabled, "Input cost diagnosis requires Profiler OFF.");
+            startingInputCostDiagnostic = true;
+            H07InputCostDiagnostics.ResetBaseline();
+            try { BeginPostBindingsRole(); }
+            finally { startingInputCostDiagnostic = false; }
+        }
+
         private const string RoleRecordCostOutputRoot = "artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/windows";
         private static bool startingRoleRecordCostDiagnostic;
         private static bool startingRoleRecordPrerequisiteDiagnostic;
@@ -461,6 +519,7 @@ namespace NTSD.Test.Editor
         [Serializable]
         private sealed class RunState
         {
+            public bool inputCostObservationValid;
             public bool roleGroupSnapshotSkipEnabled;
             public bool roleGroupSnapshotSkipFlagApplied;
             public bool roleGroupSnapshotSkipUnchanged;
@@ -695,6 +754,10 @@ namespace NTSD.Test.Editor
             public bool roleRecordPrerequisiteDiagnostic;
             public bool rolePrerequisiteQualification;
             public bool producerAbbaDiagnostic;
+            public bool nativeOwnedCompatibilityQualification;
+            public bool inputCostDiagnostic;
+            public bool inputFlowDiagnostic;
+            public bool inputCpuDiagnostic;
             public bool roleBranchTimingWindow;
             public bool inputBoundaryTimingWindow;
             public bool nativeSampledStateTimingWindow;
@@ -1299,7 +1362,11 @@ namespace NTSD.Test.Editor
                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
-            string outputRoot = startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
+            string outputRoot = startingNativeOwnedCompatibilityQualification ? H07InputCostDiagnostics.QualificationOutputRoot :
+                startingInputCpuDiagnostic ? H07InputCostDiagnostics.CpuOutputRoot :
+                startingInputFlowDiagnostic ? H07InputCostDiagnostics.FlowOutputRoot :
+                startingInputCostDiagnostic ? H07InputCostDiagnostics.OutputRoot :
+                startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
                 startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
                 startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
                 startingProducerAbbaDiagnostic ? ProducerAbbaOutputRoot :
@@ -1374,12 +1441,16 @@ namespace NTSD.Test.Editor
                 roleRecordPrerequisiteDiagnostic = startingRoleRecordPrerequisiteDiagnostic,
                 rolePrerequisiteQualification = startingRolePrerequisiteQualification,
                 producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
+                nativeOwnedCompatibilityQualification = startingNativeOwnedCompatibilityQualification,
+                inputCostDiagnostic = startingInputCostDiagnostic,
+                inputFlowDiagnostic = startingInputFlowDiagnostic,
+                inputCpuDiagnostic = startingInputCpuDiagnostic,
                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
-                runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                runs = new RunState[startingInputCpuDiagnostic ? 2 : startingInputFlowDiagnostic || startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
                 originalScene = scene.path,
                 originalSceneHash = HashFile(scene.path),
                 battleSceneHash = HashFile(BattleScene),
@@ -1466,6 +1537,14 @@ namespace NTSD.Test.Editor
 
         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
         {
+            if (state.nativeOwnedCompatibilityQualification)
+                return H07InputCostDiagnostics.BuildQualificationRequest(index);
+            if (state.inputCpuDiagnostic)
+                return H07InputCostDiagnostics.BuildCpuRequest(index);
+            if (state.inputFlowDiagnostic)
+                return H07InputCostDiagnostics.BuildFlowRequest(index);
+            if (state.inputCostDiagnostic)
+                return H07InputCostDiagnostics.BuildRequest(index);
             if (state.rolePrerequisiteQualification)
                 return H06RolePrerequisiteDiagnostics.BuildQualificationRequest(index);
             if (state.roleRecordPrerequisiteDiagnostic)
@@ -2111,6 +2190,7 @@ namespace NTSD.Test.Editor
                     (!state.bruteOrdinalPacketCandidate || OrdinalPacketObservationValid(run)) &&
                     (!state.bruteDepthRejectCandidate || DepthRejectObservationValid(run)) &&
                     (!state.postBindingsRoleWindow || PostBindingsRoleObservationValid(run)) &&
+                    (!state.inputCostDiagnostic || run.inputCostObservationValid) &&
                     (!state.roleGroupSnapshotSkipWindow || RoleGroupSnapshotSkipObservationValid(run)) &&
                     (!state.roleBranchTimingWindow || RoleBranchTimingObservationValid(run)) &&
                     (!state.inputBoundaryTimingWindow || InputBoundaryTimingObservationValid(run)) &&
@@ -2138,6 +2218,8 @@ namespace NTSD.Test.Editor
                 currentReport = null;
                 if (run.retainedFailedGcMeasurement)
                     state.retainedFailedGcMeasurements++;
+                if (state.inputCostDiagnostic && (!run.workloadValid || (!state.inputCpuDiagnostic && !run.zeroGcPassed) || !run.inputCostObservationValid))
+                    throw new InvalidOperationException("Finite input diagnosis gate failed; no next window is authorized.");
                 if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
                     throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
                 if (!run.workloadValid && !run.retainedFailedGcMeasurement)
@@ -2398,7 +2480,9 @@ namespace NTSD.Test.Editor
                     logicGcObserver == null,
                     "The calibrated scope requires the existing production path before the first tick.");
                 logicGcObserver = new BattleLogicTickGcObserverEditor();
-                if (state.roleRecordCostDiagnostic)
+                if (state.inputCostDiagnostic)
+                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex, state.inputFlowDiagnostic, state.inputCpuDiagnostic, state.nativeOwnedCompatibilityQualification);
+                else if (state.roleRecordCostDiagnostic)
                     roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
                 else
                     logicGcObserver.Attach(runner);
@@ -2486,7 +2570,7 @@ namespace NTSD.Test.Editor
         }
 
         private static bool CurrentPostBindingsRoleQueryValid(BruteForceSceneQuery query, int index) =>
-            state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
+            state.inputCostDiagnostic || state.roleRecordCostDiagnostic ? PostBindingsRoleQueryValid(query, 3) :
             state.roleGroupSnapshotSkipWindow ? RoleGroupSnapshotSkipQueryValid(query, index) :
             state.producerSnapshotReuseWindow ? ProducerSnapshotReuseQueryValid(query, index) :
             state.inputBoundaryTimingWindow ? InputBoundaryTimingQueryValid(query, index) :
@@ -2765,6 +2849,8 @@ namespace NTSD.Test.Editor
             Require(RestoreBruteKind5Presence(), "Kind5 presence must be restored before owner shutdown.");
             if (roleRecordTickObserver != null) FinishRoleRecordObservation(state.runs[state.runIndex], true);
             roleRecordBaseline = null;
+            if (inputCostObserver != null) FinishInputCostObservation(state.runs[state.runIndex], true);
+            H07InputCostDiagnostics.ResetBaseline();
             productionQuery = null;
             if (state.cpuGcCaptureOnly)
                 BattleOptimizationCpuGcCaptureEditor.FinishAndRestore("owner-shutdown");
@@ -2890,11 +2976,11 @@ namespace NTSD.Test.Editor
             try
             {
                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
-                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic)
+                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic || state.inputFlowDiagnostic || state.inputCpuDiagnostic)
                 {
                     run.logicGcEvidence.zeroAllocationPassed = false;
                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
-                    run.logicGcEvidence.status = "INSTRUMENTED_CALLSITE_ONLY / " + run.logicGcEvidence.status;
+                    run.logicGcEvidence.status = (state.inputCpuDiagnostic ? "CPU_DIAGNOSTIC_NOT_CERTIFICATE / " : "INSTRUMENTED_CALLSITE_ONLY / ") + run.logicGcEvidence.status;
                 }
                 if (aborted)
                 {
@@ -2911,8 +2997,23 @@ namespace NTSD.Test.Editor
             {
                 observer.Dispose();
                 if (state.roleRecordCostDiagnostic) FinishRoleRecordObservation(run, aborted);
+                if (state.inputCostDiagnostic) FinishInputCostObservation(run, aborted);
             }
         }
+        private static void FinishInputCostObservation(RunState run, bool aborted)
+        {
+            H07InputCostDiagnostics observer = inputCostObserver;
+            inputCostObserver = null;
+            if (observer == null) return;
+            try
+            {
+                run.inputCostObservationValid = observer.Finish(aborted);
+                SaveNew(run.reportPath + (aborted ? ".input-cost.aborted.json" : ".input-cost.json"),
+                    JsonUtility.ToJson(observer.evidence, true));
+            }
+            finally { observer.Dispose(); }
+        }
+
         private static string PathFor(string path) => Path.GetFullPath(Path.Combine(Application.dataPath, "..", path));
 
         private static bool IsOwnedTerminalOrAbsent()
@@ -2979,7 +3080,15 @@ namespace NTSD.Test.Editor
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
-                    PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
+                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.QualificationOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.CpuOutputRoot) +
+                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.FlowOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.OutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
                     PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.OutputRoot) +
                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||

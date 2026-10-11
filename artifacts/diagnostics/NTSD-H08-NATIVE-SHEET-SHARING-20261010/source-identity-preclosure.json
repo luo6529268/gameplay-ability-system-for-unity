@@ -1,0 +1,23 @@
+[
+  {
+    "path": "Assets\\NTSD\\Scripts\\Animation\\Manager\\CharacterAnimtorManager.cs",
+    "before": "e90facd3e95f815f9266d124086096032b9796c91d4adc5987857901dcf93f99",
+    "after": "ce7acf52f9f7ed1fa37f2f4bb5bacfee674a974d7ba7bef02191418dea2c5a09",
+    "linesAdded": 361,
+    "linesRemoved": 168
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\H08ResidentVisualMemoryDiagnostics.cs",
+    "before": "c485e65f985514f45cfbd4f999103dd82302fdc5241dab5d4e566df8325822d9",
+    "after": "eaecf32e705f7e989f414eb414a8ed092d6da525dbe8f7f6480396028a2538c0",
+    "linesAdded": 468,
+    "linesRemoved": 0
+  },
+  {
+    "path": "Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11AtomicPublicationEditorTests.cs",
+    "before": "8965561f1600fcc59ecef99b945f4f996942b273a27ef23e0e3a5ea35bbe1c1f",
+    "after": "4397e2f7d1e72abed5938f2d8ad068f66a6fbc5c0e2e364301fadef7e88bdfcd",
+    "linesAdded": 567,
+    "linesRemoved": 3
+  }
+]

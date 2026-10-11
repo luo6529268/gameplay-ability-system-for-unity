@@ -1,0 +1,97 @@
+// Artifact-only Editor method body. Change: NTSD-H07-NATIVE-ROUTING-COST-PROBE-001.
+if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling || EditorApplication.isUpdating)
+    throw new InvalidOperationException("Editor is not idle.");
+var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
+var fixtureType = AppDomain.CurrentDomain.GetAssemblies().Select(a => a.GetType("NTSD.Test.NTSD28NativeType0GroundBuiltinsEditorTests")).First(t => t != null);
+var dataFactory = fixtureType.GetMethod("StandardGroundData", flags);
+var characterFactory = fixtureType.GetMethod("CreateCharacter", flags);
+var writerType = typeof(NTSD.Simulation.SimulationWorld).Assembly.GetType("NTSD.Simulation.Ecs.BattleCharacterActionWriter", true);
+var readState = (Func<NTSD.Animation.LF2FrameData, int>)Delegate.CreateDelegate(typeof(Func<NTSD.Animation.LF2FrameData, int>), writerType.GetMethod("ReadNativeInputFrameState", flags));
+var writeFrame = (Func<NTSD.Animation.LF2Objects.LF2Entity, int, bool>)Delegate.CreateDelegate(typeof(Func<NTSD.Animation.LF2Objects.LF2Entity, int, bool>), typeof(NTSD.Animation.LF2Objects.LF2Entity).GetMethod("WriteNativeInputActionUnchecked", flags));
+var loganProperty = typeof(NTSD.Animation.LF2FrameData).GetProperty("UsesLoganFrameNumbers", flags);
+var results = new List<object>();
+var checks = new List<object>();
+var sceneBefore = Enumerable.Range(0, UnityEngine.SceneManagement.SceneManager.sceneCount).Select(i => { var s = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i); return new { s.path, s.isDirty, roots = s.rootCount }; }).ToArray();
+string[] tokens = { "0", "2", "85", "-1", "2147483647", "-2147483648", "", "abc", "+2", " 2", "2147483648", null };
+int[] expected = { 0, 2, 85, -1, 2147483647, -2147483648, -1, -1, -1, -1, -1, -1 };
+for (int i = 0; i < tokens.Length; i++)
+{
+    var frame = new NTSD.Animation.LF2FrameData();
+    loganProperty.SetValue(frame, true, null);
+    if (tokens[i] != null) frame.rawProperties["state"] = tokens[i];
+    int actual = readState(frame);
+    if (actual != expected[i]) throw new InvalidOperationException("Reader semantic probe mismatch.");
+    checks.Add(new { token = tokens[i], expected = expected[i], actual });
+}
+int[] startFrames = { 0, 5, 9 };
+string[] cases = { "idle", "walk", "run" };
+bool[] rawModes = { true, false, false, true };
+for (int c = 0; c < cases.Length; c++)
+{
+    ulong[] referenceChecksums = null;
+    for (int window = 0; window < rawModes.Length; window++)
+    {
+        var world = new NTSD.Simulation.SimulationWorld(NTSD.Simulation.BattleRuntimeProfile.DesktopExtended, 1024);
+        var characters = new List<NTSD.Animation.LF2Objects.LF2Character>(1000);
+        object windowResult = null;
+        try
+        {
+            world.NativeRandom.ResetFromSeed(1u);
+            var data = (NTSD.Animation.LF2CharacterData)dataFactory.Invoke(null, null);
+            foreach (var frame in data.frames)
+            {
+                frame.rawProperties["state"] = frame.state.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                loganProperty.SetValue(frame, rawModes[window], null);
+            }
+            var writer = typeof(NTSD.Simulation.SimulationWorld).GetProperty("CharacterActionWriter", flags).GetValue(world, null);
+            var route = (Func<NTSD.Animation.LF2Objects.LF2Entity, bool>)Delegate.CreateDelegate(typeof(Func<NTSD.Animation.LF2Objects.LF2Entity, bool>), writer, writerType.GetMethod("RouteNativeGroundBuiltins", flags));
+            for (int i = 0; i < 1000; i++)
+            {
+                var character = (NTSD.Animation.LF2Objects.LF2Character)characterFactory.Invoke(null, new object[] { data, i, 840 });
+                characters.Add(character);
+                world.Register(character);
+                if (!ReferenceEquals(character.Runtime.RegisteredWorld, world)) throw new InvalidOperationException("Fixture registration rejected.");
+                if (!writeFrame(character, startFrames[c])) throw new InvalidOperationException("Fixture action setup failed.");
+                if (c != 0) character.Runtime.NativeInputProxy.Current[3] = 1;
+            }
+            if (world.ObjectCount != 1000 || world.ClaimedRuntimeSlotCountForDiagnostics != 1000 || world.RuntimeSlotCapacityRejectCountForDiagnostics != 0) throw new InvalidOperationException("Fixture must contain exactly 1000 registered roles without rejects.");
+            long[] elapsed = new long[32];
+            long[] allocations = new long[32];
+            ulong[] checksums = new ulong[40];
+            int[] ownedCounts = new int[40];
+            int capacity = world.RuntimeSlotCapacityForDiagnostics;
+            for (int round = 0; round < 40; round++)
+            {
+                long beforeAllocation = GC.GetAllocatedBytesForCurrentThread();
+                long begin = System.Diagnostics.Stopwatch.GetTimestamp();
+                int owned = 0;
+                for (int i = 0; i < 1000; i++) if (route(characters[i])) owned++;
+                long end = System.Diagnostics.Stopwatch.GetTimestamp();
+                long allocated = GC.GetAllocatedBytesForCurrentThread() - beforeAllocation;
+                ownedCounts[round] = owned;
+                checksums[round] = world.CaptureRuntimeChecksum64(round, null);
+                if (owned != 1000 || world.RuntimeSlotCapacityForDiagnostics != capacity)
+                    throw new InvalidOperationException("Local ownership/capacity gate failed.");
+                if (round >= 8)
+                {
+                    elapsed[round - 8] = end - begin;
+                    allocations[round - 8] = allocated;
+                    if (allocated != 0) throw new InvalidOperationException("Local measured allocation gate failed: " + allocated);
+                }
+            }
+            if (referenceChecksums == null) referenceChecksums = checksums;
+            bool parity = referenceChecksums.SequenceEqual(checksums);
+            if (!parity) throw new InvalidOperationException("Raw/typed synthetic checksum parity failed.");
+            windowResult = new { caseName = cases[c], window, rawStateParsing = rawModes[window], warm = 8, sample = 32, characters = 1000, elapsedTimestampTicks = elapsed, allocatedBytes = allocations, checksums, ownedCounts, capacity, registered = world.ObjectCount, claimed = world.ClaimedRuntimeSlotCountForDiagnostics, rejects = world.RuntimeSlotCapacityRejectCountForDiagnostics, parity };
+        }
+        finally
+        {
+            foreach (var character in characters) world.Unregister(character);
+            if (world.ObjectCount != 0 || world.ClaimedRuntimeSlotCountForDiagnostics != 0)
+                throw new InvalidOperationException("Isolated fixture cleanup failed.");
+        }
+        results.Add(windowResult);
+    }
+}
+var sceneAfter = Enumerable.Range(0, UnityEngine.SceneManagement.SceneManager.sceneCount).Select(i => { var s = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i); return new { s.path, s.isDirty, roots = s.rootCount }; }).ToArray();
+return new { scope = "SYNTHETIC_ORIGINAL_ROUTING_COST_ONLY_NOT_OPTIMIZATION_OR_DRIVER_CERTIFICATE", frequency = System.Diagnostics.Stopwatch.Frequency, semanticChecks = checks, windows = results, fixtureObjectsAndSlotsAfter = 0, sceneBefore, sceneAfter };

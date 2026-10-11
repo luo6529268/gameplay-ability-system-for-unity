@@ -1,0 +1,138 @@
+{
+  "scope": "SYNTHETIC_ORIGINAL_ROUTING_COST_ONLY_NOT_OPTIMIZATION_OR_DRIVER_CERTIFICATE",
+  "rows": [
+    {
+      "case": "idle",
+      "window": 0,
+      "raw": true,
+      "mean": 0.502884375,
+      "p95": 0.7026,
+      "p99": 0.748,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "idle",
+      "window": 1,
+      "raw": false,
+      "mean": 0.584353125,
+      "p95": 0.9689,
+      "p99": 1.2934999999999999,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "idle",
+      "window": 2,
+      "raw": false,
+      "mean": 0.6041875,
+      "p95": 1.1808999999999998,
+      "p99": 1.9101000000000001,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "idle",
+      "window": 3,
+      "raw": true,
+      "mean": 1.154915625,
+      "p95": 2.5090999999999997,
+      "p99": 2.9537999999999998,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "walk",
+      "window": 0,
+      "raw": true,
+      "mean": 1.328153125,
+      "p95": 2.1641,
+      "p99": 2.5465,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "walk",
+      "window": 1,
+      "raw": false,
+      "mean": 1.21986875,
+      "p95": 1.8881,
+      "p99": 2.2503,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "walk",
+      "window": 2,
+      "raw": false,
+      "mean": 1.890121875,
+      "p95": 3.5305,
+      "p99": 3.7257000000000002,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "walk",
+      "window": 3,
+      "raw": true,
+      "mean": 1.28549375,
+      "p95": 2.1117000000000004,
+      "p99": 2.2771,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "run",
+      "window": 0,
+      "raw": true,
+      "mean": 1.535934375,
+      "p95": 1.9786000000000001,
+      "p99": 2.4439,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "run",
+      "window": 1,
+      "raw": false,
+      "mean": 1.98535625,
+      "p95": 7.0568,
+      "p99": 10.231300000000001,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "run",
+      "window": 2,
+      "raw": false,
+      "mean": 1.539265625,
+      "p95": 4.5542,
+      "p99": 5.6036,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    },
+    {
+      "case": "run",
+      "window": 3,
+      "raw": true,
+      "mean": 1.57661875,
+      "p95": 3.8042000000000002,
+      "p99": 4.6876,
+      "allocated": 0,
+      "parity": true,
+      "capacity": 400
+    }
+  ],
+  "scenesEqual": false
+}

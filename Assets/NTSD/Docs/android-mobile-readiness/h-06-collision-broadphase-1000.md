@@ -1,3 +1,17 @@
+## 2026-10-10 当前阶段更正：H-06
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| 父项目标保留／子项暂不续办 | 不单独排队 | 高 |
+
+Role限定默认和FindEffect既有成果保留；父项开放，Role精确配对诊断不续办。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
+> **2026-10-10 排程更正：Role限定默认准入已完成，H-06父项最终门仍开放。** 已完成成果保留，不重复推广或重跑未受影响证据；H06-ROLE-EXACT记录链/前置修复不再续办。当前首个讨论项为H-07的既有[H07-INPUT](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)，未批准新网格、空间索引或AI行为改变。下方旧“下一Role/尚未默认”只保留原时点。
+
 > 2026-10-09 Role限定准入完成：空配置正常生产默认采用既有Role，显式Brute/Role和非法安全回退保留；当前双布局四窗完整Driver稳态0GC、容量/关闭和可辨收益通过，实际World/query及关闭重建13/13 PASS。H06父项/H07/Android仍开放，95OFF，旧Goal不恢复。
 
 > **已完成单点的独立说明：** [优化点 A：FindEffect 从原代码到修复后代码、效果与边界](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。单点完成不等于本父项或Role默认推广完成。
@@ -14,7 +28,7 @@
 | 类别 / 建议优先级 | CPU / 高 |
 | 当前状态 | D1=A／Role限定准入完成，空配置生产默认Role；父项/H07最终门开放 |
 | 依赖的最小范围 | H-09受影响正确性、H-11适用容量、M-09/M-15基线；不依赖Mono整体 |
-| 下一步与具体方向 | 2026-10-10 producer由用户暂缓；下一[现有Role精确配对成本方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，仅静态分析/方案、具体实施未授权。复用准入证据，不重试无收益微候选；空间分区仍独立 |
+| 下一步与具体方向 | 保留Role默认与FindEffect限定成果；H06-ROLE-EXACT不续办。当前转H07-INPUT方案讨论，空间分区保留既有条件、不自动实施 |
 | 完成边界 | 限定准入必要门通过后可先推广；H06父项/H07整体P95等门未过仍开放 |
 | 方案成熟度 | 独立窗口/生产Change已VERIFIED，实际Role/Brute/Role关闭重建通过；仅限定准入，非最终性能认证 |
 | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |

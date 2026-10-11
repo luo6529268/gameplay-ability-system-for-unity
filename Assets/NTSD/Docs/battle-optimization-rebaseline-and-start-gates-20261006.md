@@ -1,3 +1,5 @@
+> **2026-10-10 当前排序入口更正。** 本文保留2026-10-06基线及强制合同；当前优先级/排程以[重整总清单](android-mobile-readiness-priority-risk-register.md)和[唯一进度](battle-optimization-progress-tracker.md)文首为准，ID及下方历史包顺序不定义当前执行先后。首项为既有H07-INPUT的实现策略讨论，H-01后移Android阶段；已完成、暂缓、条件候选与伴随验证分别处理。仅文档/讨论，额外方向不跟进，不恢复旧Goal/34队列或解冻专项；所有精确33ms/确定性/0GC/关闭门保持。
+
 > **2026-10-09 优化文档整理入口（不恢复执行）：** 用户授权整理总清单/单项方案/进度/依赖；本轮只改文档。[组织与规则](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md)、[当前进度](battle-optimization-progress-tracker.md)、[依赖](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md)、[D1=A已批准](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。34父项与旧证据保留；用户已批准D1=A：既有Role必要准入门通过后可先默认推广，H06/H07最终性能门不变；本会话仍未实施，H07仍FAIL；PERF/ATLAS/MONO/EXT-1保持原门。下方旧active/继续语句是历史，不得自动恢复；正式战斗规则不变；限定准入分阶段依D1=A，最终验收不降低。
 
 # NTSD 优化文档重基线与启动门（2026-10-06）

@@ -1,0 +1,20 @@
+{
+  "backups_intact": true,
+  "protected_files": 17,
+  "protected_changes": [],
+  "head_unchanged": true,
+  "staged_unchanged": true,
+  "unexpected_tracked_changes": [],
+  "links_checked": 29,
+  "broken_links": [
+    {
+      "source": "docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md",
+      "url": "../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "target": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-01-content-deployment.md"
+    }
+  ],
+  "history_or_scope_mismatches": [],
+  "diff_check_exit": 0,
+  "edited_documents": 10,
+  "no_unity_or_tests_run": true
+}

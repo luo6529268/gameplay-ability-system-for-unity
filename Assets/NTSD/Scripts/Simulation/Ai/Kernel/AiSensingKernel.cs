@@ -65,6 +65,185 @@ namespace NTSD.Simulation
                 out result);
         }
 
+        internal static bool TryFindNearestCursorReuseForDiagnostics(
+            AiSensingSnapshot rows,
+            int selfSlot,
+            int inputPhase,
+            AiDecisionEvaluationPolicy policy,
+            out AiSensingNearestResult result)
+        {
+            if (policy != AiDecisionEvaluationPolicy.Indexed)
+                return TryFindNearest(rows, selfSlot, inputPhase, policy, out result);
+            result = default;
+            if (rows == null || !rows.RoleIndexesReady)
+                return false;
+            // Alignment contract R3-AI-LIFE-001: C++ prepare_ai_input does not
+            // reject the active self by HP before its no-target roll/clear path.
+            if (!IsIncluded(rows, selfSlot) ||
+                rows.CoordinateTargetX[selfSlot] > -1000)
+            {
+                return false;
+            }
+
+            int selectedSlot;
+            int bestDist;
+            selectedSlot = FindIndexedGroundCursorReuse(rows, selfSlot, inputPhase, ref result, out bestDist);
+
+            bool sameZLane = selectedSlot >= 0 &&
+                             Abs(rows.Z[selectedSlot] - rows.Z[selfSlot]) < 15;
+            if (rows.State[selfSlot] != 9)
+            {
+                int airSlot = FindIndexedAirCursorReuse(rows, selfSlot, inputPhase, ref result);
+                if (airSlot >= 0)
+                    selectedSlot = airSlot;
+            }
+
+            result.SelectedSlot = selectedSlot;
+            result.BestDist = bestDist;
+            result.SameZLane = sameZLane;
+            CaptureHandle(rows, selectedSlot, ref result.SelectedGeneration, ref result.SelectedIdentity);
+            result.CapturedOccupancyEpoch = rows.CapturedOccupancyEpoch;
+            return true;
+        }
+
+        private static int FindIndexedGroundCursorReuse(
+            AiSensingSnapshot rows,
+            int selfSlot,
+            int inputPhase,
+            ref AiSensingNearestResult result,
+            out int bestDist)
+        {
+            int selectedSlot = -1;
+            bestDist = 10000;
+            int selfX = rows.X[selfSlot];
+            for (int summaryIndex = 0; summaryIndex < rows.GroundRoleTeamSummaryCount; summaryIndex++)
+            {
+                AiSensingRoleTeamSummary summary = rows.GroundRoleTeamSummaries[summaryIndex];
+                if (summary.Count <= 0 || !TeamAllowed(rows.Team[selfSlot], summary.Team, inputPhase))
+                    continue;
+                int spanEnd = summary.Start + summary.Count;
+                int left = LowerBound(rows, rows.GroundRoleSlotsByX, summary.Start, summary.Count, selfX) - 1;
+                int right = left + 1;
+                int leftSlot = -1, rightSlot = -1;
+                int leftDx = int.MaxValue, rightDx = int.MaxValue;
+                bool refreshLeft = true, refreshRight = true;
+                while (left >= summary.Start || right < spanEnd)
+                {
+                    if (refreshLeft)
+                    {
+                        leftSlot = left >= summary.Start ? rows.GroundRoleSlotsByX[left] : -1;
+                        leftDx = leftSlot >= 0 ? Abs(rows.X[leftSlot] - selfX) : int.MaxValue;
+                        refreshLeft = false;
+                    }
+                    if (refreshRight)
+                    {
+                        rightSlot = right < spanEnd ? rows.GroundRoleSlotsByX[right] : -1;
+                        rightDx = rightSlot >= 0 ? Abs(rows.X[rightSlot] - selfX) : int.MaxValue;
+                        refreshRight = false;
+                    }
+                    if (leftDx > bestDist && rightDx > bestDist)
+                        break;
+                    int slot, selectedDx;
+                    if (leftDx <= rightDx)
+                    {
+                        slot = leftSlot;
+                        selectedDx = leftDx;
+                        left--;
+                        refreshLeft = true;
+                    }
+                    else
+                    {
+                        slot = rightSlot;
+                        selectedDx = rightDx;
+                        right++;
+                        refreshRight = true;
+                    }
+                    result.GroundRowVisits++;
+                    if (!IsGroundTarget(rows, selfSlot, slot, inputPhase))
+                        continue;
+                    int distance = selectedDx + Abs(rows.Z[slot] - rows.Z[selfSlot]);
+                    if (distance < bestDist ||
+                        (distance == bestDist && selectedSlot >= 0 && slot < selectedSlot))
+                    {
+                        bestDist = distance;
+                        selectedSlot = slot;
+                    }
+                }
+            }
+            return selectedSlot;
+        }
+
+        private static int FindIndexedAirCursorReuse(
+            AiSensingSnapshot rows,
+            int selfSlot,
+            int inputPhase,
+            ref AiSensingNearestResult result)
+        {
+            int selectedSlot = -1;
+            int bestDist = 10000;
+            int selfX = rows.X[selfSlot];
+            for (int summaryIndex = 0; summaryIndex < rows.AirRoleTeamSummaryCount; summaryIndex++)
+            {
+                AiSensingRoleTeamSummary summary = rows.AirRoleTeamSummaries[summaryIndex];
+                if (summary.Count <= 0 || !TeamAllowed(rows.Team[selfSlot], summary.Team, inputPhase))
+                    continue;
+                int spanEnd = summary.Start + summary.Count;
+                int left = LowerBound(rows, rows.AirRoleSlotsByX, summary.Start, summary.Count, selfX) - 1;
+                int right = left + 1;
+                int leftSlot = -1, rightSlot = -1;
+                int leftDx = int.MaxValue, rightDx = int.MaxValue;
+                bool refreshLeft = true, refreshRight = true;
+                while (left >= summary.Start || right < spanEnd)
+                {
+                    if (refreshLeft)
+                    {
+                        leftSlot = left >= summary.Start ? rows.AirRoleSlotsByX[left] : -1;
+                        leftDx = leftSlot >= 0 ? Abs(rows.X[leftSlot] - selfX) : int.MaxValue;
+                        refreshLeft = false;
+                    }
+                    if (refreshRight)
+                    {
+                        rightSlot = right < spanEnd ? rows.AirRoleSlotsByX[right] : -1;
+                        rightDx = rightSlot >= 0 ? Abs(rows.X[rightSlot] - selfX) : int.MaxValue;
+                        refreshRight = false;
+                    }
+                    int maximumRelevantDx = bestDist < 249 ? bestDist : 249;
+                    if (leftDx > maximumRelevantDx && rightDx > maximumRelevantDx)
+                        break;
+                    int slot, selectedDx;
+                    if (leftDx <= rightDx)
+                    {
+                        slot = leftSlot;
+                        selectedDx = leftDx;
+                        left--;
+                        refreshLeft = true;
+                    }
+                    else
+                    {
+                        slot = rightSlot;
+                        selectedDx = rightDx;
+                        right++;
+                        refreshRight = true;
+                    }
+                    result.AirRowVisits++;
+                    if (!IsAirTarget(rows, selfSlot, slot, inputPhase))
+                        continue;
+                    int zDistance = Abs(rows.Z[slot] - rows.Z[selfSlot]);
+                    int xDistance = selectedDx;
+                    int distance = zDistance + xDistance;
+                    if (zDistance >= 40 || xDistance >= 250)
+                        continue;
+                    if (distance < bestDist ||
+                        (distance == bestDist && selectedSlot >= 0 && slot < selectedSlot))
+                    {
+                        bestDist = distance;
+                        selectedSlot = slot;
+                    }
+                }
+            }
+            return selectedSlot;
+        }
+
         private static bool TryFindNearestCore(
             AiSensingSnapshot rows,
             int selfSlot,

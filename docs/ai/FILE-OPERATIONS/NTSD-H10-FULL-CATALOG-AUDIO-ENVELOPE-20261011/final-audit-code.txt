@@ -1,0 +1,28 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,difflib,xml.etree.ElementTree as ET
+out=Path('artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+op=Path('docs/ai/FILE-OPERATIONS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest() if Path(p).exists() else None
+protected=json.loads((op/'protected-before.json').read_text(encoding='utf-8'))
+drift=[{'path':p,'before':h,'after':sha(p)} for p,h in protected.items() if sha(p)!=h]
+before=json.loads((op/'before-manifest.json').read_text(encoding='utf-8'))
+bad=[x['path'] for x in before if sha(x['backup'])!=x['sha256']]
+inter=list((op/'intermediate').glob('*/manifest.json'));ibad=[]
+for p in inter:
+ d=json.loads(p.read_text(encoding='utf-8'))
+ if sha(d['backup'])!=d['sha256']:ibad.append(str(p))
+def git(*args):
+ return subprocess.run(['git','-c','core.safecrlf=false','--no-pager',*args],capture_output=True,timeout=60)
+head=git('rev-parse','HEAD');staged=git('diff','--no-ext-diff','--cached','--binary')
+status=git('status','--short','--branch','--untracked-files=all')
+with (out/'git-status-final.txt').open('xb') as f:f.write(status.stdout)
+paths=[x['path'] for x in before]+['docs/ai/TASKS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011.md','docs/ai/CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md']
+check=git('diff','--no-ext-diff','--check','--',*paths)
+with (out/'scoped-diff-check.log').open('xb') as f:f.write(check.stdout+check.stderr)
+source=before[0];old=Path(source['backup']).read_text(encoding='utf-8-sig');new=Path(source['path']).read_text(encoding='utf-8-sig')
+prefix=old[:old.rindex('\n    }\n}\n#endif')]
+with (out/'diagnostic-delta.patch').open('x',encoding='utf-8') as f:f.writelines(difflib.unified_diff(old.splitlines(True),new.splitlines(True),fromfile='dirty-before/'+source['path'],tofile=source['path']))
+fp=json.loads((out/'full-fingerprints-after.json').read_text(encoding='utf-8'))
+report={'time':datetime.datetime.now().astimezone().isoformat(),'protectedCount':len(protected),'protectedDrift':drift,'dirtyBackups':len(before),'invalidDirtyBackups':bad,'intermediateBackups':len(inter),'invalidIntermediateBackups':ibad,'oldDiagnosticBodyUnchanged':new.startswith(prefix),'headUnchanged':head.stdout.decode().strip()==(op/'head-before.txt').read_text(encoding='utf-8-sig').strip(),'stagedUnchanged':staged.stdout==(op/'staged-before.patch').read_bytes(),'scopedDiffCheckExitCode':check.returncode,'finalFingerprints':{p:sha(p) for p in fp},'changedSinceMeasuredGroup':[p for p,h in fp.items() if sha(p)!=h],'sourceGuardDifferenceScope':'Only post-measurement diagnostic unknown-manager branch/negative guard; no production or collection/measurement algorithm change, no full rerun'}
+with (out/'final-audit.json').open('x',encoding='utf-8') as f:json.dump(report,f,ensure_ascii=False,indent=2)
+print(json.dumps({k:v for k,v in report.items() if k!='finalFingerprints'},ensure_ascii=True))

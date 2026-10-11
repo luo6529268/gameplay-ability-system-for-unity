@@ -1,0 +1,356 @@
+{
+  "capturedUtc": "2026-10-10T03:41:08.195614+00:00",
+  "originalBackupsVerified": true,
+  "originalBackupCount": 9,
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "sha256": "b9d67febfb6cc835f32a93e83d7f953369026911e9c4dd429cff4592e51bc55b",
+      "size": 1607386
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "sha256": "be2728c9720d8228864313be4d601f6f8734c71b25bcbaa85b6116df757d8730",
+      "size": 230247
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "sha256": "39663fd73f205045a04b316a5fa8f08a7cff845936e95793f11ccfd21093ab99",
+      "size": 493426
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07InputCostDiagnostics.cs",
+      "exists": true,
+      "sha256": "bfdef820da28298f7fea1619567d43f57547ac09857c4492446c05c8e4be6a3a",
+      "size": 9512
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07InputCostDiagnostics.cs.meta",
+      "exists": true,
+      "sha256": "e1722d32dda209d86b99e1e22a120c7afaa0d33905275b6a5a93aa231b6bae9f",
+      "size": 243
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.request.json",
+      "exists": false,
+      "sha256": null,
+      "size": 0
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "sha256": "956ac53f291695edf00565988e27322cdb4bda0ea393eaee09651cbb5da3375f",
+      "size": 496
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result.txt",
+      "exists": false,
+      "sha256": null,
+      "size": 0
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md",
+      "exists": true,
+      "sha256": "b3a1596c077973d1bd200f83c9e3ed40a896e6193dbc0583151f0a65226aa9ca",
+      "size": 7906
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/console-after-compile-01.json",
+      "exists": true,
+      "sha256": "d0e36d3c49850af676c5fca69dc37c6c5467b352d9b930b23751ffaed97922b0",
+      "size": 433
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/console-after-compile-02.json",
+      "exists": true,
+      "sha256": "1d06f20ce8d25bc5667874e457221f8d540445fa53546cb0a11d18b4b8f626b5",
+      "size": 1029
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/console-after-reload-01.json",
+      "exists": true,
+      "sha256": "9da703cb281b418354cb292f74b37db60b951a0e360e83236e3c5387c250f7d2",
+      "size": 1625
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/console-window-progress-01.json",
+      "exists": true,
+      "sha256": "d07327f222acf947f3a2ee382c5c913ed88d2f7aab494542936f7574311d6f4b",
+      "size": 433
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/diagnosis-summary.json",
+      "exists": true,
+      "sha256": "1b89fae18e9306b3f9d3053b50b86df3e29862ffbf9c348ea40cc4ba861ae7a4",
+      "size": 16342
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/diff-check.txt",
+      "exists": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-after-compile-01.json",
+      "exists": true,
+      "sha256": "a24e2c57379056c1b01d390d33f405715130032f2e4e598747727658796bed3a",
+      "size": 2136
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-after-compile-02.json",
+      "exists": true,
+      "sha256": "ad85d134c4f708c142ec2239f47eb803d450b0f628df5b70aba9bc364d2788c7",
+      "size": 2136
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-after-reload-01.json",
+      "exists": true,
+      "sha256": "1dd8338d135406486612628174da22b38203549551b5a5d9a328e425de0b49dc",
+      "size": 2122
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-after-window.json",
+      "exists": true,
+      "sha256": "1f7388216453ef3c9a96f3bc65cbddd02e08445faedf1f0e75fd306e09b641dd",
+      "size": 2122
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-before-compile.json",
+      "exists": true,
+      "sha256": "43c964ada52e33523d8a483fa92bd0846f475ae66c16dd50d546e9f07b32566b",
+      "size": 2123
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-before-window.json",
+      "exists": true,
+      "sha256": "8210e789fdb52e6ec39adb0f9e497ac76156ddac5db251986ce40c672da10dcd",
+      "size": 2243
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/editor-window-progress-01.json",
+      "exists": true,
+      "sha256": "24f7adcb5880007760beaf8552e79e8d6a544ccc52e2039d87df5c1d3a1db2f6",
+      "size": 2138
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/focused-result-01.json",
+      "exists": true,
+      "sha256": "0cb495a427ae9660d3b5ffb32ea6ab2b241c71c4af483a7f9d8f51f0c30a3d9a",
+      "size": 2902
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/focused-start.json",
+      "exists": true,
+      "sha256": "d82957b0dc5f7d0fedb3dc5ecd745e6ea65b781f03bb1e1e7cb15656b17c142d",
+      "size": 305
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/git-after.txt",
+      "exists": true,
+      "sha256": "c2504a097f68df96b5b6c87b344ece1f019c8bb17037ea90b8b4fc8f49b1e3d6",
+      "size": 2702
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/git-before.txt",
+      "exists": true,
+      "sha256": "60b5ade134bda26d25a3f466bb166b2536582e02281c2e97d7a9a90618bd7185",
+      "size": 2327
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/ledger-validation.txt",
+      "exists": true,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/protected-after.json",
+      "exists": true,
+      "sha256": "e34e8d333f9aa33b7d0e39f7ce47131916c142db31bbf84eefd3bb5150feb93b",
+      "size": 64
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/protected-before.json",
+      "exists": true,
+      "sha256": "cd0203e2037ee27fb6aee5cac01635d791104ed1d3f01948090b359f69825b42",
+      "size": 2217375
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/refresh-01.json",
+      "exists": true,
+      "sha256": "f9aeec7f3f86d73f93c8d31e3fcb215bd62f9cea567eba5b36b781b989244217",
+      "size": 346
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/request-comparison.json",
+      "exists": true,
+      "sha256": "079ab2bd98e2bb39a4b1a342c0de390fb73b0672b0516135102a679edccc3e74",
+      "size": 2910
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/scene-after-window.json",
+      "exists": true,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "size": 323
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/scene-before-compile.json",
+      "exists": true,
+      "sha256": "9c90ed272ab4cbd1aa0dd663069aaf723929e257065a8be1b7abfa62b42af0cc",
+      "size": 3329
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/scene-before-refresh.json",
+      "exists": true,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "size": 323
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/scene-before-window.json",
+      "exists": true,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "size": 323
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/window-start.json",
+      "exists": true,
+      "sha256": "6e4562aa5f5f563a85eb5beeee552d8a52a4fd1afd4a46cf61db9a1f40672a57",
+      "size": 223
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json",
+      "exists": true,
+      "sha256": "717b620db286ccca0489c7a93f7b3a45d234b16d525fd6b4789f1464d6b2c22b",
+      "size": 161155
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.final-checksum.json",
+      "exists": true,
+      "sha256": "e4916aca8c5be675b8192d5a6c1429029fd94db6f838cf6c82e532b030836b12",
+      "size": 4208480
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.input-cost.json",
+      "exists": true,
+      "sha256": "dc53f3e3d3a92bea5a653363a07c86cc5208889c3480a76f049b8b63510ac0a1",
+      "size": 784588
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.logic-gc.json",
+      "exists": true,
+      "sha256": "be503c708d944506b5164e7c81b508915ac76c83d32faceae64b73571b4de230",
+      "size": 1925
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.observation.json",
+      "exists": true,
+      "sha256": "f1c2a196075dab9f8ae029ded739ca8b477bdff5b63f558ca748a821f367ff17",
+      "size": 10677
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.request.json",
+      "exists": true,
+      "sha256": "3c7d9c46381ced3d4cc9b76e1d06440d287f9d15f68217c60de0c5f934e0feb4",
+      "size": 2707
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "sha256": "a9036a3708457f6d338198733fd94134444d632372271b37df604cac28f18d4a",
+      "size": 505
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/00-combat1000-off/report.json.terminal.txt",
+      "exists": true,
+      "sha256": "956ac53f291695edf00565988e27322cdb4bda0ea393eaee09651cbb5da3375f",
+      "size": 496
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/01-combat1000-on/report.json.request.json",
+      "exists": true,
+      "sha256": "cdc2fbd33da4c8ef355dd319efb7a7f98b6308aaf996691a411eba26f1f230b5",
+      "size": 2706
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/02-combat1000-on/report.json.request.json",
+      "exists": true,
+      "sha256": "b75b4f544637305b16657b5625b2fd9048e8ba7bea8765124c8152e4db6c349c",
+      "size": 2706
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/03-combat1000-off/report.json.request.json",
+      "exists": true,
+      "sha256": "6e8894c43423c0a62d36cff6698bb59544bf56531bb5d9a1566f7fcab3795202",
+      "size": 2707
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/progress-0000.json",
+      "exists": true,
+      "sha256": "4076eceb9c95ef47a31d01a2dba7c35b50d1823eecee414a404eadb181b05ee0",
+      "size": 10591
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/progress-0001.json",
+      "exists": true,
+      "sha256": "74279b4d9f1c0b1f5c3274b67b6290443f1851ee14f5155847c4889900d90641",
+      "size": 10589
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/windows/suite-result.json",
+      "exists": true,
+      "sha256": "6a68b782c59847970f1420fbb79ddfa36e0a79677b0ed8a170eb7765294305b8",
+      "size": 53799
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "sha256": "58927f9e2833bdd4e89390023e237ffd3701e64d0abbf2f005f25936fd5bbd8a",
+      "size": 754197
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H07-INPUT-COST-DIAG-001.md",
+      "exists": true,
+      "sha256": "83e2d79a90be0f5e6ba4b49552aafb134fc0e75340f6dd762ca9328374c6ba81",
+      "size": 2517
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "exists": true,
+      "sha256": "6f978ef9e751cca15e6ef41156418ec0ca985c794dabafa9b00dbd6d530a2d9b",
+      "size": 387396
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "sha256": "d0eb750690971674e39681bdbaefcdfaa1765187912bcefd032e869fec177e1d",
+      "size": 143300
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-H07-INPUT-COST-DIAG-20261010/RECORD.md",
+      "exists": true,
+      "sha256": "95c7b1640690d84b1f77a80af58b142144b00d47b88db02af9abd90f4593a9d6",
+      "size": 2418
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "exists": true,
+      "sha256": "584fbedd1438d07ea632ca7904d220025b26ff92602f6b913d34496e9f702cee",
+      "size": 10975
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "sha256": "371f57bc07b35373baa7cc83c90c453baf82cc601432978854d7985ff6e3053f",
+      "size": 1668584
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md",
+      "exists": true,
+      "sha256": "76ce7a26f02e408eb7098f63ee2758b1b39a478ee5207d2cd60b7a6cb22cd093",
+      "size": 2353
+    }
+  ],
+  "exclusions": "after-manifest itself; validation.txt created after this snapshot"
+}

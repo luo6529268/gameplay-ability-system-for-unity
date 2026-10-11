@@ -1,0 +1,135 @@
+[
+  {
+    "field": "Scene GUID",
+    "expected": "132c934aff207b048833ab33c1961278",
+    "actual": "132c934aff207b048833ab33c1961278",
+    "status": "PASS_SCENE_ONLY"
+  },
+  {
+    "field": "GO stable localFileID",
+    "expected": "762446124",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "component stable localFileID",
+    "expected": "762446125",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "Transform stable localFileID",
+    "expected": "762446126",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "script GUID",
+    "expected": "614edb33c38bcf949846d5675f29f9fb",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "actual component type",
+    "expected": "MoreMountains.Tools.MMSoundManager",
+    "actual": "MoreMountains.Tools.MMSoundManager",
+    "status": "OBSERVED_CANDIDATE_ONLY"
+  },
+  {
+    "field": "activeSelf",
+    "expected": true,
+    "actual": true,
+    "status": "OBSERVED_CANDIDATE_ONLY"
+  },
+  {
+    "field": "enabled",
+    "expected": true,
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "AutomaticallyUnparentOnAwake",
+    "expected": true,
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "AudioSourcePoolSize",
+    "expected": 10,
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "PoolCanExpand",
+    "expected": true,
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "settingsSo GUID",
+    "expected": "07ea3ff88e1ecb84d91f58aa804badc6",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "settingsSo localFileID",
+    "expected": "11400000",
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "parent",
+    "expected": null,
+    "actual": null,
+    "status": "OBSERVED_ROOT_CANDIDATE_ONLY"
+  },
+  {
+    "field": "children",
+    "expected": 0,
+    "actual": 0,
+    "status": "OBSERVED_CANDIDATE_ONLY"
+  },
+  {
+    "field": "localPosition",
+    "expected": [
+      0,
+      0,
+      0
+    ],
+    "actual": null,
+    "status": "UNKNOWN_RAW_FIELD"
+  },
+  {
+    "field": "localRotation",
+    "expected": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "actual": null,
+    "status": "UNKNOWN_RAW_QUATERNION"
+  },
+  {
+    "field": "localScale",
+    "expected": [
+      1,
+      1,
+      1
+    ],
+    "actual": null,
+    "status": "UNKNOWN_RAW_FIELD"
+  },
+  {
+    "field": "missing scripts",
+    "expected": 0,
+    "actual": null,
+    "status": "UNKNOWN"
+  },
+  {
+    "field": "stable matched manager count",
+    "expected": 1,
+    "actual": null,
+    "status": "UNKNOWN"
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "params": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Test.Editor.H07InputGuardDiagnosticTests.CanonicalGuardMatchesProgressForBoundReleasedAndReplacedOwners",
+      "NTSD.Test.Editor.H07InputGuardDiagnosticTests.CanonicalGuardRejectsNullAndForeignObjectWithBorrowedSlot",
+      "NTSD.Test.Editor.H07InputGuardDiagnosticTests.LegacyProfileNeedsItsOwnGateEvenWhenOwnerIsValid",
+      "NTSD.Test.Editor.H07InputGuardDiagnosticTests.FlowRequestIsOneOriginalFixtureWithOnlyFreshOutput",
+      "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.DataOrientedAiActionResolver_SkipsUnchangedProgressCommit",
+      "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.DataOrientedAiActionResolver_LeavesDirectFieldToNativeSecondPass",
+      "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.RegisteredAiActionResolver_ConsumesAndCommitsRuntimeProgressDirectly",
+      "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeSampleTiming_DisableAndNextTickClearChildren"
+    ]
+  },
+  "result": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "885c283979eb4ac180eba04de638e08e",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": false,
+        "include_failed_tests": false
+      }
+    }
+  }
+}

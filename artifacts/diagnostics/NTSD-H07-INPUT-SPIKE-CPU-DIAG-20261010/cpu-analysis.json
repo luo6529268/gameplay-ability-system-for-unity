@@ -1,0 +1,5700 @@
+{
+  "scope": "Two finite diagnostic windows; elapsed slots are nested; no cycles-to-ms conversion or gain claim",
+  "parityFields": [
+    "tick",
+    "steady",
+    "playerInputCount",
+    "fullRuntimeChecksum",
+    "rngState",
+    "rngCalls",
+    "crtState",
+    "crtCalls",
+    "tableSeed",
+    "synchronizedCounter",
+    "synchronizedIndex",
+    "synchronizedCalls",
+    "lastSynchronizedCallSite",
+    "synchronizedTableHash"
+  ],
+  "offOnParityMismatches": [],
+  "previousProfiledWindowParityMismatchTicks": 0,
+  "windows": [
+    {
+      "window": "00-combat1000-phase-cpu-off",
+      "flagsFailures": 0,
+      "parityMismatches": 0,
+      "ticks": 300,
+      "profilerEnabledCount": 0,
+      "settingsRestored": true,
+      "cpuCalibration": {
+        "monotonic": true,
+        "emptyPairs": 64,
+        "emptyElapsedMeanTimestampTicks": 19,
+        "emptyElapsedMaxTimestampTicks": 931,
+        "emptyCycleMean": 5701,
+        "emptyCycleMax": 315305,
+        "units": "elapsed=Stopwatch ticks; CPU time=GetThreadTimes 100ns units (resolution not asserted); cycles=raw QueryThreadCycleTime, never converted to ms"
+      },
+      "driverElapsedMs": {
+        "mean": 47.49504777777778,
+        "median": 44.57405,
+        "p95": 58.9106,
+        "p99": 111.50980000000001,
+        "min": 39.2599,
+        "max": 113.3567
+      },
+      "driverCpuMs": {
+        "mean": 47.65625,
+        "median": 46.875,
+        "p95": 62.5,
+        "p99": 109.375,
+        "min": 31.25,
+        "max": 109.375
+      },
+      "driverCycles": {
+        "mean": 164026224.4722222,
+        "median": 155193042.0,
+        "p95": 204981563,
+        "p99": 333174868,
+        "min": 137017385,
+        "max": 339881958
+      },
+      "driverElapsedCyclesCorrelation": 0.9899969166239627,
+      "cpuQuantized100nsCounts": {
+        "625000": 16,
+        "468750": 130,
+        "937500": 1,
+        "1093750": 4,
+        "781250": 1,
+        "312500": 28
+      },
+      "steadyAllocationEvents": 2,
+      "allocationTicks": [
+        130,
+        162
+      ],
+      "gcCollectionTicks": [],
+      "commits": 0,
+      "skips": 180000,
+      "nearestVisits": {
+        "mean": 19495.505555555555,
+        "median": 19368.0,
+        "p95": 21853,
+        "p99": 22434,
+        "min": 16641,
+        "max": 22451
+      },
+      "phases": [
+        {
+          "index": 0,
+          "name": "SnapshotSlotSnapshot",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "SnapshotIndexBuild",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "SnapshotQuadtreeSync",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "name": "FindNearestGround",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "FindNearestAir",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "name": "RemainingAiDecision",
+          "elapsedMs": {
+            "mean": 4.961280555555556,
+            "median": 4.80855,
+            "p95": 6.012499999999999,
+            "p99": 7.405,
+            "min": 4.6290000000000004,
+            "max": 11.789000000000001
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 11.789000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 277,
+              "ms": 7.405,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 7.2829,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 7.1291,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 7.0605,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "name": "InputStateSyncFromRuntime",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "name": "ComboUpdate",
+          "elapsedMs": {
+            "mean": 0.4788061111111111,
+            "median": 0.4514,
+            "p95": 0.5785,
+            "p99": 1.366,
+            "min": 0.437,
+            "max": 1.8217
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 132,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 132,
+              "ms": 1.8217,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 1.366,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.9777,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.9086,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.852,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "name": "RefreshRuntimeSnapshot",
+          "elapsedMs": {
+            "mean": 0.07252388888888889,
+            "median": 0.06945,
+            "p95": 0.0872,
+            "p99": 0.1651,
+            "min": 0.061099999999999995,
+            "max": 0.1872
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.1872,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.1651,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.1504,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.1318,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.10880000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "name": "CandidateNearest",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "name": "CandidateSpecial",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "name": "ContextMoveMode",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "name": "CachedTargetRetention",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "name": "PostSpecialMainDecision",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "name": "Teammate20Scan",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "name": "Held20Scan",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "name": "InputEdges",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "name": "SnapshotUnifiedDuplicateCapture",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "name": "SnapshotUnifiedDuplicateIndexBuild",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "name": "UnifiedSnapshotExecutionRowRefresh",
+          "elapsedMs": {
+            "mean": 0.23646,
+            "median": 0.22265,
+            "p95": 0.2833,
+            "p99": 0.7161,
+            "min": 0.2086,
+            "max": 0.7348
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 0.7348,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.7161,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.5957,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.5123000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 162,
+              "ms": 0.3772,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 1
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "name": "IndexedCanonicalCapture",
+          "elapsedMs": {
+            "mean": 0.20487444444444444,
+            "median": 0.1971,
+            "p95": 0.2596,
+            "p99": 0.30820000000000003,
+            "min": 0.1887,
+            "max": 0.5812
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 0.5812,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 0.30820000000000003,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.3025,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 0.3012,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 277,
+              "ms": 0.27599999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 21,
+          "name": "IndexedCanonicalKernel",
+          "elapsedMs": {
+            "mean": 3.1151633333333333,
+            "median": 3.0318500000000004,
+            "p95": 3.6651000000000002,
+            "p99": 4.557,
+            "min": 2.8716000000000004,
+            "max": 6.8297
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 6.8297,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 4.557,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 4.4159999999999995,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 4.355300000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 277,
+              "ms": 3.9325999999999994,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "name": "IndexedCanonicalCommitValidation",
+          "elapsedMs": {
+            "mean": 0.15989555555555554,
+            "median": 0.15564999999999998,
+            "p95": 0.1899,
+            "p99": 0.2364,
+            "min": 0.1472,
+            "max": 0.3692
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 0.3692,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.2364,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 0.2316,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 0.2277,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.20149999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "name": "IndexedCanonicalCommitApply",
+          "elapsedMs": {
+            "mean": 0.4688638888888889,
+            "median": 0.44594999999999996,
+            "p95": 0.5923,
+            "p99": 1.2812999999999999,
+            "min": 0.42250000000000004,
+            "max": 1.7204
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 277,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 277,
+              "ms": 1.7204,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 1.2812999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 0.6725,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 0.6595000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.6553,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "name": "IndexedCanonicalNearestSearch",
+          "elapsedMs": {
+            "mean": 1.540116111111111,
+            "median": 1.50565,
+            "p95": 1.7148,
+            "p99": 2.3259000000000003,
+            "min": 1.3372,
+            "max": 2.755
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 17852,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 2.755,
+              "cycles": 0,
+              "visits": 17852,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 2.3259000000000003,
+              "cycles": 0,
+              "visits": 20724,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 2.1871,
+              "cycles": 0,
+              "visits": 19496,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 2.1365999999999996,
+              "cycles": 0,
+              "visits": 18764,
+              "alloc": 0
+            },
+            {
+              "tick": 277,
+              "ms": 2.0016000000000003,
+              "cycles": 0,
+              "visits": 21276,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 25,
+          "name": "IndexedCanonicalSpecialSearch",
+          "elapsedMs": {
+            "mean": 0.14504166666666668,
+            "median": 0.13999999999999999,
+            "p95": 0.1827,
+            "p99": 0.2099,
+            "min": 0.1308,
+            "max": 0.3653
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 0.3653,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 0.2099,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 0.2077,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.2066,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.19799999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "name": "ActionProgressCapture",
+          "elapsedMs": {
+            "mean": 0.08292722222222222,
+            "median": 0.079,
+            "p95": 0.1013,
+            "p99": 0.2268,
+            "min": 0.07239999999999999,
+            "max": 0.2535
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 0.2535,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.2268,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.196,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.166,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 162,
+              "ms": 0.12430000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 1
+            }
+          ]
+        },
+        {
+          "index": 27,
+          "name": "ActionComboDirectResolve",
+          "elapsedMs": {
+            "mean": 0.05049222222222222,
+            "median": 0.04865,
+            "p95": 0.0593,
+            "p99": 0.0999,
+            "min": 0.041699999999999994,
+            "max": 0.1204
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.1204,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.0999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.0954,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.0877,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.08339999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "name": "ActionReleaseResolve",
+          "elapsedMs": {
+            "mean": 0.03159555555555556,
+            "median": 0.028,
+            "p95": 0.0343,
+            "p99": 0.1898,
+            "min": 0.0239,
+            "max": 0.3424
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.3424,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 0.1898,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.0584,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.0532,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.0517,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "name": "ActionProgressCommit",
+          "elapsedMs": {
+            "mean": 0.08667555555555556,
+            "median": 0.0821,
+            "p95": 0.1054,
+            "p99": 0.1871,
+            "min": 0.076,
+            "max": 0.3533
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 132,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 132,
+              "ms": 0.3533,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.1871,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.16890000000000002,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.1625,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.14750000000000002,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "name": "ProducerFreeze",
+          "elapsedMs": {
+            "mean": 0.23760166666666666,
+            "median": 0.22585,
+            "p95": 0.325,
+            "p99": 0.5416000000000001,
+            "min": 0.2009,
+            "max": 0.7805000000000001
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 0.7805000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.5416000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 0.41209999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 0.406,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.3605,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 31,
+          "name": "ProducerSnapshotRefresh",
+          "elapsedMs": {
+            "mean": 1.0000005555555556,
+            "median": 0.95765,
+            "p95": 1.2827,
+            "p99": 1.521,
+            "min": 0.9237,
+            "max": 3.4111
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 3.4111,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 1.521,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 181,
+              "ms": 1.415,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 268,
+              "ms": 1.4033,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 1.3721,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "name": "ProxyApply",
+          "elapsedMs": {
+            "mean": 0.04520166666666667,
+            "median": 0.041699999999999994,
+            "p95": 0.058,
+            "p99": 0.148,
+            "min": 0.0333,
+            "max": 0.15259999999999999
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.15259999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.148,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.1217,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.1206,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.0998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 33,
+          "name": "NativeSampledState",
+          "elapsedMs": {
+            "mean": 2.926126111111111,
+            "median": 2.76325,
+            "p95": 3.473,
+            "p99": 7.5606,
+            "min": 2.6127,
+            "max": 8.0673
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 8.0673,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 7.5606,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 6.5315,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 6.4909,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 6.0857,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 34,
+          "name": "NativeSamplePreprocess",
+          "elapsedMs": {
+            "mean": 0.41375555555555554,
+            "median": 0.38944999999999996,
+            "p95": 0.5017,
+            "p99": 1.0399999999999998,
+            "min": 0.34400000000000003,
+            "max": 1.2548
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 1.2548,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 1.0399999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.9188,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.8564999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.85,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "name": "NativeComboRoute",
+          "elapsedMs": {
+            "mean": 0.15614166666666668,
+            "median": 0.12945,
+            "p95": 0.1819,
+            "p99": 0.6304000000000001,
+            "min": 0.1154,
+            "max": 3.0166
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 3.0166,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.6304000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.45780000000000004,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.3839,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.3493,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 36,
+          "name": "NativeThreeButtonRoute",
+          "elapsedMs": {
+            "mean": 0.1279627777777778,
+            "median": 0.1237,
+            "p95": 0.1493,
+            "p99": 0.27149999999999996,
+            "min": 0.1155,
+            "max": 0.2931
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.2931,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.27149999999999996,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.2352,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.225,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.1853,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 37,
+          "name": "NativeDirectionRoute",
+          "elapsedMs": {
+            "mean": 0.25992055555555554,
+            "median": 0.24864999999999998,
+            "p95": 0.3332,
+            "p99": 0.5819,
+            "min": 0.2377,
+            "max": 0.6991
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.6991,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.5819,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.5337000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.4845,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 217,
+              "ms": 0.36769999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 38,
+          "name": "NativeBuiltinsRoute",
+          "elapsedMs": {
+            "mean": 0.9993077777777778,
+            "median": 0.94845,
+            "p95": 1.1401000000000001,
+            "p99": 2.3325,
+            "min": 0.878,
+            "max": 2.7946
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 2.7946,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 2.3325,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 2.1556,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 2.0861,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 162,
+              "ms": 1.8513,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 1
+            }
+          ]
+        },
+        {
+          "index": 39,
+          "name": "NativeLegacyProjection",
+          "elapsedMs": {
+            "mean": 0.17871055555555557,
+            "median": 0.1716,
+            "p95": 0.2172,
+            "p99": 0.36460000000000004,
+            "min": 0.16349999999999998,
+            "max": 0.40059999999999996
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.40059999999999996,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.36460000000000004,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.36029999999999995,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.35619999999999996,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 162,
+              "ms": 0.26739999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 1
+            }
+          ]
+        },
+        {
+          "index": 40,
+          "name": "NativeCanonicalAiSync",
+          "elapsedMs": {
+            "mean": 0.3432894444444444,
+            "median": 0.32830000000000004,
+            "p95": 0.4095,
+            "p99": 0.8034,
+            "min": 0.3167,
+            "max": 0.9414
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.9414,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.8034,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.7404,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.6618999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.5136000000000001,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 41,
+          "name": "NativeInputStateSync",
+          "elapsedMs": {
+            "mean": 0.07565333333333334,
+            "median": 0.06999999999999999,
+            "p95": 0.0853,
+            "p99": 0.2852,
+            "min": 0.064,
+            "max": 0.2963
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 132,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 132,
+              "ms": 0.2963,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 137,
+              "ms": 0.2852,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.20670000000000002,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.2011,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.16799999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "window": "01-combat1000-phase-cpu-on",
+      "flagsFailures": 0,
+      "parityMismatches": 0,
+      "ticks": 300,
+      "profilerEnabledCount": 0,
+      "settingsRestored": true,
+      "cpuCalibration": {
+        "monotonic": true,
+        "emptyPairs": 64,
+        "emptyElapsedMeanTimestampTicks": 4,
+        "emptyElapsedMaxTimestampTicks": 10,
+        "emptyCycleMean": 782,
+        "emptyCycleMax": 1322,
+        "units": "elapsed=Stopwatch ticks; CPU time=GetThreadTimes 100ns units (resolution not asserted); cycles=raw QueryThreadCycleTime, never converted to ms"
+      },
+      "driverElapsedMs": {
+        "mean": 50.74774222222222,
+        "median": 48.307900000000004,
+        "p95": 58.588,
+        "p99": 114.0642,
+        "min": 42.0656,
+        "max": 125.67960000000001
+      },
+      "driverCpuMs": {
+        "mean": 50.86805555555556,
+        "median": 46.875,
+        "p95": 62.5,
+        "p99": 109.375,
+        "min": 31.25,
+        "max": 109.375
+      },
+      "driverCycles": {
+        "mean": 175108403.68333334,
+        "median": 167651848.5,
+        "p95": 204082965,
+        "p99": 346892080,
+        "min": 146448100,
+        "max": 355857497
+      },
+      "driverElapsedCyclesCorrelation": 0.9898524831004841,
+      "cpuQuantized100nsCounts": {
+        "625000": 31,
+        "468750": 140,
+        "781250": 2,
+        "1093750": 2,
+        "937500": 2,
+        "312500": 3
+      },
+      "steadyAllocationEvents": 0,
+      "allocationTicks": [],
+      "gcCollectionTicks": [],
+      "commits": 0,
+      "skips": 180000,
+      "nearestVisits": {
+        "mean": 19495.505555555555,
+        "median": 19368.0,
+        "p95": 21853,
+        "p99": 22434,
+        "min": 16641,
+        "max": 22451
+      },
+      "phases": [
+        {
+          "index": 0,
+          "name": "SnapshotSlotSnapshot",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "SnapshotIndexBuild",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "name": "SnapshotQuadtreeSync",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "name": "FindNearestGround",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "name": "FindNearestAir",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "name": "RemainingAiDecision",
+          "elapsedMs": {
+            "mean": 6.509212222222223,
+            "median": 6.285550000000001,
+            "p95": 6.8801000000000005,
+            "p99": 13.1722,
+            "min": 6.0792,
+            "max": 13.470899999999999
+          },
+          "rawCycles": {
+            "mean": 21379051.277777776,
+            "median": 20865745.5,
+            "p95": 22420687,
+            "p99": 37172093,
+            "min": 20159523,
+            "max": 37897005
+          },
+          "elapsedCyclesCorrelation": 0.9188959718931583,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 134,
+          "peakCycles": 37897005,
+          "peakCyclesOverMedian": 1.8162305775271725,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 13.470899999999999,
+              "cycles": 37897005,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 13.1722,
+              "cycles": 29199934,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 11.940900000000001,
+              "cycles": 26882217,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 11.267299999999999,
+              "cycles": 37172093,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 11.213799999999999,
+              "cycles": 36852459,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 6,
+          "name": "InputStateSyncFromRuntime",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 7,
+          "name": "ComboUpdate",
+          "elapsedMs": {
+            "mean": 1.4231416666666667,
+            "median": 1.3883999999999999,
+            "p95": 1.5977999999999999,
+            "p99": 2.222,
+            "min": 1.3671,
+            "max": 2.4047
+          },
+          "rawCycles": {
+            "mean": 3976898.95,
+            "median": 3891841.5,
+            "p95": 4383536,
+            "p99": 6053509,
+            "min": 3842740,
+            "max": 6926722
+          },
+          "elapsedCyclesCorrelation": 0.9726308139434879,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 133,
+          "peakCycles": 6926722,
+          "peakCyclesOverMedian": 1.779805780888045,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 2.4047,
+              "cycles": 6926722,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 2.222,
+              "cycles": 6053509,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 2.1153999999999997,
+              "cycles": 5954308,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 1.933,
+              "cycles": 5495295,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 1.8316999999999999,
+              "cycles": 5109110,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 8,
+          "name": "RefreshRuntimeSnapshot",
+          "elapsedMs": {
+            "mean": 0.07388944444444444,
+            "median": 0.07150000000000001,
+            "p95": 0.0875,
+            "p99": 0.15239999999999998,
+            "min": 0.0632,
+            "max": 0.1744
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 0.1744,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.15239999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.1356,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.1342,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.1138,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 9,
+          "name": "CandidateNearest",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 10,
+          "name": "CandidateSpecial",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 11,
+          "name": "ContextMoveMode",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 12,
+          "name": "CachedTargetRetention",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 13,
+          "name": "PostSpecialMainDecision",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 14,
+          "name": "Teammate20Scan",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 15,
+          "name": "Held20Scan",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 16,
+          "name": "InputEdges",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 17,
+          "name": "SnapshotUnifiedDuplicateCapture",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 18,
+          "name": "SnapshotUnifiedDuplicateIndexBuild",
+          "elapsedMs": {
+            "mean": 0.0,
+            "median": 0.0,
+            "p95": 0.0,
+            "p99": 0.0,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 121,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 121,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 122,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 123,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 124,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 125,
+              "ms": 0.0,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 19,
+          "name": "UnifiedSnapshotExecutionRowRefresh",
+          "elapsedMs": {
+            "mean": 0.2476288888888889,
+            "median": 0.2343,
+            "p95": 0.3076,
+            "p99": 0.6698999999999999,
+            "min": 0.2084,
+            "max": 0.9909999999999999
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 0.9909999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.6698999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.5452,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.4834,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.3663,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 20,
+          "name": "IndexedCanonicalCapture",
+          "elapsedMs": {
+            "mean": 0.21047666666666667,
+            "median": 0.20145,
+            "p95": 0.2707,
+            "p99": 0.4372,
+            "min": 0.1924,
+            "max": 0.444
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 136,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 136,
+              "ms": 0.444,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.4372,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 228,
+              "ms": 0.42979999999999996,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.4267,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 299,
+              "ms": 0.3284,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 21,
+          "name": "IndexedCanonicalKernel",
+          "elapsedMs": {
+            "mean": 4.124307777777778,
+            "median": 4.0242,
+            "p95": 4.4969,
+            "p99": 6.8009,
+            "min": 3.8474,
+            "max": 8.307
+          },
+          "rawCycles": {
+            "mean": 13308994.222222222,
+            "median": 13028153.0,
+            "p95": 14012239,
+            "p99": 21635155,
+            "min": 12414987,
+            "max": 22289833
+          },
+          "elapsedCyclesCorrelation": 0.980445824368936,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 134,
+          "peakCycles": 22289833,
+          "peakCyclesOverMedian": 1.7108973927463087,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 8.307,
+              "cycles": 22289833,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 6.8009,
+              "cycles": 21635155,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 6.7108,
+              "cycles": 21379880,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 5.7642,
+              "cycles": 17598164,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 5.4073,
+              "cycles": 17545412,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 22,
+          "name": "IndexedCanonicalCommitValidation",
+          "elapsedMs": {
+            "mean": 0.15801833333333334,
+            "median": 0.15265,
+            "p95": 0.1819,
+            "p99": 0.3167,
+            "min": 0.1461,
+            "max": 0.33849999999999997
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 134,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 0.33849999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.3167,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.3008,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 179,
+              "ms": 0.2434,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.2349,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 23,
+          "name": "IndexedCanonicalCommitApply",
+          "elapsedMs": {
+            "mean": 0.46220666666666665,
+            "median": 0.44555,
+            "p95": 0.5488999999999999,
+            "p99": 0.9511,
+            "min": 0.4224,
+            "max": 0.9531999999999999
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 135,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 135,
+              "ms": 0.9531999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.9511,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.9214,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 0.7147,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.6952,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 24,
+          "name": "IndexedCanonicalNearestSearch",
+          "elapsedMs": {
+            "mean": 2.033463333333333,
+            "median": 2.00075,
+            "p95": 2.2019,
+            "p99": 2.9526,
+            "min": 1.8243999999999998,
+            "max": 3.797
+          },
+          "rawCycles": {
+            "mean": 6110989.6,
+            "median": 6026602.5,
+            "p95": 6611871,
+            "p99": 8749394,
+            "min": 5399274,
+            "max": 9138006
+          },
+          "elapsedCyclesCorrelation": 0.9561833764472114,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 134,
+          "peakCycles": 9138006,
+          "peakCyclesOverMedian": 1.516278201523993,
+          "peakVisits": 17341,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 3.797,
+              "cycles": 9138006,
+              "visits": 17341,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 2.9526,
+              "cycles": 8749394,
+              "visits": 17852,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 2.9231000000000003,
+              "cycles": 8539313,
+              "visits": 17324,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 2.8191,
+              "cycles": 7500023,
+              "visits": 17803,
+              "alloc": 0
+            },
+            {
+              "tick": 199,
+              "ms": 2.5247,
+              "cycles": 7654426,
+              "visits": 18055,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 25,
+          "name": "IndexedCanonicalSpecialSearch",
+          "elapsedMs": {
+            "mean": 0.15400111111111112,
+            "median": 0.14934999999999998,
+            "p95": 0.1674,
+            "p99": 0.2961,
+            "min": 0.13999999999999999,
+            "max": 0.30519999999999997
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 134,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 0.30519999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.2961,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.29550000000000004,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 0.2328,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.2256,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 26,
+          "name": "ActionProgressCapture",
+          "elapsedMs": {
+            "mean": 0.08611222222222223,
+            "median": 0.08174999999999999,
+            "p95": 0.1081,
+            "p99": 0.221,
+            "min": 0.0727,
+            "max": 0.25930000000000003
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 229,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 229,
+              "ms": 0.25930000000000003,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.221,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.184,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.1652,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.1357,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 27,
+          "name": "ActionComboDirectResolve",
+          "elapsedMs": {
+            "mean": 0.05588888888888889,
+            "median": 0.053349999999999995,
+            "p95": 0.07229999999999999,
+            "p99": 0.111,
+            "min": 0.0472,
+            "max": 0.1295
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 224,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 224,
+              "ms": 0.1295,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.111,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 198,
+              "ms": 0.1109,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.0976,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.0934,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 28,
+          "name": "ActionReleaseResolve",
+          "elapsedMs": {
+            "mean": 0.03222833333333333,
+            "median": 0.030750000000000003,
+            "p95": 0.0402,
+            "p99": 0.059500000000000004,
+            "min": 0.0266,
+            "max": 0.1365
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 280,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 280,
+              "ms": 0.1365,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.059500000000000004,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.0539,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.0535,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.0524,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 29,
+          "name": "ActionProgressCommit",
+          "elapsedMs": {
+            "mean": 0.5549105555555556,
+            "median": 0.54305,
+            "p95": 0.6252,
+            "p99": 0.816,
+            "min": 0.5336,
+            "max": 0.8616999999999999
+          },
+          "rawCycles": {
+            "mean": 1021854.5444444445,
+            "median": 1004210.0,
+            "p95": 1121532,
+            "p99": 1461980,
+            "min": 990904,
+            "max": 1646924
+          },
+          "elapsedCyclesCorrelation": 0.9324024909255505,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 133,
+          "peakCycles": 1646924,
+          "peakCyclesOverMedian": 1.640019517829936,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 0.8616999999999999,
+              "cycles": 1646924,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.816,
+              "cycles": 1461980,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.7866000000000001,
+              "cycles": 1426150,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.7092,
+              "cycles": 1305589,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 263,
+              "ms": 0.7010000000000001,
+              "cycles": 1080052,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 30,
+          "name": "ProducerFreeze",
+          "elapsedMs": {
+            "mean": 0.24807333333333334,
+            "median": 0.23835,
+            "p95": 0.3024,
+            "p99": 0.5493,
+            "min": 0.2106,
+            "max": 0.5737
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 134,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 0.5737,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.5493,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.5483,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.4093,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 0.4045,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 31,
+          "name": "ProducerSnapshotRefresh",
+          "elapsedMs": {
+            "mean": 1.507873888888889,
+            "median": 1.45385,
+            "p95": 1.6601000000000001,
+            "p99": 3.3669,
+            "min": 1.4074,
+            "max": 3.9921999999999995
+          },
+          "rawCycles": {
+            "mean": 4270553.616666666,
+            "median": 4134476.0,
+            "p95": 4646557,
+            "p99": 9258924,
+            "min": 3982923,
+            "max": 9262960
+          },
+          "elapsedCyclesCorrelation": 0.9828867110762537,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 134,
+          "peakCycles": 9240275,
+          "peakCyclesOverMedian": 2.2349325525169332,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 134,
+              "ms": 3.9921999999999995,
+              "cycles": 9240275,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 3.3669,
+              "cycles": 9262960,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 3.1683000000000003,
+              "cycles": 9258924,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 2.2222,
+              "cycles": 6471089,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 2.1609,
+              "cycles": 6004092,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 32,
+          "name": "ProxyApply",
+          "elapsedMs": {
+            "mean": 0.048398333333333335,
+            "median": 0.04485,
+            "p95": 0.0588,
+            "p99": 0.1598,
+            "min": 0.0378,
+            "max": 0.1948
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 0.1948,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.1598,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.12029999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.1121,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.0956,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 33,
+          "name": "NativeSampledState",
+          "elapsedMs": {
+            "mean": 3.5381722222222223,
+            "median": 3.364,
+            "p95": 4.0083,
+            "p99": 9.2663,
+            "min": 3.2176,
+            "max": 12.1553
+          },
+          "rawCycles": {
+            "mean": 11207288.077777777,
+            "median": 10775623.5,
+            "p95": 12850586,
+            "p99": 21317915,
+            "min": 10320686,
+            "max": 26790026
+          },
+          "elapsedCyclesCorrelation": 0.927253457482306,
+          "pairCounts": [
+            1000
+          ],
+          "peakTick": 133,
+          "peakCycles": 26790026,
+          "peakCyclesOverMedian": 2.4861694546027895,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 12.1553,
+              "cycles": 26790026,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 9.2663,
+              "cycles": 16756832,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 6.686100000000001,
+              "cycles": 21317915,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 6.2040999999999995,
+              "cycles": 20004180,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 5.2433000000000005,
+              "cycles": 17034203,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 34,
+          "name": "NativeSamplePreprocess",
+          "elapsedMs": {
+            "mean": 0.43804777777777776,
+            "median": 0.4143,
+            "p95": 0.5497,
+            "p99": 0.7728999999999999,
+            "min": 0.37839999999999996,
+            "max": 2.2466999999999997
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 2.2466999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.7728999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.7105,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.6845,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.6348,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 35,
+          "name": "NativeComboRoute",
+          "elapsedMs": {
+            "mean": 0.1474438888888889,
+            "median": 0.13815,
+            "p95": 0.2062,
+            "p99": 0.3181,
+            "min": 0.1252,
+            "max": 0.43320000000000003
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 0.43320000000000003,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.3181,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.3045,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.2768,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 228,
+              "ms": 0.247,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 36,
+          "name": "NativeThreeButtonRoute",
+          "elapsedMs": {
+            "mean": 0.1384188888888889,
+            "median": 0.13065,
+            "p95": 0.1474,
+            "p99": 0.2872,
+            "min": 0.12229999999999999,
+            "max": 0.8656
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 0.8656,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.2872,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.2349,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.23379999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.2041,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 37,
+          "name": "NativeDirectionRoute",
+          "elapsedMs": {
+            "mean": 0.2672222222222222,
+            "median": 0.25505,
+            "p95": 0.3421,
+            "p99": 0.5297999999999999,
+            "min": 0.24230000000000002,
+            "max": 0.675
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 0.675,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.5297999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.4674,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 224,
+              "ms": 0.4605,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.43389999999999995,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 38,
+          "name": "NativeBuiltinsRoute",
+          "elapsedMs": {
+            "mean": 1.0425733333333334,
+            "median": 0.9869000000000001,
+            "p95": 1.1777,
+            "p99": 2.8417999999999997,
+            "min": 0.9056,
+            "max": 3.836
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 3.836,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 2.8417999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 2.0894,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 1.8684,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 132,
+              "ms": 1.5887,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 39,
+          "name": "NativeLegacyProjection",
+          "elapsedMs": {
+            "mean": 0.19222833333333333,
+            "median": 0.17789999999999997,
+            "p95": 0.2205,
+            "p99": 0.5679,
+            "min": 0.1688,
+            "max": 1.59
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 1.59,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 0.5679,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.3352,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.31129999999999997,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.2694,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 40,
+          "name": "NativeCanonicalAiSync",
+          "elapsedMs": {
+            "mean": 0.3527438888888889,
+            "median": 0.3357,
+            "p95": 0.40709999999999996,
+            "p99": 1.0421,
+            "min": 0.32289999999999996,
+            "max": 1.1004999999999998
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 131,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 131,
+              "ms": 1.1004999999999998,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 133,
+              "ms": 1.0421,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.6924,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.6476999999999999,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.5312,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        },
+        {
+          "index": 41,
+          "name": "NativeInputStateSync",
+          "elapsedMs": {
+            "mean": 0.07614222222222222,
+            "median": 0.07235,
+            "p95": 0.0936,
+            "p99": 0.1854,
+            "min": 0.0659,
+            "max": 0.21780000000000002
+          },
+          "rawCycles": {
+            "mean": 0,
+            "median": 0.0,
+            "p95": 0,
+            "p99": 0,
+            "min": 0,
+            "max": 0
+          },
+          "elapsedCyclesCorrelation": null,
+          "pairCounts": [
+            0
+          ],
+          "peakTick": 133,
+          "peakCycles": 0,
+          "peakCyclesOverMedian": null,
+          "peakVisits": 0,
+          "peakAlloc": 0,
+          "top5": [
+            {
+              "tick": 133,
+              "ms": 0.21780000000000002,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 135,
+              "ms": 0.1854,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 136,
+              "ms": 0.1483,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 134,
+              "ms": 0.1271,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            },
+            {
+              "tick": 131,
+              "ms": 0.1188,
+              "cycles": 0,
+              "visits": 0,
+              "alloc": 0
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

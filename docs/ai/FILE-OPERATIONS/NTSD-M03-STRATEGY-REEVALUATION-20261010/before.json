@@ -1,0 +1,70 @@
+{
+  "task": "NTSD-M03-STRATEGY-REEVALUATION-20261010",
+  "timestamp": "2026-10-10T10:22:47.479213+00:00",
+  "manifest": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "sha256": "7231fb3c7b69841321e8431bddd50cdd77c5a319d365c29268433733d7cbee21",
+      "bytes": 149909,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "sha256": "3899428177c9a8ab6a56373df6e96cda4c77e38d58fe0d186ddbd6e4a9da7a7b",
+      "bytes": 405314,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "sha256": "fd3d19d41fef800da8ee74a4163c95f4f67244760da13d5190a074f61f702bc9",
+      "bytes": 1686691,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\docs\\ai\\STATE.md",
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "sha256": "2dfeddbdd629b2c8a6d75bbfbac70b75094dd434fb492de0944f81fbdcaadd99",
+      "bytes": 1625513,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "sha256": "ba09aea3f470d9f054521e2c3202f5b739bd41edc9418c6f6440018d8bf9e423",
+      "bytes": 246237,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "absolute": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "sha256": "fa74fc769229ddfa808b754b8cfd0684cbc2105a193c7d34cffccde64b78c6b8",
+      "bytes": 45360,
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-STRATEGY-REEVALUATION-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\m-03-dynamic-mesh-upload.md",
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+    }
+  ],
+  "protected": {
+    "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs": "f003c6d15ad6271e7d24ac84c2f70c9b5a328eabed40f40658416a5c7eb75bcf",
+    "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs": "cee95e74a6a2f1d9e16631e210f5c8bace8f517d1f0c3a1b20932bab24127090",
+    "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs": "247bd7e73dfa8d4f004968e0e7e0d93917e28eb39fe8e26d6a361602d0cb118d",
+    "Assets/NTSD/Scripts/Animation/Runtime/BattleSpriteCatalog.cs": "f1d2a174d0e585507c94c74f7f51e91fd6019934efb64648ab728744a043190c",
+    "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs": "200816f8acbd15cf2c7920071c8d2aaf2e1106f8225a121af15e4aa0a764d5b5",
+    "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationDisplayMotion.cs": "dad3c1dba0968c181921dca009fa4cb03749fa5209fd89a36282c56983c49213",
+    "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationPhaseDiagnostics.cs": "22523db614c1cd2532461f23dad9d7f306c33164c2b6f08bb1240e07c5814ba8",
+    "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs": "1be334ebaa630abcf461207708792547f15ddd4a6cd489dbaa6f14ffbc256b81",
+    "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs": "99a79d7552b2a3e7b07ec776b2df716cb8ce9869d0eec6358f2339bd9a76ac26",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff",
+    "Packages/manifest.json": "21d93b83f18d354050ea0965165806001563de7ac2e974841279aff63edb2705",
+    "ProjectSettings/ProjectVersion.txt": "b51e896aa269e68a1a2edc32ed0920b7c15973e9775f9c03967074bf5854ca73"
+  },
+  "head": "6e04c4eda3276c5b8ce8e9971dcf762b8113acfd",
+  "stagedSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

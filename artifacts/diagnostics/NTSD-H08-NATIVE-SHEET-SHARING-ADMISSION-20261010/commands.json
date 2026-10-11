@@ -1,0 +1,47 @@
+{
+  "transport": "existing Unity TCP 127.0.0.1:6402; project PID39108",
+  "compile": {
+    "tool": "refresh_unity",
+    "params": {
+      "mode": "if_dirty",
+      "scope": "scripts",
+      "compile": "request",
+      "wait_for_ready": false
+    }
+  },
+  "entry": {
+    "tool": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.Editor.H08ResidentVisualMemoryDiagnostics.NativeSheetReuse_ColdSwitchDefaultsOnAndRetainsExplicitOff",
+        "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.NativeDefaultAdmission_ConfiguredEntryPreservesFallbackAndRebuildsOwners"
+      ]
+    }
+  },
+  "lifecycle": {
+    "tool": "run_tests",
+    "params": {
+      "mode": "EditMode",
+      "testNames": [
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_CancelGenerationReleasesSharedStagingAndRetryPublishes",
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_FailedGenerationKeepsOldPublication",
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LeaseRebindsUiAndPreservesBorrowedAssetsUntilSharedRetirement",
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOff_LoadedPublicationUsesUnityDestroyCallback",
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LoadedPublicationUsesUnityDestroyCallback",
+        "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_DriverShutdownRecyclesGroupedUnpublishedImages",
+        "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers",
+        "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate",
+        "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.ReplacedGlobalOwner_CannotPublishItsLateInputResult"
+      ]
+    }
+  },
+  "results": {
+    "tool": "get_test_job",
+    "params": {
+      "include_details": true,
+      "include_failed_tests": true
+    }
+  },
+  "validation": "Tools/Validate-ChangeLedger.ps1; git diff --check -- exact four script paths plus changed governance; Python SHA256 preimage/protection/source/assembly audit"
+}

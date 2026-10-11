@@ -1,0 +1,6 @@
+# Independent static review (no Unity run)
+Reviewer agent01a1267f-f9b3-7981-9f00-a52eebe6be43. Two P2 gaps found before final tests and corrected: attached resources must be Destroy-requested before NextFrame; diagnostic sink binding must preserve existing captured owner and reject foreign player before assignment. Current-request controller-change silent-unsealed result additionally changed to fail visibly while preserving superseded/shutdown early-return.
+
+Compatibility actual14 cases:13 PASS,1 FAIL retained. The failure at SoundPresentationDispatchEditorTests.cs:129 expects a voice holding original 44100-frame mono clip. Dirty-before NTSDSoundPlayer.PlayPreparedCue already converts to new stereo and selects BattlePlaybackClips; pre-task bounded helper creates new2channel clip. PrepareLoadedCue sets only Clips/IsLoaded, not BattlePlaybackClips or OwnedSource. Thus the test assumption is already incompatible before this task; this is static baseline attribution, not a rerun of old version or a 14/14 PASS. Existing NTSD28OriginalCommonAudioEditorTests.MonoPlaybackAcceptsDirectSoundCenterGain agrees with current stereo route and passed. Old test left unchanged outside write scope.
+
+No Q06 bodies read. PCM helper/maths unchanged, formal local ownership checks and stale release judged coherent statically. Runtime gates remain independent.

@@ -1,0 +1,23 @@
+{
+  "scope": "These current data fields exist outside the saved frame/weapon sound collector shape. No claim that every field is a string cue or a reachable production request.",
+  "fields": [
+    {
+      "field": "LF2CharacterData.armors / LF2ArmorData.sound1/sound2",
+      "evidence": [
+        "Assets/NTSD/Scripts/Animation/LF2CharacterData.cs:79",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:37"
+      ],
+      "gap": "Armor string fields are not exported in prior perDefinition inventory or explicitly visited by CollectBattleSoundIds. Actual request-use depends on restricted hit writer; cannot assert omitted runtime audio or silently assume included."
+    },
+    {
+      "field": "InteractionArea.sound / WeaponStrengthEntry.sound",
+      "evidence": [
+        "Assets/NTSD/Scripts/Animation/LF2FrameData.cs:369",
+        "Assets/NTSD/Scripts/Animation/LF2FrameData.cs:593",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:152",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:203"
+      ],
+      "gap": "Numeric data, not directly WAV path. Mapping to final cue or control flag requires actual request consumer. Do not format arbitrary numeric field as SFX string without evidence."
+    }
+  ]
+}

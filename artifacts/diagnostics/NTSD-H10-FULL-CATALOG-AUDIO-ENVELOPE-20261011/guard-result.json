@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "61f5852cc2174193b53086910c14bdb5",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791651756000,
+      "finished_unix_ms": 1791651763049,
+      "last_update_unix_ms": 1791651763049,
+      "progress": {
+        "completed": 1,
+        "total": 10718,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791651762228,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.CatalogAudioEnvelopeUnknownManagerGuardPreservesObjects",
+        "last_finished_unix_ms": 1791651762290,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.6814353,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CatalogAudioEnvelopeUnknownManagerGuardPreservesObjects",
+            "fullName": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.CatalogAudioEnvelopeUnknownManagerGuardPreservesObjects",
+            "state": "Passed",
+            "durationSeconds": 0.0576828,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "status": "PROPOSAL_ONLY_NOT_AUTHORIZED_OR_EXECUTED",
+  "scopePolicy": "Each line is a specific read request for human decision, not a blanket Q06 reopening",
+  "requests": [
+    {
+      "id": "R1",
+      "file": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplyWeaponDamage",
+      "declarationLine": 1289,
+      "requestLine": 1370,
+      "question": "Which assignments, branch guards and definition identity produce local sound passed to QueueBattleSound? Is armor/numeric sound involved?",
+      "minimalPermission": "Only local sound value-production slice and guards within this method; no damage/RNG/HP writes or transitively opening helpers. If value originates from another restricted helper, stop and name that helper.",
+      "knownLimit": "Direct request line and signature indexed; variable assignment not legally read."
+    },
+    {
+      "id": "R2",
+      "file": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplyNativeType5HurtTail",
+      "declarationLine": 1927,
+      "requestLine": 1975,
+      "question": "Which finite constants or definition fields produce cue, and which preconditions select it?",
+      "minimalPermission": "Only cue assignment/guards and QueueBattleSound slice, no other tail side effects.",
+      "knownLimit": "Historical type5/armor records do not bind current complete variable source."
+    },
+    {
+      "id": "R3",
+      "file": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplySpecialObjectHurtTail",
+      "declarationLine": 2000,
+      "requestLine": 2063,
+      "question": "Does current cue come exclusively from attacker weapon_broken_sound, and what guards apply?",
+      "minimalPermission": "Only cue assignment/guards and QueueBattleSound slice; do not use old unauthorized snippets.",
+      "knownLimit": "Historical TYPE3-NATIVE-AUDIO-ORACLE describes older path; not current direct proof."
+    },
+    {
+      "id": "R4",
+      "file": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "symbol": "QueueNativeC25FrameSounds",
+      "declarationLine": 6967,
+      "requestLine": 6986,
+      "question": "Does local sound use the same FrameSounds source, index cap20 and fallback rules as collector?",
+      "minimalPermission": "This small sound-only method, with current frame source identities; no surrounding frame transaction.",
+      "knownLimit": "Prior saved list shows FrameSounds values, but no legal current method-body proof."
+    },
+    {
+      "id": "R5",
+      "file": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "symbols": [
+        {
+          "symbol": "StateExitEvent",
+          "declarationLine": 687
+        },
+        {
+          "symbol": "State_Frozen",
+          "declarationLine": 1623
+        }
+      ],
+      "question": "Does the compatibility state_exit dispatch reach DamageStateResolver.StateFrozen in the current production state path?",
+      "minimalPermission": "Only frozen-state state_exit dispatch/forwarding and bypass guards in these two symbols, no other state body.",
+      "knownLimit": "Current declaration lines confirmed only; bodies not read."
+    },
+    {
+      "id": "R6",
+      "file": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "symbol": "RunNativeC25FrameTransaction",
+      "declarationLine": 6748,
+      "question": "Does the native frame/state transition invoke or bypass that StateExitEvent route?",
+      "minimalPermission": "Only calls/guards that determine frozen state_exit dispatch, not whole transaction. Follow-up readers must stop if proving this needs another symbol.",
+      "knownLimit": "Declaration located only. R5/R6 needed only if choosing to resolve IceShatter formal reachability; no full-Q06 approval requested."
+    }
+  ],
+  "extraFieldConsumerLimit": "No exact restricted consumer for armor/numeric sound is proved by allowed evidence. Do not invent one or request all writers; if approving additional reference-index-only search, it must list exact files and output only method declarations/direct audio call lines before any body permission."
+}

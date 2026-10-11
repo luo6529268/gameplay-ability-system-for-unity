@@ -1,0 +1,2725 @@
+{
+    "status": "LOCAL_SCAN_GAIN_SIGNAL_ONLY",
+    "scope": "Editor local mirror scan only; one scan per sample; no Build or native upload gain claim",
+    "frequency": 10000000,
+    "unit": "TimeNanoseconds",
+    "before": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 100
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "after": {
+        "passed": true,
+        "knownLiveBytes": 1048576,
+        "positive": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 1,
+            "allocationEvents": 1,
+            "rawValueTotal": 200
+        },
+        "empty": {
+            "valid": true,
+            "calibratedBefore": false,
+            "saturated": false,
+            "wrapped": false,
+            "sampleCount": 0,
+            "allocationEvents": 0,
+            "rawValueTotal": 0
+        }
+    },
+    "windows": [
+        {
+            "quads": 2000,
+            "grouped": false,
+            "order": 0,
+            "warm": 8,
+            "ticks": [
+                5595,
+                5764,
+                5802,
+                5086,
+                5544,
+                5243,
+                5223,
+                3447,
+                3916,
+                3602,
+                3653,
+                3513,
+                3661,
+                3678,
+                3660,
+                3686,
+                3529,
+                3724,
+                3610,
+                3290,
+                3199,
+                3301,
+                5172,
+                4001,
+                3828,
+                3240,
+                3580,
+                3255,
+                3718,
+                3636,
+                3661,
+                3654
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.404596875,
+            "p95Ms": 0.5764,
+            "p99Ms": 0.5802,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 2000,
+            "grouped": true,
+            "order": 1,
+            "warm": 8,
+            "ticks": [
+                1952,
+                1430,
+                1525,
+                1733,
+                1490,
+                1511,
+                1474,
+                1492,
+                1483,
+                1465,
+                1451,
+                1448,
+                1336,
+                1266,
+                1337,
+                1297,
+                1292,
+                1282,
+                1285,
+                1294,
+                1353,
+                1449,
+                1451,
+                1443,
+                1446,
+                1459,
+                1464,
+                1362,
+                1476,
+                1460,
+                1456,
+                1455
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.144115625,
+            "p95Ms": 0.1733,
+            "p99Ms": 0.1952,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 2000,
+            "grouped": true,
+            "order": 2,
+            "warm": 8,
+            "ticks": [
+                1297,
+                1452,
+                1451,
+                1463,
+                1478,
+                1443,
+                1440,
+                1441,
+                1445,
+                1441,
+                1420,
+                1401,
+                1425,
+                1510,
+                1510,
+                1460,
+                1471,
+                1496,
+                1495,
+                1510,
+                1457,
+                1487,
+                1463,
+                1460,
+                1438,
+                1440,
+                1439,
+                1436,
+                1416,
+                1438,
+                1718,
+                1489
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.14603125,
+            "p95Ms": 0.151,
+            "p99Ms": 0.1718,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 2000,
+            "grouped": false,
+            "order": 3,
+            "warm": 8,
+            "ticks": [
+                4081,
+                4130,
+                4239,
+                4111,
+                4089,
+                4228,
+                4090,
+                4032,
+                3927,
+                3944,
+                4012,
+                3901,
+                4096,
+                4018,
+                4069,
+                3886,
+                4072,
+                4065,
+                4041,
+                4093,
+                3806,
+                3775,
+                3776,
+                3951,
+                3902,
+                3803,
+                4008,
+                3958,
+                4016,
+                4115,
+                3967,
+                3636
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.399490625,
+            "p95Ms": 0.4228,
+            "p99Ms": 0.4239,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 4096,
+            "grouped": false,
+            "order": 0,
+            "warm": 8,
+            "ticks": [
+                6648,
+                7852,
+                6390,
+                7318,
+                8223,
+                7225,
+                7185,
+                7229,
+                10586,
+                7732,
+                7837,
+                8283,
+                7313,
+                7841,
+                7547,
+                7802,
+                7350,
+                7478,
+                8142,
+                8217,
+                7424,
+                7415,
+                6985,
+                7720,
+                7322,
+                7206,
+                7390,
+                7163,
+                7272,
+                6777,
+                7172,
+                7376
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.7544375,
+            "p95Ms": 0.8283,
+            "p99Ms": 1.0586,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 4096,
+            "grouped": true,
+            "order": 1,
+            "warm": 8,
+            "ticks": [
+                2976,
+                2972,
+                2979,
+                3009,
+                2899,
+                2900,
+                2902,
+                2835,
+                2620,
+                2650,
+                2691,
+                2664,
+                2593,
+                2642,
+                2606,
+                3367,
+                2653,
+                2943,
+                2978,
+                2968,
+                2957,
+                2915,
+                2901,
+                2927,
+                2926,
+                2903,
+                2931,
+                2854,
+                2759,
+                2915,
+                2915,
+                2840
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.28621875,
+            "p95Ms": 0.3009,
+            "p99Ms": 0.3367,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 4096,
+            "grouped": true,
+            "order": 2,
+            "warm": 8,
+            "ticks": [
+                3438,
+                3312,
+                3355,
+                3337,
+                3473,
+                3274,
+                3108,
+                2990,
+                3095,
+                3003,
+                2962,
+                2993,
+                2909,
+                3000,
+                3016,
+                3023,
+                2944,
+                3003,
+                2996,
+                2998,
+                2988,
+                3003,
+                3016,
+                2999,
+                3006,
+                2839,
+                2949,
+                2988,
+                2985,
+                2974,
+                3003,
+                2996
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.306171875,
+            "p95Ms": 0.3438,
+            "p99Ms": 0.3473,
+            "bufferUnchanged": true
+        },
+        {
+            "quads": 4096,
+            "grouped": false,
+            "order": 3,
+            "warm": 8,
+            "ticks": [
+                6488,
+                7308,
+                6709,
+                6715,
+                6884,
+                6558,
+                6690,
+                6600,
+                7235,
+                6752,
+                6700,
+                7105,
+                6827,
+                6831,
+                7224,
+                6631,
+                6716,
+                6961,
+                6870,
+                6844,
+                6947,
+                6550,
+                6483,
+                7751,
+                7395,
+                7383,
+                6944,
+                7085,
+                7383,
+                6936,
+                6661,
+                7302
+            ],
+            "gc": [
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                },
+                {
+                    "valid": true,
+                    "calibratedBefore": true,
+                    "saturated": false,
+                    "wrapped": false,
+                    "sampleCount": 0,
+                    "allocationEvents": 0,
+                    "rawValueTotal": 0
+                }
+            ],
+            "meanMs": 0.6920875,
+            "p95Ms": 0.7395,
+            "p99Ms": 0.7751,
+            "bufferUnchanged": true
+        }
+    ],
+    "completed": 8
+}

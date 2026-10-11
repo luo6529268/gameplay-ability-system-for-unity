@@ -1,0 +1,327 @@
+[
+  {
+    "id": "R1",
+    "status": "STATIC_VALUE_COVERAGE_CLOSED_UNDER_SAME_GENERATION",
+    "proofLevel": "CURRENT_SCOPED_STATIC_WITH_REUSED_FROZEN_CATALOG",
+    "definitionIdentity": "LF2HitResolveRuntimeData.ResolveCharacterData(attacker) uses living _FrameDataWrapper.characterData else entity.FrameCache.Wrapper.characterData; allowed helper proof reused with unchanged SHA",
+    "valueField": "weapon_broken_sound",
+    "localNonemptyGuard": "!string.IsNullOrEmpty(value)",
+    "mapping": "21 saved weapon_broken_sound cue rows /169 occurrences selected from existing1000cue metadata, with original identity/key/routes in cue-mapping-evidence.json",
+    "assumptions": [
+      "attacker references a prepared definition from the same frozen published content generation",
+      "no external mutation of that field after prepare",
+      "only value coverage is closed, not transaction-wide reachability/behavior or runtime event ordering"
+    ],
+    "excludedFieldUse": "armor.sound1/sound2, InteractionArea.sound and WeaponStrengthEntry.sound do not participate in the inspected value production slices; no whole-project unused claim",
+    "localTypeGuard": "attacker.GetCurrentDataObjectTypeForSimulation() == 3",
+    "readEvidence": {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplyWeaponDamage",
+      "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+      "methodBounds": [
+        1289,
+        1400
+      ],
+      "lines": [
+        {
+          "line": 1289,
+          "text": "        internal bool ApplyWeaponDamage("
+        },
+        {
+          "line": 1366,
+          "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)"
+        },
+        {
+          "line": 1368,
+          "text": "                string sound = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+        },
+        {
+          "line": 1369,
+          "text": "                if (!string.IsNullOrEmpty(sound))"
+        },
+        {
+          "line": 1370,
+          "text": "                    attacker.QueueBattleSound(sound);"
+        }
+      ],
+      "purposes": [
+        "Initial exact sound variable assignment/reference and audio request matches only",
+        "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+      ],
+      "uniqueReadLineCount": 5
+    }
+  },
+  {
+    "id": "R2",
+    "status": "STATIC_VALUE_COVERAGE_CLOSED_UNDER_SAME_GENERATION",
+    "proofLevel": "CURRENT_SCOPED_STATIC_WITH_REUSED_FROZEN_CATALOG",
+    "definitionIdentity": "LF2HitResolveRuntimeData.ResolveCharacterData(attacker) uses living _FrameDataWrapper.characterData else entity.FrameCache.Wrapper.characterData; allowed helper proof reused with unchanged SHA",
+    "valueField": "weapon_broken_sound",
+    "localNonemptyGuard": "!string.IsNullOrEmpty(value)",
+    "mapping": "21 saved weapon_broken_sound cue rows /169 occurrences selected from existing1000cue metadata, with original identity/key/routes in cue-mapping-evidence.json",
+    "assumptions": [
+      "attacker references a prepared definition from the same frozen published content generation",
+      "no external mutation of that field after prepare",
+      "only value coverage is closed, not transaction-wide reachability/behavior or runtime event ordering"
+    ],
+    "excludedFieldUse": "armor.sound1/sound2, InteractionArea.sound and WeaponStrengthEntry.sound do not participate in the inspected value production slices; no whole-project unused claim",
+    "localTypeGuard": "attacker.GetCurrentDataObjectTypeForSimulation() == 3",
+    "readEvidence": {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplyNativeType5HurtTail",
+      "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+      "methodBounds": [
+        1927,
+        1998
+      ],
+      "lines": [
+        {
+          "line": 1927,
+          "text": "        private static void ApplyNativeType5HurtTail("
+        },
+        {
+          "line": 1971,
+          "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)"
+        },
+        {
+          "line": 1973,
+          "text": "                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+        },
+        {
+          "line": 1974,
+          "text": "                if (!string.IsNullOrEmpty(cue))"
+        },
+        {
+          "line": 1975,
+          "text": "                    attacker.QueueBattleSound(cue);"
+        }
+      ],
+      "purposes": [
+        "Initial exact sound variable assignment/reference and audio request matches only",
+        "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+      ],
+      "uniqueReadLineCount": 5
+    }
+  },
+  {
+    "id": "R3",
+    "status": "STATIC_VALUE_COVERAGE_CLOSED_UNDER_SAME_GENERATION",
+    "proofLevel": "CURRENT_SCOPED_STATIC_WITH_REUSED_FROZEN_CATALOG",
+    "definitionIdentity": "LF2HitResolveRuntimeData.ResolveCharacterData(attacker) uses living _FrameDataWrapper.characterData else entity.FrameCache.Wrapper.characterData; allowed helper proof reused with unchanged SHA",
+    "valueField": "weapon_broken_sound",
+    "localNonemptyGuard": "!string.IsNullOrEmpty(value)",
+    "mapping": "21 saved weapon_broken_sound cue rows /169 occurrences selected from existing1000cue metadata, with original identity/key/routes in cue-mapping-evidence.json",
+    "assumptions": [
+      "attacker references a prepared definition from the same frozen published content generation",
+      "no external mutation of that field after prepare",
+      "only value coverage is closed, not transaction-wide reachability/behavior or runtime event ordering"
+    ],
+    "excludedFieldUse": "armor.sound1/sound2, InteractionArea.sound and WeaponStrengthEntry.sound do not participate in the inspected value production slices; no whole-project unused claim",
+    "localTypeGuard": "attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack",
+    "readEvidence": {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "symbol": "ApplySpecialObjectHurtTail",
+      "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+      "methodBounds": [
+        2000,
+        2125
+      ],
+      "lines": [
+        {
+          "line": 2000,
+          "text": "        private static void ApplySpecialObjectHurtTail("
+        },
+        {
+          "line": 2059,
+          "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack)"
+        },
+        {
+          "line": 2061,
+          "text": "                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+        },
+        {
+          "line": 2062,
+          "text": "                if (!string.IsNullOrEmpty(cue))"
+        },
+        {
+          "line": 2063,
+          "text": "                    attacker.QueueBattleSound(cue);"
+        }
+      ],
+      "purposes": [
+        "Initial exact sound variable assignment/reference and audio request matches only",
+        "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+      ],
+      "uniqueReadLineCount": 5
+    }
+  },
+  {
+    "id": "R4",
+    "status": "STATIC_VALUE_COVERAGE_CLOSED_UNDER_SAME_GENERATION",
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "symbol": "QueueNativeC25FrameSounds",
+    "readLines": [
+      6967,
+      6988
+    ],
+    "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b",
+    "source": "Frame.N -> FrameCache.GetNativeFrameDataById(action)",
+    "guards": [
+      "action in [0,999)",
+      "Runtime.NativeSoundActionLatch differs; then set latch to action",
+      "frame exists"
+    ],
+    "legacy": "if !frame.UsesLoganFrameNumbers and FrameSounds.Count==0 then QueueBattleSound(frame.sound), return",
+    "native": "first min(20, FrameSounds.Count), skip null/empty entry; same collector source/cap/fallback",
+    "mapping": "existing976 distinct captured frame cue routes in prior metadata-coverage.json; no remapping or runtime sampling",
+    "assumptions": [
+      "FrameCache native lookup belongs to same prepared catalog generation and frame list",
+      "no post-prepare content mutation"
+    ],
+    "notClaimed": [
+      "method is pure/no state writes: it updates existing sound-action latch",
+      "all runtime event timings/checksums/retriggers newly verified"
+    ]
+  },
+  {
+    "id": "R5",
+    "status": "COMPAT_FORWARDING_PROVED_FORMAL_DISPATCH_UNKNOWN",
+    "known": [
+      "StateExitEvent returns RunStateExitPhase() || DispatchCurrentStateEvent(\"state_exit\")",
+      "C# short circuit: true phase result skips Dispatch; false evaluates Dispatch",
+      "State_Frozen forwards eventType/eventData to _damageStateResolver.StateFrozen",
+      "allowed DamageStateResolver emits exact IceShatter on state_exit"
+    ],
+    "unknown": [
+      "RunStateExitPhase return conditions for frozen/native path",
+      "DispatchCurrentStateEvent current state routing to State_Frozen"
+    ],
+    "notClaimed": "formal reachable or always bypassed; no runtime run"
+  },
+  {
+    "id": "R6",
+    "status": "INDIRECT_BINDING_CALLBACK_BEHAVIOR_UNKNOWN",
+    "known": [
+      "No direct StateExitEvent/state_exit/Frozen match in the approved transaction",
+      "Conditional BindNativeC25Action calls at6775,6785,6811,6839,6855,6859,6866 with false/true args"
+    ],
+    "unknown": [
+      "BindNativeC25Action callback behavior and parameter meaning",
+      "whether frozen exits reach or bypass compatibility dispatch through the binder"
+    ],
+    "notClaimed": "absence of direct call proves absence of indirect call; boolean true/false interpreted as callback enable/disable",
+    "readEvidence": {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "symbol": "RunNativeC25FrameTransaction",
+      "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b",
+      "methodBounds": [
+        6748,
+        6891
+      ],
+      "lines": [
+        {
+          "line": 6748,
+          "text": "        private bool RunNativeC25FrameTransaction()"
+        },
+        {
+          "line": 6767,
+          "text": "            if (type == 3 && frame != null &&"
+        },
+        {
+          "line": 6768,
+          "text": "                !(frame.HasPrimaryCatchPoint && frame.PrimaryCatchPoint.Kind == 2))"
+        },
+        {
+          "line": 6770,
+          "text": "                if (frame.state == 3007)"
+        },
+        {
+          "line": 6772,
+          "text": "                    if (Health.HP < 1)"
+        },
+        {
+          "line": 6775,
+          "text": "                        BindNativeC25Action(frame.hit_d == 0 ? 10 : frame.hit_d, false);"
+        },
+        {
+          "line": 6779,
+          "text": "                else if (frame.hit_a > 0)"
+        },
+        {
+          "line": 6782,
+          "text": "                    if (Health.HP < 1)"
+        },
+        {
+          "line": 6785,
+          "text": "                        BindNativeC25Action(frame.hit_d, false);"
+        },
+        {
+          "line": 6808,
+          "text": "            if (type >= 0 && frame.state == 0 && Runtime.YInt < 0 &&"
+        },
+        {
+          "line": 6809,
+          "text": "                Runtime.YInt != Runtime.CollisionYReference)"
+        },
+        {
+          "line": 6811,
+          "text": "                BindNativeC25Action(212, false);"
+        },
+        {
+          "line": 6820,
+          "text": "            if (AttackingCounter > frame.wait)"
+        },
+        {
+          "line": 6831,
+          "text": "                else"
+        },
+        {
+          "line": 6834,
+          "text": "                    if (rawNext >= 1300 && rawNext < 1400 && frame.state != 80)"
+        },
+        {
+          "line": 6839,
+          "text": "                        BindNativeC25Action(selected, true);"
+        },
+        {
+          "line": 6843,
+          "text": "                    else"
+        },
+        {
+          "line": 6853,
+          "text": "                        if (target >= 1000 || target < 0)"
+        },
+        {
+          "line": 6855,
+          "text": "                            BindNativeC25Action(target, false);"
+        },
+        {
+          "line": 6857,
+          "text": "                        else"
+        },
+        {
+          "line": 6859,
+          "text": "                            BindNativeC25Action(target, true);"
+        },
+        {
+          "line": 6862,
+          "text": "                            if (rawNext == 999)"
+        },
+        {
+          "line": 6866,
+          "text": "                                BindNativeC25Action(resolved, true);"
+        },
+        {
+          "line": 6875,
+          "text": "                ApplyCommonCaughtExitHitStop(previousAction);"
+        }
+      ],
+      "purposes": [
+        "Exact exit/frozen dispatch and bypass matches only; not full transaction",
+        "Only callback/dispatch/frame-transition call names within approved transaction; no unrelated state writes",
+        "Only lexically enclosing conditions of observed native action-binding calls; helper body not read"
+      ],
+      "uniqueReadLineCount": 24
+    }
+  }
+]

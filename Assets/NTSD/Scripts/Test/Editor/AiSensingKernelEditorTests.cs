@@ -7,6 +7,23 @@ namespace NTSD.Test
 {
     public sealed class AiSensingKernelEditorTests
     {
+        private delegate bool CursorQuery(AiSensingSnapshot rows, int self, int phase,
+            AiDecisionEvaluationPolicy policy, out AiSensingNearestResult result);
+
+        private static CursorQuery BindCursorCandidate()
+        {
+            var method = typeof(AiSensingKernel).GetMethod("TryFindNearestCursorReuseForDiagnostics",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            Assert.That(method, Is.Not.Null, "The isolated candidate entry must exist.");
+            return (CursorQuery)Delegate.CreateDelegate(typeof(CursorQuery), method);
+        }
+
+        [Test]
+        public void CursorReuse_EntryExists()
+        {
+            Assert.That(BindCursorCandidate(), Is.Not.Null);
+        }
+
         [Test]
         public void Nearest_PreservesGroundTieAirOverrideAndGroundFacts()
         {
@@ -328,6 +345,470 @@ namespace NTSD.Test
             snapshot.SpecialSlotCount = 0;
             Assert.That(AiSensingKernel.ValidateIndexedContract(snapshot), Is.False,
                 "special membership must be recomputed from the captured object id");
+        }
+
+        private static int CursorAbs(int value) => value < 0 ? -value : value;
+
+        private static void BuildCursorIndexes(AiSensingSnapshot rows)
+        {
+            var ground = new System.Collections.Generic.List<int>();
+            var air = new System.Collections.Generic.List<int>();
+            var teams = new System.Collections.Generic.SortedSet<int>();
+            rows.SpecialSlotCount = 0;
+            Array.Clear(rows.SpecialScanMember, 0, rows.Capacity);
+            for (int slot = 0; slot < rows.Capacity; slot++)
+            {
+                if (!rows.Included[slot]) continue;
+                int oid = rows.ObjectId[slot];
+                if (slot >= 20 && (oid / 100 == 1 || oid == 200 || oid == 211 || oid == 212 || oid == 213))
+                {
+                    rows.SpecialScanMember[slot] = true;
+                    rows.SpecialSlots[rows.SpecialSlotCount++] = slot;
+                }
+                if (rows.Hp[slot] <= 0) continue;
+                if (rows.DataObjectType[slot] == 0) teams.Add(rows.Team[slot]);
+                if (rows.State[slot] == 14 || CursorAbs(rows.HitStop[slot]) > 2) air.Add(slot);
+                else if (rows.DataObjectType[slot] == 0 || rows.State[slot] == 3000) ground.Add(slot);
+            }
+            Comparison<int> order = (a, b) =>
+            {
+                int comparison = rows.Team[a].CompareTo(rows.Team[b]);
+                if (comparison == 0) comparison = rows.X[a].CompareTo(rows.X[b]);
+                return comparison == 0 ? a.CompareTo(b) : comparison;
+            };
+            ground.Sort(order);
+            air.Sort(order);
+            rows.GroundRoleSlotCount = ground.Count;
+            rows.AirRoleSlotCount = air.Count;
+            rows.GroundRoleTeamSummaryCount = FillCursorSpans(rows, ground, rows.GroundRoleSlotsByX, rows.GroundRoleTeamSummaries);
+            rows.AirRoleTeamSummaryCount = FillCursorSpans(rows, air, rows.AirRoleSlotsByX, rows.AirRoleTeamSummaries);
+            rows.TeamSummaryCount = 0;
+            foreach (int team in teams)
+            {
+                int count = 0, min = int.MaxValue, second = int.MaxValue, minCount = 0;
+                for (int slot = 0; slot < rows.Capacity; slot++)
+                {
+                    if (!rows.Included[slot] || rows.DataObjectType[slot] != 0 ||
+                        rows.Hp[slot] <= 0 || rows.Team[slot] != team) continue;
+                    count++;
+                    int hp = rows.Hp[slot];
+                    if (hp < min) { second = min; min = hp; minCount = 1; }
+                    else if (hp == min) minCount++;
+                    else if (hp < second) second = hp;
+                }
+                rows.TeamSummaries[rows.TeamSummaryCount++] = new AiSensingTeamSummary
+                {
+                    Team = team, Count = count, MinHp = min, MinCount = minCount, SecondMinHp = second
+                };
+            }
+            rows.RoleIndexesReady = rows.SpecialIndexReady = rows.TeamSummariesReady = true;
+            Assert.That(AiSensingKernel.ValidateIndexedContract(rows), Is.True, "Cold fixture must have complete indexes.");
+        }
+
+        private static int FillCursorSpans(AiSensingSnapshot rows, System.Collections.Generic.List<int> source,
+            int[] slots, AiSensingRoleTeamSummary[] summaries)
+        {
+            int count = 0;
+            for (int index = 0; index < source.Count;)
+            {
+                int start = index, team = rows.Team[source[index]];
+                while (index < source.Count && rows.Team[source[index]] == team)
+                {
+                    slots[index] = source[index];
+                    index++;
+                }
+                summaries[count++] = new AiSensingRoleTeamSummary { Team = team, Start = start, Count = index - start };
+            }
+            return count;
+        }
+
+        private static void CompareCursorResult(AiSensingNearestResult expected, AiSensingNearestResult actual, bool visits)
+        {
+            Assert.That(actual.SelectedSlot, Is.EqualTo(expected.SelectedSlot));
+            Assert.That(actual.BestDist, Is.EqualTo(expected.BestDist));
+            Assert.That(actual.SameZLane, Is.EqualTo(expected.SameZLane));
+            Assert.That(actual.CapturedOccupancyEpoch, Is.EqualTo(expected.CapturedOccupancyEpoch));
+            Assert.That(actual.SelectedGeneration, Is.EqualTo(expected.SelectedGeneration));
+            Assert.That(actual.SelectedIdentity, Is.EqualTo(expected.SelectedIdentity));
+            if (visits)
+            {
+                Assert.That(actual.GroundRowVisits, Is.EqualTo(expected.GroundRowVisits));
+                Assert.That(actual.AirRowVisits, Is.EqualTo(expected.AirRowVisits));
+            }
+        }
+
+        private static void CompareCursorQuery(CursorQuery candidate, AiSensingSnapshot rows, int self, int phase, bool linear)
+        {
+            bool oldAvailable = AiSensingKernel.TryFindNearest(rows, self, phase, AiDecisionEvaluationPolicy.Indexed, out var old);
+            bool newAvailable = candidate(rows, self, phase, AiDecisionEvaluationPolicy.Indexed, out var result);
+            Assert.That(newAvailable, Is.EqualTo(oldAvailable));
+            CompareCursorResult(old, result, true);
+            if (linear)
+            {
+                bool fullAvailable = AiSensingKernel.TryFindNearest(rows, self, phase, AiDecisionEvaluationPolicy.FullScan, out var full);
+                Assert.That(newAvailable, Is.EqualTo(fullAvailable));
+                CompareCursorResult(full, result, false);
+            }
+        }
+
+        private static void CompareCursorSnapshot(CursorQuery candidate, AiSensingSnapshot rows, bool linear)
+        {
+            for (int self = 0; self < rows.Capacity; self++)
+                foreach (int phase in new[] { 1, 2, 4 })
+                    CompareCursorQuery(candidate, rows, self, phase, linear);
+        }
+
+        [Test]
+        public void CursorReuse_ExplicitBoundariesAndEligibilityMatchOriginal()
+        {
+            var candidate = BindCursorCandidate();
+            var rows = CreateSnapshot(40, 9191);
+            int[] x = { 0, -10001, -10000, -9999, -250, -249, -10, 0, 0, 10, 249, 250, 9999, 10000, 10001 };
+            int[] z = { -40, -39, -15, -14, 0, 14, 15, 39, 40 };
+            double[] velocity = { -1, 0, 0.001, 0.002, 1, double.NaN };
+            for (int slot = 0; slot < rows.Capacity; slot++)
+            {
+                SetCharacter(rows, slot, new[] { -1, 0, 1, 2, 5 }[slot % 5],
+                    x[slot % x.Length], z[slot % z.Length], slot % 4 == 0 ? 14 : 0);
+                rows.HitStop[slot] = new[] { -3, -2, 0, 2, 3 }[slot % 5];
+                if (slot % 7 == 0) rows.Hp[slot] = 0;
+                if (slot >= 20)
+                {
+                    rows.DataObjectType[slot] = 1;
+                    rows.State[slot] = slot % 2 == 0 ? 3000 : 0;
+                    rows.Vx[slot] = velocity[slot % velocity.Length];
+                }
+            }
+            BuildCursorIndexes(rows);
+            CompareCursorSnapshot(candidate, rows, true);
+            for (int step = 0; step < 6; step++)
+            {
+                rows.X[0] = step % 2 == 0 ? -20000 : 20000; // Exhaust either side.
+                rows.State[0] = step % 3 == 0 ? 9 : 0;
+                rows.Hp[0] = step % 2 == 0 ? 0 : 500; // Self HP is not an admission guard.
+                rows.X[21] = rows.X[0];
+                rows.HitStop[22] = step - 3;
+                rows.CapturedOccupancyEpoch++;
+                rows.Generation[23]++;
+                rows.Identity[23]++;
+                BuildCursorIndexes(rows);
+                CompareCursorSnapshot(candidate, rows, true);
+            }
+        }
+
+        [Test]
+        public void CursorReuse_TieGroundFactsStrictLimitsAndState9()
+        {
+            var candidate = BindCursorCandidate();
+            var rows = CreateSnapshot(6, 92);
+            SetCharacter(rows, 0, 1, 0, 0, 0);
+            SetCharacter(rows, 1, 2, 10, 0, 0);
+            SetCharacter(rows, 2, 2, -10, 0, 0);
+            SetCharacter(rows, 3, 2, 249, 39, 14);
+            BuildCursorIndexes(rows);
+            CompareCursorQuery(candidate, rows, 0, 2, true);
+            candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out var result);
+            Assert.That(result.SelectedSlot, Is.EqualTo(3));
+            Assert.That(result.BestDist, Is.EqualTo(10));
+            Assert.That(result.SameZLane, Is.True);
+            rows.State[0] = 9;
+            candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out result);
+            Assert.That(result.SelectedSlot, Is.EqualTo(1));
+            rows.State[0] = 0;
+            rows.Z[3] = 40;
+            CompareCursorQuery(candidate, rows, 0, 2, true);
+            candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out result);
+            Assert.That(result.SelectedSlot, Is.EqualTo(1));
+            rows.Z[3] = 0; rows.X[3] = 250;
+            BuildCursorIndexes(rows);
+            CompareCursorQuery(candidate, rows, 0, 2, true);
+            rows.Included[1] = rows.Included[2] = rows.Included[3] = false;
+            SetCharacter(rows, 4, 2, 10000, 0, 0);
+            BuildCursorIndexes(rows);
+            candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out result);
+            Assert.That(result.SelectedSlot, Is.EqualTo(-1));
+            Assert.That(result.BestDist, Is.EqualTo(10000));
+            CompareCursorSnapshot(candidate, rows, true);
+        }
+
+        [Test]
+        public void CursorReuse_ReadinessEmptyIndexAndNonIndexedDelegation()
+        {
+            var candidate = BindCursorCandidate();
+            CompareCursorQuery(candidate, null, 0, 2, false);
+            var rows = CreateSnapshot(3, 93);
+            SetCharacter(rows, 0, 1, 0, 0, 0);
+            SetCharacter(rows, 1, 2, 30, 0, 0);
+            CompareCursorQuery(candidate, rows, 0, 2, false);
+            BuildCursorIndexes(rows);
+            CompareCursorQuery(candidate, rows, -1, 2, true);
+            CompareCursorQuery(candidate, rows, 3, 2, true);
+            CompareCursorQuery(candidate, rows, 2, 2, true);
+            rows.CoordinateTargetX[0] = -999;
+            CompareCursorQuery(candidate, rows, 0, 2, true);
+            rows.CoordinateTargetX[0] = -1000;
+            foreach (AiDecisionEvaluationPolicy policy in new[] { AiDecisionEvaluationPolicy.FullScan, (AiDecisionEvaluationPolicy)77 })
+            {
+                bool a = AiSensingKernel.TryFindNearest(rows, 0, 2, policy, out var expected);
+                bool b = candidate(rows, 0, 2, policy, out var actual);
+                Assert.That(b, Is.EqualTo(a)); CompareCursorResult(expected, actual, true);
+            }
+            // Deliberate existing readiness contract: ready empty indexes never fall back to linear.
+            rows.GroundRoleTeamSummaryCount = rows.AirRoleTeamSummaryCount = 0;
+            rows.GroundRoleSlotCount = rows.AirRoleSlotCount = 0;
+            CompareCursorQuery(candidate, rows, 0, 2, false);
+            candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out var empty);
+            Assert.That(empty.SelectedSlot, Is.EqualTo(-1));
+            Assert.That(empty.GroundRowVisits + empty.AirRowVisits, Is.Zero);
+        }
+
+        [Test]
+        public void CursorReuse_SeededSnapshotsAndIntercallMutationMatchAllFields()
+        {
+            var candidate = BindCursorCandidate();
+            var random = new Random(20261010);
+            int comparisons = 0;
+            int[] capacities = { 1, 2, 8, 20, 32, 64 };
+            int[] coordinates = { -10001, -10000, -250, -249, -1, 0, 1, 249, 250, 9999, 10000 };
+            int[] teams = { -1, 0, 1, 2, 5, 6 };
+            int[] states = { 0, 9, 14, 3000 };
+            double[] velocities = { -1, 0, 0.001, 0.002, 1, double.NaN };
+            for (int fixture = 0; fixture < 256; fixture++)
+            {
+                var rows = CreateSnapshot(capacities[fixture % capacities.Length], (ulong)(fixture + 100));
+                for (int slot = 0; slot < rows.Capacity; slot++)
+                {
+                    SetCharacter(rows, slot, teams[random.Next(teams.Length)], coordinates[random.Next(coordinates.Length)],
+                        random.Next(-40, 41), states[random.Next(states.Length)]);
+                    rows.Included[slot] = random.Next(8) != 0;
+                    rows.Hp[slot] = random.Next(3) == 0 ? 0 : random.Next(1, 501);
+                    rows.DataObjectType[slot] = random.Next(2);
+                    rows.HitStop[slot] = random.Next(-3, 4);
+                    rows.Vx[slot] = velocities[random.Next(velocities.Length)];
+                }
+                BuildCursorIndexes(rows);
+                CompareCursorSnapshot(candidate, rows, true);
+                comparisons += rows.Capacity * 3;
+                rows.X[0] = random.Next(-1000, 1001);
+                rows.State[0] = states[random.Next(states.Length)];
+                rows.Team[0] = 5; rows.Generation[0]++; rows.CapturedOccupancyEpoch++;
+                BuildCursorIndexes(rows);
+                CompareCursorQuery(candidate, rows, 0, 1, true); comparisons++;
+            }
+            TestContext.WriteLine("C# indexed/candidate and normal FullScan payload comparisons: " + comparisons);
+        }
+
+        [Test]
+        public void CursorReuse_IntExtremesPreserveOriginalIndexedArithmetic()
+        {
+            var candidate = BindCursorCandidate();
+            var rows = CreateSnapshot(16, 94);
+            int[] x = { int.MinValue, int.MaxValue, -1, 0, 1, -10000, 10000, 249 };
+            for (int i = 0; i < 16; i++)
+            {
+                SetCharacter(rows, i, i % 3, x[i % 8], x[(i + 3) % 8], i % 4 == 0 ? 14 : 0);
+                rows.HitStop[i] = i % 5 == 0 ? int.MinValue : 0;
+            }
+            BuildCursorIndexes(rows);
+            CompareCursorSnapshot(candidate, rows, false);
+        }
+
+        private static AiSensingSnapshot CursorCostSnapshot(int spacing)
+        {
+            var rows = CreateSnapshot(1000, 20261010);
+            var random = new Random(20261010);
+            for (int slot = 0; slot < 1000; slot++)
+            {
+                SetCharacter(rows, slot, slot % 4, (slot % 50 - 25) * spacing + random.Next(-3, 4),
+                    (slot / 50 - 10) * 4, slot % 11 == 0 ? 14 : 0);
+                rows.HitStop[slot] = slot % 17 == 0 ? 3 : 0;
+            }
+            BuildCursorIndexes(rows);
+            return rows;
+        }
+
+        private static long CursorQueryRound(CursorQuery query, AiSensingSnapshot rows)
+        {
+            long aggregate = 0;
+            for (int self = 0; self < 1000; self++)
+            {
+                bool available = query(rows, self, self % 3 == 0 ? 1 : 2, AiDecisionEvaluationPolicy.Indexed, out var result);
+                aggregate += result.SelectedSlot + result.BestDist + result.GroundRowVisits + result.AirRowVisits + (available ? 1 : 0);
+            }
+            return aggregate;
+        }
+
+        [TestCase(120)]
+        [TestCase(12)]
+        public void CursorReuse_WarmedQueriesBothPathsZeroBytesAndFixedArrays(int spacing)
+        {
+            var rows = CursorCostSnapshot(spacing);
+            CursorQuery original = AiSensingKernel.TryFindNearest;
+            var candidate = BindCursorCandidate();
+            CompareCursorSnapshot(candidate, rows, true);
+            string beforeState = Newtonsoft.Json.JsonConvert.SerializeObject(rows);
+            foreach (CursorQuery query in new[] { original, candidate })
+            {
+                long sum = 0;
+                for (int warm = 0; warm < 8; warm++) sum += CursorQueryRound(query, rows);
+                var x = rows.X; var ground = rows.GroundRoleSlotsByX; var air = rows.AirRoleSlotsByX;
+                long before = GC.GetAllocatedBytesForCurrentThread();
+                for (int round = 0; round < 32; round++) sum += CursorQueryRound(query, rows);
+                long bytes = GC.GetAllocatedBytesForCurrentThread() - before;
+                Assert.That(bytes, Is.Zero);
+                Assert.That(rows.Capacity, Is.EqualTo(1000));
+                Assert.That(rows.X, Is.SameAs(x)); Assert.That(rows.GroundRoleSlotsByX, Is.SameAs(ground)); Assert.That(rows.AirRoleSlotsByX, Is.SameAs(air));
+                Assert.That(Newtonsoft.Json.JsonConvert.SerializeObject(rows), Is.EqualTo(beforeState));
+                Assert.That(sum, Is.Not.Zero);
+            }
+        }
+
+        [Test]
+        public void CursorReuse_ProjectileDirectionEqualXAndNaNAreExplicit()
+        {
+            var candidate = BindCursorCandidate();
+            var rows = CreateSnapshot(2, 95);
+            SetCharacter(rows, 0, 1, 0, 0, 9);
+            SetCharacter(rows, 1, 2, 10, 0, 3000);
+            rows.DataObjectType[1] = 1;
+            foreach (int x in new[] { -10, 0, 10 })
+                foreach (double velocity in new[] { -1.0, 0.0, 0.001, 0.002, 1.0, double.NaN })
+                {
+                    rows.X[1] = x; rows.Vx[1] = velocity;
+                    BuildCursorIndexes(rows);
+                    CompareCursorQuery(candidate, rows, 0, 2, true);
+                    candidate(rows, 0, 2, AiDecisionEvaluationPolicy.Indexed, out var result);
+                    bool incoming = x > 0 ? velocity < 0.001 : x < 0 && velocity > 0.001;
+                    Assert.That(result.SelectedSlot, Is.EqualTo(incoming ? 1 : -1));
+                }
+        }
+
+        [Serializable]
+        private sealed class CursorCostWindow
+        {
+            public int spacing, sequence;
+            public bool candidate, completed, capacityUnchanged, snapshotUnchanged;
+            public long allocatedBytes, aggregate;
+            public long[] elapsedTicks = new long[32];
+            public double meanMs, p95Ms, p99Ms;
+        }
+
+        [Serializable]
+        private sealed class CursorCostEvidence
+        {
+            public string status = "STARTED", error = "";
+            public string scope = "Local immutable 1000-row query fixture only; ms/1000 queries; not Driver/input/Android evidence.";
+            public string criterion = "Each layout: both ON means below both OFF means; max ON P95/P99 <= max OFF P95/P99. Single bounded group, no retests.";
+            public int seed = 20261010, warmRounds = 8, sampleRounds = 32, queryCount = 1000, completedWindows;
+            public long stopwatchFrequency = System.Diagnostics.Stopwatch.Frequency;
+            public CursorCostWindow[] windows = new CursorCostWindow[8];
+            public bool spacedGainSignal, combatGainSignal;
+        }
+
+        private static double CursorPercentile(long[] sorted, double quantile)
+        {
+            double rank = (sorted.Length - 1) * quantile;
+            int low = (int)rank;
+            int high = Math.Min(low + 1, sorted.Length - 1);
+            return (sorted[low] + (sorted[high] - sorted[low]) * (rank - low)) *
+                1000.0 / System.Diagnostics.Stopwatch.Frequency;
+        }
+
+        private static bool CursorGainSignal(CursorCostWindow[] windows, int start)
+        {
+            var offA = windows[start]; var onA = windows[start + 1];
+            var onB = windows[start + 2]; var offB = windows[start + 3];
+            return Math.Max(onA.meanMs, onB.meanMs) < Math.Min(offA.meanMs, offB.meanMs) &&
+                Math.Max(onA.p95Ms, onB.p95Ms) <= Math.Max(offA.p95Ms, offB.p95Ms) &&
+                Math.Max(onA.p99Ms, onB.p99Ms) <= Math.Max(offA.p99Ms, offB.p99Ms);
+        }
+
+        [Test, Explicit("One authorized cost group only; requires prior semantic and zero-byte tests.")]
+        public void CursorReuse_LocalCostAbbaOnce()
+        {
+            const string relativeRoot = "artifacts/diagnostics/NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010";
+            string root = System.IO.Path.GetFullPath(relativeRoot);
+            Assert.That(UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode, Is.False);
+            Assert.That(UnityEngine.Profiling.Profiler.enabled, Is.False);
+            System.IO.Directory.CreateDirectory(root);
+            using (var stream = new System.IO.FileStream(System.IO.Path.Combine(root, "local-cost.started.txt"),
+                System.IO.FileMode.CreateNew, System.IO.FileAccess.Write))
+            using (var writer = new System.IO.StreamWriter(stream)) writer.Write(DateTime.UtcNow.ToString("O"));
+            var evidence = new CursorCostEvidence();
+            try
+            {
+                var snapshots = new[] { CursorCostSnapshot(120), CursorCostSnapshot(12) };
+                string[] immutable = {
+                    Newtonsoft.Json.JsonConvert.SerializeObject(snapshots[0]),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(snapshots[1])
+                };
+                CursorQuery original = AiSensingKernel.TryFindNearest;
+                CursorQuery candidate = BindCursorCandidate();
+                for (int index = 0; index < 8; index++)
+                    evidence.windows[index] = new CursorCostWindow
+                    {
+                        spacing = index < 4 ? 120 : 12, sequence = index % 4,
+                        candidate = index % 4 == 1 || index % 4 == 2
+                    };
+                for (int layout = 0; layout < 2; layout++)
+                {
+                    AiSensingSnapshot rows = snapshots[layout];
+                    var x = rows.X; var ground = rows.GroundRoleSlotsByX; var air = rows.AirRoleSlotsByX;
+                    long originalAggregate = 0;
+                    for (int window = 0; window < 4; window++)
+                    {
+                        CursorCostWindow sample = evidence.windows[layout * 4 + window];
+                        CursorQuery query = sample.candidate ? candidate : original;
+                        long warmAggregate = 0;
+                        for (int warm = 0; warm < 8; warm++) warmAggregate += CursorQueryRound(query, rows);
+                        long aggregate = 0;
+                        long before = GC.GetAllocatedBytesForCurrentThread();
+                        for (int round = 0; round < 32; round++)
+                        {
+                            long begin = System.Diagnostics.Stopwatch.GetTimestamp();
+                            aggregate += CursorQueryRound(query, rows);
+                            sample.elapsedTicks[round] = System.Diagnostics.Stopwatch.GetTimestamp() - begin;
+                        }
+                        sample.allocatedBytes = GC.GetAllocatedBytesForCurrentThread() - before;
+                        sample.aggregate = aggregate;
+                        sample.capacityUnchanged = rows.Capacity == 1000 &&
+                            ReferenceEquals(x, rows.X) && ReferenceEquals(ground, rows.GroundRoleSlotsByX) &&
+                            ReferenceEquals(air, rows.AirRoleSlotsByX);
+                        sample.snapshotUnchanged = Newtonsoft.Json.JsonConvert.SerializeObject(rows) == immutable[layout];
+                        sample.completed = true;
+                        evidence.completedWindows++;
+                        if (window == 0) originalAggregate = aggregate;
+                        Assert.That(sample.allocatedBytes, Is.Zero, "Stop group at any allocation.");
+                        Assert.That(sample.capacityUnchanged && sample.snapshotUnchanged, Is.True);
+                        Assert.That(aggregate, Is.EqualTo(originalAggregate));
+                        Assert.That(aggregate, Is.EqualTo(warmAggregate * 4));
+                        long total = 0;
+                        foreach (long ticks in sample.elapsedTicks) total += ticks;
+                        sample.meanMs = total * 1000.0 / evidence.stopwatchFrequency / 32;
+                        long[] sorted = (long[])sample.elapsedTicks.Clone();
+                        Array.Sort(sorted);
+                        sample.p95Ms = CursorPercentile(sorted, 0.95);
+                        sample.p99Ms = CursorPercentile(sorted, 0.99);
+                    }
+                }
+                evidence.spacedGainSignal = CursorGainSignal(evidence.windows, 0);
+                evidence.combatGainSignal = CursorGainSignal(evidence.windows, 4);
+                evidence.status = evidence.spacedGainSignal && evidence.combatGainSignal
+                    ? "LOCAL_GAIN_SIGNAL" : "INCONCLUSIVE";
+            }
+            catch (Exception exception)
+            {
+                evidence.status = "HARD_GATE_FAILED_STOPPED";
+                evidence.error = exception.ToString();
+                throw;
+            }
+            finally
+            {
+                using (var stream = new System.IO.FileStream(System.IO.Path.Combine(root, "local-cost.json"),
+                    System.IO.FileMode.CreateNew, System.IO.FileAccess.Write))
+                using (var writer = new System.IO.StreamWriter(stream))
+                    writer.Write(UnityEngine.JsonUtility.ToJson(evidence, true));
+            }
         }
 
         private static AiSensingSnapshot CreateSnapshot(int capacity, ulong epoch)

@@ -11,6 +11,273 @@ namespace NTSD.Test
 {
     public sealed class CharacterInputLiveSlotLoopEditorTests
     {
+        private static void ConfigureNativeOwnedSkip(SimulationWorld world, bool enabled)
+        {
+            var method = typeof(SimulationWorld).GetMethod("ConfigureNativeOwnedCompatibilitySkipForDiagnostics");
+            Assert.That(method, Is.Not.Null, "Candidate cold configuration API must exist.");
+            method.Invoke(world, new object[] { enabled });
+        }
+
+        private static long NativeOwnedSkipCount(SimulationWorld world) => (long)typeof(SimulationWorld)
+            .GetProperty("NativeOwnedCompatibilityFastSkipCountForDiagnostics").GetValue(world);
+
+        private static Func<LF2Entity, int, bool, bool> InputPass(SimulationWorld world)
+        {
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+            object pass = typeof(SimulationWorld).GetField("battleEcsCharacterInputPass", flags).GetValue(world);
+            return (Func<LF2Entity, int, bool, bool>)Delegate.CreateDelegate(
+                typeof(Func<LF2Entity, int, bool, bool>), pass, pass.GetType().GetMethod("TryExecute", flags));
+        }
+
+        [Test]
+        public void NativeOwnedSkip_DefaultOffAndFixed1000CaptureWitness()
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 1024);
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+            var detail = world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
+            ulong witnessCycles = 0;
+            detail.SetThreadCycleCounterForDiagnostics(() => ++witnessCycles, 1UL << (int)BattleAiInputDetailPhase.ActionProgressCapture);
+            var characters = new LF2Character[1000];
+            for (int i = 0; i < characters.Length; i++)
+            {
+                characters[i] = RegisterCharacter(world, i, 9000 + i);
+                characters[i].AiControlled = true;
+            }
+            var execute = InputPass(world);
+            Assert.That(typeof(SimulationWorld).GetProperty("NativeOwnedCompatibilitySkipEnabledForDiagnostics"), Is.Not.Null);
+            Assert.That(typeof(SimulationWorld).GetProperty("NativeOwnedCompatibilitySkipEnabledForDiagnostics").GetValue(world), Is.False);
+            detail.BeginTick(1);
+            foreach (var character in characters) Assert.That(execute(character, 1, false), Is.True);
+            Assert.That(detail.GetLastThreadCyclePairsForDiagnostics(BattleAiInputDetailPhase.ActionProgressCapture), Is.EqualTo(1000));
+            Assert.That(NativeOwnedSkipCount(world), Is.Zero);
+            int skips = world.LastCharacterInputProgressCommitSkipCountForDiagnostics;
+            Assert.That(skips, Is.EqualTo(1000));
+            ConfigureNativeOwnedSkip(world, true);
+            detail.BeginTick(2);
+            foreach (var character in characters) Assert.That(execute(character, 2, false), Is.True);
+            Assert.That(detail.GetLastThreadCyclePairsForDiagnostics(BattleAiInputDetailPhase.ActionProgressCapture), Is.Zero);
+            Assert.That(NativeOwnedSkipCount(world), Is.EqualTo(1000));
+            Assert.That(world.LastCharacterInputProgressCommitSkipCountForDiagnostics - skips, Is.EqualTo(1000));
+            Assert.That(world.LastCharacterInputProgressCommitCountForDiagnostics, Is.Zero);
+            foreach (var character in characters) world.Unregister(character);
+        }
+
+        private static byte[] NativeOwnedRuntimeProgress(NTSDEntityRuntime runtime)
+        {
+            return new byte[] { runtime.CdAttack, runtime.CdJump, runtime.CdDefend, runtime.CdDefendLock, runtime.CdRight, runtime.CdLeft, runtime.CdUp, runtime.CdDown, runtime.ComboDra, runtime.ComboDla, runtime.ComboDua, runtime.ComboDda, runtime.ComboDrj, runtime.ComboDlj, runtime.ComboDuj, runtime.ComboDdj, runtime.ComboDja };
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NativeOwnedSkip_PreservesDistinctCanonicalRuntime17AndTail(bool tail)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var character = RegisterCharacter(world, 0, 11000);
+            character.AiControlled = true;
+            world.CharacterInputWriter.CommitProgressState(character.Runtime, new AiDecisionInputState
+            {
+                CdAttack = 1, CdJump = 2, CdDefend = 3, CdDefendLock = 4, CdRight = 5, CdLeft = 6, CdUp = 7, CdDown = 8, ComboDra = 9, ComboDla = 10, ComboDua = 11, ComboDda = 12, ComboDrj = 13, ComboDlj = 14, ComboDuj = 15, ComboDdj = 16, ComboDja = 17
+            });
+            character.Runtime.CdAttack = 31;
+            character.Runtime.CdJump = 32;
+            character.Runtime.CdDefend = 33;
+            character.Runtime.CdDefendLock = 34;
+            character.Runtime.CdRight = 35;
+            character.Runtime.CdLeft = 36;
+            character.Runtime.CdUp = 37;
+            character.Runtime.CdDown = 38;
+            character.Runtime.ComboDra = 39;
+            character.Runtime.ComboDla = 40;
+            character.Runtime.ComboDua = 41;
+            character.Runtime.ComboDda = 42;
+            character.Runtime.ComboDrj = 43;
+            character.Runtime.ComboDlj = 44;
+            character.Runtime.ComboDuj = 45;
+            character.Runtime.ComboDdj = 46;
+            character.Runtime.ComboDja = 47;
+            Assert.That(world.CharacterInputWriter.TryCaptureProgressState(character.Runtime, out var before), Is.True);
+            character.Runtime.KeyUp = 1;
+            character.Runtime.KeyDown = 1;
+            character.Runtime.CdUp = 4;
+            character.Runtime.CdDown = 5;
+            byte[] runtimeBefore = NativeOwnedRuntimeProgress(character.Runtime);
+            character.Frame.D.dvx = 8;
+            character.Frame.D.dvy = 2;
+            character.Frame.D.dvz = 3;
+            character.Runtime.SetVelocity(1, -4, 9);
+            ConfigureNativeOwnedSkip(world, true);
+            Assert.That(InputPass(world)(character, 2, tail), Is.True);
+            Assert.That(world.CharacterInputWriter.TryCaptureProgressState(character.Runtime, out var after), Is.True);
+            Assert.That(after.ContentEquals(in before), Is.True);
+            Assert.That(NativeOwnedRuntimeProgress(character.Runtime), Is.EqualTo(runtimeBefore));
+            Assert.That(character.Runtime.Vx, Is.EqualTo(tail ? 8 : 1));
+            Assert.That(character.Runtime.Vy, Is.EqualTo(tail ? -2 : -4));
+            Assert.That(character.Runtime.Vz, Is.EqualTo(tail ? 3 : 9));
+            Assert.That(NativeOwnedSkipCount(world), Is.EqualTo(1));
+            Assert.That(world.LastCharacterInputProgressCommitSkipCountForDiagnostics, Is.EqualTo(1));
+            world.Unregister(character);
+        }
+
+        private static string NativeOwnedFallbackOutcome(string scenario, bool enabled, out long fastSkips)
+        {
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(scenario == "legacy-profile"
+                ? BattleAiExecutionProfile.LegacyCanonical : BattleAiExecutionProfile.DataOrientedCanonical);
+            if (scenario == "legacy-pass") world.ConfigureBattleEcsCharacterInputPassForDiagnostics(BattleEcsCharacterInputPassMode.Legacy);
+            if (scenario == "unknown-pass") world.ConfigureBattleEcsCharacterInputPassForDiagnostics((BattleEcsCharacterInputPassMode)42);
+            LF2Character character = scenario == "derived"
+                ? InitializeCharacter(new DerivedCharacter(), 0, 11001)
+                : CreateCharacter(0, 11001);
+            character.AiControlled = scenario != "player";
+            world.Register(character);
+            LF2Character replacement = null;
+            SimulationWorld foreignWorld = null;
+            if (scenario == "released" || scenario == "replaced" || scenario == "borrowed-slot" || scenario == "foreign-world")
+            {
+                world.Unregister(character);
+                if (scenario != "released")
+                {
+                    replacement = RegisterCharacter(world, 0, 11002);
+                    replacement.AiControlled = true;
+                }
+                if (scenario == "foreign-world")
+                {
+                    foreignWorld = new SimulationWorld();
+                    foreignWorld.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+                    foreignWorld.Register(character);
+                }
+                if (scenario == "borrowed-slot") character.Runtime.SlotIndex = replacement.Runtime.SlotIndex;
+            }
+            var originalFrame = character.Frame;
+            var originalRuntime = character.Runtime;
+            if (scenario == "missing-data") character.Frame.D = null;
+            if (scenario == "missing-frame") typeof(LF2Entity).GetProperty("Frame", flags).SetValue(character, null);
+            if (scenario == "null-runtime") typeof(LF2Entity).GetField("<Runtime>k__BackingField", flags).SetValue(character, null);
+            ConfigureNativeOwnedSkip(world, enabled);
+            try
+            {
+                bool returned = false;
+                string exceptionType = null;
+                try { returned = InputPass(world)(scenario == "null-entity" ? null : character, 2, false); }
+                catch (NullReferenceException exception) when (scenario == "null-runtime")
+                {
+                    // AiControlled reads Runtime before the existing pass null-runtime guard.
+                    exceptionType = exception.GetType().FullName;
+                }
+                fastSkips = NativeOwnedSkipCount(world);
+                return Newtonsoft.Json.JsonConvert.SerializeObject(new
+                {
+                    returned, exceptionType,
+                    pass = world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics,
+                    world.LastCharacterInputProgressCommitCountForDiagnostics,
+                    world.LastCharacterInputProgressCommitSkipCountForDiagnostics,
+                    progress = character.Runtime == null ? null : NativeOwnedRuntimeProgress(character.Runtime),
+                    vx = character.Runtime?.Vx, vy = character.Runtime?.Vy, vz = character.Runtime?.Vz
+                });
+            }
+            finally
+            {
+                typeof(LF2Entity).GetProperty("Frame", flags).SetValue(character, originalFrame);
+                if (scenario == "null-runtime") typeof(LF2Entity).GetField("<Runtime>k__BackingField", flags).SetValue(character, originalRuntime);
+                if (ReferenceEquals(character.RegisteredWorldForSimulation, world)) world.Unregister(character);
+                if (foreignWorld != null) foreignWorld.Unregister(character);
+                if (replacement != null) world.Unregister(replacement);
+            }
+        }
+
+        [TestCase("legacy-profile", false)]
+        [TestCase("legacy-pass", false)]
+        [TestCase("unknown-pass", false)]
+        [TestCase("player", false)]
+        [TestCase("derived", false)]
+        [TestCase("null-entity", false)]
+        [TestCase("null-runtime", false)]
+        [TestCase("released", false)]
+        [TestCase("replaced", false)]
+        [TestCase("borrowed-slot", false)]
+        [TestCase("foreign-world", false)]
+        [TestCase("missing-data", true)]
+        [TestCase("missing-frame", true)]
+        public void NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(string scenario, bool admitted)
+        {
+            string expected = NativeOwnedFallbackOutcome(scenario, false, out long offSkips);
+            string actual = NativeOwnedFallbackOutcome(scenario, true, out long onSkips);
+            Assert.That(actual, Is.EqualTo(expected), scenario);
+            Assert.That(offSkips, Is.Zero);
+            Assert.That(onSkips, Is.EqualTo(admitted ? 1 : 0), scenario);
+        }
+
+        [Test]
+        public void NativeOwnedSkip_ResetReentryAndColdConfigurationBoundaries()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var character = RegisterCharacter(world, 0, 11003);
+            character.AiControlled = true;
+            ConfigureNativeOwnedSkip(world, true);
+            var execute = InputPass(world);
+            execute(character, 1, false);
+            const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
+            var ticking = typeof(SimulationWorld).GetProperty("_ticking", flags);
+            ticking.SetValue(world, true);
+            try
+            {
+                Assert.Throws<InvalidOperationException>(() => world.ConfigureNativeOwnedCompatibilitySkipForDiagnostics(true));
+                Assert.Throws<InvalidOperationException>(() => world.DisableNativeOwnedCompatibilitySkipForDiagnostics());
+            }
+            finally { ticking.SetValue(world, false); }
+            world.Runtime.Flow.CurrentTickIndex = 1;
+            Assert.Throws<InvalidOperationException>(() => world.ConfigureNativeOwnedCompatibilitySkipForDiagnostics(true));
+            world.DisableNativeOwnedCompatibilitySkipForDiagnostics();
+            Assert.That(world.NativeOwnedCompatibilitySkipEnabledForDiagnostics, Is.False);
+            world.Runtime.Flow.CurrentTickIndex = 0;
+            ConfigureNativeOwnedSkip(world, true);
+            object pass = typeof(SimulationWorld).GetField("battleEcsCharacterInputPass", flags).GetValue(world);
+            pass.GetType().GetMethod("Reset", flags).Invoke(pass, null);
+            Assert.That(world.NativeOwnedCompatibilitySkipEnabledForDiagnostics, Is.False);
+            Assert.That(NativeOwnedSkipCount(world), Is.Zero);
+            world.Unregister(character);
+            var next = RegisterCharacter(world, 0, 11004);
+            next.AiControlled = true;
+            ConfigureNativeOwnedSkip(world, true);
+            Assert.That(execute(next, 2, false), Is.True);
+            Assert.That(NativeOwnedSkipCount(world), Is.EqualTo(1));
+            world.Unregister(next);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(bool enabled)
+        {
+            var world = new SimulationWorld(BattleRuntimeProfile.DesktopExtended, 1024);
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            var characters = new LF2Character[1000];
+            for (int i = 0; i < characters.Length; i++)
+            {
+                characters[i] = RegisterCharacter(world, i, 12000 + i);
+                characters[i].AiControlled = true;
+            }
+            ConfigureNativeOwnedSkip(world, enabled);
+            var execute = InputPass(world);
+            for (int warm = 0; warm < 8; warm++)
+                foreach (var character in characters) execute(character, warm, false);
+            int capacity = world.RuntimeSlotCapacityForDiagnostics;
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int tick = 0; tick < 32; tick++)
+                foreach (var character in characters) execute(character, tick, false);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+            Assert.That(world.RuntimeSlotCapacityForDiagnostics, Is.EqualTo(capacity));
+            Assert.That(NativeOwnedSkipCount(world), Is.EqualTo(enabled ? 40000 : 0));
+            foreach (var character in characters) world.Unregister(character);
+        }
+
         private static readonly string[] NativeSamplePhaseNames =
         {
             "NativeSamplePreprocess", "NativeComboRoute", "NativeThreeButtonRoute",

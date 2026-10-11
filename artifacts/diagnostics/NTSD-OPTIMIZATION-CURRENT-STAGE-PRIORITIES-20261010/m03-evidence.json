@@ -1,0 +1,94 @@
+{
+  "kind": "EXISTING_REPORT_AND_CURRENT_SOURCE_ONLY",
+  "noNewMeasurements": true,
+  "presentationTimings": [
+    {
+      "phase": "Materialize/BuildCommands",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Opt-in coarse Stopwatch timestamps around presentation publication boundaries; independent from battle tick and per-entity detail diagnostics.",
+        "unavailableReason": "",
+        "sampleCount": 90,
+        "average": 4.155967777777778,
+        "maximum": 9.5267,
+        "p95": 5.54312,
+        "p99": 8.502043
+      }
+    },
+    {
+      "phase": "Materialize/Mesh/ResolveAndWriteCommands",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Opt-in coarse Stopwatch timestamps around presentation publication boundaries; independent from battle tick and per-entity detail diagnostics.",
+        "unavailableReason": "",
+        "sampleCount": 90,
+        "average": 2.1159566666666665,
+        "maximum": 4.9087000000000005,
+        "p95": 3.059109999999999,
+        "p99": 4.254906
+      }
+    },
+    {
+      "phase": "Materialize/Mesh/UploadChunks",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Opt-in coarse Stopwatch timestamps around presentation publication boundaries; independent from battle tick and per-entity detail diagnostics.",
+        "unavailableReason": "",
+        "sampleCount": 90,
+        "average": 0.4130000000000002,
+        "maximum": 0.6672,
+        "p95": 0.497935,
+        "p99": 0.615224
+      }
+    },
+    {
+      "phase": "Materialize/Mesh/ResolveCommands",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Opt-in coarse Stopwatch timestamps around presentation publication boundaries; independent from battle tick and per-entity detail diagnostics.",
+        "unavailableReason": "",
+        "sampleCount": 90,
+        "average": 0.7542099999999998,
+        "maximum": 2.2238,
+        "p95": 1.0567699999999998,
+        "p99": 1.671644
+      }
+    },
+    {
+      "phase": "Materialize/Mesh/WriteQuads",
+      "timing": {
+        "available": true,
+        "unit": "ms",
+        "source": "Opt-in coarse Stopwatch timestamps around presentation publication boundaries; independent from battle tick and per-entity detail diagnostics.",
+        "unavailableReason": "",
+        "sampleCount": 90,
+        "average": 1.080572222222222,
+        "maximum": 2.1224000000000003,
+        "p95": 1.5998249999999996,
+        "p99": 2.041766
+      }
+    }
+  ],
+  "fingerprints": [
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010/windows/00-combat1000-off/report.json",
+      "sha256": "e22d0bcd89c29dddd815ad79fdf0d5589f69a2c851c38e0819d111959b144f83"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderSystem.cs",
+      "sha256": "247bd7e73dfa8d4f004968e0e7e0d93917e28eb39fe8e26d6a361602d0cb118d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "sha256": "f5519e8f5ad9634244c5d1dc1e67a6b3415054faf8f9eafac9c694e096e52292"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Presentation/BattlePresentationShadowBuild.cs",
+      "sha256": "200816f8acbd15cf2c7920071c8d2aaf2e1106f8225a121af15e4aa0a764d5b5"
+    }
+  ]
+}

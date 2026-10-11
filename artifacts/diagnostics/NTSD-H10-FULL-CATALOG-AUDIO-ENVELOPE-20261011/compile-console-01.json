@@ -1,0 +1,23 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Retrieved 2 log entries.",
+    "data": [
+      {
+        "type": "Error",
+        "message": "Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs(2684,52): error CS1061: 'LF2CharacterData' does not contain a definition for 'type' and no accessible extension method 'type' accepting a first argument of type 'LF2CharacterData' could be found (are you missing a using directive or an assembly reference?)",
+        "file": "Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs",
+        "line": 2684,
+        "stackTrace": null
+      },
+      {
+        "type": "Error",
+        "message": "Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs(2688,50): error CS1061: 'LF2FrameData' does not contain a definition for 'frame' and no accessible extension method 'frame' accepting a first argument of type 'LF2FrameData' could be found (are you missing a using directive or an assembly reference?)",
+        "file": "Assets\\NTSD\\Scripts\\Test\\Editor\\H10ResidentClosureDiagnostics.cs",
+        "line": 2688,
+        "stackTrace": null
+      }
+    ]
+  }
+}

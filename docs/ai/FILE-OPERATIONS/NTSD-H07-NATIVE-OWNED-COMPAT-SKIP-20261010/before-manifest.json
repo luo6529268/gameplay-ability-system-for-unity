@@ -1,0 +1,122 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterInputPass.cs",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Passes\\BattleEcsCharacterInputPass.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Scripts__Simulation__Ecs__Passes__BattleEcsCharacterInputPass.cs",
+    "sha256": "be2cffb3b5e9a471e9de5c3ca7fe085a45413171a542d75c8668d3d5ebabdff5",
+    "bytes": 4927,
+    "gitStatus": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Diagnostics\\SimulationWorld.DetailTimingDiagnostics.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Scripts__Simulation__Diagnostics__SimulationWorld.DetailTimingDiagnostics.cs",
+    "sha256": "e72d7abef7e7fbf86a1d5b17f4dc8a1da77c204d7baaafc48811ac03bb658f39",
+    "bytes": 47123,
+    "gitStatus": "M Assets/NTSD/Scripts/Simulation/Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\CharacterInputLiveSlotLoopEditorTests.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Scripts__Test__Editor__CharacterInputLiveSlotLoopEditorTests.cs",
+    "sha256": "c5cff51eaed3d6a7e79f144107ea646c1c315ba3312ec5634490f1e8f1db3cab",
+    "bytes": 86342,
+    "gitStatus": ""
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Scripts__Test__Editor__BattleOptimizationWindowsAiSuiteEditor.cs",
+    "sha256": "9281f1693b1808852d0b4e7a2307e3e3d0d232929def8fe38fcc997cf9879595",
+    "bytes": 496215,
+    "gitStatus": "M Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H07InputCostDiagnostics.cs",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\H07InputCostDiagnostics.cs",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Scripts__Test__Editor__H07InputCostDiagnostics.cs",
+    "sha256": "8878bc5e34e279dc6349648dae21d56f55ff4c106f7e6aa18d5cbce48130b3b2",
+    "bytes": 40937,
+    "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/H07InputCostDiagnostics.cs"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__CURRENT-AUTHORITY.md",
+    "sha256": "0a4dc3e9b8bbf6ac7047905a9234c5cac5bfb59b672fd250d78652bea4d43f75",
+    "bytes": 389959,
+    "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__STATE.md",
+    "sha256": "78a048d92005bb6c49e07ae008bce804c9d632bf70cc0d1e1219978a19b62249",
+    "bytes": 1671147,
+    "gitStatus": "M docs/ai/STATE.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Docs__CODEX-CURRENT-HANDOFF.md",
+    "sha256": "a8d6431b89cc8902aa0f2b7e050ee799ab74163215d6e5d22d66d788e780aeb9",
+    "bytes": 1609969,
+    "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CHANGE-LEDGER.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__CHANGE-LEDGER.md",
+    "sha256": "f4777adc7b5265312ad2cf8108767a1f88245ac6de50d537b917fa58328bfac0",
+    "bytes": 754988,
+    "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__FILE-OPERATIONS__INDEX.md",
+    "sha256": "4cc6ce859a73cfea54a863fcbaf66ebdd9d9f4fca4d553aff2a549fec21e4e37",
+    "bytes": 143925,
+    "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__OPTIMIZATION-REVIEW-20261009__H07-INPUT.md",
+    "sha256": "9ce10f957622dfab33e148b1c640ef3832bf7f72fc1f611a998f5cfb17cbd966",
+    "bytes": 13544,
+    "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-NATIVE-OWNED-COMPATIBILITY-SKIP.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\IMPLEMENTATION-RECORDS\\H07-NATIVE-OWNED-COMPATIBILITY-SKIP.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__OPTIMIZATION-REVIEW-20261009__IMPLEMENTATION-RECORDS__H07-NATIVE-OWNED-COMPATIBILITY-SKIP.md",
+    "sha256": "d88a072ee57f3deba5f1986f6c87f18b1cf6b468dc5630640d215f7680479939",
+    "bytes": 2527,
+    "gitStatus": "?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-NATIVE-OWNED-COMPATIBILITY-SKIP.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+    "sha256": "c15059caea1e526c93d740047f1cae17e5a68e3b9f10b35a81c9043d2376b130",
+    "bytes": 232830,
+    "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\docs__ai__OPTIMIZATION-REVIEW-20261009__DEPENDENCIES.md",
+    "sha256": "54430de575b234b027c889e943e68a5c68b40a72d250ea0f93f798bc46871938",
+    "bytes": 17733,
+    "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+  },
+  {
+    "path": "Temp/NTSD_ProductionEntityStress.result",
+    "absolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD_ProductionEntityStress.result",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\before\\Temp__NTSD_ProductionEntityStress.result",
+    "sha256": "ad1a02c87d213abaa0bf8132bc1eb5328f2c0ab66c111a9bfde897f385dbda9f",
+    "bytes": 509,
+    "gitStatus": ""
+  }
+]

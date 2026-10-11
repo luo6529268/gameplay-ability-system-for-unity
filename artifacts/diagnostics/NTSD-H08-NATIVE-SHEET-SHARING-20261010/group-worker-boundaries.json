@@ -1,0 +1,287 @@
+{
+  "status": "GROUP_WORKER_BOUNDARIES_PASS",
+  "scope": "Actual worker; original native coordinator, publication and pixel gates are separate.",
+  "rows": [
+    {
+      "kind": "png",
+      "off": {
+        "declarations": 2,
+        "sprites": 6,
+        "textures": 3,
+        "sourceRecords": 3,
+        "created": 8,
+        "failed": 0,
+        "sourcePayloadBytes": 708,
+        "textureMemoryBytes": 3000,
+        "textureMemory": [
+          1040,
+          1040,
+          920
+        ],
+        "textureIds": [
+          -1206000,
+          -1206012,
+          -1206016
+        ],
+        "sourcePaths": [
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png",
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png",
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba"
+        ],
+        "cleaned": true,
+        "geometry": [
+          "56/0:0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625",
+          "56/1:4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625",
+          "56/2:0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125",
+          "56/3:4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125",
+          "57/0:0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125",
+          "57/1:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0",
+          "57/2:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0",
+          "57/3:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0"
+        ],
+        "catalog": [
+          "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625|(x:0.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625|(x:4.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125|(x:0.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125|(x:4.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125|(x:0.000000, y:1.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)"
+        ]
+      },
+      "on": {
+        "declarations": 2,
+        "sprites": 6,
+        "textures": 2,
+        "sourceRecords": 2,
+        "created": 8,
+        "failed": 0,
+        "sourcePayloadBytes": 452,
+        "textureMemoryBytes": 1960,
+        "textureMemory": [
+          1040,
+          920
+        ],
+        "textureIds": [
+          -1206020,
+          -1206032
+        ],
+        "sourcePaths": [
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png",
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba"
+        ],
+        "cleaned": true,
+        "geometry": [
+          "56/0:0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625",
+          "56/1:4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625",
+          "56/2:0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125",
+          "56/3:4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125",
+          "57/0:0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125",
+          "57/1:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0",
+          "57/2:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0",
+          "57/3:0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0"
+        ],
+        "catalog": [
+          "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625|(x:0.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625|(x:4.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125|(x:0.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125|(x:4.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\8e9c633558764cf8af8b145d1a00ef95\\vfs\\c\\body.png|0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125|(x:0.000000, y:1.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)",
+          "(57,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28NativeClampCells\\6EA8B46051B13E1371EE86E2A72EABDB5F977200E7BFAB6E1F7F8C6AAC1B5A5E.rgba|0,0,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,1,1,0,0,1,0|(x:0.000000, y:0.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)"
+        ]
+      }
+    },
+    {
+      "kind": "bmp",
+      "off": {
+        "declarations": 2,
+        "sprites": 5,
+        "textures": 2,
+        "sourceRecords": 2,
+        "created": 5,
+        "failed": 0,
+        "sourcePayloadBytes": 512,
+        "textureMemoryBytes": 2232,
+        "textureMemory": [
+          1040,
+          1192
+        ],
+        "textureIds": [
+          -1206036,
+          -1206046
+        ],
+        "sourcePaths": [
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp",
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp"
+        ],
+        "cleaned": true,
+        "geometry": [
+          "56/0:0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625",
+          "56/1:4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625",
+          "56/2:0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125",
+          "56/3:4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125",
+          "57/0:0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125",
+          "57/1:null",
+          "57/2:null",
+          "57/3:null"
+        ],
+        "catalog": [
+          "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625|(x:0.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625|(x:4.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125|(x:0.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125|(x:4.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125|(x:0.000000, y:1.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)"
+        ]
+      },
+      "on": {
+        "declarations": 2,
+        "sprites": 5,
+        "textures": 1,
+        "sourceRecords": 1,
+        "created": 5,
+        "failed": 0,
+        "sourcePayloadBytes": 256,
+        "textureMemoryBytes": 1040,
+        "textureMemory": [
+          1040
+        ],
+        "textureIds": [
+          -1206050
+        ],
+        "sourcePaths": [
+          "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp"
+        ],
+        "cleaned": true,
+        "geometry": [
+          "56/0:0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625",
+          "56/1:4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625",
+          "56/2:0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125",
+          "56/3:4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125",
+          "57/0:0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125",
+          "57/1:null",
+          "57/2:null",
+          "57/3:null"
+        ],
+        "catalog": [
+          "(56,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,1,0.375,1,0,0.625,0.375,0.625|(x:0.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,1)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|4,5,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,1,0.875,1,0.5,0.625,0.875,0.625|(x:4.000000, y:5.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,2)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0,0.5,0.375,0.5,0,0.125,0.375,0.125|(x:0.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(56,3)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|4,1,3,3,1.5,0,100,0,0.015,0,0.03,0.03,0.2,-0.015,0.03,0.015,0.03,-0.015,0,0.015,0,0.5,0.5,0.875,0.5,0.5,0.125,0.875,0.125|(x:4.000000, y:1.000000, width:3.000000, height:3.000000)|(0.500000, 0.000000)",
+          "(57,0)|I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSDH08Sharing\\dea79eda30e14182bda17b2644834ace\\vfs\\c\\body.bmp|0,1,7,7,3.5,0,100,0,0.035,0,0.07,0.07,0.2,-0.035,0.07,0.035,0.07,-0.035,0,0.035,0,0,1,0.875,1,0,0.125,0.875,0.125|(x:0.000000, y:1.000000, width:7.000000, height:7.000000)|(0.500000, 0.000000)"
+        ]
+      }
+    },
+    {
+      "kind": "hash-mismatch",
+      "result": {
+        "declarations": 2,
+        "sprites": 0,
+        "textures": 0,
+        "sourceRecords": 0,
+        "created": 0,
+        "failed": 2,
+        "sourcePayloadBytes": 0,
+        "textureMemoryBytes": 0,
+        "textureMemory": [],
+        "textureIds": [],
+        "sourcePaths": [],
+        "cleaned": true,
+        "geometry": [
+          "56/0:null",
+          "56/1:null",
+          "56/2:null",
+          "56/3:null",
+          "57/0:null",
+          "57/1:null",
+          "57/2:null",
+          "57/3:null"
+        ],
+        "catalog": null
+      }
+    },
+    {
+      "kind": "invalid-plan",
+      "result": {
+        "declarations": 2,
+        "sprites": 0,
+        "textures": 0,
+        "sourceRecords": 0,
+        "created": 0,
+        "failed": 1,
+        "sourcePayloadBytes": 0,
+        "textureMemoryBytes": 0,
+        "textureMemory": [],
+        "textureIds": [],
+        "sourcePaths": [],
+        "cleaned": true,
+        "geometry": [
+          "56/0:null",
+          "56/1:null",
+          "56/2:null",
+          "56/3:null",
+          "58/0:null"
+        ],
+        "catalog": null
+      }
+    },
+    {
+      "kind": "empty",
+      "result": {
+        "declarations": 2,
+        "sprites": 0,
+        "textures": 0,
+        "sourceRecords": 0,
+        "created": 0,
+        "failed": 2,
+        "sourcePayloadBytes": 0,
+        "textureMemoryBytes": 0,
+        "textureMemory": [],
+        "textureIds": [],
+        "sourcePaths": [],
+        "cleaned": true,
+        "geometry": [
+          "56/0:null",
+          "56/1:null",
+          "56/2:null",
+          "56/3:null",
+          "57/0:null",
+          "57/1:null",
+          "57/2:null",
+          "57/3:null"
+        ],
+        "catalog": null
+      }
+    },
+    {
+      "kind": "corrupt",
+      "result": {
+        "declarations": 2,
+        "sprites": 0,
+        "textures": 0,
+        "sourceRecords": 0,
+        "created": 0,
+        "failed": 2,
+        "sourcePayloadBytes": 0,
+        "textureMemoryBytes": 0,
+        "textureMemory": [],
+        "textureIds": [],
+        "sourcePaths": [],
+        "cleaned": true,
+        "geometry": [
+          "56/0:null",
+          "56/1:null",
+          "56/2:null",
+          "56/3:null",
+          "57/0:null",
+          "57/1:null",
+          "57/2:null",
+          "57/3:null"
+        ],
+        "catalog": null
+      }
+    }
+  ]
+}

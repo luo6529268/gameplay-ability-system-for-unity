@@ -1,0 +1,75 @@
+{
+  "R10": {
+    "symbol": "WriteCurrentFrameId",
+    "status": "EDITOR_DELEGATE_PATH_PRESENT_PLAYER_BRANCH_EXCLUDED_BY_SOURCE",
+    "order": [
+      {
+        "line": 1239,
+        "condition": "Frame == null"
+      },
+      {
+        "line": 1240,
+        "effect": "return before writes or delegate"
+      },
+      {
+        "line": 1243,
+        "condition": "UNITY_EDITOR",
+        "effect": "capture previousFrameId from Frame.N"
+      },
+      {
+        "line": 1245,
+        "effect": "Frame.N = frameId"
+      },
+      {
+        "line": 1246,
+        "condition": "Runtime != null"
+      },
+      {
+        "line": 1247,
+        "effect": "Runtime.Frame = frameId"
+      },
+      {
+        "line": 1249,
+        "condition": "UNITY_EDITOR and previousFrameId != frameId"
+      },
+      {
+        "line": 1250,
+        "effect": "FrameWriteObserverForDiagnostics?.Invoke(this, previousFrameId, frameId)"
+      }
+    ],
+    "delegateReachability": "Static conditional invocation when Frame is nonnull, Editor symbol compiled, frame id differs, and observer is nonnull. No subscriber or actual installed value read.",
+    "stateExitReachability": "UNKNOWN: delegate could execute subscriber logic, but no evidence here that any subscriber dispatches state_exit.",
+    "playerBoundary": "In builds without UNITY_EDITOR, capture/compare/observer lines are excluded by conditional source; no Player build/runtime verification.",
+    "dataMemberLimit": "Assignments to Frame.N and Runtime.Frame are observed; their declarations/setter contracts were not expanded. No hypothetical setter behavior is treated as a discovered defect."
+  },
+  "R11": {
+    "symbol": "GetNativeFrameDataById",
+    "status": "INDEXED_LOOKUP_NO_EXPLICIT_DELEGATE_OR_EXIT_DISPATCH_IN_METHOD",
+    "guard": "Wrapper?.characterData == null or (uint)frameId >= NativeMaxFrameIdExclusive -> null",
+    "return": "_frames[frameId] if nonnull; else NativeZeroFrames[frameId] only when (uint)frameId < NativeZeroFrames.Length, else null",
+    "observedBehavior": "Null checks, unsigned range comparisons, indexed reads and null-coalescing; no explicit self-authored helper invocation, event/delegate Invoke or legacy exit dispatch in this method.",
+    "limits": "Describes method statements only; no whole-cache lifecycle, performance, thread-safety or bounds certification. Standard data operations are not expanded into hypothetical global side-effect audit."
+  },
+  "R12": {
+    "symbol": "SyncDirectFrameData",
+    "status": "COUNTER_ASSIGNMENTS_THEN_UNREAD_PROJECT_HELPER",
+    "order": [
+      "wait = frameWait < 0 ? 0 : frameWait",
+      "next = frameNext",
+      "if directWaitCounter != int.MinValue, waitCounter = directWaitCounter",
+      "SyncRuntime() unconditionally after these statements"
+    ],
+    "unreadCallee": "FrameTransistor.SyncRuntime",
+    "unknown": "Whether SyncRuntime only synchronizes runtime data or also invokes callbacks; no claim inferred from name."
+  },
+  "R13": {
+    "symbol": "SyncWaitCounterFrame",
+    "status": "COUNTER_ASSIGNMENT_THEN_SAME_UNREAD_PROJECT_HELPER",
+    "order": [
+      "waitCounter = frameId",
+      "SyncRuntime()"
+    ],
+    "unreadCallee": "FrameTransistor.SyncRuntime",
+    "unknown": "Same single missing callee contract as R12, not a separate new optimization."
+  }
+}

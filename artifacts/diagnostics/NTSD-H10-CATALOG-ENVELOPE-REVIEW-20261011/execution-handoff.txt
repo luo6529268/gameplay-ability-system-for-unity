@@ -1,0 +1,34 @@
+继续同一H10，不转下一优化点。人类已要求“那就先把H10完成了啊”，并再次明确“那为什么不继续处理？”。本讨论会话已独立审查上一有限任务与当前collector/prewarm/cache路线。现在执行下面准确的下一有限诊断，不把上一子任务结束当作H10整体暂停。
+
+Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011
+Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001
+需求：补齐此前5文件资源组不能证明的完整音频集合驻留、真实generic/cache占用、退出/重入阶段账本；同时清楚判定保守按局依赖清单哪些已证明、哪些仍未知。完成后交讨论会话独立审查下一H10方案，不自行裁剪或宣告父项完成。
+
+1. 准确范围与前置
+唯一可写脚本 Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs，添加具名Editor诊断/必要同文件fixture，不重写既有测试历史。生产三个文件、CharacterAnimtorManager、loader、World、声音事件规则、其他测试均只读。正常PCM分块和formal session ownership保持。不能读活跃Q06方法体或解冻其他专项。
+先按原规范建立独立Task/Change/Operation，备份此脚本真实dirty字节与相关治理文件并记录SHA/Git/程序集，更新唯一进度/恢复入口。旧兼容13/14 FAIL、Play前置失败及所有旧原件保留，不把它们刷绿；不要运行旧ABBA/五文件资源组或无关回归。
+只用现有单Editor，核idle/非用户Play/原Menu clean8/无测试或编译，loader无pending/queued请求，无并行运行本诊断。不得开启第二Editor、重启、清Console、全局GC.Collect/UnloadUnusedAssets。
+
+2. 第一步是准确清单和可恢复fixture，不先全量加载
+复用现有 Capture + BuildCharacterFrameConfigsFromCatalog 得到本次正式全部330定义的实际C#配置，只解析数据，不创建整库纹理/Sprite/atlas或启动游戏。绑定真实PublishedLoganCatalog/ModeComboInput或通过同等生产只读接口确保两种KO路径进入原collector；不要以测试自造空Mode覆盖。读取真实GameConfig/AudioController/soundRootFolder并保存恢复点；沿用public PrepareBattleCuesAsync(manager)正常路径。
+导出本次content/source fingerprint，实际catalog id/type、per-definition cue来源、common/builtin/mode cue、formal规范化路径/alias、generic实际file/folder成员、已有配置borrowed clip映射；全部按原生产collector/resolver，不靠目录名分类声音。核旧1000/978/72的变化原因，不硬编码旧count为真。
+分别记录：完整正式定义集合是当前安全回退；玩家+全non0+静态visual closure只是未准入候选。基于声明metadata及已知入口列出stage/reserve、OPoint、transform、random weapon、respawn/late/external OID、weapon-piece、内建受击/落地/KO/字符串cue覆盖表。仅源码位置/外部合同/metadata，不展开Q06行为。任何未知保留明确reason并回退完整集合，不静默去掉某类声音，不将“候选包含于全量”当完整性证明。
+
+3. 隔离与既有缓存保护必须先通过最小fixture
+禁止把production soundRoot改成不存在目录后冒充全量测量。禁止反射替换NTSD_ResourceLoader.private static readonly instance。保留真实generic路径和已有AudioController配置；所有现有cache键/值/资源ID、借用clip、单例、loader队列及原Scene记录前像。
+本任务允许诊断在空闲且无并发消费者的前提下，通过实际加载新增generic缓存，然后在最终测量结束后仅移除“前像不存在、属于预先解析的本次generic key集合、当前value引用与本次记录相同”的精确新增条目。只销毁能证明本次新增且不在旧cache/配置borrowed/原场景voice绑定中的clip，数组需逐对象去重。先owner stage1/5并drain，解除本次fixture引用，再处理新增cache delta。不得ClearCache，不删任何前像条目/旧对象，不碰用户文件。若不能证明无共享借用或出现未知cache变化，保留未知资源并报准确隔离缺口，禁止全局清理掩盖。
+用最多两个具名小资源（一个formal、一个既有generic/配置借用）验证该fixture/清理路径，确认前后原cache、单例、队列、Scene完全恢复，实际新owned对象Unity null/ID不存在。运行最新编译和最窄新fixture测试，只有正确性与恢复全过才进入下一组。冷加载允许分配，旧Driver 0GC失败不拦本项。
+
+4. 唯一完整audio-only顺序测量组
+本Task新增允许完整当前catalog音频解码，不沿用旧小组任务禁止全量的范围；但不加载visual整库、不做旧/新全量双份同驻留。组开始写CreateNew marker/固定清单，最多两个正常生产完整prepare会话串行：第一次冷准备→sealed稳态→stage1/5→drain/owned释放→同owner第二次准备→sealed→关闭/drain→fixture最终精确恢复。第二次可以复用第一次正常保留的generic cache，这是生产事实，不能偷偷清掉来模拟“冷”。任一正确性/容量/恢复硬失败停止剩余会话，原件保留，不重跑找PASS。
+先用WAV header总量/generic估算、当前可用物理内存/commit与当前Editor对象规模做记录化执行容量预检；预计本次增量不能容纳就停止给出缺口。执行安全余量不是产品预算，不能凭自行选的数字判H10预算通过。禁止通过杀进程或清旧cache腾空间。
+通过现有public PrepareBattleCuesAsync(manager)，保留真实normal formal/generic/config行为，不复制私有循环绕过正常入口。新诊断可只读反射现有字典/字段，不注入生产hook/不改原计时GC边界。每会话记录before、冷准备中有限采样、sealed、stage5-return、tail-drained、下轮入口、final-cleanup。以现有计数/Editor更新做有限采样，每约100个新formal完成一次、最多16个中途快照；观察器的时间/managed对象计入测量局限，不宣称原生解码瞬时峰值或CPU基准。不能为测量改变加载顺序/增加warm/开Profiler栈。
+每个快照按真实clip instance ID去重，分栏列 formal session-owned output/nonmono input、尚存owned mono、generic cache新增/原有、配置borrowed、voice绑定、pending local、Destroy pending、理论PCM与临时数组payload、Profiler.GetRuntimeMemorySizeLong对象内存；共享source/output只计一次。可记录进程private/working set作为环境观测，不能和对象bytes相加，也不能把采样最高值当整局/设备绝对峰值。原loader内部无法观察的decode/staging区间明确UNKNOWN，不假填0。
+sealed后核实际所有预期cue路径/alias/metadata与完整manifest相符、missing/fallback有精确原因、formal加载与唯一identity一致、无新未准备拒绝。复用先前PCM位/增益/retrigger规则证据，不为全部输出再造第二套全量PCM数组。必要逐clip核samples/channels/frequency，比较两个会话语义/资源数量；ID跨局应不复用为旧owner，generic借用按实际复用。按关门计数和真实对象身份确认旧formal output在新会话前释放；generic留存直到诊断结束按第3节清理新delta。不得停止原菜单generic voice。
+
+5. 输出与完成定义
+提交完整manifest、每阶段机器可读资源账本、精确cache delta/owner清理、两轮metadata/数量对照、采样口径、未知项、当前已批准预算检索结果。若项目没有当前阶段的音频steady/transition数字预算，就报告“测量完成/预算待设定”，给以实测为依据的具体备选范围和代价，不新增生产超预算拒绝策略、不擅自宣布低端通过。
+按局裁剪只有覆盖闭合才可提出准确后继生产方案；否则指出最小缺失元数据/合同和是否必须维持全量回退，不能再把未准入144100664B当可实现收益。本次不能修改声音规则、按首次播放lazy加载、压缩降采样或删cue。可形成当前阶段H10验收清单：已应用两项、全量账本、仍需实现/真实决策、后期设备分开。
+报告状态使用 FULL_CATALOG_AUDIO_ENVELOPE_MEASURED 或准确INCONCLUSIVE/BLOCKED及原因，不写H10全部完成。脚本收尾立即登记Change，Validate-ChangeLedger和scoped diff、源码程序集稳定/资源设置保护、Scene/单例/缓存恢复。主会话随后继续独立审查H10，只有真实新架构/规则/预算决策才请人类，不因子Task完成要求人类重复“继续”。
+
+保留H08默认ON、M03候选OFF、H07及producer暂缓、95OFF、H06不续；不恢复旧Goal/34队列或其他优化点。AB/Android/GPU/IL2CPP/构建期音频格式仍后期。所有已有dirty工作保护，不reset/checkout/clean/stash/删除资源。

@@ -1,0 +1,45 @@
+"""Audited one-shot local Editor bridge; does not retry or alter source/scene."""
+from pathlib import Path
+import json
+import socket
+import struct
+import sys
+
+root = Path(__file__).resolve().parent
+action, output = sys.argv[1:3]
+destination = root / output
+assert destination.parent == root and not destination.exists()
+if action == "state":
+    request = {"type": "get_editor_state", "params": {}}
+elif action == "probe":
+    request = {"type": "execute_code", "params": {"action": "execute", "code": (root / "probe-body.cs").read_text(encoding="utf-8"), "compiler": "auto", "safety_checks": True}}
+else:
+    raise ValueError(action)
+with socket.create_connection(("127.0.0.1", 6402), timeout=5) as connection:
+    connection.settimeout(50)
+    greeting = connection.recv(512)
+    assert b"FRAMING=1" in greeting
+    payload = json.dumps(request).encode("utf-8")
+    connection.sendall(struct.pack(">Q", len(payload)) + payload)
+
+    def read_exact(size):
+        data = b""
+        while len(data) < size:
+            chunk = connection.recv(size - len(data))
+            if not chunk:
+                raise EOFError("Editor connection closed")
+            data += chunk
+        return data
+
+    for _ in range(180):
+        length = struct.unpack(">Q", read_exact(8))[0]
+        if not length:
+            continue
+        assert 0 < length < 64 * 1024 * 1024
+        response = json.loads(read_exact(length))
+        with destination.open("x", encoding="utf-8") as handle:
+            json.dump(response, handle, ensure_ascii=False, indent=2)
+        print(json.dumps({"output": str(destination), "status": response.get("status"), "result": response.get("result", {}) if action == "state" else {k: v for k, v in response.get("result", {}).items() if k != "data"}}, ensure_ascii=True))
+        break
+    else:
+        raise TimeoutError("No terminal reply; do not resubmit the probe blindly")

@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "f38ce7c846a24caf9cffb74c9ae3b5ad",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791626279390,
+      "finished_unix_ms": 1791626287128,
+      "last_update_unix_ms": 1791626287128,
+      "progress": {
+        "completed": 1,
+        "total": 10642,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791626286316,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_DefaultOffAndClearDisables",
+        "last_finished_unix_ms": 1791626286333,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_DefaultOffAndClearDisables",
+            "message": "  The bounded candidate flag is not implemented.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

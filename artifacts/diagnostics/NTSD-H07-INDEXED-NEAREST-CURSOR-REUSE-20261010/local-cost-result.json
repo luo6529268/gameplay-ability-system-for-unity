@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5ce4867a7a634c1ab0b07984a36f6610",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791613173343,
+      "finished_unix_ms": 1791613187409,
+      "last_update_unix_ms": 1791613187409,
+      "progress": {
+        "completed": 1,
+        "total": 10634,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791613181387,
+        "last_finished_test_full_name": "NTSD.Test.AiSensingKernelEditorTests.CursorReuse_LocalCostAbbaOnce",
+        "last_finished_unix_ms": 1791613186971,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 6.8037565,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CursorReuse_LocalCostAbbaOnce",
+            "fullName": "NTSD.Test.AiSensingKernelEditorTests.CursorReuse_LocalCostAbbaOnce",
+            "state": "Passed",
+            "durationSeconds": 5.5841967,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

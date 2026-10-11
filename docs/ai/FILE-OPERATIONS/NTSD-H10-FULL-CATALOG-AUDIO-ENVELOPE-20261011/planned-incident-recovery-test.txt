@@ -1,0 +1,63 @@
+
+        [Test]
+        public void CatalogAudioEnvelopeRecoverExactQualificationDelta()
+        {
+            Assert.That(Application.isPlaying, Is.False);
+            Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
+            Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
+            const int expectedId = -1243288;
+            const string expectedKey = @"NTSD.AudioFile::data\015.wav";
+            var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private).GetValue(NTSD_ResourceLoader.Instance);
+            var before = SnapshotCache(cache);
+            var clips = Resources.FindObjectsOfTypeAll<AudioClip>();
+            AudioClip target = clips.SingleOrDefault(x => x.GetInstanceID() == expectedId);
+            object capturedValue = cache.Contains(expectedKey) ? cache[expectedKey] : null;
+            Assert.That(cache.Keys.Cast<string>().All(x => x == expectedKey), Is.True, "Unexpected cache preserved");
+            if (target != null)
+            {
+                Assert.That(target.name, Is.EqualTo("015"));
+                Assert.That(target.samples, Is.EqualTo(7153));
+                Assert.That(target.channels, Is.EqualTo(1));
+                Assert.That(target.frequency, Is.EqualTo(44100));
+                if (capturedValue != null) Assert.That(ReferenceEquals(capturedValue, target), Is.True);
+                foreach (AudioSource voice in Resources.FindObjectsOfTypeAll<AudioSource>())
+                    Assert.That(voice.clip == target, Is.False);
+                foreach (AudioController controller in Resources.FindObjectsOfTypeAll<AudioController>())
+                    Assert.That((controller.AudioList ?? Array.Empty<AudioItem>()).Where(x => x != null)
+                        .SelectMany(x => x.clip ?? Array.Empty<AudioClip>()).Contains(target), Is.False);
+                foreach (NTSDSoundPlayer player in Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>())
+                {
+                    Assert.That(player.BattleAudioPreparationInProgressForDiagnostics, Is.False);
+                    Assert.That(player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
+                    foreach (string field in new[] { "preparedCues", "preparedFormalBattleCues" })
+                        foreach (object cue in EnvelopeField<IDictionary>(player, field).Values)
+                            foreach (string clipsField in new[] { "Clips", "BattlePlaybackClips" })
+                                Assert.That((EnvelopeField<AudioClip[]>(cue, clipsField) ?? Array.Empty<AudioClip>()).Contains(target), Is.False);
+                }
+                foreach (string key in cache.Keys)
+                    if (key != expectedKey)
+                        Assert.That(EnvelopeFixture.CacheClips(cache[key]).Contains(target), Is.False);
+                if (capturedValue != null)
+                {
+                    Assert.That(ReferenceEquals(cache[expectedKey], capturedValue), Is.True);
+                    Assert.That(NTSD_ResourceLoader.Instance.RemoveCache(expectedKey), Is.True);
+                }
+                UnityEngine.Object.DestroyImmediate(target);
+                Assert.That(target == null, Is.True);
+            }
+            else
+                Assert.That(capturedValue, Is.Null, "Missing native with unexpected cache mapping: retain");
+            var otherBefore = clips.Where(x => x != null && x.GetInstanceID() != expectedId).ToArray();
+            Assert.That(otherBefore.All(x => x != null), Is.True);
+            Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => x.GetInstanceID() == expectedId), Is.False);
+            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByPath("Assets/NTSD/Scene/NTSD_Menu.unity");
+            Assert.That(scene.isLoaded && !scene.isDirty && scene.rootCount == 8, Is.True);
+            SaveEnvelope("qualification-delta-recovery", new
+            {
+                expectedKey, expectedId, cacheMappingPresentBefore = capturedValue != null,
+                targetPresentBefore = clips.Any(x => ReferenceEquals(x, target)),
+                originalOtherClips = otherBefore.Select(x => new { id = x.GetInstanceID(), x.name, x.samples, x.channels, x.frequency }).ToArray(),
+                cacheEmptyAfter = cache.Count == 0, targetGone = true, sceneRestoredByFramework = true,
+                scope = "Exact task-owned failed-qualification native ID only. Domain reload may discard new mapping; not used as release proof. No other native cleanup."
+            });
+        }

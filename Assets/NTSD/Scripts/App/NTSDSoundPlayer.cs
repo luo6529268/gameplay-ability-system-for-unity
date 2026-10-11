@@ -50,6 +50,9 @@ namespace NTSD.App
             public bool IsLoaded;
             public bool IsLoading;
             public bool IsFormalBattleFile;
+            public int CatalogGeneration;
+            public string FormalIdentity;
+            public AudioClip OwnedSource;
             public AudioClip[] Clips;
             public AudioClip[] BattlePlaybackClips;
         }
@@ -61,6 +64,16 @@ namespace NTSD.App
         private AudioController preparedAudioController;
         private int preparedCatalogGeneration;
         private readonly List<AudioClip> ownedBattlePlaybackClips = new List<AudioClip>();
+        private readonly List<AudioClip> ownedFormalAudioSources = new List<AudioClip>();
+        private int battlePrepareRequest;
+        private int pendingFormalAudioLoads;
+        private bool battleAudioPreparationInProgress;
+        private bool battleSoundIntakeClosed;
+        private bool battleSoundShutdownCompleted;
+        private bool soundOwnerDisposed;
+        private long formalAudioLoadCount;
+        private long staleFormalAudioReleaseCount;
+        private int lastStaleFormalAudioInstanceId;
         private long preparedCueBuildCount;
         private AudioSource[] oneShotVoices = Array.Empty<AudioSource>();
         private MMFollowTarget[] oneShotVoiceFollowers = Array.Empty<MMFollowTarget>();
@@ -100,6 +113,15 @@ namespace NTSD.App
         public long SkippedMissingBattleCueFileCountForDiagnostics =>
             skippedMissingBattleCueFileCount;
         public int NativeBattleVolumePercentForDiagnostics => nativeBattleVolumePercent;
+        public int PendingFormalAudioLoadsForDiagnostics => pendingFormalAudioLoads;
+        public int OwnedFormalAudioSourcesForDiagnostics => ownedFormalAudioSources.Count;
+        public long FormalAudioLoadCountForDiagnostics => formalAudioLoadCount;
+        public long StaleFormalAudioReleaseCountForDiagnostics => staleFormalAudioReleaseCount;
+        public int LastStaleFormalAudioInstanceIdForDiagnostics => lastStaleFormalAudioInstanceId;
+        public bool BattleSoundShutdownCompletedForDiagnostics => battleSoundShutdownCompleted;
+        public bool BattleAudioPreparationInProgressForDiagnostics => battleAudioPreparationInProgress;
+        public bool BattleAudioTailDrainedForDiagnostics =>
+            !battleAudioPreparationInProgress && pendingFormalAudioLoads == 0;
 
         internal void ApplyNativeBattleVolumeHostTick(
             NTSD28NativeFunctionKeyHostCommand command)
@@ -146,22 +168,96 @@ namespace NTSD.App
 
         private void OnDestroy()
         {
+            soundOwnerDisposed = true;
+            BeginBattleSoundShutdown();
+            CompleteBattleSoundShutdown();
+        }
+
+        internal void BeginBattleSoundShutdown()
+        {
+            battleSoundIntakeClosed = true;
+            battlePrepareRequest++;
+            preparedCatalogGeneration++;
+        }
+
+        internal void CompleteBattleSoundShutdown()
+        {
+            if (!battleSoundIntakeClosed)
+                BeginBattleSoundShutdown();
             ReleaseBattlePlaybackClips();
+            battleCatalogSealed = false;
+            battleSoundShutdownCompleted = true;
+        }
+
+        private static void DestroyOwnedAudioClip(AudioClip clip)
+        {
+            if (clip == null)
+                return;
+            if (Application.isPlaying)
+                Destroy(clip);
+            else
+                DestroyImmediate(clip);
+        }
+
+        private void ReleaseOwnedFormalSource(PreparedSoundCue cue)
+        {
+            AudioClip source = cue.OwnedSource;
+            cue.OwnedSource = null;
+            if (ReferenceEquals(source, null))
+                return;
+            ownedFormalAudioSources.Remove(source);
+            DestroyOwnedAudioClip(source);
         }
 
         private void ReleaseBattlePlaybackClips()
         {
             preparedCatalogGeneration++;
-            foreach (AudioClip clip in ownedBattlePlaybackClips)
+            for (int index = 0; index < oneShotVoices.Length; index++)
             {
-                if (clip == null)
+                AudioSource voice = oneShotVoices[index];
+                if (voice == null ||
+                    (string.IsNullOrEmpty(battleVoiceIdentities[index]) &&
+                     !ownedBattlePlaybackClips.Contains(voice.clip) &&
+                     !ownedFormalAudioSources.Contains(voice.clip)))
                     continue;
-                if (Application.isPlaying)
-                    Destroy(clip);
-                else
-                    DestroyImmediate(clip);
+                voice.Stop();
+                voice.clip = null;
+                battleVoiceIdentities[index] = null;
+                oneShotVoiceAvailableDspTimes[index] = 0;
+                oneShotVoiceStartSequences[index] = 0;
+                MMFollowTarget follower = oneShotVoiceFollowers[index];
+                if (follower != null)
+                {
+                    follower.Target = null;
+                    follower.enabled = false;
+                }
             }
+            foreach (AudioClip clip in ownedBattlePlaybackClips)
+                DestroyOwnedAudioClip(clip);
             ownedBattlePlaybackClips.Clear();
+            foreach (AudioClip clip in ownedFormalAudioSources)
+                DestroyOwnedAudioClip(clip);
+            ownedFormalAudioSources.Clear();
+            foreach (PreparedSoundCue cue in preparedFormalBattleCues.Values)
+            {
+                cue.OwnedSource = null;
+                cue.Clips = Array.Empty<AudioClip>();
+                cue.BattlePlaybackClips = null;
+                cue.IsLoaded = false;
+            }
+            preparedFormalBattleCues.Clear();
+            foreach (PreparedSoundCue cue in preparedCues.Values)
+                cue.BattlePlaybackClips = null;
+        }
+
+        private bool IsCurrentFormalCue(PreparedSoundCue cue)
+        {
+            return this != null && !soundOwnerDisposed && !battleSoundIntakeClosed &&
+                cue.CatalogGeneration == preparedCatalogGeneration &&
+                ReferenceEquals(AudioController.Instance, preparedAudioController) &&
+                cue.FormalIdentity != null &&
+                preparedFormalBattleCues.TryGetValue(cue.FormalIdentity, out PreparedSoundCue current) &&
+                ReferenceEquals(current, cue);
         }
 
         internal void PrepareBattlePresentationHotPath()
@@ -178,6 +274,52 @@ namespace NTSD.App
         public async UniTask PrepareBattleCuesAsync(
             CharacterAnimtorManager characterManager)
         {
+            if (this == null || soundOwnerDisposed)
+                return;
+            BeginBattleSoundShutdown();
+            int request = battlePrepareRequest;
+            while (battleAudioPreparationInProgress || pendingFormalAudioLoads != 0)
+            {
+                await UniTask.Yield();
+                if (this == null || soundOwnerDisposed || request != battlePrepareRequest)
+                    return;
+            }
+            if (this == null || soundOwnerDisposed || request != battlePrepareRequest)
+                return;
+            CompleteBattleSoundShutdown();
+            // Retire attached resources as well as local tails before opening the next generation.
+            if (Application.isPlaying)
+                await UniTask.NextFrame();
+            if (this == null || soundOwnerDisposed || request != battlePrepareRequest)
+                return;
+
+            battleSoundShutdownCompleted = false;
+            battleSoundIntakeClosed = false;
+            battleAudioPreparationInProgress = true;
+            try
+            {
+                await PrepareBattleCuesCoreAsync(characterManager);
+                if (this != null && !soundOwnerDisposed &&
+                    request == battlePrepareRequest && !battleCatalogSealed)
+                {
+                    throw new InvalidOperationException(
+                        "Battle sound preparation ended without sealing the current catalog.");
+                }
+            }
+            finally
+            {
+                if (!battleCatalogSealed && request == battlePrepareRequest)
+                {
+                    BeginBattleSoundShutdown();
+                    CompleteBattleSoundShutdown();
+                }
+                battleAudioPreparationInProgress = false;
+            }
+        }
+
+        private async UniTask PrepareBattleCuesCoreAsync(
+            CharacterAnimtorManager characterManager)
+        {
             battleCatalogSealed = false;
             PrepareBattlePresentationHotPath();
             EnsureOneShotVoiceCapacity(NativeBattleVoiceLimit);
@@ -186,9 +328,7 @@ namespace NTSD.App
             AudioController controller = AudioController.Instance;
             if (!ReferenceEquals(controller, preparedAudioController))
             {
-                ReleaseBattlePlaybackClips();
                 preparedCues.Clear();
-                preparedFormalBattleCues.Clear();
                 preparedAudioController = controller;
             }
 
@@ -200,11 +340,15 @@ namespace NTSD.App
                 soundIds.Add(BuiltInBattleSoundIds[index]);
 
             preparedCues.EnsureCapacity(soundIds.Count);
+            if (ownedFormalAudioSources.Capacity < soundIds.Count)
+                ownedFormalAudioSources.Capacity = soundIds.Count;
             foreach (string soundId in soundIds)
             {
                 PreparedSoundCue battleCue = GetOrPrepareCue(soundId, true);
                 await EnsurePreparedCueLoadedAsync(battleCue);
-                if (this == null || generation != preparedCatalogGeneration)
+                if (this == null || soundOwnerDisposed || battleSoundIntakeClosed ||
+                    generation != preparedCatalogGeneration ||
+                    !ReferenceEquals(AudioController.Instance, preparedAudioController))
                     return;
                 PrepareBattlePlaybackClips(battleCue);
                 if (battleCue != null && battleCue.IsFormalBattleFile)
@@ -215,7 +359,9 @@ namespace NTSD.App
                         : Directory.Exists(genericCue.SourcePath)))
                     {
                         await EnsurePreparedCueLoadedAsync(genericCue);
-                        if (this == null || generation != preparedCatalogGeneration)
+                        if (this == null || soundOwnerDisposed || battleSoundIntakeClosed ||
+                    generation != preparedCatalogGeneration ||
+                    !ReferenceEquals(AudioController.Instance, preparedAudioController))
                             return;
                     }
                 }
@@ -246,6 +392,9 @@ namespace NTSD.App
             int battleSourceWorldX,
             Vector2Int? battleMix = null)
         {
+            if (this == null || soundOwnerDisposed ||
+                (isBattleEvent && (battleSoundIntakeClosed || battleAudioPreparationInProgress)))
+                return;
             PreparedSoundCue preparedCue = GetOrPrepareCue(soundId, isBattleEvent);
             if (preparedCue == null)
                 return;
@@ -350,7 +499,8 @@ namespace NTSD.App
         private PreparedSoundCue GetOrPrepareCue(
             string soundId, bool isBattleEvent = false)
         {
-            if (string.IsNullOrEmpty(soundId))
+            if (this == null || soundOwnerDisposed || string.IsNullOrEmpty(soundId) ||
+                (isBattleEvent && battleSoundIntakeClosed))
                 return null;
 
             AudioController controller = AudioController.Instance;
@@ -415,6 +565,8 @@ namespace NTSD.App
                 AudioItem = audioItem,
                 IsSingleFile = isSingleFile,
                 IsFormalBattleFile = isFormalBattleFile,
+                CatalogGeneration = preparedCatalogGeneration,
+                FormalIdentity = normalizedRelativeFolder,
                 CacheKey = isSingleFile
                     ? $"{(isFormalBattleFile ? "NTSD.FormalBattleAudioFile::" : "NTSD.AudioFile::")}{normalizedRelativeFolder}"
                     : $"NTSD.Audio::{normalizedRelativeFolder}",
@@ -435,7 +587,12 @@ namespace NTSD.App
 
         private async UniTask EnsurePreparedCueLoadedAsync(PreparedSoundCue preparedCue)
         {
-            if (preparedCue == null || preparedCue.IsLoaded)
+            if (preparedCue == null)
+                return;
+            while (preparedCue.IsLoading)
+                await UniTask.Yield();
+            if (this == null || preparedCue.IsLoaded ||
+                (preparedCue.IsFormalBattleFile && !IsCurrentFormalCue(preparedCue)))
                 return;
 
             preparedCue.IsLoading = true;
@@ -516,7 +673,8 @@ namespace NTSD.App
             string battleIdentity,
             Vector2Int? battleMix)
         {
-            if (this == null)
+            if (this == null || soundOwnerDisposed ||
+                (isBattleEvent && battleSoundIntakeClosed))
                 return;
             AudioItem audioItem = preparedCue.AudioItem;
 
@@ -696,6 +854,12 @@ namespace NTSD.App
                         continue;
                     }
 
+                    if (source.samples >= 8192)
+                    {
+                        playbackClips[index] = CreateBoundedBattlePlaybackClip(source);
+                        continue;
+                    }
+
                     // Unity's mono pan law attenuates the center and caps volume at1.
                     // Duplicate PCM into stereo to preserve native per-channel gain.
                     var mono = new float[source.samples];
@@ -711,6 +875,11 @@ namespace NTSD.App
                     playbackClips[index] = playback;
                 }
                 cue.BattlePlaybackClips = playbackClips;
+                if (cue.OwnedSource != null && cue.OwnedSource.channels == 1)
+                {
+                    cue.Clips = playbackClips;
+                    ReleaseOwnedFormalSource(cue);
+                }
             }
             catch
             {
@@ -723,7 +892,46 @@ namespace NTSD.App
                         DestroyImmediate(clip);
                     ownedBattlePlaybackClips.RemoveAt(index);
                 }
+                if (cue.OwnedSource != null)
+                {
+                    ReleaseOwnedFormalSource(cue);
+                    cue.Clips = Array.Empty<AudioClip>();
+                    cue.IsLoaded = false;
+                }
                 throw;
+            }
+        }
+
+        private AudioClip CreateBoundedBattlePlaybackClip(AudioClip source)
+        {
+            const int blockFrames = 4096;
+            int totalFrames = source.samples;
+            var mono = new float[blockFrames];
+            if (!source.GetData(mono, 0))
+                throw new InvalidOperationException("Cannot prepare battle PCM: " + source.name);
+            _ = checked(totalFrames * 2);
+            var stereo = new float[blockFrames * 2];
+            AudioClip playback = AudioClip.Create(source.name, totalFrames, 2, source.frequency, false);
+            ownedBattlePlaybackClips.Add(playback);
+            int offset = 0;
+            while (true)
+            {
+                for (int sample = 0; sample < mono.Length; sample++)
+                    stereo[sample * 2] = stereo[sample * 2 + 1] = mono[sample];
+                if (!playback.SetData(stereo, offset))
+                    throw new InvalidOperationException("Cannot initialize battle PCM: " + source.name);
+                offset += mono.Length;
+                if (offset == totalFrames)
+                    return playback;
+                int remaining = totalFrames - offset;
+                if (remaining < blockFrames)
+                {
+                    // Exact tail buffers prevent Unity SetData from wrapping over the clip's beginning.
+                    mono = new float[remaining];
+                    stereo = new float[remaining * 2];
+                }
+                if (!source.GetData(mono, offset))
+                    throw new InvalidOperationException("Cannot prepare battle PCM: " + source.name);
             }
         }
 
@@ -885,8 +1093,10 @@ namespace NTSD.App
 
         private async UniTask LoadPreparedClipsAsync(PreparedSoundCue preparedCue)
         {
-            if (preparedCue.IsLoaded)
+            if (preparedCue.IsLoaded ||
+                (preparedCue.IsFormalBattleFile && !IsCurrentFormalCue(preparedCue)))
                 return;
+            int generation = preparedCatalogGeneration;
 
             try
             {
@@ -901,10 +1111,42 @@ namespace NTSD.App
                 // 单文件模式：soundId 以音频扩展名结尾（如 data\003.wav）
                 if (preparedCue.IsSingleFile)
                 {
-                    preparedCue.Clips[0] =
-                        await NTSD_ResourceLoader.Instance.LoadSingleAudioClipAsync(
-                            preparedCue.CacheKey,
-                            preparedCue.SourcePath);
+                    if (preparedCue.IsFormalBattleFile)
+                    {
+                        pendingFormalAudioLoads++;
+                        formalAudioLoadCount++;
+                        try
+                        {
+                            AudioClip loaded = await NTSD_ResourceLoader.Instance.LoadSingleAudioClipAsync(
+                                string.Empty, preparedCue.SourcePath);
+                            if (!IsCurrentFormalCue(preparedCue))
+                            {
+                                if (loaded != null)
+                                {
+                                    lastStaleFormalAudioInstanceId = loaded.GetInstanceID();
+                                    staleFormalAudioReleaseCount++;
+                                }
+                                DestroyOwnedAudioClip(loaded);
+                                return;
+                            }
+                            preparedCue.OwnedSource = loaded;
+                            if (loaded != null)
+                                ownedFormalAudioSources.Add(loaded);
+                            preparedCue.Clips[0] = loaded;
+                        }
+                        finally
+                        {
+                            pendingFormalAudioLoads--;
+                        }
+                    }
+                    else
+                    {
+                        AudioClip loaded = await NTSD_ResourceLoader.Instance.LoadSingleAudioClipAsync(
+                            preparedCue.CacheKey, preparedCue.SourcePath);
+                        if (this == null || generation != preparedCatalogGeneration)
+                            return;
+                        preparedCue.Clips[0] = loaded;
+                    }
                     return;
                 }
 
@@ -913,6 +1155,8 @@ namespace NTSD.App
                     await NTSD_ResourceLoader.Instance.LoadAudioClipsAsync(
                         preparedCue.CacheKey,
                         preparedCue.SourcePath);
+                if (this == null || generation != preparedCatalogGeneration)
+                    return;
                 if (loadedClips != null && loadedClips.Length > 0)
                 {
                     preparedCue.Clips = loadedClips;
@@ -924,6 +1168,9 @@ namespace NTSD.App
             }
             catch (Exception ex)
             {
+                if (this == null || generation != preparedCatalogGeneration ||
+                    (preparedCue.IsFormalBattleFile && !IsCurrentFormalCue(preparedCue)))
+                    return;
                 failedPreparedCueLoadCount++;
                 UseConfiguredClipOrEmpty(preparedCue);
                 Debug.LogWarning(
@@ -932,7 +1179,9 @@ namespace NTSD.App
             }
             finally
             {
-                preparedCue.IsLoaded = true;
+                if (this != null && generation == preparedCatalogGeneration &&
+                    (!preparedCue.IsFormalBattleFile || IsCurrentFormalCue(preparedCue)))
+                    preparedCue.IsLoaded = true;
             }
         }
 

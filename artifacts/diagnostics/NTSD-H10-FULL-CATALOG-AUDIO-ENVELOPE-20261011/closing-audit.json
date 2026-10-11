@@ -1,0 +1,20 @@
+{
+  "time": "2026-10-11T01:11:51.349135+08:00",
+  "scope": "final governance/document edits only; protected71283 audit reused from final-audit.json",
+  "sourceAssemblyDriftSinceFinalAudit": [],
+  "intermediateBackups": 46,
+  "invalidIntermediateBackups": [],
+  "dirtyBackupCount": 10,
+  "invalidDirtyBackups": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "governanceDiffCheckExitCode": 0,
+  "validatorPassed": true,
+  "validatorRecords": 1421,
+  "governedDiffFiles": 26,
+  "historicalWarningCount": 4263,
+  "ownChangeWarningLines": [],
+  "operationAfterManifestSha256": "b38677d2d82f335b927cfcdda5676ef3772b369a181b1cd918cd5d80f485e48a",
+  "reportSha256": "ec5a83a7897cebc62450a6f859ab3866bc1c7d5d340ba9ebd2723cfbf6f3ec09",
+  "fullRerun": false
+}

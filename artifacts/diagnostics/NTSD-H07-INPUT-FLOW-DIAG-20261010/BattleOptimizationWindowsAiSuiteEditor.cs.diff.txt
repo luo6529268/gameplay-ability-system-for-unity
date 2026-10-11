@@ -1,0 +1,92 @@
+--- before/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -21,6 +21,20 @@
+     [InitializeOnLoad]
+     internal static class BattleOptimizationWindowsAiSuiteEditor
+     {
++        private static bool startingInputFlowDiagnostic;
++        [MenuItem("NTSD/Validation/Optimization/H07 Full Input Flow Diagnostic")]
++        private static void BeginInputFlowDiagnostic()
++        {
++            Require(!startingInputCostDiagnostic && inputCostObserver == null,
++                "Input flow diagnosis already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Input flow diagnosis requires Profiler initially OFF.");
++            startingInputFlowDiagnostic = true;
++            startingInputCostDiagnostic = true;
++            H07InputCostDiagnostics.ResetBaseline();
++            try { BeginPostBindingsRole(); }
++            finally { startingInputCostDiagnostic = false; startingInputFlowDiagnostic = false; }
++        }
++
+         private static bool startingInputCostDiagnostic;
+         private static H07InputCostDiagnostics inputCostObserver;
+ 
+@@ -712,6 +726,7 @@
+             public bool rolePrerequisiteQualification;
+             public bool producerAbbaDiagnostic;
+             public bool inputCostDiagnostic;
++            public bool inputFlowDiagnostic;
+             public bool roleBranchTimingWindow;
+             public bool inputBoundaryTimingWindow;
+             public bool nativeSampledStateTimingWindow;
+@@ -1316,7 +1331,8 @@
+                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingInputCostDiagnostic ? H07InputCostDiagnostics.OutputRoot :
++            string outputRoot = startingInputFlowDiagnostic ? H07InputCostDiagnostics.FlowOutputRoot :
++                startingInputCostDiagnostic ? H07InputCostDiagnostics.OutputRoot :
+                 startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
+                 startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
+                 startingRoleRecordCostDiagnostic ? RoleRecordCostOutputRoot :
+@@ -1393,12 +1409,13 @@
+                 rolePrerequisiteQualification = startingRolePrerequisiteQualification,
+                 producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
+                 inputCostDiagnostic = startingInputCostDiagnostic,
++                inputFlowDiagnostic = startingInputFlowDiagnostic,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
+-                runs = new RunState[startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingInputFlowDiagnostic || startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                 originalScene = scene.path,
+                 originalSceneHash = HashFile(scene.path),
+                 battleSceneHash = HashFile(BattleScene),
+@@ -1485,6 +1502,8 @@
+ 
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.inputFlowDiagnostic)
++                return H07InputCostDiagnostics.BuildFlowRequest(index);
+             if (state.inputCostDiagnostic)
+                 return H07InputCostDiagnostics.BuildRequest(index);
+             if (state.rolePrerequisiteQualification)
+@@ -2423,7 +2442,7 @@
+                     "The calibrated scope requires the existing production path before the first tick.");
+                 logicGcObserver = new BattleLogicTickGcObserverEditor();
+                 if (state.inputCostDiagnostic)
+-                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex);
++                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex, state.inputFlowDiagnostic);
+                 else if (state.roleRecordCostDiagnostic)
+                     roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
+                 else
+@@ -2918,7 +2937,7 @@
+             try
+             {
+                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
+-                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic)
++                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic || state.inputFlowDiagnostic)
+                 {
+                     run.logicGcEvidence.zeroAllocationPassed = false;
+                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
+@@ -3022,6 +3041,8 @@
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.FlowOutputRoot) +
++                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.OutputRoot) +
+                          Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                      PathFor(lines[1]).StartsWith(PathFor(H06RolePrerequisiteDiagnostics.QualificationRoot) +

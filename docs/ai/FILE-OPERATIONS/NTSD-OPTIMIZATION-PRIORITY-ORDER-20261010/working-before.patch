@@ -1,0 +1,254 @@
+diff --git a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+index 1288638c..2ad81bd1 100644
+--- a/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
++++ b/Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 恢复入口：先确认H-01内容部署策略，禁止按历史“下一项”自动执行。** 最新用户要求所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待确认；不改代码/资源/设置，不运行Unity/测试/构建，不发执行指令、不恢复监测。H06-ROLE-EXACT不再续办，旧结果保留；已准入Role默认/FindEffect修复、producer暂缓/OFF、95 OFF和最终门保持。H-08/H-10是原方案既有依赖，仅解释范围，不自动解冻。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [当前进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。
+diff --git a/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md b/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+index 95cddac2..89a170bf 100644
+--- a/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
++++ b/Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 用户执行边界：只按既有优化方案推进，额外发现的方向一律不跟进。** 当前从原编号第一项[H-01内容部署](android-mobile-readiness/h-01-content-deployment.md)开始，先确认策略；文档中的候选/诊断线索不等于已证实收益或实施授权。H06-ROLE-EXACT不再作为下一项，既有结果保留。依赖只说明，不自动解冻其它专项。[完整决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [唯一进度](battle-optimization-progress-tracker.md)。
++
+ > **已实施问题的详细说明：** [实施记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md) · [H-06子问题：FindEffect修复前后对照](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。用于解释具体代码改法，不新增父项或另一套进度。
+ 
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+@@ -11,13 +13,13 @@
+ 
+ | ID | 优化点 / 独立方案 | 类型 | 建议优先级 | 当前处理方向 |
+ |---|---|---|---|---|
+-| H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
++| H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 当前策略待确认：Manifest/Provider＋随包本地资源包；先对照再切换；H-08/H-10既有依赖单独确认 |
+ | H-02 | [Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 平台 | 中 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+ | H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+ | H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+ | H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+ | H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | Role限定准入完成：当前收益/完整Driver稳态0GC/默认接线通过；空配置Role、显式Brute与非法回退保留，H06/H07最终门不变 |
+-| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，下一方案见H06-ROLE-EXACT |
++| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，本轮转H-01策略 |
+ | H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+ | H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+ | H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+@@ -46,11 +48,11 @@
+ | L-07 | [AI profile说明一致性](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 维护 | 低 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
+ | L-08 | [发布包装](android-mobile-readiness/l-08-release-packaging.md) | 发布 | 低 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
+ 
+-## 新热点与条件候选：6个父项子方案
++## 已存子方案：保留历史，不构成额外方向推进授权
+ 
+ | 子ID | 父项 | 优先级 | 独立方案 |
+ |---|---|---|---|
+-| H06-ROLE-EXACT | H-06 | 高／下一方案 | [现有Role精确配对成本](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，2026-10-10静态分析/方案，具体实施未授权 |
++| H06-ROLE-EXACT | H-06 | 本轮不再续办 | [现有Role精确配对成本](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，2026-10-10静态分析/方案，具体实施未授权 |
+ | H07-INPUT | H-07 | 高 | [CharacterInput等价优化](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) |
+ | H07-LATE | H-07 | 中 | [后续实体更新](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) |
+ | H07-GC95 | H-07 | 限定问题 | [第95批分配调用点](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) |
+diff --git a/Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md b/Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
+index b283e796..d778a42f 100644
+--- a/Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
++++ b/Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md
+@@ -1,3 +1,48 @@
++> **2026-10-10 当前策略草案 / STRATEGY_REVIEW_PENDING，未批准实施。** 用户指定按总清单原第一项H-01讨论具体策略，并要求额外发现的优化方向一律不跟进。本节是当前提案；下方原方案和历史证据保留，未修改原最终验收门。[范围决定](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [文档Task](../../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
++## 本项要解决什么
++
++让Android安装包在没有开发机项目目录、没有网络的情况下，仍能加载本局完整且正确的战斗内容。它是部署和加载兼容性工作；已有静态代码依据，不以新增CPU热点诊断或帧率收益作为必要性证明。当前没有Android运行结果，不能声称已复现某台设备的具体报错或已带来性能收益。
++
++## 当前代码依据（2026-10-10只读核对）
++
++| 当前入口 | 已确认事实及实施含义 |
++|---|---|
++| `GameConfig.asset` 的 `BattleContentRuntimeRoot`；`CharacterAnimtorManager.ResolveConfiguredLoganSource` | 从 `Application.dataPath/..` 拼接 `Assets/NTSD/Content/LoganRuntime`。正式Player需要按稳定内容key定位，不能保留开发项目根假设 |
++| `BattleContentSource`；`LoganObjectCatalog.Read` | 已有相对key/路径越界保护；catalog、DAT以及目录枚举仍依赖真实文件。复用规范与定义语义，不能只把根字符串改成StreamingAssets |
++| `LoganVisualContentCandidate.Capture`；`BMPLoader.LoadVerifiedImageData` | 当前候选捕获、源身份验证和图像解码都有关联文件输入。生成包需要记录来源与转换版本，并保持既有decoder/crop结果 |
++| `NTSDResourceLoader.LoadBytesAsync`、音频目录读取；`NTSDSoundPlayer` 文件检查 | 已有FilePath/Resources读取与声音异步加载基础；音频仍存在文件依赖。统一入口需覆盖这些真实调用者，不能只改角色DAT |
++| `NTSD28Q07WindowsContentBuildProcessor` | 已有Windows专用copy manifest及源/目标hash校验，Android分支未实现。复用现有清单的来源和校验思路，补足实际内容依赖；脚本常量1373文件/46927691字节只代表既有Windows基线，不是本轮完整闭包统计 |
++| `CharacterAnimtorManager` 的已有预热、取消、generation与发布检查 | 继续使用现有owner和发布边界；不另建平行全局内容管理器，不使迟到请求发布到下一局 |
++
++上述均为源码/配置事实，不等于Android验收。原D-023资源权威、项目自有背景/地图/模式及音频来源边界保持；默认stage.dat仍暂缓。
++
++## 建议采用的具体路线（待用户确认）
++
++**版本化资源清单 + 统一内容加载入口 + 随安装包分发的本地AssetBundle。** AssetBundle建议放入专用StreamingAssets子目录，Android通过Unity支持的异步包加载入口访问，业务层只请求内容key。沿用项目现有UniTask；当前manifest未声明Addressables依赖，本提案无需先增加资源框架。本次不创建任何包或资源目录，不改Packages/Settings。
++
++1. **先形成清单与来源映射，暂不切换运行路径。** 以现有Windows清单、catalog和实际可达生产者为起点，列DAT、kind/fusion索引、角色图、公共视觉、声音以及项目地图/模式的key、来源hash、依赖和可选/必需属性。保持catalog顺序与已有可选缺失语义；检查大小写碰撞、重复key和越界。不把所有历史可选图一律改成必需。
++2. **复用现有加载owner，接入Provider并先做对照。** 在 `CharacterAnimtorManager`、catalog/candidate、资源loader的实际入口接入 `IBattleRuntimeContentProvider`；Editor源读取保留为对照，正式Player实现从本地包加载。物理路径与逻辑内容身份须明确分离，不随意改写现有checksum/内容版本合同。保留同一取消、generation、发布和关闭顺序。
++3. **按原方案在构建期生成等价运行内容，再打包。** DAT按现有parser/转换语义生成运行定义；视觉接入H-08已计划的预烘焙产物；声音和地图保持当前内容与表现语义。构建前验证源hash、生成器版本、产物hash、依赖闭包、目标平台和包存在性，缺失/过期拒绝。共享依赖归入公共包；具体分包与数量由依赖清单决定，不先发明细碎包预算。原源文件保留，正式Player切换不等于删除源文件。
++4. **同内容对照通过后切换Player，最后做Android有限验收。** 先核定义/帧数/顺序/依赖、必要像素与播放资源对照和session关闭，再按原文执行清数据离线冷启动、缺失/坏hash受控夹具、取消重进与三次进出。对照仅复用未受改动影响的证据；不机械重跑全部H06/H07性能实验。
++
++Unity 2022.3依据：[StreamingAssets](https://docs.unity3d.com/2022.3/Documentation/Manual/StreamingAssets.html)说明Android路径在APK/JAR内，普通File API不能直接作为通用读取方案；[AssetBundle原生加载](https://docs.unity3d.com/2022.3/Documentation/Manual/AssetBundles-Native.html)提供包与依赖加载API。具体URL组合与加载实现须按现有Unity版本和实际构建布局验证，不能机械添加file前缀。官方API能力不是本项目实机通过证据。
++
++## 既有依赖和阶段完成条件
++
++| 阶段 | 足够的完成证据 | 仍不代表什么 |
++|---|---|---|
++| 当前策略确认 | 用户确认载体与分阶段路线，准确代码/资源写域和Task/Change另行冻结 | 本轮只交草案，不授权修改或构建 |
++| 清单与Provider子阶段 | 来源完整、key唯一、必需/可选正确、失败明确；源与Provider读到的定义/依赖一致，取消/旧session发布/Lease关闭满足原合同 | 不能记H-01父项完成，不能把原DAT/PNG拷贝包当成原方案全部产物 |
++| 生成内容与本地包接入 | 原方案所需的运行定义、公共/角色视觉、音频及项目地图依赖齐全；hash/版本/平台检查通过，相关资源语义对照成立 | 不要求H-08/H-10所有内存优化完成；也不等于设备验收 |
++| H-01最终验收 | 满足下方原Android离线冷启动、缺失拒绝、完整依赖和Lease生命周期所有条件 | 不关闭H-07性能、H-05 GPU或整个Android最终认证 |
++
++H-08视觉预烘焙是原方案已列出的产物依赖；H-10共享声音key/依赖/所有权合同。先冻结这些共同接口不需要先完成两个父项，但真正生成或修改视觉/音频资源时须取得对应准确范围批准，ATLAS暂缓不因H-01讨论自动解除。最终Android验证还需H-02/H-04已有计划提供可运行构建与配置，不在本次策略阶段启动。
++
++当前待用户确认的是上述“随包本地AssetBundle + 清单/Provider先行”的路线。确认后先制定第一子阶段的准确实施合同；H-08/ATLAS等依赖的资源制作与设备配置到实际接入前单独明确，不默认为已批准。没有新增优化点、没有派发执行会话任务，历史H06诊断不再续办。
++
++---
++
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+ # H-01 当前评审卡（2026-10-09）
+ 
+@@ -6,9 +51,9 @@
+ | 字段 | 本轮整理 |
+ |---|---|
+ | 类别 / 建议优先级 | 平台 / 中 |
+-| 当前状态 | 待方案决策；本轮仅文档，未实施/复测 |
++| 当前状态 | 当前第一项；STRATEGY_REVIEW_PENDING；2026-10-10路线草案待确认，未实施/复测 |
+ | 依赖的最小范围 | Manifest/Provider接口与资源载体先确认；H-08/H-10共享闭包，不等其父项全验收 |
+-| 下一步与具体方向 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
++| 下一步与具体方向 | 已静态核对读取链；确认随包本地AssetBundle＋Manifest/Provider先行路线；实施写域与资源依赖另行冻结 |
+ | 完成边界 | Android离线冷启动、缺失拒绝和Lease关闭满足原方案；不要求先完成所有内存优化 |
+ | 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+ | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+diff --git a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+index 17c61b51..9340dc53 100644
+--- a/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
++++ b/Assets/NTSD/Docs/battle-optimization-progress-tracker.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 当前工作：H-01 Android生产内容部署 / STRATEGY_REVIEW_PENDING。** 已记录用户要求：所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待用户确认，未实施、未测试/构建、未发送指令。H06-ROLE-EXACT不再续办；旧诊断结果保留，Role默认、FindEffect修复、producer暂缓/OFF与95 OFF保持。下方按原日期保留历史，任何旧“下一项”不构成当前排程。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [本轮文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010 SCOPED_DIAGNOSIS_COMPLETED；Change NTSD-H06-ROLE-PREREQUISITE-DIAG-001 VERIFIED仅Editor诊断。300tick旧OFF完整checksum/输入双RNG0差；113失败仅fallback总数门，均inert且真fallback attack/body0。当前稳态2event精确tick130/162，raw调用栈均Mono.JIT，首managed RecordAlternateLeadSound/RouteNativeRunning，metadata36/30B共66B；不追溯95/旧ABBA。实时帧回调0/PARTIAL原件保留，同raw解析2目标主线程帧，无第二实景。原硬门失败保持，七段ON未跑。后继只Editor门修正/冷JIT资格，尚未发送；不改生产。原Menu clean/容量/有序关闭/2512保护稳。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-DIAG-20261010/REPORT.md。producerUSER_DEFERRED/OFF、95OFF、Role默认、H06/H07/Android开放、旧Goal取消保持。
+@@ -13,13 +15,13 @@
+ > **具体问题的代码对照记录：** [FindEffect已修复](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md) · [Role已限定准入](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-ROLE-DEFAULT-ADMISSION.md) · [producer快照复用用户暂缓](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md) · [索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md)。不增加父项或旧完成包。
+ 
+ <!-- OPTIMIZATION-REVIEW-20261009 -->
+-# 优化进度：当前工作入口（2026-10-10）
++# 优化进度：状态索引（2026-10-10；文首决定优先）
+ 
+-当前决定：**producer快照复用 USER_DEFERRED / 生产OFF；下一项选择现有Role精确配对成本，先到方案阶段**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
++历史决定（已由文首H-01排程取代）：**producer快照复用 USER_DEFERRED / 生产OFF；当时下一项选择现有Role精确配对成本**。用户要求先记录并推进下一项。ABBA未证明稳定收益，首OFF完整Driver稳态2event/首tick130调用点未知、后三窗0，本组GC门FAIL仍保留；33+1+1聚焦/设置、四窗一致性/容量/关闭通过。[原报告](../../../artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md)及[暂缓/恢复条件](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)。Role默认保持，H06父/H07/Android开放。
+ 
+ - 当前完成：四场景完整Driver 128 paired/256 steps强一致；三个collector形状0GC历史证据复用；混合形状经FindEffect修复后原4warm+8sample全0GC。Role限定准入已完成，实际生产接线13/13通过；第二项44+1+1及四窗正确性/0GC/容量/关闭通过但混战tick回退14.448675%，保持OFF。未新增旧批次完成包；详两个具名报告。34项文档结构、D1=A和旧证据边界保留。
+ - 已确认决定：[D1=A，先限定准入，最终33ms门保留](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+-- 下一项：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
++- 原下一项（不再续办）：[H06-ROLE-EXACT独立方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，复用91的精确配对约8.1—8.4ms与当前Role准入证据，先判断可安全减少的ITR/BDY检查是否足够有价值。当前仅静态分析/方案，未批准具体改法及新测量；没有发现有效机会则结束该路线，不重试84/92/94。一般H07-INPUT保留，producer不自动恢复。
+ - 首阶段六项：H11/M03选定实现范围、H06/M13/M14选定评估共5/6；H07性能FAIL。34父项完整关闭0。
+ - 批次：最新完成94/73包；95第74包未验收、默认OFF且执行停止；没有本轮新96。
+ 
+@@ -29,13 +31,13 @@
+ 
+ | ID | 当前状态（按范围） | 下一步 |
+ |---|---|---|
+-| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 待方案决策 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
++| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 当前项／STRATEGY_REVIEW_PENDING；未实施 | 已静态核对路径读取；确认随包本地资源包、Manifest/Provider及H-08/H-10依赖边界后，才形成实施指令 |
+ | [H-02](android-mobile-readiness/h-02-android-build-scene-closure.md) | 待授权与前置 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+ | [H-03](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 待产品与写域决策 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+ | [H-04](android-mobile-readiness/h-04-il2cpp-arm64.md) | 待配置授权 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+ | [H-05](android-mobile-readiness/h-05-device-gpu-certification.md) | 设备前置未满足 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+ | [H-06](android-mobile-readiness/h-06-collision-broadphase-1000.md) | ROLE_SCOPED_ADMISSION_COMPLETED / 默认Role；父项OPEN | 当前双布局同配置收益/稳态Driver0GC及实际生产接线通过；最终33ms/drop等未过仍开放 |
+-| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 基线GC130独立挂账；先准备H06-ROLE-EXACT方案，不恢复自动目标 |
++| [H-07](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | PERFORMANCE_FAIL；producer用户暂缓/生产OFF | 基线GC130独立挂账；本轮不继续诊断，当前转H-01策略，不恢复自动目标 |
+ | [H-08](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 专项待批 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+ | [H-09](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 复用限定收尾／按影响域 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+ | [H-10](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 方案待预算与载体决策 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+diff --git a/docs/ai/CURRENT-AUTHORITY.md b/docs/ai/CURRENT-AUTHORITY.md
+index fd8ea3f8..ef6be355 100644
+--- a/docs/ai/CURRENT-AUTHORITY.md
++++ b/docs/ai/CURRENT-AUTHORITY.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 最新用户范围：OPTIMIZATION_PLAN_ONLY；当前H-01 / STRATEGY_REVIEW_PENDING。** 所有优化仅按既有方案，额外发现方向一律不跟进；本轮只确认原第一项Android生产内容部署策略，不改代码/资源/设置、不运行Unity/测试/构建，不发送执行指令或恢复监测。H06-ROLE-EXACT不再续办，原失败/证据保留；Role默认、FindEffect修复、producer暂缓/OFF、95 OFF及H06/H07/Android未关闭保持。既有依赖只说明，不自动解冻专项。当前唯一进度文首与 docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md 优先于下方历史排程。文档Task：docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md；H-01草案：Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md。战斗authority与红线不变。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。
+diff --git a/docs/ai/FILE-OPERATIONS/INDEX.md b/docs/ai/FILE-OPERATIONS/INDEX.md
+index ddbf05cc..77a5cb1c 100644
+--- a/docs/ai/FILE-OPERATIONS/INDEX.md
++++ b/docs/ai/FILE-OPERATIONS/INDEX.md
+@@ -685,3 +685,8 @@ Operation NTSD-OPTIMIZATION-D1-A-20261009 / VERIFIED：[Record](NTSD-OPTIMIZATIO
+ | NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 | PLANNED | [Record](NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/RECORD.md) | two Editor files, true dirty backups |
+ 
+ | NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 | VERIFIED operations / FAILED qualification | [Record](NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/RECORD.md) | two Editor sources stable; protected2514; no repeat |
++
++
++> Operation NTSD-H01-STRATEGY-AND-SCOPE-20261010 / PLANNED / DOCUMENTATION_ONLY：[Record](NTSD-H01-STRATEGY-AND-SCOPE-20261010/RECORD.md)。用户要求只按既有优化方案、额外方向不跟进；本轮仅H-01策略确认草案，不实施。
++
++> Operation NTSD-H01-STRATEGY-AND-SCOPE-20261010 / VERIFIED（仅文档）：[Record](NTSD-H01-STRATEGY-AND-SCOPE-20261010/RECORD.md) · [验证](NTSD-H01-STRATEGY-AND-SCOPE-20261010/verification-02.json)。只按既有方案规则及H-01策略草案已记录；29链接/17保护/11备份与diff检查通过，策略仍待确认，未实施/运行/发送任务。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md
+index cb91d1cc..f35a8ff3 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md
+@@ -1,3 +1,19 @@
++> **2026-10-10 用户确认：OPTIMIZATION_PLAN_ONLY；当前只讨论 H-01 策略。** 本节是最新执行边界，下方旧排程和有限指令约定只保留原时点。
++
++## 2026-10-10 只按既有优化方案推进（USER_CONFIRMED）
++
++用户原话：“所有优化处理，都按照优化方案文档来处理，所有额外发现的可优化方向，一律不管”；接着要求：“接下来，我们来处理第一项，然后我们先确认具体的优化策略”。
++
++- 总清单与各项独立方案是优化范围入口；额外发现的可优化方向不新增方案、不诊断、不修复、不派任务，不以排查中发现为追加优化授权。
++- 当前第一项按总清单原编号确定为 **H-01 Android生产内容部署**。本轮只读核对和文档策略草案；资源载体、准确实施写域与分阶段策略尚未确认，未授权代码、资源、设置修改或Unity/测试/构建。
++- 原方案已经列出的必要依赖可以说明，但不据此自动启动其它项。H-01与H-08/H-10共享内容合同，H-08/ATLAS等暂缓边界仍保持；不能为了跳过依赖而降低H-01最终完成条件。
++- H06-ROLE-EXACT及其诊断/前置修复不再作为当前下一项续办，原报告与失败事实保留，不再自动补测。Role已完成限定默认推广、FindEffect既有修复、producer暂缓/OFF与95 OFF保持。
++- 过去“整理后直接发送”的约定只适用于已讨论且明确授权的具名执行范围。本轮明确要求先确认H-01策略，因此不发送实施指令、不恢复监测或旧Goal/34项自动队列。
++
++策略草案：[H-01独立方案](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。当前状态与下一动作：[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。本次文档Task：[NTSD-H01-STRATEGY-AND-SCOPE-20261010](../TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
++
++---
++
+ > **2026-10-10 有限下一指令约定与状态更正。** 直接人类授权由讨论会话传达：“等你整理出下一个优化点后，直接出输出指令即可，不需要等我回复”。允许整理完成后直接输出已界定的下一有限执行指令，例行已授权步骤无需重复问A/B或许可；不授予跨红线规则变更、Q06禁读、资源/Scene/Settings写入、专项解冻或旧自动Goal。当前执行会话只完成 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 静态分析，结论B；[报告第7节](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md)已有单一record内部诊断指令草案，本Task未运行、未向其它会话发送，也未操作监测。下方“等待发送/未批准具体步骤”按原日期保留，不再阻止组织这条有限指令。
+ >
+ > Role限定准入已由独立证据完成；下方旧BLOCKED/Brute默认为修复前历史。producer USER_DEFERRED/OFF、ABBA首OFF完整Driver2event/首tick130调用点未知仍独立，95OFF，H06父/H07/Android开放；D1=A及所有最终门不变。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+index b7079446..1e6c0dfa 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 当前仅H-01策略确认。** 用户限定只按既有方案处理，额外方向一律不跟进。H-01先确认Manifest/key/Provider/Lease与资源载体；原方案的预烘焙视觉接入依赖H-08相关产物，声音共享H-10内容合同，但不要求H-08/H-10所有内存优化先完成。接口阶段不自动解冻H-08/ATLAS或H-10实施；未接入原方案所需产物时只能记子阶段，不能关闭H-01。H-02/H-04提供最后Android验收的可运行包与配置，当前不改设置。下方Windows路线为历史待选路线，不恢复H06-ROLE-EXACT诊断。[决定](DECISIONS.md) · [H-01](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > **2026-10-10 NTSD-H06-ROLE-RECORD-COST-DIAG-20261010：FAILED / FINITE_DIAGNOSIS_STOPPED。** 默认OFF诊断四写域已写、最新编译与最窄focused2/2通过，复用既有6/6及12/12；唯一combat1000 OFF120+180完整Driver校准有效但稳态2event/首tick130，另300tick组合状态门113失败（report fallback participant峰值3，不能逐tick唯一归因）。ON未启动，无七段成本/新生产方案，不追加窗口/自动修复。容量/关闭/原Menu clean及设置恢复通过；四源窗前后稳、2510其它保护稳。Change NTSD-H06-ROLE-RECORD-COST-DIAG-001 BLOCKED仅诊断实景未验收，保留默认OFF，不是自动续办任务。报告 artifacts/diagnostics/NTSD-H06-ROLE-RECORD-COST-DIAG-20261010/REPORT.md。Role默认/Brute回退保持，producer USER_DEFERRED/OFF，95/84/89/92/94 OFF；旧ABBA2event/tick130调用点未知独立保留，H06父/H07/Android开放，旧Goal/34队列不恢复。后继须人类选择具名范围，不输出自动实施指令；下方旧状态为历史。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md
+index 5caa6e43..57bc0bdc 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 当前使用限制：此文件下方为历史执行提示词，不得直接启动。** 用户新决定只按既有优化方案推进，额外发现方向一律不跟进；当前第一项[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)尚在策略确认，本轮没有生成或派发实施指令。策略与准确范围确认后，另行形成具名H-01指令；不按下方旧H06入口恢复诊断、旧Goal或自动队列。[最新决定](DECISIONS.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。
++
+ # 新会话执行提示词（D1=A已确认）
+ 
+ 文档状态：FINAL_FOR_USER_DISPATCH。用户2026-10-09已确认“可以先用A”；本文件供用户发送给新会话，当前会话没有执行优化。复制下方分隔线后的正文即可。
+diff --git a/docs/ai/OPTIMIZATION-REVIEW-20261009/README.md b/docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
+index eb949af0..73da2268 100644
+--- a/docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
++++ b/docs/ai/OPTIMIZATION-REVIEW-20261009/README.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 最新执行边界：[OPTIMIZATION_PLAN_ONLY](DECISIONS.md)。** 用户要求所有优化按既有方案处理，额外发现的方向一律不跟进。当前第一项为[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)，仅策略讨论/待确认；不继续H06-ROLE-EXACT诊断，不发送执行指令或恢复监测。下方旧“下一项”均为历史，当前状态以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准。
++
+ > **2026-10-10 最新决定：** producer快照复用[用户暂缓/生产OFF](IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)，下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)仅静态分析/方案；Role限定准入成果保持。当前排程以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准，下方旧状态按日期保留；不恢复旧自动目标。
+ 
+ > **2026-10-09 独立实施说明已补充：** [代码前后对照记录与固定格式](IMPLEMENTATION-RECORDS/README.md) · [优化点 A：FindEffect 临时分配修复](IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。记录已完成的具体改法及验证范围；当前排程仍以唯一进度为准，不恢复执行。
+@@ -13,7 +15,7 @@
+ 1. 先读[当前权威](../CURRENT-AUTHORITY.md)及[AGENTS](../../../AGENTS.md)。
+ 2. [总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)文首是全部34父项及6个子方案的导航（2026-10-10增加H06-ROLE-EXACT方案），不能以数量代表收益。
+ 3. [进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)文首是当前/完成范围/下一项。下面批次原文为历史证据。
+-4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。新热点作为父项子方案，不伪装成新增父项。
++4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。2026-10-10用户新决定取代旧“新热点作为父项子方案”约定：额外发现的优化方向一律不新增、不调查、不实施；既有依赖仅说明，不自动启动。
+ 5. [依赖](DEPENDENCIES.md)统一描述跨项前置；方案卡只摘要。先满足需要的前置阶段，不要求前置父项全关闭。
+ 6. [待决策](DECISIONS.md)记录会改变实施边界的选择。[新会话提示词](NEXT-SESSION-PROMPT.md)已按D1=A定稿，供用户发到新会话启动具名任务。
+ 7. Task/Change Record/FILE-OPERATIONS继续沿用，方案和进度不替代实施审计。
+diff --git a/docs/ai/STATE.md b/docs/ai/STATE.md
+index 5622f53e..6b5cfc7f 100644
+--- a/docs/ai/STATE.md
++++ b/docs/ai/STATE.md
+@@ -1,3 +1,5 @@
++> **2026-10-10 当前优化范围：OPTIMIZATION_PLAN_ONLY；H-01 / STRATEGY_REVIEW_PENDING。** 用户要求只按既有方案处理，额外发现方向一律不跟进；当前仅确认Android生产内容部署策略，未授权实施/测试/构建，未派发任务或恢复监测。H06-ROLE-EXACT不再续办，历史结果不删除；Role默认/FindEffect成果、producer暂缓/OFF、95 OFF保持。H-08/H-10既有依赖不自动启动，H06父/H07/Android仍开放。参见[决定](OPTIMIZATION-REVIEW-20261009/DECISIONS.md)、[H-01草案](../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)、[本轮文档Task](TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。下方旧排程为历史。
++
+ > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
+ 
+ > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。

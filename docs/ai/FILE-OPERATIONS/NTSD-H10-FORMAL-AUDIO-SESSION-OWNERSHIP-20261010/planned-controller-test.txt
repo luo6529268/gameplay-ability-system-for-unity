@@ -1,0 +1,57 @@
+
+        [UnityTest]
+        public IEnumerator FormalAudioControllerChangeFailsCurrentPreparationAndAllowsNewGeneration()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                using var fixture = new FormalAudioSessionFixture("H10ControllerChange", false, true);
+                FieldInfo controllerInstance = typeof(AudioController).GetField("<Instance>k__BackingField",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                object original = controllerInstance.GetValue(null);
+                var host = new GameObject("H10ReplacementController") { hideFlags = HideFlags.HideAndDontSave };
+                host.SetActive(false);
+                var replacement = host.AddComponent<AudioController>();
+                try
+                {
+                    UniTask first = fixture.Player.PrepareBattleCuesAsync(fixture.Manager);
+                    Assert.That(fixture.Player.PendingFormalAudioLoadsForDiagnostics, Is.EqualTo(1),
+                        "actual local file await required for controller-change qualification");
+                    object oldCue = fixture.GetBattleCue(fixture.FixedCueIds[0]);
+                    controllerInstance.SetValue(null, replacement);
+                    bool failed = false;
+                    try { await AwaitWithTimeout(first, "controller-change current preparation"); }
+                    catch (InvalidOperationException error)
+                    {
+                        Assert.That(error.Message, Does.Contain("without sealing"));
+                        failed = true;
+                    }
+                    Assert.That(failed, Is.True);
+                    Assert.That(fixture.Player.BattleCatalogSealedForDiagnostics, Is.False);
+                    Assert.That(fixture.Player.BattleSoundShutdownCompletedForDiagnostics, Is.True);
+                    Assert.That(fixture.Player.OwnedFormalAudioSourcesForDiagnostics, Is.Zero);
+                    Assert.That(fixture.Player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
+                    int staleId = fixture.Player.LastStaleFormalAudioInstanceIdForDiagnostics;
+                    Assert.That(staleId, Is.Not.Zero);
+                    Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(c => c.GetInstanceID() == staleId), Is.False);
+                    await AwaitWithTimeout(fixture.Player.PrepareBattleCuesAsync(fixture.Manager),
+                        "new-controller preparation");
+                    Assert.That(fixture.Player.BattleCatalogSealedForDiagnostics, Is.True);
+                    object newCue = fixture.GetBattleCue(fixture.FixedCueIds[0]);
+                    Assert.That(newCue, Is.Not.SameAs(oldCue));
+                    WriteH10Evidence("formal-controller-change", new
+                    {
+                        oldGeneration = fixture.ReadCue<int>(oldCue, "CatalogGeneration"),
+                        newGeneration = fixture.ReadCue<int>(newCue, "CatalogGeneration"),
+                        oldRequestFailed = failed, staleId, staleNativeGone = true, newSealed = true
+                    });
+                }
+                finally
+                {
+                    fixture.BeginShutdown();
+                    fixture.CompleteShutdown();
+                    controllerInstance.SetValue(null, original);
+                    UnityEngine.Object.DestroyImmediate(host);
+                }
+            });
+        }
+

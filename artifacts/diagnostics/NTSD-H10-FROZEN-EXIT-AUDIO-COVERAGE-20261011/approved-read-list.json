@@ -1,0 +1,22 @@
+{
+  "humanApproval": "开始吧, in response to the explicit three-method frozen-exit read proposal",
+  "sourceThread": "01a11fe2-bfaa-72f3-a9ed-c8260f63b193",
+  "approvedSymbols": [
+    {
+      "id": "R7",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "symbol": "RunStateExitPhase"
+    },
+    {
+      "id": "R8",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "symbol": "DispatchCurrentStateEvent"
+    },
+    {
+      "id": "R9",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "symbol": "BindNativeC25Action"
+    }
+  ],
+  "bodyScope": "Only direct frozen exit conditions/returns/dispatch and necessary parameter meaning; no whole methods or other helpers"
+}

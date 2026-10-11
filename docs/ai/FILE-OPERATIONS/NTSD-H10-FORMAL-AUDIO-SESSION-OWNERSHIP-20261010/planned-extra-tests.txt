@@ -1,0 +1,171 @@
+
+        [UnityTest]
+        public IEnumerator FormalAudioDriverCapturesBothPreparationOrdersAndNoDriverShutdown()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                var appSingleton = typeof(AppManager).BaseType.GetField("<Instance>k__BackingField",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                var driverSingleton = typeof(NTSD.Simulation.SimulationTickDriver).BaseType
+                    .GetField("<Instance>k__BackingField", BindingFlags.Static | BindingFlags.NonPublic);
+                var configSingleton = typeof(GameConfig).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+                object oldApp = appSingleton.GetValue(null), oldDriver = driverSingleton.GetValue(null),
+                    oldConfig = configSingleton.GetValue(null);
+                var rows = new List<object>();
+                try
+                {
+                    configSingleton.SetValue(null, UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                        "Assets/NTSD/Config/GameConfig/GameConfig.asset"));
+                    for (int order = 0; order < 2; order++)
+                    {
+                        appSingleton.SetValue(null, null);
+                        driverSingleton.SetValue(null, null);
+                        var appHost = new GameObject("H10CapturedApp") { hideFlags = HideFlags.HideAndDontSave };
+                        var driverHost = new GameObject("H10CapturedDriver") { hideFlags = HideFlags.HideAndDontSave };
+                        appHost.SetActive(false); driverHost.SetActive(false);
+                        var app = appHost.AddComponent<AppManager>();
+                        var driver = driverHost.AddComponent<NTSD.Simulation.SimulationTickDriver>();
+                        var appModules = typeof(AppManager).GetMethod("EnsureRuntimeModules", Private);
+                        var enter = driver.GetType().GetMethod("EnterPreparingState", Private);
+                        var captured = driver.GetType().GetField("_battleSoundPlayer", Private);
+                        try
+                        {
+                            if (order == 0)
+                            {
+                                appSingleton.SetValue(null, app);
+                                appModules.Invoke(app, null);
+                                driverSingleton.SetValue(null, driver);
+                                enter.Invoke(driver, null);
+                            }
+                            else
+                            {
+                                driverSingleton.SetValue(null, driver);
+                                enter.Invoke(driver, null);
+                                Assert.That(captured.GetValue(driver), Is.Null);
+                                appSingleton.SetValue(null, app);
+                                appModules.Invoke(app, null);
+                            }
+                            NTSDSoundPlayer player = app.SoundPlayer;
+                            Assert.That(captured.GetValue(driver), Is.SameAs(player));
+                            Assert.That(driver.LifecycleState,
+                                Is.EqualTo(NTSD.Simulation.BattleRuntimeLifecycleState.Preparing));
+                            object cue = RequireProductionMethod("GetOrPrepareCue", 2)
+                                .Invoke(player, new object[] { "data/001.wav", true });
+                            await (UniTask)RequireProductionMethod("EnsurePreparedCueLoadedAsync", 1)
+                                .Invoke(player, new[] { cue });
+                            RequireProductionMethod("PrepareBattlePlaybackClips", 1).Invoke(player, new[] { cue });
+                            AudioClip output = ((AudioClip[])cue.GetType().GetField("BattlePlaybackClips").GetValue(cue))[0];
+                            int outputId = output.GetInstanceID();
+                            if (order == 0)
+                            {
+                                var report = driver.ShutdownBattleRuntime();
+                                Assert.That(report.RuntimeStagesCompleted, Is.True);
+                                Assert.That(ReadDiagnostic<bool>(player, "BattleSoundShutdownCompletedForDiagnostics"), Is.True);
+                                Assert.That(output == null, Is.True);
+                                Assert.That(driver.CompleteBattleRuntimeShutdownAfterMapCleanup(true).IsComplete, Is.True);
+                                Assert.That(captured.GetValue(driver), Is.Null);
+                            }
+                            else
+                            {
+                                // Exercise the existing application fallback with the exact owned player.
+                                driverSingleton.SetValue(null, null);
+                                Assert.That(app.TryShutdownBattleRuntimeBeforeSceneDestroy(out var report), Is.True);
+                                Assert.That(output == null, Is.True);
+                                Assert.That(ReadDiagnostic<bool>(player, "BattleSoundShutdownCompletedForDiagnostics"), Is.True);
+                            }
+                            rows.Add(new { order, capturedBeforeAudioAwait = true, outputId, outputReleased = output == null });
+                        }
+                        finally
+                        {
+                            if (app.SoundPlayer != null)
+                            {
+                                RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(app.SoundPlayer, null);
+                                RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(app.SoundPlayer, null);
+                            }
+                            object input = typeof(AppManager).GetField("inputModule", Private).GetValue(app);
+                            if (input != null)
+                            {
+                                object actions = input.GetType().GetField("_NTSDInputConfig", Private).GetValue(input);
+                                if (actions != null)
+                                {
+                                    var asset = actions.GetType().GetProperty("asset").GetValue(actions) as UnityEngine.Object;
+                                    if (asset != null) UnityEngine.Object.DestroyImmediate(asset);
+                                }
+                            }
+                            appSingleton.SetValue(null, null);
+                            driverSingleton.SetValue(null, null);
+                            UnityEngine.Object.DestroyImmediate(driverHost);
+                            UnityEngine.Object.DestroyImmediate(appHost);
+                        }
+                    }
+                    Directory.CreateDirectory(SessionStageOutput);
+                    using var writer = new StreamWriter(new FileStream(Path.Combine(SessionStageOutput,
+                        "driver-owner-" + Guid.NewGuid().ToString("N") + ".json"), FileMode.CreateNew, FileAccess.Write));
+                    writer.Write(JsonConvert.SerializeObject(new { rows }, Formatting.Indented));
+                }
+                finally
+                {
+                    configSingleton.SetValue(null, oldConfig);
+                    appSingleton.SetValue(null, oldApp);
+                    driverSingleton.SetValue(null, oldDriver);
+                }
+                Assert.That(appSingleton.GetValue(null), Is.SameAs(oldApp));
+                Assert.That(driverSingleton.GetValue(null), Is.SameAs(oldDriver));
+                Assert.That(configSingleton.GetValue(null), Is.SameAs(oldConfig));
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator FormalAudioMissingFallbackKeepsBorrowedClipAndGenericVoice()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                AudioClip borrowed = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                    "Assets/NTSD/Content/LoganRuntime/vfs/c/kim/w/a1.wav");
+                Assert.That(borrowed, Is.Not.Null);
+                int borrowedId = borrowed.GetInstanceID();
+                var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private)
+                    .GetValue(NTSD_ResourceLoader.Instance);
+                var before = SnapshotCache(cache);
+                var host = new GameObject("H10BorrowedFallback") { hideFlags = HideFlags.HideAndDontSave };
+                var player = host.AddComponent<NTSDSoundPlayer>();
+                player.runInEditMode = true;
+                try
+                {
+                    typeof(NTSDSoundPlayer).GetField("soundRootFolder", Private)
+                        .SetValue(player, "H10_Diagnostic_NeverCreate_Borrowed");
+                    const string id = "H10_MissingBorrowed.wav";
+                    object cue = RequireProductionMethod("GetOrPrepareCue", 2)
+                        .Invoke(player, new object[] { id, false });
+                    var item = (AudioItem)cue.GetType().GetField("AudioItem").GetValue(cue);
+                    item.clip = new[] { borrowed };
+                    await (UniTask)RequireProductionMethod("EnsurePreparedCueLoadedAsync", 1)
+                        .Invoke(player, new[] { cue });
+                    Assert.That(cue.GetType().GetField("OwnedSource").GetValue(cue), Is.Null);
+                    Assert.That(((AudioClip[])cue.GetType().GetField("Clips").GetValue(cue))[0], Is.SameAs(borrowed));
+                    player.PresentSound(new NTSD.Simulation.PendingSoundEvent(id, 500, 1));
+                    item.loop = true;
+                    player.PlaySfx(id);
+                    var voices = host.GetComponentsInChildren<AudioSource>(true);
+                    AudioSource generic = voices.First(v => v.clip == borrowed && v.loop);
+                    AudioSource battle = voices.First(v => v.clip == borrowed && !v.loop);
+                    long count = ReadDiagnostic<long>(player, "FormalAudioLoadCountForDiagnostics");
+                    long builds = player.PreparedCueBuildCountForDiagnostics;
+                    RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(player, null);
+                    player.PresentSound(new NTSD.Simulation.PendingSoundEvent(id, 500, 2));
+                    Assert.That(player.PreparedCueBuildCountForDiagnostics, Is.EqualTo(builds));
+                    Assert.That(ReadDiagnostic<long>(player, "FormalAudioLoadCountForDiagnostics"), Is.EqualTo(count));
+                    Assert.That(battle.clip, Is.SameAs(borrowed), "stage1 closes intake, stage5 retires");
+                    RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(player, null);
+                    Assert.That(battle.clip, Is.Null);
+                    Assert.That(generic.clip, Is.SameAs(borrowed));
+                    Assert.That(generic.loop, Is.True);
+                    Assert.That(borrowed != null && borrowed.GetInstanceID() == borrowedId, Is.True);
+                    Assert.That(ReadDiagnostic<int>(player, "OwnedFormalAudioSourcesForDiagnostics"), Is.Zero);
+                    Assert.That(CacheMatches(cache, before), Is.True);
+                }
+                finally { UnityEngine.Object.DestroyImmediate(host); }
+                Assert.That(borrowed != null && borrowed.GetInstanceID() == borrowedId, Is.True);
+            });
+        }
+

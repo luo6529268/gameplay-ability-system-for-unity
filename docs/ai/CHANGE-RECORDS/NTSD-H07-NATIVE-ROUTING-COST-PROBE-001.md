@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD-H07-NATIVE-ROUTING-COST-PROBE-001
+status: VERIFIED
+artifact-code-path: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/probe-body.cs
+artifact-code-path: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/bridge.py
+code-path: Assets/NTSD/Scripts/Test/Editor/H07NativeRoutingCostProbeEditorTests.cs
+authority: User authorizes same-input causal-chain investigation before complete implementation handoff
+evidence: artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/REPORT.md
+-->
+# H07 native routing isolated cost probe
+Current: raw native state parsed per builtin call; missing/invalid=-1 differs from typed0. This is an unmeasured clue, not an optimization result.
+Change: artifact-only in-memory Editor diagnostic, existing compiled methods via cold reflection delegates. No production code, no optimization candidate, no fullDriver qualification. Exact bounded group and cleanup: Task checkpoint / Operation NTSD-H07-NATIVE-ROUTING-COST-PROBE-20261010.
+Validation: semantic exact raw/typed valid-fixture checks, warmed per-loop thread allocated0/capacity; fullRuntimeChecksum outside timer; scenes/source fingerprints unchanged. Result not yet run.
+Rollback: remove only newly added diagnostic after approval, backups for docs; no existing dirty work touched.
+
+Editor entry added after in-memory compiler failed before execution; same finite group, no production change.
+
+## Final diagnostic evidence / correction
+
+2026-10-10: VERIFIED only for finite diagnostic, PERFORMANCE_INCONCLUSIVE, no production handoff. The earlier artifact-only and not-yet-run text is historical: one new Explicit Editor test and .meta were added under recorded amendment. v1 NUnit PASS was independently rejected INVALID_FIXTURE (400 capacity). Corrected v2 exact job b691f0d111a64695b34a4632f4880622 passed1/1: 12 raw semantics, 3x4windows each1000 registered/claimed, reject0/capacity1024, 8warm32sample, full per-round checksum parity and all384sample allocations0B. Latest Explicit-only change recompiled/reloaded with no C# errors; no repeat measurement. Raw/typed performance not consistently lower across cases, cannot claim12ms/Driver/Player gain. Report and raw evidence under native-routing-cost-probe. Source/scene protection2361 unchanged; Menu clean8. Full H07 plan remains open, no execution message/automation resume.
+
+最终审计：Validate-ChangeLedger第二次 PASSED / 1406 records；第一次两项artifact元数据错误保留后修正，validator本体未改。治理文档diff-check通过，新Editor源码check无空白错误。测后源码与测前逐字比较只新增Explicit属性。audit-final.json保存最终状态；主Task仍IN_PROGRESS，无实施派发。

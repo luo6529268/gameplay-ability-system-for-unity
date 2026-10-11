@@ -1,0 +1,125 @@
+
+        private const string SessionPlayRestoreKey = "NTSD.H10.FormalAudioSession.PlayRestore";
+
+        [Serializable]
+        private sealed class H10SceneSetup
+        {
+            public UnityEditor.SceneManagement.SceneSetup[] Scenes;
+        }
+
+        [UnityTearDown]
+        public IEnumerator RestoreOwnedSessionPlayScene()
+        {
+            if (string.IsNullOrEmpty(UnityEditor.SessionState.GetString(SessionPlayRestoreKey, "")))
+                yield break;
+            if (Application.isPlaying)
+                yield return new ExitPlayMode();
+            var setup = JsonConvert.DeserializeObject<H10SceneSetup>(
+                UnityEditor.SessionState.GetString(SessionPlayRestoreKey, ""));
+            UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup.Scenes);
+            UnityEditor.SessionState.EraseString(SessionPlayRestoreKey);
+            Assert.That(UnityEngine.SceneManagement.SceneManager.sceneCount, Is.EqualTo(setup.Scenes.Length));
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+                Assert.That(UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty, Is.False);
+        }
+
+        [UnityTest]
+        public IEnumerator FormalAudioOneIsolatedPlayDeferredDestroy()
+        {
+            Assert.That(Application.isPlaying, Is.False);
+            Assert.That(UnityEditor.SessionState.GetString(SessionPlayRestoreKey, ""), Is.Empty);
+            Assert.That(UnityEngine.SceneManagement.SceneManager.sceneCount, Is.EqualTo(1));
+            var current = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            Assert.That(current.path, Is.EqualTo("Assets/NTSD/Scene/NTSD_Menu.unity"));
+            Assert.That(current.isDirty, Is.False);
+            var setup = new H10SceneSetup
+            {
+                Scenes = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup()
+            };
+            Directory.CreateDirectory(SessionStageOutput);
+            using (var marker = new FileStream(Path.Combine(SessionStageOutput,
+                "isolated-play.started"), FileMode.CreateNew, FileAccess.Write))
+            {
+                byte[] data = System.Text.Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString("O"));
+                marker.Write(data, 0, data.Length);
+            }
+            string setupJson = JsonConvert.SerializeObject(setup);
+            using (var writer = new StreamWriter(new FileStream(Path.Combine(SessionStageOutput,
+                "isolated-play-scene-before.json"), FileMode.CreateNew, FileAccess.Write)))
+                writer.Write(setupJson);
+            UnityEditor.SessionState.SetString(SessionPlayRestoreKey, setupJson);
+            UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+                UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,
+                UnityEditor.SceneManagement.NewSceneMode.Single);
+            yield return new EnterPlayMode();
+            yield return UniTask.ToCoroutine(async () =>
+            {
+                Assert.That(Application.isPlaying, Is.True);
+                Assert.That(AppManager.Instance == null, Is.True, "isolated scene must not start Menu/AppManager");
+                Assert.That(NTSD.Simulation.SimulationTickDriver.Instance == null, Is.True);
+                var configInstance = typeof(GameConfig).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+                object previous = configInstance.GetValue(null);
+                var host = new GameObject("H10DeferredAudioOnly");
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                var all = new List<AudioClip>();
+                var rows = new List<object>();
+                var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private)
+                    .GetValue(NTSD_ResourceLoader.Instance);
+                var before = SnapshotCache(cache);
+                try
+                {
+                    configInstance.SetValue(null, UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                        "Assets/NTSD/Config/GameConfig/GameConfig.asset"));
+                    foreach (string relative in new[] { "data/001.wav", "c/kim/w/a1.wav" })
+                    {
+                        object cue = RequireProductionMethod("GetOrPrepareCue", 2)
+                            .Invoke(player, new object[] { relative, true });
+                        await (UniTask)RequireProductionMethod("EnsurePreparedCueLoadedAsync", 1)
+                            .Invoke(player, new[] { cue });
+                        AudioClip source = ((AudioClip[])cue.GetType().GetField("Clips").GetValue(cue))[0];
+                        int sourceId = source.GetInstanceID();
+                        int channels = source.channels;
+                        all.Add(source);
+                        RequireProductionMethod("PrepareBattlePlaybackClips", 1).Invoke(player, new[] { cue });
+                        AudioClip output = ((AudioClip[])cue.GetType().GetField("BattlePlaybackClips").GetValue(cue))[0];
+                        int outputId = output.GetInstanceID();
+                        all.Add(output);
+                        bool sourceAliveWhenDestroyRequested = source != null;
+                        await UniTask.NextFrame();
+                        Assert.That(source == null, Is.EqualTo(channels == 1));
+                        player.PresentSound(new NTSD.Simulation.PendingSoundEvent(relative, 500, 1));
+                        rows.Add(new { relative, sourceId, outputId, sourceAliveWhenDestroyRequested,
+                            sourceRetiredAfterFrame = source == null, outputAlive = output != null });
+                    }
+                    RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(player, null);
+                    RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(player, null);
+                    int aliveAtStage5Return = all.Distinct().Count(c => c != null);
+                    Assert.That(ReadDiagnostic<bool>(player, "BattleSoundShutdownCompletedForDiagnostics"), Is.True);
+                    Assert.That(host.GetComponentsInChildren<AudioSource>(true).All(v => v.clip == null), Is.True);
+                    await UniTask.NextFrame();
+                    Assert.That(all.All(c => c == null), Is.True);
+                    Assert.That(CacheMatches(cache, before), Is.True);
+                    UnityEngine.Object.Destroy(host);
+                    await UniTask.NextFrame();
+                    Assert.That(host == null && player == null, Is.True);
+                    using var writer = new StreamWriter(new FileStream(Path.Combine(SessionStageOutput,
+                        "isolated-play-deferred.json"), FileMode.CreateNew, FileAccess.Write));
+                    writer.Write(JsonConvert.SerializeObject(new { rows, aliveAtStage5Return,
+                        allTrackedOwnedDestroyedAfterFrame = true, voiceBindingsCleared = true,
+                        globalCacheUnchanged = true, noAppOrBattleStarted = true }, Formatting.Indented));
+                }
+                finally
+                {
+                    configInstance.SetValue(null, previous);
+                    if (player != null)
+                    {
+                        RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(player, null);
+                        RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(player, null);
+                    }
+                    if (host != null) UnityEngine.Object.Destroy(host);
+                }
+            });
+            yield return new ExitPlayMode();
+            // UnityTearDown restores the exact saved clean scene setup, including failure paths.
+        }
+

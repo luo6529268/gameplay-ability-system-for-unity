@@ -1,0 +1,218 @@
+
+        private const string SessionStageOutput =
+            "artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010";
+
+        private sealed class RetainedStageCue
+        {
+            public bool IsLoaded = true;
+            public AudioClip[] Clips;
+            public AudioClip[] BattlePlaybackClips;
+        }
+
+        private sealed class RetainedStageOwner
+        {
+            private readonly List<AudioClip> ownedBattlePlaybackClips = new List<AudioClip>();
+            public AudioClip Convert(AudioClip source)
+            {
+                var cue = new RetainedStageCue { Clips = new[] { source } };
+                PrepareBattlePlaybackClips(cue);
+                return cue.BattlePlaybackClips[0];
+            }
+
+            public void Release()
+            {
+                foreach (AudioClip clip in ownedBattlePlaybackClips)
+                    if (clip != null) UnityEngine.Object.DestroyImmediate(clip);
+                ownedBattlePlaybackClips.Clear();
+            }
+
+__FROZEN_CONVERSION__
+        }
+
+        private static object StageResourceSnapshot(string stage, List<AudioClip> sources,
+            List<AudioClip> outputs, int pending, long temporaryFloatPayload)
+        {
+            AudioClip[] liveSources = sources.Where(c => c != null).ToArray();
+            AudioClip[] liveOutputs = outputs.Where(c => c != null).ToArray();
+            AudioClip[] unique = liveSources.Concat(liveOutputs)
+                .GroupBy(c => c.GetInstanceID()).Select(g => g.First()).ToArray();
+            return new
+            {
+                stage,
+                sourceIds = liveSources.Select(c => c.GetInstanceID()).ToArray(),
+                outputIds = liveOutputs.Select(c => c.GetInstanceID()).ToArray(),
+                sourceObjectBytes = liveSources.Sum(c => Profiler.GetRuntimeMemorySizeLong(c)),
+                outputObjectBytes = liveOutputs.Sum(c => Profiler.GetRuntimeMemorySizeLong(c)),
+                distinctObjectBytes = unique.Sum(c => Profiler.GetRuntimeMemorySizeLong(c)),
+                temporaryFloatPayload,
+                pendingLocalLoads = pending,
+                destroyRequestedButAliveCount = 0,
+                scope = "EditMode immediate destruction, actual native clip objects; float payload analytic, not RSS/decode peak"
+            };
+        }
+
+        private static string StagePcmHash(AudioClip clip)
+        {
+            var samples = new float[clip.samples * clip.channels];
+            Assert.That(clip.GetData(samples, 0), Is.True);
+            var bytes = new byte[samples.Length * sizeof(float)];
+            Buffer.BlockCopy(samples, 0, bytes, 0, bytes.Length);
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "");
+        }
+
+        [UnityTest]
+        public IEnumerator FormalAudioSessionBoundedResourceStages()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                Assert.That(Application.isPlaying, Is.False);
+                Directory.CreateDirectory(SessionStageOutput);
+                using (var marker = new FileStream(Path.Combine(SessionStageOutput,
+                    "bounded-resource-group.started"), FileMode.CreateNew, FileAccess.Write))
+                {
+                    byte[] note = System.Text.Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString("O"));
+                    marker.Write(note, 0, note.Length);
+                }
+                string[] paths = { "c/jira/w/e3.wav", "c/kar/w/t.wav", "c/dan/w/t.wav",
+                    "data/001.wav", "c/kim/w/a1.wav" };
+                var instance = typeof(GameConfig).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+                object previousConfig = instance.GetValue(null);
+                var config = UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                    "Assets/NTSD/Config/GameConfig/GameConfig.asset");
+                var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private)
+                    .GetValue(NTSD_ResourceLoader.Instance);
+                var previousCache = cache.Keys.Cast<string>().ToDictionary(k => k, k => cache[k]);
+                var rows = new List<object>();
+                var expectedHashes = new Dictionary<string, string>();
+                var expectedMetadata = new Dictionary<string, string>();
+                var allOwned = new List<AudioClip>();
+                var allIds = new List<int>();
+                try
+                {
+                    instance.SetValue(null, config);
+                    for (int group = 0; group < 2; group++)
+                    {
+                        Assert.That(allOwned.All(c => c == null), Is.True, "groups cannot co-reside");
+                        bool candidate = group == 1;
+                        var host = new GameObject("H10StageMeasurement") { hideFlags = HideFlags.HideAndDontSave };
+                        host.SetActive(false);
+                        NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                        var frozen = new RetainedStageOwner();
+                        var loader = (NTSD_ResourceLoader)Activator.CreateInstance(typeof(NTSD_ResourceLoader), true);
+                        var sources = new List<AudioClip>();
+                        var outputs = new List<AudioClip>();
+                        var stages = new List<object>();
+                        var cues = new List<object>();
+                        try
+                        {
+                            stages.Add(StageResourceSnapshot("before", sources, outputs, 0, 0));
+                            foreach (string relative in paths)
+                            {
+                                string full = Path.GetFullPath("Assets/NTSD/Content/LoganRuntime/vfs/" + relative);
+                                object cue = null;
+                                AudioClip source;
+                                var clock = new System.Diagnostics.Stopwatch();
+                                if (candidate)
+                                {
+                                    cue = typeof(NTSDSoundPlayer).GetMethod("GetOrPrepareCue", Private)
+                                        .Invoke(player, new object[] { relative, true });
+                                    Assert.That(cue, Is.Not.Null);
+                                    clock.Start();
+                                    await (UniTask)typeof(NTSDSoundPlayer).GetMethod("EnsurePreparedCueLoadedAsync", Private)
+                                        .Invoke(player, new[] { cue });
+                                    clock.Stop();
+                                    source = ((AudioClip[])cue.GetType().GetField("Clips").GetValue(cue))[0];
+                                }
+                                else
+                                {
+                                    clock.Start();
+                                    source = await loader.LoadSingleAudioClipAsync(
+                                        "NTSD.FormalBattleAudioFile::" + relative, full);
+                                    clock.Stop();
+                                }
+                                Assert.That(source, Is.Not.Null);
+                                int sourceId = source.GetInstanceID();
+                                int frames = source.samples, channels = source.channels, hz = source.frequency;
+                                double loadElapsedMs = clock.Elapsed.TotalMilliseconds;
+                                long sourceObjectBytes = Profiler.GetRuntimeMemorySizeLong(source);
+                                sources.Add(source); allOwned.Add(source); allIds.Add(sourceId);
+                                long temp = channels != 1 ? 0 : frames < 8192 ? frames * 12L :
+                                    (4096L + frames % 4096) * 12L;
+                                stages.Add(StageResourceSnapshot("loaded:" + relative, sources, outputs, 0, 0));
+                                clock.Restart();
+                                AudioClip playback;
+                                if (candidate)
+                                {
+                                    typeof(NTSDSoundPlayer).GetMethod("PrepareBattlePlaybackClips", Private)
+                                        .Invoke(player, new[] { cue });
+                                    clock.Stop();
+                                    playback = ((AudioClip[])cue.GetType().GetField("BattlePlaybackClips").GetValue(cue))[0];
+                                }
+                                else
+                                {
+                                    playback = frozen.Convert(source);
+                                    clock.Stop();
+                                }
+                                double conversionElapsedMs = clock.Elapsed.TotalMilliseconds;
+                                Assert.That(playback, Is.Not.Null);
+                                outputs.Add(playback); allOwned.Add(playback); allIds.Add(playback.GetInstanceID());
+                                string hash = StagePcmHash(playback);
+                                string metadata = playback.name + ":" + playback.samples + ":" + playback.channels + ":" + playback.frequency;
+                                if (candidate)
+                                {
+                                    Assert.That(hash, Is.EqualTo(expectedHashes[relative]));
+                                    Assert.That(metadata, Is.EqualTo(expectedMetadata[relative]));
+                                    Assert.That(source == null, Is.EqualTo(channels == 1));
+                                }
+                                else
+                                {
+                                    expectedHashes.Add(relative, hash);
+                                    expectedMetadata.Add(relative, metadata);
+                                }
+                                stages.Add(StageResourceSnapshot("converted:" + relative, sources, outputs, 0, temp));
+                                cues.Add(new { relative, sourceId, outputId = playback.GetInstanceID(), frames, channels, hz,
+                                    sourceObjectBytes, outputObjectBytes = Profiler.GetRuntimeMemorySizeLong(playback),
+                                    tempFloatPayload = temp, hash, metadata, loadElapsedMs, conversionElapsedMs,
+                                    sourceRetired = source == null });
+                            }
+                            stages.Add(StageResourceSnapshot("steady", sources, outputs, 0, 0));
+                            if (candidate)
+                            {
+                                typeof(NTSDSoundPlayer).GetMethod("BeginBattleSoundShutdown", Private).Invoke(player, null);
+                                typeof(NTSDSoundPlayer).GetMethod("CompleteBattleSoundShutdown", Private).Invoke(player, null);
+                            }
+                            else
+                            {
+                                frozen.Release();
+                                foreach (AudioClip source in sources)
+                                    if (source != null) UnityEngine.Object.DestroyImmediate(source);
+                            }
+                            stages.Add(StageResourceSnapshot("released-and-drained", sources, outputs, 0, 0));
+                            Assert.That(sources.All(c => c == null) && outputs.All(c => c == null), Is.True);
+                            rows.Add(new { group = candidate ? "actual-production" : "frozen-retained-formal",
+                                cues, stages, ownedReleased = true });
+                        }
+                        finally
+                        {
+                            frozen.Release();
+                            typeof(NTSDSoundPlayer).GetMethod("ReleaseBattlePlaybackClips", Private).Invoke(player, null);
+                            foreach (AudioClip c in sources) if (c != null) UnityEngine.Object.DestroyImmediate(c);
+                            UnityEngine.Object.DestroyImmediate(host);
+                        }
+                    }
+                    Assert.That(cache.Count, Is.EqualTo(previousCache.Count));
+                    foreach (var entry in previousCache) Assert.That(cache[entry.Key], Is.SameAs(entry.Value));
+                    Assert.That(allOwned.All(c => c == null), Is.True);
+                    string file = Path.Combine(SessionStageOutput, "bounded-resource-stages.json");
+                    using var writer = new StreamWriter(new FileStream(file, FileMode.CreateNew, FileAccess.Write));
+                    writer.Write(JsonConvert.SerializeObject(new { rows, allResourceIds = allIds,
+                        globalCacheUnchanged = true, finalOwnedZero = true,
+                        scope = "One fixed serial five-file resource group. No cost ABBA, full-catalog decode, Driver GC, RSS, device or full H10 certification." },
+                        Formatting.Indented));
+                    TestContext.WriteLine(file);
+                }
+                finally { instance.SetValue(null, previousConfig); }
+            });
+        }
+

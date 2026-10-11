@@ -1,0 +1,314 @@
+#if UNITY_EDITOR
+using System;
+using System.IO;
+using System.Reflection;
+using NTSD.Animation.Rendering;
+using NTSD.Animation.Rendering.Editor;
+using NTSD.Animation;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test.Editor
+{
+    // Alignment contract: NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 (Editor observation only).
+    [InitializeOnLoad]
+    public static class M03PublicationWorkloadDiagnostics
+    {
+        public const string Root = "artifacts/diagnostics/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010/attempt-02";
+        private static readonly string ExpectedReportPath = Path.GetFullPath(Root + "/report.json");
+        private const string OwnerKey = "NTSD.M03.PublicationWorkload.Active";
+        private const string SeenKey = "NTSD.M03.PublicationWorkload.SeenRunner";
+        private const string RestoreKey = "NTSD.M03.PublicationWorkload.RestoreScene";
+        private const string SceneKey = "NTSD.M03.PublicationWorkload.OriginalScene";
+        private const string SubmittedKey = "NTSD.M03.PublicationWorkload.Submitted";
+        private const string SuppressionKey = "NTSD.M03.PublicationWorkload.OriginalSuppression";
+        private static readonly MethodInfo ServicesReady = typeof(ProductionEntityStressRunner).GetMethod(
+            "AreProductionServicesReady", BindingFlags.Static | BindingFlags.NonPublic);
+
+        [Serializable]
+        public struct Row
+        {
+            public int frame, tick, warm, steady, camera, activeAi, commands, resolved, segments;
+            public int sourceQuads, arrayQuads, pageQuads, otherQuads;
+            public long epoch, total, publication, alpha, repeated, failed, rejected, bytes;
+        }
+
+        [Serializable]
+        private sealed class Evidence
+        {
+            public string status, failure, scope = "End-camera cumulative production Build counters, no CPU or GC certificate.";
+            public int count, cameraId, unavailableSubmissions;
+            public bool overflow, hooksDetached;
+            public Row[] rows = new Row[1024];
+        }
+
+        private static Evidence evidence;
+        private static ProductionEntityStressReport ownedReport;
+        private static bool attached;
+        private static double deadline;
+
+        static M03PublicationWorkloadDiagnostics()
+        {
+            if (SessionState.GetBool(RestoreKey, false))
+                EditorApplication.playModeStateChanged += RestoreScene;
+            if (!SessionState.GetBool(OwnerKey, false)) return;
+            if (SessionState.GetBool(SeenKey, false))
+            {
+                evidence = new Evidence();
+                Finish("PARTIAL", "Unexpected reload after runner started; no observer restart.");
+                return;
+            }
+            Attach();
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/M03 Publication Workload Observe Once")]
+        public static void Begin()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating || UnityEngine.Profiling.Profiler.enabled ||
+                SessionState.GetBool(OwnerKey, false) || ProductionEntityStressRunner.Active != null)
+                throw new InvalidOperationException("Editor or observer is not idle.");
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+                if (SceneManager.GetSceneAt(i).isDirty) throw new InvalidOperationException("Dirty scene; no run started.");
+            if (SceneManager.sceneCount != 1 || string.IsNullOrEmpty(SceneManager.GetActiveScene().path))
+                throw new InvalidOperationException("Only a saved clean single-scene setup is supported.");
+            if (File.Exists(Root + "/observation.json") || File.Exists(Root + "/report.json") ||
+                File.Exists("Temp/NTSD_ProductionEntityStress.request.json"))
+                throw new InvalidOperationException("Existing output or pending request; no overwrite/retry.");
+            var request = JsonUtility.FromJson<ProductionEntityStressRequest>(File.ReadAllText(Root + "/request.json"));
+            if (request.entityCount != 1000 || request.warmupTicks != 120 || request.sampleTicks != 180 ||
+                request.enablePhaseTiming || request.enablePresentationTiming || request.enableDetailPhaseTiming ||
+                request.enableFrameTiming || request.outputPath != Root + "/report.json")
+                throw new InvalidOperationException("Request differs from finite observation contract.");
+            SessionState.SetBool(OwnerKey, true);
+            SessionState.SetBool(SeenKey, false);
+            SessionState.SetBool(SubmittedKey, false);
+            SessionState.SetString(SceneKey, SceneManager.GetActiveScene().path);
+            SessionState.SetBool(SuppressionKey, BattleTestBootstrap.SuppressEntityCreationForProductionStress);
+            SessionState.SetBool(RestoreKey, true);
+            EditorApplication.playModeStateChanged -= RestoreScene;
+            EditorApplication.playModeStateChanged += RestoreScene;
+            Attach();
+            try
+            {
+                BattleTestBootstrap.SuppressEntityCreationForProductionStress = true;
+                EditorSceneManager.OpenScene("Assets/NTSD/Scene/NTSD_Battle.unity", OpenSceneMode.Single);
+                EditorApplication.EnterPlaymode();
+            }
+            catch (Exception exception) { Finish("FAILED", exception.ToString()); throw; }
+        }
+
+        [MenuItem("NTSD/Validation/Optimization/M03 Cancel Unstarted Observation Preparation")]
+        public static void CancelUnstartedPreparation()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || ProductionEntityStressRunner.Active != null ||
+                SessionState.GetBool(SeenKey, false) || File.Exists(Root + "/report.json"))
+                throw new InvalidOperationException("Only an unstarted idle preparation can be cancelled.");
+            RenderPipelineManager.endCameraRendering -= Observe;
+            EditorApplication.update -= Update;
+            EditorApplication.playModeStateChanged -= OnPlayState;
+            attached = false;
+            evidence = null;
+            BattleTestBootstrap.SuppressEntityCreationForProductionStress = SessionState.GetBool(SuppressionKey, false);
+            SessionState.SetBool(OwnerKey, false);
+            SessionState.SetBool(SeenKey, false);
+            SessionState.SetBool(SubmittedKey, false);
+        }
+
+        private static void RestoreScene(PlayModeStateChange state)
+        {
+            if (state != PlayModeStateChange.EnteredEditMode || !SessionState.GetBool(RestoreKey, false)) return;
+            string original = SessionState.GetString(SceneKey, string.Empty);
+            if (!string.IsNullOrEmpty(original) && !SceneManager.GetActiveScene().isDirty)
+                EditorSceneManager.OpenScene(original, OpenSceneMode.Single);
+            BattleTestBootstrap.SuppressEntityCreationForProductionStress = SessionState.GetBool(SuppressionKey, false);
+            SessionState.SetBool(RestoreKey, false);
+            EditorApplication.playModeStateChanged -= RestoreScene;
+        }
+
+        private static void Attach()
+        {
+            if (attached) return;
+            if (!SessionState.GetBool(SubmittedKey, false))
+                BattleTestBootstrap.SuppressEntityCreationForProductionStress = true;
+            evidence = new Evidence();
+            deadline = EditorApplication.timeSinceStartup + 600;
+            RenderPipelineManager.endCameraRendering += Observe;
+            EditorApplication.update += Update;
+            EditorApplication.playModeStateChanged += OnPlayState;
+            attached = true;
+        }
+
+        private static void OnPlayState(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.EnteredEditMode && SessionState.GetBool(SeenKey, false))
+                Finish("COMPLETED", string.Empty);
+        }
+
+        private static void Update()
+        {
+            var runner = ProductionEntityStressRunner.Active;
+            if (EditorApplication.isPlaying && !EditorApplication.isPaused &&
+                !SessionState.GetBool(SubmittedKey, false) && runner == null &&
+                BattleTestBootstrap.ProductionStressServicesReady && ServicesReady != null &&
+                (bool)ServicesReady.Invoke(null, null))
+            {
+                var request = JsonUtility.FromJson<ProductionEntityStressRequest>(File.ReadAllText(Root + "/request.json"));
+                SessionState.SetBool(SubmittedKey, true);
+                ProductionEntityStressRequestProcessor.WriteRequest(request);
+            }
+            if (runner != null)
+            {
+                if (runner.Report == null || !IsOwnedOutputPath(runner.Report.outputPath))
+                {
+                    Finish("FAILED", "Foreign runner; detached without interfering.");
+                    return;
+                }
+                ownedReport = runner.Report;
+                SessionState.SetBool(SeenKey, true);
+            }
+            if (ownedReport != null && runner == null)
+                Finish("COMPLETED", string.Empty);
+            else if (EditorApplication.timeSinceStartup > deadline)
+            {
+                if (runner != null && ReferenceEquals(runner.Report, ownedReport))
+                    runner.StopAndCleanup("M03 finite observer timeout");
+                Finish("PARTIAL", "Finite observer timeout; no retry.");
+            }
+        }
+
+        private static void Observe(ScriptableRenderContext context, Camera camera)
+        {
+            var runner = ProductionEntityStressRunner.Active;
+            if (runner == null || camera == null || camera.cameraType != CameraType.Game) return;
+            CameraRenderType type = camera.TryGetComponent(out UniversalAdditionalCameraData data)
+                ? data.renderType : CameraRenderType.Base;
+            if (!IsTargetCamera(camera, type, NTSDRenderSpace.WorldCamera)) return;
+            var report = runner.Report;
+            if (report == null || !IsOwnedOutputPath(report.outputPath) || report.status != "Running") return;
+            ownedReport = report;
+            int id = camera.GetInstanceID();
+            if (evidence.cameraId != 0 && evidence.cameraId != id)
+            {
+                Finish("PARTIAL", "Multiple Game cameras; attribution not valid.");
+                return;
+            }
+            evidence.cameraId = id;
+            if (evidence.count >= evidence.rows.Length)
+            {
+                evidence.overflow = true;
+                Finish("PARTIAL", "Fixed observation capacity exhausted.");
+                return;
+            }
+            var counters = BattleCentralRenderSystem.Diagnostics;
+            var row = new Row
+            {
+                frame = Time.frameCount, tick = report.logicTicksExecuted, warm = report.warmupTicksCompleted,
+                steady = report.sampledLogicTicks, camera = id, activeAi = report.baseAiActiveCount,
+                epoch = counters.MaterializationCounterEpoch,
+                total = counters.MaterializationBuilds.CompletedBuildCount,
+                publication = counters.PublicationChangedBuilds.CompletedBuildCount,
+                alpha = counters.AlphaChangedBuilds.CompletedBuildCount,
+                repeated = counters.RepeatedSampleBuilds.CompletedBuildCount,
+                failed = counters.MaterializationBuilds.FailedBuildCount,
+                rejected = counters.MaterializationBuilds.RejectedBeforeBuildCount,
+                bytes = counters.MaterializationBuilds.UploadedVertexBytes
+            };
+            if (BattleCentralRenderSystem.TryAcquireSubmissionForSelfCheck(camera, type, camera.cameraType, true, out var lease))
+            {
+                try
+                {
+                    var backend = lease.Backend;
+                    row.commands = backend.Diagnostics.SourceCommandCount;
+                    row.resolved = backend.Diagnostics.ResolvedCommandCount;
+                    row.segments = backend.SegmentCount;
+                    for (int i = 0; i < backend.SegmentCount; i++)
+                    {
+                        var segment = backend.GetSegment(i);
+                        switch (segment.BindingMode)
+                        {
+                            case BattleSpriteCentralBindingMode.SourceTexture2D: row.sourceQuads += segment.QuadCount; break;
+                            case BattleSpriteCentralBindingMode.AtlasTextureArray: row.arrayQuads += segment.QuadCount; break;
+                            case BattleSpriteCentralBindingMode.AtlasPageTexture2D: row.pageQuads += segment.QuadCount; break;
+                            default: row.otherQuads += segment.QuadCount; break;
+                        }
+                    }
+                }
+                finally { lease.Dispose(); }
+            }
+            else evidence.unavailableSubmissions++;
+            evidence.rows[evidence.count++] = row;
+        }
+
+        internal static bool IsOwnedOutputPath(string outputPath)
+        {
+            return string.Equals(outputPath, ExpectedReportPath, StringComparison.OrdinalIgnoreCase);
+        }
+
+        internal static bool IsTargetCamera(Camera camera, CameraRenderType type, Camera worldCamera)
+        {
+            return BattleCentralRenderSystem.CanRenderCamera(camera, type, worldCamera);
+        }
+
+        private static void Finish(string status, string failure)
+        {
+            RenderPipelineManager.endCameraRendering -= Observe;
+            EditorApplication.update -= Update;
+            EditorApplication.playModeStateChanged -= OnPlayState;
+            attached = false;
+            SessionState.SetBool(OwnerKey, false);
+            SessionState.SetBool(SeenKey, false);
+            SessionState.SetBool(SubmittedKey, false);
+            if (evidence == null || File.Exists(Root + "/observation.json")) return;
+            evidence.status = status;
+            evidence.failure = failure;
+            evidence.hooksDetached = true;
+            File.WriteAllText(Root + "/observation.json", JsonUtility.ToJson(evidence, true));
+            if (EditorApplication.isPlaying && ProductionEntityStressRunner.Active == null)
+                EditorApplication.ExitPlaymode();
+        }
+    }
+
+#if UNITY_INCLUDE_TESTS
+    public sealed class M03PublicationWorkloadOwnershipTests
+    {
+        [NUnit.Framework.Test]
+        public void CameraFilter_UsesExistingWorldBaseCameraContract()
+        {
+            var worldObject = new GameObject("M03 transient world camera");
+            var otherObject = new GameObject("M03 transient other camera");
+            try
+            {
+                var world = worldObject.AddComponent<Camera>();
+                var other = otherObject.AddComponent<Camera>();
+                NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsTargetCamera(world, CameraRenderType.Base, world), NUnit.Framework.Is.True);
+                NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsTargetCamera(other, CameraRenderType.Base, world), NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsTargetCamera(world, CameraRenderType.Overlay, world), NUnit.Framework.Is.False);
+                NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsTargetCamera(null, CameraRenderType.Base, world), NUnit.Framework.Is.False);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(otherObject);
+                UnityEngine.Object.DestroyImmediate(worldObject);
+            }
+        }
+
+        [NUnit.Framework.Test]
+        public void RunnerNormalizedPath_IsAcceptedAndForeignPathIsRejected()
+        {
+            var request = JsonUtility.FromJson<ProductionEntityStressRequest>(
+                File.ReadAllText(M03PublicationWorkloadDiagnostics.Root + "/request.json"));
+            var config = ProductionEntityStressConfig.FromRequest(request, Directory.GetCurrentDirectory());
+            NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsOwnedOutputPath(config.OutputPath), NUnit.Framework.Is.True);
+            NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsOwnedOutputPath(
+                Path.GetFullPath("Temp/foreign-report.json")), NUnit.Framework.Is.False);
+            NUnit.Framework.Assert.That(M03PublicationWorkloadDiagnostics.IsOwnedOutputPath(null), NUnit.Framework.Is.False);
+        }
+    }
+#endif
+}
+#endif

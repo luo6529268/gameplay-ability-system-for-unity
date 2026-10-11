@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-10T20:56:29.075699+08:00",
+  "protectedCount": 15625,
+  "protectedChanged": [],
+  "backupCount": 11,
+  "backupMismatches": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "scopedDiffExit": 0,
+  "assembly": [
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+      "sha256": "e57f352b3f0fc94c9b2fe5532be2a3a9013e37963a0ae121e1c3bac98ca33988",
+      "bytes": 4295680
+    },
+    {
+      "path": "Library\\ScriptAssemblies\\Assembly-CSharp-Editor.dll",
+      "sha256": "e38559786dd45a784396f47f5657fa30fb63ef2a917b3e1482e9c023228acfb2",
+      "bytes": 7259136
+    }
+  ],
+  "candidateStatus": "BLOCKED_VALIDATION_HARNESS_DEFAULT_OFF",
+  "nativePublicationZeroResidue": "UNVERIFIED_NOT_INFERRED_FROM_SCENE",
+  "memoryGroupStarted": false,
+  "boundedMemoryExists": false
+}

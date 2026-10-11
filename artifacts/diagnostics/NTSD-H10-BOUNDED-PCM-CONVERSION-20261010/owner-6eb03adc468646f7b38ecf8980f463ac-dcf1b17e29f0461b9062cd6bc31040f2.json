@@ -1,0 +1,9 @@
+{
+  "test": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionPcmMatchesFrozenOriginalAtBoundaries",
+  "released": true,
+  "explicitOwnerCleanup": true,
+  "naturalCallbackCertified": false,
+  "baselineCount": 5,
+  "allObservedDestroyed": true,
+  "resources": []
+}

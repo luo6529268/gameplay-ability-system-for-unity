@@ -1,0 +1,96 @@
+{
+  "time": "2026-10-10T20:08:49.103036+08:00",
+  "paths": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+      "sha256": "b8acfd90cc23884037555b6a4d10309c34fa8a24bb24ac8360d1896d08b40eef",
+      "bytes": 49237,
+      "gitStatus": "M Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/M03FiniteVertexScanDiagnostics.cs",
+      "sha256": "9a5e45fb5631407863b44fedf3be33b4606b3e7a8c4ee31e82d2ef56c40d76b5",
+      "bytes": 40879,
+      "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/M03FiniteVertexScanDiagnostics.cs"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "386c8ea37705f0314017ffd9c035112fa8ed2e70d7d94d0720fbecef9f4af41c",
+      "bytes": 410908,
+      "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "dc2f37aef30d83a3bbcf4ef3b59eab4ea190a2a525246e2bb339e0b1d3d0c72c",
+      "bytes": 1692285,
+      "gitStatus": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "0068a04158bbdee9c9b1720e6d81105075aeac5faa5a57ab31b551dbae045b3e",
+      "bytes": 1631107,
+      "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "1436a1446b6c00bd42b9cafb61d3e355ea6fc6ae877c7ab788650b81156e7509",
+      "bytes": 763620,
+      "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "d7b25204a0223b8a49cbbefb98fbf7ea3d30af55fb972277ed0c77ecb7c1fd40",
+      "bytes": 151357,
+      "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "32a8689bae1f6ed996da8c975d02656b40dc3984e515f5adc16229bce41efda4",
+      "bytes": 251039,
+      "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+      "sha256": "9749d7b6f227848a3c601eeaa03d21a5b4c6a18a5677e72694beaaaabb680093",
+      "bytes": 50378,
+      "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "sha256": "97f1141da301dfb36ddb3939001349526c05848b68cf8b14178335565b4feb3c",
+      "bytes": 24218,
+      "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-M03-GROUPED-FINITE-GUARD-20261010.md",
+      "sha256": "05baf66753246336786e9318f4b78769304a1ff8417ce26b9dcce925862ef1a4",
+      "bytes": 9169,
+      "gitStatus": "?? docs/ai/TASKS/NTSD-M03-GROUPED-FINITE-GUARD-20261010.md"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-M03-GROUPED-FINITE-GUARD-001.md",
+      "sha256": "bac6d5746627d6128f6a2c8510898134992c6412d57d5f850c731fb8b7873ed3",
+      "bytes": 4576,
+      "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-M03-GROUPED-FINITE-GUARD-001.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/M03-GROUPED-FINITE-GUARD.md",
+      "sha256": "501d53b5417fede52d042c691eb111be1a43bff893ef3225a50cc0bbecaedd65",
+      "bytes": 4763,
+      "gitStatus": "?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/M03-GROUPED-FINITE-GUARD.md"
+    },
+    {
+      "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-M03-GROUPED-FINITE-GUARD-20261010\\RECORD.md",
+      "sha256": "d3e1b8fac9885a9992f631041286c06659507f6ba29109bdebb08b337cb26826",
+      "bytes": 4034,
+      "gitStatus": "?? docs/ai/FILE-OPERATIONS/NTSD-M03-GROUPED-FINITE-GUARD-20261010/RECORD.md"
+    }
+  ],
+  "protectedCount": 2442,
+  "protectedDrift": [],
+  "backupCount": 10,
+  "invalidBackups": [],
+  "validatorExit": 0,
+  "validatorWarnings": 4358,
+  "scopedDiffExit": 0
+}

@@ -1,0 +1,41 @@
+<!-- CHANGE-RECORD
+id: NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001
+status: VERIFIED
+code-path: Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs
+authority: Direct user approval for H08 normal default admission, discussion turn01a1260a-3126-7e61-9704-992782cea6d4
+evidence: docs/ai/TASKS/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010.md
+evidence: artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010/REPORT.md
+-->
+# NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001
+
+Human authorization: discussion thread01a11fe2-bfaa-72f3-a9ed-c8260f63b193 turn01a1260a-3126-7e61-9704-992782cea6d4 direct human '那你来处理呗，应用到项目中' verified through read_thread. Default promotion now explicitly authorized; old candidate defaultOFF boundary superseded only for this exact admission.
+
+Production path: LoadingPrewarmController.PrewarmOnceCoreAsync -> public manager.PrewarmConfiguredLoganContentAsync -> PrewarmConfiguredLoganContentCoreAsync -> LoadLoganContentWithScopeAsync -> NativePrewarmOperation.ReuseNativeBodySheets -> LoadCharacterSpritesCoreAsync native/group branch. Only production change: private bool reuseNativeBodySheetsForDiagnostics initializer false/default to true. Existing cold setter explicitfalse, per-operation immutable snapshot, midoperation/disposed rejection, OnDestroy false, legacy native=null branch unchanged. No inplace replacement of existing publication. No new runtime fields/cache/resources/owner.
+
+Exact4scripts: Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs default initializer only; Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs cold default/fallback test only (old memory routine/artifacts unchanged); Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs explicitOFF fixture and production-default setup variant, current admission evidence directory and disposed rejection; Assets/NTSD/Scripts/Test/Editor/NTSD28B11SourceCacheCallerEditorTests.cs Candidate reflection3arguments, configured normal-path admission test and accurate traceable final cleanup.
+
+Test design: newdefaulttrue/explicitfalse/disposedfalse+reject/newinstancetrue. Existing atomic SetUp explicitly false; source caller SetupUsingProductionDefault does not set sharing. Small existing MultiDefinitionCandidate controlled PNG+mode snapshot -> temporary GameConfig root -> actual public configuredPrewarm, observe live operation snapshot/progress, assert distinctSprites/sharedTexture ON and independentTextures OFF, full geometry/processed readback pixels/catalog equality. Same root reentry samepublication/cachehit; destroy oldowner natural Unity callback and assert exact resources gone; fresh OFF owner via explicitcoldfalse normalentry; destroy and fresh defaultON owner normalentry/cachecandidatehit cannot reuse oldOFFpublication. Each owner resources exact baseline nonintersection/borrowed preserved and original singleton/config/cache restoration.
+
+Test-only new state: bounded fixture evidence records per3smallgenerations, payload arrays per6bodyentries, selectedroot cache key list and preexisting cache dictionary reference snapshot owned by test, released in TearDown; no new runtime cache. All real Unity resources remain original peroperation/publication owner. Existing phase1 cancel/workerJoin then phase5 staging/lastlease/OnDestroy cleanup unchanged. Unity runInEditMode only on temporary test instances; no production attribute or Scene asset/Play.
+
+Minimum validation: originalEditor safeidle/Menu clean; targetedcompile; colddefault test; configuredpublic default/OFF/rebuild/geometry/pixels/cache integration; affected cancellation/failedgeneration/lease/naturalOFFONdestroy and configured concurrent/cancel/ownerreplacement scopes. Reuse previous candidate8/8, resume8/8, fourfixedgroups and allpixel/56inventory; do not repeat memory group, all330load, Play, Driver1800, GC or device.
+
+Risk: OFF tests accidentally becomeON, cached oldpub hides real default, premature shared destruction, fixture-owner cleanup fails. Keep exact output IDs/mode/source/generation, noFakePublication/ForOwners substitution. Any true production-gate failure stops and flips only this new initializer back to its exact prior line peruser authorized rollback; preserve all existing dirty/failedraw, log reversepatch/preimage before rollback. No reset/checkout/delete/Scene/assets/Settings/Server/Gen/Plugins changes. No other algorithm edits.
+
+Success SCOPED_DEFAULT_ADMISSION_VERIFIED normalnative default shared, explicitcoldOFF retained; H08parent budgets/prebake/device, H07/Android remainopen. M03off/H07producerhold/95off/H06notcontinued/RoleFindEffect preserved. No Goal/queue/H10. Prechange dirty/status/hash backups inthisOperation; everypatch intermediatepreimage. Validator, scoped diff, protection and exact source/assembly identities andscene restore atclose.
+
+2026-10-10 implementation: changed only the production bool initializer to true; diagnostics cold default/OFF/destroy/reset test; atomic explicitOFF and production-default setup plus new evidence directory; configured-source test now exercises actual public prewarm across defaultON/cache reentry/destroy/explicitOFF/destroy/freshdefaultON. Candidate reflection arity corrected. Exact caller cache snapshot restored in finally; fixture collects owned native resources before cleanup. No memory routine or other production method edited. Script source snapshots and exact patch command captured.
+
+
+Compile attempt1 failed in new test only: CS0266 at caller lines209/281 because existing ConfiguredCandidateCacheHitCount is long. Corrected snapshot/local counters to long, no production change. Original error retained in compile-attempt1.txt; no Unity test started on failed compile.
+
+
+> **2026-10-10 H08正常默认接入完成：SCOPED_DEFAULT_ADMISSION_VERIFIED。** Task NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010 / Change NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001 VERIFIED仅限定默认准入。生产仅新manager初始值true；实际public配置入口验证默认共享→缓存重入→新owner显式OFF→新owner默认ON，几何/目录/像素一致；原Editor2/2+9/9通过。502条owned资源记录已释放、缓存/配置/单例恢复，Menu clean8。旧唯一四组内存与未受影响像素证据复用，不重跑或外推整局；H08父项/H07/Android仍OPEN。下一只审阅本报告，不自动H10/Goal/队列。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010/REPORT.md；下方DEFAULT_OFF等为此前阶段历史。
+
+Actual two test jobs: 36fbfdd75ee946a7ba26a5b01bc619c0 2/2 PASS and 7cce05f779164ca3ba3f02ee7b320894 9/9 PASS. Compile attempt1 CS0266 repaired in test long counters only; attempt2 live reload passed. No new memory/performance/GC/device run. Exact commands, source/assembly hashes, 15731 protection audit and true dirty preimages retained. Final validator and closure audit linked by report. Rollback unused.
+
+
+收尾审计补充：首次closure-audit.json的严格“初始批量快照必须等于逐次首备份”检查失败，仅命中进度表。已逐行核对，初始批量快照采集到本Task自己的PLANNED文首之后；更早的逐次编辑备份完整保存了真正改前字节（SHA256 d28544ecefb151b5bc1f62f72e552263c017b38e820357c1207daf08fcfaf279）。除新增本Task两行文首外无差异、无内容丢失。保留两份原件和首次失败审计；preimage-resolution.json明确首备份恢复来源，最终结论以closure-audit-final.json为准。不是生产/测试失败，未重跑Unity或内存实验。

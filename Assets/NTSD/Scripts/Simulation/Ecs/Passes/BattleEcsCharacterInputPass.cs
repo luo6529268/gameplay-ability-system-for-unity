@@ -56,6 +56,9 @@ namespace NTSD.Simulation.Ecs
             this.world = world;
         }
 
+        internal bool NativeOwnedCompatibilitySkipEnabled { get; set; }
+        internal long NativeOwnedCompatibilityFastSkipCount { get; private set; }
+
         internal BattleEcsCharacterInputPassMode Mode => mode;
 
         internal BattleEcsCharacterInputPassDiagnostics Diagnostics =>
@@ -75,6 +78,7 @@ namespace NTSD.Simulation.Ecs
 
         internal void Reset()
         {
+            NativeOwnedCompatibilitySkipEnabled = false;
             ResetDiagnostics();
         }
 
@@ -113,10 +117,23 @@ namespace NTSD.Simulation.Ecs
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.ComboUpdate);
             try
             {
-                world.CharacterInputActionResolver.ApplyFrameInputFromRuntimeProgress(
-                    character,
-                    world.CharacterInputWriter,
-                    diagnostics);
+                if (NativeOwnedCompatibilitySkipEnabled &&
+                    mode == BattleEcsCharacterInputPassMode.DataOriented &&
+                    ReferenceEquals(character.RegisteredWorldForSimulation, world) &&
+                    world.UsesNTSD28NativeInputPipeline &&
+                    world.AiExecutionProfile == BattleAiExecutionProfile.DataOrientedCanonical &&
+                    world.CharacterInputWriter.CanEvaluateCanonicalDecision(runtime))
+                {
+                    world.RecordCharacterInputProgressCommitForDiagnostics(false);
+                    NativeOwnedCompatibilityFastSkipCount++;
+                }
+                else
+                {
+                    world.CharacterInputActionResolver.ApplyFrameInputFromRuntimeProgress(
+                        character,
+                        world.CharacterInputWriter,
+                        diagnostics);
+                }
             }
             finally
             {
@@ -138,6 +155,7 @@ namespace NTSD.Simulation.Ecs
             compatibilityFallbackCount = 0;
             unityCompatibilityShellCount = 0;
             unexpectedFallbackCount = 0;
+            NativeOwnedCompatibilityFastSkipCount = 0;
         }
     }
 }

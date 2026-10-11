@@ -1,0 +1,19 @@
+<!-- CHANGE-RECORD
+id: NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001
+status: CODE_WRITTEN
+code-path: Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs
+authority: Human authorized continued H10 and precise full catalog audio envelope delegation
+evidence: docs/ai/TASKS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011.md
+-->
+# NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001
+
+Human authorization: continuation of the same H10 requested directly by human in discussion thread01a11fe2-bfaa-72f3-a9ed-c8260f63b193 ("finish H10", "why not continue"); exact detailed delegation received in current thread2026-10-11. This finite diagnosis fills full-catalog resident/cache/lifecycle evidence, not product budget or parent H10 certification.
+Only writable authored script: Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs. New methods CatalogAudioEnvelopeInventory, CatalogAudioEnvelopeFixtureQualification, CatalogAudioEnvelopeTwoSessionMeasurement; nested EnvelopeFixture and inventory/resource/header/cleanup helpers. Previous tests retained verbatim. Production and Q06 bodies untouched.
+Owner/capacity: all new state belongs to one Editor-only fixture; complete captured definition/cue manifest bounds dictionaries/lists. One run at a time; at most16 in-prepare snapshots/session at roughly100completed formal loads. No new production/runtime state or hot allocations. Stage1/5 use existing player methods; await/drain before fixture release. Generic delta only remove keys absent before, predeclared manifest keys, unchanged value refs; destroy only proven newly created clips unshared by old/native/config/scene voices/other players. Fail closed and retain unknown objects, no global cleanup.
+Validation sequence: inspect actual config/published catalog/KO and full metadata without decode; safe-original-Editor/loader preflight. Latest compile and max2 actual small resource fixture qualification including exact cache/scene/singleton restoration before unique full group. Capacity estimate plus physical/commit preflight; 2 sequential public PrepareBattleCuesAsync(manager) full sessions max, generic cache retained between; stage snapshots, metadata equivalence, old formal native disappearance. Any hard failure stops remaining full sessions, no same-version full rerun. No oldABBA/five-file group/regression rerun.
+Risks: false completeness from visual subset; missing modeKO; borrowed clip destroyed; stale async/cache refs; full-load memory envelope; snapshot observer overhead; Unity editor immediateDestroy not Player delayed peak. All UNKNOWN remain explicit. Budget numerical approval not inferred from operational safety margin.
+Rollback: precise task additions only from actual dirty backups and intermediate preimages under separate audited authorization, no HEAD reset or deleting user content. No Scene/assets/settings/InputActions/Server/Gen/Plugins writes, no ClearCache/GC.Collect/UnloadUnusedAssets/restart/secondEditor/Goal.
+
+Preimplementation isolation refinement from independent discussion review: stage5 leaves generic preparedCues.Clips. Final newgeneric cleanup strictly follows drain and destruction of this fixturePlayer/Host, clearing only deadfixture dictionaries/held clip refs. Protect other soundplayers preparedCues/BattlePlaybackClips and all crosskey arrays, not just voices/cache counts. Cannot prove isolation: retain unknown resources, no full run. Binding actual scene AudioController temporarily when passive singleton null is fixture-only and restored; no empty/artificial controller or invalid generic root.
+
+Actual diagnostic methods and nested helpers appended within declared singlefile; production unchanged. RealMode/Controller/root and cache/otherplayer/voice protections implemented; inventory first, max2resource fixture before once2session full run. Compilation/qualification pending.

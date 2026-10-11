@@ -1,0 +1,570 @@
+{
+  "test": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionBoundedColdConversionCostGroupOnce",
+  "released": true,
+  "explicitOwnerCleanup": true,
+  "naturalCallbackCertified": false,
+  "baselineCount": 5,
+  "allObservedDestroyed": true,
+  "resources": [
+    {
+      "instanceId": -1224744,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224746,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224748,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224750,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224752,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224754,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224756,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224758,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224760,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224762,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224764,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224766,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224768,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224770,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224772,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224774,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224776,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224778,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224780,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224782,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224784,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224786,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224788,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224790,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224792,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224794,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224796,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224798,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224800,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224802,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224804,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224806,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224808,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224810,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224812,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224814,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224816,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224818,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224820,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224822,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224824,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224826,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224828,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224830,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224832,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224834,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224836,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224838,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224840,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224842,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224844,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224846,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224848,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224850,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224852,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224854,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224856,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224858,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224860,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224862,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224864,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224866,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224868,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224870,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224872,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224874,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224876,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224878,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224880,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224882,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224884,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224886,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224888,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224890,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224892,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224894,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224896,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224898,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224900,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1224902,
+      "name": "H10ProductionCost65537",
+      "samples": 65537,
+      "channels": 2,
+      "frequency": 44100
+    }
+  ]
+}

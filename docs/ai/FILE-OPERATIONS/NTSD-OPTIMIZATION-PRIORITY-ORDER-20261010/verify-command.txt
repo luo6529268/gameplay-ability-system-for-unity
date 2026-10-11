@@ -1,0 +1,46 @@
+$env:PYTHONUTF8='1'
+$env:PYTHONIOENCODING='utf-8'
+@'
+
+import json,hashlib,re,subprocess
+from pathlib import Path
+from urllib.parse import unquote
+root=Path.cwd().resolve();op=root/"docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010"
+plan=json.loads((op/"edit-plan.json").read_text(encoding="utf-8"))
+before=json.loads((op/"before-manifest.json").read_text(encoding="utf-8"))
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def git(*args):return subprocess.run(["git",*args],cwd=root,capture_output=True,check=True).stdout
+backup_changes=[i["path"] for i in before["existing_documents"] if sha(root/i["backup"])!=i["sha256"]]
+protected_changes=[i["path"] for i in before["protected_files"] if sha(root/i["path"])!=i["sha256"]]
+planned_mismatch=[e["path"] for e in plan["edits"] if (root/e["path"]).read_bytes()!=(op/"planned"/e["path"]).read_bytes()]
+table_checks=[];snippets=[]
+for edit in plan["edits"]:
+    text=(root/edit["path"]).read_text(encoding="utf-8-sig")
+    snippets.append((edit["path"],edit["prepend"]))
+    snippets.extend((edit["path"],new) for old,new in edit.get("replace",[]))
+    for table in [edit.get("reorder"),edit.get("childReorder")]:
+        if not table:continue
+        match=re.search(r"(^"+re.escape(table["header"])+r"\n\|[^\n]+\n)((?:\|[^\n]*\n)+)",text,re.M)
+        assert match,(edit["path"],table["header"])
+        keys=[re.match(r"^\|\s*(?:\[)?([A-Z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)+)(?:\]|\s|\|)",row).group(1) for row in match.group(2).splitlines()]
+        table_checks.append(dict(path=edit["path"],count=len(keys),unique=len(set(keys)),expected_order=keys==table["ids"]))
+        snippets.append((edit["path"],match.group(0)))
+task=root/plan["taskPath"]
+snippets.append((plan["taskPath"],task.read_text(encoding="utf-8")))
+broken=[];link_count=0
+for rel,text in snippets:
+    for label,url in re.findall(r"\[([^\]]+)\]\(([^)]+)\)",text):
+        if re.match(r"\w+://",url) or url.startswith("#"):continue
+        target=((root/rel).parent/unquote(url.split("#")[0])).resolve()
+        link_count+=1
+        if not target.exists():broken.append(dict(source=rel,url=url,target=str(target)))
+paths=[i["path"] for i in before["existing_documents"]]
+outside_now=git("diff","--binary","--",".",*[":(exclude)"+p for p in paths])
+diff=subprocess.run(["git","diff","--check","--",*paths],cwd=root,capture_output=True)
+(op/"diff-check.txt").write_bytes(diff.stdout+diff.stderr)
+result=dict(backups=len(before["existing_documents"]),backup_changes=backup_changes,protected_files=len(before["protected_files"]),protected_changes=protected_changes,planned_content_mismatch=planned_mismatch,table_checks=table_checks,links_checked=link_count,broken_links=broken,head_unchanged=git("rev-parse","HEAD")==(op/"head-before.txt").read_bytes(),staged_unchanged=git("diff","--cached","--binary")==(op/"staged-before.patch").read_bytes(),outside_working_diff_unchanged=outside_now==(op/"outside-working-before.patch").read_bytes(),diff_check_exit=diff.returncode)
+(op/"verification.json").write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+print(json.dumps(result,ensure_ascii=False))
+assert not backup_changes and not protected_changes and not planned_mismatch and not broken and all(x["expected_order"] for x in table_checks) and result["head_unchanged"] and result["staged_unchanged"] and result["outside_working_diff_unchanged"] and diff.returncode==0
+
+'@ | python -X utf8 -

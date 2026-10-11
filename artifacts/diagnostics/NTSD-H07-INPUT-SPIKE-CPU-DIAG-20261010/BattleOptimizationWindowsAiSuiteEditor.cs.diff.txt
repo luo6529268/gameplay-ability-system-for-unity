@@ -1,0 +1,106 @@
+--- before/Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs
+@@ -21,6 +21,20 @@
+     [InitializeOnLoad]
+     internal static class BattleOptimizationWindowsAiSuiteEditor
+     {
++        private static bool startingInputCpuDiagnostic;
++        [MenuItem("NTSD/Validation/Optimization/H07 Input CPU Diagnostic")]
++        private static void BeginInputCpuDiagnostic()
++        {
++            Require(inputCostObserver == null && !startingInputCostDiagnostic,
++                "Input CPU diagnosis already has an owner.");
++            Require(!UnityEngine.Profiling.Profiler.enabled, "Input CPU diagnosis requires Profiler OFF.");
++            startingInputCpuDiagnostic = true;
++            startingInputCostDiagnostic = true;
++            H07InputCostDiagnostics.ResetBaseline();
++            try { BeginPostBindingsRole(); }
++            finally { startingInputCostDiagnostic = false; startingInputCpuDiagnostic = false; }
++        }
++
+         private static bool startingInputFlowDiagnostic;
+         [MenuItem("NTSD/Validation/Optimization/H07 Full Input Flow Diagnostic")]
+         private static void BeginInputFlowDiagnostic()
+@@ -727,6 +741,7 @@
+             public bool producerAbbaDiagnostic;
+             public bool inputCostDiagnostic;
+             public bool inputFlowDiagnostic;
++            public bool inputCpuDiagnostic;
+             public bool roleBranchTimingWindow;
+             public bool inputBoundaryTimingWindow;
+             public bool nativeSampledStateTimingWindow;
+@@ -1331,7 +1346,8 @@
+                 BattleOptimizationCpuGcCaptureEditor.RequireAvailable();
+             Require(!logicGcCallsiteOnly || cpuGcCaptureOnly && bruteProductionOnly && logicGcScopeOnly,
+                 "The logic callsite window requires capture, production and calibrated full Driver scope together.");
+-            string outputRoot = startingInputFlowDiagnostic ? H07InputCostDiagnostics.FlowOutputRoot :
++            string outputRoot = startingInputCpuDiagnostic ? H07InputCostDiagnostics.CpuOutputRoot :
++                startingInputFlowDiagnostic ? H07InputCostDiagnostics.FlowOutputRoot :
+                 startingInputCostDiagnostic ? H07InputCostDiagnostics.OutputRoot :
+                 startingRolePrerequisiteQualification ? H06RolePrerequisiteDiagnostics.QualificationRoot :
+                 startingRoleRecordPrerequisiteDiagnostic ? H06RolePrerequisiteDiagnostics.OutputRoot :
+@@ -1410,12 +1426,13 @@
+                 producerAbbaDiagnostic = startingProducerAbbaDiagnostic,
+                 inputCostDiagnostic = startingInputCostDiagnostic,
+                 inputFlowDiagnostic = startingInputFlowDiagnostic,
++                inputCpuDiagnostic = startingInputCpuDiagnostic,
+                 roleBranchTimingWindow = startingRoleBranchTimingWindow,
+                 inputBoundaryTimingWindow = startingInputBoundaryTimingWindow,
+                 nativeSampledStateTimingWindow = startingNativeSampledStateTimingWindow,
+                 producerSnapshotReuseWindow = startingProducerSnapshotReuseWindow,
+                 roleGroupSnapshotSkipWindow = startingRoleGroupSnapshotSkipWindow,
+-                runs = new RunState[startingInputFlowDiagnostic || startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
++                runs = new RunState[startingInputCpuDiagnostic ? 2 : startingInputFlowDiagnostic || startingRolePrerequisiteQualification || startingRoleRecordPrerequisiteDiagnostic ? 1 : startingRoleRecordCostDiagnostic ? 2 : startingPostBindingsRoleWindow ? 4 : startingMatchCentralBindings ? 2 : startingCentralSegmentReadback ? 1 : startingDepthRejectWindow || startingOrdinalPacketWindow || startingRenderTextureBindingWindow || startingEnvelopeBranchTimingWindow || startingEnvelopeBindingEligibilityWindow || startingEnvelopeBindingWindow || startingCoarseEnvelopeWindow || bruteCombinedCacheCandidate || bruteEligibilityReuseCandidate || bruteBranchTimingOnly ? 4 : cpuGcCaptureOnly ? 1 : bruteProductionOnly || emptyItrGuardCandidate ? 2 : roleFormalCandidate ? 4 : roleCandidate ? 2 : 6],
+                 originalScene = scene.path,
+                 originalSceneHash = HashFile(scene.path),
+                 battleSceneHash = HashFile(BattleScene),
+@@ -1502,6 +1519,8 @@
+ 
+         private static ProductionEntityStressRequest BuildCurrentRequest(int index)
+         {
++            if (state.inputCpuDiagnostic)
++                return H07InputCostDiagnostics.BuildCpuRequest(index);
+             if (state.inputFlowDiagnostic)
+                 return H07InputCostDiagnostics.BuildFlowRequest(index);
+             if (state.inputCostDiagnostic)
+@@ -2179,7 +2198,7 @@
+                 currentReport = null;
+                 if (run.retainedFailedGcMeasurement)
+                     state.retainedFailedGcMeasurements++;
+-                if (state.inputCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.inputCostObservationValid))
++                if (state.inputCostDiagnostic && (!run.workloadValid || (!state.inputCpuDiagnostic && !run.zeroGcPassed) || !run.inputCostObservationValid))
+                     throw new InvalidOperationException("Finite input diagnosis gate failed; no next window is authorized.");
+                 if (state.roleRecordCostDiagnostic && (!run.workloadValid || !run.zeroGcPassed || !run.roleRecordObservationValid))
+                     throw new InvalidOperationException("Finite record diagnostic gate failed; no next window is authorized.");
+@@ -2442,7 +2461,7 @@
+                     "The calibrated scope requires the existing production path before the first tick.");
+                 logicGcObserver = new BattleLogicTickGcObserverEditor();
+                 if (state.inputCostDiagnostic)
+-                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex, state.inputFlowDiagnostic);
++                    inputCostObserver = new H07InputCostDiagnostics(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex, state.inputFlowDiagnostic, state.inputCpuDiagnostic);
+                 else if (state.roleRecordCostDiagnostic)
+                     roleRecordTickObserver = new RoleRecordTickObserver(runner, SimulationTickDriver.Instance, productionQuery, logicGcObserver, state.runIndex == 1);
+                 else
+@@ -2937,11 +2956,11 @@
+             try
+             {
+                 run.logicGcEvidence = observer.Finish(currentReport?.logicTicksExecuted ?? 0, run.targetSamples);
+-                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic || state.inputFlowDiagnostic)
++                if (state.logicGcCallsiteOnly || state.roleRecordPrerequisiteDiagnostic || state.inputFlowDiagnostic || state.inputCpuDiagnostic)
+                 {
+                     run.logicGcEvidence.zeroAllocationPassed = false;
+                     run.logicGcEvidence.provenSteadyAllocatedBytes = -1;
+-                    run.logicGcEvidence.status = "INSTRUMENTED_CALLSITE_ONLY / " + run.logicGcEvidence.status;
++                    run.logicGcEvidence.status = (state.inputCpuDiagnostic ? "CPU_DIAGNOSTIC_NOT_CERTIFICATE / " : "INSTRUMENTED_CALLSITE_ONLY / ") + run.logicGcEvidence.status;
+                 }
+                 if (aborted)
+                 {
+@@ -3040,6 +3059,8 @@
+                     PathFor(lines[1]).StartsWith(PathFor(MatchCentralBindingsEvidenceRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(RoleBranchTimingOutputRoot) +
++                        Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
++                    PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.CpuOutputRoot) +
+                         Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                     PathFor(lines[1]).StartsWith(PathFor(H07InputCostDiagnostics.FlowOutputRoot) +
+                          Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||

@@ -1,0 +1,39 @@
+{
+  "scope": "Only method declarations and direct audio call lines were inspected; bodies excluded",
+  "observations": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+      "declarations": {
+        "ApplyWeaponDamage": 1289,
+        "ApplyNativeType5HurtTail": 1927,
+        "ApplySpecialObjectHurtTail": 2000
+      },
+      "directQueueBattleSoundLines": [
+        1370,
+        1975,
+        2063,
+        2654
+      ],
+      "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "relevantDeclarations": {
+        "RunNativeC25FrameTransaction": 6748,
+        "QueueNativeC25FrameSounds": 6967
+      },
+      "directQueueBattleSoundLines": [
+        6986
+      ],
+      "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "declarations": {
+        "StateExitEvent": 687,
+        "State_Frozen": 1623
+      },
+      "sha256": "7e59a58765dbccd2c214ad976dc177c76a5f54fef34164145395edb59a89fd3c"
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "operation": "NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010",
+  "start_time": "2026-10-10T10:25:13.552542+08:00",
+  "root": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "existing_documents": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "bytes": 41959,
+      "sha256": "d01cf005889ee87e3824a16568d74ea6e6c5e2bdb2c6ec0bc0c4ce69cca004b9",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness-priority-risk-register.md",
+      "backup_sha256": "d01cf005889ee87e3824a16568d74ea6e6c5e2bdb2c6ec0bc0c4ce69cca004b9",
+      "git_status": "M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "bytes": 227922,
+      "sha256": "8d056a1ac6dcd66263e2f7305d4ccda9c7be8ae800f0fd11cf3a53f433a888f8",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "backup_sha256": "8d056a1ac6dcd66263e2f7305d4ccda9c7be8ae800f0fd11cf3a53f433a888f8",
+      "git_status": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DECISIONS.md",
+      "bytes": 7341,
+      "sha256": "293d90aed9e997afebf904c5a0b7511f23ad1d488f97faf6425223adc24c707c",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DECISIONS.md",
+      "backup_sha256": "293d90aed9e997afebf904c5a0b7511f23ad1d488f97faf6425223adc24c707c",
+      "git_status": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "bytes": 8077,
+      "sha256": "2a775fcd524eef8a55d939a4644beeaa6ce68ba2edf4b103797d0ccda9b7997d",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\README.md",
+      "backup_sha256": "2a775fcd524eef8a55d939a4644beeaa6ce68ba2edf4b103797d0ccda9b7997d",
+      "git_status": "M docs/ai/OPTIMIZATION-REVIEW-20261009/README.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "bytes": 17136,
+      "sha256": "109060ab092ed613ab9925c52c639d10b27a9dbb0335abb1764d3ce40a981819",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\DEPENDENCIES.md",
+      "backup_sha256": "109060ab092ed613ab9925c52c639d10b27a9dbb0335abb1764d3ce40a981819",
+      "git_status": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "bytes": 385041,
+      "sha256": "63ada182f4a4572b480c3c3e1f3672f476f8981cf0963ab9d396e62b82f1dd53",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "backup_sha256": "63ada182f4a4572b480c3c3e1f3672f476f8981cf0963ab9d396e62b82f1dd53",
+      "git_status": "M docs/ai/CURRENT-AUTHORITY.md"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\STATE.md",
+      "bytes": 1666396,
+      "sha256": "41e3e2914f1427244e40224c95b476bbad3cf0221422583e7b754fdfddabf6e5",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\STATE.md",
+      "backup_sha256": "41e3e2914f1427244e40224c95b476bbad3cf0221422583e7b754fdfddabf6e5",
+      "git_status": "M docs/ai/STATE.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1605141,
+      "sha256": "d15db0e055d30024fb30e4b0355dbb5ab61eb29ab67dfc0275ac672f68892827",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "backup_sha256": "d15db0e055d30024fb30e4b0355dbb5ab61eb29ab67dfc0275ac672f68892827",
+      "git_status": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\NEXT-SESSION-PROMPT.md",
+      "bytes": 5668,
+      "sha256": "07b3c717f4ee28637b11358e965b6ae0c08f85541e602996832e42b0ce16f979",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\NEXT-SESSION-PROMPT.md",
+      "backup_sha256": "07b3c717f4ee28637b11358e965b6ae0c08f85541e602996832e42b0ce16f979",
+      "git_status": "M docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-01-content-deployment.md",
+      "bytes": 13149,
+      "sha256": "43b2c448f683ebb52a20afb559c10e83a7abee81cf049e58557ced8aa4c89d45",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-01-content-deployment.md",
+      "backup_sha256": "43b2c448f683ebb52a20afb559c10e83a7abee81cf049e58557ced8aa4c89d45",
+      "git_status": "M Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "bytes": 34411,
+      "sha256": "b9536d189af6b4bb65ede7bcbe85655da41b972cbb8c42e7ab1398bbe6d64200",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-07-fresh-1000-ai-certificate.md",
+      "backup_sha256": "b9536d189af6b4bb65ede7bcbe85655da41b972cbb8c42e7ab1398bbe6d64200",
+      "git_status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "bytes": 8068,
+      "sha256": "404bffe6272baa3f9fa308b710b891bb37e6cc5af0f53f79d327c25ea24b1ea7",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\android-mobile-readiness\\h-06-collision-broadphase-1000.md",
+      "backup_sha256": "404bffe6272baa3f9fa308b710b891bb37e6cc5af0f53f79d327c25ea24b1ea7",
+      "git_status": ""
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Docs\\battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "bytes": 14619,
+      "sha256": "2695ac5e4f875ce5c5baf44158e9d793aeb944bca8f7f782ffac22d183491faf",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\Assets\\NTSD\\Docs\\battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "backup_sha256": "2695ac5e4f875ce5c5baf44158e9d793aeb944bca8f7f782ffac22d183491faf",
+      "git_status": ""
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "bytes": 5382,
+      "sha256": "7d7621407782440cd131a7e2dde0c9908c6574e51e5033c4f4bd9f9451b982c1",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "backup_sha256": "7d7621407782440cd131a7e2dde0c9908c6574e51e5033c4f4bd9f9451b982c1",
+      "git_status": ""
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "absolute_path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "bytes": 142445,
+      "sha256": "b4431a140322414a132235f48346d331c56a2259fb4415d7a64b930acdfe3e10",
+      "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "backup_sha256": "b4431a140322414a132235f48346d331c56a2259fb4415d7a64b930acdfe3e10",
+      "git_status": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+    }
+  ],
+  "new_task": "docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md",
+  "protected_files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "4c8cae02dfcf6b2365f724a7fcd60f90b7be17f67e319eeeb0bce1c656169f1f"
+    },
+    {
+      "path": "Packages/manifest.json",
+      "sha256": "21d93b83f18d354050ea0965165806001563de7ac2e974841279aff63edb2705"
+    },
+    {
+      "path": "Packages/packages-lock.json",
+      "sha256": "2f106073218b01f2b70676df173b6f1f791fab8f15a6957e9c41e509aa3df06e"
+    },
+    {
+      "path": "ProjectSettings/ProjectVersion.txt",
+      "sha256": "b51e896aa269e68a1a2edc32ed0920b7c15973e9775f9c03967074bf5854ca73"
+    },
+    {
+      "path": "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+      "sha256": "25c8e08f4d1be55ee55d0404aaf4e46d099afc6c2ba3d9040e1c5203f654d9ff"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "d861f7290fdadd773396101782be1092993125e551efe923a38c04a3e83c83ab"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+      "sha256": "38569aa92c5bbbb237298963d21f717d8fe808d22d12bfb605297fbccbe4562e"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+      "sha256": "7fb62ea1f3910d4352297423359de9f9a92824668da663b11b13bc88bf4983f6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Kernel/AiDecisionKernel.cs",
+      "sha256": "d31284ec8e120e0c7c943ac783ceb588c0a1038abd2c50f74a30b1094e6abd2d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+      "sha256": "1b2b0c469365de2821c7c87c05a648a2e314365ce4e5199c2a3bf1d9e3c0e589"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/BattleContentSource.cs",
+      "sha256": "d3de7cd93c965e7ddab03d3098f55284eb727d48fd4d39ad50c0a7535d8e04d5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "e90facd3e95f815f9266d124086096032b9796c91d4adc5987857901dcf93f99"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "sha256": "396653874921d97c45052433e376a732d15fec94fddfcc628b658a71f082e6e2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs",
+      "sha256": "17768f6bc8536e34b98a479c98c0aaa2ead867bee9d72b35a4c0c4b5abece9a9"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+      "sha256": "a39ee92580385233cbf5866165c3701b3502fb7c1cdf5e40817f963883a54a37"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+      "sha256": "dc076c041d4d6ddd9a58ab9fd5d447cf1794f33d1dc0f97fcd0f18bfd3b17ebc"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+      "sha256": "74e32afd518b6115316f0fd4b41bbc392825e13cfa0b935021abc54497819454"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md",
+      "sha256": "d4346b781d7f80d60b56eab500ad4e999fcdb23ab0b9b304a2ba41f97b93cb2d"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "sha256": "d1eb518a06c7cf0f9ff2e3abfe0f30deae38df67092838219f6c0ec49afe63a5"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+      "sha256": "865866dc5fa7a61bddead2950e6f79e09f422777f3b1af9c0b41470d511bbaed"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json",
+      "sha256": "896d848e6d6bc0651b4ebd41bff83658038e0b9946fdcaf848783f4b18dd972e"
+    }
+  ],
+  "audit_note": "21 named protections; current dirty docs are actually backed up, no HEAD substitution or whole-repo byte claim."
+}

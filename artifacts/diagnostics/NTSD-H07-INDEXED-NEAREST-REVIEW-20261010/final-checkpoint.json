@@ -1,0 +1,24 @@
+{
+  "cursor": "5e0503f0-91be-4ecc-bf18-40749a3a2cc9:77",
+  "turn": "01a1246d-a4b3-78a3-8fdd-edaffb253f18",
+  "state": "inProgress",
+  "acknowledgment": "我会按这份新指令建立独立的 cursor-reuse 候选任务，先核对评审证据、两处源码和原 Editor 安全状态。生产仍走原算法；本轮只做实际 C# 等价验证、局部 0B 检查和规定的一次局部 ABBA 成本对照。",
+  "monitorUpdate": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Updated automation in the app."
+      },
+      {
+        "type": "text",
+        "text": "{\"automationId\":\"automation\",\"mode\":\"update\",\"status\":\"ACTIVE\"}"
+      }
+    ],
+    "isError": false
+  },
+  "finalScopedDiffCheck": {
+    "exitCode": 0,
+    "warnings": "LF/CRLF normalization notices only"
+  },
+  "scope": "Candidate acknowledged; no actual CSharp/performance result yet; failed command marker alone not classified as task failure"
+}

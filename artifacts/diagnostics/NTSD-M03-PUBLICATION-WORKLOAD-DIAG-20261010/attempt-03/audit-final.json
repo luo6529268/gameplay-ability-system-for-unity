@@ -1,0 +1,24 @@
+{
+  "protectedCount": 157,
+  "protectedDrift": [],
+  "backupCount": 12,
+  "invalidBackups": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "measuredSourceAndAssemblyDrift": [],
+  "timingFlagsActual": {
+    "frameTimingEnabled": false,
+    "phaseTimingEnabled": false,
+    "presentationTimingEnabled": false,
+    "detailPhaseTimingEnabled": false
+  },
+  "wholeFinalChecksumMatchesAttempt02": true,
+  "checksumDifferingSections": [],
+  "finalChecksumIsNotPerTickParity": true,
+  "cameraFilterLiveVerified": true,
+  "cacheStrategyHasHitsInObservedSteadyRange": false,
+  "productionChanged": false,
+  "fullDriverGcCertified": false,
+  "scopedDiffCheckExit": 0,
+  "sourceTrailingWhitespaceLines": []
+}

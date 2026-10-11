@@ -1,0 +1,166 @@
+{
+  "scope": "No safe per-match subset proved. Direct/static known edges separated from runtime unknown; subset not rejected merely because a producer is random or late. All read-boundary deviations are separately recorded.",
+  "rows": [
+    {
+      "root": "players",
+      "knownEdge": "CharacterSelectionController.StartBattle creates MatchConfig.players list; AppManager.CurrentMatchConfig.players where use -> characterId -> GetCharacterConfig -> LF2ReferencePool.Get(Character, characterId) -> ModuleBind(frameData,characterId)",
+      "freeze": "AppManager visualRoots captured189-198 and participant setup200 before audio Prepare204; audio seal then allocation seal219",
+      "sources": [
+        "Assets/NTSD/Scripts/UI/CharacterSelectionController.cs:455",
+        "Assets/NTSD/Scripts/App/PlayerSlotConfig.cs:8",
+        "Assets/NTSD/Scripts/App/AppManager.cs:189",
+        "Assets/NTSD/Scripts/App/AppManager.cs:284",
+        "Assets/NTSD/Scripts/App/AppManager.cs:320",
+        "Assets/NTSD/Scripts/App/AppManager.cs:333"
+      ],
+      "level": "direct_non_Q06_source",
+      "gap": "No actual MatchConfig player root values captured by the prior audio-only fixture. Public SetMatchConfig accepts reference; normal preparation values are visible but all later creation roots are not defined by this list.",
+      "blocksSubset": true
+    },
+    {
+      "root": "mode_KO",
+      "knownEdge": "PublishedLoganCatalog.ModeComboInput.KnockoutFeed -> both collector and Driver.ConfigureNativeKnockoutAudio before tick0; captured data/m_ok.wav + data/m_join.wav",
+      "freeze": "Published config snapshot; driver CurrentTickIndex0 gate; cue seal",
+      "sources": [
+        "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:4438",
+        "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs:1450",
+        "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs:259",
+        "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs:605"
+      ],
+      "level": "direct_non_Q06_source_plus_saved_metadata",
+      "gap": "Does not enumerate stage/reserve spawn roots",
+      "blocksSubset": false
+    },
+    {
+      "root": "static_OPoint",
+      "knownEdge": "CollectBattleVisualDependencyIds includes frame.opoint.Value.Oid and opoints[].Oid recursively only if configs contain id",
+      "freeze": "Loaded DAT frame metadata and preparing visual closure",
+      "sources": [
+        "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:580",
+        "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs:70"
+      ],
+      "level": "direct_static_collector",
+      "gap": "Saved audio inventory has no opoint fields/edges; Include silently ignores missing config IDs. Runtime materialization/overrides excluded from reading, so no assertion that any particular out-of-catalog child actually occurs.",
+      "blocksSubset": true
+    },
+    {
+      "root": "static_state_transform",
+      "knownEdge": "Visual closure includes state9995 -> 50; 4000<=state<5000 -> state-4000; 8000<=state<9000 -> state-8000",
+      "freeze": "Preparing static visual dependency traversal",
+      "sources": [
+        "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs:614"
+      ],
+      "level": "direct_static_collector",
+      "gap": "These three rules are proven coverage of visual helper, not complete runtime transform rules. KindInput bound/respond/dynamic writer mappings not represented in audio inventory; no runtime transform body proof.",
+      "blocksSubset": true
+    },
+    {
+      "root": "stage",
+      "knownEdge": "MatchConfig.stageCampaignFilePath/stageSeriesId; BattleStageSpawnData.Id/Act/Hp/Times/X/Y/Ratio/Join; StageSpawnTaskConfigurator spawn.Id -> task.opoint.oid and spawn.Act -> action",
+      "freeze": "Selected campaign value projection would precede stage execution; exact selected campaign/OID values not saved in audio fixture",
+      "sources": [
+        "Assets/NTSD/Scripts/App/MatchConfig.cs:22",
+        "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeState.cs:9",
+        "Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs:85"
+      ],
+      "level": "metadata_and_direct_non_Q06_assignment",
+      "gap": "No actual selected stage file/series/phase spawn OID set in previous audio-only evidence. Default stage deployment remains deferred, not a reason to invent new stage content. Stage Join is not OPoint.JoinReserve.",
+      "blocksSubset": true
+    },
+    {
+      "root": "reserve",
+      "knownEdge": "OPoint has Reserve/Join/JoinReserve/JoinPic; decoder parses reserve/join_reserve. Runtime ReserveOwnerValid/ReserveCommittedTotal/ReserveCommittedHp are accounting state, not an OID list",
+      "freeze": "DAT metadata frozen; runtime reserve selection not proven",
+      "sources": [
+        "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs:77",
+        "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs:86",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:277",
+        "Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeState.cs:669"
+      ],
+      "level": "metadata_only",
+      "gap": "No mapping from these accounting/flags to final reserve/late object IDs in saved inventory; restricted consumer not read. Do not treat armor.reserve as a stage/reserve root.",
+      "blocksSubset": true
+    },
+    {
+      "root": "random_weapon",
+      "knownEdge": "SimulationRandomWeaponDropBuffer candidate envelope [100,200), capacity100. Current catalog IDs in range are 101,120,121,122,123,124,150,151; all are nonzero object type",
+      "freeze": "Conservative current-catalog union can include all8 irrespective of RNG; actual module provider membership not certified",
+      "sources": [
+        "Assets/NTSD/Scripts/Simulation/Passes/RandomWeapon/SimulationRandomWeaponDropBuffer.cs:7",
+        "artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/inventory.json"
+      ],
+      "level": "current_metadata_plus_static_capacity",
+      "gap": "Random choice alone is NOT a blocker if loaded catalog provider is proven fixed to these definitions. Missing condition is World resolver provider/epoch/mutation contract, not an inherently unknowable random outcome. Full non0 candidate already includes these8 current IDs.",
+      "blocksSubset": "conditional_provider_gap"
+    },
+    {
+      "root": "respawn_late_external",
+      "knownEdge": "Existing declaration indices: SimulationPassPipeline.RunRespawn; SimulationWorld.MaterializeObjectForStructuralWriter/late and explicit object-id signatures. Public sound ingress accepts arbitrary nonblank string",
+      "freeze": "No unified per-match immutable allowed-ObjectId/cue boundary proved by allowed metadata",
+      "sources": [
+        "Assets/NTSD/Scripts/Simulation/Core/SimulationPassPipeline.cs:62",
+        "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs:2059"
+      ],
+      "level": "declarations_only",
+      "gap": "No claim that they actually introduce uncatalogued IDs; missing proof is allowed definition set/source epoch for caller-provided object IDs and post-seal cue strings. All lifecycle/writer bodies excluded.",
+      "blocksSubset": true
+    },
+    {
+      "root": "weapon_piece",
+      "knownEdge": "Current metadata stores block.Fields, Groups[].Piece/Fields/Variants[].Piece/Fields; historical reviewed contract documents default -1->999 and special native piece OID0 admission. Current full inventory includes OID0(type0),50(type0),999(type5)",
+      "freeze": "Per-definition NativeMetadata snapshot; actual target alias mapping not present in saved audio inventory",
+      "sources": [
+        "Assets/NTSD/Scripts/Animation/LoganWeaponPieceDefinition.cs:8",
+        "docs/ai/CHANGE-RECORDS/NTSD28-Q06-NATIVE-WEAPON-PIECE-TRANSACTION-001.md:33",
+        "docs/ai/CHANGE-RECORDS/NTSD28-Q06-WEAPON-PIECE-SPAWN-ADMISSION-EDGE-001.md:15"
+      ],
+      "level": "current_metadata_shape_plus_historical_contract",
+      "gap": "No actual Fields values or Piece->targetOID inherited alias graph captured. Historical default and OID0 rules are not current writer-body proof. Do not apply ordinary OPoint positive-ID condition to native pieces. Restricted writer/factory snippets exposed by sidecar are excluded and separately recorded.",
+      "blocksSubset": true
+    }
+  ],
+  "currentRandomEnvelopeCatalogMembers": [
+    {
+      "id": 101,
+      "type": 4
+    },
+    {
+      "id": 120,
+      "type": 1
+    },
+    {
+      "id": 121,
+      "type": 1
+    },
+    {
+      "id": 122,
+      "type": 6
+    },
+    {
+      "id": 123,
+      "type": 6
+    },
+    {
+      "id": 124,
+      "type": 4
+    },
+    {
+      "id": 150,
+      "type": 2
+    },
+    {
+      "id": 151,
+      "type": 2
+    }
+  ],
+  "savedDefinitionKeys": [
+    "id",
+    "type",
+    "includesPublishedModeCues",
+    "cues",
+    "weapon",
+    "frames"
+  ],
+  "safeSubsetProved": false,
+  "estimatedSubsetSaving": null
+}

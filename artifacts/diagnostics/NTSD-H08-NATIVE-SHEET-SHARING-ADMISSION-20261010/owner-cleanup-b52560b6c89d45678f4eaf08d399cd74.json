@@ -1,0 +1,264 @@
+{
+  "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers",
+  "released": true,
+  "resources": [
+    {
+      "InstanceId": -1216842,
+      "Type": "Sprite",
+      "Name": "sprite_0_0",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216846,
+      "Type": "Sprite",
+      "Name": "spark_00",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216848,
+      "Type": "Sprite",
+      "Name": "spark_01",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216850,
+      "Type": "Sprite",
+      "Name": "spark_02",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216852,
+      "Type": "Sprite",
+      "Name": "spark_03",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216854,
+      "Type": "Sprite",
+      "Name": "spark_04",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216856,
+      "Type": "Sprite",
+      "Name": "spark_05",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216858,
+      "Type": "Sprite",
+      "Name": "spark_06",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216860,
+      "Type": "Sprite",
+      "Name": "spark_07",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216862,
+      "Type": "Sprite",
+      "Name": "spark_08",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216864,
+      "Type": "Sprite",
+      "Name": "spark_09",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216866,
+      "Type": "Sprite",
+      "Name": "spark_10",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216868,
+      "Type": "Sprite",
+      "Name": "spark_11",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216870,
+      "Type": "Sprite",
+      "Name": "spark_12",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216872,
+      "Type": "Sprite",
+      "Name": "spark_13",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216874,
+      "Type": "Sprite",
+      "Name": "spark_14",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216876,
+      "Type": "Sprite",
+      "Name": "spark_15",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216878,
+      "Type": "Sprite",
+      "Name": "spark_16",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216880,
+      "Type": "Sprite",
+      "Name": "spark_17",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216882,
+      "Type": "Sprite",
+      "Name": "spark_18",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216884,
+      "Type": "Sprite",
+      "Name": "spark_19",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216890,
+      "Type": "Sprite",
+      "Name": "head",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216894,
+      "Type": "Sprite",
+      "Name": "small",
+      "OwnerPhase": "publishedOwnedSprites",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216840,
+      "Type": "Texture2D",
+      "Name": "body",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216844,
+      "Type": "Texture2D",
+      "Name": "SPARK",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216886,
+      "Type": "Texture2D",
+      "Name": "NTSD Battle Atlas Page 0",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216888,
+      "Type": "Texture2D",
+      "Name": "",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    },
+    {
+      "InstanceId": -1216892,
+      "Type": "Texture2D",
+      "Name": "",
+      "OwnerPhase": "publishedOwnedResources",
+      "Generation": null,
+      "SourceRoot": null,
+      "destroyed": true
+    }
+  ],
+  "baselineNativeObjectCount": 914,
+  "oldNativeResidue": "UNKNOWN_UNTOUCHED",
+  "priorManagerRestored": true,
+  "priorDataRestored": true,
+  "priorUiRestored": true,
+  "configRestored": true
+}

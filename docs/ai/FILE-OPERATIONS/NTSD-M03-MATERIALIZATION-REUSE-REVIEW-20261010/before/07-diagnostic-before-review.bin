@@ -1,0 +1,266 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.IO;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test
+{
+    public sealed class M03MeshUvDimensionReuseDiagnosticsEditorTests
+    {
+        private const int Count = 4000;
+        private const int Warm = 8;
+        private const int Samples = 32;
+        private const string Output = "artifacts/diagnostics/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010/uv-local-cost.json";
+
+        private struct Dimensions
+        {
+            public Texture First;
+            public Texture Second;
+            public int FirstWidth, FirstHeight, SecondWidth, SecondHeight;
+
+            public void Read(Texture texture, out int width, out int height)
+            {
+                if (ReferenceEquals(texture, First))
+                {
+                    width = FirstWidth;
+                    height = FirstHeight;
+                    return;
+                }
+                if (ReferenceEquals(texture, Second))
+                {
+                    width = SecondWidth;
+                    height = SecondHeight;
+                    return;
+                }
+                width = texture.width;
+                height = texture.height;
+                Second = First;
+                SecondWidth = FirstWidth;
+                SecondHeight = FirstHeight;
+                First = texture;
+                FirstWidth = width;
+                FirstHeight = height;
+            }
+        }
+
+        [Serializable]
+        public sealed class Window
+        {
+            public string layout;
+            public bool reuse;
+            public long[] ticks = new long[Samples];
+            public long[] allocatedBytes = new long[Samples];
+            public double meanMs, p95Ms, p99Ms;
+        }
+
+        [Serializable]
+        public sealed class Report
+        {
+            public string status = "IN_PROGRESS";
+            public string scope = "Isolated UV bounds computation; not complete backend, render frame, Driver or device";
+            public int commandsPerRound = Count;
+            public int warmRounds = Warm;
+            public int sampleRounds = Samples;
+            public long frequency;
+            public long calibrationBefore, calibrationAfter;
+            public int semanticComparisons;
+            public bool sharedSignal, alternatingSignal;
+            public string failure;
+            public Window[] windows = new Window[12];
+        }
+
+        [Test, Explicit("Finite M03 isolated diagnosis; run by exact test name only")]
+        public void RunFiniteUvReview()
+        {
+            Assert.That(File.Exists(Output), Is.False, "Do not overwrite or repeat the finite group.");
+            Assert.That(UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode, Is.False);
+            Scene scene = SceneManager.GetActiveScene();
+            Assert.That(scene.isDirty, Is.False);
+            int roots = scene.rootCount;
+            var report = new Report { frequency = System.Diagnostics.Stopwatch.Frequency };
+            Texture2DArray array = null;
+            Texture2D textureA = null;
+            Texture2D textureB = null;
+            Texture2D destroyed = null;
+            try
+            {
+                array = new Texture2DArray(512, 256, 2, TextureFormat.RGBA32, false);
+                textureA = new Texture2D(64, 128, TextureFormat.RGBA32, false);
+                textureB = new Texture2D(128, 32, TextureFormat.RGBA32, false);
+                destroyed = new Texture2D(4, 4);
+                UnityEngine.Object.DestroyImmediate(destroyed);
+                Texture[] semanticTextures = { array, textureA, textureB, null, destroyed };
+                Rect[] semanticUvs =
+                {
+                    new Rect(0, 0, 1, 1), new Rect(0.1f, 0.2f, 0.3f, 0.4f),
+                    new Rect(0, 0, 0.00001f, 0.00002f), new Rect(-1, -1, 2, 2),
+                    new Rect(0, 0, 0, 1), new Rect(0, 0, -1, 1),
+                    new Rect(0, 0, 1, -1), new Rect(0, 0, float.NaN, 1)
+                };
+                Dimensions cache = default;
+                foreach (Texture texture in semanticTextures)
+                {
+                    foreach (Rect uv in semanticUvs)
+                    {
+                        EqualBits(Original(texture, uv), Reuse(texture, uv, ref cache));
+                        report.semanticComparisons++;
+                    }
+                }
+                Rect resizeUv = new Rect(0, 0, 1, 1);
+                cache = default;
+                Reuse(textureA, resizeUv, ref cache);
+                Assert.That(textureA.Reinitialize(96, 48), Is.True);
+                cache = default;
+                EqualBits(Original(textureA, resizeUv), Reuse(textureA, resizeUv, ref cache));
+                report.semanticComparisons++;
+
+                var textures = new Texture[Count];
+                var uvs = new Rect[Count];
+                var expected = new Vector4[Count];
+                var actual = new Vector4[Count];
+                bool[] modes = { false, true, true, false };
+                string[] layouts = { "shared-array", "alternating-two", "three-texture-thrash" };
+                report.calibrationBefore = Calibrate();
+                Assert.That(report.calibrationBefore, Is.GreaterThanOrEqualTo(8192), "Allocation API must respond.");
+                for (int layout = 0; layout < layouts.Length; layout++)
+                {
+                    for (int i = 0; i < Count; i++)
+                    {
+                        textures[i] = layout == 0 ? (Texture)array : layout == 1
+                            ? ((i & 1) == 0 ? (Texture)array : textureA)
+                            : (i % 3 == 0 ? (Texture)array : i % 3 == 1 ? textureA : textureB);
+                        uvs[i] = new Rect((i % 8) * 0.0625f, (i % 5) * 0.125f, 0.0625f, 0.125f);
+                        expected[i] = Original(textures[i], uvs[i]);
+                    }
+                    for (int window = 0; window < modes.Length; window++)
+                    {
+                        var row = new Window { layout = layouts[layout], reuse = modes[window] };
+                        report.windows[layout * 4 + window] = row;
+                        for (int i = 0; i < Warm; i++) RunRound(row.reuse, textures, uvs, actual);
+                        for (int i = 0; i < Samples; i++)
+                        {
+                            long before = GC.GetAllocatedBytesForCurrentThread();
+                            long start = System.Diagnostics.Stopwatch.GetTimestamp();
+                            RunRound(row.reuse, textures, uvs, actual);
+                            long end = System.Diagnostics.Stopwatch.GetTimestamp();
+                            long after = GC.GetAllocatedBytesForCurrentThread();
+                            row.ticks[i] = end - start;
+                            row.allocatedBytes[i] = after - before;
+                            Assert.That(row.allocatedBytes[i], Is.Zero, "Whole measured loop must be allocation-free.");
+                            for (int j = 0; j < Count; j++) EqualBits(expected[j], actual[j]);
+                        }
+                        Summarize(row, report.frequency);
+                    }
+                }
+                report.calibrationAfter = Calibrate();
+                Assert.That(report.calibrationAfter, Is.GreaterThanOrEqualTo(8192));
+                report.sharedSignal = Signal(report.windows, 0);
+                report.alternatingSignal = Signal(report.windows, 4);
+                report.status = report.sharedSignal && report.alternatingSignal
+                    ? "LOCAL_UV_SIGNAL_ONLY" : "NO_DISCERNIBLE_LOCAL_SIGNAL";
+            }
+            catch (Exception exception)
+            {
+                report.status = "FAILED_STOPPED";
+                report.failure = exception.ToString();
+                throw;
+            }
+            finally
+            {
+                if (array != null) UnityEngine.Object.DestroyImmediate(array);
+                if (textureA != null) UnityEngine.Object.DestroyImmediate(textureA);
+                if (textureB != null) UnityEngine.Object.DestroyImmediate(textureB);
+                Directory.CreateDirectory(Path.GetDirectoryName(Output));
+                File.WriteAllText(Output, JsonUtility.ToJson(report, true));
+                Assert.That(SceneManager.GetActiveScene().handle, Is.EqualTo(scene.handle));
+                Assert.That(scene.isDirty, Is.False);
+                Assert.That(scene.rootCount, Is.EqualTo(roots));
+            }
+        }
+
+        private static long Calibrate()
+        {
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            var witness = new byte[8192];
+            long after = GC.GetAllocatedBytesForCurrentThread();
+            GC.KeepAlive(witness);
+            return after - before;
+        }
+
+        private static void RunRound(bool reuse, Texture[] textures, Rect[] uvs, Vector4[] output)
+        {
+            Dimensions cache = default;
+            if (reuse)
+            {
+                for (int i = 0; i < textures.Length; i++) output[i] = Reuse(textures[i], uvs[i], ref cache);
+            }
+            else
+            {
+                for (int i = 0; i < textures.Length; i++) output[i] = Original(textures[i], uvs[i]);
+            }
+        }
+
+        private static Vector4 Original(Texture texture, Rect uv)
+        {
+            Vector4 bounds = default;
+            if (texture != null && uv.width > 0f && uv.height > 0f)
+            {
+                float insetU = Mathf.Min(0.5f / texture.width, uv.width * 0.5f);
+                float insetV = Mathf.Min(0.5f / texture.height, uv.height * 0.5f);
+                bounds = new Vector4(uv.xMin + insetU, uv.yMin + insetV, uv.xMax - insetU, uv.yMax - insetV);
+            }
+            return bounds;
+        }
+
+        private static Vector4 Reuse(Texture texture, Rect uv, ref Dimensions cache)
+        {
+            Vector4 bounds = default;
+            if (texture != null && uv.width > 0f && uv.height > 0f)
+            {
+                cache.Read(texture, out int width, out int height);
+                float insetU = Mathf.Min(0.5f / width, uv.width * 0.5f);
+                float insetV = Mathf.Min(0.5f / height, uv.height * 0.5f);
+                bounds = new Vector4(uv.xMin + insetU, uv.yMin + insetV, uv.xMax - insetU, uv.yMax - insetV);
+            }
+            return bounds;
+        }
+
+        private static void EqualBits(Vector4 expected, Vector4 actual)
+        {
+            Assert.That(BitConverter.SingleToInt32Bits(actual.x), Is.EqualTo(BitConverter.SingleToInt32Bits(expected.x)));
+            Assert.That(BitConverter.SingleToInt32Bits(actual.y), Is.EqualTo(BitConverter.SingleToInt32Bits(expected.y)));
+            Assert.That(BitConverter.SingleToInt32Bits(actual.z), Is.EqualTo(BitConverter.SingleToInt32Bits(expected.z)));
+            Assert.That(BitConverter.SingleToInt32Bits(actual.w), Is.EqualTo(BitConverter.SingleToInt32Bits(expected.w)));
+        }
+
+        private static void Summarize(Window row, long frequency)
+        {
+            long[] sorted = (long[])row.ticks.Clone();
+            Array.Sort(sorted);
+            double sum = 0;
+            foreach (long ticks in sorted) sum += ticks;
+            row.meanMs = sum / Samples * 1000 / frequency;
+            row.p95Ms = Quantile(sorted, 0.95) * 1000 / frequency;
+            row.p99Ms = Quantile(sorted, 0.99) * 1000 / frequency;
+        }
+
+        private static double Quantile(long[] sorted, double fraction)
+        {
+            double index = (sorted.Length - 1) * fraction;
+            int low = (int)index;
+            int high = Math.Min(low + 1, sorted.Length - 1);
+            return sorted[low] + (sorted[high] - sorted[low]) * (index - low);
+        }
+
+        private static bool Signal(Window[] windows, int first)
+        {
+            double offMean = Math.Min(windows[first].meanMs, windows[first + 3].meanMs);
+            return windows[first + 1].meanMs < offMean && windows[first + 2].meanMs < offMean &&
+                Math.Max(windows[first + 1].p95Ms, windows[first + 2].p95Ms) <= Math.Max(windows[first].p95Ms, windows[first + 3].p95Ms) &&
+                Math.Max(windows[first + 1].p99Ms, windows[first + 2].p99Ms) <= Math.Max(windows[first].p99Ms, windows[first + 3].p99Ms);
+        }
+    }
+}
+#endif

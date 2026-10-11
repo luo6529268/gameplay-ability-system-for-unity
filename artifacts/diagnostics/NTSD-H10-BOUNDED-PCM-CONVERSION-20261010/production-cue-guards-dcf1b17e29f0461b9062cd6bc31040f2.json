@@ -1,0 +1,13 @@
+{
+  "nullCue": true,
+  "notLoaded": true,
+  "preparedIdentity": true,
+  "empty": true,
+  "nullBorrowed": true,
+  "stereoBorrowed": true,
+  "order": true,
+  "idempotent": true,
+  "borrowedSurvived": true,
+  "destroyedOwnerCannotRecreate": true,
+  "explicitReleaseBeforeDestroy": true
+}

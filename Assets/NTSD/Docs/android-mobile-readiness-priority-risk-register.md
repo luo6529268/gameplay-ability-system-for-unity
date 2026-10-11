@@ -1,3 +1,86 @@
+> **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+
+> 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+
+> **2026-10-11 H10 正式音频源每局所有权已接入：H10_FORMAL_SESSION_OWNERSHIP_APPLIED。** Task NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 / Change NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 VERIFIED（限定生产接入）。三生产脚本+一Editor测试；实际生命周期7/7、失败清理1/1、唯一资源组1/1、唯一实际隔离Play1/1通过。固定5音频distinct native对象9→5、bytes7,626,693→6,778,456，输出PCM位不变、owned关闭归零；非RSS/整局峰值/CPU收益。旧兼容组13/14，既有mono引用断言FAIL保留，未冒称全通过。Menu恢复clean8。报告 artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/REPORT.md。H10父项producer音频闭包/整局预算仍OPEN；下一仅讨论审阅，不自动后继/Goal/34项；H08 ON/M03 OFF/H07及producer暂缓/95OFF/H06不续保持。下方为此前时点。
+
+> 2026-10-10 NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 IN_PROGRESS / NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 PLANNED. Exact four-script formal audio session ownership and existing stage1/stage5 release; cold serialization and stale local recycling. H10 full producer closure/budget remains OPEN, no other task/Goal resumed. See Task and Operation.
+
+# 当前战斗优化优先级（2026-10-10 用户阶段更正）
+
+2026-10-10 用户更正：Android真机/GPU认证、IL2CPP/ARM64属于后期；AB部署、Android构建和正式发布随平台交付后置。当前按战斗CPU、CPU侧渲染工作和驻留内存问题排序。原34项ID及历史12高/14中/8低保留，原风险重要性不再冒充当前执行顺序。
+当前P1：M-03 → H-08 → H-10；P2：M-12 → M-05 → M-01 → M-02 → M-06。此顺序是评审/投入顺序，不是收益排名，也不代表每项已确认必须改代码。
+H07输入约12ms尚未解决、当前无新有据方案而暂缓；H07-LATE已评审暂无必要优化。H06既有成果保留，不续Role精确配对；producer暂缓、95和旧候选不自动开启。只处理原方案，不恢复旧Goal或34项自动队列。
+本轮已先评审M03历史证据和当前生产入口。相同显示采样复用已存在；剩余先看命令物化与顶点准备是否有可消除重复，不能因GPU证书未完成就追加设备任务。脚本/资源/设置未改，未跑Unity或新测试/测量，未发送执行指令；监测不恢复。
+
+## 完整34项当前排程
+
+| 当前阶段 | 次序 | ID及单项方案 | 原风险等级 | 当前处理范围 |
+|---|---:|---|---|---|
+| P1／当前优先评审 | 1 | [M-03 Mesh物化与上传](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 高 | 第1项：复用已完成metadata/相机消重/共享绑定；评审当前命令物化与顶点准备剩余工作，不把GPU认证缺失当当前优化内容。 |
+| P1／当前优先评审 | 2 | [H-08 视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 高 | 第2项：先核当前纹理、图集、解码暂存的实际驻留与生命周期；预印/ATLAS资源实施另有准确范围，不等待AB整体迁移。 |
+| P1／当前优先评审 | 3 | [H-10 音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 高 | 有界PCM与正式源每局所有权已接入；完整目录每轮218.313758MiB/两轮恢复通过，下一同H10数字预算与producer覆盖合同审阅，父项OPEN。 |
+| P2／当前后续评审 | 4 | [M-12 解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 中 | 第4项：核解码到上传间的字节占用与释放，存在实际高峰后才定背压。 |
+| P2／当前后续评审 | 5 | [M-05 GameObject shell成本](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 中 | 第5项：核active/visible/inactive/logic-only真实shell与组件成本。 |
+| P2／当前后续评审 | 6 | [M-01 worker吞吐与背压](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | 中 | 第6项：核worker实际eligible/active/fallback/等待；不把默认开关当实际并行。 |
+| P2／当前后续评审 | 7 | [M-02 中央segment与提交](android-mobile-readiness/m-02-central-render-draw-segmentation.md) | 中 | 第7项：复用已有合批，核多资源segment剩余成本；不重复共享绑定优化。 |
+| P2／当前后续评审 | 8 | [M-06 池预热与容量计划](android-mobile-readiness/m-06-pool-capacity-prewarm.md) | 中 | 第8项：按真实slot/command/shell峰值核预热和容量，避免无据扩大池。 |
+| 父项目标保留／子项暂不续办 | — | [H-06 碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | 高 | Role限定默认和FindEffect既有成果保留；父项开放，Role精确配对诊断不续办。 |
+| 父项目标保留／子项暂不续办 | — | [H-07 千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 高 | 33ms等父目标开放；输入约12ms未解决且当前无新有据方案；LATE已评审暂无必要改动。不重复旧候选。 |
+| 随选定改动验证／不单独插队 | — | [H-09 优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 高 | 随具体修改复用受影响证据，不启动独立全量任务。 |
+| 随选定改动验证／不单独插队 | — | [H-11 表现容量与0GC](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 高 | 当前选定改动继续守容量、适用CPU 0GC及关闭；GPU/native/device完整认证后置。 |
+| 随选定改动验证／不单独插队 | — | [M-09 证据指纹](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 中 | 随具体修改复用受影响证据，不启动独立全量任务。 |
+| 随选定改动验证／不单独插队 | — | [M-15 Kernel构建可复现](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 中 | 当前修改所需Kernel身份/可复现证据随项维护；正式平台构建后置。 |
+| 随选定改动验证／不单独插队 | — | [M-04 中央失败诊断](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 中 | 随具体修改复用受影响证据，不启动独立全量任务。 |
+| 随选定改动验证／不单独插队 | — | [L-07 AI profile说明一致性](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 低 | 随具体修改复用受影响证据，不启动独立全量任务。 |
+| 已评审暂不实施 | — | [M-13 声音事件聚合](android-mobile-readiness/m-13-sound-event-aggregation.md) | 中 | 原有界评审未建立实际高价值热点，保留结论。 |
+| 已评审暂不实施 | — | [M-14 重复完整性校验I/O](android-mobile-readiness/m-14-content-verification-io.md) | 中 | 保留已完成评审和可变Editor守卫；不原样重跑。 |
+| 用户暂缓 | — | [M-11 Mono/Core/Presentation分层](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | 中 | USER_HOLD；架构专项不因重排解冻。 |
+| 后期平台适配与发布 | — | [H-01 内容部署](android-mobile-readiness/h-01-content-deployment.md) | 高 | 本地AB仅内容载体草案；留到部署阶段，不作为当前CPU/驻留内存评审前置。 |
+| 后期平台适配与发布 | — | [H-02 Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 高 | Android构建、安装、冷启动在平台阶段处理。 |
+| 后期平台适配与发布 | — | [H-03 触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 高 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [H-04 IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 高 | IL2CPP、ARM64、AOT与裁剪在平台适配阶段处理。 |
+| 后期平台适配与发布 | — | [H-05 Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 高 | Android真机及GPU认证在后期平台验收处理；当前CPU渲染优化可独立评审。 |
+| 后期平台适配与发布 | — | [M-07 图形API策略](android-mobile-readiness/m-07-android-graphics-api-policy.md) | 中 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [M-08 持续热稳态](android-mobile-readiness/m-08-sustained-thermal-performance.md) | 中 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [M-10 移动取景与Safe Area](android-mobile-readiness/m-10-mobile-viewport-safe-area.md) | 中 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-01 应用包名](android-mobile-readiness/l-01-application-identifier.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-02 签名与升级链](android-mobile-readiness/l-02-signing-keystore.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-03 Target API](android-mobile-readiness/l-03-target-api.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-04 屏幕方向](android-mobile-readiness/l-04-orientation-policy.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-05 Graphics Jobs与FrameTiming](android-mobile-readiness/l-05-graphics-jobs-frame-timing.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-06 HDR成本](android-mobile-readiness/l-06-urp-hdr.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+| 后期平台适配与发布 | — | [L-08 发布包装](android-mobile-readiness/l-08-release-packaging.md) | 低 | 待后期相应平台、设备或产品交付阶段处理，不抢当前战斗性能排程。 |
+
+P1三项、P2五项、父目标保留两项、伴随保障六项、已评审暂不实施两项、USER_HOLD一项、后期交付十五项：合计34，不增删父项。M-03编号沿用，2026-10-06已提升为原高等级，不能因M前缀再次降级。
+
+当前选择依据：M03已有历史千人CPU物化耗时线索且可先独立窄读；H08/H10是当前资源占用问题但实施预算/产物范围需形成方案。后续证据若不支持收益，应具名结束该候选；不为维持排序制造优化。
+
+[唯一进度](battle-optimization-progress-tracker.md) · [本轮评审与审计](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010/REPORT.md)。
+
+## 以下为被本次阶段排程取代的历史导航与原登记
+
+下方旧“当前/首项/中优先级”等属于当时快照；最新阶段与顺序只以上表为准，原方案、旧结果与失败全部保留。
+
+> **2026-10-10 最新排序：按优先级与当前状态，首个讨论项为 H07-INPUT。** 用户要求“重新按照优先级来整理文档，然后把第一个优化点告诉我，我们来讨论具体实现方案”。编号是稳定ID，不是执行次序；H-01本地AB部署草案后移到Android阶段。仅整理/讨论，不实施或发送任务；额外发现方向一律不跟进。下方旧“当前从H-01开始”已被本节取代。[当前进度](battle-optimization-progress-tracker.md) · [首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。
+
+## 当前优先级与讨论顺序
+
+| 顺序/类别 | 现有项 | 当前安排 |
+|---|---|---|
+| 1／高，当前性能主线 | H-07 → **H07-INPUT角色输入与AI输入计算** | 首个具体方案讨论项；已有历史热点和代码落点，具体等价改法待确认，未到可实施状态 |
+| 高，已有限定成果 | H-06既有Role准入及FindEffect修复 | 保留已完成成果；H06父项仍开放，不机械重做默认推广，不续H06-ROLE-EXACT诊断 |
+| 中，现有CPU/渲染/容量候选 | M-01/M-05/M-02/M-03/M-06/M-12；H07-LATE | 只保留既有方案；收益、依赖及未完成范围各守证据，不因排在表中就自动启动 |
+| 中，Android部署与资源阶段 | H-01/H-08/H-10/H-04/H-02/H-03 | 后移；H-01资源合同是相关产物前置，构建/ABI/视觉/音频/触屏按实际依赖分阶段，不把整个父项相互等待 |
+| 随改动，伴随验证 | H-09/H-11/M-09/M-15 | 服务选定实施项，不单独插入新一轮全量验证 |
+| 后续或按需，设备/产品 | H-05/M-04/M-07/M-08/M-10/L-04 | 对应平台和产品阶段具备后再处理 |
+| 低，评估已结束或发布后置 | M-13/M-14/L-01/L-02/L-03/L-05/L-06/L-07/L-08 | 结束的具名研究不原样重试；发布值/条件开关不抢当前性能主线 |
+| 暂缓/不续办 | M-11；producer复用；H06-ROLE-EXACT及95在途候选 | 原状态与失败证据保持；不因重排自动恢复 |
+
+下面34父项按上述分组排列；同组位置仅便于阅读，不承诺其中每项已有收益或均可执行。H-07是最终性能目标/验收父项，当前可讨论的具体优化入口是其已有H07-INPUT子方案；不新增第35父项或新候选。H06-SPATIAL/H07-AI-MODE仍各有既有进入条件及行为决策，不自动插队。
+
+> **2026-10-10 用户执行边界：只按既有优化方案推进，额外发现的方向一律不跟进。** 当前从原编号第一项[H-01内容部署](android-mobile-readiness/h-01-content-deployment.md)开始，先确认策略；文档中的候选/诊断线索不等于已证实收益或实施授权。H06-ROLE-EXACT不再作为下一项，既有结果保留。依赖只说明，不自动解冻其它专项。[完整决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [唯一进度](battle-optimization-progress-tracker.md)。
+
 > **已实施问题的详细说明：** [实施记录索引与格式](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/README.md) · [H-06子问题：FindEffect修复前后对照](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。用于解释具体代码改法，不新增父项或另一套进度。
 
 <!-- OPTIMIZATION-REVIEW-20261009 -->
@@ -11,51 +94,51 @@
 
 | ID | 优化点 / 独立方案 | 类型 | 建议优先级 | 当前处理方向 |
 |---|---|---|---|---|
-| H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |
-| H-02 | [Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 平台 | 中 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
-| H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
-| H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
-| H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | 当前性能主线：先讨论H07-INPUT；producer暂缓/OFF，历史GC失败保留，不恢复旧Goal |
 | H-06 | [碰撞收集与Role准入](android-mobile-readiness/h-06-collision-broadphase-1000.md) | CPU | 高 | Role限定准入完成：当前收益/完整Driver稳态0GC/默认接线通过；空配置Role、显式Brute与非法回退保留，H06/H07最终门不变 |
-| H-07 | [千人整tick性能](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 验收 | 高 | producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，下一方案见H06-ROLE-EXACT |
-| H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
-| H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
-| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
-| H-11 | [表现容量与0GC](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 保障 | 随改动 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
 | M-01 | [worker吞吐与背压](android-mobile-readiness/m-01-dedicated-worker-throughput.md) | CPU | 中 | 先核eligible/active/fallback/等待；不将worker默认true当实际并行 |
+| M-05 | [GameObject shell成本](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 内存/CPU | 中 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
 | M-02 | [中央segment与提交](android-mobile-readiness/m-02-central-render-draw-segmentation.md) | 渲染 | 中 | 保留80同Sakura SetPass1995→5、CPU DrawMesh约2；多资源场景有证再优化 |
 | M-03 | [Mesh物化与上传](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | 渲染 | 中 | 保留13 metadata和15每camera消重；脏区优化先区分publication/alpha/完全重复显示 |
-| M-04 | [中央失败诊断](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 保障 | 后续 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
-| M-05 | [GameObject shell成本](android-mobile-readiness/m-05-gameobject-shell-cost.md) | 内存/CPU | 中 | 分别数logic-only/active/visible/inactive shell；不假设1000AI=1000Mono |
 | M-06 | [池预热与容量计划](android-mobile-readiness/m-06-pool-capacity-prewarm.md) | 内存 | 中 | 按slot/command/shell分别清点峰值，不能用GameConfig旧10/200判断现容量 |
+| M-12 | [解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 内存 | 中 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
+| H-01 | [内容部署](android-mobile-readiness/h-01-content-deployment.md) | 平台 | 中 | 后续Android阶段：保留本地AB策略草案；先共享内容合同再按依赖接入，未授权实施 |
+| H-08 | [视觉预印与驻留内存](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 内存 | 中 | 先保守生产者闭包和生命周期，再预印/按局装载；已有共享绑定不是完整ATLAS实现 |
+| H-10 | [音频PCM与加载内存](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 内存 | 中 | 有界PCM与formal每局释放已接入，完整音频对象账本已实测；producer闭包/数字预算待审，非整项关闭 |
+| H-04 | [IL2CPP与ARM64](android-mobile-readiness/h-04-il2cpp-arm64.md) | 平台 | 中 | 盘点AOT/native/stripping并冻结Development配置；不改第三方或包源 |
+| H-02 | [Android构建与冷启动](android-mobile-readiness/h-02-android-build-scene-closure.md) | 平台 | 中 | 沿用Menu/Battle顺序；Build Profile指记录化构建配置/脚本，不默认要求Unity6专有UI |
+| H-03 | [触屏固定tick输入](android-mobile-readiness/h-03-touch-input-fixed-tick.md) | 平台 | 中 | 复用现有Input Actions和FrameInputSet，处理多指/失焦释放；Prefab/Scene/Input Actions另批 |
+| H-09 | [优化正确性合同](android-mobile-readiness/h-09-ntsd28-correctness-alignment.md) | 保障 | 随改动 | 逐候选声明输入/RNG/候选顺序/事件/状态比较域；不重启旧全量对齐 |
+| H-11 | [表现容量与0GC](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | 保障 | 随改动 | 复用86两轮1800camera和容量证据；只处理新影响或父项未覆盖域 |
+| M-09 | [证据指纹](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 保障 | 随改动 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
+| M-15 | [Kernel构建可复现](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 保障 | 随改动 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
+| H-05 | [Android设备GPU认证](android-mobile-readiness/h-05-device-gpu-certification.md) | 验收 | 后续 | 先功能与故障门，再分API/设备性能；目标设备和预算需用户确认 |
+| M-04 | [中央失败诊断](android-mobile-readiness/m-04-centralonly-fail-closed-diagnostics.md) | 保障 | 后续 | 复用reason/首错字段，缺哪个补哪个；故障注入用受控夹具不删除生产资产 |
 | M-07 | [图形API策略](android-mobile-readiness/m-07-android-graphics-api-policy.md) | 平台 | 后续 | 先候选Vulkan/GLES矩阵后定策略；Automatic并非已证错误 |
 | M-08 | [持续热稳态](android-mobile-readiness/m-08-sustained-thermal-performance.md) | 验收 | 后续 | 固定温度/功耗等环境，按原10—20分钟门评价 |
-| M-09 | [证据指纹](android-mobile-readiness/m-09-performance-evidence-fingerprint.md) | 保障 | 随改动 | 沿用现有请求和报告；平台不适用字段显式N/A，不造第二套harness |
 | M-10 | [移动取景与Safe Area](android-mobile-readiness/m-10-mobile-viewport-safe-area.md) | 平台 | 后续 | 先viewport/Safe Area合同后触控适配；保留用户底部黑区和平台取景 |
-| M-11 | [Mono/Core/Presentation分层](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | 架构 | 暂缓 | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
-| M-12 | [解码上传字节背压](android-mobile-readiness/m-12-decode-upload-byte-backpressure.md) | 内存 | 中 | 区分待上传和仍被atlas持有的像素；保留UniTask，取消归还reservation |
+| L-04 | [屏幕方向](android-mobile-readiness/l-04-orientation-policy.md) | 产品 | 按需前置 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
 | M-13 | [声音事件聚合](android-mobile-readiness/m-13-sound-event-aggregation.md) | CPU | 低 | 现有评估未建立真实热点，冻结原算法；不因二次复杂度描述直接改 |
 | M-14 | [重复完整性校验I/O](android-mobile-readiness/m-14-content-verification-io.md) | 加载 | 低 | 保留可变Editor stale守卫；前置成立后才评估同epoch复用 |
-| M-15 | [Kernel构建可复现](android-mobile-readiness/m-15-kernel-build-reproducibility.md) | 保障 | 随改动 | 记录相邻本地package精确文件身份，复用现有工具；不写Server/更换包源 |
 | L-01 | [应用包名](android-mobile-readiness/l-01-application-identifier.md) | 发布 | 低 | 冻结dev/release命名与Manifest一致性 |
 | L-02 | [签名与升级链](android-mobile-readiness/l-02-signing-keystore.md) | 发布 | 低 | 用户安全环境配置；文档只公开证书指纹，不读取私钥/口令 |
 | L-03 | [Target API](android-mobile-readiness/l-03-target-api.md) | 发布 | 低 | 实施时查询官方要求并冻结min/target；本轮不写未经核实的政策值 |
-| L-04 | [屏幕方向](android-mobile-readiness/l-04-orientation-policy.md) | 产品 | 按需前置 | 比较横屏左右与允许旋转的输入/布局成本，产品决定后再改设置 |
 | L-05 | [Graphics Jobs与FrameTiming](android-mobile-readiness/l-05-graphics-jobs-frame-timing.md) | 设备候选 | 低 | 采集开销与Jobs性能分开；不能盲开开关 |
 | L-06 | [HDR成本](android-mobile-readiness/l-06-urp-hdr.md) | 设备候选 | 低 | 保持其他配置做HDR对照；先有GPU成本再定 |
 | L-07 | [AI profile说明一致性](android-mobile-readiness/l-07-ai-profile-description-drift.md) | 维护 | 低 | 只同步tooltip/说明，不改resolver或asset；既有测试优先复用 |
 | L-08 | [发布包装](android-mobile-readiness/l-08-release-packaging.md) | 发布 | 低 | 版本/图标/AAB/包体预算统一收口；不自动上传商店 |
+| M-11 | [Mono/Core/Presentation分层](android-mobile-readiness/m-11-mono-core-presentation-layering.md) | 架构 | 暂缓 | 沿用原B0-B9方案；目录整理不是分层完成；本轮不改正文架构 |
 
-## 新热点与条件候选：6个父项子方案
+## 既有子方案：首项先讨论，其余不自动推进
 
 | 子ID | 父项 | 优先级 | 独立方案 |
 |---|---|---|---|
-| H06-ROLE-EXACT | H-06 | 高／下一方案 | [现有Role精确配对成本](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，2026-10-10静态分析/方案，具体实施未授权 |
-| H07-INPUT | H-07 | 高 | [CharacterInput等价优化](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) |
+| H07-INPUT | H-07 | 高／第1讨论项，具体改法待确认 | [CharacterInput等价优化](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) |
 | H07-LATE | H-07 | 中 | [后续实体更新](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-LATE.md) |
-| H07-GC95 | H-07 | 限定问题 | [第95批分配调用点](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) |
 | H06-SPATIAL | H-06 | 条件候选 | [保守空间候选裁剪](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-SPATIAL.md) |
 | H07-AI-MODE | H-07 | 待行为决策 | [独立千人AI策略](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-AI-MODE.md) |
+| H07-GC95 | H-07 | 限定问题 | [第95批分配调用点](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-GC95.md) |
+| H06-ROLE-EXACT | H-06 | 本轮不再续办 | [现有Role精确配对成本](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，2026-10-10静态分析/方案，具体实施未授权 |
 
 PERF、ATLAS、MONO及EXT-1为既有专项入口，不增加父项计数、也不自动解冻；见[原专项索引](battle-optimization-proposals-index.md)。
 
@@ -182,7 +265,7 @@ M-12～M-15 六项；M-03 从中调高但不改旧 ID。高优先级表示安全
 | ID | 一句话说明 | 当前进度 | 独立方案与验收 | 最新留痕 | 更新 |
 |---|---|---|---|---|---|
 | `H-08` | 全量视觉预热与源纹理回退仍可能造成高驻留及启动峰值。 | `OPEN / SOURCE_FALLBACK_EXISTS / PREBAKE_PENDING` | [H-08 方案](android-mobile-readiness/h-08-prebaked-visual-content-memory.md) | 全量 sprites/textures/atlas sources；Auto 超 atlas 预算保留 SourceTexture2D | 2026-10-06 |
-| `H-10` | 全量音频预热与双声道 PCM 副本增加整局内存和启动成本。 | `OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED` | [H-10 方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 已有报告：965 副本约 209.99 MiB 静态估算，非 RSS/峰值实测 | 2026-10-06 |
+| `H-10` | 完整目录音频对象账本已测量；预算/producer闭包仍开放。 | `OPEN / FULL_CATALOG_AUDIO_ENVELOPE_MEASURED / BUDGET_UNDECIDED` | [H-10 方案](android-mobile-readiness/h-10-battle-audio-pcm-memory.md) | 两轮各978formal+72generic/去重228918567B；formal逐局释放，generic复用后精确恢复；非RSS或绝对/切局峰值 | 2026-10-11 |
 | `H-11` | 多类预热/硬限/resolver封口与native Mesh再预热已聚焦通过，完整 0GC 尚未闭合。 | `OPEN / RUNTIME_PENDING / CACHE_PREWARM_AND_CAPACITY_GUARD_FOCUSED_PASS` | [H-11 方案](android-mobile-readiness/h-11-presentation-capacity-zero-gc.md) | [批次进度](battle-optimization-progress-tracker.md)；子批05新12/12、旧120/120；父项未关闭 | 2026-10-06 |
 | `M-03` | metadata/warm消重限定通过；22已补无authoring时GameConfig Foot生产入口，显式覆盖/禁用保持。 | `OPEN / RUNTIME_PENDING / FOOT_CONFIG_SCOPED_PASS` | [M-03 方案](android-mobile-readiness/m-03-dynamic-mesh-upload.md) | [批次进度](battle-optimization-progress-tracker.md)；22 32/32、1800camera每帧Foot2/Health2、三档catalog重放局部0B。20 FAIL/21诊断不改；有限选定链/A-B/关闭重进继续，全域0GC/1000AI/GPU/FPS/设备待验 | 2026-10-07 |
 | `H-07` | 缺少能覆盖当前代码、内容、插值及音频链的 1000 AI 性能证书。 | `OPEN / CURRENT_CERTIFICATE_MISSING` | [H-07 方案](android-mobile-readiness/h-07-fresh-1000-ai-certificate.md) | 历史 Windows/Editor 压测不构成当前 Android 证书 | 2026-10-06 |

@@ -1,0 +1,17 @@
+{
+  "args": [
+    "rg",
+    "-n",
+    "\\b(sound1|sound2)\\b|\\.sound\\b",
+    "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs",
+    "Assets/NTSD/Scripts/Animation/LF2CharacterData.cs",
+    "Assets/NTSD/Scripts/Animation/LF2FrameData.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/NTSDGlobal.cs",
+    "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs"
+  ],
+  "exitCode": 0,
+  "scope": "exact allowed files only, no conclusion about global lack of consumers"
+}

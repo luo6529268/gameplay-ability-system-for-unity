@@ -1,0 +1,39 @@
+{
+  "backups": 15,
+  "backup_changes": [],
+  "protected_files": 21,
+  "protected_changes": [],
+  "planned_content_mismatch": [],
+  "table_checks": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "count": 34,
+      "unique": 34,
+      "expected_order": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "count": 6,
+      "unique": 6,
+      "expected_order": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "count": 34,
+      "unique": 34,
+      "expected_order": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "count": 6,
+      "unique": 6,
+      "expected_order": true
+    }
+  ],
+  "links_checked": 122,
+  "broken_links": [],
+  "head_unchanged": true,
+  "staged_unchanged": true,
+  "outside_working_diff_unchanged": true,
+  "diff_check_exit": 0
+}

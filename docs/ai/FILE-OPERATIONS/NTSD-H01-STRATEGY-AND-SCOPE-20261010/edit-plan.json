@@ -1,0 +1,121 @@
+{
+  "operation": "NTSD-H01-STRATEGY-AND-SCOPE-20261010",
+  "edits": [
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "prepend": "> **2026-10-10 用户确认：OPTIMIZATION_PLAN_ONLY；当前只讨论 H-01 策略。** 本节是最新执行边界，下方旧排程和有限指令约定只保留原时点。\n\n## 2026-10-10 只按既有优化方案推进（USER_CONFIRMED）\n\n用户原话：“所有优化处理，都按照优化方案文档来处理，所有额外发现的可优化方向，一律不管”；接着要求：“接下来，我们来处理第一项，然后我们先确认具体的优化策略”。\n\n- 总清单与各项独立方案是优化范围入口；额外发现的可优化方向不新增方案、不诊断、不修复、不派任务，不以排查中发现为追加优化授权。\n- 当前第一项按总清单原编号确定为 **H-01 Android生产内容部署**。本轮只读核对和文档策略草案；资源载体、准确实施写域与分阶段策略尚未确认，未授权代码、资源、设置修改或Unity/测试/构建。\n- 原方案已经列出的必要依赖可以说明，但不据此自动启动其它项。H-01与H-08/H-10共享内容合同，H-08/ATLAS等暂缓边界仍保持；不能为了跳过依赖而降低H-01最终完成条件。\n- H06-ROLE-EXACT及其诊断/前置修复不再作为当前下一项续办，原报告与失败事实保留，不再自动补测。Role已完成限定默认推广、FindEffect既有修复、producer暂缓/OFF与95 OFF保持。\n- 过去“整理后直接发送”的约定只适用于已讨论且明确授权的具名执行范围。本轮明确要求先确认H-01策略，因此不发送实施指令、不恢复监测或旧Goal/34项自动队列。\n\n策略草案：[H-01独立方案](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。当前状态与下一动作：[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。本次文档Task：[NTSD-H01-STRATEGY-AND-SCOPE-20261010](../TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。\n\n---\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "prepend": "> **2026-10-10 最新执行边界：[OPTIMIZATION_PLAN_ONLY](DECISIONS.md)。** 用户要求所有优化按既有方案处理，额外发现的方向一律不跟进。当前第一项为[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)，仅策略讨论/待确认；不继续H06-ROLE-EXACT诊断，不发送执行指令或恢复监测。下方旧“下一项”均为历史，当前状态以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准。\n\n",
+      "replace": [
+        [
+          "4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。新热点作为父项子方案，不伪装成新增父项。",
+          "4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。2026-10-10用户新决定取代旧“新热点作为父项子方案”约定：额外发现的优化方向一律不新增、不调查、不实施；既有依赖仅说明，不自动启动。"
+        ]
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "prepend": "> **2026-10-10 当前工作：H-01 Android生产内容部署 / STRATEGY_REVIEW_PENDING。** 已记录用户要求：所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待用户确认，未实施、未测试/构建、未发送指令。H06-ROLE-EXACT不再续办；旧诊断结果保留，Role默认、FindEffect修复、producer暂缓/OFF与95 OFF保持。下方按原日期保留历史，任何旧“下一项”不构成当前排程。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [本轮文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。\n\n",
+      "replace": [
+        [
+          "# 优化进度：当前工作入口（2026-10-10）",
+          "# 优化进度：状态索引（2026-10-10；文首决定优先）"
+        ],
+        [
+          "当前决定：**producer快照复用 USER_DEFERRED / 生产OFF；下一项选择现有Role精确配对成本，先到方案阶段**。",
+          "历史决定（已由文首H-01排程取代）：**producer快照复用 USER_DEFERRED / 生产OFF；当时下一项选择现有Role精确配对成本**。"
+        ],
+        [
+          "- 下一项：[H06-ROLE-EXACT独立方案]",
+          "- 原下一项（不再续办）：[H06-ROLE-EXACT独立方案]"
+        ],
+        [
+          "| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 待方案决策 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |",
+          "| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 当前项／STRATEGY_REVIEW_PENDING；未实施 | 已静态核对路径读取；确认随包本地资源包、Manifest/Provider及H-08/H-10依赖边界后，才形成实施指令 |"
+        ],
+        [
+          "基线GC130独立挂账；先准备H06-ROLE-EXACT方案，不恢复自动目标",
+          "基线GC130独立挂账；本轮不继续诊断，当前转H-01策略，不恢复自动目标"
+        ]
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "prepend": "> **2026-10-10 用户执行边界：只按既有优化方案推进，额外发现的方向一律不跟进。** 当前从原编号第一项[H-01内容部署](android-mobile-readiness/h-01-content-deployment.md)开始，先确认策略；文档中的候选/诊断线索不等于已证实收益或实施授权。H06-ROLE-EXACT不再作为下一项，既有结果保留。依赖只说明，不自动解冻其它专项。[完整决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [唯一进度](battle-optimization-progress-tracker.md)。\n\n",
+      "replace": [
+        [
+          "盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口",
+          "当前策略待确认：Manifest/Provider＋随包本地资源包；先对照再切换；H-08/H-10既有依赖单独确认"
+        ],
+        [
+          "producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，下一方案见H06-ROLE-EXACT",
+          "producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，本轮转H-01策略"
+        ],
+        [
+          "## 新热点与条件候选：6个父项子方案",
+          "## 已存子方案：保留历史，不构成额外方向推进授权"
+        ],
+        [
+          "| H06-ROLE-EXACT | H-06 | 高／下一方案 |",
+          "| H06-ROLE-EXACT | H-06 | 本轮不再续办 |"
+        ]
+      ]
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "prepend": "> **2026-10-10 当前仅H-01策略确认。** 用户限定只按既有方案处理，额外方向一律不跟进。H-01先确认Manifest/key/Provider/Lease与资源载体；原方案的预烘焙视觉接入依赖H-08相关产物，声音共享H-10内容合同，但不要求H-08/H-10所有内存优化先完成。接口阶段不自动解冻H-08/ATLAS或H-10实施；未接入原方案所需产物时只能记子阶段，不能关闭H-01。H-02/H-04提供最后Android验收的可运行包与配置，当前不改设置。下方Windows路线为历史待选路线，不恢复H06-ROLE-EXACT诊断。[决定](DECISIONS.md) · [H-01](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。\n\n"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "prepend": "> **2026-10-10 最新用户范围：OPTIMIZATION_PLAN_ONLY；当前H-01 / STRATEGY_REVIEW_PENDING。** 所有优化仅按既有方案，额外发现方向一律不跟进；本轮只确认原第一项Android生产内容部署策略，不改代码/资源/设置、不运行Unity/测试/构建，不发送执行指令或恢复监测。H06-ROLE-EXACT不再续办，原失败/证据保留；Role默认、FindEffect修复、producer暂缓/OFF、95 OFF及H06/H07/Android未关闭保持。既有依赖只说明，不自动解冻专项。当前唯一进度文首与 docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md 优先于下方历史排程。文档Task：docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md；H-01草案：Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md。战斗authority与红线不变。\n\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "prepend": "> **2026-10-10 当前优化范围：OPTIMIZATION_PLAN_ONLY；H-01 / STRATEGY_REVIEW_PENDING。** 用户要求只按既有方案处理，额外发现方向一律不跟进；当前仅确认Android生产内容部署策略，未授权实施/测试/构建，未派发任务或恢复监测。H06-ROLE-EXACT不再续办，历史结果不删除；Role默认/FindEffect成果、producer暂缓/OFF、95 OFF保持。H-08/H-10既有依赖不自动启动，H06父/H07/Android仍开放。参见[决定](OPTIMIZATION-REVIEW-20261009/DECISIONS.md)、[H-01草案](../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)、[本轮文档Task](TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。下方旧排程为历史。\n\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "prepend": "> **2026-10-10 恢复入口：先确认H-01内容部署策略，禁止按历史“下一项”自动执行。** 最新用户要求所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待确认；不改代码/资源/设置，不运行Unity/测试/构建，不发执行指令、不恢复监测。H06-ROLE-EXACT不再续办，旧结果保留；已准入Role默认/FindEffect修复、producer暂缓/OFF、95 OFF和最终门保持。H-08/H-10是原方案既有依赖，仅解释范围，不自动解冻。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [当前进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md",
+      "prepend": "> **2026-10-10 当前使用限制：此文件下方为历史执行提示词，不得直接启动。** 用户新决定只按既有优化方案推进，额外发现方向一律不跟进；当前第一项[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)尚在策略确认，本轮没有生成或派发实施指令。策略与准确范围确认后，另行形成具名H-01指令；不按下方旧H06入口恢复诊断、旧Goal或自动队列。[最新决定](DECISIONS.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。\n\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "prepend": "> **2026-10-10 当前策略草案 / STRATEGY_REVIEW_PENDING，未批准实施。** 用户指定按总清单原第一项H-01讨论具体策略，并要求额外发现的优化方向一律不跟进。本节是当前提案；下方原方案和历史证据保留，未修改原最终验收门。[范围决定](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [文档Task](../../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。\n\n## 本项要解决什么\n\n让Android安装包在没有开发机项目目录、没有网络的情况下，仍能加载本局完整且正确的战斗内容。它是部署和加载兼容性工作；已有静态代码依据，不以新增CPU热点诊断或帧率收益作为必要性证明。当前没有Android运行结果，不能声称已复现某台设备的具体报错或已带来性能收益。\n\n## 当前代码依据（2026-10-10只读核对）\n\n| 当前入口 | 已确认事实及实施含义 |\n|---|---|\n| `GameConfig.asset` 的 `BattleContentRuntimeRoot`；`CharacterAnimtorManager.ResolveConfiguredLoganSource` | 从 `Application.dataPath/..` 拼接 `Assets/NTSD/Content/LoganRuntime`。正式Player需要按稳定内容key定位，不能保留开发项目根假设 |\n| `BattleContentSource`；`LoganObjectCatalog.Read` | 已有相对key/路径越界保护；catalog、DAT以及目录枚举仍依赖真实文件。复用规范与定义语义，不能只把根字符串改成StreamingAssets |\n| `LoganVisualContentCandidate.Capture`；`BMPLoader.LoadVerifiedImageData` | 当前候选捕获、源身份验证和图像解码都有关联文件输入。生成包需要记录来源与转换版本，并保持既有decoder/crop结果 |\n| `NTSDResourceLoader.LoadBytesAsync`、音频目录读取；`NTSDSoundPlayer` 文件检查 | 已有FilePath/Resources读取与声音异步加载基础；音频仍存在文件依赖。统一入口需覆盖这些真实调用者，不能只改角色DAT |\n| `NTSD28Q07WindowsContentBuildProcessor` | 已有Windows专用copy manifest及源/目标hash校验，Android分支未实现。复用现有清单的来源和校验思路，补足实际内容依赖；脚本常量1373文件/46927691字节只代表既有Windows基线，不是本轮完整闭包统计 |\n| `CharacterAnimtorManager` 的已有预热、取消、generation与发布检查 | 继续使用现有owner和发布边界；不另建平行全局内容管理器，不使迟到请求发布到下一局 |\n\n上述均为源码/配置事实，不等于Android验收。原D-023资源权威、项目自有背景/地图/模式及音频来源边界保持；默认stage.dat仍暂缓。\n\n## 建议采用的具体路线（待用户确认）\n\n**版本化资源清单 + 统一内容加载入口 + 随安装包分发的本地AssetBundle。** AssetBundle建议放入专用StreamingAssets子目录，Android通过Unity支持的异步包加载入口访问，业务层只请求内容key。沿用项目现有UniTask；当前manifest未声明Addressables依赖，本提案无需先增加资源框架。本次不创建任何包或资源目录，不改Packages/Settings。\n\n1. **先形成清单与来源映射，暂不切换运行路径。** 以现有Windows清单、catalog和实际可达生产者为起点，列DAT、kind/fusion索引、角色图、公共视觉、声音以及项目地图/模式的key、来源hash、依赖和可选/必需属性。保持catalog顺序与已有可选缺失语义；检查大小写碰撞、重复key和越界。不把所有历史可选图一律改成必需。\n2. **复用现有加载owner，接入Provider并先做对照。** 在 `CharacterAnimtorManager`、catalog/candidate、资源loader的实际入口接入 `IBattleRuntimeContentProvider`；Editor源读取保留为对照，正式Player实现从本地包加载。物理路径与逻辑内容身份须明确分离，不随意改写现有checksum/内容版本合同。保留同一取消、generation、发布和关闭顺序。\n3. **按原方案在构建期生成等价运行内容，再打包。** DAT按现有parser/转换语义生成运行定义；视觉接入H-08已计划的预烘焙产物；声音和地图保持当前内容与表现语义。构建前验证源hash、生成器版本、产物hash、依赖闭包、目标平台和包存在性，缺失/过期拒绝。共享依赖归入公共包；具体分包与数量由依赖清单决定，不先发明细碎包预算。原源文件保留，正式Player切换不等于删除源文件。\n4. **同内容对照通过后切换Player，最后做Android有限验收。** 先核定义/帧数/顺序/依赖、必要像素与播放资源对照和session关闭，再按原文执行清数据离线冷启动、缺失/坏hash受控夹具、取消重进与三次进出。对照仅复用未受改动影响的证据；不机械重跑全部H06/H07性能实验。\n\nUnity 2022.3依据：[StreamingAssets](https://docs.unity3d.com/2022.3/Documentation/Manual/StreamingAssets.html)说明Android路径在APK/JAR内，普通File API不能直接作为通用读取方案；[AssetBundle原生加载](https://docs.unity3d.com/2022.3/Documentation/Manual/AssetBundles-Native.html)提供包与依赖加载API。具体URL组合与加载实现须按现有Unity版本和实际构建布局验证，不能机械添加file前缀。官方API能力不是本项目实机通过证据。\n\n## 既有依赖和阶段完成条件\n\n| 阶段 | 足够的完成证据 | 仍不代表什么 |\n|---|---|---|\n| 当前策略确认 | 用户确认载体与分阶段路线，准确代码/资源写域和Task/Change另行冻结 | 本轮只交草案，不授权修改或构建 |\n| 清单与Provider子阶段 | 来源完整、key唯一、必需/可选正确、失败明确；源与Provider读到的定义/依赖一致，取消/旧session发布/Lease关闭满足原合同 | 不能记H-01父项完成，不能把原DAT/PNG拷贝包当成原方案全部产物 |\n| 生成内容与本地包接入 | 原方案所需的运行定义、公共/角色视觉、音频及项目地图依赖齐全；hash/版本/平台检查通过，相关资源语义对照成立 | 不要求H-08/H-10所有内存优化完成；也不等于设备验收 |\n| H-01最终验收 | 满足下方原Android离线冷启动、缺失拒绝、完整依赖和Lease生命周期所有条件 | 不关闭H-07性能、H-05 GPU或整个Android最终认证 |\n\nH-08视觉预烘焙是原方案已列出的产物依赖；H-10共享声音key/依赖/所有权合同。先冻结这些共同接口不需要先完成两个父项，但真正生成或修改视觉/音频资源时须取得对应准确范围批准，ATLAS暂缓不因H-01讨论自动解除。最终Android验证还需H-02/H-04已有计划提供可运行构建与配置，不在本次策略阶段启动。\n\n当前待用户确认的是上述“随包本地AssetBundle + 清单/Provider先行”的路线。确认后先制定第一子阶段的准确实施合同；H-08/ATLAS等依赖的资源制作与设备配置到实际接入前单独明确，不默认为已批准。没有新增优化点、没有派发执行会话任务，历史H06诊断不再续办。\n\n---\n\n",
+      "replace": [
+        [
+          "| 当前状态 | 待方案决策；本轮仅文档，未实施/复测 |",
+          "| 当前状态 | 当前第一项；STRATEGY_REVIEW_PENDING；2026-10-10路线草案待确认，未实施/复测 |"
+        ],
+        [
+          "| 下一步与具体方向 | 盘点项目路径读取，确定内容key与失效协议，先shadow compare后换运行入口 |",
+          "| 下一步与具体方向 | 已静态核对读取链；确认随包本地AssetBundle＋Manifest/Provider先行路线；实施写域与资源依赖另行冻结 |"
+        ]
+      ]
+    }
+  ],
+  "taskPath": "docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md",
+  "protectedPaths": [
+    "AGENTS.md",
+    "Packages/manifest.json",
+    "Packages/packages-lock.json",
+    "ProjectSettings/ProjectVersion.txt",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "Assets/NTSD/Scripts/Animation/BattleContentSource.cs",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+    "Assets/NTSD/Scripts/Animation/LoganKindCatalogInput.cs",
+    "Assets/NTSD/Scripts/Animation/LoganFusionCatalogInput.cs",
+    "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q07WindowsContentBuildProcessor.cs",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "docs/ai/CHANGE-LEDGER.md"
+  ]
+}

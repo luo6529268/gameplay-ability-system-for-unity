@@ -1,0 +1,1087 @@
+{
+  "failure": null,
+  "cleanupFailure": null,
+  "evidence": [
+    {
+      "cycle": 0,
+      "managerPrepareRound": 1,
+      "builtinColdReentry": true,
+      "controllerSameAcrossCycle": true,
+      "generation": 2,
+      "cueEvidence": [
+        {
+          "cue": "c/jira/w/e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237832,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237832,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kar/w/t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237836,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237836,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/dan/w/t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237840,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237840,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data/001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237844,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237844,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kim/w/a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": true,
+          "ownedSource": {
+            "instanceId": -1237846,
+            "name": "a1",
+            "samples": 17370,
+            "channels": 2,
+            "frequency": 48000,
+            "runtimeBytes": 72368
+          },
+          "clips": [
+            {
+              "instanceId": -1237846,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237846,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": true
+        }
+      ],
+      "stage5CueEvidence": [
+        {
+          "cue": "c\\jira\\w\\e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kar\\w\\t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\dan\\w\\t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data\\001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kim\\w\\a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 2,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        }
+      ],
+      "managerStage5Release": {
+        "Label": "manager-cycle-1-stage5",
+        "Ids": [
+          -1237832,
+          -1237836,
+          -1237840,
+          -1237844,
+          -1237850,
+          -1237854,
+          -1237858,
+          -1237862,
+          -1237866,
+          -1237870,
+          -1237874,
+          -1237878,
+          -1237882,
+          -1237886,
+          -1237890,
+          -1237894,
+          -1237898,
+          -1237902,
+          -1237906,
+          -1237910,
+          -1237914,
+          -1237846
+        ],
+        "trackedOwnedCount": 22,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "coldStage5Release": {
+        "Label": "builtin-cold-cycle-1-stage5",
+        "Ids": [
+          -1237918,
+          -1237922,
+          -1237926,
+          -1237930,
+          -1237934,
+          -1237938,
+          -1237942,
+          -1237946,
+          -1237950,
+          -1237954,
+          -1237958,
+          -1237962,
+          -1237966,
+          -1237970,
+          -1237974,
+          -1237978,
+          -1237982,
+          -1237986
+        ],
+        "trackedOwnedCount": 18,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "cueBuildsBeforePlayback": 46,
+      "cueBuildsAfterPlayback": 64,
+      "formalLoadsBeforePlayback": 22,
+      "formalLoadsAfterPlayback": 40,
+      "uniqueFormalLoadCount": 22,
+      "builtInCount": 19,
+      "builtInFormalLoadCount": 18,
+      "genericRoot": "H10_Diagnostic_NeverCreate_772cd75c02d142bea57ce95f06a507c5",
+      "genericRootExists": false,
+      "stage5Released": true,
+      "pendingAfterDrain": 0,
+      "preparationAfterDrain": false,
+      "shutdownCompleted": true
+    },
+    {
+      "cycle": 1,
+      "managerPrepareRound": 2,
+      "builtinColdReentry": true,
+      "controllerSameAcrossCycle": true,
+      "generation": 10,
+      "cueEvidence": [
+        {
+          "cue": "c/jira/w/e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237990,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237990,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kar/w/t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237994,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237994,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/dan/w/t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1237998,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1237998,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data/001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1238002,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238002,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kim/w/a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": true,
+          "ownedSource": {
+            "instanceId": -1238004,
+            "name": "a1",
+            "samples": 17370,
+            "channels": 2,
+            "frequency": 48000,
+            "runtimeBytes": 72368
+          },
+          "clips": [
+            {
+              "instanceId": -1238004,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238004,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": true
+        }
+      ],
+      "stage5CueEvidence": [
+        {
+          "cue": "c\\jira\\w\\e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kar\\w\\t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\dan\\w\\t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data\\001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kim\\w\\a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 10,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        }
+      ],
+      "managerStage5Release": {
+        "Label": "manager-cycle-2-stage5",
+        "Ids": [
+          -1237990,
+          -1237994,
+          -1237998,
+          -1238002,
+          -1238008,
+          -1238012,
+          -1238016,
+          -1238020,
+          -1238024,
+          -1238028,
+          -1238032,
+          -1238036,
+          -1238040,
+          -1238044,
+          -1238048,
+          -1238052,
+          -1238056,
+          -1238060,
+          -1238064,
+          -1238068,
+          -1238072,
+          -1238004
+        ],
+        "trackedOwnedCount": 22,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "coldStage5Release": {
+        "Label": "builtin-cold-cycle-2-stage5",
+        "Ids": [
+          -1238076,
+          -1238080,
+          -1238084,
+          -1238088,
+          -1238092,
+          -1238096,
+          -1238100,
+          -1238104,
+          -1238108,
+          -1238112,
+          -1238116,
+          -1238120,
+          -1238124,
+          -1238128,
+          -1238132,
+          -1238136,
+          -1238140,
+          -1238144
+        ],
+        "trackedOwnedCount": 18,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "cueBuildsBeforePlayback": 86,
+      "cueBuildsAfterPlayback": 104,
+      "formalLoadsBeforePlayback": 62,
+      "formalLoadsAfterPlayback": 80,
+      "uniqueFormalLoadCount": 22,
+      "builtInCount": 19,
+      "builtInFormalLoadCount": 18,
+      "genericRoot": "H10_Diagnostic_NeverCreate_772cd75c02d142bea57ce95f06a507c5",
+      "genericRootExists": false,
+      "stage5Released": true,
+      "pendingAfterDrain": 0,
+      "preparationAfterDrain": false,
+      "shutdownCompleted": true
+    },
+    {
+      "cycle": 2,
+      "managerPrepareRound": 3,
+      "builtinColdReentry": true,
+      "controllerSameAcrossCycle": true,
+      "generation": 18,
+      "cueEvidence": [
+        {
+          "cue": "c/jira/w/e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1238148,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238148,
+              "name": "e3",
+              "samples": 329244,
+              "channels": 2,
+              "frequency": 96000,
+              "runtimeBytes": 2636720
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kar/w/t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1238152,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238152,
+              "name": "t",
+              "samples": 259584,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 2079440
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/dan/w/t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1238156,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238156,
+              "name": "t",
+              "samples": 236265,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 1892888
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data/001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": true,
+          "ownedSource": null,
+          "clips": [
+            {
+              "instanceId": -1238160,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238160,
+              "name": "001",
+              "samples": 11784,
+              "channels": 2,
+              "frequency": 44100,
+              "runtimeBytes": 97040
+            }
+          ],
+          "clipsSameAsBattlePlayback": true,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c/kim/w/a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": true,
+          "ownedSource": {
+            "instanceId": -1238162,
+            "name": "a1",
+            "samples": 17370,
+            "channels": 2,
+            "frequency": 48000,
+            "runtimeBytes": 72368
+          },
+          "clips": [
+            {
+              "instanceId": -1238162,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "battlePlaybackClips": [
+            {
+              "instanceId": -1238162,
+              "name": "a1",
+              "samples": 17370,
+              "channels": 2,
+              "frequency": 48000,
+              "runtimeBytes": 72368
+            }
+          ],
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": true
+        }
+      ],
+      "stage5CueEvidence": [
+        {
+          "cue": "c\\jira\\w\\e3.wav",
+          "formalIdentity": "c\\jira\\w\\e3.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 96000,
+            "Samples": 329244
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kar\\w\\t.wav",
+          "formalIdentity": "c\\kar\\w\\t.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kar\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 48000,
+            "Samples": 259584
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\dan\\w\\t.wav",
+          "formalIdentity": "c\\dan\\w\\t.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\dan\\w\\t.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 236265
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "data\\001.wav",
+          "formalIdentity": "data\\001.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 1,
+            "Frequency": 44100,
+            "Samples": 11784
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        },
+        {
+          "cue": "c\\kim\\w\\a1.wav",
+          "formalIdentity": "c\\kim\\w\\a1.wav",
+          "catalogGeneration": 18,
+          "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\kim\\w\\a1.wav",
+          "sourceExists": true,
+          "sourceFile": {
+            "Channels": 2,
+            "Frequency": 48000,
+            "Samples": 17370
+          },
+          "isLoaded": false,
+          "ownedSource": null,
+          "clips": [],
+          "battlePlaybackClips": null,
+          "clipsSameAsBattlePlayback": false,
+          "ownedSourceSameAsSourceArray": false
+        }
+      ],
+      "managerStage5Release": {
+        "Label": "manager-cycle-3-stage5",
+        "Ids": [
+          -1238148,
+          -1238152,
+          -1238156,
+          -1238160,
+          -1238166,
+          -1238170,
+          -1238174,
+          -1238178,
+          -1238182,
+          -1238186,
+          -1238190,
+          -1238194,
+          -1238198,
+          -1238202,
+          -1238206,
+          -1238210,
+          -1238214,
+          -1238218,
+          -1238222,
+          -1238226,
+          -1238230,
+          -1238162
+        ],
+        "trackedOwnedCount": 22,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "coldStage5Release": {
+        "Label": "builtin-cold-cycle-3-stage5",
+        "Ids": [
+          -1238234,
+          -1238238,
+          -1238242,
+          -1238246,
+          -1238250,
+          -1238254,
+          -1238258,
+          -1238262,
+          -1238266,
+          -1238270,
+          -1238274,
+          -1238278,
+          -1238282,
+          -1238286,
+          -1238290,
+          -1238294,
+          -1238298,
+          -1238302
+        ],
+        "trackedOwnedCount": 18,
+        "nativeAliveAfterStage5": 0,
+        "boundVoicesAfterStage5": 0
+      },
+      "cueBuildsBeforePlayback": 126,
+      "cueBuildsAfterPlayback": 144,
+      "formalLoadsBeforePlayback": 102,
+      "formalLoadsAfterPlayback": 120,
+      "uniqueFormalLoadCount": 22,
+      "builtInCount": 19,
+      "builtInFormalLoadCount": 18,
+      "genericRoot": "H10_Diagnostic_NeverCreate_772cd75c02d142bea57ce95f06a507c5",
+      "genericRootExists": false,
+      "stage5Released": true,
+      "pendingAfterDrain": 0,
+      "preparationAfterDrain": false,
+      "shutdownCompleted": true
+    }
+  ],
+  "managerPrepareRounds": 3,
+  "builtinColdReentries": 3,
+  "cacheRestored": true,
+  "configRestored": true,
+  "sceneRestored": true,
+  "audioControllerRestored": true,
+  "mmSoundManagerRestored": true,
+  "loaderPendingRequestsRestored": true,
+  "loaderQueuedTasksRestored": true,
+  "scope": "Three public manager-bounded formal prewarm cycles with real play, stage1/stage5 drain, and public null cold reentry; fixed five-cue fixture plus the existing nineteen builtins only."
+}

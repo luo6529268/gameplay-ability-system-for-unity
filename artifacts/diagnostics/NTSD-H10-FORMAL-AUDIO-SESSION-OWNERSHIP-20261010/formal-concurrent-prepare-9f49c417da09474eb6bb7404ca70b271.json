@@ -1,0 +1,62 @@
+{
+  "failure": null,
+  "cleanupFailure": null,
+  "evidence": [
+    {
+      "firstGeneration": 2,
+      "finalGeneration": 4,
+      "firstCueRetired": true,
+      "maximumPending": 1,
+      "staleBefore": 0,
+      "staleAfter": 1,
+      "formalLoadsBefore": 0,
+      "formalLoadsAfter": 23,
+      "finalCue": {
+        "cue": "c/jira/w/e3.wav",
+        "formalIdentity": "c\\jira\\w\\e3.wav",
+        "catalogGeneration": 4,
+        "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+        "sourceExists": true,
+        "sourceFile": {
+          "Channels": 1,
+          "Frequency": 96000,
+          "Samples": 329244
+        },
+        "isLoaded": true,
+        "ownedSource": null,
+        "clips": [
+          {
+            "instanceId": -1236814,
+            "name": "e3",
+            "samples": 329244,
+            "channels": 2,
+            "frequency": 96000,
+            "runtimeBytes": 2636720
+          }
+        ],
+        "battlePlaybackClips": [
+          {
+            "instanceId": -1236814,
+            "name": "e3",
+            "samples": 329244,
+            "channels": 2,
+            "frequency": 96000,
+            "runtimeBytes": 2636720
+          }
+        ],
+        "clipsSameAsBattlePlayback": true,
+        "ownedSourceSameAsSourceArray": false
+      },
+      "globalCacheUnchanged": true,
+      "scope": "Two real public manager-bounded preparations on one player; the first local result is stale and cannot publish over the second generation."
+    }
+  ],
+  "cacheRestored": true,
+  "configRestored": true,
+  "sceneRestored": true,
+  "audioControllerRestored": true,
+  "mmSoundManagerRestored": true,
+  "loaderPendingRequestsRestored": true,
+  "loaderQueuedTasksRestored": true,
+  "scope": "Concurrent public PrepareBattleCuesAsync only; no reflected unseal or production fault injection."
+}

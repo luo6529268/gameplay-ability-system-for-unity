@@ -1,0 +1,30 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "e04b767d1bb74ab89095dc2e78b8c9d6",
+      "status": "running",
+      "mode": "EditMode",
+      "started_unix_ms": 1791651448414,
+      "finished_unix_ms": null,
+      "last_update_unix_ms": 1791651453175,
+      "progress": {
+        "completed": 0,
+        "total": 10717,
+        "current_test_full_name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.CatalogAudioEnvelopeTwoSessionMeasurement",
+        "current_test_started_unix_ms": 1791651453175,
+        "last_finished_test_full_name": null,
+        "last_finished_unix_ms": null,
+        "stuck_suspected": true,
+        "editor_is_focused": true,
+        "blocked_reason": "unknown",
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

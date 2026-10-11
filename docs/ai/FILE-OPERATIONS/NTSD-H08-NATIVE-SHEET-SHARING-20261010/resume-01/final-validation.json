@@ -1,0 +1,68 @@
+{
+  "time": "2026-10-10T21:15:15.869562+08:00",
+  "status": "SCOPED_MEMORY_GAIN_VERIFIED_DEFAULT_OFF",
+  "protectedCount": 15625,
+  "protectedChanged": [],
+  "originalBackupCount": 11,
+  "resumeBackupCount": 15,
+  "backupMismatches": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "productionFrozen": true,
+  "diffCheckExit": 0,
+  "links": [
+    {
+      "source": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md",
+      "target": "../REPORT.md",
+      "exists": true
+    },
+    {
+      "source": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md",
+      "target": "../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../../../artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../FILE-OPERATIONS/NTSD-H08-NATIVE-SHEET-SHARING-20261010/before/Assets__NTSD__Scripts__Animation__Manager__CharacterAnimtorManager.cs",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../../../artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/REPORT.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../TASKS/NTSD-H08-NATIVE-SHEET-SHARING-20261010.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../CHANGE-RECORDS/NTSD-H08-NATIVE-SHEET-SHARING-001.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../FILE-OPERATIONS/NTSD-H08-NATIVE-SHEET-SHARING-20261010/RECORD.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../../../Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+      "exists": true
+    },
+    {
+      "source": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+      "target": "../../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true
+    }
+  ],
+  "oldNativeResidue": "UNKNOWN_UNTOUCHED",
+  "newScopedOwners": "ALL_RELEASED_VERIFIED",
+  "defaultPromotion": false
+}

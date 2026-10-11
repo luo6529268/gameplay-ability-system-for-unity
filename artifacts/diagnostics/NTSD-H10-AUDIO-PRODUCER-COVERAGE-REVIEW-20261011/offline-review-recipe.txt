@@ -1,0 +1,95 @@
+from pathlib import Path
+import json,re,hashlib,collections,datetime
+out=Path('artifacts/diagnostics/NTSD-H10-AUDIO-PRODUCER-COVERAGE-REVIEW-20261011')
+old=Path('artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+def put(name,x):
+ with (out/name).open('x',encoding='utf-8') as f:json.dump(x,f,ensure_ascii=False,indent=2)
+inv=json.loads((old/'inventory.json').read_text(encoding='utf-8'))
+routes={r['soundId']:r for r in inv['routes']}
+origins=collections.defaultdict(list)
+frame=set();weapon={x:set() for x in ['hit','drop','broken']};miss=[]
+for d in inv['perDefinition']:
+ for k,v in zip(weapon,d['weapon']):
+  if v and v.strip():weapon[k].add(v);origins[v].append({'kind':'weapon_'+k+'_sound','definitionId':d['id']})
+ for f in d['frames']:
+  values=[('frame.sound',None,f['sound'])]+[('FrameSounds',i,s) for i,s in enumerate(f['frameSounds'][:20])]
+  for field,index,s in values:
+   if s and s.strip():
+    frame.add(s);origins[s].append({'kind':field,'definitionId':d['id'],'frameId':f['frameId'],'index':index})
+    if s not in routes:miss.append({'definitionId':d['id'],'frameId':f['frameId'],'field':field,'cue':s})
+for s in inv['builtIn']:origins[s].append({'kind':'builtIn'})
+for s in inv['mode']:origins[s].append({'kind':'modeKO'})
+manifest=[]
+for cue,r in routes.items():
+ manifest.append({'cue':cue,'origins':origins[cue],'formalIdentity':r['battle']['identity'],'formalKey':r['battle']['key'],'formalPath':r['battle']['path'],'formalExists':r['battle']['exists'],'genericKey':r['generic']['key'],'genericExists':r['generic']['exists'],'genericFiles':r['generic']['files']})
+summary={'scope':'Offline existing C# inventory only; no decoding or runtime collection','sourceInventorySha256':hashlib.sha256((old/'inventory.json').read_bytes()).hexdigest(),'definitions':len(inv['perDefinition']),'types':dict(collections.Counter(d['type'] for d in inv['perDefinition'])),'cueCount':len(routes),'formalIdentityCount':len({r['battle']['identity'] for r in routes.values()}),'genericExistingRouteCount':sum(r['generic']['exists'] for r in routes.values()),'genericUniqueFileCount':len({p for r in routes.values() for p in r['generic']['files']}),'distinctFrameCues':len(frame),'distinctWeaponCues':len(set().union(*weapon.values())),'fieldOccurrences':dict(collections.Counter(x['kind'] for a in origins.values() for x in a)),'metadataCueMissingFromInventory':miss,'routesWithoutKnownMetadataOrigin':[s for s in routes if not origins[s]],'allFrameSoundValuesHaveFrameSounds':all(not f['sound'] or bool(f['frameSounds']) for d in inv['perDefinition'] for f in d['frames']),'maximumCapturedFrameSounds':max(len(f['frameSounds']) for d in inv['perDefinition'] for f in d['frames'])}
+put('metadata-coverage.json',{'summary':summary,'cueRoutes':manifest})
+sites=json.loads((out/'request-sites.json').read_text(encoding='utf-8'))
+matrix=[]
+for site in sites:
+ row=dict(site);n=Path(row['path']).name;line=row['line'];t=row['text'];vals=[];source='';kind='';proof='';unknown=None;fields=None
+ if re.match(r'^(public|private|internal|protected)\s',t):
+  row.update(role='declaration',classification='forwarding_or_sink_contract',collectorCoverage='not_applicable',valueSource='Caller-provided string/event; declaration does not bound allowed values',proof='Signature only')
+  matrix.append(row);continue
+ if n=='NTSDSoundPlayer.cs':
+  kind='forwarding_or_presentation';source='public PlaySfx caller string (non-battle)' if line==383 else 'PendingSoundEvent.Cue, isBattleEvent=true'
+  unknown='Forwarder does not define an independent cue set; sealed GetOrPrepareCue rejects unknown ID with counter'
+ elif n=='SimulationWorld.cs':
+  kind='forwarding_or_buffer';source='QueueSound soundId copied into PendingSoundEvent; excludes whitespace only'
+  unknown='Public string ingress has no definition/catalog membership type constraint'
+ elif n=='LF2Entity.cs' and line==5014 or n=='LF2SpecialAttack.cs' and line==775 or n=='LF2WeaponBase.cs' and line==388:
+  kind='forwarding';source='Caller-provided soundId, whitespace/empty filtered';unknown='No independent fixed value domain; see individual upstream rows'
+ elif n=='LF2CharacterDamageStateResolver.cs' and line==156:
+  kind='other_constant_config';vals=['Battle/Ice/Shatter'];source='NTSDGlobal.Sound.IceShatter constant :201 -> StateFrozen(state_exit) :156; LF2Character State_Frozen :1625 / DispatchCurrentStateEvent :760'
+  unknown='Not in inventory/builtIn; directory exists but no explicit alias to data/066.wav. Formal-native reachability through outer frame/exit transaction is unproved under current Q06 read restriction.'
+ elif n=='LF2CharacterDatHitResolver.cs' and line==221:
+  kind='literal_finite_switch';vals=['SFX_001','SFX_002','SFX_006','SFX_010','SFX_011','SFX_004'];source='RecordDamageEffectSound itr.effect switch :211-219'
+ elif n=='LF2CharacterDatHitResolver.cs' and line in (265,269):
+  kind='literal_finite_switch';vals=['SFX_006','SFX_001'];source='RecordStandardCharacterHurtSounds baseSound = Fall==80 ? SFX_006 : SFX_001 :263-264'
+ elif n=='LF2CharacterDatHitResolver.cs' and line==268:
+  kind='literal_finite_switch';vals=['SFX_033','SFX_032'];source='fall80 ternary literal :268'
+ elif n=='LF2CharacterDatHitResolver.cs' and line==245:
+  kind='weapon_metadata';fields=['hit'];source='ResolveCharacterData(victim).weapon_hit_sound :233-245'
+ elif n=='LF2CharacterDatHitResolver.cs' and line==256 or n=='LF2Entity.cs' and line==4394:
+  kind='weapon_metadata';fields=['broken'];source='Current attacker/frame-wrapper characterData.weapon_broken_sound; field/collector match; Q06 enclosing cleanup body not expanded' if n=='LF2Entity.cs' else 'ResolveCharacterData(attacker).weapon_broken_sound :251-256'
+ elif n=='LF2Entity.cs' and line in (5508,6978) or n in ('LF2LivingObject.cs','LF2OtherObject.ReleaseFlow.partial.cs') or n=='LF2SpecialAttack.cs' and line==785 or n=='LF2WeaponBase.cs' and line==516:
+  kind='frame_metadata';vals=sorted(frame);source='Frame.D.sound / frame.sound from current definition. LF2Entity :5504 / LF2SpecialAttack :781 direct value; Q06 :6978 only request line'
+  unknown='Covered for captured330 definition fields; dynamic rebind/late/external definition admission remains unproved'
+ elif n=='LF2Entity.cs' and line==6986:
+  kind='runtime_variable_restricted';source='QueueNativeC25FrameSounds local sound';unknown='Request line/signature only: active Q06 body not read; cannot claim source list/index/20-limit from method name. All captured first20 FrameSounds values are in metadata-coverage.json.'
+ elif n=='LF2Weapon.cs' or n=='LF2WeaponBase.cs' and line==1045:
+  kind='public_mutable_property';source='WeaponDropSound auto-property :93' if n=='LF2Weapon.cs' else 'WeaponBrokenSound auto-property :94'
+  unknown='Default empty; no authored production assignment found by whole-Assets reference search (one test writes WeaponBrokenSound). Public setters are not wired by proof to characterData.weapon_*; no sound for unchanged empty default, arbitrary external value not covered.'
+ elif n=='NTSDBattleTickSystem.cs':
+  kind='mode_KO';vals=inv['mode'];source='nativeKnockoutTeam1/5SoundPath :605-609 <- ConfigureNativeKnockoutAudio :264-265 <- Driver.ApplyPublishedKnockoutFeedBeforeFirstTick :1455-1463 <- PublishedLoganCatalog.ModeComboInput.KnockoutFeed'
+  unknown='Covered when Driver and sound prepare share the recorded published mode generation; public configuration replacement outside lifecycle not certified'
+ elif n=='BattleResultsWriter.cs' and line==130:
+  kind='literal_finite_switch';vals=['SFX_004','SFX_006'];source='results.TableCursor==10 ternary :131'
+ elif n=='BattleDamageWriter.cs' and line==1265:
+  kind='finite_helper';vals=['SFX_065','SFX_068'];source='LF2HitResolveRuntimeData.ResolveStandardPostHitSound(effect, postEffectAction) returns literals or null :273-280'
+  unknown='Helper value range proved; Q06 caller transaction body/branch reachability not read'
+ elif n=='BattleDamageWriter.cs' and line==2654:
+  kind='weapon_metadata_helper_index_only';fields=['broken','drop','hit'];vals=['SFX_002'];source='Indexed helper call ResolveReducedHitSound :2648; helper definition :283-297 uses attacker broken or victim drop/hit with SFX_002 fallback'
+  unknown='Source/helper domain conditional on indexed call relationship and captured definition; full Q06 RecordAlternateLeadSound body deliberately not read'
+ elif n=='BattleDamageWriter.cs' and line in (1370,1975,2063):
+  kind='runtime_variable_restricted';source=row['nearestDeclaration']+' -> '+t
+  unknown='Exact Q06 call line/signature only; local sound/cue assignment and all branch values not read. Cannot claim fixed domain or runtime reachability.'
+ else:
+  vals=re.findall(r'"(SFX_[0-9]{3})"',t)
+  if vals:kind='literal_builtin';source='Literal call argument'
+  else:raise RuntimeError('unclassified '+str(row))
+ if fields:
+  vals=sorted(set(vals)|set().union(*(weapon[x] for x in fields)))
+ refs=[{'cue':s,'identity':routes[s]['battle']['identity'],'formalKey':routes[s]['battle']['key'],'genericKey':routes[s]['generic']['key'],'genericExists':routes[s]['generic']['exists']} for s in vals if s in routes]
+ missing=[s for s in vals if s not in routes]
+ row.update(role='call',classification=kind,valueSource=source,finiteValues=vals,manifestMappings=refs,unmappedValues=missing,collectorCoverage='MISSING_KNOWN_VALUE' if missing else 'MATCHED_VALUE_SET_CONDITIONAL_ON_SOURCE' if vals else 'UNKNOWN_OR_FORWARDER',proof='DIRECT_VALUE_SOURCE_PLUS_SAVED_CSHARP_MANIFEST' if vals else 'CALLSITE_OR_DECLARATION_ONLY',unknownReason=unknown,subsetProof='Not established; full captured metadata match does not prove a per-match root closure')
+ matrix.append(row)
+put('request-coverage-matrix.json',{'scope':'All exact matching sound request/forwarder signatures and invocations in authored Assets/NTSD/Scripts excluding Test/Editor/Gen; whole Assets reference check found no other authored callers outside NTSD. Regex signature nearest location is an index, not a complete C# parser or reflection proof. Active Q06 bodies not expanded.','rows':matrix})
+full=json.loads((old/'full-stages.json').read_text(encoding='utf-8'))
+sealed=next(x for x in full['Stages'] if x['stage']=='session1-sealed')
+by=collections.defaultdict(list)
+for c in sealed['clips']:by[(c['name'],c['samples'],c['channels'],c['frequency'])].append(c['id'])
+ice=Path('Assets/NTSD/Sound/Battle/Ice/Shatter/shatter_1_066.wav')
+put('review-summary.json',{'createdAt':datetime.datetime.now().astimezone().isoformat(),'metadata':summary,'indexedRows':len(matrix),'declarations':sum(r['role']=='declaration' for r in matrix),'calls':sum(r['role']=='call' for r in matrix),'classifications':dict(collections.Counter(r['classification'] for r in matrix)),'knownMissingCue':'Battle/Ice/Shatter','missingCueAsset':{'path':str(ice),'bytes':ice.stat().st_size,'sha256':hashlib.sha256(ice.read_bytes()).hexdigest(),'scope':'File existence/hash only; no decode or load'},'safeSubsetProved':False,'newRuntimeSavingsClaim':False,'existingMeasuredDistinctBytes':sealed['distinctObjectBytes'],'existingObjectMetadataTupleCollisions':len([v for v in by.values() if len(v)>1]),'objectMappingLimit':'Existing stage clip rows have nativeID/name/samples/channels/frequency/bytes but no full identity. 19 metadata tuples are nonunique across the ledger; do not invent path-nativeID bijection or subset byte gain. No safe subset proved, so no candidate estimate supplied.'})
+print(json.dumps({'metadata':summary,'rows':len(matrix),'classification':dict(collections.Counter(r['classification'] for r in matrix))},ensure_ascii=True))
+

@@ -1,0 +1,37 @@
+{
+  "utcTime": "2026-10-10T16:42:49.523465+00:00",
+  "files": {
+    "Assets\\NTSD\\Scene\\NTSD_Battle.unity": "253b2ebad322aa6ec18488dfbbf555bb93ad897940a342e4130e77ce778f9010",
+    "Assets\\NTSD\\Scripts\\App\\AudioController.cs": "5d15cf4fc876baf7534f8be9ac2964061918a14bb39f27bd8bf784f10e9a6777",
+    "Assets\\NTSD\\Scripts\\App\\NTSDSoundPlayer.cs": "2d540933e1661b7b679f9be7bd500da825d9c9706b97628c22bc8345145184ee",
+    "Assets\\NTSD\\Scripts\\App\\AudioController.cs.meta": "95fde730cb0724796a4c45f627027acfcb029b9563c0c1795bf1b7764389baf5"
+  },
+  "sceneControllerCount": 1,
+  "component": {
+    "m_ObjectHideFlags": 0,
+    "m_CorrespondingSourceObject": {
+      "fileID": 0
+    },
+    "m_PrefabInstance": {
+      "fileID": 0
+    },
+    "m_PrefabAsset": {
+      "fileID": 0
+    },
+    "m_GameObject": {
+      "fileID": 1681687615
+    },
+    "m_Enabled": 1,
+    "m_EditorHideFlags": 0,
+    "m_Script": {
+      "fileID": 11500000,
+      "guid": "9a98fb328cdb667479d395af046ebc5e",
+      "type": 3
+    },
+    "m_Name": null,
+    "m_EditorClassIdentifier": null,
+    "AudioList": []
+  },
+  "configuredAudioItems": 0,
+  "scope": "Current Menu has no controller. Actual Battle scene serialized AudioList empty. FindAudioItem null and empty both select existing production fallback; configuration-route equivalence only, not runtime singleton/lifecycle equivalence."
+}

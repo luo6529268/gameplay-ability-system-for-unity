@@ -1,0 +1,21 @@
+{
+  "protectedSourceConfigCount": 12,
+  "protectedDrift": [],
+  "backups": 6,
+  "badBackups": [],
+  "headSame": true,
+  "stagedSame": true,
+  "scopedDiffExit": 2,
+  "diffOutput": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md:5997: new blank line at EOF.\nAssets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md:396: new blank line at EOF.\nAssets/NTSD/Docs/battle-optimization-progress-tracker.md:884: new blank line at EOF.\ndocs/ai/CURRENT-AUTHORITY.md:1472: new blank line at EOF.\ndocs/ai/STATE.md:6837: new blank line at EOF.\nwarning: in the working copy of 'docs/ai/FILE-OPERATIONS/INDEX.md', LF will be replaced by CRLF the next time Git touches it\n",
+  "taskBrokenLinks": [],
+  "checkpoints": {
+    "docs/ai/CURRENT-AUTHORITY.md": true,
+    "docs/ai/STATE.md": true,
+    "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md": true,
+    "Assets/NTSD/Docs/battle-optimization-progress-tracker.md": true,
+    "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md": true
+  },
+  "newRuntimeTests": 0,
+  "newMeasurements": 0,
+  "automationStatus": "PAUSED"
+}

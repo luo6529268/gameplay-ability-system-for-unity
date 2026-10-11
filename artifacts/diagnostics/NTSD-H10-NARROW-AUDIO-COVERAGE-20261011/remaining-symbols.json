@@ -1,0 +1,24 @@
+{
+  "status": "NOT_READ_NOT_AUTOMATICALLY_AUTHORIZED",
+  "scope": "Three exact observed callees; declaration location must be confirmed before any narrowly approved body read; no whole Q06/whole file request",
+  "symbols": [
+    {
+      "symbol": "RunStateExitPhase",
+      "confirmedCallsite": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:689 in StateExitEvent",
+      "question": "Only frozen/native exit guards and the boolean that short-circuits DispatchCurrentStateEvent; no other state behavior",
+      "declaringFile": "not newly resolved outside approved method intervals; do not assume"
+    },
+    {
+      "symbol": "DispatchCurrentStateEvent",
+      "confirmedCallsite": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs:689 in StateExitEvent",
+      "question": "Only state_exit mapping/guards into State_Frozen, if any; no other state implementations",
+      "declaringFile": "not newly resolved outside approved method intervals; do not assume"
+    },
+    {
+      "symbol": "BindNativeC25Action",
+      "confirmedCallsite": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs:6775/6785/6811/6839/6855/6859/6866 in RunNativeC25FrameTransaction",
+      "question": "Only parameter meaning and callbacks controlling frozen state_exit; this may settle native bypass",
+      "declaringFile": "not newly resolved outside approved method intervals; do not assume"
+    }
+  ]
+}

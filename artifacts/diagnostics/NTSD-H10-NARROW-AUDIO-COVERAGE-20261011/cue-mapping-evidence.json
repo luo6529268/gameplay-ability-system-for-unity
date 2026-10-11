@@ -1,0 +1,1017 @@
+{
+  "source": "artifacts\\diagnostics\\NTSD-H10-AUDIO-PRODUCER-COVERAGE-REVIEW-20261011\\metadata-coverage.json",
+  "sourceSha256": "c684058b13046ce34e9a3328773e3ce69201e97d0d4b13046fdc66215f08418b",
+  "method": "Select existing saved rows only; no new export, no reparse current catalog, no all1000 remapping",
+  "sourceSummaryReused": {
+    "scope": "Offline existing C# inventory only; no decoding or runtime collection",
+    "sourceInventorySha256": "db1d30c6fa4fbf43341797289706e644c77fe14bbc9bf2ea82ff93941557c1f9",
+    "definitions": 330,
+    "types": {
+      "0": 158,
+      "3": 150,
+      "1": 8,
+      "4": 4,
+      "6": 2,
+      "2": 6,
+      "5": 2
+    },
+    "cueCount": 1000,
+    "formalIdentityCount": 978,
+    "genericExistingRouteCount": 77,
+    "genericUniqueFileCount": 72,
+    "distinctFrameCues": 976,
+    "distinctWeaponCues": 24,
+    "fieldOccurrences": {
+      "frame.sound": 8864,
+      "FrameSounds": 8864,
+      "weapon_hit_sound": 169,
+      "weapon_drop_sound": 169,
+      "weapon_broken_sound": 169,
+      "builtIn": 19,
+      "modeKO": 2
+    },
+    "metadataCueMissingFromInventory": [],
+    "routesWithoutKnownMetadataOrigin": [],
+    "allFrameSoundValuesHaveFrameSounds": true,
+    "maximumCapturedFrameSounds": 1
+  },
+  "R1_R2_R3": {
+    "conservativeDomain": "all captured definitions weapon_broken_sound; includes non-type3 definitions, not a per-match set",
+    "routes": [
+      {
+        "cue": "c\\shino\\w\\e1.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 228
+          }
+        ],
+        "formalIdentity": "c\\shino\\w\\e1.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::c\\shino\\w\\e1.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\shino\\w\\e1.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::c\\shino\\w\\e1.wav",
+        "genericExists": false,
+        "genericFiles": []
+      },
+      {
+        "cue": "data\\0.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 700
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 408
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 883
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 333
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 405
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 222
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 715
+          }
+        ],
+        "formalIdentity": "data\\0.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\0.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\0.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\0.wav",
+        "genericExists": false,
+        "genericFiles": []
+      },
+      {
+        "cue": "data\\001.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 907
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 518
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 207
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 804
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 355
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 204
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 435
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 719
+          }
+        ],
+        "formalIdentity": "data\\001.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\001.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\001.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\001.wav",
+        "genericExists": false,
+        "genericFiles": []
+      },
+      {
+        "cue": "data\\002.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 420
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 213
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 512
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 822
+          }
+        ],
+        "formalIdentity": "data\\002.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\002.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\002.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\002.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\002.wav"
+        ]
+      },
+      {
+        "cue": "data\\003.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 425
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 603
+          }
+        ],
+        "formalIdentity": "data\\003.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\003.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\003.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\003.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\003.wav"
+        ]
+      },
+      {
+        "cue": "data\\007.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 630
+          }
+        ],
+        "formalIdentity": "data\\007.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\007.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\007.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\007.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\007.wav"
+        ]
+      },
+      {
+        "cue": "data\\010.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 439
+          }
+        ],
+        "formalIdentity": "data\\010.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\010.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\010.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\010.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\010.wav"
+        ]
+      },
+      {
+        "cue": "data\\017.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 212
+          }
+        ],
+        "formalIdentity": "data\\017.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\017.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\017.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\017.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\017.wav"
+        ]
+      },
+      {
+        "cue": "data\\020.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 902
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 904
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 905
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 906
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 746
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 440
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 707
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 875
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 876
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 877
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 418
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 406
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 407
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 710
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 809
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 280
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 810
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 814
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 760
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 725
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 462
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 431
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 432
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 226
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 419
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 230
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 231
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 525
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 447
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 441
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 728
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 511
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 514
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 516
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 619
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 602
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 455
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 421
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 314
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 402
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 429
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 708
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 709
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 438
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 442
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 805
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 820
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 862
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 888
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 414
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 423
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 424
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 237
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 448
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 815
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 426
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 236
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 459
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 409
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 499
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 334
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 335
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 225
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 206
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 221
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 416
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 220
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 526
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 401
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 403
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 404
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 838
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 232
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 832
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 219
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 299
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 443
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 300
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 235
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 301
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 302
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 304
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 305
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 202
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 208
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 210
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 214
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 223
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 224
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 227
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 233
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 229
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 251
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 433
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 446
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 605
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 608
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 616
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 703
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 706
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 714
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 716
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 717
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 736
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 761
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 762
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 808
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 816
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 818
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 830
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 846
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 900
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 998
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 999
+          }
+        ],
+        "formalIdentity": "data\\020.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\020.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\020.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\020.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\020.wav"
+        ]
+      },
+      {
+        "cue": "data\\021.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 150
+          }
+        ],
+        "formalIdentity": "data\\021.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\021.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\021.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\021.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\021.wav"
+        ]
+      },
+      {
+        "cue": "data\\025.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 670
+          }
+        ],
+        "formalIdentity": "data\\025.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\025.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\025.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\025.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\025.wav"
+        ]
+      },
+      {
+        "cue": "data\\027.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 434
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 444
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 445
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 866
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 437
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 817
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 101
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 120
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 122
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 123
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 124
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 503
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 515
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 884
+          }
+        ],
+        "formalIdentity": "data\\027.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\027.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\027.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\027.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\027.wav"
+        ]
+      },
+      {
+        "cue": "data\\033.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 417
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 411
+          }
+        ],
+        "formalIdentity": "data\\033.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\033.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\033.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\033.wav",
+        "genericExists": false,
+        "genericFiles": []
+      },
+      {
+        "cue": "data\\035.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 555
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 303
+          }
+        ],
+        "formalIdentity": "data\\035.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\035.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\035.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\035.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\035.wav"
+        ]
+      },
+      {
+        "cue": "data\\036.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 151
+          }
+        ],
+        "formalIdentity": "data\\036.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\036.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\036.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\036.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\036.wav"
+        ]
+      },
+      {
+        "cue": "data\\038.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 422
+          }
+        ],
+        "formalIdentity": "data\\038.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\038.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\038.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\038.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\038.wav"
+        ]
+      },
+      {
+        "cue": "data\\040.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 600
+          }
+        ],
+        "formalIdentity": "data\\040.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\040.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\040.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\040.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\040.wav"
+        ]
+      },
+      {
+        "cue": "data\\068.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 211
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 606
+          }
+        ],
+        "formalIdentity": "data\\068.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\068.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\068.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\068.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\068.wav"
+        ]
+      },
+      {
+        "cue": "data\\079.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 121
+          }
+        ],
+        "formalIdentity": "data\\079.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\079.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\079.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\079.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\079.wav"
+        ]
+      },
+      {
+        "cue": "data\\084.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 217
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 218
+          },
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 652
+          }
+        ],
+        "formalIdentity": "data\\084.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\084.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\084.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\084.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\084.wav"
+        ]
+      },
+      {
+        "cue": "data\\103.wav",
+        "weaponBrokenOrigins": [
+          {
+            "kind": "weapon_broken_sound",
+            "definitionId": 806
+          }
+        ],
+        "formalIdentity": "data\\103.wav",
+        "formalKey": "NTSD.FormalBattleAudioFile::data\\103.wav",
+        "formalPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\data\\103.wav",
+        "formalExists": true,
+        "genericKey": "NTSD.AudioFile::data\\103.wav",
+        "genericExists": true,
+        "genericFiles": [
+          "I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets\\NTSD/Sound\\data\\103.wav"
+        ]
+      }
+    ]
+  },
+  "R4": {
+    "domain": "same-generation native frame by action; legacy frame.sound fallback or first20 FrameSounds",
+    "identityMapping": "reuse cueRoutes rows whose origins are frame.sound / FrameSounds in the same saved source JSON",
+    "capturedDistinctFrameCues": 976,
+    "existingMissing": [],
+    "noNewRuntimeTrace": true
+  },
+  "IceShatter": {
+    "cue": "Battle/Ice/Shatter",
+    "oldSavedRoute": null,
+    "noAliasInferredFrom066Filename": true
+  }
+}

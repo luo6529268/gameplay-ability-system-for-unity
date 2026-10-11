@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "7f1334dd52ae407c8e619b7031e8373e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791625181947,
+      "finished_unix_ms": 1791625191633,
+      "last_update_unix_ms": 1791625191633,
+      "progress": {
+        "completed": 1,
+        "total": 10641,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791625190511,
+        "last_finished_test_full_name": "NTSD.Test.M03MeshUvDimensionReuseDiagnosticsEditorTests.RunFiniteUvReview",
+        "last_finished_unix_ms": 1791625191058,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.000084,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "RunFiniteUvReview",
+            "fullName": "NTSD.Test.M03MeshUvDimensionReuseDiagnosticsEditorTests.RunFiniteUvReview",
+            "state": "Passed",
+            "durationSeconds": 0.54386,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

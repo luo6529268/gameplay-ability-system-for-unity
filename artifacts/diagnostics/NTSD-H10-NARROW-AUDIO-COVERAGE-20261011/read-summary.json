@@ -1,0 +1,372 @@
+{
+  "R1": {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "symbol": "ApplyWeaponDamage",
+    "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+    "methodBounds": [
+      1289,
+      1400
+    ],
+    "lines": [
+      {
+        "line": 1289,
+        "text": "        internal bool ApplyWeaponDamage("
+      },
+      {
+        "line": 1366,
+        "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)"
+      },
+      {
+        "line": 1368,
+        "text": "                string sound = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+      },
+      {
+        "line": 1369,
+        "text": "                if (!string.IsNullOrEmpty(sound))"
+      },
+      {
+        "line": 1370,
+        "text": "                    attacker.QueueBattleSound(sound);"
+      }
+    ],
+    "purposes": [
+      "Initial exact sound variable assignment/reference and audio request matches only",
+      "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+    ],
+    "uniqueReadLineCount": 5
+  },
+  "R2": {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "symbol": "ApplyNativeType5HurtTail",
+    "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+    "methodBounds": [
+      1927,
+      1998
+    ],
+    "lines": [
+      {
+        "line": 1927,
+        "text": "        private static void ApplyNativeType5HurtTail("
+      },
+      {
+        "line": 1971,
+        "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)"
+      },
+      {
+        "line": 1973,
+        "text": "                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+      },
+      {
+        "line": 1974,
+        "text": "                if (!string.IsNullOrEmpty(cue))"
+      },
+      {
+        "line": 1975,
+        "text": "                    attacker.QueueBattleSound(cue);"
+      }
+    ],
+    "purposes": [
+      "Initial exact sound variable assignment/reference and audio request matches only",
+      "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+    ],
+    "uniqueReadLineCount": 5
+  },
+  "R3": {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "symbol": "ApplySpecialObjectHurtTail",
+    "sha256": "18c0d8d89237e47c809c78b7e35d743e0d1f12e6b7c10780ada4d50821abb70f",
+    "methodBounds": [
+      2000,
+      2125
+    ],
+    "lines": [
+      {
+        "line": 2000,
+        "text": "        private static void ApplySpecialObjectHurtTail("
+      },
+      {
+        "line": 2059,
+        "text": "            if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack)"
+      },
+      {
+        "line": 2061,
+        "text": "                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;"
+      },
+      {
+        "line": 2062,
+        "text": "                if (!string.IsNullOrEmpty(cue))"
+      },
+      {
+        "line": 2063,
+        "text": "                    attacker.QueueBattleSound(cue);"
+      }
+    ],
+    "purposes": [
+      "Initial exact sound variable assignment/reference and audio request matches only",
+      "Only lexically enclosing control conditions of the sound request, no unrelated statements"
+    ],
+    "uniqueReadLineCount": 5
+  },
+  "R4": {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "symbol": "QueueNativeC25FrameSounds",
+    "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b",
+    "methodBounds": [
+      6967,
+      6988
+    ],
+    "lines": [
+      {
+        "line": 6967,
+        "text": "        private void QueueNativeC25FrameSounds()"
+      },
+      {
+        "line": 6968,
+        "text": "        {"
+      },
+      {
+        "line": 6969,
+        "text": "            int action = Frame.N;"
+      },
+      {
+        "line": 6970,
+        "text": "            if (action < 0 || action >= 999 || Runtime.NativeSoundActionLatch == action)"
+      },
+      {
+        "line": 6971,
+        "text": "                return;"
+      },
+      {
+        "line": 6972,
+        "text": "            Runtime.NativeSoundActionLatch = action;"
+      },
+      {
+        "line": 6973,
+        "text": "            LF2FrameData frame = FrameCache.GetNativeFrameDataById(action);"
+      },
+      {
+        "line": 6974,
+        "text": "            if (frame == null)"
+      },
+      {
+        "line": 6975,
+        "text": "                return;"
+      },
+      {
+        "line": 6976,
+        "text": "            if (!frame.UsesLoganFrameNumbers && frame.FrameSounds.Count == 0)"
+      },
+      {
+        "line": 6977,
+        "text": "            {"
+      },
+      {
+        "line": 6978,
+        "text": "                QueueBattleSound(frame.sound);"
+      },
+      {
+        "line": 6979,
+        "text": "                return;"
+      },
+      {
+        "line": 6980,
+        "text": "            }"
+      },
+      {
+        "line": 6981,
+        "text": "            int count = System.Math.Min(20, frame.FrameSounds.Count);"
+      },
+      {
+        "line": 6982,
+        "text": "            for (int index = 0; index < count; index++)"
+      },
+      {
+        "line": 6983,
+        "text": "            {"
+      },
+      {
+        "line": 6984,
+        "text": "                string sound = frame.FrameSounds[index];"
+      },
+      {
+        "line": 6985,
+        "text": "                if (!string.IsNullOrEmpty(sound))"
+      },
+      {
+        "line": 6986,
+        "text": "                    QueueBattleSound(sound);"
+      },
+      {
+        "line": 6987,
+        "text": "            }"
+      },
+      {
+        "line": 6988,
+        "text": "        }"
+      }
+    ],
+    "purposes": [
+      "Authorized whole small pure sound method"
+    ],
+    "uniqueReadLineCount": 22
+  },
+  "R5a": {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "symbol": "StateExitEvent",
+    "sha256": "7e59a58765dbccd2c214ad976dc177c76a5f54fef34164145395edb59a89fd3c",
+    "methodBounds": [
+      687,
+      690
+    ],
+    "lines": [
+      {
+        "line": 687,
+        "text": "        protected override bool StateExitEvent()"
+      },
+      {
+        "line": 689,
+        "text": "            return RunStateExitPhase() || DispatchCurrentStateEvent(\"state_exit\");"
+      }
+    ],
+    "purposes": [
+      "Frozen exit dispatch and bypass name matches only"
+    ],
+    "uniqueReadLineCount": 2
+  },
+  "R5b": {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "symbol": "State_Frozen",
+    "sha256": "7e59a58765dbccd2c214ad976dc177c76a5f54fef34164145395edb59a89fd3c",
+    "methodBounds": [
+      1623,
+      1626
+    ],
+    "lines": [
+      {
+        "line": 1623,
+        "text": "        private bool State_Frozen(string eventType, object eventData)"
+      },
+      {
+        "line": 1625,
+        "text": "            return _damageStateResolver.StateFrozen(eventType, eventData);"
+      }
+    ],
+    "purposes": [
+      "Frozen exit dispatch and bypass name matches only"
+    ],
+    "uniqueReadLineCount": 2
+  },
+  "R6": {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "symbol": "RunNativeC25FrameTransaction",
+    "sha256": "70e3da17fbdc144076555940f6d37a3b39cd76a14759b30ba15766e46eb7ad5b",
+    "methodBounds": [
+      6748,
+      6891
+    ],
+    "lines": [
+      {
+        "line": 6748,
+        "text": "        private bool RunNativeC25FrameTransaction()"
+      },
+      {
+        "line": 6767,
+        "text": "            if (type == 3 && frame != null &&"
+      },
+      {
+        "line": 6768,
+        "text": "                !(frame.HasPrimaryCatchPoint && frame.PrimaryCatchPoint.Kind == 2))"
+      },
+      {
+        "line": 6770,
+        "text": "                if (frame.state == 3007)"
+      },
+      {
+        "line": 6772,
+        "text": "                    if (Health.HP < 1)"
+      },
+      {
+        "line": 6775,
+        "text": "                        BindNativeC25Action(frame.hit_d == 0 ? 10 : frame.hit_d, false);"
+      },
+      {
+        "line": 6779,
+        "text": "                else if (frame.hit_a > 0)"
+      },
+      {
+        "line": 6782,
+        "text": "                    if (Health.HP < 1)"
+      },
+      {
+        "line": 6785,
+        "text": "                        BindNativeC25Action(frame.hit_d, false);"
+      },
+      {
+        "line": 6808,
+        "text": "            if (type >= 0 && frame.state == 0 && Runtime.YInt < 0 &&"
+      },
+      {
+        "line": 6809,
+        "text": "                Runtime.YInt != Runtime.CollisionYReference)"
+      },
+      {
+        "line": 6811,
+        "text": "                BindNativeC25Action(212, false);"
+      },
+      {
+        "line": 6820,
+        "text": "            if (AttackingCounter > frame.wait)"
+      },
+      {
+        "line": 6831,
+        "text": "                else"
+      },
+      {
+        "line": 6834,
+        "text": "                    if (rawNext >= 1300 && rawNext < 1400 && frame.state != 80)"
+      },
+      {
+        "line": 6839,
+        "text": "                        BindNativeC25Action(selected, true);"
+      },
+      {
+        "line": 6843,
+        "text": "                    else"
+      },
+      {
+        "line": 6853,
+        "text": "                        if (target >= 1000 || target < 0)"
+      },
+      {
+        "line": 6855,
+        "text": "                            BindNativeC25Action(target, false);"
+      },
+      {
+        "line": 6857,
+        "text": "                        else"
+      },
+      {
+        "line": 6859,
+        "text": "                            BindNativeC25Action(target, true);"
+      },
+      {
+        "line": 6862,
+        "text": "                            if (rawNext == 999)"
+      },
+      {
+        "line": 6866,
+        "text": "                                BindNativeC25Action(resolved, true);"
+      },
+      {
+        "line": 6875,
+        "text": "                ApplyCommonCaughtExitHitStop(previousAction);"
+      }
+    ],
+    "purposes": [
+      "Exact exit/frozen dispatch and bypass matches only; not full transaction",
+      "Only callback/dispatch/frame-transition call names within approved transaction; no unrelated state writes",
+      "Only lexically enclosing conditions of observed native action-binding calls; helper body not read"
+    ],
+    "uniqueReadLineCount": 24
+  }
+}

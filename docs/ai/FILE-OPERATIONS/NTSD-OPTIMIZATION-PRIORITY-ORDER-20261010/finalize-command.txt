@@ -1,0 +1,42 @@
+$env:PYTHONUTF8='1'
+$env:PYTHONIOENCODING='utf-8'
+@'
+
+import json,hashlib,subprocess
+from pathlib import Path
+from datetime import datetime
+root=Path.cwd().resolve();op=root/"docs/ai/FILE-OPERATIONS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010"
+v=json.loads((op/"verification.json").read_text(encoding="utf-8"))
+assert not any(v[k] for k in ["backup_changes","protected_changes","planned_content_mismatch","broken_links"])
+assert all(t["expected_order"] for t in v["table_checks"])
+assert v["head_unchanged"] and v["staged_unchanged"] and v["outside_working_diff_unchanged"] and v["diff_check_exit"]==0
+plan=json.loads((op/"edit-plan.json").read_text(encoding="utf-8"))
+before=json.loads((op/"before-manifest.json").read_text(encoding="utf-8"))
+now=datetime.now().astimezone().isoformat()
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def append(path,body):
+    raw=path.read_bytes();nl="\r\n" if b"\r\n" in raw else "\n"
+    with path.open("ab") as f:f.write(body.replace("\n",nl).encode("utf-8"))
+task=root/plan["taskPath"]
+append(task,"\n## 本轮实际检查\n\n"+now+"：14正文和索引已整理，34父项/6子项在总清单与进度中均唯一且按计划排列；122个新增/改动本地链接有效，15实际dirty备份完整，21具名保护0变化，HEAD/暂存/范围外已有diff不变，git diff --check退出0。见[验证](../FILE-OPERATIONS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/verification.json)。首项仍仅讨论，未运行编译/测试/测量或发送消息。\n")
+record=op/"RECORD.md"
+with (op/"record-before-final.md").open("xb") as f:f.write(record.read_bytes())
+text=record.read_text(encoding="utf-8")
+assert text.count("状态：PLANNED / DOCUMENTATION_ONLY。")==1
+text=text.replace("状态：PLANNED / DOCUMENTATION_ONLY。","状态：VERIFIED（仅文档操作） / DOCUMENTATION_ONLY。",1)
+text+="\n## 执行后追加\n\n结束："+now+"。prepare/execute/verify均exit0；实际触及15份已有文档、新Task及本Operation审计文件。14正文严格匹配planned，原34父项/6子项不增不减，历史主体保留。122链接有效、15真实dirty备份完整、21具名保护0变化、HEAD/暂存/范围外已有diff不变、diff-check0。准确命令与verification.json/after-manifest.json保存于本目录。\n\n已交付按优先级/状态的导航和H07-INPUT首个讨论入口；H-01后移，已完成/暂缓/条件候选/伴随验证分开。没有脚本/资源/Scene/Prefab/Settings/Packages改动，没有Unity/测试/Profiler/测量或任务消息，监测/Goal未恢复；未读活跃Q06方法体。文档排序不代表具体优化方案获准或性能通过。未运行Change Ledger validator，因为没有项目脚本变更。\n"
+record.write_text(text,encoding="utf-8")
+append(root/"docs/ai/FILE-OPERATIONS/INDEX.md","\n\n> Operation NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010 / VERIFIED（仅文档）：[Record](NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/RECORD.md) · [验证](NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010/verification.json)。34父/6子排序与唯一性、122链接、15备份/21保护、HEAD/暂存/范围外diff和diff-check通过；首项H07-INPUT仅讨论，H-01后移，无实施/运行/任务派发。\n")
+after=[dict(path=i["path"],sha256=sha(root/i["path"]),bytes=(root/i["path"]).stat().st_size) for i in before["existing_documents"]]
+after.append(dict(path=plan["taskPath"],sha256=sha(task),bytes=task.stat().st_size))
+(op/"after-manifest.json").write_text(json.dumps(dict(operation=plan["operation"],end_time=now,files=after),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+paths=[i["path"] for i in before["existing_documents"]]
+diff=subprocess.run(["git","diff","--check","--",*paths],cwd=root,capture_output=True)
+def git(*args):return subprocess.run(["git",*args],cwd=root,capture_output=True,check=True).stdout
+final=dict(status="VERIFIED_DOCUMENTATION_ONLY",first="H07-INPUT",implementation="NOT_STARTED",protected_changes=[i["path"] for i in before["protected_files"] if sha(root/i["path"])!=i["sha256"]],diff_check_exit=diff.returncode,head_unchanged=git("rev-parse","HEAD")==(op/"head-before.txt").read_bytes(),staged_unchanged=git("diff","--cached","--binary")==(op/"staged-before.patch").read_bytes(),outside_working_diff_unchanged=git("diff","--binary","--",".",*[":(exclude)"+p for p in paths])==(op/"outside-working-before.patch").read_bytes(),unity_or_tests_run=False,message_sent=False)
+(op/"final-check.json").write_text(json.dumps(final,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+(op/"git-status-after.txt").write_bytes(git("status","--short","--branch"))
+print(json.dumps(final,ensure_ascii=False))
+assert not final["protected_changes"] and final["diff_check_exit"]==0 and final["head_unchanged"] and final["staged_unchanged"] and final["outside_working_diff_unchanged"]
+
+'@ | python -X utf8 -

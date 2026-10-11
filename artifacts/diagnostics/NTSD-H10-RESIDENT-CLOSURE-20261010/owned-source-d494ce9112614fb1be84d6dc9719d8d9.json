@@ -1,0 +1,151 @@
+{
+  "rows": [
+    {
+      "cycle": 0,
+      "relative": "c/jira/w/e3.wav",
+      "decodedObjectBytes": 332084,
+      "sourceBytesAfterConversion": 332084,
+      "playbackBytes": 2636720,
+      "retainedBeforeBytes": 2968804,
+      "retainedAfterBytes": 2636720,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 0,
+      "relative": "c/kar/w/t.wav",
+      "decodedObjectBytes": 262424,
+      "sourceBytesAfterConversion": 262424,
+      "playbackBytes": 2079440,
+      "retainedBeforeBytes": 2341864,
+      "retainedAfterBytes": 2079440,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 0,
+      "relative": "c/dan/w/t.wav",
+      "decodedObjectBytes": 239105,
+      "sourceBytesAfterConversion": 239105,
+      "playbackBytes": 1892888,
+      "retainedBeforeBytes": 2131993,
+      "retainedAfterBytes": 1892888,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 0,
+      "relative": "data/001.wav",
+      "decodedObjectBytes": 14624,
+      "sourceBytesAfterConversion": 14624,
+      "playbackBytes": 97040,
+      "retainedBeforeBytes": 111664,
+      "retainedAfterBytes": 97040,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 1,
+      "relative": "c/jira/w/e3.wav",
+      "decodedObjectBytes": 332084,
+      "sourceBytesAfterConversion": 332084,
+      "playbackBytes": 2636720,
+      "retainedBeforeBytes": 2968804,
+      "retainedAfterBytes": 2636720,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 1,
+      "relative": "c/kar/w/t.wav",
+      "decodedObjectBytes": 262424,
+      "sourceBytesAfterConversion": 262424,
+      "playbackBytes": 2079440,
+      "retainedBeforeBytes": 2341864,
+      "retainedAfterBytes": 2079440,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 1,
+      "relative": "c/dan/w/t.wav",
+      "decodedObjectBytes": 239105,
+      "sourceBytesAfterConversion": 239105,
+      "playbackBytes": 1892888,
+      "retainedBeforeBytes": 2131993,
+      "retainedAfterBytes": 1892888,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 1,
+      "relative": "data/001.wav",
+      "decodedObjectBytes": 14624,
+      "sourceBytesAfterConversion": 14624,
+      "playbackBytes": 97040,
+      "retainedBeforeBytes": 111664,
+      "retainedAfterBytes": 97040,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 2,
+      "relative": "c/jira/w/e3.wav",
+      "decodedObjectBytes": 332084,
+      "sourceBytesAfterConversion": 332084,
+      "playbackBytes": 2636720,
+      "retainedBeforeBytes": 2968804,
+      "retainedAfterBytes": 2636720,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 2,
+      "relative": "c/kar/w/t.wav",
+      "decodedObjectBytes": 262424,
+      "sourceBytesAfterConversion": 262424,
+      "playbackBytes": 2079440,
+      "retainedBeforeBytes": 2341864,
+      "retainedAfterBytes": 2079440,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 2,
+      "relative": "c/dan/w/t.wav",
+      "decodedObjectBytes": 239105,
+      "sourceBytesAfterConversion": 239105,
+      "playbackBytes": 1892888,
+      "retainedBeforeBytes": 2131993,
+      "retainedAfterBytes": 1892888,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    },
+    {
+      "cycle": 2,
+      "relative": "data/001.wav",
+      "decodedObjectBytes": 14624,
+      "sourceBytesAfterConversion": 14624,
+      "playbackBytes": 97040,
+      "retainedBeforeBytes": 111664,
+      "retainedAfterBytes": 97040,
+      "sourceRetired": true,
+      "playbackReleased": true,
+      "pcmEqual": true
+    }
+  ],
+  "globalCacheUnchanged": true,
+  "isolatedCacheCount": 0,
+  "scope": "Actual existing uncached loader and production PCM conversion, prototype source retirement only; no production loading change, whole-game peak, playback waveform or natural lifecycle certificate."
+}

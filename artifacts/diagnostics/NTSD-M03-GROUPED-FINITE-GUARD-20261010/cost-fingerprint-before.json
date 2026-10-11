@@ -1,0 +1,32 @@
+{
+  "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs": {
+    "sha256": "b8acfd90cc23884037555b6a4d10309c34fa8a24bb24ac8360d1896d08b40eef",
+    "bytes": 49237,
+    "mtime": 1791633625814338400
+  },
+  "Assets/NTSD/Scripts/Test/Editor/M03FiniteVertexScanDiagnostics.cs": {
+    "sha256": "9a5e45fb5631407863b44fedf3be33b4606b3e7a8c4ee31e82d2ef56c40d76b5",
+    "bytes": 40879,
+    "mtime": 1791633883791489500
+  },
+  "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs": {
+    "sha256": "1be334ebaa630abcf461207708792547f15ddd4a6cd489dbaa6f14ffbc256b81",
+    "bytes": 106570,
+    "mtime": 1791626453403461200
+  },
+  "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs": {
+    "sha256": "99a79d7552b2a3e7b07ec776b2df716cb8ce9869d0eec6358f2339bd9a76ac26",
+    "bytes": 51437,
+    "mtime": 1791626453406971800
+  },
+  "Library/ScriptAssemblies/Assembly-CSharp.dll": {
+    "sha256": "98de32ddf5bdbb671131784f6db064778e0694417675b1b988f3918fbb73a714",
+    "bytes": 4289536,
+    "mtime": 1791633630865997100
+  },
+  "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": {
+    "sha256": "7ee997834a9f0554f693f059ccfe78db092fd07a7d5cc3adc3639df9ce64df77",
+    "bytes": 7161856,
+    "mtime": 1791633890012913800
+  }
+}

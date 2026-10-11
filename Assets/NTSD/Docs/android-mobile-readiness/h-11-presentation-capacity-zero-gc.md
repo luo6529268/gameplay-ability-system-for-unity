@@ -1,3 +1,15 @@
+## 2026-10-10 当前阶段更正：H-11
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| 随选定改动验证／不单独插队 | 不单独排队 | 高 |
+
+当前选定改动继续守容量、适用CPU 0GC及关闭；GPU/native/device完整认证后置。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # H-11 当前评审卡（2026-10-09）
 

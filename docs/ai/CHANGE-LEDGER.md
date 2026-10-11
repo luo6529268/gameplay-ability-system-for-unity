@@ -1,3 +1,43 @@
+> **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+
+> 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+
+> **2026-10-11 H10 正式音频源每局所有权已接入：H10_FORMAL_SESSION_OWNERSHIP_APPLIED。** Task NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 / Change NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 VERIFIED（限定生产接入）。三生产脚本+一Editor测试；实际生命周期7/7、失败清理1/1、唯一资源组1/1、唯一实际隔离Play1/1通过。固定5音频distinct native对象9→5、bytes7,626,693→6,778,456，输出PCM位不变、owned关闭归零；非RSS/整局峰值/CPU收益。旧兼容组13/14，既有mono引用断言FAIL保留，未冒称全通过。Menu恢复clean8。报告 artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/REPORT.md。H10父项producer音频闭包/整局预算仍OPEN；下一仅讨论审阅，不自动后继/Goal/34项；H08 ON/M03 OFF/H07及producer暂缓/95OFF/H06不续保持。下方为此前时点。
+
+> 2026-10-10 NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 IN_PROGRESS / NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 PLANNED. Exact four-script formal audio session ownership and existing stage1/stage5 release; cold serialization and stale local recycling. H10 full producer closure/budget remains OPEN, no other task/Goal resumed. See Task and Operation.
+
+> 2026-10-10 User resumed entire current-stage H10: NTSD-H10-RESIDENT-CLOSURE-20261010 / NTSD-H10-RESIDENT-CLOSURE-001 IN_PROGRESS. Temporary PCM reduction is already production-applied; old-path spike retained as timing limitation after independent review, not a new-path failure. Now audit remaining resident dependencies, cache/owner and load memory before accurate implementation. No next point/device/build/old queue.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H10-AUDIO-MEMORY-REVIEW-001 VERIFIED (Editor diagnostic only): final2/2 plus unique cost1/1, 4 WAV exact PCM; long-clip bounded temporary arrays <98304B, final stereo resident unchanged. Production unchanged; exact two-script handoff ready, dispatch receipt authoritative. H10 parent OPEN/H08 default ON retained.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H10-AUDIO-MEMORY-REVIEW-001 IN_PROGRESS: user approved H10 independent audio memory review; one Editor-only diagnostic, production unchanged. Prior H08 default admission remains verified; no other queue/goal resumed.
+
+> **2026-10-10 M03独立评审收口：SCOPED_REVIEW_COMPLETE / 有界生产候选方案READY，性能门仍OPEN。** NTSD-M03-UV-DIMENSION-REVIEW-001 VERIFIED仅诊断；8项既有契约通过，新UV三版各41边界/共1408有效scope事件0。两槽轮换退化、array限定不通用、segment数学模型连续段有信号但逐quad换段负控5.0494%超过事前5%，整体未通过，不写生产收益。最终指令只利用既有canAppend分支：新段首quad/custom/Strict原路，真正append后段内准备尺寸，默认OFF，再验真实Backend/payload/像素/完整Build成本。未改生产、未开启下一点。Task NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010；报告/准确三文件修复指令位于artifacts/diagnostics/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010/REPORT.md与execution-handoff.txt；实际发送以dispatch-receipt/status为准。155保护无漂移、原Menu clean8。M03父项OPEN，H07/producer暂缓与95OFF等保持；下方是此前时点。
+
+> NTSD-M03-UV-DIMENSION-REVIEW-001 / PLANNED：M03仅新Explicit Editor局部UV尺寸读取诊断，不接生产；见对应Change/Task NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010。
+
+> **2026-10-10 H07 owned-input有限评估完成：COMPLETED_NO_DISCERNIBLE_GAIN / 本版不采用。** NTSD-H07-OWNED-INPUT-EVALUATION-001 VERIFIED仅Editor诊断：最新3/3 focused、唯一千人合成native输入两布局8窗完成，256稳态pass0B、逐tick完整checksum/双RNG/41字段一致；两个布局均无可辨收益，不跑后继实景或推广，生产SnapshotCopy不变。不是GC门阻止测量，也不是已解决旧Sakura约12ms。主H07仍OPEN/未形成新的生产实施方案；未派发、监测暂停。报告artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/owned-input-evaluation/REPORT.md。以下保留此前时点。
+
+> 2026-10-10 NTSD-H07-OWNED-INPUT-EVALUATION-20261010 IN_PROGRESS / NTSD-H07-OWNED-INPUT-EVALUATION-001 IN_PROGRESS：既有owned-input模式有限等价/成本评估；仅新增Editor测试，生产SnapshotCopy不变，先局部完整输入pass后按证据决定真实fixture，无编译模式变更/新派发。详同Task/Operation。
+
+> **2026-10-10 H07输入同因链继续评审，未派生产任务。** 复用已有无细分千人OFF基线：CharacterInput均值12.037463ms/P95 18.949035ms，不能把12ms全归于细分测量；原GC资格失败保持。新增朝向→旧Renderer线索经实际GameConfig/Prefab/CentralOnly池路径核查，尚无真实setter频率依据，故不作为本fixture优化，不跑合成成本组。NTSD-H07-INPUT-FACING-COST-DIAG-001 ABANDONED：新Explicit工具保留，首job实际total0/NOT_EXECUTED，无测量结果、生产未改。主Task NTSD-H07-AI-DECISION-WORK-REVIEW-20261010仍IN_PROGRESS，完整方案未成，不自动派发或恢复监测。详input-facing-cost-diag/REPORT.md；下方为先前时点。
+
+| Change ID | 状态 | 记录 |
+|---|---|---|
+| NTSD-H07-INPUT-FACING-COST-DIAG-001 | ABANDONED | [Record](CHANGE-RECORDS/NTSD-H07-INPUT-FACING-COST-DIAG-001.md) |
+
+> 2026-10-10 H07 same-input facing causal diagnosis IN_PROGRESS / NTSD-H07-INPUT-FACING-COST-DIAG-001 PLANNED. Coarse baseline fine timing OFF already observes CharacterInput mean12.037463ms/P95 18.949035ms. New Explicit isolated SpriteRenderer diagnosis only; source clue is SwitchDir -> SwitchLR native flipX while central legacy suppressed, restoration must be checked. No production fix, gain or dispatch yet. Operation NTSD-H07-INPUT-FACING-COST-DIAG-20261010; main Task remains IN_PROGRESS.
+
+| Change ID | 状态 | 记录 |
+|---|---|---|
+| NTSD-H07-INPUT-FACING-COST-DIAG-001 | PLANNED | [Record](CHANGE-RECORDS/NTSD-H07-INPUT-FACING-COST-DIAG-001.md) |
+
+> **2026-10-10 H07同因跨模块复核进展：局部诊断 NTSD-H07-NATIVE-ROUTING-COST-PROBE-001 VERIFIED（仅诊断），性能结论 INCONCLUSIVE。** 已沿Native输入路由、状态解析、动作写入、legacy/AI/InputState镜像及快照尾部检查。有效千人合成idle/walk/run共12窗、12语义例、384测量轮0B/各40轮checksum一致/容量1024无拒绝、原Menu clean8与2361保护稳定；首版400槽错误整组INVALID，不能用旧NUnit PASS冒称有效。减少状态解析未在三场景稳定获益，无新生产优化或派发。主Task NTSD-H07-AI-DECISION-WORK-REVIEW-20261010 仍 IN_PROGRESS / CAUSAL_CHAIN_REVIEW，完整方案尚未形成，不称H07/12ms优化完成。新报告 artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/REPORT.md。下方状态均为此前时点，最新修正优先。
+
+| Change ID | 状态 | 范围 | 记录 | 证据 |
+|---|---|---|---|---|
+| NTSD-H07-NATIVE-ROUTING-COST-PROBE-001 | VERIFIED | 仅Explicit Editor合成路由诊断，无生产改动 | [Record](CHANGE-RECORDS/NTSD-H07-NATIVE-ROUTING-COST-PROBE-001.md) | 12语义/12有效窗局部0B与checksum；性能INCONCLUSIVE，v1无效保留，H07开放 |
+
 > 2026-10-10 新具名ABBA诊断已完成：OFF90.5245/92.5756ms，ON92.8389/77.3209ms，未复现开启后稳定更慢，ON状态内波动15.518ms，不能宣称稳定收益或具体因果。首OFF校准有效完整Driver稳态2次GC.Alloc、首tick130，后三窗0；本组GC门FAIL、调用点未知。33+1+1测试及配置/20hash/末态/容量/关闭/设置恢复通过；producer生产OFF，Role默认保持，未自动修复/推广/转下一项。Change NTSD-H07-PRODUCER-ABBA-DIAG-001 VERIFIED仅冷诊断实现与记录；Task NTSD-H07-PRODUCER-ABBA-DIAG-20261009 SCOPED_DIAGNOSIS_COMPLETED，H06父/H07/Android开放、95OFF、旧Goal不恢复。详 artifacts/diagnostics/NTSD-H07-PRODUCER-ABBA-DIAG-20261009/REPORT.md；下方IN_PROGRESS/旧准入状态保留历史。
 
 > 新具名诊断 NTSD-H07-PRODUCER-ABBA-DIAG-20261009 / NTSD-H07-PRODUCER-ABBA-DIAG-001 IN_PROGRESS：combat OFF→ON→ON→OFF，输入边界细分计时OFF，生产reuse仍OFF、Role默认保持。仅诊断，不复开旧准入Task/Goal、不推广。
@@ -2273,3 +2313,55 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / FOCUSED_TEST_PASS: original compile/err
 
 > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
 
+
+- NTSD-H07-INPUT-COST-DIAG-001 / PLANNED：[Record](CHANGE-RECORDS/NTSD-H07-INPUT-COST-DIAG-001.md)，NTSD-H07-INPUT-COST-DIAG-20261010，仅Editor有限诊断。
+
+- 2026-10-10 NTSD-H07-INPUT-COST-DIAG-001 → VERIFIED仅Editor有限诊断/失败停止/恢复；首OFF0GC FAIL，ABBA未完成，生产无修改；报告 artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md。
+
+- `NTSD-H07-INPUT-FLOW-DIAG-001` / PLANNED — [Record](CHANGE-RECORDS/NTSD-H07-INPUT-FLOW-DIAG-001.md)，当前H07输入补充诊断、非生产实现。
+
+- `NTSD-H07-INPUT-FLOW-DIAG-001` 最新 FOCUSED_TEST_PASS，8/8；仅Editor诊断，单窗实景待运行，原PLANNED保留为前时点。
+
+- NTSD-H07-INPUT-FLOW-DIAG-001 最新 VERIFIED仅Editor诊断工具与单窗采集；8/8及300tick状态一致，完整Driver稳态2event/0GC FAIL、尖峰未全归因；NO_PRODUCTION_HANDOFF，不升格生产/父项。详[Record](CHANGE-RECORDS/NTSD-H07-INPUT-FLOW-DIAG-001.md)与同Task REPORT；旧PLANNED/FOCUSED为历史。
+
+- NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 / VERIFIED — [Record](CHANGE-RECORDS/NTSD-H07-INPUT-SPIKE-CPU-DIAG-001.md)，当前点CPU归因，非生产优化。
+
+| NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 | PLANNED | [Record](CHANGE-RECORDS/NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001.md) | bounded native-owned compatibility guard, default OFF |
+
+| NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 | BLOCKED | Scope checkpoint: expected RED only; waiting explicit Core facade write-scope adjustment; production unchanged. | [Record](CHANGE-RECORDS/NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001.md) |
+
+2026-10-10 HUMAN_APPROVED_SCOPE_CORRECTION via discussion thread: user "开始吧，只要能达到优化条件就行". Continue same Task/Change/Operation. Exact five code paths replace Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs with Core/SimulationWorld.cs; Core only cold configure/disable restore/status/count facade near existing input-pass diagnostics, no existing methods/Q06/partial/algorithms/cache. Pass owns bool/long, reset stage8 disables. Original RED and BLOCKED checkpoint retained historically. Before Core edit actual bytes/SHA/Git captured in core-approved-before.json; 15 prior backups retained. All original tests/unique no-detail ABBA/hard failure stop/defaultOFF contracts unchanged. Status IN_PROGRESS.
+
+| NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 | BLOCKED | Final: defaultOFF candidate implemented;19/19+qualification4; firstOFF fullDriver2events130/162 stops ABBA, no ON/benefit/admission. | [Record](CHANGE-RECORDS/NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001.md) |
+
+| NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001 | PLANNED | [Record](CHANGE-RECORDS/NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001.md) | local-only cursor reuse candidate, production unchanged |
+
+| NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001 | ABANDONED | [Record](CHANGE-RECORDS/NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001.md) | C#18+1PASS, local8 windows0B, INCONCLUSIVE both layouts; production unchanged, candidate not adopted. |
+
+| NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 | PLANNED | [Record](CHANGE-RECORDS/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001.md) | M03 segment dimensions default OFF; gates pending. |
+
+| NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 | ABANDONED | [Record](CHANGE-RECORDS/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001.md) | FullBuild512scope0events, payload/pixels pass, array gain gate FAIL; defaultOFF/no adoption. |
+
+- `NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001` | VERIFIED | [Record](CHANGE-RECORDS/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001.md) | M03 finite publication workload diagnosis; no production cache.
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 IN_PROGRESS / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 PLANNED: user-approved new-publication M03 review; one Editor-only finite-scan diagnostic, production unchanged. Same-publication cache excluded by prior workload. Local equivalence/cost only; no handoff yet.
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 VERIFIED (Editor diagnostic only): private WriteQuad rectangle invariant supports 12-to-5 finite-coordinate checks at original Upload location; actual21build/27nonfinite/14641IEEE cases plus original3+2 guards pass. Unique2000/4096 scanABBA both show local gain,256valid calibrated GCscopes0events,158protections unchanged/Menu clean8. Production unchanged; exact defaultOFF candidate/fullBuild handoff ready, dispatch status in artifacts/diagnostics/NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010/dispatch-receipt.json. No fullBuild/parent/device admission. Earlier publication cache and UV failures retained.
+
+| NTSD-M03-GROUPED-FINITE-GUARD-001 | ABANDONED | [Record](CHANGE-RECORDS/NTSD-M03-GROUPED-FINITE-GUARD-001.md) | Grouped finite guard defaultOFF bounded candidate |
+
+> NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 IN_PROGRESS: user-approved H08 current-content inventory and bounded Editor duplicate-source verification. Production unchanged; no handoff yet.
+
+> NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 VERIFIED diagnostic only: actual C#773 live refs/703paths, repeated RGBA32 estimate184792652B; real loader duplicate2/2 and existing owner-helper1/1 pass. Production unchanged. Exact native per-publication source-sharing handoff ready; dispatch receipt authoritative. H08 parent OPEN.
+
+| NTSD-H08-NATIVE-SHEET-SHARING-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H08-NATIVE-SHEET-SHARING-001.md) | H08 native body sheet sharing defaultOFF |
+
+| NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001.md) | H08 normal native default admission |
+
+| NTSD-H10-BOUNDED-PCM-CONVERSION-001 | BLOCKED | [Record](CHANGE-RECORDS/NTSD-H10-BOUNDED-PCM-CONVERSION-001.md) | H10 bounded PCM temporary arrays |
+
+| NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001.md) |
+
+| NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 | VERIFIED | [Record](CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md) |

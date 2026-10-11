@@ -1,0 +1,66 @@
+{
+  "operation": "NTSD-H01-STRATEGY-AND-SCOPE-20261010",
+  "end_time": "2026-10-10T10:09:00.013540+08:00",
+  "files": [
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "sha256": "293d90aed9e997afebf904c5a0b7511f23ad1d488f97faf6425223adc24c707c",
+      "bytes": 7341
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "sha256": "2a775fcd524eef8a55d939a4644beeaa6ce68ba2edf4b103797d0ccda9b7997d",
+      "bytes": 8077
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "sha256": "8d056a1ac6dcd66263e2f7305d4ccda9c7be8ae800f0fd11cf3a53f433a888f8",
+      "bytes": 227922
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "sha256": "d01cf005889ee87e3824a16568d74ea6e6c5e2bdb2c6ec0bc0c4ce69cca004b9",
+      "bytes": 41959
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "sha256": "109060ab092ed613ab9925c52c639d10b27a9dbb0335abb1764d3ce40a981819",
+      "bytes": 17136
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "sha256": "63ada182f4a4572b480c3c3e1f3672f476f8981cf0963ab9d396e62b82f1dd53",
+      "bytes": 385041
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "sha256": "41e3e2914f1427244e40224c95b476bbad3cf0221422583e7b754fdfddabf6e5",
+      "bytes": 1666396
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "sha256": "d15db0e055d30024fb30e4b0355dbb5ab61eb29ab67dfc0275ac672f68892827",
+      "bytes": 1605141
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md",
+      "sha256": "07b3c717f4ee28637b11358e965b6ae0c08f85541e602996832e42b0ce16f979",
+      "bytes": 5668
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "sha256": "43b2c448f683ebb52a20afb559c10e83a7abee81cf049e58557ced8aa4c89d45",
+      "bytes": 13149
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "sha256": "b4431a140322414a132235f48346d331c56a2259fb4415d7a64b930acdfe3e10",
+      "bytes": 142445
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md",
+      "sha256": "b603d0e60169d2cbf2e49045096bdcc55d54948e1c3d74ce491fa33008c26234",
+      "bytes": 3457
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+Governance glob unintentionally included adjacent .md.meta. Removed only this task notice prefix immediately before Unity refresh; exact preimage restored and hash verified, no GUID/content change intended. No other meta edited. This was an implementation error, not authorization for metadata changes.

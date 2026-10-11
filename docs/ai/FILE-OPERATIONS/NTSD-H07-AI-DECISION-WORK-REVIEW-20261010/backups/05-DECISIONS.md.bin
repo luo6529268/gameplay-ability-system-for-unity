@@ -1,0 +1,80 @@
+> **2026-10-10 最新派发实态：独立评审 SCOPED_REVIEW_COMPLETE / HANDOFF_DISPATCHED；已发送 NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010，执行会话turn01a1246d-a4b3-78a3-8fdd-edaffb253f18已active/inProgress，无error，cursor76；原automation已ACTIVE。准确两脚本/不接生产/有限局部对照范围见execution-handoff.txt及dispatch-receipt.json。下面READY_FOR_DISPATCH为派发前历史；没有C#、Unity或收益通过结论。**
+
+> **2026-10-10 H07-INPUT 当前后继：NTSD-H07-INDEXED-NEAREST-REVIEW-20261010 已 SCOPED_REVIEW_COMPLETE / READY_FOR_DISPATCH。用户“那你来处理即可，然后再让另一个会话去处理”授权本讨论会话完成评审后直接派发。准确后继 NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010 / Change NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001，仅 AiSensingKernel.cs 与 AiSensingKernelEditorTests.cs 的 internal、不接生产的局部cursor距离复用候选；实际C#语义/局部0B后仅两布局各一次固定1000query局部ABBA。现有public入口/生产调用原样，不改World/Writer/Store/AI/Suite，不跑完整Driver，不豁免正式0GC/33ms/确定性/关闭。旧兼容候选OFF及Driver2event失败、producer暂缓、95OFF/H06不续/旧Goal队列取消保持；整个12ms/H07未完成。**
+> 评审与准确指令：artifacts/diagnostics/NTSD-H07-INDEXED-NEAREST-REVIEW-20261010/REPORT.md、execution-handoff.txt。离线23870原Indexed对照/19125线性payload对照0差，只是模型，非C#/Unity/CPU收益；派发实态以dispatch-receipt/status文件为准。下方保留历史。
+
+> **2026-10-10 最新排程决定：PRIORITY_ORDER_FIRST；首项H07-INPUT仅讨论。** 用户原话：“那你重新按照优先级来整理文档，然后把第一个优化点告诉我，我们来讨论具体实现方案”。本节取代之前按编号选H-01为当前项的排程，不撤销OPTIMIZATION_PLAN_ONLY。
+
+## 2026-10-10 按优先级与状态排序（文档整理授权）
+
+- 保留34父项原编号和所有历史结果；登记编号不再用作执行顺序。先看当前高优先性能主线，再排除已完成、用户暂缓、条件未满足和纯验收项。
+- 当前高优先主线为H-07；其既有H07-INPUT“角色输入与AI输入计算”排为第1讨论项。它有91历史成本与当前代码入口，具体可消除成本/等价实现尚待确认；不能把排序写成已获实施授权或收益已证。
+- H-06既有Role限定准入及FindEffect修复成果保持，H06父项仍开放，不重复推广。producer快照复用用户暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF和旧失败保持。
+- H-01本地AB方向已讨论，方案草案保留并后移至Android部署阶段；不是当前性能首项，也未授权打包/资源/Settings实施。H-08/ATLAS/H-10等原依赖与暂缓范围不变。
+- 中/低/后续项和伴随正确性/0GC/关闭验证分别登记，不把候选、诊断工具、验收目标当作同样的“可立即优化”任务。额外发现方向一律不新增、不诊断、不修复、不派发。
+- 本轮仅文档/窄源码只读核对，不运行Unity/测试/测量、不发送执行会话消息、不恢复监测或旧Goal/34项自动队列。用户要求接下来讨论具体实现，尚未要求输出实施指令。
+
+[排序总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [H07-INPUT](H07-INPUT.md) · [文档Task](../TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。
+
+---
+
+> **2026-10-10 用户确认：OPTIMIZATION_PLAN_ONLY；当前只讨论 H-01 策略。** 本节是最新执行边界，下方旧排程和有限指令约定只保留原时点。
+
+## 2026-10-10 只按既有优化方案推进（USER_CONFIRMED）
+
+用户原话：“所有优化处理，都按照优化方案文档来处理，所有额外发现的可优化方向，一律不管”；接着要求：“接下来，我们来处理第一项，然后我们先确认具体的优化策略”。
+
+- 总清单与各项独立方案是优化范围入口；额外发现的可优化方向不新增方案、不诊断、不修复、不派任务，不以排查中发现为追加优化授权。
+- 当前第一项按总清单原编号确定为 **H-01 Android生产内容部署**。本轮只读核对和文档策略草案；资源载体、准确实施写域与分阶段策略尚未确认，未授权代码、资源、设置修改或Unity/测试/构建。
+- 原方案已经列出的必要依赖可以说明，但不据此自动启动其它项。H-01与H-08/H-10共享内容合同，H-08/ATLAS等暂缓边界仍保持；不能为了跳过依赖而降低H-01最终完成条件。
+- H06-ROLE-EXACT及其诊断/前置修复不再作为当前下一项续办，原报告与失败事实保留，不再自动补测。Role已完成限定默认推广、FindEffect既有修复、producer暂缓/OFF与95 OFF保持。
+- 过去“整理后直接发送”的约定只适用于已讨论且明确授权的具名执行范围。本轮明确要求先确认H-01策略，因此不发送实施指令、不恢复监测或旧Goal/34项自动队列。
+
+策略草案：[H-01独立方案](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)。当前状态与下一动作：[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。本次文档Task：[NTSD-H01-STRATEGY-AND-SCOPE-20261010](../TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
+
+---
+
+> **2026-10-10 有限下一指令约定与状态更正。** 直接人类授权由讨论会话传达：“等你整理出下一个优化点后，直接出输出指令即可，不需要等我回复”。允许整理完成后直接输出已界定的下一有限执行指令，例行已授权步骤无需重复问A/B或许可；不授予跨红线规则变更、Q06禁读、资源/Scene/Settings写入、专项解冻或旧自动Goal。当前执行会话只完成 `NTSD-H06-ROLE-RECORD-ANALYSIS-20261010` 静态分析，结论B；[报告第7节](../../../artifacts/diagnostics/NTSD-H06-ROLE-RECORD-ANALYSIS-20261010/REPORT.md)已有单一record内部诊断指令草案，本Task未运行、未向其它会话发送，也未操作监测。下方“等待发送/未批准具体步骤”按原日期保留，不再阻止组织这条有限指令。
+>
+> Role限定准入已由独立证据完成；下方旧BLOCKED/Brute默认为修复前历史。producer USER_DEFERRED/OFF、ABBA首OFF完整Driver2event/首tick130调用点未知仍独立，95OFF，H06父/H07/Android开放；D1=A及所有最终门不变。
+
+> 2026-10-09 H06限定准入 BLOCKED / NO_DEFAULT_PROMOTION：四场景32tick逐tick一致性通过；混合OPoint形状collector 8样本各234分配事件，可靠校准有效，默认仍Brute。阻塞不是33ms；Suite/生产代码未改，H06/H07/Android开放，95默认OFF，旧Goal不恢复。 Task `NTSD-H06-ROLE-SCOPED-ADMISSION-20261009` / Change `NTSD-H06-ROLE-SCOPED-ADMISSION-001`。H07-INPUT建议可独立评审，由用户决定实施；不恢复未授权队列。
+
+# 优化决策记录
+
+## 2026-10-09 D1=A已批准
+
+用户原话：“可以先用A”。在大白话解释A/B后，用户选择：现有Role-aware通过必要检查后可以先用于正常游戏，不必等整体性能达到33ms；剩余性能继续优化。
+
+批准的是限定准入阶段与最终性能阶段分开：四场景强一致、适用完整0GC、容量、生命周期/关闭、收益和无未解释布局退化要求仍保留。必要门通过后允许推广既有Role路径并保留Brute诊断/回退；H06父项/H07未满足原33ms等最终性能门时仍开放。不要再次询问用户选择A还是B。
+
+当前会话仍只整理文档，没有切默认、没有运行测试、没有恢复旧Goal。新会话收到用户发送的正式执行提示词后开展H06限定任务；准确代码写域需先调查并记入Task/Change，已有授权内无需逐包再问。Scene/资源/设置、活跃Q06读范围、AI模式、暂缓专项等仍按原独立边界。
+
+以下PENDING/选A或B文字是决定前历史，已由本节取代；后续D2—D5仍未批准。
+
+## 决定前讨论原文（保留）
+
+# 待用户决策
+
+状态：PENDING。创建文档不代表批准任何选项；当前会话只做文档与方案工作。先只问会改变下一步的D1，其他项到相应阶段再确认。
+
+## D1：Role-aware先做限定生产准入，还是继续保留原性能前置
+
+发现：H-06原方案验收包含四场景强一致和整tick P95<33ms；H-07也有33ms阶段门。81实际Role tick约44ms/P95约50—53ms，不能直接宣称满足旧H-06父门。先前聊天建议的“先推广收益，再继续H07”需要你确认是否允许独立子阶段。
+
+建议选A：允许独立的H-06 Role候选生产准入阶段，与H07最终性能达标分开判断。仅修改候选准入的阶段组织，不关闭H06父项、不降低H07/Android性能门。以后新会话获得具体执行授权后：
+- 先复用81/82/H06四形状证据，列准确scope及缺口。保留原四场景强一致要求；已充分通过且未影响的不重跑。
+- 生产接线受影响范围须通过适用正确性/容量/0GC/关闭与可追溯收益比较；无未解释布局退化。不凭短期顺序波动定因果，不设未经证实的collector<=16ms门。
+- 接线实际开关在全部必要门通过后切换，保留Brute诊断/回退。未通过则候选默认OFF，H07仍FAIL。
+- 整tick尚未<33ms时只记限定准入结果，不写阶段性能已通过。若验证需要Scene/资源/设置修改或Q06方法体，停止并列准确新范围。
+
+选B：保持现有H-06整体门作为默认推广前提。Role仅用于显式诊断比较，优先继续CharacterInput方案分析与获批后的等价优化；达到原准入门再推广。代价是已证Role收益暂不进入普通默认。
+
+本轮没有实施A/B，也没有把旧合同改为A。用户答复后应在本文件追加原意、适用范围和日期，并同步H06/进度；此决策不等于本会话开始写代码。
+
+## 后续决定（现在不阻塞文档整理）
+
+- D2 独立千人AI模式：默认先只保留提案；若选用，批准反应节奏/目标选择/疏散攻击等行为差异及确定性合同，详H07-AI-MODE.md。不默认批准回放格式变化。
+- D3 平台路线：当前推荐先Windows H07主线；Android部署/内存/设备可另行获批，不要求等待Windows全部完成。要启动时确定目标设备、预算、载体及准确资源/ProjectSettings写域。
+- D4 暂缓专项：PERF M0、ATLAS预印/bank/格式预算、MONO B0-B9、EXT-1均不自动解冻，按原专项批准规则处理。
+- D5 产品发布：包名/签名/屏幕方向/发布SDK与视觉HDR等到对应任务再问，不一次性要求用户回答无关决策。

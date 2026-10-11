@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "7021305ff10748fa8268f1ffff4dd1ac",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1791650735278,
+      "finished_unix_ms": 1791650777559,
+      "last_update_unix_ms": 1791650777559,
+      "progress": {
+        "completed": 1,
+        "total": 10716,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791650742790,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.CatalogAudioEnvelopeFixtureQualification",
+        "last_finished_unix_ms": 1791650775868,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.CatalogAudioEnvelopeFixtureQualification",
+            "message": "  Expected string length 144 but was 137. Strings differ at index 103.\r\n  Expected: \"...\":[215832,215978,216430,216664,216670,217048,217122,217238]}]\"\r\n  But was:  \"...\":[215832,215978,216664,216670,217048,217122,217238]}]\"\r\n  ----------------------------------^\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

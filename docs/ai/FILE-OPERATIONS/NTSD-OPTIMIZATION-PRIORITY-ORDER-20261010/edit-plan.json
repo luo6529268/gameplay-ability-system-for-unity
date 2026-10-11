@@ -1,0 +1,261 @@
+{
+  "operation": "NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010",
+  "edits": [
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+      "prepend": "> **2026-10-10 最新排序：按优先级与当前状态，首个讨论项为 H07-INPUT。** 用户要求“重新按照优先级来整理文档，然后把第一个优化点告诉我，我们来讨论具体实现方案”。编号是稳定ID，不是执行次序；H-01本地AB部署草案后移到Android阶段。仅整理/讨论，不实施或发送任务；额外发现方向一律不跟进。下方旧“当前从H-01开始”已被本节取代。[当前进度](battle-optimization-progress-tracker.md) · [首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)。\n\n## 当前优先级与讨论顺序\n\n| 顺序/类别 | 现有项 | 当前安排 |\n|---|---|---|\n| 1／高，当前性能主线 | H-07 → **H07-INPUT角色输入与AI输入计算** | 首个具体方案讨论项；已有历史热点和代码落点，具体等价改法待确认，未到可实施状态 |\n| 高，已有限定成果 | H-06既有Role准入及FindEffect修复 | 保留已完成成果；H06父项仍开放，不机械重做默认推广，不续H06-ROLE-EXACT诊断 |\n| 中，现有CPU/渲染/容量候选 | M-01/M-05/M-02/M-03/M-06/M-12；H07-LATE | 只保留既有方案；收益、依赖及未完成范围各守证据，不因排在表中就自动启动 |\n| 中，Android部署与资源阶段 | H-01/H-08/H-10/H-04/H-02/H-03 | 后移；H-01资源合同是相关产物前置，构建/ABI/视觉/音频/触屏按实际依赖分阶段，不把整个父项相互等待 |\n| 随改动，伴随验证 | H-09/H-11/M-09/M-15 | 服务选定实施项，不单独插入新一轮全量验证 |\n| 后续或按需，设备/产品 | H-05/M-04/M-07/M-08/M-10/L-04 | 对应平台和产品阶段具备后再处理 |\n| 低，评估已结束或发布后置 | M-13/M-14/L-01/L-02/L-03/L-05/L-06/L-07/L-08 | 结束的具名研究不原样重试；发布值/条件开关不抢当前性能主线 |\n| 暂缓/不续办 | M-11；producer复用；H06-ROLE-EXACT及95在途候选 | 原状态与失败证据保持；不因重排自动恢复 |\n\n下面34父项按上述分组排列；同组位置仅便于阅读，不承诺其中每项已有收益或均可执行。H-07是最终性能目标/验收父项，当前可讨论的具体优化入口是其已有H07-INPUT子方案；不新增第35父项或新候选。H06-SPATIAL/H07-AI-MODE仍各有既有进入条件及行为决策，不自动插队。\n\n",
+      "reorder": {
+        "header": "| ID | 优化点 / 独立方案 | 类型 | 建议优先级 | 当前处理方向 |",
+        "ids": [
+          "H-07",
+          "H-06",
+          "M-01",
+          "M-05",
+          "M-02",
+          "M-03",
+          "M-06",
+          "M-12",
+          "H-01",
+          "H-08",
+          "H-10",
+          "H-04",
+          "H-02",
+          "H-03",
+          "H-09",
+          "H-11",
+          "M-09",
+          "M-15",
+          "H-05",
+          "M-04",
+          "M-07",
+          "M-08",
+          "M-10",
+          "L-04",
+          "M-13",
+          "M-14",
+          "L-01",
+          "L-02",
+          "L-03",
+          "L-05",
+          "L-06",
+          "L-07",
+          "L-08",
+          "M-11"
+        ],
+        "linked": false
+      },
+      "replace": [
+        [
+          "当前策略待确认：Manifest/Provider＋随包本地资源包；先对照再切换；H-08/H-10既有依赖单独确认",
+          "后续Android阶段：保留本地AB策略草案；先共享内容合同再按依赖接入，未授权实施"
+        ],
+        [
+          "producer用户暂缓/生产OFF；H07性能FAIL及新ABBA基线GC失败保留，本轮转H-01策略",
+          "当前性能主线：先讨论H07-INPUT；producer暂缓/OFF，历史GC失败保留，不恢复旧Goal"
+        ],
+        [
+          "## 已存子方案：保留历史，不构成额外方向推进授权",
+          "## 既有子方案：首项先讨论，其余不自动推进"
+        ],
+        [
+          "| H07-INPUT | H-07 | 高 |",
+          "| H07-INPUT | H-07 | 高／第1讨论项，具体改法待确认 |"
+        ]
+      ],
+      "childReorder": {
+        "header": "| 子ID | 父项 | 优先级 | 独立方案 |",
+        "ids": [
+          "H07-INPUT",
+          "H07-LATE",
+          "H06-SPATIAL",
+          "H07-AI-MODE",
+          "H07-GC95",
+          "H06-ROLE-EXACT"
+        ],
+        "linked": false
+      }
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "prepend": "> **2026-10-10 当前：按优先级重排，首个讨论项 H07-INPUT / STRATEGY_DISCUSSION_PENDING。** H-07千人整tick性能是当前高优先主线；只讨论既有“角色输入与AI输入计算”方案，具体成本块/等价改法待确认，不改代码、不运行测试/测量、不发实施指令。H-01本地AB草案保留并后移到Android阶段；Role默认/FindEffect成果保留，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持。额外发现方向一律不跟进。下方H-01/Role历史“当前项”不再构成排程。[优先级总清单](android-mobile-readiness-priority-risk-register.md) · [首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [文档Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。\n\n",
+      "reorder": {
+        "header": "| ID | 当前状态（按范围） | 下一步 |",
+        "ids": [
+          "H-07",
+          "H-06",
+          "M-01",
+          "M-05",
+          "M-02",
+          "M-03",
+          "M-06",
+          "M-12",
+          "H-01",
+          "H-08",
+          "H-10",
+          "H-04",
+          "H-02",
+          "H-03",
+          "H-09",
+          "H-11",
+          "M-09",
+          "M-15",
+          "H-05",
+          "M-04",
+          "M-07",
+          "M-08",
+          "M-10",
+          "L-04",
+          "M-13",
+          "M-14",
+          "L-01",
+          "L-02",
+          "L-03",
+          "L-05",
+          "L-06",
+          "L-07",
+          "L-08",
+          "M-11"
+        ],
+        "linked": true
+      },
+      "replace": [
+        [
+          "历史决定（已由文首H-01排程取代）",
+          "历史决定（已由文首优先级排程取代）"
+        ],
+        [
+          "| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 当前项／STRATEGY_REVIEW_PENDING；未实施 | 已静态核对路径读取；确认随包本地资源包、Manifest/Provider及H-08/H-10依赖边界后，才形成实施指令 |",
+          "| [H-01](android-mobile-readiness/h-01-content-deployment.md) | 后续Android部署阶段；策略草案保留、未实施 | 本地AB方向可讨论；到平台阶段确认准确范围，不作为当前首项 |"
+        ],
+        [
+          "基线GC130独立挂账；本轮不继续诊断，当前转H-01策略，不恢复自动目标",
+          "首项讨论H07-INPUT的AI输入计算等价方案；基线GC问题按原范围保留，不恢复自动目标"
+        ],
+        [
+          "| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 下一项方案；静态分析完成，具体实施未授权 | 具名可消除成本、准确改法和最小证据明确后决定实施；否则结束本路线 |",
+          "| [H06-ROLE-EXACT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md) | 不再续办；历史诊断与失败保留 | 不自动补测/修复，不作为下一项 |"
+        ],
+        [
+          "| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | producer用户暂缓；一般输入方案保留 | 本轮静态复核不支持继续堆零点几毫秒省读；有新成本证据再选择 |",
+          "| [H07-INPUT](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) | 第1讨论项／STRATEGY_DISCUSSION_PENDING；producer仍暂缓 | 优先讨论已有AI计算/查询成本与数据访问；不重试小快照候选，具体等价改法未确认 |"
+        ]
+      ],
+      "childReorder": {
+        "header": "| 子项 | 当前 | 后继条件 |",
+        "ids": [
+          "H07-INPUT",
+          "H07-LATE",
+          "H06-SPATIAL",
+          "H07-AI-MODE",
+          "H07-GC95",
+          "H06-ROLE-EXACT"
+        ],
+        "linked": true
+      }
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "prepend": "> **2026-10-10 最新排程决定：PRIORITY_ORDER_FIRST；首项H07-INPUT仅讨论。** 用户原话：“那你重新按照优先级来整理文档，然后把第一个优化点告诉我，我们来讨论具体实现方案”。本节取代之前按编号选H-01为当前项的排程，不撤销OPTIMIZATION_PLAN_ONLY。\n\n## 2026-10-10 按优先级与状态排序（文档整理授权）\n\n- 保留34父项原编号和所有历史结果；登记编号不再用作执行顺序。先看当前高优先性能主线，再排除已完成、用户暂缓、条件未满足和纯验收项。\n- 当前高优先主线为H-07；其既有H07-INPUT“角色输入与AI输入计算”排为第1讨论项。它有91历史成本与当前代码入口，具体可消除成本/等价实现尚待确认；不能把排序写成已获实施授权或收益已证。\n- H-06既有Role限定准入及FindEffect修复成果保持，H06父项仍开放，不重复推广。producer快照复用用户暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF和旧失败保持。\n- H-01本地AB方向已讨论，方案草案保留并后移至Android部署阶段；不是当前性能首项，也未授权打包/资源/Settings实施。H-08/ATLAS/H-10等原依赖与暂缓范围不变。\n- 中/低/后续项和伴随正确性/0GC/关闭验证分别登记，不把候选、诊断工具、验收目标当作同样的“可立即优化”任务。额外发现方向一律不新增、不诊断、不修复、不派发。\n- 本轮仅文档/窄源码只读核对，不运行Unity/测试/测量、不发送执行会话消息、不恢复监测或旧Goal/34项自动队列。用户要求接下来讨论具体实现，尚未要求输出实施指令。\n\n[排序总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [H07-INPUT](H07-INPUT.md) · [文档Task](../TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。\n\n---\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/README.md",
+      "prepend": "> **2026-10-10 当前排序：[优先级总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)优先于编号顺序。** 首项[H07-INPUT角色输入与AI输入计算](H07-INPUT.md)仅进入实现策略讨论；H-01本地AB后移至Android阶段。已完成/暂缓/待决策/伴随验收分别登记，额外方向不跟进。下方旧H-01或Role“下一项”保留历史，不作为当前排程；未授权实施/运行/派发任务。[决定](DECISIONS.md) · [进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+      "prepend": "> **2026-10-10 当前先讨论H07-INPUT，H-01后移。** 排序按当前优先级、实际状态和最小依赖，原ID不变。H07-INPUT依赖当前内容/Kernel指纹与受影响正确性，不依赖先完成H-01、H-08、M-11、producer准入或95全部闭合；实际选择到失败fixture/路径时仍须满足原0GC等门，不能豁免。producer暂缓、H06-ROLE-EXACT不续办，AI降频/疏散及新空间算法未获批准。H-01/H-08/H-10共同接口及H-02/H-04运行前置留在后续Android阶段，不自动启动。[决定](DECISIONS.md) · [首项](H07-INPUT.md)。\n\n",
+      "replace": [
+        [
+          "## 当前Windows主线",
+          "## Windows主线与既有条件方案（2026-10-10文首排程优先）"
+        ],
+        [
+          "- H06 Role限定准入已完成，当前空配置生产默认Role。下一H06-ROLE-EXACT：现有成本/计数→可消除工作与authority副作用证明→具名方案获批→必要验证；不因producer暂缓而等待，不自动切网格。",
+          "- H06 Role限定准入已完成，当前空配置生产默认Role；成果保留。H06-ROLE-EXACT不再续办，不自动切网格。"
+        ],
+        [
+          "- H07-INPUT：已有91归因/字段合同→具名热点方案→获批实施；Role默认不是它的硬前置，但A/B必须固定同一种collector。",
+          "- H07-INPUT是第1讨论项：复用91归因/当前调用链→明确一块成本及等价实现→用户确认具体范围后才实施。producer复用仍暂缓；若后续A/B，必须固定已准入Role、AI配置及内容。"
+        ]
+      ]
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "prepend": "> **2026-10-10 最新排程：PRIORITY_ORDER_FIRST；H07-INPUT / STRATEGY_DISCUSSION_PENDING。** 用户要求按优先级重整并讨论首项实现。现有高优先H-07主线下，角色输入/AI输入计算为首个讨论项；具体等价改法未确认，未授权代码/资源/设置修改或Unity/测试/测量/任务派发。H-01本地AB草案后移到Android阶段。OPTIMIZATION_PLAN_ONLY继续有效，额外方向一律不跟进；Role默认/FindEffect成果、producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF和最终门保持。不恢复监测/旧Goal/自动队列。下方按编号选择H-01等旧排程为历史。入口：docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md、Assets/NTSD/Docs/battle-optimization-progress-tracker.md；文档Task：docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md。\n\n"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "prepend": "> **2026-10-10 当前：按优先级整理完成后，首项H07-INPUT仅讨论具体实现。** H-07当前性能主线优先；H-01本地AB草案后移Android阶段。具体等价改法未确认/无实施授权，额外方向不跟进；Role默认/FindEffect成果保留，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持。未运行Unity/测试/测量，未发任务/恢复监测或Goal。[首项方案](OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [当前进度](../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [文档Task](TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。下方H-01等“当前项”为历史。\n\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "prepend": "> **2026-10-10 当前恢复：按实际优先级，先讨论H07-INPUT角色/AI输入计算。** H-01本地AB后移Android阶段；原ID不等于执行次序。具体成本块与等价改法待确认，不可从本次排序直接启动实施/测试/测量或派发消息。额外方向不跟进；Role默认/FindEffect、producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及原最终门保持。未恢复监测/旧Goal。[首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [唯一进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。下方旧当前项只保留原时点。\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/NEXT-SESSION-PROMPT.md",
+      "prepend": "> **2026-10-10 当前仅讨论H07-INPUT的具体实现，尚无实施指令。** 用户要求按优先级重整，H-01部署后移。下方提示词仍为历史，不得按旧H06或H-01入口执行；待具体方案/范围确认并要求输出指令时另行形成具名任务。额外方向不跟进，不恢复旧Goal/队列/监测。[首项方案](H07-INPUT.md) · [决定](DECISIONS.md)。\n\n"
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md",
+      "prepend": "> **2026-10-10 排程更正：平台／中，后移到Android部署阶段。** 用户要求重新按优先级整理；H-01原编号第一不代表当前先实施。下方本地AB＋Manifest/Provider草案保留，具体实施未授权；当前首个讨论项是既有[H07-INPUT](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)。H-08/ATLAS/H-10依赖不自动解冻，原最终验收条件不变。[当前进度](../battle-optimization-progress-tracker.md)。\n\n",
+      "replace": [
+        [
+          "| 当前状态 | 当前第一项；STRATEGY_REVIEW_PENDING；2026-10-10路线草案待确认，未实施/复测 |",
+          "| 当前状态 | 后续Android部署阶段；本地AB路线草案保留、具体实施未授权，未实施/复测 |"
+        ]
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-07-fresh-1000-ai-certificate.md",
+      "prepend": "> **2026-10-10 排序更正：H-07为当前高优先性能主线，首个讨论项H07-INPUT。** 本父项是性能目标/验收，不等于只继续生成证书；当前先讨论既有角色/AI输入计算的具体等价优化，准确改法尚未确认，不实施/运行。H-01后移，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持，精确33ms/0GC等最终门不变。[首项方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [当前进度](../battle-optimization-progress-tracker.md)。\n\n",
+      "replace": [
+        [
+          "| 下一步与具体方向 | 2026-10-10用户选择暂缓producer并推进下一项；先准备[H06-ROLE-EXACT方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，具体改法/新测量未授权，原33ms与0GC门不变 |",
+          "| 下一步与具体方向 | 第1讨论项为既有[H07-INPUT](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)；先确认具名成本块与等价实现，不续producer/Role记录链诊断，原33ms与0GC门不变 |"
+        ]
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/android-mobile-readiness/h-06-collision-broadphase-1000.md",
+      "prepend": "> **2026-10-10 排程更正：Role限定默认准入已完成，H-06父项最终门仍开放。** 已完成成果保留，不重复推广或重跑未受影响证据；H06-ROLE-EXACT记录链/前置修复不再续办。当前首个讨论项为H-07的既有[H07-INPUT](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)，未批准新网格、空间索引或AI行为改变。下方旧“下一Role/尚未默认”只保留原时点。\n\n",
+      "replace": [
+        [
+          "| 下一步与具体方向 | 2026-10-10 producer由用户暂缓；下一[现有Role精确配对成本方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，仅静态分析/方案、具体实施未授权。复用准入证据，不重试无收益微候选；空间分区仍独立 |",
+          "| 下一步与具体方向 | 保留Role默认与FindEffect限定成果；H06-ROLE-EXACT不续办。当前转H07-INPUT方案讨论，空间分区保留既有条件、不自动实施 |"
+        ]
+      ]
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-rebaseline-and-start-gates-20261006.md",
+      "prepend": "> **2026-10-10 当前排序入口更正。** 本文保留2026-10-06基线及强制合同；当前优先级/排程以[重整总清单](android-mobile-readiness-priority-risk-register.md)和[唯一进度](battle-optimization-progress-tracker.md)文首为准，ID及下方历史包顺序不定义当前执行先后。首项为既有H07-INPUT的实现策略讨论，H-01后移Android阶段；已完成、暂缓、条件候选与伴随验证分别处理。仅文档/讨论，额外方向不跟进，不恢复旧Goal/34队列或解冻专项；所有精确33ms/确定性/0GC/关闭门保持。\n\n"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "prepend": "> **2026-10-10 当前第1讨论项：角色输入与AI输入计算 / STRATEGY_DISCUSSION_PENDING。** 用户要求按优先级重整并讨论具体实现，本项是原有H-07高优先子方案，不是新增方向。H-01部署后移；producer复用仍USER_DEFERRED/OFF，H06-ROLE-EXACT不续办，95 OFF。本次仅文档及窄源码核对，没有新优化实现或运行证据。下方旧“优先Role/下一Role”结论只保留原时点。[总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md) · [文档Task](../TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。\n\n## 为什么排在第一\n\n当前主目标是减少千人战斗整tick耗时。H-06既有Role限定准入已完成；原方案中的H07-INPUT优先级高，并有历史实景成本和当前代码入口。H-07父项的33ms证书是最终验收目标，不能靠继续生成报告代替优化。H-01等Android部署工作后移，未受影响的正确性/容量/关闭证据复用。\n\n| 证据范围 | 已确认内容 | 决策限制 |\n|---|---|---|\n| 91历史千人窗口，报告第41行 | CharacterInput约12.1—12.6ms/tick；RemainingAiDecision约4.94—5.11ms/tick | 是整个输入阶段及嵌套AI阶段，不是可消除收益，也不是当前工作树新鲜测量 |\n| 91混战ON原JSON，180样本 | IndexedCanonicalKernel均值3.117646ms，其中NearestSearch均值1.506964ms | nearest包含在kernel内，kernel又在上级阶段内，不能直接相加；已存在Indexed策略，不能假设仍是全量平方扫描 |\n| 本轮窄源码静态核对 | SimulationAiDecisionModule在DataOrientedCanonical/direct模式调用inputWriter.TryEvaluateCanonicalDecision，其它分支调用AiDecisionKernel.TryEvaluate；AiDecisionKernel内部调用AiSensingKernel.TryFindNearest | 需沿实际生效分支讨论，不能只改一个未生效旁路；静态调用链不证明有新收益 |\n| 原小快照方向 | producer复用已被用户暂缓；capture/sync处于不同可见边界，旧局部省读未证明当前整tick收益 | 不把本次排序当成重开producer、95或换名微缓存的授权 |\n\n原证据：[91报告](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md)；[混战ON JSON](../../../artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json)。这里只复用相位归因，不把旧工作树性能当当前证书。\n\n## 当前具体讨论范围\n\n优先讨论原方案“AI决策计算/目标查询及其数据访问”这一分支，目标是寻找可以等价减少的计算或访问工作。暂不选定新的算法、缓存或预期节省毫秒数；准确改法需要由当前讨论确定。\n\n- 主要代码入口：Simulation/Ai/Runtime/SimulationAiDecisionModule.cs的IndexedCanonicalKernel实际分支；Simulation/Ai/Kernel/AiDecisionKernel.cs及其AiSensingKernel查询；CharacterInput发布/读取边界只按相关性核对。\n- 现有DataOrientedCanonical/Indexed/canonical writer能力优先复用；不重建一套SoA，不直接认定“再加空间索引”就是缺口。\n- 输入逐tick结果、目标选择和遍历/tie-break顺序、双RNG及完整checksum必须保持；本项不包含AI降频/疏散/迁区攻击行为改变。\n- producer Runtime自复制复用保持暂缓，95候选仍OFF；不回到H06-ROLE-EXACT七段诊断，不重跑91八子阶段或无信息量旧窗口。\n- 当前只讨论：明确优化哪一块、消除什么工作、为何等价、准确所有者/失效条件、最小验证和停止条件。没有安全且足够有价值的改法就保持“待方案/不实施”，不把排序升格为READY，不自动加实验或新优化点。\n\n实施与最终性能验收仍使用下方原合同；具体方案确认后才另立准确Task/Change和备份，不因本次文档重排启动Unity/测试/Profiler/测量或发送消息。\n\n---\n\n"
+    }
+  ],
+  "taskPath": "docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md",
+  "protectedPaths": [
+    "AGENTS.md",
+    "Packages/manifest.json",
+    "Packages/packages-lock.json",
+    "ProjectSettings/ProjectVersion.txt",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+    "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs",
+    "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs",
+    "Assets/NTSD/Scripts/Simulation/Ai/Kernel/AiDecisionKernel.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleAiUnifiedRowPublisher.cs",
+    "Assets/NTSD/Scripts/Animation/BattleContentSource.cs",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+    "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+    "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md",
+    "docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md",
+    "docs/ai/CHANGE-LEDGER.md",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/REPORT.md",
+    "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH91-NATIVE-SAMPLED-STATE-WINDOWS-20261009/windows-01/03-combat1000-native-on/report.json"
+  ]
+}

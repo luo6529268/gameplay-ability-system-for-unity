@@ -1,0 +1,16 @@
+{
+  "observedUtc": "2026-10-10T07:54:31.1341610Z",
+  "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Library\\ScriptAssemblies\\Assembly-CSharp.dll",
+  "sha256": "EC5599D1539A5F2E0C67FBB00CD7872AE9D2BA4BDDD7B5D28EC81CB382B5FCC5",
+  "debugModes": 263,
+  "attribute": "[System.Diagnostics.DebuggableAttribute((System.Diagnostics.DebuggableAttribute+DebuggingModes)263)]",
+  "compilerResponse": "Library/Bee/artifacts/1900b0aEDbg.dag/Assembly-CSharp.rsp",
+  "compilerFlags": [
+    "\"Assets/KAKO/CameraFit/Scripts/Utility/Debug/CameraFitDebugUtility.cs\"",
+    "/optimize-",
+    "/debug:portable"
+  ],
+  "historicalBaselineSha": "75d97ad66129479630442e4affb5616d6d71e838f6feb56312418ce443dcfac5",
+  "historicalCompileMode": "NOT_VERIFIED",
+  "compilationModeChanged": false
+}

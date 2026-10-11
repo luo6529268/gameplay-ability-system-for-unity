@@ -1,0 +1,88 @@
+{
+  "time": "2026-10-10T14:10:07.198155+08:00",
+  "files": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "bytes": 145715,
+      "sha256": "52dfcb4b347b8cfd9693cb259f922eb27c03254246dfe2564a4e7bd5a62caa12"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "bytes": 392661,
+      "sha256": "9b94fb4793e34a8acf14179fe3dab3bc56fea6704949caa43a0ce83335c709ed"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "bytes": 1668486,
+      "sha256": "ccb71b0f08107c4870fb30ed7977521f3669566c506f6857275d43a71b2552ba"
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "bytes": 1608148,
+      "sha256": "3d6ae12085845dea03812b4ae8bef3dfa013a1ea387a3cbe05ff5473ebf82491"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "bytes": 235861,
+      "sha256": "80f3d8d18c5507ede79f9a3633deedb2cba805bdd0eb51891c7a841060570803"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "bytes": 16380,
+      "sha256": "862949e8799c760176ac56a932bd3d14f0cb393b11535575517de9c0f05a6bf2"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "bytes": 10947,
+      "sha256": "90cb5508c16bdeb29217b25c4ff818a828ade04b83f7dd6b5feb922425902b12"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H07-INDEXED-NEAREST-REVIEW-20261010.md",
+      "bytes": 3312,
+      "sha256": "50ded81bd992784a4bc15fe1655e9efbffd623f8293675bbd60d6a1c8dd1d1b6"
+    }
+  ],
+  "backups": [
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H07-INDEXED-NEAREST-REVIEW-20261010.md",
+      "backupValid": true,
+      "originalBytesStillPresent": true
+    }
+  ],
+  "concurrentExecution": "target may now modify its separately authorized two script scope; this review used pre-dispatch CSharp audit"
+}

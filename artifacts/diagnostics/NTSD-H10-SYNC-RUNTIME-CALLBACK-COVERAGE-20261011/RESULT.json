@@ -1,0 +1,32 @@
+{
+  "task": "NTSD-H10-SYNC-RUNTIME-CALLBACK-COVERAGE-20261011",
+  "status": "NATIVE_BINDING_LEGACY_EXIT_STATIC_BYPASS_UNDER_APPROVED_CONDITION",
+  "finiteTaskComplete": true,
+  "closedAtConditionalStaticLevel": [
+    "R14 SyncRuntime callback question",
+    "Specific BindNativeC25Action helper-chain indirect legacy state_exit question under approved condition"
+  ],
+  "condition": "!UNITY_EDITOR compilation OR Editor FrameWriteObserverForDiagnostics not installed",
+  "actualEditorObserverState": "NOT_MEASURED",
+  "newUnresolvedProjectCallees": [],
+  "newProvenProductionDefect": false,
+  "productionPatchProposed": false,
+  "newCueAdded": false,
+  "newReadLines": 5,
+  "protectedNamedFilesExpected": 166,
+  "protectionEvidence": "final-audit.json",
+  "unityExecuted": false,
+  "testsExecuted": false,
+  "compileExecuted": false,
+  "performanceMeasurementExecuted": false,
+  "codeChanged": false,
+  "preexistingFilesChangedByTask": false,
+  "changeLedgerValidator": "NOT_APPLICABLE_NOT_RUN_NO_CODE_CHANGE",
+  "priorPassesReusedAtOriginalScope": true,
+  "menuStatus": "UNKNOWN_TOOL_QUERY_UNAVAILABLE",
+  "budgetStatus": "UNDECIDED",
+  "parentH10": "OPEN",
+  "H07Passed": false,
+  "androidCertified": false,
+  "autoNext": false
+}

@@ -1,0 +1,114 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "859b7b0be10f41088fc92c1027bfcb6c",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791626381928,
+      "finished_unix_ms": 1791626403864,
+      "last_update_unix_ms": 1791626403864,
+      "progress": {
+        "completed": 8,
+        "total": 10649,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791626399709,
+        "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_PreparedFullPayloadAndCounts(2)",
+        "last_finished_unix_ms": 1791626402963,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 8,
+          "passed": 8,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 14.9132249,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "SegmentUvReuse_BetweenBuildResizeReplaceShrinkAndNativeRecovery",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_BetweenBuildResizeReplaceShrinkAndNativeRecovery",
+            "state": "Passed",
+            "durationSeconds": 3.7546265,
+            "message": null,
+            "stackTrace": null,
+            "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:2958 (active clients: 1)\r\n"
+          },
+          {
+            "name": "SegmentUvReuse_CustomFallbackInvalidUvsNullDestroyedResizeAndException",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_CustomFallbackInvalidUvsNullDestroyedResizeAndException",
+            "state": "Passed",
+            "durationSeconds": 0.0212662,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SegmentUvReuse_DefaultOffAndClearDisables",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_DefaultOffAndClearDisables",
+            "state": "Passed",
+            "durationSeconds": 0.0008915,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SegmentUvReuse_OriginalCapacityAndNonfiniteRejection",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_OriginalCapacityAndNonfiniteRejection",
+            "state": "Passed",
+            "durationSeconds": 0.0057638,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SegmentUvReuse_PreparedBreaksAndDestroyedResource",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_PreparedBreaksAndDestroyedResource",
+            "state": "Passed",
+            "durationSeconds": 0.088098,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SegmentUvReuse_PreparedFullPayloadAndCounts(0)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_PreparedFullPayloadAndCounts(0)",
+            "state": "Passed",
+            "durationSeconds": 3.6638362,
+            "message": null,
+            "stackTrace": null,
+            "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)\r\n"
+          },
+          {
+            "name": "SegmentUvReuse_PreparedFullPayloadAndCounts(1)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_PreparedFullPayloadAndCounts(1)",
+            "state": "Passed",
+            "durationSeconds": 3.3623951,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SegmentUvReuse_PreparedFullPayloadAndCounts(2)",
+            "fullName": "NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvReuse_PreparedFullPayloadAndCounts(2)",
+            "state": "Passed",
+            "durationSeconds": 3.253184,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

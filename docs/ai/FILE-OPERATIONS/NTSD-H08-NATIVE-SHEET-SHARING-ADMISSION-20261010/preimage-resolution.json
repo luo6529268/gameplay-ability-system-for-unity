@@ -1,0 +1,19 @@
+{
+  "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+  "initialBatchSnapshot": {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010\\before\\Assets__NTSD__Docs__battle-optimization-progress-tracker.md",
+    "bytes": 254618,
+    "sha256": "b7efa429746d84d5284e89ff139da30beda7bbe824a93138310d61bf772467a5",
+    "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+  },
+  "actualPreEditSnapshot": {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "sha256": "d28544ecefb151b5bc1f62f72e552263c017b38e820357c1207daf08fcfaf279",
+    "backup": "docs\\ai\\FILE-OPERATIONS\\NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010\\intermediate\\20261010T214303773529\\battle-optimization-progress-tracker.md"
+  },
+  "onlyDifference": "Own admission PLANNED header; original content is exact suffix",
+  "shaValid": true,
+  "noContentLost": true,
+  "reason": "Initial batch baseline captured this document after its first mutation; mandatory per-edit preimage preceded the mutation and is authoritative."
+}

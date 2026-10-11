@@ -1,0 +1,20 @@
+{
+  "scope": "Offline Python transcription of old/candidate control flow; NOT C# or Unity acceptance; no performance timing",
+  "seed": 20261010,
+  "fixtureCount": 1400,
+  "oldCandidateFullResultAndVisitSequenceComparisons": 23870,
+  "validRangeLinearOracleComparisons": 19125,
+  "mismatchCount": 0,
+  "mismatchesFirst10": [],
+  "boundAndCandidateXDistanceEvaluationsOld": 221199,
+  "boundAndCandidateXDistanceEvaluationsCandidate": 150936,
+  "eliminatedModelEvaluations": 70263,
+  "candidateRowVisits": 52453,
+  "protectedTrackedCSharpFiles": 2642,
+  "limitations": [
+    "Model transcribed manually; real C# must be validated independently",
+    "Counts are arithmetic operations in generated fixtures, not actual combat counts or CPU gains",
+    "Invalid/extreme int32 values compare against original indexed behavior; linear oracle limited to nonoverflow coordinates",
+    "No actual frame inputs, RNG/checksum, GC, Unity Editor or device validation in this model"
+  ]
+}

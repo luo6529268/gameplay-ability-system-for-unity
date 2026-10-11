@@ -1,0 +1,12 @@
+{
+  "approvedNow": true,
+  "sourceProposal": "artifacts\\diagnostics\\NTSD-H10-REMAINING-GATES-DECISION-20261011\\minimal-read-permissions.json",
+  "proposalSha256": "69ee2395ef122ecadf151476c39518a8cc2b428e48007026c5da657790158f7e",
+  "taskContract": "TASK.md",
+  "requestedTargets": [
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs"
+  ],
+  "noOtherBodies": true
+}

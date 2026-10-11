@@ -12,10 +12,604 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleCatalogCentralResourceResolverEditorTests
     {
+
+        internal const string SegmentUvOutput = "artifacts/diagnostics/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010";
+
+        internal static void SetUvReuse(BattleDynamicMeshBackend backend, bool enabled, bool count = false)
+        {
+            backend.SegmentUvDimensionReuseEnabled = enabled;
+            typeof(BattleDynamicMeshBackend).GetField("countUvDimensionReads",
+                BindingFlags.Instance | BindingFlags.NonPublic).SetValue(backend, count);
+        }
+
+        internal static string CaptureFields(object value)
+        {
+            var output = new System.Text.StringBuilder();
+            AppendFields(output, value, true);
+            return output.ToString();
+        }
+
+        private static void AppendFields(System.Text.StringBuilder output, object value, bool expand)
+        {
+            if (value == null) { output.Append("null;"); return; }
+            Type type = value.GetType();
+            if (value is float f) { output.Append(BitConverter.SingleToInt32Bits(f)).Append(';'); return; }
+            if (value is double d) { output.Append(BitConverter.DoubleToInt64Bits(d)).Append(';'); return; }
+            if (type.IsPrimitive || type.IsEnum || value is string)
+            { output.Append(value).Append(';'); return; }
+            if (value is UnityEngine.Object unity)
+            { output.Append(unity == null ? 0 : unity.GetInstanceID()).Append(';'); return; }
+            if (value is Array array)
+            {
+                output.Append(array.Length).Append('[');
+                foreach (object item in array) AppendFields(output, item, false);
+                output.Append(']'); return;
+            }
+            if (!type.IsValueType && !expand)
+            { output.Append(System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(value)).Append(';'); return; }
+            foreach (FieldInfo field in type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                output.Append(field.Name).Append(':');
+                AppendFields(output, field.GetValue(value), false);
+            }
+        }
+
+        internal static string CaptureBackend(BattleDynamicMeshBackend backend)
+        {
+            var output = new System.Text.StringBuilder(CaptureFields(backend.Diagnostics));
+            output.Append(backend.AllocatedChunkCount);
+            for (int i = 0; i < backend.SegmentCount; i++) output.Append(CaptureFields(backend.GetSegment(i)));
+            for (int i = 0; i < backend.ActiveChunkCount; i++)
+            {
+                Mesh mesh = backend.GetChunkMesh(i);
+                int vertices = backend.GetChunkActiveQuadCount(i) * 4;
+                Assert.That(mesh.GetVertexBufferStride(0), Is.EqualTo(44));
+                using (var data = Mesh.AcquireReadOnlyMeshData(mesh))
+                {
+                    var bytes = data[0].GetVertexData<byte>(0);
+                    for (int j = 0; j < vertices * 44; j++) output.Append(bytes[j]).Append(',');
+                    var indices = data[0].GetIndexData<ushort>();
+                    for (int j = 0; j < vertices / 4 * 6; j++) output.Append(indices[j]).Append(',');
+                }
+                output.Append(CaptureFields(mesh.bounds)).Append(mesh.indexFormat).Append(mesh.subMeshCount);
+                for (int j = 0; j < mesh.subMeshCount; j++) output.Append(CaptureFields(mesh.GetSubMesh(j)));
+            }
+            return output.ToString();
+        }
+
+        internal sealed class SegmentUvFixture : IDisposable
+        {
+            private readonly ResolverFixture[] owners = new ResolverFixture[3];
+            internal Texture2DArray ArrayTexture;
+            internal BattleSpriteCatalog Catalog;
+            internal readonly BattleCatalogCentralResourceResolver Resolver = new BattleCatalogCentralResourceResolver();
+            internal Material Material => Mode == 1 ? owners[0].ValidArrayMaterial : owners[0].Valid2DMaterial;
+            internal Texture2D TextureAt(int index) => owners[index].SourceTexture;
+            internal readonly int Mode;
+            private readonly bool pageBreaks;
+
+            internal SegmentUvFixture(int mode, bool pageBreaks = false)
+            {
+                Mode = mode;
+                this.pageBreaks = pageBreaks;
+                try
+                {
+                    for (int i = 0; i < owners.Length; i++)
+                    {
+                        owners[i] = new ResolverFixture(false, "segment-uv-" + i);
+                        Assert.That(owners[i].SourceTexture.Reinitialize(32, 32), Is.True);
+                        Fill(owners[i].SourceTexture, i);
+                    }
+                    ArrayTexture = new Texture2DArray(32, 32, 2, TextureFormat.RGBA32, false)
+                    { hideFlags = HideFlags.HideAndDontSave, filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp };
+                    ArrayTexture.SetPixels32(owners[0].SourceTexture.GetPixels32(), 0);
+                    ArrayTexture.SetPixels32(owners[1].SourceTexture.GetPixels32(), 1);
+                    ArrayTexture.Apply(false, false);
+                    Rebuild();
+                }
+                catch { Dispose(); throw; }
+            }
+
+            private static void Fill(Texture2D texture, int offset)
+            {
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                var pixels = new Color32[texture.width * texture.height];
+                for (int i = 0; i < pixels.Length; i++)
+                    pixels[i] = new Color32((byte)(30 + i % 140), (byte)(40 + (i * 3 + offset * 55) % 180),
+                        (byte)(220 - i % 150), (byte)(100 + i % 150));
+                texture.SetPixels32(pixels);
+                texture.Apply(false, false);
+            }
+
+            internal void Rebuild()
+            {
+                var entries = new Dictionary<BattleSpriteKey, BattleSpriteEntry>();
+                for (int i = 0; i < 12; i++)
+                {
+                    Texture2D source = owners[i / 4].SourceTexture;
+                    Rect pixels = new Rect(2 + i % 4, 2, 20, 16);
+                    Texture bindingTexture = Mode == 1 ? (Texture)ArrayTexture : source;
+                    Rect uv = new Rect(pixels.x / bindingTexture.width, pixels.y / bindingTexture.height,
+                        pixels.width / bindingTexture.width, pixels.height / bindingTexture.height);
+                    var key = new BattleSpriteKey(71, i);
+                    var binding = new BattleSpriteCentralBinding((BattleSpriteCentralBindingMode)Mode,
+                        bindingTexture, Mode == 1 ? i % 2 : 0, uv, pixels,
+                        Mode == 1 ? i % 2 : Mode == 2 ? (pageBreaks ? i % 2 : 0) : -1);
+                    entries.Add(key, new BattleSpriteEntry(key, "segment-uv-test", source, pixels,
+                        new Vector2(0.5f, 0.5f), null, binding));
+                }
+                Catalog = new BattleSpriteCatalog(entries);
+                Configure();
+            }
+
+            internal void Configure()
+            {
+                Resolver.Configure(Catalog, owners[0].Valid2DMaterial, owners[0].ValidArrayMaterial);
+            }
+
+            internal BattleRenderCommand Command(int pic, int sequence = 0, Vector3? position = null)
+            {
+                BattleRenderCommand source = owners[0].CreateCommand(Catalog, 71, pic,
+                    new Color32((byte)(255 - sequence % 150), (byte)(120 + sequence % 120),
+                        (byte)(160 + sequence % 90), (byte)(150 + sequence % 100)));
+                var command = new BattleRenderCommand(source.Type, new RuntimeEntityHandle(3, 1), 5, 71,
+                    pic, 0, 3, sequence, 0, sequence, position ?? new Vector3(sequence % 31 * 0.001f, 0.15f, sequence % 3 * 0.001f),
+                    source.Size, source.Pivot, source.NormalizedUv,
+                    new BattleSpriteRenderState(source.Color, (sequence & 1) != 0, (sequence & 2) != 0,
+                        SpriteMaskInteraction.None, BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha),
+                    source.SpriteDescriptor, motionAnchor: BattlePresentationMotionAnchor.Body);
+                Catalog.TryGet(71, pic, out BattleSpriteEntry entry);
+                return CreateTrustedCommandWithIdentity(command, entry);
+            }
+
+            internal BattlePresentationFrame Frame(int count, bool fragmented = false)
+            {
+                var frame = new BattlePresentationFrame();
+                frame.Reset(77);
+                for (int i = 0; i < count; i++) frame.AddCommand(Command(fragmented ? i % 3 * 4 : i % 4, i));
+                return frame;
+            }
+
+            public void Dispose()
+            {
+                UnityEngine.Object.DestroyImmediate(ArrayTexture);
+                foreach (var owner in owners) owner?.Dispose();
+            }
+        }
+
+        private static int CompareUvBuild(SegmentUvFixture fixture, BattlePresentationFrame frame,
+            BattleCentralDrawMode mode = BattleCentralDrawMode.OrderedChunks)
+        {
+            string publication = CaptureFields(frame);
+            using var off = new BattleDynamicMeshBackend();
+            using var on = new BattleDynamicMeshBackend();
+            off.PrepareCapacity(frame.CommandCount);
+            on.PrepareCapacity(frame.CommandCount);
+            SetUvReuse(off, false, true);
+            SetUvReuse(on, true, true);
+            off.Build(frame, fixture.Resolver, mode);
+            on.Build(frame, fixture.Resolver, mode);
+            Assert.That(CaptureBackend(on), Is.EqualTo(CaptureBackend(off)), "Full native mesh payload/metadata differs.");
+            Assert.That(CaptureFields(frame), Is.EqualTo(publication), "Publication was mutated.");
+            Assert.That(on.Diagnostics.CapacityGrowthCount, Is.Zero);
+            return on.LastUvDimensionReadPairs;
+        }
+
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void SegmentUvReuse_PreparedFullPayloadAndCounts(int bindingMode)
+        {
+            using var fixture = new SegmentUvFixture(bindingMode);
+            foreach (int count in new[] { 0, 1, 64, 4096, 4097 })
+            {
+                var frame = fixture.Frame(count);
+                int expected = count == 0 ? 0 : count == 1 ? 1 : count == 4097 ? 3 : 2;
+                Assert.That(CompareUvBuild(fixture, frame), Is.EqualTo(expected), "Getter pair count at " + count);
+            }
+            Assert.That(CompareUvBuild(fixture, fixture.Frame(15, true)), Is.EqualTo(bindingMode == 1 ? 2 : 15));
+            Assert.That(CompareUvBuild(fixture, fixture.Frame(15), BattleCentralDrawMode.StrictOrderedDraw), Is.EqualTo(15));
+            Assert.That(CompareUvBuild(fixture, fixture.Frame(15), BattleCentralDrawMode.SingleMeshDiagnosticOnly), Is.EqualTo(15));
+        }
+
+        [Test]
+        public void SegmentUvReuse_PreparedBreaksAndDestroyedResource()
+        {
+            using var page = new SegmentUvFixture(2, true);
+            Assert.That(CompareUvBuild(page, page.Frame(12)), Is.EqualTo(12), "Page identity must break segments.");
+            using var fixture = new SegmentUvFixture(0);
+            var broken = fixture.Frame(4);
+            broken.AddCommand(default);
+            for (int i = 0; i < 4; i++) broken.AddCommand(fixture.Command(i, i + 5));
+            Assert.That(CompareUvBuild(fixture, broken), Is.EqualTo(4), "Unresolved must break reuse.");
+            var entries = new Dictionary<BattleSpriteKey, BattleSpriteEntry>();
+            for (int i = 0; i < 12; i++)
+            {
+                fixture.Catalog.TryGet(71, i, out var entry);
+                if (i == 2)
+                    entry = entry.WithCentralBinding(new BattleSpriteCentralBinding(BattleSpriteCentralBindingMode.AtlasTextureArray,
+                        fixture.ArrayTexture, 1, entry.NormalizedUv, entry.PixelRect, 1));
+                entries.Add(entry.Key, entry);
+            }
+            fixture.Catalog = new BattleSpriteCatalog(entries);
+            fixture.Configure();
+            Assert.That(CompareUvBuild(fixture, fixture.Frame(12)), Is.EqualTo(10), "Texture/material/binding breaks.");
+            UnityEngine.Object.DestroyImmediate(fixture.TextureAt(0));
+            fixture.Configure();
+            var invalid = fixture.Frame(12);
+            Assert.That(CompareUvBuild(fixture, invalid), Is.GreaterThanOrEqualTo(0));
+            using var backend = new BattleDynamicMeshBackend();
+            backend.PrepareCapacity(12);
+            SetUvReuse(backend, true, true);
+            backend.Build(invalid, fixture.Resolver);
+            Assert.That(backend.Diagnostics.UnresolvedCommandCount, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void SegmentUvReuse_BetweenBuildResizeReplaceShrinkAndNativeRecovery()
+        {
+            using var fixture = new SegmentUvFixture(0);
+            using var replacement = new SegmentUvFixture(1);
+            using var off = new BattleDynamicMeshBackend();
+            using var on = new BattleDynamicMeshBackend();
+            off.PrepareCapacity(4097);
+            on.PrepareCapacity(4097);
+            SetUvReuse(off, false, true);
+            SetUvReuse(on, true, true);
+            Action<BattlePresentationFrame, BattleCatalogCentralResourceResolver> compare = (frame, resolver) =>
+            {
+                string before = CaptureFields(frame);
+                off.Build(frame, resolver);
+                on.Build(frame, resolver);
+                Assert.That(CaptureBackend(on), Is.EqualTo(CaptureBackend(off)));
+                Assert.That(CaptureFields(frame), Is.EqualTo(before));
+            };
+            var large = fixture.Frame(4097);
+            compare(large, fixture.Resolver);
+            compare(fixture.Frame(1), fixture.Resolver);
+            compare(fixture.Frame(0), fixture.Resolver);
+            compare(fixture.Frame(32), fixture.Resolver);
+            string original = CaptureBackend(on);
+            Assert.That(fixture.TextureAt(0).Reinitialize(64, 48), Is.True);
+            fixture.Configure();
+            compare(fixture.Frame(32), fixture.Resolver);
+            Assert.That(CaptureBackend(on), Is.Not.EqualTo(original), "New Build must read resized native texture.");
+            fixture.Rebuild();
+            compare(fixture.Frame(32), fixture.Resolver);
+            compare(replacement.Frame(32), replacement.Resolver);
+            UnityEngine.Object.DestroyImmediate(off.GetChunkMesh(0));
+            UnityEngine.Object.DestroyImmediate(on.GetChunkMesh(0));
+            off.PrepareCapacity(4097);
+            on.PrepareCapacity(4097);
+            compare(fixture.Frame(4097), fixture.Resolver);
+            Assert.That(on.Diagnostics.ResolvedCommandCount, Is.EqualTo(4097));
+            Assert.That(on.LastUvDimensionReadPairs, Is.EqualTo(3));
+            off.Clear();
+            on.Clear();
+            Assert.That(on.SegmentUvDimensionReuseEnabled, Is.False);
+            SetUvReuse(on, true, true);
+            compare(replacement.Frame(32), replacement.Resolver);
+        }
+
+        [Test]
+        public void SegmentUvReuse_OriginalCapacityAndNonfiniteRejection()
+        {
+            using var fixture = new SegmentUvFixture(0);
+            foreach (bool enabled in new[] { false, true })
+            {
+                using var backend = new BattleDynamicMeshBackend();
+                backend.PrepareCapacity(4);
+                backend.SealCapacity(4);
+                SetUvReuse(backend, enabled, true);
+                backend.Build(fixture.Frame(4), fixture.Resolver);
+                string before = CaptureBackend(backend);
+                Assert.Throws<InvalidOperationException>(() => backend.Build(fixture.Frame(5), fixture.Resolver));
+                Assert.That(CaptureBackend(backend), Is.EqualTo(before));
+                var invalid = fixture.Frame(2);
+                invalid.AddCommand(fixture.Command(0, 2, new Vector3(float.NaN, 0, 0)));
+                Assert.Throws<ArgumentException>(() => backend.Build(invalid, fixture.Resolver));
+                backend.Clear();
+                backend.UnsealCapacity();
+                SetUvReuse(backend, enabled, true);
+                backend.Build(fixture.Frame(4), fixture.Resolver);
+                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(4));
+                Assert.That(backend.LastUvDimensionReadPairs, Is.EqualTo(enabled ? 2 : 4));
+            }
+        }
+
+        private sealed class UvFallbackResolver : IBattleCentralResourceResolver
+        {
+            internal Texture2D Texture;
+            internal Material Material;
+            internal bool Resize;
+            internal bool Throw;
+            internal Rect[] Uvs;
+            public BattleCentralResourceStatus Resolve(in BattleRenderCommand command, out BattleCentralResolvedResource resource)
+            {
+                if (Throw && command.LocalSequence == 2) throw new InvalidOperationException("owned resolver fault");
+                if (Resize && command.LocalSequence == 1) Texture.Reinitialize(64, 48);
+                Rect uv = Uvs == null ? new Rect(0.125f, 0.25f, 0.5f, 0.5f) : Uvs[command.LocalSequence % Uvs.Length];
+                resource = new BattleCentralResolvedResource(Texture, Material, uv, command.Size, command.Pivot, command.Color);
+                return BattleCentralResourceStatus.Resolved;
+            }
+        }
+
+        [Test]
+        public void SegmentUvReuse_CustomFallbackInvalidUvsNullDestroyedResizeAndException()
+        {
+            using var fixture = new SegmentUvFixture(0);
+            var resolver = new UvFallbackResolver { Texture = fixture.TextureAt(0), Material = fixture.Material };
+            var frame = fixture.Frame(12);
+            var uvs = new[] { new Rect(0, 0, 0, 1), new Rect(0, 0, 1, 1), new Rect(0, 0, -1, 1),
+                new Rect(0, 0, 1, -1), new Rect(0, 0, float.NaN, 1), new Rect(0, 0, 0.00001f, 0.00002f) };
+            for (int shape = 0; shape < 4; shape++)
+            {
+                resolver.Uvs = shape == 0 ? uvs : null;
+                resolver.Resize = shape == 1;
+                if (shape == 2) resolver.Texture = null;
+                if (shape == 3)
+                {
+                    resolver.Texture = fixture.TextureAt(0);
+                    UnityEngine.Object.DestroyImmediate(resolver.Texture);
+                }
+                using var off = new BattleDynamicMeshBackend();
+                using var on = new BattleDynamicMeshBackend();
+                off.PrepareCapacity(12);
+                on.PrepareCapacity(12);
+                SetUvReuse(off, false, true);
+                SetUvReuse(on, true, true);
+                if (resolver.Resize) resolver.Texture.Reinitialize(32, 32);
+                off.Build(frame, resolver);
+                if (resolver.Resize) resolver.Texture.Reinitialize(32, 32);
+                on.Build(frame, resolver);
+                Assert.That(CaptureBackend(on), Is.EqualTo(CaptureBackend(off)));
+                Assert.That(on.LastUvDimensionReadPairs, Is.EqualTo(off.LastUvDimensionReadPairs));
+                Assert.That(on.LastUvDimensionReadPairs, Is.EqualTo(shape == 0 ? 4 : shape == 1 ? 12 : 0));
+            }
+            using var backend = new BattleDynamicMeshBackend();
+            backend.PrepareCapacity(12);
+            SetUvReuse(backend, true, true);
+            resolver.Throw = true;
+            Assert.Throws<InvalidOperationException>(() => backend.Build(frame, resolver));
+            backend.Clear();
+            SetUvReuse(backend, true, true);
+            resolver.Throw = false;
+            resolver.Texture = fixture.TextureAt(1);
+            backend.Build(frame, resolver);
+            Assert.That(backend.LastUvDimensionReadPairs, Is.EqualTo(12));
+        }
+
+
+        [Test]
+        public void SegmentUvReuse_PreparedInvalidBindingFirstFailsClosed()
+        {
+            using var fixture = new SegmentUvFixture(0);
+            BattleSpriteCatalog validCatalog = fixture.Catalog;
+            foreach (Rect uv in new[] { Rect.zero, new Rect(0, 0, -1, 1), new Rect(0, 0, float.NaN, 1) })
+            {
+                var entries = new Dictionary<BattleSpriteKey, BattleSpriteEntry>();
+                for (int i = 0; i < 12; i++)
+                {
+                    validCatalog.TryGet(71, i, out var entry);
+                    if (i == 2) entry = entry.WithCentralBinding(new BattleSpriteCentralBinding(
+                        BattleSpriteCentralBindingMode.SourceTexture2D, fixture.TextureAt(0), 0, uv, entry.PixelRect));
+                    entries.Add(entry.Key, entry);
+                }
+                fixture.Catalog = new BattleSpriteCatalog(entries);
+                fixture.Configure();
+                var frame = new BattlePresentationFrame();
+                frame.Reset(88);
+                frame.AddCommand(fixture.Command(2));
+                frame.AddCommand(fixture.Command(0, 1));
+                frame.AddCommand(fixture.Command(1, 2));
+                frame.AddCommand(fixture.Command(3, 3));
+                Assert.That(CompareUvBuild(fixture, frame), Is.EqualTo(2));
+                using var backend = new BattleDynamicMeshBackend();
+                backend.PrepareCapacity(4);
+                SetUvReuse(backend, true, true);
+                backend.Build(frame, fixture.Resolver);
+                Assert.That(backend.Diagnostics.UnresolvedCommandCount, Is.EqualTo(1));
+                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(3));
+            }
+        }
+
+
+        [Serializable]
+        private sealed class SegmentUvCostWindow
+        {
+            public string layout;
+            public bool enabled;
+            public long[] elapsedTicks = new long[32];
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[] gc =
+                new NTSD.Test.Editor.BattleScopedGcAllocationRecorder.ScopeResult[32];
+            public int completed;
+            public double meanMs, p95Ms, p99Ms;
+            public string payloadSha256;
+            public bool capacityStable, publicationUnchanged;
+        }
+
+        [Serializable]
+        private sealed class SegmentUvCostReport
+        {
+            public string status = "IN_PROGRESS";
+            public string scope = "Complete synchronous main-thread backend Build including native Mesh upload; CPU only";
+            public int commands = 4000, warm = 8, samples = 32;
+            public long frequency = System.Diagnostics.Stopwatch.Frequency;
+            public string unit, failure;
+            public NTSD.Test.Editor.BattleScopedGcAllocationRecorder.CalibrationResult calibrationBefore, calibrationAfter;
+            public SegmentUvCostWindow[] windows = new SegmentUvCostWindow[16];
+            public bool sourceSignal, arraySignal, fragmentedAccepted, strictAccepted;
+        }
+
+        private static string UvHash(string value)
+        {
+            using var sha = System.Security.Cryptography.SHA256.Create();
+            return BitConverter.ToString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(value))).Replace("-", "");
+        }
+
+        private static string UvCapacity(BattleDynamicMeshBackend backend)
+        {
+            var output = new System.Text.StringBuilder();
+            foreach (string name in new[] { "chunks", "segments", "segmentBounds" })
+            {
+                var array = (Array)typeof(BattleDynamicMeshBackend).GetField(name,
+                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(backend);
+                output.Append(name).Append(array.Length).Append(System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(array));
+                if (name != "chunks") continue;
+                foreach (object chunk in array)
+                {
+                    if (chunk == null) continue;
+                    foreach (FieldInfo field in chunk.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic))
+                    {
+                        if (!(field.GetValue(chunk) is Array owned)) continue;
+                        output.Append(field.Name).Append(owned.Length).Append(System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(owned));
+                    }
+                }
+            }
+            for (int i = 0; i < backend.ActiveChunkCount; i++) output.Append(backend.GetChunkMesh(i).GetInstanceID());
+            return output.ToString();
+        }
+
+        private static double UvPercentile(long[] sorted, double fraction)
+        {
+            double index = (sorted.Length - 1) * fraction;
+            int low = (int)index;
+            int high = Math.Min(low + 1, sorted.Length - 1);
+            return sorted[low] + (sorted[high] - sorted[low]) * (index - low);
+        }
+
+        private static bool UvCostGate(SegmentUvCostWindow[] rows, int start, bool continuous)
+        {
+            double offMean = continuous ? Math.Min(rows[start].meanMs, rows[start + 3].meanMs)
+                : Math.Max(rows[start].meanMs, rows[start + 3].meanMs);
+            double onMean = Math.Max(rows[start + 1].meanMs, rows[start + 2].meanMs);
+            return (continuous ? onMean < offMean : onMean <= offMean) &&
+                Math.Max(rows[start + 1].p95Ms, rows[start + 2].p95Ms) <= Math.Max(rows[start].p95Ms, rows[start + 3].p95Ms) &&
+                Math.Max(rows[start + 1].p99Ms, rows[start + 2].p99Ms) <= Math.Max(rows[start].p99Ms, rows[start + 3].p99Ms);
+        }
+
+        [Test, Explicit("Exactly one predeclared four-layout full Build group, only after semantic/pixel gates")]
+        public void SegmentUvReuse_FullBuildCostOnce()
+        {
+            System.IO.Directory.CreateDirectory(SegmentUvOutput);
+            using (var marker = new System.IO.FileStream(System.IO.Path.Combine(SegmentUvOutput, "full-build-cost.started"),
+                System.IO.FileMode.CreateNew, System.IO.FileAccess.Write)) { }
+            var report = new SegmentUvCostReport();
+            NTSD.Test.Editor.BattleScopedGcAllocationRecorder recorder = null;
+            try
+            {
+                recorder = new NTSD.Test.Editor.BattleScopedGcAllocationRecorder();
+                report.unit = recorder.Unit;
+                report.calibrationBefore = recorder.Calibrate();
+                Assert.That(report.calibrationBefore.passed, Is.True);
+                bool[] switches = { false, true, true, false };
+                string[] layouts = { "continuous-source2d", "continuous-array", "fragmented-source2d", "strict-mixed-source2d" };
+                for (int layout = 0; layout < 4; layout++)
+                {
+                    using var fixture = new SegmentUvFixture(layout == 1 ? 1 : 0);
+                    using var backend = new BattleDynamicMeshBackend();
+                    var frame = fixture.Frame(4000, layout >= 2);
+                    string publication = CaptureFields(frame);
+                    backend.PrepareCapacity(4000);
+                    backend.SealCapacity(4000);
+                    var drawMode = layout == 3 ? BattleCentralDrawMode.StrictOrderedDraw : BattleCentralDrawMode.OrderedChunks;
+                    string capacity = null, payload = null;
+                    for (int window = 0; window < 4; window++)
+                    {
+                        var row = new SegmentUvCostWindow { layout = layouts[layout], enabled = switches[window] };
+                        report.windows[layout * 4 + window] = row;
+                        SetUvReuse(backend, row.enabled, false);
+                        for (int warm = 0; warm < 8; warm++) backend.Build(frame, fixture.Resolver, drawMode);
+                        if (window == 0)
+                        {
+                            capacity = UvCapacity(backend);
+                            payload = CaptureBackend(backend);
+                        }
+                        for (int sample = 0; sample < 32; sample++)
+                        {
+                            bool begun = recorder.Begin();
+                            try
+                            {
+                                long start = System.Diagnostics.Stopwatch.GetTimestamp();
+                                backend.Build(frame, fixture.Resolver, drawMode);
+                                row.elapsedTicks[sample] = System.Diagnostics.Stopwatch.GetTimestamp() - start;
+                            }
+                            finally { row.gc[sample] = recorder.End(); }
+                            row.completed++;
+                            Assert.That(begun && row.gc[sample].valid && row.gc[sample].calibratedBefore &&
+                                !row.gc[sample].wrapped && !row.gc[sample].saturated, Is.True, "Complete Build GC scope invalid.");
+                            Assert.That(row.gc[sample].allocationEvents, Is.Zero, "Hard gate: no retry of this finite cost group.");
+                            Assert.That(backend.Diagnostics.CapacityGrowthCount, Is.Zero);
+                            Assert.That(backend.LastUvDimensionReadPairs, Is.Zero, "Correctness counters must be disabled.");
+                        }
+                        row.capacityStable = UvCapacity(backend) == capacity;
+                        row.publicationUnchanged = CaptureFields(frame) == publication;
+                        string actual = CaptureBackend(backend);
+                        Assert.That(actual, Is.EqualTo(payload));
+                        Assert.That(row.capacityStable && row.publicationUnchanged, Is.True);
+                        row.payloadSha256 = UvHash(actual);
+                        long[] sorted = (long[])row.elapsedTicks.Clone();
+                        Array.Sort(sorted);
+                        double sum = 0;
+                        foreach (long ticks in sorted) sum += ticks;
+                        row.meanMs = sum / 32 * 1000 / report.frequency;
+                        row.p95Ms = UvPercentile(sorted, 0.95) * 1000 / report.frequency;
+                        row.p99Ms = UvPercentile(sorted, 0.99) * 1000 / report.frequency;
+                    }
+                    backend.UnsealCapacity();
+                }
+                report.calibrationAfter = recorder.Calibrate();
+                Assert.That(report.calibrationAfter.passed, Is.True);
+                report.sourceSignal = UvCostGate(report.windows, 0, true);
+                report.arraySignal = UvCostGate(report.windows, 4, true);
+                report.fragmentedAccepted = UvCostGate(report.windows, 8, false);
+                report.strictAccepted = UvCostGate(report.windows, 12, false);
+                report.status = report.sourceSignal && report.arraySignal && report.fragmentedAccepted && report.strictAccepted
+                    ? "SCOPED_ADMISSION_RECOMMENDATION_ONLY_DEFAULT_OFF" : "NO_DISCERNIBLE_FULL_BUILD_GAIN_DEFAULT_OFF";
+            }
+            catch (Exception exception)
+            {
+                report.status = "FAILED_STOPPED_DEFAULT_OFF";
+                report.failure = exception.ToString();
+                throw;
+            }
+            finally
+            {
+                if (recorder != null)
+                {
+                    if (!report.calibrationAfter.passed) report.calibrationAfter = recorder.Calibrate();
+                    recorder.Dispose();
+                }
+                using var stream = new System.IO.FileStream(System.IO.Path.Combine(SegmentUvOutput, "full-build-cost.json"),
+                    System.IO.FileMode.CreateNew, System.IO.FileAccess.Write);
+                byte[] bytes = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(report, true));
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
         private static readonly FieldInfo FallbackMaterialField =
             typeof(BattleCatalogCentralResourceResolver).GetField(
                 "fallbackMaterial",
                 BindingFlags.Instance | BindingFlags.NonPublic);
+
+
+        [Test]
+        public void SegmentUvReuse_DefaultOffAndClearDisables()
+        {
+            PropertyInfo flag = typeof(BattleDynamicMeshBackend).GetProperty(
+                "SegmentUvDimensionReuseEnabled", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(flag, Is.Not.Null, "The bounded candidate flag is not implemented.");
+            using var backend = new BattleDynamicMeshBackend();
+            Assert.That(flag.GetValue(backend), Is.False);
+            flag.SetValue(backend, true);
+            backend.Clear();
+            Assert.That(flag.GetValue(backend), Is.False);
+            flag.SetValue(backend, true);
+            backend.Dispose();
+            Assert.That(flag.GetValue(backend), Is.False);
+        }
 
         [Test]
         public void ResolvePrepared_BleedMarkUsesOpaqueSolidResourceAndFailsClosed()

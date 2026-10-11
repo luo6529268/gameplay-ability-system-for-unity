@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-10-10T22:52:24.244352+08:00",
+  "protected": 15818,
+  "protectionDrift": [],
+  "originalBackups": 10,
+  "intermediateBackups": 25,
+  "invalidBackups": [],
+  "firstPreimageDifferences": [],
+  "sourceAssemblyDrift": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "diffCheckExit": 0,
+  "taskAdmission": "COST_SPIKE_REVIEW_REQUIRED; file audit success does not override gate",
+  "passed": true
+}

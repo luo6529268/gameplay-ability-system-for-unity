@@ -1,0 +1,17 @@
+{
+  "test": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionFailedReadRollsBackOnlyThisCueWithoutPublication",
+  "released": true,
+  "explicitOwnerCleanup": true,
+  "naturalCallbackCertified": false,
+  "baselineCount": 4,
+  "allObservedDestroyed": true,
+  "resources": [
+    {
+      "instanceId": -1221162,
+      "name": "H10Failure_c50e133c67244f8d922806891a030b4c_prior",
+      "samples": 8193,
+      "channels": 2,
+      "frequency": 44100
+    }
+  ]
+}

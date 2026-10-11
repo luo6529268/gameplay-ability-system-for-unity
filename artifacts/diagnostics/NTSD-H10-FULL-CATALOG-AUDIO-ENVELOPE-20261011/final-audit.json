@@ -1,0 +1,28 @@
+{
+  "time": "2026-10-11T01:05:13.930441+08:00",
+  "protectedCount": 71283,
+  "protectedDrift": [],
+  "dirtyBackups": 10,
+  "invalidDirtyBackups": [],
+  "intermediateBackups": 29,
+  "invalidIntermediateBackups": [],
+  "oldDiagnosticBodyUnchanged": true,
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "scopedDiffCheckExitCode": 0,
+  "finalFingerprints": {
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs": "fbe8821f00a87505e9c28e3a629a66f0de09088c08d06cc04b0e67c99c01cb18",
+    "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs": "2d540933e1661b7b679f9be7bd500da825d9c9706b97628c22bc8345145184ee",
+    "Assets/NTSD/Scripts/App/AppManager.cs": "3cd50eabc70527a5633bab5dc644e479bfe4110ba476342b9c7a09e9c38680bc",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs": "b8600e56b3325fe6f27c35a9f62b6c4e08b0e02001b0ef8c7eeb7097defafbf7",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs": "6990b2534ca6c832ab50c5fd692e3275ca335b2e2c77c1502bcc85eaa394ea34",
+    "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs": "17768f6bc8536e34b98a479c98c0aaa2ead867bee9d72b35a4c0c4b5abece9a9",
+    "Library/ScriptAssemblies/Assembly-CSharp.dll": "2a8884669c54bebdb5747e7808778912d5aa5a0bf41cbedd271141027003ab69",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": "61264e66a036c10da3e9fe635f1f14576d5cb96a175bc85e9cf6a36d18417de9"
+  },
+  "changedSinceMeasuredGroup": [
+    "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+    "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll"
+  ],
+  "sourceGuardDifferenceScope": "Only post-measurement diagnostic unknown-manager branch/negative guard; no production or collection/measurement algorithm change, no full rerun"
+}

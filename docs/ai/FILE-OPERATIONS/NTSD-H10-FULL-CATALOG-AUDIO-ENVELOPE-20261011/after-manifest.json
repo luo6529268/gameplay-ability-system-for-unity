@@ -1,0 +1,92 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+    "sha256": "fbe8821f00a87505e9c28e3a629a66f0de09088c08d06cc04b0e67c99c01cb18",
+    "bytes": 195437,
+    "gitStatus": "?? Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "sha256": "a2ae590d8f963f90f948918dd0c9e53ff37b2ae90b984bdc6fabcf393499fd2b",
+    "bytes": 420168,
+    "gitStatus": "M docs/ai/CURRENT-AUTHORITY.md"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha256": "7ed4baf9ef196108974e19ad861fddaecf577d394044cde2edf6d71076196ef7",
+    "bytes": 1701541,
+    "gitStatus": "M docs/ai/STATE.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha256": "d0ba64b685bd4754c4d030b2e630abe7617280b663d0efed419356f26251fe59",
+    "bytes": 1640363,
+    "gitStatus": "M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha256": "d42687fac9fec2962d1405451055612f0eaa5ae781f7c627e88df0d941b6fe7b",
+    "bytes": 768673,
+    "gitStatus": "M docs/ai/CHANGE-LEDGER.md"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha256": "1c1f8d6907f4dbc57e085902f2486c42c53964174897ed24c61bd97a7836fbb3",
+    "bytes": 156313,
+    "gitStatus": "M docs/ai/FILE-OPERATIONS/INDEX.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "sha256": "b557d20abdf8ab70d95f1438bc6db0e024aa671c05cbb50d8a799957bf773380",
+    "bytes": 260456,
+    "gitStatus": "M Assets/NTSD/Docs/battle-optimization-progress-tracker.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md",
+    "sha256": "2f480fc5bb4e816fc86ba75e0e6131d8b32563460dc21c9eacbfdef41a3de4ad",
+    "bytes": 57061,
+    "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "sha256": "961e5200d8d8253e9257720f82c6ec33a7307a43c4325713441449188a3d2b4e",
+    "bytes": 30685,
+    "gitStatus": "M docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md",
+    "sha256": "ba2d38793884aecf6574533703024d071afc987ea162ac0679de0576288b880d",
+    "bytes": 12275,
+    "gitStatus": "M Assets/NTSD/Docs/android-mobile-readiness/h-10-battle-audio-pcm-memory.md"
+  },
+  {
+    "path": "docs/ai/TASKS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011.md",
+    "sha256": "da90f2b37829b11b8f0c433aabe3cdef577f19eee3f6df9884ae975207f6d6a5",
+    "bytes": 5716,
+    "gitStatus": "?? docs/ai/TASKS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011.md"
+  },
+  {
+    "path": "docs/ai/CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md",
+    "sha256": "2dd92f549401e6ae99d9954414d2aa9cbae0268356d612c032b69814980881f1",
+    "bytes": 8833,
+    "gitStatus": "?? docs/ai/CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md"
+  },
+  {
+    "path": "docs\\ai\\FILE-OPERATIONS\\NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011\\RECORD.md",
+    "sha256": "62c755fc3b456dba550160a0ccb398bdcc25cb1df12cdccff0cf18ec2460a2a0",
+    "bytes": 6652,
+    "gitStatus": "?? docs/ai/FILE-OPERATIONS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/RECORD.md"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H10-FULL-CATALOG-AUDIO-ENVELOPE.md",
+    "sha256": "48d279938b29dcb0147c4d6d9256923890f98234bd9361c67993e9e254306fb7",
+    "bytes": 1474,
+    "gitStatus": "?? docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H10-FULL-CATALOG-AUDIO-ENVELOPE.md"
+  },
+  {
+    "path": "artifacts\\diagnostics\\NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011\\REPORT.md",
+    "sha256": "ec5a83a7897cebc62450a6f859ab3866bc1c7d5d340ba9ebd2723cfbf6f3ec09",
+    "bytes": 15642,
+    "gitStatus": "?? artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md"
+  }
+]

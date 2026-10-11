@@ -1,3 +1,17 @@
+## 2026-10-10 当前阶段更正：H-07
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| 父项目标保留／子项暂不续办 | 不单独排队 | 高 |
+
+33ms等父目标开放；输入约12ms未解决且当前无新有据方案；LATE已评审暂无必要改动。不重复旧候选。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
+> **2026-10-10 排序更正：H-07为当前高优先性能主线，首个讨论项H07-INPUT。** 本父项是性能目标/验收，不等于只继续生成证书；当前先讨论既有角色/AI输入计算的具体等价优化，准确改法尚未确认，不实施/运行。H-01后移，producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及旧失败保持，精确33ms/0GC等最终门不变。[首项方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [当前进度](../battle-optimization-progress-tracker.md)。
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # H-07 当前评审卡（2026-10-09）
 
@@ -8,7 +22,7 @@
 | 类别 / 建议优先级 | 验收 / 高 |
 | 当前状态 | PERFORMANCE_FAIL；Role限定准入完成；producer USER_DEFERRED/生产OFF；新ABBA首OFF完整Driver GC失败保留 |
 | 依赖的最小范围 | 所选优化的实际成果；M-09/M-15指纹与H-09正确性，Android阶段另需H-02/H-04 |
-| 下一步与具体方向 | 2026-10-10用户选择暂缓producer并推进下一项；先准备[H06-ROLE-EXACT方案](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H06-ROLE-EXACT.md)，具体改法/新测量未授权，原33ms与0GC门不变 |
+| 下一步与具体方向 | 第1讨论项为既有[H07-INPUT](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md)；先确认具名成本块与等价实现，不续producer/Role记录链诊断，原33ms与0GC门不变 |
 | 完成边界 | Windows两布局120+180冒烟后120+1800；P95<33ms、drop0、暖0GC及原容量/表现/关闭门；Android另判 |
 | 方案成熟度 | 本次具名冷测量完成、未准入生产；其它优化仍须独立Task/准确写域及验证 |
 | 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |

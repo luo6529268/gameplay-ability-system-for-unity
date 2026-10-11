@@ -1,0 +1,30 @@
+
+        [Test]
+        public void CatalogAudioEnvelopeUnknownManagerGuardPreservesObjects()
+        {
+            var singletonBefore = MoreMountains.Tools.MMSoundManager.Current;
+            var hosts = new[] { new GameObject("H10KnownGuard"), new GameObject("H10OtherKnownGuard"), new GameObject("H10UnknownGuard") };
+            foreach (var host in hosts) { host.hideFlags = HideFlags.HideAndDontSave; host.SetActive(false); }
+            try
+            {
+                var managers = hosts.Select(x => x.AddComponent<MoreMountains.Tools.MMSoundManager>()).ToArray();
+                var fixture = (EnvelopeFixture)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(EnvelopeFixture));
+                typeof(EnvelopeFixture).GetField("beforeSoundManagers", Private).SetValue(fixture, managers.Take(2).ToArray());
+                typeof(EnvelopeFixture).GetField("beforeSceneObjects", Private).SetValue(fixture, hosts.Take(2).Select(x => x.GetInstanceID()).ToArray());
+                MethodInfo guard = typeof(EnvelopeFixture).GetMethod("RecordResolvedExistingSoundManager", Private);
+                Assert.That(Assert.Throws<TargetInvocationException>(() => guard.Invoke(fixture, new object[] { managers[2] })).InnerException,
+                    Is.InstanceOf<NUnit.Framework.AssertionException>());
+                Assert.That(hosts.All(x => x != null), Is.True, "Unknown object must not be destroyed");
+                guard.Invoke(fixture, new object[] { managers[0] });
+                Assert.That(Assert.Throws<TargetInvocationException>(() => guard.Invoke(fixture, new object[] { managers[1] })).InnerException,
+                    Is.InstanceOf<NUnit.Framework.AssertionException>());
+                Assert.That(hosts.All(x => x != null), Is.True);
+                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, singletonBefore), Is.True);
+                SaveEnvelope("unknown-manager-guard", new { unknownPreserved = true, changedKnownRejected = true,
+                    originalAccepted = true, singletonUnchanged = true, scope = "No audio decode, isolated real-component ownership guard only" });
+            }
+            finally
+            {
+                foreach (var host in hosts) if (host != null) UnityEngine.Object.DestroyImmediate(host);
+            }
+        }

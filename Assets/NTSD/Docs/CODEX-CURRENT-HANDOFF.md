@@ -1,3 +1,123 @@
+> **2026-10-11 H10全目录音频账本完成：FULL_CATALOG_AUDIO_ENVELOPE_MEASURED。** Task NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 / Change NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 VERIFIED（仅Editor诊断）。真实330定义/1000cue，两轮public准备关闭唯一组1/1 PASS；每轮978formal+72generic去重228,918,567B（218.313758MiB），formal逐局归零、同72generic跨轮复用，最终仅精确释放新增72key/clip，原4clips及Menu clean8保持。首次资格FAIL及事件保留，修正资格/恢复检查/无音频所有权负控各1/1；测量后仅诊断guard哈希变化，生产冻结。71283保护无漂移。报告 artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011/REPORT.md。音频数字预算UNDECIDED、producer完整闭包未准入，H10父项OPEN；下一仅同H10预算/覆盖合同审阅，不自动其他点/Goal/队列。以下为此前时点。
+
+> 2026-10-11 NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011 IN_PROGRESS / NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001 PLANNED. H10 continues: complete real catalog/generic inventory, protected2resource fixture first, then one bounded2session audio-only envelope if safe. Production frozen; parent budget/coverage remain OPEN. No other point or Goal.
+
+> **2026-10-11 H10 正式音频源每局所有权已接入：H10_FORMAL_SESSION_OWNERSHIP_APPLIED。** Task NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 / Change NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 VERIFIED（限定生产接入）。三生产脚本+一Editor测试；实际生命周期7/7、失败清理1/1、唯一资源组1/1、唯一实际隔离Play1/1通过。固定5音频distinct native对象9→5、bytes7,626,693→6,778,456，输出PCM位不变、owned关闭归零；非RSS/整局峰值/CPU收益。旧兼容组13/14，既有mono引用断言FAIL保留，未冒称全通过。Menu恢复clean8。报告 artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010/REPORT.md。H10父项producer音频闭包/整局预算仍OPEN；下一仅讨论审阅，不自动后继/Goal/34项；H08 ON/M03 OFF/H07及producer暂缓/95OFF/H06不续保持。下方为此前时点。
+
+> 2026-10-10 NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010 IN_PROGRESS / NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001 PLANNED. Exact four-script formal audio session ownership and existing stage1/stage5 release; cold serialization and stale local recycling. H10 full producer closure/budget remains OPEN, no other task/Goal resumed. See Task and Operation.
+
+> 2026-10-10 User resumed entire current-stage H10: NTSD-H10-RESIDENT-CLOSURE-20261010 / NTSD-H10-RESIDENT-CLOSURE-001 IN_PROGRESS. Temporary PCM reduction is already production-applied; old-path spike retained as timing limitation after independent review, not a new-path failure. Now audit remaining resident dependencies, cache/owner and load memory before accurate implementation. No next point/device/build/old queue.
+
+> **2026-10-10 H10有界PCM转换：CORRECTNESS_PASS_COST_SPIKE_REVIEW_REQUIRED / FINITE_TASK_STOPPED。** Task NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 / Change NTSD-H10-BOUNDED-PCM-CONVERSION-001 BLOCKED。两脚本生产分块已写入并接原调用、无新flag/未回滚；真实失败资格1/1、正确性及原声音规则10/10、唯一成本1/1程序断言PASS，临时float payload长源<98304B、最终clip/逐样本不变。但大尺寸首个旧算法窗有46.8822ms尖峰，按“异常尖峰明显则交回”条款停止，不重测/归因/称准入成功。新均值1.5964/1.5734ms低于另一个旧均值2.1918ms，此事实保留。19owner/191资源记录释放，Menu clean8。报告 artifacts/diagnostics/NTSD-H10-BOUNDED-PCM-CONVERSION-20261010/REPORT.md；下一仅审阅尖峰与接入状态，不自动新实验/后继；H10/H07/Android仍OPEN、H08默认ON保持。
+
+> 2026-10-10 NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 IN_PROGRESS / NTSD-H10-BOUNDED-PCM-CONVERSION-001 PLANNED: approved two-script bounded mono-to-stereo temporary-buffer implementation. Exact short-path/owner/error/overflow contracts retained; correctness/real failure gates before unique production cost ABBA. No other task or goal resumed.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H10-AUDIO-MEMORY-REVIEW-001 VERIFIED (Editor diagnostic only): final2/2 plus unique cost1/1, 4 WAV exact PCM; long-clip bounded temporary arrays <98304B, final stereo resident unchanged. Production unchanged; exact two-script handoff ready, dispatch receipt authoritative. H10 parent OPEN/H08 default ON retained.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H10-AUDIO-MEMORY-REVIEW-001 IN_PROGRESS: user approved H10 independent audio memory review; one Editor-only diagnostic, production unchanged. Prior H08 default admission remains verified; no other queue/goal resumed.
+
+> **2026-10-10 H08正常默认接入完成：SCOPED_DEFAULT_ADMISSION_VERIFIED。** Task NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010 / Change NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001 VERIFIED仅限定默认准入。生产仅新manager初始值true；实际public配置入口验证默认共享→缓存重入→新owner显式OFF→新owner默认ON，几何/目录/像素一致；原Editor2/2+9/9通过。502条owned资源记录已释放、缓存/配置/单例恢复，Menu clean8。旧唯一四组内存与未受影响像素证据复用，不重跑或外推整局；H08父项/H07/Android仍OPEN。下一只审阅本报告，不自动H10/Goal/队列。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010/REPORT.md；下方DEFAULT_OFF等为此前阶段历史。
+
+> **2026-10-10 H08正常默认接入获人类明确授权，NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010 IN_PROGRESS / Change NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001 PLANNED。** 仅新manager默认true和四脚本必要测试；原共享算法/显式cold OFF/关闭不变，实际public配置入口小夹具验证后才准入。旧四组内存不重跑，不整体加载/Play/设备，不自动下一项。此前DEFAULT_OFF为候选阶段历史。
+
+> **2026-10-10 H08同Task恢复完成：SCOPED_MEMORY_GAIN_VERIFIED / 默认OFF。** NTSD-H08-NATIVE-SHEET-SHARING-20261010 / Change NTSD-H08-NATIVE-SHEET-SHARING-001 VERIFIED仅限定候选。生产代码冻结；两个Editor夹具修复后8/8，loaded publication OFF/ON实际Unity销毁回调释放40/39 owned对象、borrowed保留；原唯一四组source-worker内存1/1，纹理5→1/2→1/2→1、对象内存降80%/50%/50%，唯一负控1→1/5328B不变，像素/几何与本次精确资源释放全部通过。旧native残留UNKNOWN未清理，非整局/峰值收益；旧176.232MiB仍估计。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md。下一仅审查限定接线，不自动推广/H10/Goal/队列；H08父项、H07及Android门保持。下方BLOCKED为修复前历史。
+
+> **2026-10-10 H08同Task恢复 resume-01 / IN_PROGRESS。** 人类批准精确测试夹具/资源所有权/真实Unity销毁验证修复，限两个Editor文件，生产候选冻结默认OFF。前置全过才执行尚未启动的原唯一四组source-worker内存比较；旧失败/未知native残留保留，禁止全局清理/改测量口径。见Operation/resume-01/PLAN.md。下方此前BLOCKED保留历史。
+
+> **2026-10-10 H08 源sheet共享候选：BLOCKED_VALIDATION_HARNESS / FINITE_TASK_STOPPED / 默认OFF。** Task NTSD-H08-NATIVE-SHEET-SHARING-20261010；Change NTSD-H08-NATIVE-SHEET-SHARING-001 BLOCKED。原Editor首组8/8通过、补充1/3通过2失败；一次空OFF/ON诊断确认当前EditMode夹具未触达OnDestroy，显式清理不能替代已加载publication销毁验收；另有旧Temp缺图夹具前置缺失。共享算法缺陷尚未证实，完整生命周期/零残留门未过，四组内存比较NOT_STARTED，无收益或准入结论。通过的像素/ownership/取消/lease子证据及失败原件保留，不重测挑PASS。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/REPORT.md。下一仅审查同任务验证入口/可追溯清理；不自动推广/转H10/恢复Goal或队列，H08父项及H07/Android等最终门保持。下方为此前时点。
+
+> **2026-10-10 NTSD-H08-NATIVE-SHEET-SHARING-20261010 IN_PROGRESS / NTSD-H08-NATIVE-SHEET-SHARING-001 PLANNED.** 三脚本native同publication源sheet共享候选默认OFF；先真实正确性/取消/lease，再唯一有界4组资源内存比较。无资源修改/ATLAS迁移/默认推广/旧Goal恢复。
+
+> **2026-10-10 M03 分组有限值候选有限任务完成：COMPLETED_NO_ADMISSION_DEFAULT_OFF，本版不采用。** Task NTSD-M03-GROUPED-FINITE-GUARD-20261010 / Change NTSD-M03-GROUPED-FINITE-GUARD-001 ABANDONED。原Editor实际候选13/13、唯一完整Build成本1/1执行完成；两布局8窗/256校准有效scope分配事件0，载荷/发布/容量不变。4097收益门PASS；2000均值/P95/P99三门FAIL，联合门未过，不重测或推广，旧UV候选仍OFF。6源码/程序集指纹稳、2442保护/10真实备份有效、原Menu clean8。报告 artifacts/diagnostics/NTSD-M03-GROUPED-FINITE-GUARD-20261010/REPORT.md。M03父项、H07及Android最终门保持开放；下一仅审阅本报告，不自动实施新点、恢复Goal或34项队列。下方保留先前时点。
+
+> **2026-10-10 NTSD-M03-GROUPED-FINITE-GUARD-20261010 IN_PROGRESS / NTSD-M03-GROUPED-FINITE-GUARD-001 PLANNED.** 两脚本默认OFF有限guard候选，旧UV始终OFF；先实际正确性/异常位置，再唯一两布局完整Build成本。旧证据/最终门/Goal取消保持。
+
+> **2026-10-10 M03 workload diagnosis COMPLETE / NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 VERIFIED (diagnostic only).** User-resumed attempt03 successfully observed World/Base camera. 89 steady completed builds at tick120->298: publication89, alpha-only0, repeated0; no failure/rejection, all actual TextureArray/mean1992.056 quads/segment1/1000AI. No same-publication template reuse opportunity in this workload; do not implement cache or dispatch. Full runner120+180 and ordered cleanup passed, last2tick camera not observed. Focused2/2 fresh, 157 protections/12 backups unchanged, Menu clean8; no production/performance/Driver0GC/device claim. M03 parent OPEN, monitoring paused. Report: artifacts/diagnostics/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010/attempt-03/REPORT.md. Below preserves earlier failed attempts and stages.
+
+> **2026-10-10 USER-RESUMED M03 NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010 / NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 IN_PROGRESS.** User requested continued verification. Corrected World/Base camera observer, fresh attempt-03/120warm+180steady, no production changes or handoff. Previous failed attempts remain historical; original paused monitoring remains paused.
+
+> **2026-10-10 M03 NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010: INCONCLUSIVE_OBSERVER_FAILURE / finite task stopped; Change NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 BLOCKED.** Two actual 120+180 workloads completed, but own observer path mismatch (attempt1) and Game-camera scope error (attempt2) yielded ZERO valid steady classification rows. Failed raw evidence retained. Same-file corrections compile and final focused2/2 pass; no third live run, no frequency/gain/candidate conclusion, no production change or handoff. Original counter20/20 remains scoped. Both clean shutdown and final tick300 checksum match; no per-tick/0GC certification. Original Menu clean8 restored; 157 named protections unchanged. Report: artifacts/diagnostics/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010/REPORT.md. M03 remains OPEN, monitoring paused. Below is historical.
+
+> **M03 NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010 IN_PROGRESS / NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 PLANNED.** User authorized continued verification. One Editor-only fixed-capacity counter observer, one existing combat1000 120warm+180steady run; all detailed/presentation clocks OFF. Frequency/binding evidence only, no production change or gain claim. No new dispatch. Task and Change Record contain exact scope.
+
+> **2026-10-10 M03策略重评完成：SCOPED_REASSESSMENT_COMPLETE / DIAGNOSTIC_DESIGN_READY，尚不可派生产修复。** 用户要求重新调整策略并评估。本轮纠正4.156ms为命令物化/插值包围范围；旧presentation计时仍含逐实体/逐command时间戳。重新核定array生产证据与旧16窗：Source2D表观3.56%而Strict负控也3.38%，不能认定全部为候选收益。旧两正常小规模Battle窗alpha-only为776/1800及775/1800，支持优先诊断同publication未插值命令准备复用，但不外推千人频率/收益。新策略按publication变化/alpha变化/重复分类核完整链；旧尺寸候选OFF，不自动source-only，不重跑旧组。仅只读源码/原JSON复算和文档，无新Unity/测试/测量/生产改动/派发，监测保持暂停。Task NTSD-M03-STRATEGY-REEVALUATION-20261010；报告 artifacts/diagnostics/NTSD-M03-STRATEGY-REEVALUATION-20261010/REPORT.md。M03父项及其他暂缓/最终门保持；下方为历史。
+
+> **2026-10-10 M03段内UV尺寸候选有限任务完成：本版不采用／默认OFF。** NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 ABANDONED；原Editor8/8＋补充5/5（含恢复加强与真实prepared三绑定像素），唯一完整Build16窗/512有效校准scope事件0，载荷/容量/发布不变；Source2D门PASS、array均值/尾部门FAIL，两负控PASS，联合收益未过，不重测/推广。Task NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010；报告 artifacts/diagnostics/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010/REPORT.md。M03父项/H07/Android仍OPEN，H07输入/producer暂缓、95OFF、H06不续/旧Goal取消保持。下方为此前时点。
+
+> **2026-10-10 NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010 IN_PROGRESS / NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 PLANNED.** 三脚本默认OFF候选，先完整payload/像素/命中/回退，后一次完整Build ABBA；旧失败/最终门保持，不推广或恢复队列。
+
+> **2026-10-10 M03独立评审收口：SCOPED_REVIEW_COMPLETE / 有界生产候选方案READY，性能门仍OPEN。** NTSD-M03-UV-DIMENSION-REVIEW-001 VERIFIED仅诊断；8项既有契约通过，新UV三版各41边界/共1408有效scope事件0。两槽轮换退化、array限定不通用、segment数学模型连续段有信号但逐quad换段负控5.0494%超过事前5%，整体未通过，不写生产收益。最终指令只利用既有canAppend分支：新段首quad/custom/Strict原路，真正append后段内准备尺寸，默认OFF，再验真实Backend/payload/像素/完整Build成本。未改生产、未开启下一点。Task NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010；报告/准确三文件修复指令位于artifacts/diagnostics/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010/REPORT.md与execution-handoff.txt；实际发送以dispatch-receipt/status为准。155保护无漂移、原Menu clean8。M03父项OPEN，H07/producer暂缓与95OFF等保持；下方是此前时点。
+
+> NTSD-M03-UV-DIMENSION-REVIEW-001 / PLANNED：M03仅新Explicit Editor局部UV尺寸读取诊断，不接生产；见对应Change/Task NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010。
+
+> NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010 / IN_PROGRESS：用户授权本讨论会话继续M03实际链与必要原Editor验证，形成完整修复方案后直接交已有执行会话。原排程/历史成果保留，当前不改生产或运行设备认证。见docs/ai/TASKS/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010.md。
+
+## 2026-10-10 最新阶段与排程（NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010）
+
+2026-10-10 用户更正：Android真机/GPU认证、IL2CPP/ARM64属于后期；AB部署、Android构建和正式发布随平台交付后置。当前按战斗CPU、CPU侧渲染工作和驻留内存问题排序。原34项ID及历史12高/14中/8低保留，原风险重要性不再冒充当前执行顺序。
+当前P1：M-03 → H-08 → H-10；P2：M-12 → M-05 → M-01 → M-02 → M-06。此顺序是评审/投入顺序，不是收益排名，也不代表每项已确认必须改代码。
+H07输入约12ms尚未解决、当前无新有据方案而暂缓；H07-LATE已评审暂无必要优化。H06既有成果保留，不续Role精确配对；producer暂缓、95和旧候选不自动开启。只处理原方案，不恢复旧Goal或34项自动队列。
+本轮已先评审M03历史证据和当前生产入口。相同显示采样复用已存在；剩余先看命令物化与顶点准备是否有可消除重复，不能因GPU证书未完成就追加设备任务。脚本/资源/设置未改，未跑Unity或新测试/测量，未发送执行指令；监测不恢复。
+
+优先级总表和34单项卡已同步，原证据/暂缓/失败保持。
+
+完整排程：Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md；唯一进度：Assets/NTSD/Docs/battle-optimization-progress-tracker.md；本轮报告：artifacts/diagnostics/NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010/REPORT.md。
+
+以下均保留此前时点；旧排程与当前状态冲突时以本段及当前总表为准。
+
+---
+
+> **2026-10-10 H07-LATE有界必要性评审完成：暂不实施（NO_JUSTIFIED_OPTIMIZATION_NOW）。** 用户“那就先检验下，是否需要优化吧，我看着耗时还行”授权本项实际调用链检查。当前Late含必要帧事务/恢复/状态计时/生成清理；ConsolidatedFinal和exact角色尾快照skip已存在。五份既有有效细分报告10处Late快照调用均0；更近无细分旧窗Late平均4.914502ms/P95 10.012780ms，仅历史经过时间，不是本轮实测或性能合格证明。未发现值得启动新实验的具体高价值冗余；不改脚本、不跑Unity/测量、不派发/恢复监测。H07输入约12ms仍未解决，保留证据并暂缓；H07父项/33ms等最终门OPEN。报告：artifacts/diagnostics/NTSD-H07-LATE-NECESSITY-REVIEW-20261010/REPORT.md。下方旧Q06_BODY_NOT_READ/当前IN_PROGRESS为此前时点，不构成本轮已授权窄读的阻塞。
+
+> **2026-10-10 H07 owned-input有限评估完成：COMPLETED_NO_DISCERNIBLE_GAIN / 本版不采用。** NTSD-H07-OWNED-INPUT-EVALUATION-001 VERIFIED仅Editor诊断：最新3/3 focused、唯一千人合成native输入两布局8窗完成，256稳态pass0B、逐tick完整checksum/双RNG/41字段一致；两个布局均无可辨收益，不跑后继实景或推广，生产SnapshotCopy不变。不是GC门阻止测量，也不是已解决旧Sakura约12ms。主H07仍OPEN/未形成新的生产实施方案；未派发、监测暂停。报告artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/owned-input-evaluation/REPORT.md。以下保留此前时点。
+
+> 2026-10-10 NTSD-H07-OWNED-INPUT-EVALUATION-20261010 IN_PROGRESS / NTSD-H07-OWNED-INPUT-EVALUATION-001 IN_PROGRESS：既有owned-input模式有限等价/成本评估；仅新增Editor测试，生产SnapshotCopy不变，先局部完整输入pass后按证据决定真实fixture，无编译模式变更/新派发。详同Task/Operation。
+
+> **2026-10-10 H07输入配置复核新增证据：** 当前程序集Debuggable263+/optimize-已记录，但历史12ms程序集不同，未做模式因果对照。DataOrientedCanonical不自动启用CanonicalStoreDirect；当前启动链默认SnapshotCopy，旧报告未记actual owned-mode，不以能力存在排除中间copy。原Editor三项现有direct/default/跨tick测试3/3通过，覆盖有限，尚缺完整native RNG/字段/边界及成本。详 `artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/input-config-review/REPORT.md`。主Task IN_PROGRESS；生产/编译模式未改，无新性能窗或派发，监测保持暂停。下方保留此前时点。
+
+> **2026-10-10 H07输入同因链继续评审，未派生产任务。** 复用已有无细分千人OFF基线：CharacterInput均值12.037463ms/P95 18.949035ms，不能把12ms全归于细分测量；原GC资格失败保持。新增朝向→旧Renderer线索经实际GameConfig/Prefab/CentralOnly池路径核查，尚无真实setter频率依据，故不作为本fixture优化，不跑合成成本组。NTSD-H07-INPUT-FACING-COST-DIAG-001 ABANDONED：新Explicit工具保留，首job实际total0/NOT_EXECUTED，无测量结果、生产未改。主Task NTSD-H07-AI-DECISION-WORK-REVIEW-20261010仍IN_PROGRESS，完整方案未成，不自动派发或恢复监测。详input-facing-cost-diag/REPORT.md；下方为先前时点。
+
+> 2026-10-10 H07 same-input facing causal diagnosis IN_PROGRESS / NTSD-H07-INPUT-FACING-COST-DIAG-001 PLANNED. Coarse baseline fine timing OFF already observes CharacterInput mean12.037463ms/P95 18.949035ms. New Explicit isolated SpriteRenderer diagnosis only; source clue is SwitchDir -> SwitchLR native flipX while central legacy suppressed, restoration must be checked. No production fix, gain or dispatch yet. Operation NTSD-H07-INPUT-FACING-COST-DIAG-20261010; main Task remains IN_PROGRESS.
+
+> **2026-10-10 H07同因跨模块复核进展：局部诊断 NTSD-H07-NATIVE-ROUTING-COST-PROBE-001 VERIFIED（仅诊断），性能结论 INCONCLUSIVE。** 已沿Native输入路由、状态解析、动作写入、legacy/AI/InputState镜像及快照尾部检查。有效千人合成idle/walk/run共12窗、12语义例、384测量轮0B/各40轮checksum一致/容量1024无拒绝、原Menu clean8与2361保护稳定；首版400槽错误整组INVALID，不能用旧NUnit PASS冒称有效。减少状态解析未在三场景稳定获益，无新生产优化或派发。主Task NTSD-H07-AI-DECISION-WORK-REVIEW-20261010 仍 IN_PROGRESS / CAUSAL_CHAIN_REVIEW，完整方案尚未形成，不称H07/12ms优化完成。新报告 artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/REPORT.md。下方状态均为此前时点，最新修正优先。
+
+> **2026-10-10 用户更正：按同一问题的因果链确定优化范围。** 用户明确：“如果检验过程，发现其他范围会影响到同一种情况，那就应该优化，而不是跳过啊”。NTSD-H07-AI-DECISION-WORK-REVIEW-20261010恢复IN_PROGRESS / CAUSAL_CHAIN_REVIEW。原H07角色输入耗时为目标；其它模块只要直接导致/放大同一耗时或阻断该优化，应纳入同一方案，不能仅因目录、旧写域或历史Q06标签跳过。调查可沿直接相关方法展开；实际修改仍须形成完整方案、声明准确路径与验证后交执行会话。下方窄域NO_HANDOFF及“后继不展开Q06”是此前时点，不再构成相关因果链分析的绝对禁令。历史失败/暂缓不抹去、旧候选不自动重跑，完整方案后再派发约定保持。精确决定见docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md最新更正。
+
+> **2026-10-10 最新H07独立复核：NTSD-H07-AI-DECISION-WORK-REVIEW-20261010 / SCOPED_SOURCE_REVIEW_COMPLETE / NO_JUSTIFIED_IMPLEMENTATION_HANDOFF。** 用户要求本讨论会话先继续处理，完整方案后再交执行。已核当前direct canonical、索引/随机流/查询事实和commit发布；未形成有据可整段消除的新成本方案，H07-INPUT仍OPEN / STRATEGY_NOT_READY，不称无法优化。没有新代码/Unity/性能窗口/任务派发，监测不恢复。旧cursor无收益结束、compat/producer/95 OFF及其它红线保持。报告：artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/REPORT.md；Task：docs/ai/TASKS/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010.md。以下保留历史。
+
+> **2026-10-10 NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010 COMPLETED_NO_LOCAL_GAIN_SIGNAL；NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001 ABANDONED（本版不采用、诊断代码保留未接生产）。** 原/新C#18/18＋明确projectile1/1、两布局原/候选0B；唯一局部两布局ABBA共8窗0B/快照容量不变，但两布局均未满足事前收益判据，INCONCLUSIVE，未重跑/推广。生产仍原Indexed；15,547保护、10备份、两源码/程序集及Menu clean8稳定。旧compat候选/producer/95 OFF、Driver两event失败、H07/Android门保持。报告 artifacts/diagnostics/NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010/REPORT.md。下方保留历史。
+
+
+> NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010 IN_PROGRESS；NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001 PLANNED。仅两脚本不接生产的局部cursor复用候选，RED/GREEN/0B后一次局部ABBA；旧兼容候选与producer/95 OFF、最终门保持。
+> **2026-10-10 最新派发实态：独立评审 SCOPED_REVIEW_COMPLETE / HANDOFF_DISPATCHED；已发送 NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010，执行会话turn01a1246d-a4b3-78a3-8fdd-edaffb253f18已active/inProgress，无error，cursor76；原automation已ACTIVE。准确两脚本/不接生产/有限局部对照范围见execution-handoff.txt及dispatch-receipt.json。下面READY_FOR_DISPATCH为派发前历史；没有C#、Unity或收益通过结论。**
+
+> **2026-10-10 H07-INPUT 当前后继：NTSD-H07-INDEXED-NEAREST-REVIEW-20261010 已 SCOPED_REVIEW_COMPLETE / READY_FOR_DISPATCH。用户“那你来处理即可，然后再让另一个会话去处理”授权本讨论会话完成评审后直接派发。准确后继 NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010 / Change NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001，仅 AiSensingKernel.cs 与 AiSensingKernelEditorTests.cs 的 internal、不接生产的局部cursor距离复用候选；实际C#语义/局部0B后仅两布局各一次固定1000query局部ABBA。现有public入口/生产调用原样，不改World/Writer/Store/AI/Suite，不跑完整Driver，不豁免正式0GC/33ms/确定性/关闭。旧兼容候选OFF及Driver2event失败、producer暂缓、95OFF/H06不续/旧Goal队列取消保持；整个12ms/H07未完成。**
+> 评审与准确指令：artifacts/diagnostics/NTSD-H07-INDEXED-NEAREST-REVIEW-20261010/REPORT.md、execution-handoff.txt。离线23870原Indexed对照/19125线性payload对照0差，只是模型，非C#/Unity/CPU收益；派发实态以dispatch-receipt/status文件为准。下方保留历史。
+
+> **2026-10-10 NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010：FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；Change NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 BLOCKED，候选默认OFF。** 已批准Core冷接口替换后五脚本候选已写，最终生产19/19及资格4项通过、固定1000capture1000→0/原skip保留/纯pass0GC；唯一无细分OFF120+180完整Driver校准有效但steady2events(tick130/162)，停止余下ON/ON/OFF，收益与实景ON等价未测，不建议准入。300tick旧同fixture14字段0差、17字段原值已存但未配对；容量/关闭三0/Menu clean8/设置恢复，15,558其它保护稳+已批准Core，16备份及五源码窗前后稳。无新调用栈/归因/重测/新优化，producer暂缓/H06不续/95OFF/最终门保持。报告 artifacts/diagnostics/NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010/REPORT.md；下方原状态保留历史。
+
+> H07 native-owned candidate IN_PROGRESS: 人类已批准Core冷接口替换写域；继续同Task/Change，默认OFF，原RED复用/硬门不变。下方BLOCKED为已解除的写域历史。
+
+> 2026-10-10 H07 native-owned candidate: NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 BLOCKED / 写域确认待答。仅新增一项测试、原Editor预期RED；生产未改、GREEN/ABBA未运行。World非partial且注释明确禁止该拆分，撤回Diagnostics中World partial计划；待用户确认将冷配置/计数入口放到Core现有诊断入口附近。原Task范围外不实施，不恢复Goal/队列；最终门保持。
+
+> 2026-10-10 NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010 IN_PROGRESS / NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-001 PLANNED：仅默认OFF兼容guard，五写域、RED/GREEN后唯一无细分ABBA，首硬门失败停；旧诊断原件保留，不自动推广/恢复Goal。
+
+> **2026-10-10 H07输入CPU补充检测完成 / BOUNDED_COMPATIBILITY_REPAIR_READY。** NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 VERIFIED仅诊断：原Editor5/5、同raw176tick冷复用、无Profiler两窗各120+180/14字段0差异、兼容各18万skip/0commit；线程CPU量化15.625ms、cycles不换ms，尖峰不全是等待且计数器有开销。实际完整Driver稳态2/0event不抵消/不称资格。只派现有exact AI/native-owned/canonical有效的17字段兼容空转guard候选、默认OFF及原硬门；生产修复尚未实施。原Menu clean8/关闭0、15562保护与11备份通过。producer暂缓/H06不续/95OFF/33ms与Android门保持。[报告](artifacts/diagnostics/NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010/REPORT.md)。
+
+> **2026-10-10 用户要求继续检验直至准确修复可派发；NTSD-H07-INPUT-SPIKE-CPU-DIAG-20261010 IN_PROGRESS / NTSD-H07-INPUT-SPIKE-CPU-DIAG-001 PLANNED。** 当前H07-INPUT同点补CPU证据，先同raw复用再无Profiler两窗；三诊断写域，生产未改，完整GC事件/最终门保持，未派发。producer暂缓/H06不续/95OFF。
+
+> **2026-10-10 H07输入补充检验：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / NO_PRODUCTION_HANDOFF。** NTSD-H07-INPUT-FLOW-DIAG-001 VERIFIED仅Editor诊断工具与单窗采集；8/8 focused、300tick完整checksum/输入双RNG14字段0差异，18万skip/0commit。守卫须同时验证DataOrientedCanonical与canonical绑定；当前raw明确tick130/162各36/30B且父Mono.JIT（受击音效/奔跑输入路径），完整Driver0GC仍FAIL。176/180steady有Profiler，所有耗时仅扰动诊断；查询访问数/写回/两次分配不足以解释尖峰，根因UNRESOLVED，不能宣称全部查清。仅两Editor域改动，生产未改、未派实施任务/恢复监测或Goal；producer暂缓/H06不续/95OFF/最终门保持。原Menu clean8、关闭objects/slots/borrowers0；15565保护中2声明文档计划变化，其余15563无漂移。 [报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
+
+> **2026-10-10 用户要求先完成H07输入检验再交执行；NTSD-H07-INPUT-FLOW-DIAG-20261010 / IN_PROGRESS，NTSD-H07-INPUT-FLOW-DIAG-001 / PLANNED。** 仅两Editor域独立一窗全输入细分及当前GC调用栈，复用既有证据；生产代码不改、不派任务、不恢复监测/Goal。旧OFF2event/ABBA停止事实保留，0GC/最终门不降低；producer暂缓、H06不续、95OFF。 [Task](docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md)。
+
+> **2026-10-10 H07-INPUT检测收口：SCOPED_DIAGNOSIS_COMPLETED_WITH_LIMITS / ABBA_STOPPED_AFTER_OFF_GC；Change NTSD-H07-INPUT-COST-DIAG-001 VERIFIED仅Editor有界采集。** 4/4 focused通过；首OFF120+180逐帧progress提交0、skip180000，每tick1000，兼容父段0.603017ms。新300tick与同fixture旧基线14字段0差异；CharacterInput15.042183ms、AI决策6.105529ms为嵌套诊断时间。完整Driver steady2event130/162，0GC FAIL，停止后三窗；无开关扰动/生产收益结论，不归因旧GC。设置恢复/十一阶段关闭/clean Menu8及15562保护通过。下一仅讨论native拥有且canonical有效的兼容外壳提前守卫；未改生产、不派任务、不恢复监测/Goal，producer暂缓/H06不续/95OFF/最终门保持。[报告](../../../artifacts/diagnostics/NTSD-H07-INPUT-COST-DIAG-20261010/REPORT.md) · [Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
+
+> **2026-10-10 当前直接授权：H07-INPUT有限检测 / NTSD-H07-INPUT-COST-DIAG-20261010 IN_PROGRESS；NTSD-H07-INPUT-COST-DIAG-001 PLANNED。** 当前讨论会话负责兼容空转定向验证与一次同fixture输入边界计时OFF→ON→ON→OFF诊断，原Editor复用。只两Editor工具域，不修改生产优化逻辑/资源/设置，不派发任务/恢复监测或Goal；额外方向不跟进，producer暂缓/OFF、H06不续办、95OFF、最终门保持。最新用户授权取代下方“仅讨论/无测试授权”的旧时点；[Task](../../../docs/ai/TASKS/NTSD-H07-INPUT-COST-DIAG-20261010.md)。
+
+> **2026-10-10 当前恢复：按实际优先级，先讨论H07-INPUT角色/AI输入计算。** H-01本地AB后移Android阶段；原ID不等于执行次序。具体成本块与等价改法待确认，不可从本次排序直接启动实施/测试/测量或派发消息。额外方向不跟进；Role默认/FindEffect、producer暂缓/OFF、H06-ROLE-EXACT不续办、95 OFF及原最终门保持。未恢复监测/旧Goal。[首项方案](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md) · [唯一进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-OPTIMIZATION-PRIORITY-ORDER-20261010.md)。下方旧当前项只保留原时点。
+
+> **2026-10-10 恢复入口：先确认H-01内容部署策略，禁止按历史“下一项”自动执行。** 最新用户要求所有优化只按既有方案，额外发现的方向一律不跟进。当前仅[H-01策略草案](android-mobile-readiness/h-01-content-deployment.md)待确认；不改代码/资源/设置，不运行Unity/测试/构建，不发执行指令、不恢复监测。H06-ROLE-EXACT不再续办，旧结果保留；已准入Role默认/FindEffect修复、producer暂缓/OFF、95 OFF和最终门保持。H-08/H-10是原方案既有依赖，仅解释范围，不自动解冻。[决定](../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md) · [当前进度](battle-optimization-progress-tracker.md) · [文档Task](../../../docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md)。
+
 > **2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 FAILED_GC_QUALIFICATION / FINITE_TASK_STOPPED；NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 BLOCKED。** 两Editor文件前置修复：v2真实fallback/inert门300tick全通过，旧误拦113tick仅inert；同基线14字段300行0差异。两目标准备API成功且focused10/10通过，但唯一OFF120+180校准完整Driver仍稳态2event/首130（本窗无新调用栈/第二tick未知），资格未通过。未跑第二窗/Profiler/七段ON，未改生产。容量/十一阶段关闭/原Menu clean8/设置与2514其它保护通过，旧失败不改写。报告 artifacts/diagnostics/NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010/REPORT.md。后继缺口交回人类，不自动诊断/修复或恢复Goal；Role默认、producerUSER_DEFERRED/OFF、95OFF、H06父/H07/Android开放保持。
 
 > 2026-10-10 NTSD-H06-ROLE-PREREQUISITE-REPAIR-20261010 IN_PROGRESS / NTSD-H06-ROLE-PREREQUISITE-REPAIR-001 PLANNED：仅Editor门v2与两已定位方法冷JIT前置资格，先focused后唯一120+180 OFF/noProfiler；旧诊断与失败保留，七段ON不跑，Role默认/producer暂缓及父项开放不变。见同Task。
@@ -5915,3 +6035,15 @@ NTSD28-336B44-BODY-DEPTH-CANDIDATE-001 / VERIFIED and NTSD28-336B44-SAGE-FIRST-R
 > NTSD-H06-ROLE-RECORD-COST-DIAG-20261010 IN_PROGRESS / NTSD-H06-ROLE-RECORD-COST-DIAG-001 PLANNED；当前只四写域诊断，见同IDTask，未运行窗口。
 
 > NTSD-H06-ROLE-RECORD-COST-DIAG-001 CODE_WRITTEN；四路径默认OFF诊断已写，原Editor编译中，未运行实景。
+
+2026-10-10 HUMAN_APPROVED_SCOPE_CORRECTION via discussion thread: user "开始吧，只要能达到优化条件就行". Continue same Task/Change/Operation. Exact five code paths replace Diagnostics/SimulationWorld.DetailTimingDiagnostics.cs with Core/SimulationWorld.cs; Core only cold configure/disable restore/status/count facade near existing input-pass diagnostics, no existing methods/Q06/partial/algorithms/cache. Pass owns bool/long, reset stage8 disables. Original RED and BLOCKED checkpoint retained historically. Before Core edit actual bytes/SHA/Git captured in core-approved-before.json; 15 prior backups retained. All original tests/unique no-detail ABBA/hard failure stop/defaultOFF contracts unchanged. Status IN_PROGRESS.
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 IN_PROGRESS / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 PLANNED: user-approved new-publication M03 review; one Editor-only finite-scan diagnostic, production unchanged. Same-publication cache excluded by prior workload. Local equivalence/cost only; no handoff yet.
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 VERIFIED (Editor diagnostic only): private WriteQuad rectangle invariant supports 12-to-5 finite-coordinate checks at original Upload location; actual21build/27nonfinite/14641IEEE cases plus original3+2 guards pass. Unique2000/4096 scanABBA both show local gain,256valid calibrated GCscopes0events,158protections unchanged/Menu clean8. Production unchanged; exact defaultOFF candidate/fullBuild handoff ready, dispatch status in artifacts/diagnostics/NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010/dispatch-receipt.json. No fullBuild/parent/device admission. Earlier publication cache and UV failures retained.
+
+> NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 IN_PROGRESS: user-approved H08 current-content inventory and bounded Editor duplicate-source verification. Production unchanged; no handoff yet.
+
+> NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H08-RESIDENT-VISUAL-MEMORY-REVIEW-001 VERIFIED diagnostic only: actual C#773 live refs/703paths, repeated RGBA32 estimate184792652B; real loader duplicate2/2 and existing owner-helper1/1 pass. Production unchanged. Exact native per-publication source-sharing handoff ready; dispatch receipt authoritative. H08 parent OPEN.

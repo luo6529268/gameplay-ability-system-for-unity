@@ -1,0 +1,315 @@
+{
+  "Stages": [
+    {
+      "stage": "small-before",
+      "time": "2026-10-10T16:55:48.8277397Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [],
+      "distinctObjectBytes": 0,
+      "distinctTheoreticalPcmBytes": 0,
+      "pendingLocal": 0,
+      "formalStarted": 0,
+      "formalCompleted": 0,
+      "preparedSealed": false,
+      "stage5Complete": false,
+      "tailDrained": true,
+      "cacheKeys": [],
+      "editorAudioClipCount": 4,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "small-loaded",
+      "time": "2026-10-10T16:55:48.9401312Z",
+      "groups": {
+        "formalOutputOrNonmono": [
+          -1244512
+        ],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [
+          -1244514
+        ],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [
+        {
+          "id": -1244512,
+          "name": "001",
+          "samples": 11784,
+          "channels": 2,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 94272,
+          "objectBytes": 97040
+        },
+        {
+          "id": -1244514,
+          "name": "015",
+          "samples": 7153,
+          "channels": 1,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 28612,
+          "objectBytes": 17154
+        }
+      ],
+      "distinctObjectBytes": 114194,
+      "distinctTheoreticalPcmBytes": 122884,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": false,
+      "tailDrained": true,
+      "cacheKeys": [
+        "NTSD.AudioFile::data\\015.wav"
+      ],
+      "editorAudioClipCount": 6,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "small-stage5-return",
+      "time": "2026-10-10T16:55:48.9421322Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [
+          -1244514
+        ],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [
+        {
+          "id": -1244514,
+          "name": "015",
+          "samples": 7153,
+          "channels": 1,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 28612,
+          "objectBytes": 17154
+        }
+      ],
+      "distinctObjectBytes": 17154,
+      "distinctTheoreticalPcmBytes": 28612,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": true,
+      "tailDrained": true,
+      "cacheKeys": [
+        "NTSD.AudioFile::data\\015.wav"
+      ],
+      "editorAudioClipCount": 5,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "small-tail-drained",
+      "time": "2026-10-10T16:55:48.9431319Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [
+          -1244514
+        ],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [
+        {
+          "id": -1244514,
+          "name": "015",
+          "samples": 7153,
+          "channels": 1,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 28612,
+          "objectBytes": 17154
+        }
+      ],
+      "distinctObjectBytes": 17154,
+      "distinctTheoreticalPcmBytes": 28612,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": true,
+      "tailDrained": true,
+      "cacheKeys": [
+        "NTSD.AudioFile::data\\015.wav"
+      ],
+      "editorAudioClipCount": 5,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "qualification-v2-stage5-return",
+      "time": "2026-10-10T16:55:48.9611365Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [
+          -1244514
+        ],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [
+        {
+          "id": -1244514,
+          "name": "015",
+          "samples": 7153,
+          "channels": 1,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 28612,
+          "objectBytes": 17154
+        }
+      ],
+      "distinctObjectBytes": 17154,
+      "distinctTheoreticalPcmBytes": 28612,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": true,
+      "tailDrained": true,
+      "cacheKeys": [
+        "NTSD.AudioFile::data\\015.wav"
+      ],
+      "editorAudioClipCount": 5,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "qualification-v2-tail-drained",
+      "time": "2026-10-10T16:55:48.9611365Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [
+          -1244514
+        ],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [
+        {
+          "id": -1244514,
+          "name": "015",
+          "samples": 7153,
+          "channels": 1,
+          "frequency": 44100,
+          "theoreticalFloatPcmBytes": 28612,
+          "objectBytes": 17154
+        }
+      ],
+      "distinctObjectBytes": 17154,
+      "distinctTheoreticalPcmBytes": 28612,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": true,
+      "tailDrained": true,
+      "cacheKeys": [
+        "NTSD.AudioFile::data\\015.wav"
+      ],
+      "editorAudioClipCount": 5,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    },
+    {
+      "stage": "qualification-v2-final-cleanup",
+      "time": "2026-10-10T16:55:48.9641373Z",
+      "groups": {
+        "formalOutputOrNonmono": [],
+        "ownedMonoSource": [],
+        "ownedNonmonoInput": [],
+        "genericCacheExisting": [],
+        "genericCacheNew": [],
+        "configuredBorrowed": [],
+        "voiceBindings": []
+      },
+      "clips": [],
+      "distinctObjectBytes": 0,
+      "distinctTheoreticalPcmBytes": 0,
+      "pendingLocal": 0,
+      "formalStarted": 1,
+      "formalCompleted": 1,
+      "preparedSealed": false,
+      "stage5Complete": true,
+      "tailDrained": true,
+      "cacheKeys": [],
+      "editorAudioClipCount": 4,
+      "destroyPending": 0,
+      "destroyScope": "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
+      "decoderStagingBytes": "UNKNOWN: loader-private transient not observed",
+      "actualTemporaryPcmBytes": "UNKNOWN: synchronous converter not intercepted",
+      "boundedConverterTemporaryPayloadUpperBound": 98304,
+      "privateMemoryBytes": null,
+      "workingSetBytes": null,
+      "processScope": "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
+    }
+  ],
+  "failure": null,
+  "operationErrors": [],
+  "drained": true,
+  "configRestored": true,
+  "controllerRestored": true,
+  "mmSoundManagerRestored": true
+}

@@ -1,0 +1,19 @@
+$env:PYTHONUTF8='1'
+$env:PYTHONIOENCODING='utf-8'
+@'
+
+import json,hashlib
+from pathlib import Path
+from datetime import datetime
+root=Path.cwd().resolve()
+op=root/"docs/ai/FILE-OPERATIONS/NTSD-H01-STRATEGY-AND-SCOPE-20261010"
+task=root/"docs/ai/TASKS/NTSD-H01-STRATEGY-AND-SCOPE-20261010.md"
+raw=task.read_bytes()
+old=b"(../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)"
+new=b"(../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)"
+assert raw.count(old)==1
+assert raw==(op/"task-before-link-fix.md").read_bytes()
+task.write_bytes(raw.replace(old,new,1))
+print(json.dumps(dict(corrected="one Task relative link",script_or_resource_change=False),ensure_ascii=False))
+
+'@ | python -X utf8 -

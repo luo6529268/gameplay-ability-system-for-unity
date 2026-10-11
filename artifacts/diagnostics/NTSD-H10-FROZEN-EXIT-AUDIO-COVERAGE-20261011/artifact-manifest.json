@@ -1,0 +1,89 @@
+{
+  "scope": "All preceding task artifacts; self intentionally excluded",
+  "files": {
+    "approved-read-list.json": {
+      "bytes": 775,
+      "sha256": "3d96476fcbd78752b9488997df7451b3d01b7e8d25290e666329c69327d13430"
+    },
+    "before.json": {
+      "bytes": 19128,
+      "sha256": "c92dc38532f3df09266af3f843ecb5977e94bf73f8dd3b194f964a665329cd8a"
+    },
+    "branch-and-routing-evidence.json": {
+      "bytes": 2829,
+      "sha256": "bbc2bfc30188403dac6d508ac64f872740b70f96f5ae1549dfb6dd1dc98b19b6"
+    },
+    "dirty-after.patch": {
+      "bytes": 614876,
+      "sha256": "acd286a688daf94dc0d27c2b41a2985a6bf9fc21bf0a816d5f9f3107f10de730"
+    },
+    "dirty-before.patch": {
+      "bytes": 614876,
+      "sha256": "acd286a688daf94dc0d27c2b41a2985a6bf9fc21bf0a816d5f9f3107f10de730"
+    },
+    "final-audit.json": {
+      "bytes": 20108,
+      "sha256": "0bdbf8b70093a08b825cc7d43af3c2a47ca78521fb1f3d94a6d45d4a2973e854"
+    },
+    "git-after-stderr.txt": {
+      "bytes": 7497,
+      "sha256": "3a2305e75c50fdae51edad68c09e66b9e30e42fa4f75e9eb9bcac958ff50dd95"
+    },
+    "git-before-stderr.txt": {
+      "bytes": 7497,
+      "sha256": "3a2305e75c50fdae51edad68c09e66b9e30e42fa4f75e9eb9bcac958ff50dd95"
+    },
+    "git-status-after.txt": {
+      "bytes": 15005,
+      "sha256": "1c830180513d9721207ef32b4bb25cba74a8ec829bc26c2fe03a5524d550e7f8"
+    },
+    "git-status-before.txt": {
+      "bytes": 15005,
+      "sha256": "1c830180513d9721207ef32b4bb25cba74a8ec829bc26c2fe03a5524d550e7f8"
+    },
+    "head-after.txt": {
+      "bytes": 41,
+      "sha256": "a86fbbf30d6fa38cd2642562f3d410c902a72a06cfd66c7ea338d6ae93349204"
+    },
+    "head-before.txt": {
+      "bytes": 41,
+      "sha256": "a86fbbf30d6fa38cd2642562f3d410c902a72a06cfd66c7ea338d6ae93349204"
+    },
+    "read-log.jsonl": {
+      "bytes": 3074,
+      "sha256": "62deebc1c8c2cad315731674545770c75817c4eb57215672bf127742bd7b91d0"
+    },
+    "read-summary.json": {
+      "bytes": 2985,
+      "sha256": "3abed7fd48e8588c9b1ec7b580c9bcf8c9920b7481692d9da07a7c27e5ef0a5a"
+    },
+    "remaining-question.json": {
+      "bytes": 1671,
+      "sha256": "2fadeba20aab93d23c47ab41f7dbc9e0d021ac705fdc5308d8e2a87ce3f18bed"
+    },
+    "REPORT.md": {
+      "bytes": 8648,
+      "sha256": "884e26ae7a43dd4e3079c64156f861ca4be0b8a6b30ea815b1b75fe034f92f92"
+    },
+    "RESULT.json": {
+      "bytes": 1016,
+      "sha256": "e7e0478c93668f2f495d054689181ddc795021eb4a66d38b29017d787a6d47a4"
+    },
+    "reused-legal-evidence.json": {
+      "bytes": 5935,
+      "sha256": "7feda45f97e2c6b03376d90229b5953217d7fbef25a00343e5302ef176f88b1e"
+    },
+    "staged-after.patch": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "staged-before.patch": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "TASK.md": {
+      "bytes": 2861,
+      "sha256": "90ccffa12701e1f5ea4691e021816c6ddee615fd38bf3e75530f02c50d940784"
+    }
+  }
+}

@@ -31,6 +31,8 @@ namespace NTSD.Animation.Rendering
         private int segmentCount;
         private int mutationVersion;
         private bool disposed;
+        private bool segmentUvDimensionReuseEnabled;
+        private bool groupedFinitePositionValidationEnabled;
         private bool capacityPrepared;
         private bool capacitySealed;
         private int preparedCommandCapacity;
@@ -38,7 +40,32 @@ namespace NTSD.Animation.Rendering
         private BattlePresentationFrame builtFrame;
 #if UNITY_EDITOR
         private int lastInactiveChunkClearCount;
+        private bool countUvDimensionReads;
+        private int lastUvDimensionReadPairs;
+        internal int LastUvDimensionReadPairs => lastUvDimensionReadPairs;
 #endif
+
+        internal bool GroupedFinitePositionValidationEnabled
+        {
+            get => groupedFinitePositionValidationEnabled;
+            set
+            {
+                if (disposed)
+                    throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
+                groupedFinitePositionValidationEnabled = value;
+            }
+        }
+
+        internal bool SegmentUvDimensionReuseEnabled
+        {
+            get => segmentUvDimensionReuseEnabled;
+            set
+            {
+                if (disposed)
+                    throw new ObjectDisposedException(nameof(BattleDynamicMeshBackend));
+                segmentUvDimensionReuseEnabled = value;
+            }
+        }
 
         public BattleCentralBuildDiagnostics Diagnostics => diagnostics;
         public int ActiveChunkCount => activeChunkCount;
@@ -171,6 +198,7 @@ namespace NTSD.Animation.Rendering
             builtFrame = frame;
 #if UNITY_EDITOR
             lastInactiveChunkClearCount = 0;
+            lastUvDimensionReadPairs = 0;
 #endif
 
             int commandCount = frame?.CommandCount ?? 0;
@@ -187,6 +215,11 @@ namespace NTSD.Animation.Rendering
             BattleCentralResolvedResource openSegmentResource = default;
             BattleCatalogCentralResourceResolver preparedCatalogResolver =
                 resolver as BattleCatalogCentralResourceResolver;
+            bool reuseSegmentDimensions = segmentUvDimensionReuseEnabled &&
+                preparedCatalogResolver != null && drawMode == BattleCentralDrawMode.OrderedChunks;
+            bool segmentDimensionsReady = false;
+            int segmentTextureWidth = 0;
+            int segmentTextureHeight = 0;
             bool collectPresentationTimings = presentationDiagnostics != null;
             long resolveCommandsElapsedTicks = 0;
             long writeQuadsElapsedTicks = 0;
@@ -265,6 +298,7 @@ namespace NTSD.Animation.Rendering
                                          openFirstQuad + openQuadCount == quadIndex;
                         if (!canAppend)
                         {
+                            segmentDimensionsReady = false;
                             if (hasOpenSegment)
                             {
                                 CommitSegment(
@@ -294,11 +328,37 @@ namespace NTSD.Animation.Rendering
                         try
                         {
                             SegmentBoundsAccumulator quadBounds;
+                            int preparedWidth = 0;
+                            int preparedHeight = 0;
+                            // Prepare only after the existing segment contract admits an append.
+                            if (canAppend && reuseSegmentDimensions &&
+                                resource.Texture != null && resource.NormalizedUv.width > 0f &&
+                                resource.NormalizedUv.height > 0f)
+                            {
+                                if (!segmentDimensionsReady)
+                                {
+                                    segmentTextureWidth = resource.Texture.width;
+                                    segmentTextureHeight = resource.Texture.height;
+                                    segmentDimensionsReady = true;
+#if UNITY_EDITOR
+                                    if (countUvDimensionReads)
+                                        lastUvDimensionReadPairs++;
+#endif
+                                }
+                                preparedWidth = segmentTextureWidth;
+                                preparedHeight = segmentTextureHeight;
+                            }
                             chunk.WriteQuad(
                                 quadIndex,
                                 command,
                                 resource,
-                                out quadBounds);
+                                out quadBounds,
+                                preparedWidth,
+                                preparedHeight
+#if UNITY_EDITOR
+                                , countUvDimensionReads ? this : null
+#endif
+                                );
                             if (canAppend)
                                 segmentBounds[openSegmentIndex].Encapsulate(quadBounds);
                             else
@@ -366,7 +426,8 @@ namespace NTSD.Animation.Rendering
                             ref segmentCursor,
                             segmentCount,
                             diagnostics,
-                            detailDiagnostics);
+                            detailDiagnostics,
+                            groupedFinitePositionValidationEnabled);
                     }
                 }
             }
@@ -391,6 +452,11 @@ namespace NTSD.Animation.Rendering
 
         public void Clear()
         {
+            groupedFinitePositionValidationEnabled = false;
+            segmentUvDimensionReuseEnabled = false;
+#if UNITY_EDITOR
+            lastUvDimensionReadPairs = 0;
+#endif
             mutationVersion++;
             builtFrame = null;
             segmentCount = 0;
@@ -407,6 +473,12 @@ namespace NTSD.Animation.Rendering
             if (disposed)
                 return;
             disposed = true;
+            groupedFinitePositionValidationEnabled = false;
+            segmentUvDimensionReuseEnabled = false;
+#if UNITY_EDITOR
+            lastUvDimensionReadPairs = 0;
+            countUvDimensionReads = false;
+#endif
             for (int i = 0; i < chunks.Length; i++)
                 chunks[i]?.Dispose();
             chunks = Array.Empty<BattleMeshChunk>();
@@ -638,7 +710,13 @@ namespace NTSD.Animation.Rendering
                 int quadIndex,
                 in BattleRenderCommand command,
                 in BattleCentralResolvedResource resource,
-                out SegmentBoundsAccumulator quadBounds)
+                out SegmentBoundsAccumulator quadBounds,
+                int preparedTextureWidth,
+                int preparedTextureHeight
+#if UNITY_EDITOR
+                , BattleDynamicMeshBackend uvReadDiagnostics
+#endif
+                )
             {
                 if ((uint)quadIndex >= QuadsPerChunk)
                     throw new ArgumentOutOfRangeException(nameof(quadIndex));
@@ -658,8 +736,19 @@ namespace NTSD.Animation.Rendering
                 Vector4 uvSampleBounds = default;
                 if (resource.Texture != null && uv.width > 0f && uv.height > 0f)
                 {
-                    float insetU = Mathf.Min(0.5f / resource.Texture.width, uv.width * 0.5f);
-                    float insetV = Mathf.Min(0.5f / resource.Texture.height, uv.height * 0.5f);
+                    int textureWidth = preparedTextureWidth;
+                    int textureHeight = preparedTextureHeight;
+                    if (textureWidth == 0)
+                    {
+                        textureWidth = resource.Texture.width;
+                        textureHeight = resource.Texture.height;
+#if UNITY_EDITOR
+                        if (uvReadDiagnostics != null)
+                            uvReadDiagnostics.lastUvDimensionReadPairs++;
+#endif
+                    }
+                    float insetU = Mathf.Min(0.5f / textureWidth, uv.width * 0.5f);
+                    float insetV = Mathf.Min(0.5f / textureHeight, uv.height * 0.5f);
                     uvSampleBounds = new Vector4(uv.xMin + insetU, uv.yMin + insetV,
                         uv.xMax - insetU, uv.yMax - insetV);
                 }
@@ -692,17 +781,39 @@ namespace NTSD.Animation.Rendering
                 ref int segmentCursor,
                 int totalSegments,
                 BattleCentralBuildDiagnostics buildDiagnostics,
-                BattleTickDetailPhaseDiagnostics detailDiagnostics)
+                BattleTickDetailPhaseDiagnostics detailDiagnostics,
+                bool groupedFinitePositionValidation)
             {
                 int activeVertices = activeQuads * VerticesPerQuad;
-                for (int vertexIndex = 0; vertexIndex < activeVertices; vertexIndex++)
+                if (groupedFinitePositionValidation)
                 {
-                    Vector3 position = vertices[vertexIndex].Position;
-                    if (float.IsNaN(position.x) || float.IsInfinity(position.x) ||
-                        float.IsNaN(position.y) || float.IsInfinity(position.y) ||
-                        float.IsNaN(position.z) || float.IsInfinity(position.z))
+                    // WriteQuad is the sole rectangle writer; recheck this invariant before adding another writer.
+                    for (int vertexIndex = 0; vertexIndex < activeVertices; vertexIndex += VerticesPerQuad)
                     {
-                        throw new ArgumentException("Battle mesh vertex positions must be finite.");
+                        Vector3 position = vertices[vertexIndex].Position;
+                        float top = vertices[vertexIndex + 1].Position.y;
+                        float right = vertices[vertexIndex + 2].Position.x;
+                        if (float.IsNaN(position.x) || float.IsInfinity(position.x) ||
+                            float.IsNaN(position.y) || float.IsInfinity(position.y) ||
+                            float.IsNaN(position.z) || float.IsInfinity(position.z) ||
+                            float.IsNaN(top) || float.IsInfinity(top) ||
+                            float.IsNaN(right) || float.IsInfinity(right))
+                        {
+                            throw new ArgumentException("Battle mesh vertex positions must be finite.");
+                        }
+                    }
+                }
+                else
+                {
+                    for (int vertexIndex = 0; vertexIndex < activeVertices; vertexIndex++)
+                    {
+                        Vector3 position = vertices[vertexIndex].Position;
+                        if (float.IsNaN(position.x) || float.IsInfinity(position.x) ||
+                            float.IsNaN(position.y) || float.IsInfinity(position.y) ||
+                            float.IsNaN(position.z) || float.IsInfinity(position.z))
+                        {
+                            throw new ArgumentException("Battle mesh vertex positions must be finite.");
+                        }
                     }
                 }
 

@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "df11369ae7f1448abe040a48b1555edf",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791613125504,
+      "finished_unix_ms": 1791613137165,
+      "last_update_unix_ms": 1791613137165,
+      "progress": {
+        "completed": 1,
+        "total": 10634,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791613130467,
+        "last_finished_test_full_name": "NTSD.Test.AiSensingKernelEditorTests.CursorReuse_ProjectileDirectionEqualXAndNaNAreExplicit",
+        "last_finished_unix_ms": 1791613130500,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.5366743,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CursorReuse_ProjectileDirectionEqualXAndNaNAreExplicit",
+            "fullName": "NTSD.Test.AiSensingKernelEditorTests.CursorReuse_ProjectileDirectionEqualXAndNaNAreExplicit",
+            "state": "Passed",
+            "durationSeconds": 0.0286066,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "status": "INCONCLUSIVE_NO_LOCAL_GAIN_SIGNAL",
+  "unit": "ms/1000query",
+  "layouts": [
+    {
+      "spacing": 120,
+      "off": {
+        "meanA": 1.158871875,
+        "meanB": 1.3135,
+        "absoluteSpread": 0.1546281249999999,
+        "relativeSpreadPercent": 12.508484388093915,
+        "pooledWindowMean": 1.2361859375
+      },
+      "on": {
+        "meanA": 1.19849375,
+        "meanB": 1.2022875,
+        "absoluteSpread": 0.00379375000000004,
+        "relativeSpreadPercent": 0.31604295476733174,
+        "pooledWindowMean": 1.2003906249999998
+      },
+      "pooledOnVsOffPercent": -2.8956252788630454,
+      "meanSeparationPassed": false,
+      "tailGatePassed": true
+    },
+    {
+      "spacing": 12,
+      "off": {
+        "meanA": 1.256871875,
+        "meanB": 1.247253125,
+        "absoluteSpread": 0.00961875000000001,
+        "relativeSpreadPercent": 0.7682324165127546,
+        "pooledWindowMean": 1.2520625
+      },
+      "on": {
+        "meanA": 1.296725,
+        "meanB": 1.288996875,
+        "absoluteSpread": 0.007728124999999864,
+        "relativeSpreadPercent": 0.5977537704050142,
+        "pooledWindowMean": 1.2928609375
+      },
+      "pooledOnVsOffPercent": 3.258498477512095,
+      "meanSeparationPassed": false,
+      "tailGatePassed": false
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  [
+    "            private MoreMountains.Tools.MMSoundManager createdSoundManager;",
+    "            private MoreMountains.Tools.MMSoundManager createdSoundManager;\n            private readonly MoreMountains.Tools.MMSoundManager[] beforeSoundManagers;"
+  ],
+  [
+    "                previousSoundManager = MoreMountains.Tools.MMSoundManager.Current;\n                previousCharacterManager",
+    "                previousSoundManager = MoreMountains.Tools.MMSoundManager.Current;\n                beforeSoundManagers = Resources.FindObjectsOfTypeAll<MoreMountains.Tools.MMSoundManager>();\n                previousCharacterManager"
+  ],
+  [
+    "                if (previousSoundManager == null && current != null)\n                {\n                    if (createdSoundManager != null)",
+    "                if (previousSoundManager == null && current != null\n                    && !beforeSoundManagers.Contains(current) && !beforeSceneObjects.Contains(current.gameObject.GetInstanceID()))\n                {\n                    if (createdSoundManager != null)"
+  ],
+  [
+    "                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, previousSoundManager), Is.True);\n            }\n\n            public EnvelopeFixture()",
+    "                var current = MoreMountains.Tools.MMSoundManager.Current;\n                if (!ReferenceEquals(current, previousSoundManager))\n                {\n                    Assert.That(current != null && beforeSoundManagers.Contains(current)\n                        && beforeSceneObjects.Contains(current.gameObject.GetInstanceID()), Is.True,\n                        \"Only restore an adopted original singleton pointer; never destroy its GameObject\");\n                    soundManagerField.SetValue(null, previousSoundManager);\n                }\n                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, previousSoundManager), Is.True);\n            }\n\n            public EnvelopeFixture()"
+  ],
+  [
+    "                    process.PrivateMemorySize64, process.WorkingSet64,",
+    "                    privateMemoryBytes = process.PrivateMemorySize64 > 0 ? (long?)process.PrivateMemorySize64 : null,\n                    workingSetBytes = process.WorkingSet64 > 0 ? (long?)process.WorkingSet64 : null,"
+  ],
+  [
+    "SaveEnvelope(\"small-selection\",",
+    "SaveEnvelope(\"small-selection-v2\","
+  ],
+  [
+    "await fixture.Finish(\"qualification\");",
+    "await fixture.Finish(\"qualification-v2\");"
+  ]
+]

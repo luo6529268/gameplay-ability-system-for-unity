@@ -1,0 +1,316 @@
+{
+  "compat-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "38236",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10703",
+      "result": "Failed",
+      "site": "Child",
+      "start-time": "2026-10-10 15:48:40Z",
+      "end-time": "2026-10-10 15:48:42Z",
+      "duration": "2.371828",
+      "total": "14",
+      "passed": "13",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests.DriverShutdown_ClosesRuntimeStagesBeforeStoppedAndIsIdempotent",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.DestroyedOwnerReleasesCopiesAndCannotRecreateThem",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.DifferentDynamicCuesAndBuiltinIdentityRemainIndependent",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.MonoPlaybackAcceptsDirectSoundCenterGain",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.NonBattlePlaybackKeepsIndependentOneShots",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SameTickSharedCueAggregatesOnceWithoutMergingNextTick",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"data\\\\053.wav\")",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"c\\\\nar\\\\w\\\\a7.wav\")",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.SharedBattleCueRetriggersOneVoiceAcrossRoles(\"c\\\\saku\\\\w\\\\tra.wav\")",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.UnityVoiceCapsMonoGainAboveOne",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.NTSD28OriginalCommonAudioEditorTests.VoiceReplacementDoesNotRetainStaleBattleIdentity",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.ContinuationGuard_RejectsStoppedReenteredAndDifferentWorld",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests.PreparingBeforeBirth_CapturesBothOwners_WithoutSealing_AndIsIdempotent",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattleStereoVoice_UsesClipSpecificMatrixAndRetainsGainAfterVolumeChange",
+        "result": "Failed",
+        "message": "  Expected: not null\n  But was:  null\n"
+      }
+    ]
+  },
+  "failure-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "13422",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10713",
+      "result": "Passed",
+      "start-time": "2026-10-10 16:01:19Z",
+      "end-time": "2026-10-10 16:01:20Z",
+      "duration": "0.766647",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioNullFallbackAndOwnedConversionFailureKeepBorrowedSource",
+        "result": "Passed",
+        "message": null
+      }
+    ]
+  },
+  "green-first-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "13412",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10703",
+      "result": "Passed",
+      "start-time": "2026-10-10 15:41:50Z",
+      "end-time": "2026-10-10 15:41:52Z",
+      "duration": "1.467731",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+        "result": "Passed",
+        "message": null
+      }
+    ]
+  },
+  "lifecycle-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "13421",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10712",
+      "result": "Passed",
+      "start-time": "2026-10-10 15:58:15Z",
+      "end-time": "2026-10-10 15:58:22Z",
+      "duration": "7.120474",
+      "total": "7",
+      "passed": "7",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioControllerChangeFailsCurrentPreparationAndAllowsNewGeneration",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioDriverCapturesBothPreparationOrdersAndNoDriverShutdown",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioMissingFallbackKeepsBorrowedClipAndGenericVoice",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSession_ConcurrentPrepareKeepsNewestGeneration",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSession_LocalLoadAwaitCancellationReleasesStaleResult",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSession_NaturalOnDestroyDuringAwaitReleasesStaleResult",
+        "result": "Passed",
+        "message": null
+      },
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSession_ThreeCyclesPublicPreparePlayShutdownAndColdReentry",
+        "result": "Passed",
+        "message": null
+      }
+    ]
+  },
+  "play-preflight-failed-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "63110",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10713",
+      "result": "Failed",
+      "site": "Child",
+      "start-time": "2026-10-10 16:03:39Z",
+      "end-time": "2026-10-10 16:03:39Z",
+      "duration": "0.735548",
+      "total": "1",
+      "passed": "0",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioOneIsolatedPlayDeferredDestroy",
+        "result": "Failed",
+        "message": "  Expected: 1\n  But was:  2\n"
+      }
+    ]
+  },
+  "play-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "1000",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10713",
+      "result": "Passed",
+      "start-time": "2026-10-10 16:09:02Z",
+      "end-time": "2026-10-10 16:09:09Z",
+      "duration": "7.529020",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioOneIsolatedPlayDeferredDestroy",
+        "result": "Passed",
+        "message": null
+      }
+    ]
+  },
+  "red-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "13412",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10703",
+      "result": "Failed",
+      "site": "Child",
+      "start-time": "2026-10-10 15:39:58Z",
+      "end-time": "2026-10-10 15:39:59Z",
+      "duration": "1.186585",
+      "total": "1",
+      "passed": "0",
+      "failed": "1",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+        "result": "Failed",
+        "message": "  Missing H10 production method contract: BeginBattleSoundShutdown/0\n  Expected: not null\n  But was:  null\n"
+      }
+    ]
+  },
+  "resource-tests.xml": {
+    "summary": {
+      "type": "TestSuite",
+      "id": "38266",
+      "name": "NTSD",
+      "fullname": "NTSD",
+      "runstate": "Runnable",
+      "testcasecount": "10713",
+      "result": "Passed",
+      "start-time": "2026-10-10 16:02:20Z",
+      "end-time": "2026-10-10 16:02:22Z",
+      "duration": "1.571074",
+      "total": "1",
+      "passed": "1",
+      "failed": "0",
+      "inconclusive": "0",
+      "skipped": "0",
+      "asserts": "0"
+    },
+    "cases": [
+      {
+        "name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSessionBoundedResourceStages",
+        "result": "Passed",
+        "message": null
+      }
+    ]
+  }
+}

@@ -1,3 +1,22 @@
+## 2026-10-10 最新阶段与排程（NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010）
+
+2026-10-10 用户更正：Android真机/GPU认证、IL2CPP/ARM64属于后期；AB部署、Android构建和正式发布随平台交付后置。当前按战斗CPU、CPU侧渲染工作和驻留内存问题排序。原34项ID及历史12高/14中/8低保留，原风险重要性不再冒充当前执行顺序。
+当前P1：M-03 → H-08 → H-10；P2：M-12 → M-05 → M-01 → M-02 → M-06。此顺序是评审/投入顺序，不是收益排名，也不代表每项已确认必须改代码。
+H07输入约12ms尚未解决、当前无新有据方案而暂缓；H07-LATE已评审暂无必要优化。H06既有成果保留，不续Role精确配对；producer暂缓、95和旧候选不自动开启。只处理原方案，不恢复旧Goal或34项自动队列。
+本轮已先评审M03历史证据和当前生产入口。相同显示采样复用已存在；剩余先看命令物化与顶点准备是否有可消除重复，不能因GPU证书未完成就追加设备任务。脚本/资源/设置未改，未跑Unity或新测试/测量，未发送执行指令；监测不恢复。
+
+当前没有新的生产实施指令。禁止复制下方旧H06/H01/H07历史提示词执行。恢复时读总表文首与唯一进度，继续M03具名评审；仅在具体可消除工作、准确owner/路径、收益验证和结束条件明确后才形成实施任务，不自动排队其它点。
+
+完整排程：Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md；唯一进度：Assets/NTSD/Docs/battle-optimization-progress-tracker.md；本轮报告：artifacts/diagnostics/NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010/REPORT.md。
+
+以下均保留此前时点；旧排程与当前状态冲突时以本段及当前总表为准。
+
+---
+
+> **2026-10-10 当前仅讨论H07-INPUT的具体实现，尚无实施指令。** 用户要求按优先级重整，H-01部署后移。下方提示词仍为历史，不得按旧H06或H-01入口执行；待具体方案/范围确认并要求输出指令时另行形成具名任务。额外方向不跟进，不恢复旧Goal/队列/监测。[首项方案](H07-INPUT.md) · [决定](DECISIONS.md)。
+
+> **2026-10-10 当前使用限制：此文件下方为历史执行提示词，不得直接启动。** 用户新决定只按既有优化方案推进，额外发现方向一律不跟进；当前第一项[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)尚在策略确认，本轮没有生成或派发实施指令。策略与准确范围确认后，另行形成具名H-01指令；不按下方旧H06入口恢复诊断、旧Goal或自动队列。[最新决定](DECISIONS.md) · [唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。
+
 # 新会话执行提示词（D1=A已确认）
 
 文档状态：FINAL_FOR_USER_DISPATCH。用户2026-10-09已确认“可以先用A”；本文件供用户发送给新会话，当前会话没有执行优化。复制下方分隔线后的正文即可。

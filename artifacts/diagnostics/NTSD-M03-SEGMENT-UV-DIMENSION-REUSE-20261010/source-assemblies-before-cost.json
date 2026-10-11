@@ -1,0 +1,34 @@
+{
+  "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs": {
+    "sha256": "f003c6d15ad6271e7d24ac84c2f70c9b5a328eabed40f40658416a5c7eb75bcf",
+    "mtimeUtc": "2026-10-10T09:58:52.440557+00:00"
+  },
+  "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs": {
+    "sha256": "1be334ebaa630abcf461207708792547f15ddd4a6cd489dbaa6f14ffbc256b81",
+    "mtimeUtc": "2026-10-10T10:00:53.403461+00:00"
+  },
+  "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs": {
+    "sha256": "99a79d7552b2a3e7b07ec776b2df716cb8ce9869d0eec6358f2339bd9a76ac26",
+    "mtimeUtc": "2026-10-10T10:00:53.406972+00:00"
+  },
+  "Library/ScriptAssemblies/Assembly-CSharp.dll": {
+    "sha256": "bf9dd52739f8022d434295fa54cda3cb24a6e05c786a9c1ea3b98ba993960ab2",
+    "mtimeUtc": "2026-10-10T09:58:56.696639+00:00"
+  },
+  "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll": {
+    "sha256": "6f2369c8bf95a33746758c91f3e447a96b7092dc894fe0cbc0083fad5aa247bf",
+    "mtimeUtc": "2026-10-10T10:01:02.772858+00:00"
+  },
+  "Assets/NTSD/Scripts/Animation/Rendering/BattleCentralRenderTypes.cs": {
+    "sha256": "cee95e74a6a2f1d9e16631e210f5c8bace8f517d1f0c3a1b20932bab24127090",
+    "mtimeUtc": "2026-10-06T12:37:50.710903+00:00"
+  },
+  "Assets/NTSD/Scripts/Animation/Runtime/BattleSpriteCatalog.cs": {
+    "sha256": "f1d2a174d0e585507c94c74f7f51e91fd6019934efb64648ab728744a043190c",
+    "mtimeUtc": "2026-09-26T02:48:23.280852+00:00"
+  },
+  "Assets/NTSD/Scripts/Test/Editor/BattleScopedGcAllocationRecorder.cs": {
+    "sha256": "5d53aee14baefdd7af8e9971de5182e8c2b860a00ee8c9258229cd9a08b82336",
+    "mtimeUtc": "2026-10-06T21:58:16.273350+00:00"
+  }
+}

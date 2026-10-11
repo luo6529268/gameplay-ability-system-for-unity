@@ -1,0 +1,26 @@
+[
+  [
+    "            private bool finished;\n            private readonly List<UniTask>",
+    "            private bool finished;\n            private Newtonsoft.Json.Linq.JObject headers;\n            private readonly List<UniTask>"
+  ],
+  [
+    "            public object VerifySealed(int session)\n            {",
+    "            private void VerifyHeader(AudioClip clip, string path, bool converted)\n            {\n                if (headers == null)\n                    headers = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, \"headers.json\")));\n                var header = headers[\"files\"][path];\n                Assert.That(header, Is.Not.Null, path);\n                Assert.That((bool)header[\"knownFrames\"], Is.True, path);\n                Assert.That(clip.samples, Is.EqualTo((int)header[\"frames\"]), path);\n                int channels = (int)header[\"channels\"];\n                Assert.That(clip.channels, Is.EqualTo(converted && channels == 1 ? 2 : channels), path);\n                Assert.That(clip.frequency, Is.EqualTo((int)header[\"frequency\"]), path);\n                Assert.That(clip.name, Is.EqualTo(Path.GetFileNameWithoutExtension(path)), path);\n            }\n\n            public object VerifySealed(int session)\n            {"
+  ],
+  [
+    "                    if (row.battle.exists) Assert.That(outputs.Count(x => x != null), Is.EqualTo(row.battle.files.Length), row.soundId);\n                    rows.Add(new",
+    "                    if (row.battle.exists)\n                    {\n                        Assert.That(outputs.Count(x => x != null), Is.EqualTo(row.battle.files.Length), row.soundId);\n                        for (int index = 0; index < outputs.Length; index++) VerifyHeader(outputs[index], row.battle.files[index], true);\n                    }\n                    AudioClip[] genericClips = Array.Empty<AudioClip>();\n                    if (row.battle.formal && row.generic.exists)\n                    {\n                        object generic = GetCue(row.soundId, false);\n                        Assert.That(EnvelopeField<bool>(generic, \"IsLoaded\"), Is.True, row.soundId + \" generic\");\n                        genericClips = EnvelopeField<AudioClip[]>(generic, \"Clips\") ?? Array.Empty<AudioClip>();\n                        Assert.That(genericClips.Count(x => x != null), Is.EqualTo(row.generic.files.Length));\n                        for (int index = 0; index < genericClips.Length; index++) VerifyHeader(genericClips[index], row.generic.files[index], false);\n                    }\n                    rows.Add(new"
+  ],
+  [
+    "                        outputs = outputs.Where(x => x != null).Select(x => new { x.name, x.samples, x.channels, x.frequency }).ToArray()\n",
+    "                        outputs = outputs.Where(x => x != null).Select(x => new { x.name, x.samples, x.channels, x.frequency }).ToArray(),\n                        generic = genericClips.Where(x => x != null).Select(x => new { x.name, x.samples, x.channels, x.frequency }).ToArray()\n"
+  ],
+  [
+    "                    SaveEnvelope(label + \"-cleanup\", new { passed = true, cleanup, destroyed,",
+    "                    Snapshot(label + \"-final-cleanup\");\n                    SaveEnvelope(label + \"-cleanup\", new { passed = true, cleanup, destroyed,"
+  ],
+  [
+    "                        previousOwned = fixture.Owned();\n                        previousIds = previousOwned.Select(x => x.GetInstanceID()).ToArray();",
+    "                        previousOwned = fixture.Owned();\n                        Assert.That(previousOwned.Any(x => previousIds.Contains(x.GetInstanceID())), Is.False, \"New session must not retain old formal identity\");\n                        previousIds = previousOwned.Select(x => x.GetInstanceID()).ToArray();"
+  ]
+]

@@ -15,6 +15,109 @@ namespace NTSD.Test.Editor
 {
     public sealed class BattleCentralSameSamplePixelEditorTests
     {
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void SegmentUvReuse_PreparedPixelsMatchIndependentOracle(int mode)
+        {
+            Assert.That(SystemInfo.graphicsDeviceType, Is.Not.EqualTo(GraphicsDeviceType.Null));
+            using var fixture = new NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvFixture(mode);
+            using var backend = new BattleDynamicMeshBackend();
+            backend.PrepareCapacity(4);
+            var target = new RenderTexture(Width, Height, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            var readback = new Texture2D(Width, Height, TextureFormat.RGBA32, false, true);
+            var buffer = new CommandBuffer();
+            var block = new MaterialPropertyBlock();
+            RenderTexture previous = RenderTexture.active;
+            string root = Path.Combine(NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SegmentUvOutput,
+                "pixels-" + mode + "-" + Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(root);
+            var result = new Result { bindingMode = mode, drawMode = 0 };
+            try
+            {
+                target.Create();
+                var published = MakePublication();
+                for (int i = 0; i < 4; i++) published.ReplaceCommand(i, fixture.Command(i, i, Position(i)));
+                string publication = NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.CaptureFields(published);
+                foreach (double alpha in new[] { 0.0, 0.25, 0.5, 0.75, 1.0 })
+                {
+                    var frame = new BattlePresentationFrame();
+                    frame.CopyFrom(published);
+                    var display = new BattlePresentationDisplayMotion();
+                    display.Prepare(frame, alpha, 1.5, 2.0);
+                    display.ApplyToCapturedCommands(frame);
+                    AssertIndependentSample(published, frame, alpha);
+                    string frozen = NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.CaptureFields(frame);
+                    var meshes = new Mesh[4];
+                    try
+                    {
+                        for (int i = 0; i < 4; i++)
+                        {
+                            Assert.That(fixture.Resolver.ResolvePrepared(frame.GetCommand(i), out var resource),
+                                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+                            meshes[i] = MakeIndependentQuad(frame.GetCommand(i), resource);
+                        }
+                        block.SetTexture(mode == 1 ? "_MainTexArray" : "_MainTex",
+                            mode == 1 ? (Texture)fixture.ArrayTexture : fixture.TextureAt(0));
+                        Begin(buffer, target);
+                        for (int i = 0; i < 4; i++) buffer.DrawMesh(meshes[i], Matrix4x4.identity, fixture.Material, 0, 0, block);
+                        Color32[] expected = Read(buffer, target, readback);
+                        int content = 0;
+                        foreach (Color32 pixel in expected) if (Error(pixel, Background) > 4) content++;
+                        Assert.That(content, Is.GreaterThan(100));
+                        result.minimumContentPixels = Math.Min(result.minimumContentPixels, content);
+                        if (alpha == 0.5) WriteNew(Path.Combine(root, "oracle.png"), readback.EncodeToPNG());
+                        Color32[] off = null;
+                        foreach (bool enabled in new[] { false, true })
+                        {
+                            NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.SetUvReuse(backend, enabled, true);
+                            backend.Build(frame, fixture.Resolver);
+                            Assert.That(backend.LastUvDimensionReadPairs, Is.EqualTo(enabled ? 2 : 4),
+                                "This test must exercise prepared append reuse.");
+                            Assert.That(backend.SegmentCount, Is.EqualTo(1));
+                            Begin(buffer, target);
+                            var segment = backend.GetSegment(0);
+                            buffer.DrawMesh(backend.GetChunkMesh(0), Matrix4x4.identity, segment.Material, segment.SubMeshIndex, 0, block);
+                            Color32[] actual = Read(buffer, target, readback);
+                            CollectionAssert.AreEqual(expected, actual, "Full pixels differ from independent quad oracle.");
+                            if (enabled) CollectionAssert.AreEqual(off, actual, "ON/OFF pixels differ.");
+                            else off = actual;
+                            Assert.That(NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.CaptureFields(frame),
+                                Is.EqualTo(frozen));
+                            result.comparedSamples++;
+                            result.comparedPixels += actual.Length;
+                            if (alpha == 0.5) WriteNew(Path.Combine(root, enabled ? "on.png" : "off.png"), readback.EncodeToPNG());
+                        }
+                        if (alpha == 0.5)
+                        {
+                            Begin(buffer, target);
+                            for (int i = 3; i >= 0; i--) buffer.DrawMesh(meshes[i], Matrix4x4.identity, fixture.Material, 0, 0, block);
+                            Color32[] reverse = Read(buffer, target, readback);
+                            int differences = 0;
+                            for (int i = 0; i < reverse.Length; i++) if (Error(reverse[i], expected[i]) > 2) differences++;
+                            Assert.That(differences, Is.GreaterThan(20), "Order negative control must detect transparency reversal.");
+                            result.reverseOrderDifferentPixels = differences;
+                            WriteNew(Path.Combine(root, "reverse.png"), readback.EncodeToPNG());
+                        }
+                    }
+                    finally { foreach (Mesh mesh in meshes) UnityEngine.Object.DestroyImmediate(mesh); }
+                    Assert.That(NTSD.Animation.Rendering.Editor.BattleCatalogCentralResourceResolverEditorTests.CaptureFields(published),
+                        Is.EqualTo(publication));
+                }
+                result.status = "PASS";
+                WriteNew(Path.Combine(root, "result.json"), System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(result, true)));
+            }
+            finally
+            {
+                RenderTexture.active = previous;
+                buffer.Release();
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+                UnityEngine.Object.DestroyImmediate(readback);
+            }
+        }
+
         private const int Width = 96;
         private const int Height = 96;
         private const string OutputRoot = "artifacts/diagnostics/NTSD-OPTIMIZATION-BATCH17-SAME-SAMPLE-PIXELS-20261007";

@@ -1,0 +1,38 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime
+o=Path('artifacts/diagnostics/NTSD-H10-AUDIO-PRODUCER-COVERAGE-REVIEW-20261011')
+old=Path('artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+def sha(p):
+ h=hashlib.sha256()
+ with Path(p).open('rb') as f:
+  while b:=f.read(1024*1024):h.update(b)
+ return h.hexdigest()
+base=json.loads((o/'protected-before.json').read_text(encoding='utf-8'))['files']
+drift=[]
+for p,h in base.items():
+ current=sha(p) if Path(p).exists() else None
+ if current!=h:drift.append({'path':p,'before':h,'after':current})
+fp=json.loads((old/'final-audit.json').read_text(encoding='utf-8'))['finalFingerprints']
+fpdrift=[{'path':p,'before':h,'after':sha(p)} for p,h in fp.items() if sha(p)!=h]
+oldscene=json.loads((old/'qualification-scene-asset-identity.json').read_text(encoding='utf-8'))
+scenedrift=[x['path'] for x in oldscene if sha(x['path'])!=x['before']]
+status=subprocess.check_output(['git','status','--short','--branch','--untracked-files=all']).decode('utf-8')
+before=(o/'git-status-before.txt').read_text(encoding='utf-8-sig')
+own=o.as_posix()
+def outside(s):return sorted(x for x in s.splitlines() if own not in x)
+head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
+metadata=json.loads((o/'metadata-coverage.json').read_text(encoding='utf-8'))
+matrix=json.loads((o/'request-coverage-matrix.json').read_text(encoding='utf-8'))
+root=json.loads((o/'root-dependency-matrix.json').read_text(encoding='utf-8'))
+assert len(matrix['rows'])==58 and len(metadata['cueRoutes'])==1000 and len(root['rows'])==9
+assert not metadata['summary']['metadataCueMissingFromInventory'] and not metadata['summary']['routesWithoutKnownMetadataOrigin']
+assert {x for r in matrix['rows'] for x in r.get('unmappedValues',[])}=={'Battle/Ice/Shatter'}
+summary={'completedAt':datetime.datetime.now().astimezone().isoformat(),'protectedCount':len(base),'protectedDrift':drift,'priorEightFingerprintDrift':fpdrift,'fourSceneAssetDrift':scenedrift,'headUnchanged':head==(o/'head-before.txt').read_text(encoding='utf-8-sig').strip(),'outsideTaskGitStatusUnchanged':outside(status)==outside(before),'newAuthoredCodeFiles':0,'newUnityCalls':0,'newCompileTestMeasurement':False,'offlineConsistencyPassed':True,'sourceReadBoundary':'VIOLATED_BY_SIDECAR_SEE_READ-BOUNDARY-INCIDENT.md; cannot report a clean read-scope pass','fullMeasurementReused':True,'safeSubsetProved':False,'newBudgetChosen':False}
+with (o/'git-status-final.txt').open('x',encoding='utf-8') as f:f.write(status)
+with (o/'final-audit.json').open('x',encoding='utf-8') as f:json.dump(summary,f,ensure_ascii=False,indent=2)
+result={'task':'NTSD-H10-AUDIO-PRODUCER-COVERAGE-REVIEW-20261011','status':'REVIEW_READY_WITH_BOUNDARY_INCIDENT','deliverables':['REPORT.md','request-coverage-matrix.json','metadata-coverage.json','root-dependency-matrix.json','additional-metadata-gaps.json','INCIDENT-EVIDENCE-BOUNDARY.md','READ-BOUNDARY-INCIDENT.md','final-audit.json'],'restrictedBodyReadOccurred':True,'furtherRestrictedReadsStopped':True,'restrictedImplementationExcludedFromAcceptedEvidence':True,'existingFilesModified':False if not drift and summary['outsideTaskGitStatusUnchanged'] else 'see final-audit','productionChanged':False,'budgetDecision':'UNDECIDED','H10ParentStatus':'UNCHANGED_OPEN','proposedNext':'One current Menu manager passive component identity/serialized-field check; not run; no production subset change justified','deferred':['Unity/tests/measurements','production changes','new Q06 read scope','audio crop/lazy/format','device/AB/build certificates']}
+with (o/'TASK-RESULT.json').open('x',encoding='utf-8') as f:json.dump(result,f,ensure_ascii=False,indent=2)
+with (o/'artifact-fingerprints.json').open('x',encoding='utf-8') as f:json.dump({p.name:sha(p) for p in o.iterdir() if p.is_file() and p.name!='artifact-fingerprints.json'},f,ensure_ascii=False,indent=2)
+print(json.dumps(summary,ensure_ascii=True))
+assert not drift and not fpdrift and not scenedrift and summary['headUnchanged'] and summary['outsideTaskGitStatusUnchanged']
+

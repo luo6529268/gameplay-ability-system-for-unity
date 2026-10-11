@@ -1,0 +1,32 @@
+# NTSD-M03-GROUPED-FINITE-GUARD-20261010
+Status: IN_PROGRESS
+Human-authorized bounded M03 grouped finite guard handoff via discussion thread 01a11fe2-bfaa-72f3-a9ed-c8260f63b193; exact contract artifacts/diagnostics/NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010/execution-handoff.txt.
+Original Upload checks all12 coordinate scalars per private WriteQuad rectangle; ON checks stored v0.xyz/v1.y/v2.x at same Upload entry before EnsureMesh/ActiveQuadCount/native mutation. Same ArgumentException/message and chunk order/partial-success API counters. OFF retains original loop. Only Build passes bool to Upload; cold instance internal property defaultfalse, Clear/Dispose disable. No writer/UV/resolver/segment/upload/stride44/index/capacity changes.
+Owner: backend existing lifecycle; one capacity1 bool, disabled by stage5 existing Clear and Dispose; no resource/cache/drain or new stage dependency. Candidate scans existing active staging only, all locals call-owned. Tests own temporary fixtures and always Dispose, no shared resources.
+Minimum: RED missingflag, actual compile, OFF/ON prepared3bindings full44byte/index/submesh/segment/bounds/diagnostics/publication,0/1/4096/4097 Ordered/Strict/shrink/empty/native recovery/seal. NaN/+Inf/-Inf axes and generated size/pivot overflow, invalid0/4096 same exception/API counters/native unchanged failedchunk and existing Clear recovery. Reuse unchanged pixels and old mirror IEEE negativecontrol with explicit private writer dependency.
+One fullBuild array2000/4097 ABBA each8warm+32sample, oldUV OFF, no fine timers/counters, calibrated currentthread GC0event validscope. First hardfail stops; no JIT/warmchange/Profiler/retry/localmirror rerun. BothONmean<bothOFFmean and maxON P95/P99<=maxOFF perlayout. Even PASS signal only/no default.
+Risks: future nonrectangle writer violates invariant, missed written arithmetic overflow, guard moved past native mutation, noisy cost. Rollback only reviewed own delta from true dirty backups after audit, never HEAD restore/unrelated content. No irreversible battle-rule changes.
+
+## Delegated contract
+继续原优化方案M-03，仅执行本条有界候选，不恢复旧UV缓存、publication缓存、H07/H06/producer/95、旧Goal或34项队列。
+
+人类授权：用户要求本讨论会话先检验直到形成准确方案再交你修复；最新“那可以，可以试试看”批准新publication生成/写入/上传链的有界调查，且已有准确指令直接发送约定。讨论会话已独立完成NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010。先读CURRENT-AUTHORITY及此Task的REPORT.md、semantic.json、local-cost.json和independent-analysis.json；它们是局部依据，不是生产收益/准入。
+
+新具名Task建议NTSD-M03-GROUPED-FINITE-GUARD-20261010，Change NTSD-M03-GROUPED-FINITE-GUARD-001。先独立Task/Change/Ledger/Operation，真实dirty备份/SHA/Git状态/准确符号和唯一进度。不得覆盖或恢复用户改动。保持正式336B44、精确33ms及所有battle规则；这是渲染CPU验证扫描优化。
+
+准确脚本写域只有：
+1. Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs：实例冷候选属性（例如internal bool GroupedFinitePositionValidationEnabled，默认false）；Build上传调用只传此flag；private BattleMeshChunk.Upload原finite guard同位置内一次分支选择原循环/新循环，Clear/Dispose关闭实例flag。不得改WriteQuad/WriteVertex实际写入、UV尺寸候选、resolver/segment/bounds算法、native上传参数/次数、stride44/index格式或资源。不要新建静态开关、World配置、cache/manager/validity状态。不使用UNITY_EDITOR条件生产算法；Editor只用于显式候选配置。必要准确命名可沿相邻规范，必须写进Change。
+2. Assets/NTSD/Scripts/Test/Editor/M03FiniteVertexScanDiagnostics.cs：复用已有fixture/原raw/语义模型，增加本候选实际OFF/ON正反例与独立完整Build成本入口及输出。保留本轮局部成本原件，不再跑局部镜像成本组。其它已有测试文件只读/运行，不改fixture/API/GC recorder。
+若此两写域确实不足，准确报告缺口；不得自行扩域。文档按现有合同维护。
+
+算法：activeVertices仍activeQuads*4；每quad v0=(left,bottom,z),v1=(left,top,z),v2=(right,bottom,z),v3=(right,top,z)。原private数组只有WriteQuad→WriteVertex生产写入。ON循环步进4，检查v0.x/y/z、v1.y、v2.x的IsNaN/IsInfinity；不是五个原命令输入，必须检查写入后的结果以保留算术溢出检测。仍在原Upload入口、EnsureMesh/ActiveQuadCount/native mutation之前抛相同ArgumentException和消息。不得提前到WriteQuad或Build外层，保持前chunk成功/后chunk失败的部分上传语义。普通scalar访问顺序可以不同，但无其它副作用。仅当前生产矩形writer不变量下等价，不能承诺任意反射篡改buffer也可检出；保留负控和说明，未来writer改变必须复核。
+
+先最窄RED/GREEN/原Editor编译，再实际候选：OFF/ON三种prepared绑定、完整活动vertex字节（所有44bytes而非只position）、index/submesh/segment/bounds/diagnostics/publication一致；0/1/4096/4097，Strict/Ordered、缩小/空/恢复、销毁Mesh重建、容量封印拒绝。NaN/+Inf/-Inf每轴及产生非有限结果的size/pivot算术；无效command0/4096各验证相同异常/已完成API计数及失败chunk native顶点未变。异常后按现有Clear恢复，不修生产恢复行为。实例默认/关闭/Dispose幂等复原。保留原GetEntity/DisplayMotion线索为未测，不纳入本Task。
+复用上轮不受影响像素/oracle与规则证据，不机械重跑所有历史；若新完整字节或真实候选异常证据缺口必须先补，不能用原镜像PASS代替候选执行。原3非有限与2跨chunk测试已新鲜通过，可按受影响范围直接复用或作为ON包装调用；不能把旧方法没开启候选的通过称ON覆盖。
+
+前置全过后只一次完整Backend.Build（含native upload）成本组：真实SegmentUvFixture array绑定，连续2000quad及4097quad跨chunk两个固定布局，各一次OFF→ON→ON→OFF，每窗8warm+32sample。同不可变frame/resolver/预备容量；旧UV候选始终OFF，detail/presentation timers和计数诊断OFF。设置flag、Configure、readback、assert、反射、日志均在计时与GC scope外；每sample完整Build，外层Stopwatch，不加逐quad内部计时。复用未修改BattleScopedGcAllocationRecorder同步当前主线程，前后正/空校准、每scope有效0event/no wrap/saturation；不要用GetAllocatedBytesForCurrentThread的假0B。记录rawticks/均值/P95/P99/actualflag、完整payload与publication、容量及owner恢复；source+程序集前后同指纹。
+任一正确性/GC/容量硬门失败即停余窗、保留原件、候选OFF交回；不得加warm/JIT准备、滤事件、改计时范围、追分配、追加Profiler或重跑找PASS。正常完成事前收益门：两个布局各两个ON mean均低于两个OFF mean，ON最坏P95/P99不高于OFF最坏。通过只FULL_BUILD_GAIN_SIGNAL/建议候选后继评审；失败或无可辨收益COMPLETED_NO_ADMISSION、OFF结束。不得承诺局部0.26/0.43ms全部成为完整Build收益，不相加旧嵌套计时，不外推整tick/游戏/Android。
+
+本Task不切正常生产默认，不跑千人完整Driver/1800/设备GPU，不派新点或追加其它两条线索。完整Build两布局是当前候选有限验证，不替代以后生产接线/正式最终门。角色行为、publication只读、透明顺序/segment/failclosed、容量/0GC、十一阶段有序关闭不变。无Scene/Prefab/资源/Settings/InputActions/Server/Gen/Plugins改动，不读Q06体，不解冻PERF/ATLAS/Mono/EXT1。
+
+末尾输出独立单项说明：原代码→新代码→消除的重复→实际证据/收益→未验证边界。Task/Change/Operation/唯一进度与恢复入口同步，保护文件/真实备份、原Scene clean与单实例、Validate-ChangeLedger和scoped diff收尾后停止。不要自动开展下一优化点或第二成本组。先读当前检查点避免压缩后回答旧Editor/FindEffect问题。

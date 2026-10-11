@@ -1,0 +1,104 @@
+> 2026-10-10 User resumed entire current-stage H10: NTSD-H10-RESIDENT-CLOSURE-20261010 / NTSD-H10-RESIDENT-CLOSURE-001 IN_PROGRESS. Temporary PCM reduction is already production-applied; old-path spike retained as timing limitation after independent review, not a new-path failure. Now audit remaining resident dependencies, cache/owner and load memory before accurate implementation. No next point/device/build/old queue.
+
+> **2026-10-10 H10有界PCM转换：CORRECTNESS_PASS_COST_SPIKE_REVIEW_REQUIRED / FINITE_TASK_STOPPED。** Task NTSD-H10-BOUNDED-PCM-CONVERSION-20261010 / Change NTSD-H10-BOUNDED-PCM-CONVERSION-001 BLOCKED。两脚本生产分块已写入并接原调用、无新flag/未回滚；真实失败资格1/1、正确性及原声音规则10/10、唯一成本1/1程序断言PASS，临时float payload长源<98304B、最终clip/逐样本不变。但大尺寸首个旧算法窗有46.8822ms尖峰，按“异常尖峰明显则交回”条款停止，不重测/归因/称准入成功。新均值1.5964/1.5734ms低于另一个旧均值2.1918ms，此事实保留。19owner/191资源记录释放，Menu clean8。报告 artifacts/diagnostics/NTSD-H10-BOUNDED-PCM-CONVERSION-20261010/REPORT.md；下一仅审阅尖峰与接入状态，不自动新实验/后继；H10/H07/Android仍OPEN、H08默认ON保持。
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-H10-AUDIO-MEMORY-REVIEW-001 VERIFIED (Editor diagnostic only): final2/2 plus unique cost1/1, 4 WAV exact PCM; long-clip bounded temporary arrays <98304B, final stereo resident unchanged. Production unchanged; exact two-script handoff ready, dispatch receipt authoritative. H10 parent OPEN/H08 default ON retained.
+
+> 2026-10-10 NTSD-H10-AUDIO-MEMORY-REVIEW-20261010 IN_PROGRESS / NTSD-H10-AUDIO-MEMORY-REVIEW-001 IN_PROGRESS: user approved H10 independent audio memory review; one Editor-only diagnostic, production unchanged. Prior H08 default admission remains verified; no other queue/goal resumed.
+
+## 2026-10-10 当前阶段更正：H-10
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| P1／当前优先评审 | 3 | 高 |
+
+第3项：先核原clip、PCM、播放副本与暂存占用；不预设已有泄漏或收益，不改变声音语义。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
+<!-- OPTIMIZATION-REVIEW-20261009 -->
+# H-10 当前评审卡（2026-10-09）
+
+文档角色：本优化点的唯一方案；当前事实与排程以本卡和[进度](../battle-optimization-progress-tracker.md)文首为准。原正文全部保留为详细设计/验收/历史证据。评审建议不覆盖未获批准的强制门，旧“立即继续/Goal active”不授予恢复执行权限。
+
+| 字段 | 本轮整理 |
+|---|---|
+| 类别 / 建议优先级 | 内存 / 中 |
+| 当前状态 | 方案待预算与载体决策；本轮仅文档，未实施/复测 |
+| 依赖的最小范围 | 共享H-01/H-08保守闭包接口，不依赖纹理烘焙全部完成 |
+| 下一步与具体方向 | 统计cue/原clip/播放副本/暂存生命周期，评估按局准备与构建期等价适配 |
+| 完成边界 | 样本/增益/retrigger/voice不变，实际预算与关闭通过；约210MiB仅历史payload估算 |
+| 方案成熟度 | 以下为文档评审；准确写域、当前代码与受影响验证须在Task中冻结，不能仅凭此卡开始修改 |
+| 范围与回滚 | 保留本项原不变量；脚本前Task/Change，保存当前dirty字节。只回滚本项增量，任何覆盖/删除依原授权审计，不从HEAD恢复用户工作 |
+
+[跨项依赖](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md) · [共同执行与证据复用规则](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/README.md) · [待用户决策](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md)
+
+## 原方案与历史证据（原始正文保留）
+
+# H-10 战斗音频依赖、PCM 预处理与内存方案
+
+> 优先级：高
+> 状态：`OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED / WAITING_USER_APPROVAL`
+> 最后更新：2026-10-06
+> 主登记表：[优化风险登记表](../android-mobile-readiness-priority-risk-register.md)
+> 共同合同与启动门：[本轮复核](../battle-optimization-rebaseline-and-start-gates-20261006.md)
+> 本文为待批方案；下面的测试全部是未来验收条件，本轮未执行。
+
+## 当前事实与问题
+
+[已验证-代码] `App/NTSDSoundPlayer.cs:178-209` 调用
+`CharacterAnimtorManager.CollectBattleSoundIds`，后者（:3923起）遍历全部已加载角色配置。
+单声道转双声道在 `NTSDSoundPlayer.cs:681-713` 创建 mono/stereo 临时数组和新 AudioClip。
+这是保持当前 native 每声道增益语义的适配，不是可直接删除的冗余。
+
+[既有报告-限定] [共用声音回归报告](../../../../artifacts/diagnostics/NTSD28-336B44-RASENGAN-COMMON-REGRESSION-20261006/original-common-fix-01/REPORT.md)
+:31/61记录965个播放副本，payload按样本数估算220188696字节≈209.99MiB；
+退出Play副本/voice计数为0。**这不是RSS、Unity Native或峰值实测，也不是泄漏结论。**
+具体声道/重触发行为遵循该任务已声明的用户来源，不把它改写成全项目新规则权威。
+
+## 待批解决方案
+
+1. 基于H-08保守生产者闭包计算本局声音集合，补DAT帧声音、内建/受击/破碎/武器、
+   公共cue、项目KO声音等真实生产者；仅全局去重不等于按局加载。
+2. 比较构建期PCM适配与现有运行时适配：保持样本、采样率、声道增益、同cue重触发、
+   聚合与voice规则；交付格式/载体未冻结，不默认有损压缩或改变64-voice行为。
+3. 音频Lease与prepared cue/原clip/播放副本/cache所有权合并审计；共享资源只计一次，
+   声明跨局复用、上限、取消、迟到回调及销毁时点。
+4. 建立整局总预算：音频steady包括原始clip及播放副本；transition包括旧/新局Lease、
+   转换临时数组、解码/上传staging及回调仍持有数据。与ATLAS/renderer账本汇总避免双计；
+   不擅自重定义ATLAS既有预算，归属/设备总额实施前另行批准。
+5. H-01部署与M-12背压协同；内容缺失/超预算在启动前明确拒绝，战斗热路径不迟加载、
+   不静默丢声音，不以降采样/减少事件偷换优化。
+
+## 实施前决策与依赖
+
+用户批准Task/Change范围后才测量：实际本局/全量cue数量、原clip/副本/temporary字节、
+加载阶段耗时、cache持有图。确认音频依赖Manifest、载体、格式、steady/transition数值、
+退出/重进释放门；未有数字不能宣称低端适配通过。H-08/M-15/M-09共享指纹。
+
+## 验收条件
+
+- 同seed/input/tick的模拟checksum和声音事件序列不变；逐样本/声道、增益、聚合、
+  retrigger和voice行为达到当前已批准基线，设备波形/听感层级另记。
+- 实际音频请求均在保守闭包内；未加载请求有明确拒绝reason，无静默漏音。
+- 普通与1000实体、多角色/技能最坏集合的steady/transition音频及整局内存均满足批准预算；
+  静态估算与实测差异可解释。
+- 物化/播放热路径0GC；取消、连续三轮进出、应用退出无旧session回调、旧clip/voice/Lease残留。
+
+## 未来测试矩阵
+
+| 测试 | 条件 | 通过标准 |
+|---|---|---|
+| 声音闭包 | 全catalog静态生产者 + 运行请求覆盖 | 不漏依赖，公共cue去重 |
+| PCM/事件A/B | 代表单cue/多cue/持续技能/声道边界 | 样本及已声明行为不变，first difference即停 |
+| 内存阶段 | 冷启动/转换/稳定/旧新局重叠/退出 | 原clip、副本、临时、cache及总峰值分别记录 |
+| 1000声音洪峰 | 同cue/多cue/连续tick | 0GC，正确聚合/重触发，无异常拒绝 |
+| 生命周期 | 取消/迟到/三轮重进 | generation有效，副本与借用按合同归零 |
+| Android设备 | 具名ARM64/API/热状态 | 功能与内存实测，不以Editor证据替代 |
+
+## 留痕与回滚
+
+2026-10-06：登记待批方案，复用报告且静态重扫；没有改代码/音频或运行测试。
+每个闭合行为独立Change；保留现有播放路径作A/B和批准后的回退，回退不等于低内存达标。

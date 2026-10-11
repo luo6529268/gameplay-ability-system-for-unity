@@ -1,0 +1,121 @@
+{
+  "timestamp": "2026-10-10T21:49:57.514691+08:00",
+  "protectedFiles": 15731,
+  "protectionDrift": [],
+  "originalBackups": 14,
+  "invalidOriginalBackups": [],
+  "intermediateBackups": 16,
+  "invalidIntermediateBackups": [],
+  "sourceAssemblyDrift": [],
+  "headUnchanged": true,
+  "stagedUnchanged": true,
+  "ownerAudits": [
+    {
+      "file": "owner-cleanup-1e710973127d48b5a520de5a403f2ff9.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_FailedGenerationKeepsOldPublication",
+      "owned": 39,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-270b2022e12d4ee19af21504f46ae7a4.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LeaseRebindsUiAndPreservesBorrowedAssetsUntilSharedRetirement",
+      "owned": 70,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-2db8a472b2a64088a8b216c58c7238c5.json",
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.NativeDefaultAdmission_ConfiguredEntryPreservesFallbackAndRebuildsOwners",
+      "owned": 118,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-3c250a1d241c453f8e7c6f061d4a0aa3.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_DriverShutdownRecyclesGroupedUnpublishedImages",
+      "owned": 31,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-6132edff599b4eebab0d7bd78cb21f70.json",
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate",
+      "owned": 28,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-82ad9db28dc24e4c8e082a86c770d885.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOff_LoadedPublicationUsesUnityDestroyCallback",
+      "owned": 40,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-842c7b8b7ee7403f9fb35cfd53ce119b.json",
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.ReplacedGlobalOwner_CannotPublishItsLateInputResult",
+      "owned": 0,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-93c5111501594586a2dcb893e91b732f.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_CancelGenerationReleasesSharedStagingAndRetryPublishes",
+      "owned": 109,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-b52560b6c89d45678f4eaf08d399cd74.json",
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers",
+      "owned": 28,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    },
+    {
+      "file": "owner-cleanup-e234b7b91560464998d911d1656c9875.json",
+      "test": "NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LoadedPublicationUsesUnityDestroyCallback",
+      "owned": 39,
+      "released": true,
+      "allDestroyed": true,
+      "restored": true
+    }
+  ],
+  "cacheAudits": [
+    {
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.NativeDefaultAdmission_ConfiguredEntryPreservesFallbackAndRebuildsOwners",
+      "baselineEntries": 0,
+      "finalEntries": 0,
+      "restored": true
+    },
+    {
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate",
+      "baselineEntries": 0,
+      "finalEntries": 0,
+      "restored": true
+    },
+    {
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.ReplacedGlobalOwner_CannotPublishItsLateInputResult",
+      "baselineEntries": 0,
+      "finalEntries": 0,
+      "restored": true
+    },
+    {
+      "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers",
+      "baselineEntries": 0,
+      "finalEntries": 0,
+      "restored": true
+    }
+  ],
+  "ownedObservationTotal": 502
+}

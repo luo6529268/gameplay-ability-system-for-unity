@@ -1,0 +1,312 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "bytes": 213075,
+    "sha256": "ce7acf52f9f7ed1fa37f2f4bb5bacfee674a974d7ba7bef02191418dea2c5a09"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+    "bytes": 44227,
+    "sha256": "bf97c82c9b97075f4bb178c565f5dc419d19d252e94faf2f7338713174df44be"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+    "bytes": 63839,
+    "sha256": "3d0a48bade8a56e8231ab4bba397f10491c021b1695b550a4f5af98c2b0a0fd2"
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "bytes": 414031,
+    "sha256": "fe1592381053951c1ce5e53e24e4445a32c213f85cb276680113b19c4783b439"
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "bytes": 1695404,
+    "sha256": "19a8543ffdb2f169131939c7249e16eded054d4c190d979bd6d4a2e0fedb34fc"
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "bytes": 1634226,
+    "sha256": "27716d0d01f39bd8ce699a9d0af71aee64dff907c6f50a83efd2fbd7d0c7d5e5"
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "bytes": 764440,
+    "sha256": "9585ccfb80370add173e5796e7178f901765517d1c570ccd7cd6be301b5f6fb7"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "bytes": 152338,
+    "sha256": "057b5f3c4c3d750f8262fdaef037d2a95ffbaa7c6ca1055459eaddc2dde95071"
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "bytes": 254158,
+    "sha256": "d28544ecefb151b5bc1f62f72e552263c017b38e820357c1207daf08fcfaf279"
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/h-08-prebaked-visual-content-memory.md",
+    "bytes": 9163,
+    "sha256": "6cae9e8b9ac5fe7930b28d4d29a6fa42b6d05d64195effe012c117d1eaef52de"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "bytes": 26258,
+    "sha256": "a3b7ac4a8c5e8e0a2e38ff27dc6a032f47d95f2c2fa261244fa7c70713e3e3f1"
+  },
+  {
+    "path": "docs/ai/TASKS/NTSD-H08-NATIVE-SHEET-SHARING-20261010.md",
+    "bytes": 10169,
+    "sha256": "f131e776b464b99dbb0a4e86c99fe541e4f476ad767295600ad6db225a30a2a9"
+  },
+  {
+    "path": "docs/ai/CHANGE-RECORDS/NTSD-H08-NATIVE-SHEET-SHARING-001.md",
+    "bytes": 17573,
+    "sha256": "6b3d566c341cdf391617a0e03c74860b039c615b277be2778c2032213d5c13e2"
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md",
+    "bytes": 6014,
+    "sha256": "7d44291aa3738d801a209c3444d10a97a24fabd6c88c1f7634ef0962b4dc039c"
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/NTSD-H08-NATIVE-SHEET-SHARING-20261010/RECORD.md",
+    "bytes": 15300,
+    "sha256": "fd5ad37078983b7d9be92e209dea0ff7b53930dd10081534221cda48a60a23a8"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/after-focused-editor.json",
+    "bytes": 2243,
+    "sha256": "c707e3c804286e8f83d72ecf6c1a77e32c89b39e6a2d1fbbc5748f546f6fc7bc"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/after-focused-scenes.json",
+    "bytes": 409,
+    "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/after-memory-editor.json",
+    "bytes": 2244,
+    "sha256": "5c3a8f5eca2ac104f393754f5148737d0b7e5d0de9cc2e57b911acf226d1d0f0"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/after-memory-scenes.json",
+    "bytes": 409,
+    "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/change-ledger-final.log",
+    "bytes": 790969,
+    "sha256": "fa6edac5088704458134af30fbf8e7dc9a533d60c6c5c7d783d1aae9145fc207"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/change-ledger-summary.json",
+    "bytes": 401,
+    "sha256": "6ef94d1b54c465b8807525a38aaf308a498eb61d4020040d966a1023c4181ecf"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/editor-final.json",
+    "bytes": 2244,
+    "sha256": "8c4beabed6c5013697b6b6e51d014a450d57d8e5191a8db803ac38e79af967f2"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-command.json",
+    "bytes": 1086,
+    "sha256": "59fdf212a07c1fe6cdc529c42bb5f3adb9fa68617619f4f4a417ddc4abb700de"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-poll01.json",
+    "bytes": 1060,
+    "sha256": "e4d4cb3d99226c1e67acbe05e30e70210053e17b19f30214fff9ffad29d90708"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-resource-summary.json",
+    "bytes": 3718,
+    "sha256": "320e63e57dec59d021a4bb11e3c74cb974497d76c37486749eacea9d8c5a2ce9"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-result.json",
+    "bytes": 27508,
+    "sha256": "c3f35637aa47ce1d6acfdca63a08c3db2f28bf6690ad95323187ae5b37e2da43"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-start.json",
+    "bytes": 307,
+    "sha256": "7bdee6d48e321a0d096c859128df1e366c0a68b4379257696bc7fdea942bc644"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/focused-tests.xml",
+    "bytes": 29172,
+    "sha256": "cc8ebb8a86c67a713b3297bfcf272d22657d03c6f44adab2f05c6fc292510854"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/H08ResidentVisualMemoryDiagnostics-resume.diff",
+    "bytes": 7256,
+    "sha256": "058faa6a3a239d11ca0a62cc8034717bd8b9dc4ca8cd09317932eadd3d0ec5b6"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/measurement-summary.json",
+    "bytes": 4050,
+    "sha256": "74390499f2e43064b4ad950d628a413186b9d1e58d7ffd8995bdace8b17a786f"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-command.json",
+    "bytes": 203,
+    "sha256": "2e26c05bd93d3da808a12d80e0840ef19f92b7fd00da44306e90659a0d718f35"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-poll01.json",
+    "bytes": 935,
+    "sha256": "f18da310a9bdf9ea6ae1b4f1e4e1de8b14fa54af86d97f01f8cf68c5868f6948"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-result.json",
+    "bytes": 956959,
+    "sha256": "442224196b48a14bd9b74eb310b3406adc64b267ed9765e21447095740ce7d74"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-start-identities.json",
+    "bytes": 1320,
+    "sha256": "c6eb4fcee95e9ed9ad1d9ebb883405ffadd007aa6c1c252a8e8d9622ef63d308"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-start.json",
+    "bytes": 307,
+    "sha256": "45d8a046613c2271509f02427b95fcd7ec84f823b1e249aa483c5f7298738da2"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/memory-tests.xml",
+    "bytes": 928209,
+    "sha256": "3f8bb47755fa321a194cf105c0cefaf37de49c332002f4eb4fc9a988d4d12d07"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/missing-body-104d5f47734546a1a61db87e03f3a4be.json",
+    "bytes": 567,
+    "sha256": "dd1055d8c65cf1f7c69d8bfe320ad2602aafeb8d1771c55a00493b8834819437"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/missing-body-875e9122972a4d3180fec2b226d4bdc3.json",
+    "bytes": 568,
+    "sha256": "80120f7fc16a84a8e8ca30d8e558c927f49c4ebdd411f784f2f1eef3223d2368"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/NTSD28B11AtomicPublicationEditorTests-resume.diff",
+    "bytes": 17795,
+    "sha256": "138087a05d223d3a033560e3f1a437fa3adf7554f20959ec2e92c83399d72461"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-104d5f47734546a1a61db87e03f3a4be.json",
+    "bytes": 32095,
+    "sha256": "7e6e6d7d749148875d1adb4520706d2dccb0ba299f9166870b358dbc668ec8da"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-43ed1c842e924feba8cf5d088734bb36.json",
+    "bytes": 23302,
+    "sha256": "7bdf6ef0522649f989d347f8bc183fa55add783eb9922df73c33fe526d27ba5a"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-7d5461c3e87043c5b3d204028e63cfdd.json",
+    "bytes": 64492,
+    "sha256": "79e638ca53b0b987dacaf79b753945e10adc5d33108d76464c28d5d6cbbdb134"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-875e9122972a4d3180fec2b226d4bdc3.json",
+    "bytes": 32103,
+    "sha256": "27275fd52a3a0cabd0add46ab9f3603b6958c8d1e1e6d4bae0df0f0f43545f8c"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-8c78b00184d8409ca8279487bf11e36f.json",
+    "bytes": 23890,
+    "sha256": "bbf12365cb2771f235cff5826e974ae38f611930551e9e218ac17dc34deb6937"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-c7c43273cd1346bcb2b4a576af0616e4.json",
+    "bytes": 41699,
+    "sha256": "bcb535a144132a9405219fd06b590b02d79fe9eef95b62f13514ecc9f6932cad"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-ee9fa0d53ed94f9b9ed3aa20473c32a5.json",
+    "bytes": 23292,
+    "sha256": "40d4b01aaed138142a0140608b03df1670b8c12125a21a6d448acfee0f3ad1f9"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/owner-cleanup-efd03808030144fa801421a08b4f3fc5.json",
+    "bytes": 18628,
+    "sha256": "d29f2f6fda1a56f7a8627f7e1bddecca59df9975b8c7e0b9dc151d4ffa558917"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md",
+    "bytes": 11362,
+    "sha256": "ade9f7afe6e2ed7f147b41bc0f1f2dc27b8f502302c4405814d2d82a10085a6d"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/scenes-final.json",
+    "bytes": 409,
+    "sha256": "33b9af863a964acf7869094f65f923f7d423cd71eae1a14f66b5adbf018f8ba9"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/scoped-diff-check-final.log",
+    "bytes": 173,
+    "sha256": "b87d700f0b9921e87d1113e2af66a63b40038a8302803c97fda3ca39b25cbc2a"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/scoped-diff-check.log",
+    "bytes": 173,
+    "sha256": "b87d700f0b9921e87d1113e2af66a63b40038a8302803c97fda3ca39b25cbc2a"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/scoped-review.json",
+    "bytes": 1072,
+    "sha256": "7d714c7bc9dd998c225e001ee055a2b2b35f8bb840a89a53e0a07b1f407e5ca6"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-0787c7f0ad7a49e6af3845f8d44d206d.json",
+    "bytes": 6849,
+    "sha256": "70ed5e958a85e5f40ed0e38967a965ded2e4c257a3d3765daeb65135447d18b7"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-139b67056695450ab3fcc0111b55864c.json",
+    "bytes": 154902,
+    "sha256": "0cf8a1412ddd10294e032f447e63b9449fe6cf71948068d883f0433c8ccc7a08"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-5468e7fe9d9448ea9a42105ae4b02ed4.json",
+    "bytes": 378576,
+    "sha256": "2bc57986bc4ce770b675f0a2848e16635e3ed3c505e89c57732a6036251013e6"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-8bb9c209ca8745dab10b1f8d4c2cb64a.json",
+    "bytes": 4216,
+    "sha256": "7a97f1449443ef41caac1e11bee719b1a12748f8a0cac6b8779e365a23d79a8b"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-963fbce855504e45990662889a04ce54.json",
+    "bytes": 4215,
+    "sha256": "c10caba1b0792989f63f56b21442a83eface5bc30369968e49627dbeaebcf214"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-a5621426c1c84d34875c3b44633277de.json",
+    "bytes": 379331,
+    "sha256": "7a45ae16a1a24b85cabf90b93fd2e6f481e514c61057726b15766ef1ed841c5b"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-d487513ccb044fcebf90635323385175.json",
+    "bytes": 7042,
+    "sha256": "9533c33a2abe884ca68acc93153a6c1aa352aa160a867fcbd23dca85ea937076"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/stage-e1db27bea3ad47849f3bd1b30734edc2.json",
+    "bytes": 155092,
+    "sha256": "06b5a94fb50067c696d3ab69c292766e16578df807d8127cc527375c58415da5"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/unity-destroy-False-8c78b00184d8409ca8279487bf11e36f.json",
+    "bytes": 23814,
+    "sha256": "7b661c3c2d3b5ef67137a87b40ca7b60a4a3a538d115e0f82bc446bb057faba7"
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/unity-destroy-True-43ed1c842e924feba8cf5d088734bb36.json",
+    "bytes": 23226,
+    "sha256": "781b0bb2b64b39ce7774a0fe8d9bccec522ef386bd58170445694dbd617cb336"
+  }
+]

@@ -1,0 +1,180 @@
+<test-suite type="TestSuite" id="38194" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10691" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:20Z" duration="8.303392" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="50551" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="10683" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:20Z" duration="8.212571" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="39108" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="50552" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="10683" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:20Z" duration="8.117295" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="50560" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="9880" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:20Z" duration="8.020375" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="39803" name="NTSD28B11AtomicPublicationEditorTests" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" testcasecount="26" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:18Z" duration="5.730156" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="39804" name="NativeCoordinatorOff_LoadedPublicationUsesUnityDestroyCallback" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOff_LoadedPublicationUsesUnityDestroyCallback" methodname="NativeCoordinatorOff_LoadedPublicationUsesUnityDestroyCallback" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="1267341699" result="Passed" start-time="2026-10-10 13:49:12Z" end-time="2026-10-10 13:49:13Z" duration="0.984082" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyFalse_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\37db193eb2944fcfb2d2b0f883dbaa72\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyFalse_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\37db193eb2944fcfb2d2b0f883dbaa72\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyFalse_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\37db193eb2944fcfb2d2b0f883dbaa72\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyFalse_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\37db193eb2944fcfb2d2b0f883dbaa72\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case><test-case id="39812" name="NativeCoordinatorOn_CancelGenerationReleasesSharedStagingAndRetryPublishes" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_CancelGenerationReleasesSharedStagingAndRetryPublishes" methodname="NativeCoordinatorOn_CancelGenerationReleasesSharedStagingAndRetryPublishes" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="1625361370" result="Passed" start-time="2026-10-10 13:49:13Z" end-time="2026-10-10 13:49:15Z" duration="1.644403" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelKept_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\5c3ec01cf7d9445886547845ba5b1ee4\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelKept_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\5c3ec01cf7d9445886547845ba5b1ee4\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelKept_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\5c3ec01cf7d9445886547845ba5b1ee4\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelKept_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\5c3ec01cf7d9445886547845ba5b1ee4\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeCancelNext_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\27a9356b5a13432d9c01ac9a65c65c0c\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case><test-case id="39814" name="NativeCoordinatorOn_DriverShutdownRecyclesGroupedUnpublishedImages" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_DriverShutdownRecyclesGroupedUnpublishedImages" methodname="NativeCoordinatorOn_DriverShutdownRecyclesGroupedUnpublishedImages" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="1956075859" result="Passed" start-time="2026-10-10 13:49:15Z" end-time="2026-10-10 13:49:15Z" duration="0.447848" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeStoppedShared_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bbe586d3a0a34f5f9671c2473ba46adb\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeStoppedShared_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bbe586d3a0a34f5f9671c2473ba46adb\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:8874 (active clients: 1)
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeStoppedShared_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bbe586d3a0a34f5f9671c2473ba46adb\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeStoppedShared_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bbe586d3a0a34f5f9671c2473ba46adb\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case><test-case id="39807" name="NativeCoordinatorOn_FailedGenerationKeepsOldPublication" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_FailedGenerationKeepsOldPublication" methodname="NativeCoordinatorOn_FailedGenerationKeepsOldPublication" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="273987410" result="Passed" start-time="2026-10-10 13:49:16Z" end-time="2026-10-10 13:49:16Z" duration="0.695743" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=KeptAfterFailure_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\338ee7fe899940ec9fbe6cf50ceed1fd\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=KeptAfterFailure_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\338ee7fe899940ec9fbe6cf50ceed1fd\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=KeptAfterFailure_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\338ee7fe899940ec9fbe6cf50ceed1fd\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=KeptAfterFailure_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\338ee7fe899940ec9fbe6cf50ceed1fd\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=RejectedChangedInput_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\795152027e6847cfbebe96a998e0db43\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=RejectedChangedInput_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\795152027e6847cfbebe96a998e0db43\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+]]></output></test-case><test-case id="39813" name="NativeCoordinatorOn_LeaseRebindsUiAndPreservesBorrowedAssetsUntilSharedRetirement" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LeaseRebindsUiAndPreservesBorrowedAssetsUntilSharedRetirement" methodname="NativeCoordinatorOn_LeaseRebindsUiAndPreservesBorrowedAssetsUntilSharedRetirement" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="87459671" result="Passed" start-time="2026-10-10 13:49:16Z" end-time="2026-10-10 13:49:17Z" duration="1.079172" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseFirst_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\7e5fd44d855349bb8b4622a767e4a56f\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseFirst_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\7e5fd44d855349bb8b4622a767e4a56f\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseFirst_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\7e5fd44d855349bb8b4622a767e4a56f\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseFirst_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\7e5fd44d855349bb8b4622a767e4a56f\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseSecond_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\a4662898167e4b0fac359b3dd550ef6a\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseSecond_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\a4662898167e4b0fac359b3dd550ef6a\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseSecond_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\a4662898167e4b0fac359b3dd550ef6a\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeLeaseSecond_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\a4662898167e4b0fac359b3dd550ef6a\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case><test-case id="39805" name="NativeCoordinatorOn_LoadedPublicationUsesUnityDestroyCallback" fullname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests.NativeCoordinatorOn_LoadedPublicationUsesUnityDestroyCallback" methodname="NativeCoordinatorOn_LoadedPublicationUsesUnityDestroyCallback" classname="NTSD.Test.NTSD28B11AtomicPublicationEditorTests" runstate="Runnable" seed="849438627" result="Passed" start-time="2026-10-10 13:49:17Z" end-time="2026-10-10 13:49:18Z" duration="0.775825" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyTrue_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\14571a38acab4f39982d6ba89ef426a9\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyTrue_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\14571a38acab4f39982d6ba89ef426a9\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyTrue_A, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\14571a38acab4f39982d6ba89ef426a9\vfs\c\body.png, 范围=[0-1], 尺寸=2x2, 行列=2x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeUnityDestroyTrue_B, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\14571a38acab4f39982d6ba89ef426a9\vfs\c\body.png, 范围=[0-3], 尺寸=3x2, 行列=2x2</color>
+<color=cyan>开始加载精灵，角色配置数量: 2</color>
+<color=cyan>共 2 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case></test-suite><test-suite type="TestFixture" id="39870" name="NTSD28B11SourceCacheCallerEditorTests" fullname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests" classname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-10 13:49:18Z" end-time="2026-10-10 13:49:20Z" duration="2.232141" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="39877" name="CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate" fullname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate" methodname="CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate" classname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests" runstate="Runnable" seed="122255456" result="Passed" start-time="2026-10-10 13:49:18Z" end-time="2026-10-10 13:49:19Z" duration="0.904179" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Cancelled, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\02c0f2ed7e78413f9de6f143b32eda6e\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Cancelled, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\02c0f2ed7e78413f9de6f143b32eda6e\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Cancelled, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\02c0f2ed7e78413f9de6f143b32eda6e\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Cancelled, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\02c0f2ed7e78413f9de6f143b32eda6e\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Cancelled, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\02c0f2ed7e78413f9de6f143b32eda6e\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>开始加载精灵，角色配置数量: 1</color>
+<color=cyan>共 1 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case><test-case id="39878" name="ReplacedGlobalOwner_CannotPublishItsLateInputResult" fullname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.ReplacedGlobalOwner_CannotPublishItsLateInputResult" methodname="ReplacedGlobalOwner_CannotPublishItsLateInputResult" classname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests" runstate="Runnable" seed="1738746633" result="Passed" start-time="2026-10-10 13:49:19Z" end-time="2026-10-10 13:49:19Z" duration="0.248568" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=SupersededOwner, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bc1ba55998424f19a9ad2168e64cda0a\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=SupersededOwner, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bc1ba55998424f19a9ad2168e64cda0a\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=SupersededOwner, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\bc1ba55998424f19a9ad2168e64cda0a\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+]]></output></test-case><test-case id="39876" name="SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers" fullname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers" methodname="SameSourceConcurrentRequests_ShareOnePublicationAndNotifyBothCallers" classname="NTSD.Test.NTSD28B11SourceCacheCallerEditorTests" runstate="Runnable" seed="24370925" result="Passed" start-time="2026-10-10 13:49:19Z" end-time="2026-10-10 13:49:20Z" duration="0.978889" asserts="0"><properties><property name="_JOINTYPE" value="UnityCombinatorial" /></properties><output><![CDATA[<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Shared, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\cde1f0a708c54a0e8236530336b58e11\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Shared, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\cde1f0a708c54a0e8236530336b58e11\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Shared, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\cde1f0a708c54a0e8236530336b58e11\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=Shared, 找到 1 个精灵文件定义</color>
+<color=cyan>[BMP 文件] c/body.png -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Temp\NTSD28AtomicPublication\cde1f0a708c54a0e8236530336b58e11\vfs\c\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>
+<color=cyan>开始加载精灵，角色配置数量: 1</color>
+<color=cyan>共 1 个文件需要处理</color>
+[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite>

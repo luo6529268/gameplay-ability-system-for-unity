@@ -1,0 +1,24 @@
+{
+  "test": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionPcmMatchesFrozenOriginalAtBoundaries",
+  "released": true,
+  "explicitOwnerCleanup": true,
+  "naturalCallbackCertified": false,
+  "baselineCount": 5,
+  "allObservedDestroyed": true,
+  "resources": [
+    {
+      "instanceId": -1221276,
+      "name": "H10ProductionBoundary16384",
+      "samples": 16384,
+      "channels": 2,
+      "frequency": 44100
+    },
+    {
+      "instanceId": -1221274,
+      "name": "H10ProductionBoundary16384",
+      "samples": 16384,
+      "channels": 2,
+      "frequency": 44100
+    }
+  ]
+}

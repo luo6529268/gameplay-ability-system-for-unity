@@ -1,0 +1,30 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs",
+    "sha256": "eeb03eaf5a3d6d06142cc27133fbdf6be69dc8865e3c8dd8d5f3f964b920c01c"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+    "sha256": "332ccba5a5c41b7961312691ad48d624f29cf4825226ae01c926da0ac85b34cf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "sha256": "3dd59431ee5516fa15449ce4364c272cdd5741d5857e374c085397ebfd3aef61"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs",
+    "sha256": "5894f898e2947578188beb183f56ee5e299e184bd648b9cfc4d55e9b60b1371f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Load/NTSDResourceLoader.cs",
+    "sha256": "17768f6bc8536e34b98a479c98c0aaa2ead867bee9d72b35a4c0c4b5abece9a9"
+  },
+  {
+    "path": "Library/ScriptAssemblies/Assembly-CSharp.dll",
+    "sha256": "550ec5d5c9e5747fbc4679cf7517c1de1e5fd019ee0f0a90b4859cddb90b2992"
+  },
+  {
+    "path": "Library/ScriptAssemblies/Assembly-CSharp-Editor.dll",
+    "sha256": "928338d083501776064fa1080de72b42b405ff29e0d45b4b107a7d9ad6788e2d"
+  }
+]

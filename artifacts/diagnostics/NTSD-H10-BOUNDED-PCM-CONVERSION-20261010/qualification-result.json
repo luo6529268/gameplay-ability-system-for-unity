@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "b32bf761e6f6429aa9b5a8eb1b4ba078",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791643591256,
+      "finished_unix_ms": 1791643598051,
+      "last_update_unix_ms": 1791643598051,
+      "progress": {
+        "completed": 1,
+        "total": 10700,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791643597516,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionStreamingReadFailureQualification",
+        "last_finished_unix_ms": 1791643597551,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.6017967,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "ProductionStreamingReadFailureQualification",
+            "fullName": "NTSD.Test.Editor.H10AudioMemoryDiagnostics.ProductionStreamingReadFailureQualification",
+            "state": "Passed",
+            "durationSeconds": 0.0332669,
+            "message": null,
+            "stackTrace": null,
+            "output": "Can't get data from streamed samples for audio clip \"H10StreamingQualification\". If you created the audio clip with AudioClip.Create, set the 'stream' argument to false, so you can access the data with 'AudioClip.GetData'. For a disk-based audio clip, change the load type to 'DecompressOnLoad', so you can access the data with 'AudioClip.GetData'.\r\n"
+          }
+        ]
+      }
+    }
+  }
+}

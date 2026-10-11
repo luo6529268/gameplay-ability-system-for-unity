@@ -1,0 +1,17 @@
+{
+  "endedUtc": "2026-10-10T07:38:01.677116+00:00",
+  "existingProtected": 2972,
+  "existingDrift": [],
+  "newFiles": {
+    "Assets/NTSD/Scripts/Test/Editor/H07InputFacingCostDiagnosticsEditorTests.cs": "4eaa63dcbe4553e8c1ed96f901c1ded33a126bdf069a924e77882892b6ae9ddb",
+    "Assets/NTSD/Scripts/Test/Editor/H07InputFacingCostDiagnosticsEditorTests.cs.meta": "98f9c929915f6b5a8b037e7a5f8367dfda977eae84534508208e28cb7ca63f6a"
+  },
+  "testExecuted": 0,
+  "measurementGroups": 0,
+  "productionFilesChanged": 0,
+  "validatorPassed": true,
+  "validatorRecords": 1407,
+  "validatorEvidence": "actual tool host stream; original default-root invocation failed and was corrected with explicit RepositoryRoot",
+  "diffCheckExit": 0,
+  "diagnosticHasTrailingWhitespace": false
+}

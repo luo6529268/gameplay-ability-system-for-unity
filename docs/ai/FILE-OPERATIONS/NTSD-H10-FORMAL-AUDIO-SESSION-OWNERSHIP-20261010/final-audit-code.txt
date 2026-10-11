@@ -1,0 +1,43 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,xml.etree.ElementTree as ET,difflib
+root=Path.cwd()
+out=root/'artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010'
+op=root/'docs/ai/FILE-OPERATIONS/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010'
+def sha(p):
+ return hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+def save(name,value):
+ with (out/name).open('x',encoding='utf-8') as f:json.dump(value,f,ensure_ascii=False,indent=2)
+fingerprints=json.loads((out/'resource-fingerprints-after.json').read_text(encoding='utf-8'))
+finalfp={p:sha(root/p) for p in fingerprints}
+save('final-fingerprints.json',{'files':finalfp,'changedSinceResourceGroup':[p for p in fingerprints if finalfp[p]!=fingerprints[p]],'reason':'Only declared Play preflight fixture and corresponding Editor assembly changed; production frozen'})
+backup=json.loads((op/'before-manifest.json').read_text(encoding='utf-8'))
+protection=json.loads((op/'protected-before.json').read_text(encoding='utf-8'))
+report={'time':datetime.datetime.now().astimezone().isoformat(),'protectedCount':len(protection),'protectedDrift':[p for p,h in protection.items() if sha(root/p)!=h],'dirtyBackupCount':len(backup),'invalidDirtyBackups':[x['path'] for x in backup if sha(root/x['backup'])!=x['sha256']]}
+intermediate=[]
+for p in (op/'intermediate').glob('*/manifest.json'):
+ d=json.loads(p.read_text(encoding='utf-8'))
+ intermediate.append({'manifest':str(p.relative_to(root)),'valid':sha(root/d['backup'])==d['sha256']})
+for p in (op/'test-intermediate').glob('*/source-sha256.json'):
+ d=json.loads(p.read_text(encoding='utf-8-sig'));clips=list(p.parent.glob('*.cs'))
+ intermediate.append({'manifest':str(p.relative_to(root)),'valid':len(clips)==1 and sha(clips[0]).lower()==d['Hash'].lower()})
+report['intermediateBackupCount']=len(intermediate);report['invalidIntermediateBackups']=[x for x in intermediate if not x['valid']]
+report['correctedMetaMatchesOriginal']=all(sha(root/x['path'])==x['sha256'] for x in backup if x['path'].endswith('.meta'))
+def git(*args):
+ return subprocess.run(['git','-c','core.safecrlf=false','--no-pager',*args],capture_output=True,timeout=60)
+head=git('rev-parse','HEAD');report['headUnchanged']=head.returncode==0 and head.stdout.decode().strip()==(op/'head-before.txt').read_text(encoding='utf-8-sig').strip()
+staged=git('diff','--no-ext-diff','--cached','--binary');report['stagedUnchanged']=staged.returncode==0 and staged.stdout==(op/'staged-before.patch').read_bytes()
+status=git('status','--short','--branch','--untracked-files=all')
+with (out/'git-status-final.txt').open('xb') as f:f.write(status.stdout)
+scoped=[x['path'] for x in backup if not x['path'].endswith('.meta')]+['docs/ai/CHANGE-RECORDS/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-001.md','docs/ai/TASKS/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010.md','docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H10-FORMAL-AUDIO-SESSION-OWNERSHIP.md']
+check=git('diff','--no-ext-diff','--check','--',*scoped)
+with (out/'scoped-diff-check.txt').open('xb') as f:f.write(check.stdout+check.stderr)
+report['scopedDiffCheckExitCode']=check.returncode
+report['scopedFiles']=[{'path':p,'sha256':sha(root/p)} for p in scoped]
+save('final-audit.json',report)
+tests={}
+for p in out.glob('*tests.xml'):
+ e=ET.parse(p).getroot();tests[p.name]={'summary':e.attrib,'cases':[{'name':x.attrib.get('fullname'),'result':x.attrib.get('result'),'message':x.findtext('failure/message')} for x in e.findall('.//test-case')]}
+save('test-result-index.json',tests)
+print(json.dumps({k:v for k,v in report.items() if k!='scopedFiles'},ensure_ascii=True))
+print('fingerprint changes', [p for p in fingerprints if finalfp[p]!=fingerprints[p]])
+print('test files',len(tests))

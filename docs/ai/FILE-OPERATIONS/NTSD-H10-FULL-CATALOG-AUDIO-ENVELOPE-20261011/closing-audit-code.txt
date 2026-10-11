@@ -1,0 +1,25 @@
+from pathlib import Path
+import json,hashlib,subprocess,datetime,re
+out=Path('artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+op=Path('docs/ai/FILE-OPERATIONS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011')
+def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+before=json.loads((op/'before-manifest.json').read_text(encoding='utf-8'))
+inter=list((op/'intermediate').glob('*/manifest.json'))
+invalid=[]
+for p in inter:
+ j=json.loads(p.read_text(encoding='utf-8'))
+ if sha(j['backup'])!=j['sha256']:invalid.append(str(p))
+fp=json.loads((out/'final-audit.json').read_text(encoding='utf-8'))['finalFingerprints']
+drift=[p for p,h in fp.items() if sha(p)!=h]
+paths=[j['path'] for j in before]+['docs/ai/TASKS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011.md','docs/ai/CHANGE-RECORDS/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001.md',str(op/'RECORD.md'),'docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H10-FULL-CATALOG-AUDIO-ENVELOPE.md',str(out/'REPORT.md')]
+g=subprocess.run(['git','-c','core.safecrlf=false','diff','--check','--',*paths],capture_output=True)
+with (out/'governance-diff-check.log').open('xb') as f:f.write(g.stdout+g.stderr)
+head=subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
+staged=subprocess.check_output(['git','-c','core.safecrlf=false','diff','--cached','--binary'])
+manifest=[{'path':p,'sha256':sha(p),'bytes':Path(p).stat().st_size,'gitStatus':subprocess.check_output(['git','status','--short','--',p]).decode().strip()} for p in paths]
+with (op/'after-manifest.json').open('x',encoding='utf-8') as f:json.dump(manifest,f,ensure_ascii=False,indent=2)
+log=(out/'change-ledger-final.log').read_text(encoding='utf-8-sig')
+summary={'time':datetime.datetime.now().astimezone().isoformat(),'scope':'final governance/document edits only; protected71283 audit reused from final-audit.json','sourceAssemblyDriftSinceFinalAudit':drift,'intermediateBackups':len(inter),'invalidIntermediateBackups':invalid,'dirtyBackupCount':len(before),'invalidDirtyBackups':[j['path'] for j in before if sha(j['backup'])!=j['sha256']],'headUnchanged':head==(op/'head-before.txt').read_text(encoding='utf-8-sig').strip(),'stagedUnchanged':staged==(op/'staged-before.patch').read_bytes(),'governanceDiffCheckExitCode':g.returncode,'validatorPassed':'Change ledger validation PASSED.' in log,'validatorRecords':1421,'governedDiffFiles':26,'historicalWarningCount':len(re.findall(r'^\s*WARNING:',log,re.M)),'ownChangeWarningLines':[s for s in log.splitlines() if 'WARNING:' in s and 'NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-001' in s],'operationAfterManifestSha256':sha(op/'after-manifest.json'),'reportSha256':sha(out/'REPORT.md'),'fullRerun':False}
+with (out/'closing-audit.json').open('x',encoding='utf-8') as f:json.dump(summary,f,ensure_ascii=False,indent=2)
+print(json.dumps(summary,ensure_ascii=True))
+assert not drift and not invalid and not summary['invalidDirtyBackups'] and summary['headUnchanged'] and summary['stagedUnchanged'] and g.returncode==0 and summary['validatorPassed'] and not summary['ownChangeWarningLines']

@@ -1,0 +1,49 @@
+        private void PrepareBattlePlaybackClips(PreparedSoundCue cue)
+        {
+            if (this == null || cue == null || !cue.IsLoaded || cue.BattlePlaybackClips != null)
+                return;
+            AudioClip[] sourceClips = cue.Clips ?? Array.Empty<AudioClip>();
+            var playbackClips = new AudioClip[sourceClips.Length];
+            int firstOwned = ownedBattlePlaybackClips.Count;
+            try
+            {
+                for (int index = 0; index < sourceClips.Length; index++)
+                {
+                    AudioClip source = sourceClips[index];
+                    if (source == null || source.channels != 1)
+                    {
+                        playbackClips[index] = source;
+                        continue;
+                    }
+
+                    // Unity's mono pan law attenuates the center and caps volume at1.
+                    // Duplicate PCM into stereo to preserve native per-channel gain.
+                    var mono = new float[source.samples];
+                    if (!source.GetData(mono, 0))
+                        throw new InvalidOperationException("Cannot prepare battle PCM: " + source.name);
+                    var stereo = new float[checked(source.samples * 2)];
+                    for (int sample = 0; sample < mono.Length; sample++)
+                        stereo[sample * 2] = stereo[sample * 2 + 1] = mono[sample];
+                    AudioClip playback = AudioClip.Create(source.name, source.samples, 2, source.frequency, false);
+                    ownedBattlePlaybackClips.Add(playback);
+                    if (!playback.SetData(stereo, 0))
+                        throw new InvalidOperationException("Cannot initialize battle PCM: " + source.name);
+                    playbackClips[index] = playback;
+                }
+                cue.BattlePlaybackClips = playbackClips;
+            }
+            catch
+            {
+                for (int index = ownedBattlePlaybackClips.Count - 1; index >= firstOwned; index--)
+                {
+                    AudioClip clip = ownedBattlePlaybackClips[index];
+                    if (Application.isPlaying)
+                        Destroy(clip);
+                    else
+                        DestroyImmediate(clip);
+                    ownedBattlePlaybackClips.RemoveAt(index);
+                }
+                throw;
+            }
+        }
+

@@ -1,0 +1,465 @@
+{
+  "completedUtc": "2026-10-10T04:17:24.689838+00:00",
+  "scope": "Named operation files and new diagnostic evidence; manifest itself excluded; not a production/0GC certificate",
+  "files": [
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "exists": true,
+      "size": 1608872,
+      "sha256": "3d07df977c296469d3da54082dcf09f66892d37d2a4ef6cc44b4f8610f6b158f",
+      "beforeSha256": "b9d67febfb6cc835f32a93e83d7f953369026911e9c4dd429cff4592e51bc55b",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\Assets\\NTSD\\Docs\\CODEX-CURRENT-HANDOFF.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "exists": true,
+      "size": 231733,
+      "sha256": "0acdf6d5d55a72e009d2dd01a6f82dad77d1feacb9ddaf0bd34abfb510dd53c5",
+      "beforeSha256": "be2728c9720d8228864313be4d601f6f8734c71b25bcbaa85b6116df757d8730",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\Assets\\NTSD\\Docs\\battle-optimization-progress-tracker.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleOptimizationWindowsAiSuiteEditor.cs",
+      "exists": true,
+      "size": 502625,
+      "sha256": "41bc58eeebd8b63b1d7849534ff30e17b112955ecc6d13fa243029fe0876e83d",
+      "beforeSha256": "39663fd73f205045a04b316a5fa8f08a7cff845936e95793f11ccfd21093ab99",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\BattleOptimizationWindowsAiSuiteEditor.cs",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H07InputCostDiagnostics.cs",
+      "exists": true,
+      "size": 23143,
+      "sha256": "90a4c35c593d3426178d1bcd350411705c2df04fb43b7d28c14a1ffcc57e91ef",
+      "beforeSha256": "bfdef820da28298f7fea1619567d43f57547ac09857c4492446c05c8e4be6a3a",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\Assets\\NTSD\\Scripts\\Test\\Editor\\H07InputCostDiagnostics.cs",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "Temp/NTSD_ProductionEntityStress.result",
+      "exists": true,
+      "size": 501,
+      "sha256": "b3d721823f322079ee3be15ddd6d76c681faadffafc3ad34ebf8e57d568cdc1a",
+      "beforeSha256": "956ac53f291695edf00565988e27322cdb4bda0ea393eaee09651cbb5da3375f",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\Temp\\NTSD_ProductionEntityStress.result",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/BattleOptimizationWindowsAiSuiteEditor.cs.diff.txt",
+      "exists": true,
+      "size": 7535,
+      "sha256": "7033e3752cc5a8de078dc1378c159353448d4b155a554d2d84dffcae8445c53d",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/H07InputCostDiagnostics.cs.diff.txt",
+      "exists": true,
+      "size": 19050,
+      "sha256": "2841a191d5dbe319d9e3aef649c16547cece06e52d991c08bf7ad5ea5440f744",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/REPORT.md",
+      "exists": true,
+      "size": 16427,
+      "sha256": "f38c2fc6e6585711c95d0ceaa4cc8d9b8af182ab4870edcc7a9339236038643a",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/actual-request-comparison.json",
+      "exists": true,
+      "size": 452,
+      "sha256": "b3f6e9dc58abb6a2fb9d6290a331f0f75aa9b8f286981a5b969a1b343fd42fb2",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/audit-summary.json",
+      "exists": true,
+      "size": 87,
+      "sha256": "ee01372796c1d13f8017d2068f526f12458c3a054a632912e837431b95012082",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/change-ledger-validation.log",
+      "exists": true,
+      "size": 804880,
+      "sha256": "0d2f0945b38a561618420e16b4b855c42199ceb944470dcdf1e07a2c9f6ae30b",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/compile-console-01.json",
+      "exists": true,
+      "size": 235,
+      "sha256": "a679676e156627bab94a5f853c58836b136ada7ac7c84146e2f6a9c8c129a6e5",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/compile-state-01.json",
+      "exists": true,
+      "size": 2122,
+      "sha256": "a1ad15cfd04336503fa68ed38d4e1ff54bcf5dc2a8dca3d689d5e4428db0d59b",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/current-gc-callsites.json",
+      "exists": true,
+      "size": 16127,
+      "sha256": "b6b15a4cc4fdfdd8f185f863970bbc8c50f9ebf9ed9e3b005ce1b7a57f27f707",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/diagnosis-summary.json",
+      "exists": true,
+      "size": 11237,
+      "sha256": "a4947e9d8f570c01ea57d6d8fbc003b56103d5b8e08bd1f9091448ea19131faf",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/editor-final-state.json",
+      "exists": true,
+      "size": 2123,
+      "sha256": "8d5276f19e4b04406e13523b92eb2dde98b33b217269fb923b410d36ed53ee7d",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/focused-request-01.json",
+      "exists": true,
+      "size": 1343,
+      "sha256": "afedfc3233db39cfc8bac2201eb4df1fb1008485afe64ab438bf626b016626c7",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/focused-result-01.json",
+      "exists": true,
+      "size": 4477,
+      "sha256": "b6218b649e0ee1784fded1b6230e4aba20194ee01097f832bcb9eaa04bf1073c",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/git-before.txt",
+      "exists": true,
+      "size": 2852,
+      "sha256": "3621cdf28874a482577fb32c8243a2fa990c3ffffe01be7dd485090d6675746f",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/protected-after.json",
+      "exists": true,
+      "size": 2217584,
+      "sha256": "c7a33200b4230f6ead6aa6917ef3e835e4727b87df33948b955fcb58631f0be2",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/protected-before.json",
+      "exists": true,
+      "size": 2217584,
+      "sha256": "a39f858155445379d231f28aee9414f964bd78ee6fd5d97f749303fbb8568942",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/protection-result.json",
+      "exists": true,
+      "size": 327,
+      "sha256": "a41cb4dc25c784b84203ce0f583b3b500581384f2800de8d8bf6fd31de89df3c",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/retained-parse-request.json",
+      "exists": true,
+      "size": 235,
+      "sha256": "b63c1a503d77daf1ee57ee4e7a1ca61c74836902a225c0c65853286d588faf17",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/scene-after-parse.json",
+      "exists": true,
+      "size": 323,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/scene-after-window.json",
+      "exists": true,
+      "size": 323,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/scene-before-window.json",
+      "exists": true,
+      "size": 323,
+      "sha256": "d6c1316c2ffef0f6c1fe5c8c3447786186cbdab280e355fcf256b0f918204e80",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/window-start.json",
+      "exists": true,
+      "size": 228,
+      "sha256": "2e5dd118f0b3d6bf118f65ee17295932e279ca3fc8aa448f82da21ff85e24a10",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json",
+      "exists": true,
+      "size": 161798,
+      "sha256": "8a183f210917d97a0cbaf8dac978f7e30429dc825b0f108ac75bcfba7d6b0ae8",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.final-checksum.json",
+      "exists": true,
+      "size": 4208480,
+      "sha256": "e4916aca8c5be675b8192d5a6c1429029fd94db6f838cf6c82e532b030836b12",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.input-cost.json",
+      "exists": true,
+      "size": 1104609,
+      "sha256": "9274667d83fd43f72680795248dab0a83978223533d0b0327dfc89a88a2c9782",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.logic-gc.json",
+      "exists": true,
+      "size": 1957,
+      "sha256": "0dd44968c1c77d248dfd3993abc51e40cfe3365d36f357c2c5d8a14828b5decc",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.observation.json",
+      "exists": true,
+      "size": 10743,
+      "sha256": "99496d09ec4ef7352e2c05143a8786c859b8cf41cdbbd13af7d8caaa7d32c6ff",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.request.json",
+      "exists": true,
+      "size": 2712,
+      "sha256": "bd7a83eaab919f926ca1ad802c8ac2d5d71440f2f0f0b400a8878aed34ea09fa",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.shared-terminal-before.txt",
+      "exists": true,
+      "size": 496,
+      "sha256": "956ac53f291695edf00565988e27322cdb4bda0ea393eaee09651cbb5da3375f",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/00-combat1000-input-on/report.json.terminal.txt",
+      "exists": true,
+      "size": 501,
+      "sha256": "b3d721823f322079ee3be15ddd6d76c681faadffafc3ad34ebf8e57d568cdc1a",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/cpu-gc-recovery.json",
+      "exists": true,
+      "size": 2044,
+      "sha256": "fa8b23a56fc6a113580dee5d4d253f3d9860e7fc9c7dc289355c2edca590d9a5",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/cpu-gc-samples-recovered.json",
+      "exists": true,
+      "size": 133969697,
+      "sha256": "e82b3e573e024a0f4273667946443e3730c4b007d81bed5872b74423988674c3",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/cpu-gc-samples.json",
+      "exists": true,
+      "size": 115,
+      "sha256": "cbe21260fddb7a1d0014021e2735d9823e480806c92b9841c16aad17e2859591",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/cpu-gc-state.json",
+      "exists": true,
+      "size": 1933,
+      "sha256": "cc3508971eb0829d81d2142ab2d1c35f48f308d2148c0febd6c4e401280d2caf",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/capture/cpu-gc.raw",
+      "exists": true,
+      "size": 408143046,
+      "sha256": "535ade7fa7bfb2a88b46b7b4568c387847689366cb849cb462a2bab00b036b1e",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/progress-0000.json",
+      "exists": true,
+      "size": 10595,
+      "sha256": "2ed4d96083bb7cd4de7704ae7ed19cbb29df74b8dd46abd675d613e61685b97d",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/progress-0001.json",
+      "exists": true,
+      "size": 10594,
+      "sha256": "8c8b46c5ac469bda748de47385ffd1dac088dd542e20f900d4e2c4a60b345019",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-INPUT-FLOW-DIAG-20261010/windows/suite-result.json",
+      "exists": true,
+      "size": 15617,
+      "sha256": "d4a2105c3637f9314643c1dfbace16de461a9c227fe48fb353053666bc791767",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "docs/ai/CHANGE-LEDGER.md",
+      "exists": true,
+      "size": 754828,
+      "sha256": "1ce47155837fbc10af063bdcc67d843c9e30de281a867bbdad31c2d6fa334ec7",
+      "beforeSha256": "58927f9e2833bdd4e89390023e237ffd3701e64d0abbf2f005f25936fd5bbd8a",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\docs\\ai\\CHANGE-LEDGER.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "docs/ai/CHANGE-RECORDS/NTSD-H07-INPUT-FLOW-DIAG-001.md",
+      "exists": true,
+      "size": 3113,
+      "sha256": "c6a3c2a99d649ca32a0a082362340c0665758111405be5b98b6064232351607f",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "exists": true,
+      "size": 388862,
+      "sha256": "0a1924d1ed6fd3d1b7bf28e0d51cf3ae2dda819bd863282d4e1d7b7aa88444f6",
+      "beforeSha256": "6f978ef9e751cca15e6ef41156418ec0ca985c794dabafa9b00dbd6d530a2d9b",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\docs\\ai\\CURRENT-AUTHORITY.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "exists": true,
+      "size": 143736,
+      "sha256": "20d22a5297836042fc214b13630cfe30b09ef5778e8584b521de4c6af3ae83ea",
+      "beforeSha256": "d0eb750690971674e39681bdbaefcdfaa1765187912bcefd032e869fec177e1d",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\docs\\ai\\FILE-OPERATIONS\\INDEX.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/NTSD-H07-INPUT-FLOW-DIAG-20261010/RECORD.md",
+      "exists": true,
+      "size": 2312,
+      "sha256": "927439d295631e360e2ab6ea4e38bfc2c161fef6928563cf9ac4e1a7234e2bd3",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "exists": true,
+      "size": 12447,
+      "sha256": "d60ee46ab8d4392e762f7a1c66f5bd6de51757619f06dea414cbd0091cce6c07",
+      "beforeSha256": "584fbedd1438d07ea632ca7904d220025b26ff92602f6b913d34496e9f702cee",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\docs\\ai\\OPTIMIZATION-REVIEW-20261009\\H07-INPUT.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "exists": true,
+      "size": 1670050,
+      "sha256": "b4314d7eb53f9a41de150a474feb90a8264fd45c4bc129efafde329c8d4466e3",
+      "beforeSha256": "371f57bc07b35373baa7cc83c90c453baf82cc601432978854d7985ff6e3053f",
+      "backup": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\docs\\ai\\FILE-OPERATIONS\\NTSD-H07-INPUT-FLOW-DIAG-20261010\\before\\docs\\ai\\STATE.md",
+      "classification": "declared-existing-edit-or-suite-terminal"
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H07-INPUT-FLOW-DIAG-20261010.md",
+      "exists": true,
+      "size": 2934,
+      "sha256": "744343185a3efd8baf0a8af6b1fd9f5644f6b14b582acb8567964570d209b68a",
+      "beforeSha256": null,
+      "backup": null,
+      "classification": "new-task-document-or-evidence"
+    }
+  ]
+}

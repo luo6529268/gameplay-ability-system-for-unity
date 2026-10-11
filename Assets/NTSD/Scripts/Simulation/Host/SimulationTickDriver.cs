@@ -289,6 +289,7 @@ namespace NTSD.Simulation
             new BattleRuntimeShutdownDiagnostics();
         private LF2ObjectPointFactory _battleObjectPointFactory;
         private LF2ObjectPool _battleObjectPool;
+        private NTSDSoundPlayer _battleSoundPlayer;
         private readonly BattleManagedMemoryBoundary _managedMemoryBoundary =
             new BattleManagedMemoryBoundary();
         private BattleManagedMemoryFrameBeginProbe _managedMemoryFrameBeginProbe;
@@ -1663,6 +1664,7 @@ namespace NTSD.Simulation
             }
 
             lifecycleState = BattleRuntimeLifecycleState.Stopping;
+            _battleSoundPlayer?.BeginBattleSoundShutdown();
             CharacterAnimtorManager.TryGetInstance()?.CancelConfiguredContentPrewarm();
             CharacterAnimtorManager.TryGetInstance()?.CancelNativeContentPrewarm();
             paused = true;
@@ -1697,6 +1699,7 @@ namespace NTSD.Simulation
                 CompleteShutdownStage(BattleRuntimeShutdownStage.AllocationUnsealed);
 
                 _publishedSoundEvents.Clear();
+                _battleSoundPlayer?.CompleteBattleSoundShutdown();
                 _world?.HudChanges.Reset(stop: true);
                 DispatchBattleHudChanges(allowClear: true);
                 _entityOverlayRenderer?.StopForBattleShutdown();
@@ -1801,6 +1804,7 @@ namespace NTSD.Simulation
             lifecycleState = BattleRuntimeLifecycleState.Stopped;
             _battleObjectPointFactory = null;
             _battleObjectPool = null;
+            _battleSoundPlayer = null;
             return BuildShutdownReport(BattleRuntimeShutdownStatus.Completed);
         }
 
@@ -1809,9 +1813,21 @@ namespace NTSD.Simulation
             suppressSoundPresentationForDiagnostics = value;
         }
 
+        internal void BindBattleSoundPreparationOwner(NTSDSoundPlayer soundPlayer)
+        {
+            if (lifecycleState != BattleRuntimeLifecycleState.Preparing || soundPlayer == null)
+                return;
+            if (_battleSoundPlayer != null && !ReferenceEquals(_battleSoundPlayer, soundPlayer))
+                throw new InvalidOperationException("Battle sound preparation owner cannot be replaced.");
+            _battleSoundPlayer = soundPlayer;
+        }
+
         public void SetSoundPresentationSinkForDiagnostics(
             ISimulationSoundPresentationSink sink)
         {
+            if (lifecycleState == BattleRuntimeLifecycleState.Preparing)
+                BindBattleSoundPreparationOwner(sink as NTSDSoundPlayer ??
+                    _battleSoundPlayer ?? AppManager.Instance?.SoundPlayer);
             _soundPresentationSinkForDiagnostics = sink;
         }
 
@@ -2643,6 +2659,8 @@ namespace NTSD.Simulation
             paused = true;
             _shutdownDiagnostics.Reset();
             shutdownStage = BattleRuntimeShutdownStage.None;
+            _battleSoundPlayer = _soundPresentationSinkForDiagnostics as NTSDSoundPlayer ??
+                AppManager.Instance?.SoundPlayer;
             _battleObjectPointFactory = null;
             _battleObjectPool = null;
         }

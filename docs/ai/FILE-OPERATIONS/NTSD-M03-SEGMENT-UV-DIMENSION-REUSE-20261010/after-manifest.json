@@ -1,0 +1,72 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleDynamicMeshBackend.cs",
+    "sha256": "f003c6d15ad6271e7d24ac84c2f70c9b5a328eabed40f40658416a5c7eb75bcf",
+    "bytes": 47284
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCatalogCentralResourceResolverEditorTests.cs",
+    "sha256": "1be334ebaa630abcf461207708792547f15ddd4a6cd489dbaa6f14ffbc256b81",
+    "bytes": 106570
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleCentralSameSamplePixelEditorTests.cs",
+    "sha256": "99a79d7552b2a3e7b07ec776b2df716cb8ce9869d0eec6358f2339bd9a76ac26",
+    "bytes": 51437
+  },
+  {
+    "path": "docs/ai/CURRENT-AUTHORITY.md",
+    "sha256": "3899428177c9a8ab6a56373df6e96cda4c77e38d58fe0d186ddbd6e4a9da7a7b",
+    "bytes": 405314
+  },
+  {
+    "path": "docs/ai/STATE.md",
+    "sha256": "fd3d19d41fef800da8ee74a4163c95f4f67244760da13d5190a074f61f702bc9",
+    "bytes": 1686691
+  },
+  {
+    "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+    "sha256": "2dfeddbdd629b2c8a6d75bbfbac70b75094dd434fb492de0944f81fbdcaadd99",
+    "bytes": 1625513
+  },
+  {
+    "path": "docs/ai/CHANGE-LEDGER.md",
+    "sha256": "4452a100c6dffea5833903cd48787c7cac43b076d71d0c4316088f97ce7e5851",
+    "bytes": 762223
+  },
+  {
+    "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+    "sha256": "7231fb3c7b69841321e8431bddd50cdd77c5a319d365c29268433733d7cbee21",
+    "bytes": 149909
+  },
+  {
+    "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+    "sha256": "ba09aea3f470d9f054521e2c3202f5b739bd41edc9418c6f6440018d8bf9e423",
+    "bytes": 246237
+  },
+  {
+    "path": "Assets/NTSD/Docs/android-mobile-readiness/m-03-dynamic-mesh-upload.md",
+    "sha256": "fa74fc769229ddfa808b754b8cfd0684cbc2105a193c7d34cffccde64b78c6b8",
+    "bytes": 45360
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DEPENDENCIES.md",
+    "sha256": "13d38baed528dcc13e5820e854fd0bd540b271a70b87ae35aa17433762abcd92",
+    "bytes": 22928
+  },
+  {
+    "path": "docs/ai/TASKS/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010.md",
+    "sha256": "3b79cd66d4ad929a0fd7e7f2e24124356e5f4d9cd3369348285719937fae4436",
+    "bytes": 9860
+  },
+  {
+    "path": "docs/ai/CHANGE-RECORDS/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001.md",
+    "sha256": "e5a66ff2c3a4c7f48fef048b2d996b5addb399ed54fbeeacd540b8a38e0256a3",
+    "bytes": 3889
+  },
+  {
+    "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/M03-SEGMENT-UV-DIMENSION-REUSE.md",
+    "sha256": "058850fea6b328ee4258882f710dc3e7245ee07e142ac5bd50bf00646071e589",
+    "bytes": 4753
+  }
+]

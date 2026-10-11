@@ -1,3 +1,35 @@
+> **2026-10-10 M03 分组有限值候选有限任务完成：COMPLETED_NO_ADMISSION_DEFAULT_OFF，本版不采用。** Task NTSD-M03-GROUPED-FINITE-GUARD-20261010 / Change NTSD-M03-GROUPED-FINITE-GUARD-001 ABANDONED。原Editor实际候选13/13、唯一完整Build成本1/1执行完成；两布局8窗/256校准有效scope分配事件0，载荷/发布/容量不变。4097收益门PASS；2000均值/P95/P99三门FAIL，联合门未过，不重测或推广，旧UV候选仍OFF。6源码/程序集指纹稳、2442保护/10真实备份有效、原Menu clean8。报告 artifacts/diagnostics/NTSD-M03-GROUPED-FINITE-GUARD-20261010/REPORT.md。M03父项、H07及Android最终门保持开放；下一仅审阅本报告，不自动实施新点、恢复Goal或34项队列。下方保留先前时点。
+
+[本候选实施前后对照](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/M03-GROUPED-FINITE-GUARD.md)。收益联合FAIL只结束本版候选；旧首阶段成果与父项门保持。
+
+> **2026-10-10 NTSD-M03-GROUPED-FINITE-GUARD-20261010 IN_PROGRESS / NTSD-M03-GROUPED-FINITE-GUARD-001 PLANNED.** 两脚本默认OFF有限guard候选，旧UV始终OFF；先实际正确性/异常位置，再唯一两布局完整Build成本。旧证据/最终门/Goal取消保持。
+
+> **2026-10-10 M03 workload diagnosis COMPLETE / NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 VERIFIED (diagnostic only).** User-resumed attempt03 successfully observed World/Base camera. 89 steady completed builds at tick120->298: publication89, alpha-only0, repeated0; no failure/rejection, all actual TextureArray/mean1992.056 quads/segment1/1000AI. No same-publication template reuse opportunity in this workload; do not implement cache or dispatch. Full runner120+180 and ordered cleanup passed, last2tick camera not observed. Focused2/2 fresh, 157 protections/12 backups unchanged, Menu clean8; no production/performance/Driver0GC/device claim. M03 parent OPEN, monitoring paused. Report: artifacts/diagnostics/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010/attempt-03/REPORT.md. Below preserves earlier failed attempts and stages.
+
+> **2026-10-10 M03 NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010: INCONCLUSIVE_OBSERVER_FAILURE / finite task stopped; Change NTSD-M03-PUBLICATION-WORKLOAD-DIAG-001 BLOCKED.** Two actual 120+180 workloads completed, but own observer path mismatch (attempt1) and Game-camera scope error (attempt2) yielded ZERO valid steady classification rows. Failed raw evidence retained. Same-file corrections compile and final focused2/2 pass; no third live run, no frequency/gain/candidate conclusion, no production change or handoff. Original counter20/20 remains scoped. Both clean shutdown and final tick300 checksum match; no per-tick/0GC certification. Original Menu clean8 restored; 157 named protections unchanged. Report: artifacts/diagnostics/NTSD-M03-PUBLICATION-WORKLOAD-DIAG-20261010/REPORT.md. M03 remains OPEN, monitoring paused. Below is historical.
+
+> **2026-10-10 M03策略重评完成：SCOPED_REASSESSMENT_COMPLETE / DIAGNOSTIC_DESIGN_READY，尚不可派生产修复。** 用户要求重新调整策略并评估。本轮纠正4.156ms为命令物化/插值包围范围；旧presentation计时仍含逐实体/逐command时间戳。重新核定array生产证据与旧16窗：Source2D表观3.56%而Strict负控也3.38%，不能认定全部为候选收益。旧两正常小规模Battle窗alpha-only为776/1800及775/1800，支持优先诊断同publication未插值命令准备复用，但不外推千人频率/收益。新策略按publication变化/alpha变化/重复分类核完整链；旧尺寸候选OFF，不自动source-only，不重跑旧组。仅只读源码/原JSON复算和文档，无新Unity/测试/测量/生产改动/派发，监测保持暂停。Task NTSD-M03-STRATEGY-REEVALUATION-20261010；报告 artifacts/diagnostics/NTSD-M03-STRATEGY-REEVALUATION-20261010/REPORT.md。M03父项及其他暂缓/最终门保持；下方为历史。
+
+> **2026-10-10 M03段内UV尺寸候选有限任务完成：本版不采用／默认OFF。** NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 ABANDONED；原Editor8/8＋补充5/5（含恢复加强与真实prepared三绑定像素），唯一完整Build16窗/512有效校准scope事件0，载荷/容量/发布不变；Source2D门PASS、array均值/尾部门FAIL，两负控PASS，联合收益未过，不重测/推广。Task NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010；报告 artifacts/diagnostics/NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010/REPORT.md。M03父项/H07/Android仍OPEN，H07输入/producer暂缓、95OFF、H06不续/旧Goal取消保持。下方为此前时点。
+
+> **2026-10-10 NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010 IN_PROGRESS / NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-001 PLANNED.** 三脚本默认OFF候选，先完整payload/像素/命中/回退，后一次完整Build ABBA；旧失败/最终门保持，不推广或恢复队列。
+
+> **2026-10-10 M03独立评审收口：SCOPED_REVIEW_COMPLETE / 有界生产候选方案READY，性能门仍OPEN。** NTSD-M03-UV-DIMENSION-REVIEW-001 VERIFIED仅诊断；8项既有契约通过，新UV三版各41边界/共1408有效scope事件0。两槽轮换退化、array限定不通用、segment数学模型连续段有信号但逐quad换段负控5.0494%超过事前5%，整体未通过，不写生产收益。最终指令只利用既有canAppend分支：新段首quad/custom/Strict原路，真正append后段内准备尺寸，默认OFF，再验真实Backend/payload/像素/完整Build成本。未改生产、未开启下一点。Task NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010；报告/准确三文件修复指令位于artifacts/diagnostics/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010/REPORT.md与execution-handoff.txt；实际发送以dispatch-receipt/status为准。155保护无漂移、原Menu clean8。M03父项OPEN，H07/producer暂缓与95OFF等保持；下方是此前时点。
+
+> NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010 / IN_PROGRESS：用户授权本讨论会话继续M03实际链与必要原Editor验证，形成完整修复方案后直接交已有执行会话。原排程/历史成果保留，当前不改生产或运行设备认证。见docs/ai/TASKS/NTSD-M03-MATERIALIZATION-REUSE-REVIEW-20261010.md。
+
+## 2026-10-10 当前阶段更正：M-03
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| P1／当前优先评审 | 1 | 高 |
+
+第1项：复用已完成metadata/相机消重/共享绑定；评审当前命令物化与顶点准备剩余工作，不把GPU认证缺失当当前优化内容。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # M-03 当前评审卡（2026-10-09）
 
@@ -372,3 +404,9 @@ PARTIAL / FOOT_COVERAGE_UNMET，严格window FAIL原件保留；不称本批完�
 Editor collectionControl/playerLoopHardGate均false，global Gen0/1/2各3；虽然tick/update/late边界bytes0B，也不等同全链/无collection。关闭11阶段完成/三残留0、Scene clean/SHA同、Menu clean8 roots已恢复。8备份/708保护，production源码/DLL不改。
 只读线索：Foot authoring依赖loaded BattleCentralEditorPreview；savedBattle未序列化该GUID，GameConfig已有Sprite。未捕获运行时authoring/command flag来源，不把线索当完整bug结论，不读Q06 body、加Scene组件或打开开关让测试过门。
 下一只读定位Foot资源/authoring/command gate；如需Scene/专项资源接线另立准确授权。真实高负载/1000AI/fullchain0GC/透明排序first-visible/GPU/FPS/Android仍开放；专项门不变，不重复1800低roster替代未跑高负载。
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 IN_PROGRESS / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 PLANNED: user-approved new-publication M03 review; one Editor-only finite-scan diagnostic, production unchanged. Same-publication cache excluded by prior workload. Local equivalence/cost only; no handoff yet.
+
+
+> NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010 SCOPED_REVIEW_COMPLETE / NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-001 VERIFIED (Editor diagnostic only): private WriteQuad rectangle invariant supports 12-to-5 finite-coordinate checks at original Upload location; actual21build/27nonfinite/14641IEEE cases plus original3+2 guards pass. Unique2000/4096 scanABBA both show local gain,256valid calibrated GCscopes0events,158protections unchanged/Menu clean8. Production unchanged; exact defaultOFF candidate/fullBuild handoff ready, dispatch status in artifacts/diagnostics/NTSD-M03-FINITE-VERTEX-SCAN-REVIEW-20261010/dispatch-receipt.json. No fullBuild/parent/device admission. Earlier publication cache and UV failures retained.

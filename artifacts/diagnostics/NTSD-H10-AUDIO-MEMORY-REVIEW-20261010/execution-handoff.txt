@@ -1,0 +1,29 @@
+人类已批准讨论会话先检验H10，然后形成准确方案交你实施。本讨论会话已完成独立源码/真实Editor检验。请开始且仅完成以下有限任务，不恢复旧Goal、34项队列或下一项。
+
+Task建议 NTSD-H10-BOUNDED-PCM-CONVERSION-20261010，Change NTSD-H10-BOUNDED-PCM-CONVERSION-001。目标：减少NTSDSoundPlayer单声道转双声道时的临时float数组分配，保持最终播放副本和所有声音行为不变。不是减少210MiB常驻播放副本，不是按局声音筛选/AB/有损压缩/新缓存系统。
+
+依据：artifacts/diagnostics/NTSD-H10-AUDIO-MEMORY-REVIEW-20261010/REPORT.md、analysis-summary.json、source-assembly-before-cost.json。当前正式978WAV/965mono只作磁盘inventory。独立真实private原方法对Editor候选，10边界+4WAV每样本float位一致、借用与拥有资源清理通过；最终2/2。一次冷转换2尺寸ABBA/4warm16sample执行1/1，局部均值新低于原，原ticks保留。镜像测试和测量不代生产接线，旧空job/初始化超时/同名保存失败原件均保留。原生产NTSDSoundPlayer未修改。源码身份若漂移先检查，不覆盖用户dirty。
+
+准确脚本写域只有：
+1. Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs：PrepareBattlePlaybackClips内部mono转换窄分支及必要private局部helper/const。
+2. Assets/NTSD/Scripts/Test/Editor/H10AudioMemoryDiagnostics.cs：将实际生产路径与冻结原算法/期望PCM对比，增加必要失败/owner/冷转换验证。保留既有诊断证据输出和原件。
+其余既有声音focused可运行不修改。不得改NTSDResourceLoader、CharacterAnimtorManager、AppManager、Q06、声音事件/聚合/voice/gain或既有其它测试。先独立Task/Change/Ledger/Operation、准确符号、真实dirty备份、STATE/authority/handoff唯一进度；新域/真实合同缺口交回，不静默扩大。
+
+准确实现：
+- null或非mono保持原借用分支；mono samples<8192保留原整条mono/stereo转换，避免小clip额外数组/调用。
+- samples>=8192，4096采样帧完整块复用float[4096]和float[8192]；offsetSamples按采样帧推进。尾块remaining>0使用精确float[remaining]/float[remaining*2]，禁止以满缓冲SetData尾部造成环回覆盖开头。无尾部则不建尾数组。
+- 每调用局部数组，不跨cue/clip/帧缓存、不新pool/manager/静态状态，不引入诊断开关。经验证直接用于正常原调用；旧算法留Editor作对照即可。
+- 最终AudioClip仍source.name/source.samples/2/source.frequency/非stream，单声道每个采样复制到L/R，不能缩短/降采样/混音/改变音量。
+- 原方法入口早退、sourceClips顺序、cue.BattlePlaybackClips最后一次发布、firstOwned批次回滚及原错误信息保持。第一块GetData必须在创建目标clip之前成功，保持首次读取失败不新增owned对象；创建后立即加入原ownedBattlePlaybackClips再SetData。后续GetData/SetData失败仍由原catch销毁本cue新增的全部副本并移除，不能留下部分发布或销毁借用source。checked(source.samples*2)等原溢出检查保持，避免大源因分块绕过原拒绝条件。原Release/generation/OnDestroy不改。
+
+验收先最窄编译及新actual-production验证：
+- 最新生产与冻结旧算法逐样本bit、samples/channels/frequency/name一致；1/2/4095/4096/4097/8191/8192/8193/65537，精确尾部和4096倍数；四正式WAV同上，不再全量978解码。
+- null cue/未加载/已准备幂等、null源/已有stereo借用、多clip顺序、第一/后续失败的owner回滚/未发布、destroyed owner不可复建。可用实际不可读/streaming clip触发读取失败；先核真实Unity API行为，不能改成假的通过。不能为了测试增加生产故障注入系统；无法覆盖的故障位置以具体源码证明和缺口上报。
+- 必要复用NTSD28OriginalCommonAudioEditorTests原增益、同cue重触发与销毁用例，不改其规则，不运行Q06方法体或整套旧回归。
+- 测试对象仅本任务精确owned；finally释放新playback和自有source，借用source不得误毁；不得全局Destroy/清cache/UnloadUnusedAssets/GC.Collect或重启掩盖。现有诊断显式Release只算owner清理，不冒充自然Unity callback。
+
+前置过后仅一次有界最新生产与冻结原冷转换比较：65537和329244帧同内容/频率，各原→新→新→原，每窗4warm+16sample。反射/冷delegate/assert/readback/cleanup在外；测量scope包含实际转换和AudioClip创建。记录真实float数组容量（源码/数学推导，含数组个数另列）与Profiler对象内存，区分累计申请、临时数据上界、最终clip、RSS/峰值。短源数组/调用不增加，长源临时payload<98304B且严格降低，最终对象内存/PCM不增变。冷加载允许分配，不套热路径0GC/旧Driver失败门。
+本任务目标是内存，耗时需核无明显代价：两尺寸每个新mean不超过两个原mean中的最大值；16样本P95/P99实际是max只报告，若mean门失败或异常尖峰明显则交回，不重跑找PASS/加warm/加JIT/Profiler追系统。本比较支持限定转换接入，不能外推整局加载时间/设备。任何正确性/资源硬门失败停止成本组、保留原件交回。
+
+成功后报告SCOPED_PCM_TEMPORARY_MEMORY_REDUCTION_VERIFIED并明确已接原生产转换（无新flag）。完整H10驻留音频、按局闭包、实际加载峰值和设备预算仍OPEN，不能把全磁盘330283044→68499492B数学累计当整局实测或已省210MiB。失败如实保留并交回，不无限重试。
+最后单项原代码→新代码→减少什么→实际验证/未测，脚本程序集/保护/Scene clean与原单实例状态核对，运行Validate-ChangeLedger和scoped diff，更新方案卡/唯一进度/恢复入口并停止。保护H08正常默认ON、M03旧候选OFF/H07和producer暂缓/95OFF/H06不续。不上资源/Scene/Settings/Server/Gen/Plugins、不解冻ATLAS/PERF/Mono/EXT1，不改变游戏规则/33ms/透明顺序/publication/十一阶段关闭，不自动下一点。

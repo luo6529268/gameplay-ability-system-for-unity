@@ -1,0 +1,8 @@
+{
+  "status": "EXISTING_OWNER_HELPER_COMPATIBLE",
+  "distinctSprites": 2,
+  "sharedTextures": 1,
+  "destroyed": 3,
+  "nativeBytes": 4624,
+  "scope": "Isolated geometry and existing destruction helper, not cancellation/lease/full publication candidate acceptance."
+}

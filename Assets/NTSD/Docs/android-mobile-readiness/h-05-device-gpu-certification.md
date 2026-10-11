@@ -1,3 +1,15 @@
+## 2026-10-10 当前阶段更正：H-05
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| 后期平台适配与发布 | 不单独排队 | 高 |
+
+Android真机及GPU认证在后期平台验收处理；当前CPU渲染优化可独立评审。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # H-05 当前评审卡（2026-10-09）
 

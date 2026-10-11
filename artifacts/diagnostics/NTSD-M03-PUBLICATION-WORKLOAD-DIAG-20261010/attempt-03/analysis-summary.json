@@ -1,0 +1,108 @@
+{
+  "status": "SCOPED_WORKLOAD_VERIFIED",
+  "observationStatus": "COMPLETED",
+  "count": 150,
+  "steadyCameraRecords": 89,
+  "steadyIntervals": 89,
+  "counterEpochs": [
+    2
+  ],
+  "cameraIds": [
+    150904
+  ],
+  "warmupTicksCompleted": 120,
+  "sampledLogicTicks": 180,
+  "coveredSteadyFromTick": 120,
+  "coveredSteadyThroughTick": 298,
+  "coverageEndExclusiveOfCleanupFrame": true,
+  "classifiedBuilds": {
+    "total": 89,
+    "publication": 89,
+    "alpha": 0,
+    "repeated": 0,
+    "failed": 0,
+    "rejected": 0,
+    "bytes": 31203568
+  },
+  "steadyBinding": {
+    "commands": {
+      "min": 1958,
+      "mean": 1992.056179775281,
+      "max": 2037
+    },
+    "resolved": {
+      "min": 1958,
+      "mean": 1992.056179775281,
+      "max": 2037
+    },
+    "segments": {
+      "min": 1,
+      "mean": 1,
+      "max": 1
+    },
+    "sourceQuads": {
+      "min": 0,
+      "mean": 0,
+      "max": 0
+    },
+    "arrayQuads": {
+      "min": 1958,
+      "mean": 1992.056179775281,
+      "max": 2037
+    },
+    "pageQuads": {
+      "min": 0,
+      "mean": 0,
+      "max": 0
+    },
+    "otherQuads": {
+      "min": 0,
+      "mean": 0,
+      "max": 0
+    },
+    "activeAi": {
+      "min": 1000,
+      "mean": 1000,
+      "max": 1000
+    }
+  },
+  "steadyRowsWithNoSubmission": 0,
+  "allResolvedEqualBindingQuadSum": true,
+  "errors": [],
+  "inputMode": "ai",
+  "effectiveAi": "data-oriented-canonical",
+  "capacityPressurePassed": true,
+  "cleanup": {
+    "attempted": true,
+    "restored": true,
+    "activeStateRestored": true,
+    "driverStateRestored": true,
+    "loggingStateRestored": true,
+    "activeGameObjectsBefore": 1000,
+    "activeGameObjectsAfter": 0,
+    "worldObjectsBefore": 2000,
+    "worldObjectsAfter": 0,
+    "worldEntitiesBefore": 1000,
+    "worldEntitiesAfter": 0,
+    "claimedSlotsBefore": 1000,
+    "claimedSlotsAfter": 0,
+    "objectPoolActiveBeforeRun": 0,
+    "objectPoolActiveAfter": 0,
+    "objectPoolAvailableBeforeRun": 10,
+    "objectPoolAvailableAfter": 1050,
+    "retainedInactiveObjectPoolCapacityBeforeRun": 10,
+    "retainedInactiveObjectPoolCapacityAfter": 1050,
+    "retainedInactiveObjectPoolCapacityDelta": 1040,
+    "retainedInactiveObjectPoolCapacityPolicy": "Informational inactive cache capacity only; it is not active cleanup residue and the stress harness does not trim it.",
+    "referencePoolActiveBeforeRun": 0,
+    "referencePoolActiveAfter": 0,
+    "cleanupExceptionCount": 0,
+    "cleanupExceptions": "",
+    "evidence": "reason=sample-complete; restored=True; activeCleanupRestored=True; driverRestored=True; loggerRestored=True; cleanupExceptions=0; activeGO=1000->0; worldObjects=2000->0; worldEntities=1000->0; claimed=1000->0; objectPoolActive=0->0; referencePoolActive=0->0; retainedInactiveObjectPoolCapacity=10->1050 (delta=1040; doesNotAffectRestored=True)"
+  },
+  "gainMeasured": false,
+  "fullDriverGcCertified": false,
+  "decision": "NO_SAME_PUBLICATION_REUSE_OPPORTUNITY_IN_OBSERVED_WINDOW",
+  "productionHandoffReady": false,
+  "priorAttemptsRetained": true
+}

@@ -1,0 +1,213 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "87946ebe77f6414098f0bdd7998e5660",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791609593716,
+      "finished_unix_ms": 1791609606192,
+      "last_update_unix_ms": 1791609606192,
+      "progress": {
+        "completed": 19,
+        "total": 10624,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791609601107,
+        "last_finished_test_full_name": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(True)",
+        "last_finished_unix_ms": 1791609601274,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 19,
+          "passed": 19,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.3981581,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "NativeOwnedSkip_DefaultOffAndFixed1000CaptureWitness",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_DefaultOffAndFixed1000CaptureWitness",
+            "state": "Passed",
+            "durationSeconds": 0.2851891,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"legacy-profile\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"legacy-profile\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0193353,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"legacy-pass\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"legacy-pass\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0028358,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"unknown-pass\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"unknown-pass\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0035112,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"player\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"player\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0031229,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"derived\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"derived\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0028408,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"null-entity\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"null-entity\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0027028,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"null-runtime\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"null-runtime\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0030962,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"released\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"released\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0035386,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"replaced\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"replaced\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0057173,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"borrowed-slot\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"borrowed-slot\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0084381,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"foreign-world\",False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"foreign-world\",False)",
+            "state": "Passed",
+            "durationSeconds": 0.0829541,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"missing-data\",True)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"missing-data\",True)",
+            "state": "Passed",
+            "durationSeconds": 0.0025168,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"missing-frame\",True)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_GuardsPreserveOriginalReturnsAndCounters(\"missing-frame\",True)",
+            "state": "Passed",
+            "durationSeconds": 0.002679,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_PreservesDistinctCanonicalRuntime17AndTail(False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_PreservesDistinctCanonicalRuntime17AndTail(False)",
+            "state": "Passed",
+            "durationSeconds": 0.0031653,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_PreservesDistinctCanonicalRuntime17AndTail(True)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_PreservesDistinctCanonicalRuntime17AndTail(True)",
+            "state": "Passed",
+            "durationSeconds": 0.0016382,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_ResetReentryAndColdConfigurationBoundaries",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_ResetReentryAndColdConfigurationBoundaries",
+            "state": "Passed",
+            "durationSeconds": 0.0035519,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(False)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(False)",
+            "state": "Passed",
+            "durationSeconds": 0.1754065,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(True)",
+            "fullName": "NTSD.Test.CharacterInputLiveSlotLoopEditorTests.NativeOwnedSkip_WarmedPurePassHasZeroAllocationAndFixedCapacity(True)",
+            "state": "Passed",
+            "durationSeconds": 0.1670627,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "documents": [
+    {
+      "path": "docs/ai/CURRENT-AUTHORITY.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "docs/ai/STATE.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "Assets/NTSD/Docs/battle-optimization-progress-tracker.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/H07-INPUT.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "docs/ai/TASKS/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/REPORT.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    },
+    {
+      "path": "docs/ai/FILE-OPERATIONS/INDEX.md",
+      "backupValid": true,
+      "originalBytesPreserved": true
+    }
+  ],
+  "scopedDiffExit": 0,
+  "productionWrites": false,
+  "newRuntimeTests": false,
+  "handoffSent": false,
+  "taskState": "IN_PROGRESS / CAUSAL_CHAIN_REVIEW"
+}

@@ -1,0 +1,39 @@
+$env:PYTHONUTF8='1'
+$env:PYTHONIOENCODING='utf-8'
+@'
+
+import json,hashlib,subprocess
+from pathlib import Path
+from datetime import datetime
+root=Path.cwd().resolve()
+op=root/"docs/ai/FILE-OPERATIONS/NTSD-H01-STRATEGY-AND-SCOPE-20261010"
+verified=json.loads((op/"verification-02.json").read_text(encoding="utf-8"))
+assert verified["backups_intact"] and verified["head_unchanged"] and verified["staged_unchanged"]
+assert not verified["protected_changes"] and not verified["unexpected_tracked_changes"] and not verified["broken_links"] and not verified["history_or_scope_mismatches"] and verified["diff_check_exit"]==0
+plan=json.loads((op/"edit-plan.json").read_text(encoding="utf-8"))
+before=json.loads((op/"before-manifest.json").read_text(encoding="utf-8"))
+now=datetime.now().astimezone().isoformat()
+def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def append(path,text):
+    raw=path.read_bytes()
+    nl="\r\n" if b"\r\n" in raw else "\n"
+    with path.open("ab") as f:f.write(text.replace("\n",nl).encode("utf-8"))
+task=root/plan["taskPath"]
+append(task,"\n## 本轮文档交付记录\n\n"+now+"：文档整理已交付，策略仍待用户确认。11份已有文档原字节备份完整，17份具名保护文件0变化；29个新增/修改本地链接均有效，HEAD/暂存不变，范围外tracked无变更，git diff --check退出0。首次链接层级错误及修正保留于verification-01/02。见[验证](../FILE-OPERATIONS/NTSD-H01-STRATEGY-AND-SCOPE-20261010/verification-02.json)。未运行Unity/编译/测试/Profiler/构建，不将本检查当作H-01运行或性能验收。\n")
+append(op/"RECORD.md","\n## 执行后追加：VERIFIED（仅文档操作）\n\n结束："+now+"。prepare、execute、链接修正和两次验证命令均exit0。首次验证发现本轮新Task单个相对链接层级错误，修正后29个新增/修改本地链接全部有效，失败观察未覆盖。\n\nverification-02.json证明：11份真实备份完整；17份具名保护文件0变化；10份正文增量严格匹配edit-plan，历史主体保持；HEAD/暂存不变、范围外tracked无变化，diff-check0。实际触及before-manifest列出的11份已有文档、新Task及本Operation审计文件。没有删除/移动文件、修改项目脚本/资源/Scene/Prefab/Settings/Packages、读取活跃Q06方法体，未调用Unity/测试/Profiler/构建，未发送执行消息或改变自动监测。\n\n当前状态：OPTIMIZATION_PLAN_ONLY已记录，H-01策略草案交付、STRATEGY_REVIEW_PENDING；不是实施通过或H-01关闭。未运行Change Ledger validator，本任务没有项目脚本改动。精确执行/验证命令、SHA与最终范围复核均在本目录保存。\n")
+index=root/"docs/ai/FILE-OPERATIONS/INDEX.md"
+append(index,"\n\n> Operation NTSD-H01-STRATEGY-AND-SCOPE-20261010 / VERIFIED（仅文档）：[Record](NTSD-H01-STRATEGY-AND-SCOPE-20261010/RECORD.md) · [验证](NTSD-H01-STRATEGY-AND-SCOPE-20261010/verification-02.json)。只按既有方案规则及H-01策略草案已记录；29链接/17保护/11备份与diff检查通过，策略仍待确认，未实施/运行/发送任务。\n")
+after=[dict(path=i["path"],sha256=sha(root/i["path"]),bytes=(root/i["path"]).stat().st_size) for i in before["existing_documents"]]
+after.append(dict(path=plan["taskPath"],sha256=sha(task),bytes=task.stat().st_size))
+(op/"after-manifest.json").write_text(json.dumps(dict(operation=plan["operation"],end_time=now,files=after),ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+diff=subprocess.run(["git","diff","--check","--",*[i["path"] for i in before["existing_documents"]]],cwd=root,capture_output=True)
+head=subprocess.run(["git","rev-parse","HEAD"],cwd=root,capture_output=True,check=True).stdout
+staged=subprocess.run(["git","diff","--cached","--binary"],cwd=root,capture_output=True,check=True).stdout
+protected=[i["path"] for i in before["protected_files"] if sha(root/i["path"])!=i["sha256"]]
+final=dict(status="VERIFIED_DOCUMENTATION_ONLY",strategy="STRATEGY_REVIEW_PENDING",diff_check_exit=diff.returncode,protected_changes=protected,head_unchanged=head==(op/"head-before.txt").read_bytes(),staged_unchanged=staged==(op/"staged-before.patch").read_bytes(),unity_or_tests_run=False,message_sent=False)
+(op/"final-check.json").write_text(json.dumps(final,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+(op/"git-status-after.txt").write_bytes(subprocess.run(["git","status","--short","--branch"],cwd=root,capture_output=True,check=True).stdout)
+print(json.dumps(final,ensure_ascii=False))
+assert final["diff_check_exit"]==0 and not protected and final["head_unchanged"] and final["staged_unchanged"]
+
+'@ | python -X utf8 -

@@ -1,0 +1,55 @@
+$env:PYTHONUTF8='1'
+$env:PYTHONIOENCODING='utf-8'
+@'
+
+import json,hashlib,re,subprocess
+from pathlib import Path
+from urllib.parse import unquote
+root=Path.cwd().resolve()
+op=root/"docs/ai/FILE-OPERATIONS/NTSD-H01-STRATEGY-AND-SCOPE-20261010"
+plan=json.loads((op/"edit-plan.json").read_text(encoding="utf-8"))
+before=json.loads((op/"before-manifest.json").read_text(encoding="utf-8"))
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+def run(*args):
+    r=subprocess.run(args,cwd=root,capture_output=True)
+    return r
+backup_ok=all(sha(root/i["backup"])==i["sha256"] for i in before["existing_documents"])
+protected_changes=[i["path"] for i in before["protected_files"] if sha(root/i["path"])!=i["sha256"]]
+head_ok=run("git","rev-parse","HEAD").stdout==(op/"head-before.txt").read_bytes()
+staged_ok=run("git","diff","--cached","--binary").stdout==(op/"staged-before.patch").read_bytes()
+expected_paths={e["path"] for e in plan["edits"]}|{"docs/ai/FILE-OPERATIONS/INDEX.md"}
+changed=run("git","diff","--name-only").stdout.decode("utf-8").splitlines()
+unexpected=[p for p in changed if p not in expected_paths]
+broken=[]
+checked=0
+for edit in plan["edits"]:
+    pieces=[edit["prepend"]]+[new for old,new in edit.get("replace",[])]
+    for piece in pieces:
+        for label,url in re.findall(r"\[([^\]]+)\]\(([^)]+)\)",piece):
+            if re.match(r"\w+://",url) or url.startswith("#"):continue
+            target=((root/edit["path"]).parent/unquote(url.split("#")[0])).resolve()
+            checked+=1
+            if not target.exists():broken.append(dict(source=edit["path"],url=url,target=str(target)))
+task=root/plan["taskPath"]
+for label,url in re.findall(r"\[([^\]]+)\]\(([^)]+)\)",task.read_text(encoding="utf-8")):
+    if re.match(r"\w+://",url) or url.startswith("#"):continue
+    target=(task.parent/unquote(url.split("#")[0])).resolve()
+    checked+=1
+    if not target.exists():broken.append(dict(source=plan["taskPath"],url=url,target=str(target)))
+diff=run("git","diff","--check","--",*sorted(expected_paths))
+(op/"diff-check.txt").write_bytes(diff.stdout+diff.stderr)
+hist=[]
+for edit in plan["edits"]:
+    item=next(i for i in before["existing_documents"] if i["path"]==edit["path"])
+    raw=(root/item["backup"]).read_bytes()
+    bom=b"\xef\xbb\xbf" if raw.startswith(b"\xef\xbb\xbf") else b""
+    raw=raw[len(bom):]
+    nl="\r\n" if b"\r\n" in raw else "\n"
+    for old,new in edit.get("replace",[]):raw=raw.replace(old.replace("\n",nl).encode(),new.replace("\n",nl).encode(),1)
+    expected=bom+edit["prepend"].replace("\n",nl).encode()+raw
+    if expected!=(root/edit["path"]).read_bytes():hist.append(edit["path"])
+result=dict(backups_intact=backup_ok,protected_files=len(before["protected_files"]),protected_changes=protected_changes,head_unchanged=head_ok,staged_unchanged=staged_ok,unexpected_tracked_changes=unexpected,links_checked=checked,broken_links=broken,history_or_scope_mismatches=hist,diff_check_exit=diff.returncode,edited_documents=len(plan["edits"]),no_unity_or_tests_run=True)
+(op/"verification-01.json").write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+print(json.dumps(result,ensure_ascii=False))
+
+'@ | python -X utf8 -

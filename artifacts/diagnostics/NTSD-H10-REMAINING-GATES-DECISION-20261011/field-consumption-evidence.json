@@ -1,0 +1,77 @@
+{
+  "scope": "Exact allowed files and existing records only; no global unused-field claim",
+  "fields": [
+    {
+      "field": "LF2ArmorData.sound1/sound2",
+      "dataType": "string; default null",
+      "dataEvidence": [
+        "Assets/NTSD/Scripts/Animation/LF2CharacterData.cs:79",
+        "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs:35",
+        "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs:64",
+        "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs:97",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:37"
+      ],
+      "observedUses": [
+        "raw field assignment",
+        "CopyFrom",
+        "fingerprint"
+      ],
+      "soundRequestConsumer": "NOT_FOUND_IN_EXACT_ALLOWED_FILES",
+      "globalConsumerStatus": "UNKNOWN_READ_BOUNDARY",
+      "collectorStatus": "not explicitly visited in CollectBattleSoundIds",
+      "missingAudioProven": false,
+      "decision": "Do not add cues, omit fields as globally unused, or initiate new export; optional precise consumer review only after scope approval."
+    },
+    {
+      "field": "InteractionArea.sound",
+      "dataType": "int; default 0",
+      "dataEvidence": [
+        "Assets/NTSD/Scripts/Animation/LF2FrameData.cs:369",
+        "Assets/NTSD/Scripts/Animation/LF2FrameData.cs:444",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:152"
+      ],
+      "observedUses": [
+        "ParseInt32OrZero assignment",
+        "CopyFrom"
+      ],
+      "soundRequestConsumer": "NOT_FOUND_IN_EXACT_ALLOWED_FILES",
+      "globalConsumerStatus": "UNKNOWN_READ_BOUNDARY",
+      "knownSoundHelperUsesInstead": "LF2CharacterDatHitResolver RecordDamageEffectSound uses itr.effect; RecordStandardCharacterHurtSounds uses Runtime.Fall and itr.effect",
+      "history": "Q05 ITR40 decoding record explicitly says data fields only, no sound behavior; historical fact is not current global no-consumer proof",
+      "missingAudioProven": false,
+      "decision": "Do not interpret integer as SFX_NNN or file path."
+    },
+    {
+      "field": "WeaponStrengthEntry.sound",
+      "dataType": "int; default 0",
+      "dataEvidence": [
+        "Assets/NTSD/Scripts/Animation/LF2FrameData.cs:593",
+        "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs:203"
+      ],
+      "observedUses": [
+        "ParseInt32OrZero assignment"
+      ],
+      "soundRequestConsumer": "NOT_FOUND_IN_EXACT_ALLOWED_FILES",
+      "globalConsumerStatus": "UNKNOWN_READ_BOUNDARY",
+      "history": "Q05 decoding record introduced data, deferred behavior; no current request mapping established",
+      "missingAudioProven": false,
+      "decision": "Do not fabricate cue conversion or a new consumer implementation."
+    },
+    {
+      "field": "NTSDGlobal.Sound.IceShatter",
+      "dataType": "constant string Battle/Ice/Shatter",
+      "dataEvidence": [
+        "Assets/NTSD/Scripts/Simulation/Core/NTSDGlobal.cs:201",
+        "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs:150"
+      ],
+      "observedUses": [
+        "StateFrozen state_exit invokes QueueBattleSound with exact constant"
+      ],
+      "soundRequestConsumer": "CONFIRMED_COMPATIBILITY_REQUEST",
+      "formalReachability": "UNKNOWN_READ_BOUNDARY",
+      "collectorStatus": "Absent from prior saved 1000 cues and current19 builtin entries; old source evidence reused without recomputation",
+      "missingAudioProven": false,
+      "decision": "Do not alias to SFX_066 based on filename, add cue, or claim live omission before reachability is established."
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "task": "NTSD-M03-STRATEGY-REEVALUATION-20261010",
+  "evaluation": "READ_ONLY_RECOMPUTATION_NOT_NEW_PERFORMANCE_RUN",
+  "costScopeCount": 512,
+  "costErrors": [],
+  "layouts": [
+    {
+      "layout": "continuous-source2d",
+      "offAverageMs": 4.9635265625,
+      "onAverageMs": 4.7867296875,
+      "apparentReductionPercent": 3.56192059765974
+    },
+    {
+      "layout": "continuous-array",
+      "offAverageMs": 4.8375734375,
+      "onAverageMs": 4.83351875,
+      "apparentReductionPercent": 0.08381655704839194
+    },
+    {
+      "layout": "fragmented-source2d",
+      "offAverageMs": 6.1243609375000005,
+      "onAverageMs": 6.027354687500001,
+      "apparentReductionPercent": 1.5839407734123236
+    },
+    {
+      "layout": "strict-mixed-source2d",
+      "offAverageMs": 6.0512218749999995,
+      "onAverageMs": 5.84671875,
+      "apparentReductionPercent": 3.379534401884736
+    }
+  ],
+  "windows": [
+    {
+      "layout": "continuous-source2d",
+      "enabled": false,
+      "meanMs": 4.948259375,
+      "p95Ms": 6.030819999999999,
+      "p99Ms": 7.210477000000001
+    },
+    {
+      "layout": "continuous-source2d",
+      "enabled": true,
+      "meanMs": 4.79720625,
+      "p95Ms": 6.079965,
+      "p99Ms": 6.92816
+    },
+    {
+      "layout": "continuous-source2d",
+      "enabled": true,
+      "meanMs": 4.776253125,
+      "p95Ms": 5.719684999999999,
+      "p99Ms": 6.750585000000001
+    },
+    {
+      "layout": "continuous-source2d",
+      "enabled": false,
+      "meanMs": 4.9787937499999995,
+      "p95Ms": 6.488694999999998,
+      "p99Ms": 7.964425
+    },
+    {
+      "layout": "continuous-array",
+      "enabled": false,
+      "meanMs": 4.757259375,
+      "p95Ms": 5.01548,
+      "p99Ms": 5.055782
+    },
+    {
+      "layout": "continuous-array",
+      "enabled": true,
+      "meanMs": 4.987853125,
+      "p95Ms": 6.455934999999999,
+      "p99Ms": 6.903822
+    },
+    {
+      "layout": "continuous-array",
+      "enabled": true,
+      "meanMs": 4.679184375,
+      "p95Ms": 5.836469999999999,
+      "p99Ms": 6.759946
+    },
+    {
+      "layout": "continuous-array",
+      "enabled": false,
+      "meanMs": 4.9178875,
+      "p95Ms": 5.77107,
+      "p99Ms": 6.001494
+    },
+    {
+      "layout": "fragmented-source2d",
+      "enabled": false,
+      "meanMs": 6.16383125,
+      "p95Ms": 7.4083999999999985,
+      "p99Ms": 8.872454000000001
+    },
+    {
+      "layout": "fragmented-source2d",
+      "enabled": true,
+      "meanMs": 6.0007875,
+      "p95Ms": 6.183854999999999,
+      "p99Ms": 6.236099
+    },
+    {
+      "layout": "fragmented-source2d",
+      "enabled": true,
+      "meanMs": 6.053921875,
+      "p95Ms": 6.39614,
+      "p99Ms": 6.640852000000001
+    },
+    {
+      "layout": "fragmented-source2d",
+      "enabled": false,
+      "meanMs": 6.084890625,
+      "p95Ms": 6.40505,
+      "p99Ms": 6.559456
+    },
+    {
+      "layout": "strict-mixed-source2d",
+      "enabled": false,
+      "meanMs": 6.071621875,
+      "p95Ms": 7.469084999999999,
+      "p99Ms": 8.387514000000001
+    },
+    {
+      "layout": "strict-mixed-source2d",
+      "enabled": true,
+      "meanMs": 5.90320625,
+      "p95Ms": 6.15185,
+      "p99Ms": 6.334017
+    },
+    {
+      "layout": "strict-mixed-source2d",
+      "enabled": true,
+      "meanMs": 5.79023125,
+      "p95Ms": 6.02644,
+      "p99Ms": 6.071236
+    },
+    {
+      "layout": "strict-mixed-source2d",
+      "enabled": false,
+      "meanMs": 6.030821875,
+      "p95Ms": 6.900449999999999,
+      "p99Ms": 7.915421
+    }
+  ],
+  "historicalCohorts": [
+    {
+      "window": "camera-01",
+      "alphaChanged": 776,
+      "publicationChanged": 1024,
+      "repeated": 0,
+      "alphaFraction": 0.4311111111111111,
+      "scope": "historical small-roster scene, not current combat1000"
+    },
+    {
+      "window": "camera-02",
+      "alphaChanged": 775,
+      "publicationChanged": 1025,
+      "repeated": 0,
+      "alphaFraction": 0.4305555555555556,
+      "scope": "historical small-roster scene, not current combat1000"
+    }
+  ],
+  "oldPresentationTimingEnabled": true,
+  "oldDetailPhaseTimingEnabled": false,
+  "phaseEvidence": [
+    {
+      "name": "BeginFrame/BuildCommands/ResolveDeferredSpriteCaptures",
+      "samples": 90,
+      "averageMs": 0.34093444444444443
+    },
+    {
+      "name": "BeginFrame/BuildCommands/Core",
+      "samples": 90,
+      "averageMs": 3.0233811111111106
+    },
+    {
+      "name": "Materialize/BuildCommands",
+      "samples": 90,
+      "averageMs": 4.155967777777778
+    },
+    {
+      "name": "Materialize/Mesh/ResolveAndWriteCommands",
+      "samples": 90,
+      "averageMs": 2.1159566666666665
+    },
+    {
+      "name": "Materialize/Mesh/UploadChunks",
+      "samples": 90,
+      "averageMs": 0.4130000000000002
+    },
+    {
+      "name": "Materialize/Mesh/ResolveCommands",
+      "samples": 90,
+      "averageMs": 0.7542099999999998
+    },
+    {
+      "name": "Materialize/Mesh/WriteQuads",
+      "samples": 90,
+      "averageMs": 1.080572222222222
+    }
+  ],
+  "evidenceSha256": {
+    "artifacts\\diagnostics\\NTSD-M03-SEGMENT-UV-DIMENSION-REUSE-20261010\\full-build-cost.json": "c9be250520b5c648e778e3f0ea2b36d7f8c487525f2dea1047a43e01a37a8e11",
+    "artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009\\camera-01\\materialization-window-01.json": "1ed0c53d37a6bf44c0438b77764afa1d67e9f5e938ddf6e2e7bd4e647dcd52c8",
+    "artifacts\\diagnostics\\NTSD-OPTIMIZATION-BATCH86-DIRECT-BATTLE-SHARED-BINDINGS-20261009\\camera-02\\materialization-window-01.json": "440b8f3165155584ce61c9079a028e3c4b2e7ed8c0a59aa9921127fbaafe974a",
+    "artifacts\\diagnostics\\NTSD-H07-NATIVE-OWNED-COMPAT-SKIP-20261010\\windows\\00-combat1000-off\\report.json": "e22d0bcd89c29dddd815ad79fdf0d5589f69a2c851c38e0819d111959b144f83"
+  }
+}

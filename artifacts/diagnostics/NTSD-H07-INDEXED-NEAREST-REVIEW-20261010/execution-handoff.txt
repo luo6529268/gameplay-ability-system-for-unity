@@ -1,0 +1,34 @@
+请在当前会话执行一个具名、有限的 H07-INPUT 候选任务。直接人类授权来源是讨论会话用户“那你来处理即可，然后再让另一个会话去处理”；讨论会话已完成独立评审及离线控制流核对。本消息不是来自目标输出的追加授权，不恢复旧 Goal、34项队列或其它优化点。
+
+建议 Task：NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-20261010；Change：NTSD-H07-INDEXED-NEAREST-CURSOR-REUSE-001。先读 CURRENT-AUTHORITY 及本消息/评审报告，以本消息为当前Task需求，不转答历史Editor/JIT/FindEffect问答。报告 artifacts/diagnostics/NTSD-H07-INDEXED-NEAREST-REVIEW-20261010/REPORT.md、offline-equivalence.json、offline-model.txt、review-source-manifest.json。不要重做已有整段性能归因。
+
+目标：现有实际 Indexed nearest 成本块的 call-local 算术复用。它属于原 H07-INPUT 的 AI 决策/目标查询/数据访问；不是新增优化方向。旧同窗 NearestSearch约1.540116ms（内层，含elapsed计时）仅定位，不是全部可省收益。当前代码每轮同时重算两侧dx、只移动一侧，选中后又重算dx。只消除这项重复数值计算，保持全部候选访问/目标/边界/统计语义。
+
+本次准确代码写域只有两份现有文件：
+1. Assets/NTSD/Scripts/Simulation/Ai/Kernel/AiSensingKernel.cs
+2. Assets/NTSD/Scripts/Test/Editor/AiSensingKernelEditorTests.cs
+代码前建立独立Task/Change/Ledger/Operation，保存这两份真实dirty bytes/SHA/Git状态，列出准确新增符号、检查与回滚。同步唯一进度/STATE/handoff/authority。沿用户既有实施记录格式建单项：原代码→候选代码→减少什么→实际证据与边界。不删除/覆盖旧Task或失败，不以HEAD替代dirty备份，不触碰Q06。
+
+候选设计：
+- 保持现有两个 public TryFindNearest、TryFindNearestCore、FindIndexedGround/FindIndexedAir 及它们的生产调用点原样。新增 internal TryFindNearestCursorReuseForDiagnostics，签名与带 AiDecisionEvaluationPolicy 的 public overload 相同（含out AiSensingNearestResult）；非Indexed policy转原public入口。Indexed分支使用两个新增私有 cursor-reuse 循环。候选只被本测试显式调用，生产默认沿原路径，不引入 static/global flag、World/row配置字段或其它冷接口。
+- 新增入口复用原只读 eligibility/LowerBound/handle helpers，准确保留原requireReady/self/coordinate拒绝、Ground/SameZLane/Air覆盖和最终handle语义。不要通过重构现有 public/core/helper 来让生产悄悄改走候选。测试可冷反射CreateDelegate绑定internal方法，热循环不得反射。
+- 两个新增循环在当前调用/当前team span的局部变量保存两侧cursor、slot/dx与是否需更新。只有某侧cursor改变才重新取该侧dx，选定候选的距离直接复用选定侧dx。边界后更新可延至下一次有效迭代，避免在原break后无必要预取；不能在越界cursor读数组。
+- 保持TeamAllowed及IsGroundTarget/IsAirTarget的原调用，不删HP/state/HitStop/非角色state3000与Vx方向检查；不改索引构建/更新、坐标来源、筛选、缓存target、special、任何输入/RNG代码。
+- span和候选顺序、leftDx<=rightDx选左、Ground初值10000与双侧strict>剪枝、distance相等时小slot、Air min(bestDist,249)/X<250/Z<40、state9 skipAir、Air只覆盖slot而Ground facts不变、capturedEpoch/Generation/Identity及Ground/Air visits全保持。手写Abs与int溢出语义保持，不改Math.Abs/long/float。函数返回局部复用失效，下一调用必须读新快照。
+
+必须先实际C#验证，不把离线模型当通过：
+- 在原Editor安全idle/未Play/未测试/已编译可用的单实例执行；CLI noinstances不能证明关闭，不启动第二Library实例。
+- 最窄RED证明候选入口缺失，然后实现并编译/GREEN。旧测试复用，本文件原测试运行即可，不机械全库回归。
+- 新C#语义夹具同时对原Indexed及候选比较全部结果字段/可用性/两种visits；正常范围另对原FullScan比较payload（线性visits口径不同不要硬比）。固定随机seed和明确边界用例：双侧与单侧、多个team/phase/5、同X/等距/10000、自身、空ready索引不回线性、notReady/null/notIncluded/coordinate、state9、air边界与Groundfacts、死亡/HitStop、非角色3000 incoming/outgoing/等X及NaN velocity、调用间位置/状态/索引变化、int极值保留原Indexed结果。没有新规则authority行为。
+- 测试中的数组/索引夹具冷构造并校验其一致性；复用已有helper能满足就复用。不要用不完整手工索引“修正”生产语义，也不要为了通过放宽断言。
+- 候选直接查询 warmed 热循环 GC.GetAllocatedBytesForCurrentThread=0、数组容量不变；原路径同scope作对照。校验/assert/log/字符串/反射/序列化放在计时/GC区间之外，避免自己的断言污染测量。
+
+一次有限局部成本对照（仅在语义/局部0B通过后）：
+- 仅本测试文件中的固定1000行 snapshot/query fixture，分散spacing120和混战spacing12两种，固定seed、角色/状态/team/输入phase/查询序列；使用原Indexed与新候选同一immutable snapshot，两个方法都查同1000个self。
+- 每布局只一组 OFF→ON→ON→OFF（OFF=原算法，ON=候选）；每窗8次完整1000query预热、32次完整1000query采样。固定delegate冷绑定，所有数据冷预备；只在整轮1000query外Stopwatch，内部没有新增计时/工作counter/hook。保留结果的轻量聚合防止无效执行，逐字段正确性对照放在测量外；两侧同测量开销。
+- GC在整个测量循环的同步当前线程范围前后读数，OFF/ON均必须0；不要过滤JIT/移动scope/改变warm或重跑找PASS。正确性/GC/容量失败立即停止剩余局部窗，保存原件，不追分配或擅加Profiler。
+- 输出每窗mean/P95/P99及OFF自身/ON自身波动，单位ms/1000query；不能外推整tick收益。预先采用保守局部信号：每布局两个ON mean都低于两个OFF mean，且ON最大P95/P99不高于OFF最大P95/P99。未满足则INCONCLUSIVE或NO_DISCERNIBLE_GAIN，结束此版，不重复同版成本组。满足也只称LOCAL_GAIN_SIGNAL，不能称统计因果证明、整个输入/Driver/Android准入。
+
+本Task不跑完整Driver/原ABBA/正式120+1800，不改Suite/H07InputCostDiagnostics/World/Writer/Store/AiDecisionKernel/SimulationAiDecisionModule/资源/Scene/Prefab/Settings/InputActions/Server/Gen/Plugins，不读取活跃Q06体。旧17字段兼容候选OFF，producer USER_DEFERRED/OFF、95OFF、H06不续，原Driver2event130/162失败保留。这里验证一个默认不进入生产的局部候选，不降低或豁免正式0GC/33ms/确定性/容量/关闭验收。生产接线的准确写域及逐tick/Driver验证须交回讨论会话审查后再定，不自动实施。
+
+任何两写域/既有Editor API不足以完成时，具名说明缺口并停止，不自行扩大。无可辨收益时也正常结束候选。完成报告/单项记录/Task/Change/唯一进度、真实保护/原Editor恢复、Validate-ChangeLedger.ps1与diff检查后停止；不要自动启动下一优化点或恢复旧Goal。最终回复给出实际代码、实际C#测试/局部成本结果、默认生产仍原算法，以及缺失的生产验收，供本讨论会话独立审查。

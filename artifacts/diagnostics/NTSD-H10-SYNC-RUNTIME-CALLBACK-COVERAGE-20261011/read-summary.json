@@ -1,0 +1,47 @@
+{
+  "reads": [
+    {
+      "id": "R14",
+      "path": "Assets/NTSD/Scripts/Animation/Character/FrameTransistor.cs",
+      "symbol": "private void SyncRuntime()",
+      "sha256": "29096ccdceffa9443ccba8cd8c5565fe86bfc5e2097336942dd64ae4e12e2f4e",
+      "methodBounds": [
+        136,
+        143
+      ],
+      "readLines": [
+        136,
+        138,
+        139,
+        141,
+        142
+      ],
+      "lines": [
+        {
+          "line": 136,
+          "text": "        private void SyncRuntime()"
+        },
+        {
+          "line": 138,
+          "text": "            if (_entity == null)"
+        },
+        {
+          "line": 139,
+          "text": "                return;"
+        },
+        {
+          "line": 141,
+          "text": "            _entity.Runtime.WaitCounter = waitCounter;"
+        },
+        {
+          "line": 142,
+          "text": "            _entity.Runtime.NextFrame = next;"
+        }
+      ],
+      "purpose": "Determine explicit exit/event/delegate/project callback reachability in approved SyncRuntime method",
+      "coverage": "All executable statements and declaration in this small method; no adjacent method body output"
+    }
+  ],
+  "uniqueReadLineCount": 5,
+  "otherMethodBodiesRead": false
+}

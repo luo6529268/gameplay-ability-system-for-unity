@@ -1,0 +1,893 @@
+--- dirty-before/Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs
++++ Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs
+@@ -2460,6 +2460,890 @@
+         }
+ 
+ 
++        private const string EnvelopeOutput = "artifacts/diagnostics/NTSD-H10-FULL-CATALOG-AUDIO-ENVELOPE-20261011";
++        private static bool envelopeRunning;
++
++        private static void SaveEnvelope(string name, object value)
++        {
++            Directory.CreateDirectory(EnvelopeOutput);
++            using var writer = new StreamWriter(new FileStream(
++                Path.Combine(EnvelopeOutput, name + ".json"), FileMode.CreateNew, FileAccess.Write));
++            writer.Write(JsonConvert.SerializeObject(value, Formatting.Indented));
++        }
++
++        private static T EnvelopeField<T>(object instance, string name)
++        {
++            return (T)instance.GetType().GetField(name,
++                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).GetValue(instance);
++        }
++
++        private static string EnvelopeSha(string path)
++        {
++            using var hash = System.Security.Cryptography.SHA256.Create();
++            using var stream = File.OpenRead(path);
++            return BitConverter.ToString(hash.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
++        }
++
++        private sealed class EnvelopeRoute
++        {
++            public string path, key, identity;
++            public bool formal, single, exists;
++            public string[] files;
++            public int[] configuredBorrowed;
++        }
++
++        private sealed class EnvelopeCue
++        {
++            public string soundId;
++            public EnvelopeRoute battle, generic;
++        }
++
++        private sealed class EnvelopeFixture
++        {
++            public readonly GameObject Host;
++            public readonly NTSDSoundPlayer Player;
++            public readonly CharacterAnimtorManager Manager;
++            public readonly LoganVisualContentCandidate Candidate;
++            public readonly Dictionary<int, LF2CharacterDataWrapper> Configs;
++            public readonly List<EnvelopeCue> Cues = new List<EnvelopeCue>();
++            public readonly IDictionary Cache;
++            public readonly Dictionary<string, object> BeforeCache;
++            public readonly Dictionary<string, object> AddedCache = new Dictionary<string, object>(StringComparer.Ordinal);
++            public readonly HashSet<string> AllowedKeys = new HashSet<string>(StringComparer.Ordinal);
++            public readonly List<object> Stages = new List<object>();
++            private readonly Dictionary<string, int[]> beforeCacheClipIds;
++            private readonly HashSet<int> initialClipIds;
++            private readonly AudioSource[] oldVoices;
++            private readonly int[] oldVoiceClipIds;
++            private readonly NTSDSoundPlayer[] oldPlayers;
++            private readonly string oldPlayerBorrowSnapshot;
++            private readonly object previousConfig;
++            private readonly AudioController previousController, boundController;
++            private readonly string controllerJson;
++            private readonly object previousSoundManager, previousCharacterManager;
++            private readonly FieldInfo configField, controllerField, soundManagerField, managerField;
++            private readonly string sceneSnapshot;
++            private readonly int[] beforeSceneObjects;
++            private readonly AudioClip[] configuredClips;
++            private bool finished;
++            private Newtonsoft.Json.Linq.JObject headers;
++            private readonly List<UniTask> operations = new List<UniTask>();
++            private MoreMountains.Tools.MMSoundManager resolvedExistingSoundManager;
++            private readonly MoreMountains.Tools.MMSoundManager[] beforeSoundManagers;
++            private readonly List<string> operationErrors = new List<string>();
++
++            public UniTask Track(UniTask operation)
++            {
++                UniTask preserved = operation.Preserve();
++                operations.Add(preserved);
++                RecordResolvedExistingSoundManager(MoreMountains.Tools.MMSoundManager.Current);
++                return preserved;
++            }
++
++            private bool FullyDrained => operations.All(x => x.Status != UniTaskStatus.Pending)
++                && Player.BattleAudioTailDrainedForDiagnostics
++                && NTSD_ResourceLoader.Instance.GetPendingRequestCount() == 0
++                && NTSD_ResourceLoader.Instance.GetQueuedTaskCount() == 0;
++
++            private async UniTask Drain()
++            {
++                double deadline = UnityEditor.EditorApplication.timeSinceStartup + 90;
++                while (!FullyDrained)
++                {
++                    Assert.That(UnityEditor.EditorApplication.timeSinceStartup, Is.LessThan(deadline),
++                        "Unconfirmed async tail: fixture and lock retained; do not run full group");
++                    await NTSD_ResourceLoader.Instance.ProcessFrame();
++                    await UniTask.Yield();
++                }
++                foreach (UniTask operation in operations)
++                {
++                    try { await operation; }
++                    catch (Exception error) { operationErrors.Add(error.ToString()); }
++                }
++                operations.Clear();
++            }
++
++            private void RecordResolvedExistingSoundManager(MoreMountains.Tools.MMSoundManager current)
++            {
++                if (current == null) return;
++                Assert.That(beforeSoundManagers.Contains(current)
++                    && beforeSceneObjects.Contains(current.gameObject.GetInstanceID()), Is.True,
++                    "Unrecognized manager retained; this fixture only borrows original scene managers");
++                if (resolvedExistingSoundManager != null)
++                    Assert.That(ReferenceEquals(current, resolvedExistingSoundManager), Is.True,
++                        "Resolved manager changed; retain foreign pointer and report conflict");
++                resolvedExistingSoundManager = current;
++            }
++
++            private void RestoreOwnedSoundManager()
++            {
++                var current = MoreMountains.Tools.MMSoundManager.Current;
++                if (!ReferenceEquals(current, previousSoundManager))
++                {
++                    Assert.That(current != null && ReferenceEquals(current, resolvedExistingSoundManager)
++                        && beforeSoundManagers.Contains(current) && beforeSceneObjects.Contains(current.gameObject.GetInstanceID()),
++                        Is.True, "Only restore the exact manager this fixture borrowed; preserve all others");
++                    soundManagerField.SetValue(null, previousSoundManager);
++                }
++                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, previousSoundManager), Is.True);
++            }
++
++            public EnvelopeFixture()
++            {
++                Assert.That(envelopeRunning, Is.False, "Only one envelope fixture may run");
++                Assert.That(Application.isPlaying, Is.False);
++                Assert.That(UnityEditor.EditorApplication.isCompiling, Is.False);
++                Assert.That(UnityEditor.EditorApplication.isUpdating, Is.False);
++                Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
++                Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
++                var menu = UnityEngine.SceneManagement.SceneManager.GetSceneByPath("Assets/NTSD/Scene/NTSD_Menu.unity");
++                Assert.That(menu.IsValid() && menu.isLoaded && !menu.isDirty && menu.rootCount == 8, Is.True);
++                for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
++                {
++                    var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
++                    if (scene == menu) continue;
++                    Assert.That(scene.path, Is.Empty);
++                    Assert.That(scene.isDirty, Is.False);
++                    Assert.That(scene.rootCount, Is.Zero);
++                }
++                sceneSnapshot = SceneState();
++                beforeSceneObjects = UnityEngine.Object.FindObjectsOfType<GameObject>(true)
++                    .Select(x => x.GetInstanceID()).OrderBy(x => x).ToArray();
++                configField = typeof(GameConfig).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
++                controllerField = typeof(AudioController).GetField("<Instance>k__BackingField", BindingFlags.Static | BindingFlags.NonPublic);
++                soundManagerField = typeof(MoreMountains.Tools.MMPersistentSingleton<MoreMountains.Tools.MMSoundManager>)
++                    .GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
++                managerField = typeof(MoreMountains.Tools.MMSingleton<CharacterAnimtorManager>)
++                    .GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
++                previousConfig = configField.GetValue(null);
++                previousController = AudioController.Instance;
++                previousSoundManager = MoreMountains.Tools.MMSoundManager.Current;
++                beforeSoundManagers = Resources.FindObjectsOfTypeAll<MoreMountains.Tools.MMSoundManager>();
++                previousCharacterManager = managerField.GetValue(null);
++                oldPlayers = Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>();
++                foreach (var player in oldPlayers)
++                {
++                    Assert.That(player.BattleAudioPreparationInProgressForDiagnostics, Is.False);
++                    Assert.That(player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
++                }
++                oldPlayerBorrowSnapshot = PlayerBorrowState(oldPlayers);
++                oldVoices = Resources.FindObjectsOfTypeAll<AudioSource>();
++                oldVoiceClipIds = oldVoices.Select(x => x.clip != null ? x.clip.GetInstanceID() : 0).ToArray();
++                Cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private).GetValue(NTSD_ResourceLoader.Instance);
++                BeforeCache = SnapshotCache(Cache);
++                beforeCacheClipIds = BeforeCache.ToDictionary(x => x.Key, x => ClipIds(CacheClips(x.Value)));
++                initialClipIds = Resources.FindObjectsOfTypeAll<AudioClip>().Select(x => x.GetInstanceID()).ToHashSet();
++                var controllers = UnityEngine.Object.FindObjectsOfType<AudioController>(true)
++                    .Where(x => x.gameObject.scene.IsValid()).ToArray();
++                Assert.That(previousController != null || controllers.Length <= 1, Is.True, "Ambiguous real controller");
++                boundController = previousController != null ? previousController : controllers.SingleOrDefault();
++                if (boundController != null)
++                    Assert.That(boundController.gameObject.scene.IsValid() && boundController.gameObject.scene.isLoaded
++                        && controllers.Contains(boundController), Is.True);
++                else
++                {
++                    // Verified actual Battle scene has an empty AudioList; null selects the same existing resolver fallback.
++                    var proof = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, "controller-evidence.json")));
++                    Assert.That((int)proof["configuredAudioItems"], Is.Zero);
++                    foreach (var property in ((Newtonsoft.Json.Linq.JObject)proof["files"]).Properties())
++                        Assert.That(EnvelopeSha(property.Name), Is.EqualTo((string)property.Value));
++                }
++                controllerJson = boundController != null ? UnityEditor.EditorJsonUtility.ToJson(boundController) : null;
++                configuredClips = Resources.FindObjectsOfTypeAll<AudioController>()
++                    .SelectMany(x => x.AudioList ?? Array.Empty<AudioItem>())
++                    .Where(x => x != null).SelectMany(x => x.clip ?? Array.Empty<AudioClip>())
++                    .Where(x => x != null).Distinct().ToArray();
++                var config = UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>("Assets/NTSD/Config/GameConfig/GameConfig.asset");
++                Assert.That(config, Is.Not.Null);
++                Candidate = LoganVisualContentCandidate.Capture(
++                    BattleContentSource.ForLoganRuntime(Path.GetFullPath(config.BattleContentRuntimeRoot)),
++                    ProjectBattleModeConfig.LoadDefault().Capture());
++                Configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(Candidate.Catalog);
++                var definitionsField = typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", Private);
++                var publicationField = typeof(CharacterAnimtorManager).GetField("publishedLoganCandidate", Private);
++                foreach (FieldInfo field in new[] { configField, controllerField, soundManagerField, managerField, definitionsField, publicationField })
++                    Assert.That(field, Is.Not.Null);
++                // Mutations start only after pure catalog construction/preflight succeed.
++                try
++                {
++                configField.SetValue(null, config);
++                controllerField.SetValue(null, boundController);
++                envelopeRunning = true;
++                Host = new GameObject("H10FullCatalogAudioEnvelope") { hideFlags = HideFlags.HideAndDontSave };
++                Host.SetActive(false);
++                Manager = Host.AddComponent<CharacterAnimtorManager>();
++                Player = Host.AddComponent<NTSDSoundPlayer>();
++                Player.runInEditMode = true;
++                typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", Private).SetValue(Manager, Configs);
++                publicationField.SetValue(Manager, Candidate);
++                }
++                catch
++                {
++                    if (Host != null) UnityEngine.Object.DestroyImmediate(Host);
++                    configField.SetValue(null, previousConfig);
++                    controllerField.SetValue(null, previousController);
++                    envelopeRunning = false;
++                    throw;
++                }
++            }
++
++            public static IEnumerable<AudioClip> CacheClips(object value)
++            {
++                if (value is AudioClip clip) return new[] { clip };
++                if (value is AudioClip[] clips) return clips;
++                return Array.Empty<AudioClip>();
++            }
++
++            private static int[] ClipIds(IEnumerable<AudioClip> clips)
++            {
++                return clips.Select(x => x != null ? x.GetInstanceID() : 0).ToArray();
++            }
++
++            private static string SceneState()
++            {
++                return JsonConvert.SerializeObject(Enumerable.Range(0, UnityEngine.SceneManagement.SceneManager.sceneCount)
++                    .Select(i => UnityEngine.SceneManagement.SceneManager.GetSceneAt(i))
++                    .Where(s => !string.IsNullOrEmpty(s.path))
++                    .Select(s => new { s.path, s.isLoaded, s.isDirty, roots = s.GetRootGameObjects()
++                        .Select(x => x.GetInstanceID()).OrderBy(x => x).ToArray() }));
++            }
++
++            private static IEnumerable<AudioClip> PlayerBorrowed(NTSDSoundPlayer player)
++            {
++                foreach (string field in new[] { "preparedCues", "preparedFormalBattleCues" })
++                {
++                    var map = EnvelopeField<IDictionary>(player, field);
++                    foreach (object cue in map.Values)
++                    {
++                        foreach (AudioClip clip in EnvelopeField<AudioClip[]>(cue, "Clips") ?? Array.Empty<AudioClip>())
++                            if (clip != null) yield return clip;
++                        foreach (AudioClip clip in EnvelopeField<AudioClip[]>(cue, "BattlePlaybackClips") ?? Array.Empty<AudioClip>())
++                            if (clip != null) yield return clip;
++                    }
++                }
++            }
++
++            private static string PlayerBorrowState(IEnumerable<NTSDSoundPlayer> players)
++            {
++                return JsonConvert.SerializeObject(players.OrderBy(p => p.GetInstanceID())
++                    .Select(p => new { id = p.GetInstanceID(), clips = ClipIds(PlayerBorrowed(p)) }));
++            }
++
++            public object GetCue(string soundId, bool battle)
++            {
++                return RequireProductionMethod("GetOrPrepareCue", 2).Invoke(Player, new object[] { soundId, battle });
++            }
++
++            private EnvelopeRoute Describe(object cue)
++            {
++                Assert.That(cue, Is.Not.Null);
++                string path = EnvelopeField<string>(cue, "SourcePath");
++                bool single = EnvelopeField<bool>(cue, "IsSingleFile");
++                bool exists = single ? File.Exists(path) : Directory.Exists(path);
++                string[] files = !exists ? Array.Empty<string>() : single ? new[] { path } :
++                    Directory.EnumerateFiles(path)
++                        .Where(p => (bool)typeof(NTSD_ResourceLoader).GetMethod("IsSupportedAudioFile", Private)
++                            .Invoke(NTSD_ResourceLoader.Instance, new object[] { p }))
++                        .OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
++                return new EnvelopeRoute
++                {
++                    path = path, key = EnvelopeField<string>(cue, "CacheKey"),
++                    identity = EnvelopeField<string>(cue, "FormalIdentity"),
++                    formal = EnvelopeField<bool>(cue, "IsFormalBattleFile"), single = single, exists = exists,
++                    files = files, configuredBorrowed = ClipIds(EnvelopeField<AudioItem>(cue, "AudioItem")?.clip ?? Array.Empty<AudioClip>())
++                };
++            }
++
++            public object BuildInventory()
++            {
++                var builtIn = (string[])typeof(NTSDSoundPlayer).GetField("BuiltInBattleSoundIds",
++                    BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
++                var feed = Candidate.Catalog.ModeComboInput?.KnockoutFeed;
++                string[] mode = new[] { feed?.StageTeam1DeathSoundPath, feed?.StageTeam5DeathSoundPath };
++                var perDefinition = new List<object>();
++                foreach (var pair in Configs)
++                {
++                    typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", Private)
++                        .SetValue(Manager, new Dictionary<int, LF2CharacterDataWrapper> { [pair.Key] = pair.Value });
++                    var cues = new HashSet<string>(StringComparer.Ordinal);
++                    Manager.CollectBattleSoundIds(cues);
++                    var data = pair.Value.characterData;
++                    perDefinition.Add(new
++                    {
++                        id = pair.Key, type = Candidate.Catalog.Entries.Single(x => x.Id == pair.Key).Type, includesPublishedModeCues = true,
++                        cues = cues.OrderBy(x => x, StringComparer.Ordinal).ToArray(),
++                        weapon = new[] { data.weapon_hit_sound, data.weapon_drop_sound, data.weapon_broken_sound },
++                        frames = data.frames.Where(x => x != null && (!string.IsNullOrWhiteSpace(x.sound) || x.FrameSounds.Count > 0))
++                            .Select(x => new { x.frameId, x.UsesLoganFrameNumbers, x.sound, frameSounds = x.FrameSounds.ToArray() }).ToArray()
++                    });
++                }
++                typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", Private).SetValue(Manager, Configs);
++                var all = new HashSet<string>(StringComparer.Ordinal);
++                Manager.CollectBattleSoundIds(all);
++                foreach (string cue in mode.Where(x => !string.IsNullOrWhiteSpace(x)))
++                    Assert.That(all.Contains(cue), Is.True, "Published mode KO must enter real collector");
++                all.UnionWith(builtIn);
++                foreach (string cue in all.OrderBy(x => x, StringComparer.Ordinal))
++                {
++                    var row = new EnvelopeCue { soundId = cue, battle = Describe(GetCue(cue, true)), generic = Describe(GetCue(cue, false)) };
++                    Cues.Add(row);
++                    if (!row.battle.formal) AllowedKeys.Add(row.battle.key);
++                    if (row.battle.formal && row.generic.exists) AllowedKeys.Add(row.generic.key);
++                }
++                var files = Cues.SelectMany(x => x.battle.files.Concat(x.generic.files)).Distinct(StringComparer.OrdinalIgnoreCase)
++                    .Select(p => new { path = p, bytes = new FileInfo(p).Length, sha256 = EnvelopeSha(p) }).ToArray();
++                Candidate.AssertInputsCurrent();
++                return new
++                {
++                    definitionCount = Configs.Count, cueCount = Cues.Count,
++                    catalog = Candidate.Catalog.Entries.Select(x => new { x.Id, x.Type, x.SourcePath, x.DatSha256 }).ToArray(),
++                    Candidate.Catalog.CatalogSha256, Candidate.Catalog.DefinitionFingerprint,
++                    Candidate.Catalog.BattleDefinitionFingerprint,
++                    mode, builtIn, perDefinition, routes = Cues, files,
++                    formalUniqueIdentities = Cues.Where(x => x.battle.formal).Select(x => x.battle.identity).Distinct().Count(),
++                    genericExistingRoutes = Cues.Count(x => x.generic.exists),
++                    allowedGenericKeys = AllowedKeys.OrderBy(x => x).ToArray(),
++                    actualSoundRoot = EnvelopeField<string>(Player, "soundRootFolder"),
++                    actualControllerId = boundController != null ? boundController.GetInstanceID() : 0,
++                    controllerWasTemporarilyBound = !ReferenceEquals(boundController, previousController),
++                    configuredBorrowed = configuredClips.Select(ClipDescription).ToArray(),
++                    originalCache = BeforeCache.Select(x => new { key = x.Key, clipIds = ClipIds(CacheClips(x.Value)) }).ToArray(),
++                    originalOtherPlayers = oldPlayerBorrowSnapshot,
++                    originalVoiceClipIds = oldVoiceClipIds,
++                    baselineEditorAudioClips = initialClipIds.Count,
++                    scope = "All formal definitions are current fallback; visual closure is NOT a certified audio closure. No audio/visual decoding in inventory."
++                };
++            }
++
++            public async UniTask LoadSmall(string formalId, EnvelopeCue generic)
++            {
++                object first = GetCue(formalId, true);
++                Assert.That(EnvelopeField<bool>(first, "IsFormalBattleFile"), Is.True);
++                Assert.That(File.Exists(EnvelopeField<string>(first, "SourcePath")), Is.True);
++                long started = Player.FormalAudioLoadCountForDiagnostics, failed = Player.FailedPreparedCueLoadCountForDiagnostics;
++                RequireProductionMethod("PrepareBattlePresentationHotPath", 0).Invoke(Player, null);
++                await Track((UniTask)RequireProductionMethod("EnsurePreparedCueLoadedAsync", 1).Invoke(Player, new[] { first }));
++                Assert.That(Player.FormalAudioLoadCountForDiagnostics, Is.EqualTo(started + 1));
++                Assert.That(Player.FailedPreparedCueLoadCountForDiagnostics, Is.EqualTo(failed));
++                Assert.That(EnvelopeField<AudioClip>(first, "OwnedSource") != null, Is.True);
++                RequireProductionMethod("PrepareBattlePlaybackClips", 1).Invoke(Player, new[] { first });
++                object second = GetCue(generic.soundId, false);
++                Assert.That(EnvelopeField<AudioClip[]>(first, "BattlePlaybackClips").Count(x => x != null), Is.EqualTo(1));
++                Assert.That(Owned().Length, Is.GreaterThan(0));
++                UniTask load = Track((UniTask)RequireProductionMethod("EnsurePreparedCueLoadedAsync", 1).Invoke(Player, new[] { second }));
++                await Pump(load);
++                Assert.That(EnvelopeField<AudioClip[]>(second, "Clips").Count(x => x != null), Is.EqualTo(1));
++                ObserveCache();
++            }
++
++            public static async UniTask Pump(UniTask task)
++            {
++                double deadline = UnityEditor.EditorApplication.timeSinceStartup + 240;
++                while (task.Status == UniTaskStatus.Pending)
++                {
++                    Assert.That(UnityEditor.EditorApplication.timeSinceStartup, Is.LessThan(deadline), "bounded fixture timeout");
++                    await NTSD_ResourceLoader.Instance.ProcessFrame();
++                    await UniTask.Yield();
++                }
++                await task;
++            }
++
++            private void AssertProtected()
++            {
++                foreach (var pair in BeforeCache)
++                {
++                    Assert.That(Cache.Contains(pair.Key), Is.True, pair.Key);
++                    Assert.That(ReferenceEquals(Cache[pair.Key], pair.Value), Is.True, pair.Key);
++                    CollectionAssert.AreEqual(beforeCacheClipIds[pair.Key], ClipIds(CacheClips(pair.Value)), pair.Key);
++                }
++                Assert.That(ReferenceEquals(AudioController.Instance, boundController), Is.True);
++                Assert.That(boundController == null ? null : UnityEditor.EditorJsonUtility.ToJson(boundController), Is.EqualTo(controllerJson));
++                Assert.That(PlayerBorrowState(oldPlayers), Is.EqualTo(oldPlayerBorrowSnapshot));
++                for (int i = 0; i < oldVoices.Length; i++)
++                {
++                    Assert.That(oldVoices[i] != null, Is.True);
++                    Assert.That(oldVoices[i].clip != null ? oldVoices[i].clip.GetInstanceID() : 0, Is.EqualTo(oldVoiceClipIds[i]));
++                }
++                Assert.That(SceneState(), Is.EqualTo(sceneSnapshot));
++            }
++
++            private void ObserveCache()
++            {
++                AssertProtected();
++                foreach (string key in Cache.Keys)
++                {
++                    if (BeforeCache.ContainsKey(key)) continue;
++                    Assert.That(AllowedKeys.Contains(key), Is.True, "Unknown cache delta retained: " + key);
++                    if (AddedCache.TryGetValue(key, out object prior))
++                        Assert.That(ReferenceEquals(prior, Cache[key]), Is.True, "Changed delta retained: " + key);
++                    else
++                        AddedCache.Add(key, Cache[key]);
++                }
++                foreach (var pair in AddedCache)
++                    Assert.That(Cache.Contains(pair.Key) && ReferenceEquals(Cache[pair.Key], pair.Value), Is.True);
++            }
++
++            private static object ClipDescription(AudioClip clip)
++            {
++                return new
++                {
++                    id = clip.GetInstanceID(), clip.name, clip.samples, clip.channels, clip.frequency,
++                    theoreticalFloatPcmBytes = (long)clip.samples * clip.channels * sizeof(float),
++                    objectBytes = Profiler.GetRuntimeMemorySizeLong(clip)
++                };
++            }
++
++            public AudioClip[] Owned()
++            {
++                return EnvelopeField<List<AudioClip>>(Player, "ownedBattlePlaybackClips")
++                    .Concat(EnvelopeField<List<AudioClip>>(Player, "ownedFormalAudioSources")).Where(x => x != null).Distinct().ToArray();
++            }
++
++            public void Snapshot(string stage)
++            {
++                ObserveCache();
++                var output = EnvelopeField<IDictionary>(Player, "preparedFormalBattleCues").Values.Cast<object>()
++                    .SelectMany(x => EnvelopeField<AudioClip[]>(x, "BattlePlaybackClips") ?? Array.Empty<AudioClip>()).Where(x => x != null).Distinct().ToArray();
++                var sources = EnvelopeField<List<AudioClip>>(Player, "ownedFormalAudioSources").Where(x => x != null).ToArray();
++                var oldCache = BeforeCache.Values.SelectMany(CacheClips).Where(x => x != null).Distinct().ToArray();
++                var delta = AddedCache.Values.SelectMany(CacheClips).Where(x => x != null).Distinct().ToArray();
++                var voices = Resources.FindObjectsOfTypeAll<AudioSource>().Where(x => x.clip != null).Select(x => x.clip).Distinct().ToArray();
++                var groups = new Dictionary<string, AudioClip[]>
++                {
++                    ["formalOutputOrNonmono"] = output,
++                    ["ownedMonoSource"] = sources.Where(x => x.channels == 1).ToArray(),
++                    ["ownedNonmonoInput"] = sources.Where(x => x.channels != 1).ToArray(),
++                    ["genericCacheExisting"] = oldCache, ["genericCacheNew"] = delta,
++                    ["configuredBorrowed"] = configuredClips.Where(x => x != null).ToArray(), ["voiceBindings"] = voices
++                };
++                var distinct = groups.Values.SelectMany(x => x).Distinct().ToArray();
++                using var process = System.Diagnostics.Process.GetCurrentProcess();
++                Stages.Add(new
++                {
++                    stage, time = DateTime.UtcNow.ToString("O"),
++                    groups = groups.ToDictionary(x => x.Key, x => ClipIds(x.Value)),
++                    clips = distinct.Select(ClipDescription).ToArray(),
++                    distinctObjectBytes = distinct.Sum(x => Profiler.GetRuntimeMemorySizeLong(x)),
++                    distinctTheoreticalPcmBytes = distinct.Sum(x => (long)x.samples * x.channels * 4),
++                    pendingLocal = Player.PendingFormalAudioLoadsForDiagnostics,
++                    formalStarted = Player.FormalAudioLoadCountForDiagnostics,
++                    formalCompleted = Player.FormalAudioLoadCountForDiagnostics - Player.PendingFormalAudioLoadsForDiagnostics,
++                    preparedSealed = Player.BattleCatalogSealedForDiagnostics,
++                    stage5Complete = Player.BattleSoundShutdownCompletedForDiagnostics,
++                    tailDrained = Player.BattleAudioTailDrainedForDiagnostics,
++                    cacheKeys = Cache.Keys.Cast<string>().OrderBy(x => x).ToArray(),
++                    editorAudioClipCount = Resources.FindObjectsOfTypeAll<AudioClip>().Length,
++                    destroyPending = 0, destroyScope = "EditMode DestroyImmediate; NOT Player deferred-destroy measurement",
++                    decoderStagingBytes = "UNKNOWN: loader-private transient not observed",
++                    actualTemporaryPcmBytes = "UNKNOWN: synchronous converter not intercepted",
++                    boundedConverterTemporaryPayloadUpperBound = 98304,
++                    privateMemoryBytes = process.PrivateMemorySize64 > 0 ? (long?)process.PrivateMemorySize64 : null,
++                    workingSetBytes = process.WorkingSet64 > 0 ? (long?)process.WorkingSet64 : null,
++                    processScope = "Environmental only; cannot add to object bytes or call sampled max a whole-game/device peak"
++                });
++            }
++
++            public async UniTask Close(string phase)
++            {
++                RequireProductionMethod("BeginBattleSoundShutdown", 0).Invoke(Player, null);
++                RequireProductionMethod("CompleteBattleSoundShutdown", 0).Invoke(Player, null);
++                Exception observationFailure = null;
++                try { Snapshot(phase + "-stage5-return"); }
++                catch (Exception error) { observationFailure = error; }
++                await Drain();
++                if (observationFailure != null) throw observationFailure;
++                Snapshot(phase + "-tail-drained");
++                Assert.That(Player.OwnedFormalAudioSourcesForDiagnostics, Is.Zero);
++                Assert.That(Owned(), Is.Empty);
++            }
++
++            private void VerifyHeader(AudioClip clip, string path, bool converted)
++            {
++                if (headers == null)
++                    headers = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, "headers.json")));
++                var header = headers["files"][path];
++                Assert.That(header, Is.Not.Null, path);
++                Assert.That((bool)header["knownFrames"], Is.True, path);
++                Assert.That(clip.samples, Is.EqualTo((int)header["frames"]), path);
++                int channels = (int)header["channels"];
++                Assert.That(clip.channels, Is.EqualTo(converted && channels == 1 ? 2 : channels), path);
++                Assert.That(clip.frequency, Is.EqualTo((int)header["frequency"]), path);
++                Assert.That(clip.name, Is.EqualTo(Path.GetFileNameWithoutExtension(path)), path);
++            }
++
++            public object VerifySealed(int session)
++            {
++                Assert.That(Player.BattleCatalogSealedForDiagnostics, Is.True);
++                Assert.That(Player.RejectedUnpreparedCueCountForDiagnostics, Is.Zero);
++                var rows = new List<object>();
++                var identityObjects = new Dictionary<string, object>(StringComparer.Ordinal);
++                foreach (EnvelopeCue row in Cues)
++                {
++                    object cue = GetCue(row.soundId, true);
++                    Assert.That(cue, Is.Not.Null, row.soundId);
++                    if (row.battle.formal)
++                    {
++                        if (identityObjects.TryGetValue(row.battle.identity, out object earlier))
++                            Assert.That(ReferenceEquals(cue, earlier), Is.True, row.soundId);
++                        else identityObjects.Add(row.battle.identity, cue);
++                    }
++                    Assert.That(EnvelopeField<bool>(cue, "IsLoaded"), Is.True, row.soundId);
++                    AudioClip[] outputs = EnvelopeField<AudioClip[]>(cue, "BattlePlaybackClips") ?? Array.Empty<AudioClip>();
++                    if (row.battle.exists)
++                    {
++                        Assert.That(outputs.Count(x => x != null), Is.EqualTo(row.battle.files.Length), row.soundId);
++                        for (int index = 0; index < outputs.Length; index++) VerifyHeader(outputs[index], row.battle.files[index], true);
++                    }
++                    AudioClip[] genericClips = Array.Empty<AudioClip>();
++                    if (row.battle.formal && row.generic.exists)
++                    {
++                        object generic = GetCue(row.soundId, false);
++                        Assert.That(EnvelopeField<bool>(generic, "IsLoaded"), Is.True, row.soundId + " generic");
++                        genericClips = EnvelopeField<AudioClip[]>(generic, "Clips") ?? Array.Empty<AudioClip>();
++                        Assert.That(genericClips.Count(x => x != null), Is.EqualTo(row.generic.files.Length));
++                        for (int index = 0; index < genericClips.Length; index++) VerifyHeader(genericClips[index], row.generic.files[index], false);
++                    }
++                    rows.Add(new
++                    {
++                        row.soundId, row.battle.identity, row.battle.path,
++                        sourceExists = row.battle.exists,
++                        missingReason = row.battle.exists ? null : row.battle.configuredBorrowed.Any(x => x != 0) ? "configured fallback" : "missing local, empty fallback",
++                        outputs = outputs.Where(x => x != null).Select(x => new { x.name, x.samples, x.channels, x.frequency }).ToArray(),
++                        generic = genericClips.Where(x => x != null).Select(x => new { x.name, x.samples, x.channels, x.frequency }).ToArray()
++                    });
++                }
++                long expectedFormal = Cues.Where(x => x.battle.formal && x.battle.exists)
++                    .Select(x => x.battle.identity).Distinct().LongCount();
++                Assert.That(Player.FormalAudioLoadCountForDiagnostics, Is.EqualTo(expectedFormal * session));
++                Assert.That(Player.RejectedUnpreparedCueCountForDiagnostics, Is.Zero);
++                return new { rows, expectedFormal, genericDeltaKeyCount = AddedCache.Count,
++                    failedLoads = Player.FailedPreparedCueLoadCountForDiagnostics,
++                    missingFiles = Player.SkippedMissingBattleCueFileCountForDiagnostics };
++            }
++
++            public async UniTask Finish(string label)
++            {
++                if (finished) return;
++                finished = true;
++                var cleanup = new List<object>();
++                string failure = null;
++                try
++                {
++                    Exception observationFailure = null;
++                    try { await Close(label); }
++                    catch (Exception error) { observationFailure = error; }
++                    Assert.That(FullyDrained, Is.True, "Tail unconfirmed: preserve fixture and lock");
++                    // Destroy the fixture first. Its production generic dictionaries intentionally retain borrowed clips at stage5.
++                    var genericReferences = EnvelopeField<IDictionary>(Player, "preparedCues");
++                    var formalReferences = EnvelopeField<IDictionary>(Player, "preparedFormalBattleCues");
++                    UnityEngine.Object.DestroyImmediate(Host);
++                    genericReferences.Clear();
++                    formalReferences.Clear();
++                    RestoreOwnedSoundManager();
++                    if (observationFailure != null) throw observationFailure;
++                    ObserveCache();
++                    Assert.That(Host == null && Player == null, Is.True);
++                    AssertProtected();
++                    var newObjects = AddedCache.Values.SelectMany(CacheClips).Where(x => x != null).Distinct().ToArray();
++                    var protectedIds = new HashSet<int>(initialClipIds);
++                    protectedIds.UnionWith(configuredClips.Where(x => x != null).Select(x => x.GetInstanceID()));
++                    protectedIds.UnionWith(Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>()
++                        .SelectMany(PlayerBorrowed).Select(x => x.GetInstanceID()));
++                    protectedIds.UnionWith(Resources.FindObjectsOfTypeAll<AudioSource>().Where(x => x.clip != null).Select(x => x.clip.GetInstanceID()));
++                    foreach (string key in Cache.Keys)
++                        if (!AddedCache.ContainsKey(key))
++                            protectedIds.UnionWith(CacheClips(Cache[key]).Where(x => x != null).Select(x => x.GetInstanceID()));
++                    Assert.That(newObjects.All(x => !protectedIds.Contains(x.GetInstanceID())), Is.True,
++                        "Shared/old cache resource detected; retain delta, no destructive cleanup");
++                    foreach (var pair in AddedCache)
++                    {
++                        Assert.That(!BeforeCache.ContainsKey(pair.Key) && AllowedKeys.Contains(pair.Key)
++                            && ReferenceEquals(Cache[pair.Key], pair.Value), Is.True);
++                        cleanup.Add(new { key = pair.Key, ids = ClipIds(CacheClips(pair.Value)), identityQualified = true });
++                    }
++                    foreach (var pair in AddedCache)
++                        Assert.That(NTSD_ResourceLoader.Instance.RemoveCache(pair.Key), Is.True);
++                    int[] destroyed = newObjects.Select(x => x.GetInstanceID()).ToArray();
++                    foreach (AudioClip clip in newObjects) UnityEngine.Object.DestroyImmediate(clip);
++                    Assert.That(newObjects.All(x => x == null), Is.True);
++                    var survivingIds = Resources.FindObjectsOfTypeAll<AudioClip>().Select(x => x.GetInstanceID()).ToHashSet();
++                    Assert.That(destroyed.Any(survivingIds.Contains), Is.False);
++                    AddedCache.Clear();
++                    Assert.That(CacheMatches(Cache, BeforeCache), Is.True);
++                    Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
++                    Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
++                    RestoreOwnedSoundManager();
++                    Assert.That(ReferenceEquals(managerField.GetValue(null), previousCharacterManager), Is.True);
++                    AssertProtected();
++                    CollectionAssert.AreEqual(beforeSceneObjects, UnityEngine.Object.FindObjectsOfType<GameObject>(true)
++                        .Select(x => x.GetInstanceID()).OrderBy(x => x).ToArray());
++                    Snapshot(label + "-final-cleanup");
++                    SaveEnvelope(label + "-cleanup", new { passed = true, cleanup, destroyed,
++                        cacheRestored = true, oldNativeProtected = true, otherPlayersAndCrossKeyBorrowersChecked = true,
++                        hostDestroyedBeforeCacheRelease = true, sceneRestored = true, queuesRestored = true });
++                }
++                catch (Exception error)
++                {
++                    failure = error.ToString();
++                    SaveEnvelope(label + "-cleanup-failure", new { failure, cleanup, cacheKeys = Cache.Keys.Cast<string>().ToArray(),
++                        policy = "Unknown cache/resource delta retained. No global cleanup or follow-on full session." });
++                    throw;
++                }
++                finally
++                {
++                    bool drained = FullyDrained;
++                    if (drained)
++                    {
++                        if (Host != null) UnityEngine.Object.DestroyImmediate(Host);
++                        RestoreOwnedSoundManager();
++                        configField.SetValue(null, previousConfig);
++                        controllerField.SetValue(null, previousController);
++                        envelopeRunning = false;
++                    }
++                    SaveEnvelope(label + "-stages", new { Stages, failure, operationErrors, drained,
++                        configRestored = ReferenceEquals(configField.GetValue(null), previousConfig),
++                        controllerRestored = ReferenceEquals(AudioController.Instance, previousController),
++                        mmSoundManagerRestored = ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, previousSoundManager) });
++                }
++            }
++        }
++
++
++        private static void AssertEnvelopeInventoryStable(object current)
++        {
++            var expected = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, "inventory.json")));
++            var actual = Newtonsoft.Json.Linq.JObject.FromObject(current);
++            foreach (string key in new[] { "definitionCount", "cueCount", "catalog", "CatalogSha256",
++                "DefinitionFingerprint", "BattleDefinitionFingerprint", "mode", "builtIn",
++                "perDefinition", "files", "allowedGenericKeys", "actualSoundRoot" })
++                Assert.That(Newtonsoft.Json.Linq.JToken.DeepEquals(expected[key], actual[key]), Is.True, "Inventory changed: " + key);
++            foreach (var root in new[] { expected, actual })
++                foreach (var route in root["routes"])
++                {
++                    ((Newtonsoft.Json.Linq.JObject)route["battle"]).Remove("configuredBorrowed");
++                    ((Newtonsoft.Json.Linq.JObject)route["generic"]).Remove("configuredBorrowed");
++                }
++            Assert.That(Newtonsoft.Json.Linq.JToken.DeepEquals(expected["routes"], actual["routes"]), Is.True, "Resolver route drift");
++        }
++
++        [UnityTest]
++        public IEnumerator CatalogAudioEnvelopeInventory()
++        {
++            return UniTask.ToCoroutine(async () =>
++            {
++                var fixture = new EnvelopeFixture();
++                try
++                {
++                    SaveEnvelope("inventory", fixture.BuildInventory());
++                    fixture.Snapshot("inventory-no-decode");
++                    Assert.That(fixture.Player.FormalAudioLoadCountForDiagnostics, Is.Zero);
++                }
++                finally { await fixture.Finish("inventory"); }
++            });
++        }
++
++        [UnityTest]
++        public IEnumerator CatalogAudioEnvelopeFixtureQualification()
++        {
++            return UniTask.ToCoroutine(async () =>
++            {
++                Assert.That(File.Exists(Path.Combine(EnvelopeOutput, "inventory.json")), Is.True);
++                var fixture = new EnvelopeFixture();
++                bool passed = false;
++                try
++                {
++                    AssertEnvelopeInventoryStable(fixture.BuildInventory());
++                    EnvelopeCue generic = fixture.Cues.First(x => x.generic.exists && x.generic.files.Length == 1
++                        && !fixture.BeforeCache.ContainsKey(x.generic.key));
++                    fixture.Snapshot("small-before");
++                    await fixture.LoadSmall("data/001.wav", generic);
++                    fixture.Snapshot("small-loaded");
++                    Assert.That(fixture.AddedCache.Count, Is.EqualTo(1));
++                    AudioClip[] owned = fixture.Owned();
++                    Assert.That(owned.Length, Is.GreaterThan(0));
++                    int[] ids = owned.Select(x => x.GetInstanceID()).ToArray();
++                    await fixture.Close("small");
++                    Assert.That(owned.All(x => x == null), Is.True);
++                    Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => ids.Contains(x.GetInstanceID())), Is.False);
++                    SaveEnvelope("small-selection-v2", new { formal = "data/001.wav", generic.soundId, generic.generic,
++                        actualNewCacheKeys = fixture.AddedCache.Keys.ToArray(), ownedDestroyed = ids });
++                    passed = true;
++                }
++                finally { await fixture.Finish("qualification-v2"); }
++                Assert.That(passed, Is.True);
++                SaveEnvelope("fixture-qualified", new { passed = true, time = DateTime.UtcNow.ToString("O"),
++                    sourceSha = EnvelopeSha("Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs") });
++            });
++        }
++
++        [UnityTest]
++        public IEnumerator CatalogAudioEnvelopeTwoSessionMeasurement()
++        {
++            return UniTask.ToCoroutine(async () =>
++            {
++                var qualification = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, "fixture-qualified.json")));
++                Assert.That((bool)qualification["passed"], Is.True);
++                Assert.That((string)qualification["sourceSha"], Is.EqualTo(EnvelopeSha("Assets/NTSD/Scripts/Test/Editor/H10ResidentClosureDiagnostics.cs")));
++                var preflight = Newtonsoft.Json.Linq.JObject.Parse(File.ReadAllText(Path.Combine(EnvelopeOutput, "capacity-preflight.json")));
++                Assert.That((bool)preflight["safeToExecute"], Is.True);
++                Assert.That((string)preflight["inventorySha256"], Is.EqualTo(EnvelopeSha(Path.Combine(EnvelopeOutput, "inventory.json"))));
++                Assert.That(DateTime.UtcNow - DateTime.Parse((string)preflight["utcTime"]).ToUniversalTime(), Is.LessThan(TimeSpan.FromMinutes(10)));
++                var fixture = new EnvelopeFixture();
++                try
++                {
++                    AssertEnvelopeInventoryStable(fixture.BuildInventory());
++                    using (var marker = new FileStream(Path.Combine(EnvelopeOutput, "full-group.started"), FileMode.CreateNew, FileAccess.Write))
++                    {
++                        byte[] data = System.Text.Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString("O"));
++                        marker.Write(data, 0, data.Length);
++                    }
++                    object firstSemantic = null;
++                    var previousOwned = Array.Empty<AudioClip>();
++                    var previousIds = Array.Empty<int>();
++                    for (int session = 1; session <= 2; session++)
++                    {
++                        Assert.That(previousOwned.All(x => x == null), Is.True);
++                        Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => previousIds.Contains(x.GetInstanceID())), Is.False);
++                        fixture.Snapshot("session" + session + "-before");
++                        long startCount = fixture.Player.FormalAudioLoadCountForDiagnostics;
++                        long nextSnapshot = 100;
++                        int midSnapshots = 0;
++                        double start = UnityEditor.EditorApplication.timeSinceStartup;
++                        UniTask preparation = fixture.Track(fixture.Player.PrepareBattleCuesAsync(fixture.Manager));
++                        while (preparation.Status == UniTaskStatus.Pending)
++                        {
++                            Assert.That(UnityEditor.EditorApplication.timeSinceStartup - start, Is.LessThan(240));
++                            await NTSD_ResourceLoader.Instance.ProcessFrame();
++                            long completed = fixture.Player.FormalAudioLoadCountForDiagnostics - startCount - fixture.Player.PendingFormalAudioLoadsForDiagnostics;
++                            if (completed >= nextSnapshot && midSnapshots < 16)
++                            {
++                                fixture.Snapshot("session" + session + "-preparing-" + completed);
++                                midSnapshots++;
++                                nextSnapshot = completed + 100;
++                            }
++                            await UniTask.Yield();
++                        }
++                        await preparation;
++                        fixture.Snapshot("session" + session + "-sealed");
++                        object semantics = fixture.VerifySealed(session);
++                        // Cumulative failure counters are reported separately, not compared as per-session state.
++                        string currentRows = Newtonsoft.Json.Linq.JObject.FromObject(semantics)["rows"].ToString(Formatting.None);
++                        if (session == 1) firstSemantic = currentRows;
++                        else Assert.That(currentRows, Is.EqualTo(firstSemantic));
++                        previousOwned = fixture.Owned();
++                        Assert.That(previousOwned.Any(x => previousIds.Contains(x.GetInstanceID())), Is.False, "New session must not retain old formal identity");
++                        previousIds = previousOwned.Select(x => x.GetInstanceID()).ToArray();
++                        SaveEnvelope("session" + session + "-sealed", new { semantics, ownedIds = previousIds, midSnapshots,
++                            elapsedWithObserverSeconds = UnityEditor.EditorApplication.timeSinceStartup - start,
++                            scope = "Actual public full prepare; observer allocation/time included; not CPU benchmark" });
++                        await fixture.Close("session" + session);
++                        Assert.That(previousOwned.All(x => x == null), Is.True);
++                        Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => previousIds.Contains(x.GetInstanceID())), Is.False);
++                    }
++                    fixture.Candidate.AssertInputsCurrent();
++                }
++                finally { await fixture.Finish("full"); }
++                SaveEnvelope("full-result", new { status = "FULL_CATALOG_AUDIO_ENVELOPE_MEASURED", sessions = 2,
++                    metadataEqual = true, exactRestoration = true, budgetStatus = "UNDECIDED: measurement is not product budget acceptance" });
++            });
++        }
++
++        [Test]
++        public void CatalogAudioEnvelopeRecoverExactQualificationDelta()
++        {
++            Assert.That(Application.isPlaying, Is.False);
++            Assert.That(NTSD_ResourceLoader.Instance.GetPendingRequestCount(), Is.Zero);
++            Assert.That(NTSD_ResourceLoader.Instance.GetQueuedTaskCount(), Is.Zero);
++            Assert.That(System.Diagnostics.Process.GetCurrentProcess().Id, Is.EqualTo(39108), "Original Editor process required for native ID proof");
++            const int expectedId = -1243288;
++            const string expectedKey = @"NTSD.AudioFile::data\015.wav";
++            var cache = (IDictionary)typeof(NTSD_ResourceLoader).GetField("cache", Private).GetValue(NTSD_ResourceLoader.Instance);
++            var before = SnapshotCache(cache);
++            var clips = Resources.FindObjectsOfTypeAll<AudioClip>();
++            var otherBefore = clips.Where(x => x.GetInstanceID() != expectedId).ToArray();
++            AudioClip target = clips.SingleOrDefault(x => x.GetInstanceID() == expectedId);
++            object capturedValue = cache.Contains(expectedKey) ? cache[expectedKey] : null;
++            Assert.That(cache.Keys.Cast<string>().All(x => x == expectedKey), Is.True, "Unexpected cache preserved");
++            if (target != null)
++            {
++                Assert.That(target.name, Is.EqualTo("015"));
++                Assert.That(target.samples, Is.EqualTo(7153));
++                Assert.That(target.channels, Is.EqualTo(1));
++                Assert.That(target.frequency, Is.EqualTo(44100));
++                if (capturedValue != null) Assert.That(ReferenceEquals(capturedValue, target), Is.True);
++                foreach (AudioSource voice in Resources.FindObjectsOfTypeAll<AudioSource>())
++                    Assert.That(voice.clip == target, Is.False);
++                foreach (AudioController controller in Resources.FindObjectsOfTypeAll<AudioController>())
++                    Assert.That((controller.AudioList ?? Array.Empty<AudioItem>()).Where(x => x != null)
++                        .SelectMany(x => x.clip ?? Array.Empty<AudioClip>()).Contains(target), Is.False);
++                foreach (NTSDSoundPlayer player in Resources.FindObjectsOfTypeAll<NTSDSoundPlayer>())
++                {
++                    Assert.That(player.BattleAudioPreparationInProgressForDiagnostics, Is.False);
++                    Assert.That(player.PendingFormalAudioLoadsForDiagnostics, Is.Zero);
++                    foreach (string ownedField in new[] { "ownedBattlePlaybackClips", "ownedFormalAudioSources" })
++                        Assert.That(EnvelopeField<List<AudioClip>>(player, ownedField).Contains(target), Is.False);
++                    foreach (string field in new[] { "preparedCues", "preparedFormalBattleCues" })
++                        foreach (object cue in EnvelopeField<IDictionary>(player, field).Values)
++                            foreach (string clipsField in new[] { "Clips", "BattlePlaybackClips" })
++                                Assert.That((EnvelopeField<AudioClip[]>(cue, clipsField) ?? Array.Empty<AudioClip>()).Contains(target), Is.False);
++                }
++                foreach (string key in cache.Keys)
++                    if (key != expectedKey)
++                        Assert.That(EnvelopeFixture.CacheClips(cache[key]).Contains(target), Is.False);
++                if (capturedValue != null)
++                {
++                    Assert.That(ReferenceEquals(cache[expectedKey], capturedValue), Is.True);
++                    Assert.That(NTSD_ResourceLoader.Instance.RemoveCache(expectedKey), Is.True);
++                }
++                UnityEngine.Object.DestroyImmediate(target);
++                Assert.That(target == null, Is.True);
++            }
++            else
++                Assert.That(capturedValue, Is.Null, "Missing native with unexpected cache mapping: retain");
++            Assert.That(otherBefore.All(x => x != null), Is.True);
++            Assert.That(Resources.FindObjectsOfTypeAll<AudioClip>().Any(x => x.GetInstanceID() == expectedId), Is.False);
++            var scene = UnityEngine.SceneManagement.SceneManager.GetSceneByPath("Assets/NTSD/Scene/NTSD_Menu.unity");
++            Assert.That(scene.isLoaded && !scene.isDirty && scene.rootCount == 8, Is.True);
++            SaveEnvelope("qualification-delta-recovery", new
++            {
++                expectedKey, expectedId, cacheMappingPresentBefore = capturedValue != null,
++                targetPresentBefore = clips.Any(x => ReferenceEquals(x, target)),
++                originalOtherClips = otherBefore.Select(x => new { id = x.GetInstanceID(), x.name, x.samples, x.channels, x.frequency }).ToArray(),
++                cacheEmptyAfter = cache.Count == 0, targetGone = true, sceneRestoredByFramework = true,
++                scope = "Exact task-owned failed-qualification native ID only. Domain reload may discard new mapping; not used as release proof. No other native cleanup."
++            });
++        }
++
++        [Test]
++        public void CatalogAudioEnvelopeUnknownManagerGuardPreservesObjects()
++        {
++            var singletonBefore = MoreMountains.Tools.MMSoundManager.Current;
++            var hosts = new[] { new GameObject("H10KnownGuard"), new GameObject("H10OtherKnownGuard"), new GameObject("H10UnknownGuard") };
++            foreach (var host in hosts) { host.hideFlags = HideFlags.HideAndDontSave; host.SetActive(false); }
++            try
++            {
++                var managers = hosts.Select(x => x.AddComponent<MoreMountains.Tools.MMSoundManager>()).ToArray();
++                var fixture = (EnvelopeFixture)System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(EnvelopeFixture));
++                typeof(EnvelopeFixture).GetField("beforeSoundManagers", Private).SetValue(fixture, managers.Take(2).ToArray());
++                typeof(EnvelopeFixture).GetField("beforeSceneObjects", Private).SetValue(fixture, hosts.Take(2).Select(x => x.GetInstanceID()).ToArray());
++                MethodInfo guard = typeof(EnvelopeFixture).GetMethod("RecordResolvedExistingSoundManager", Private);
++                Assert.That(Assert.Throws<TargetInvocationException>(() => guard.Invoke(fixture, new object[] { managers[2] })).InnerException,
++                    Is.InstanceOf<NUnit.Framework.AssertionException>());
++                Assert.That(hosts.All(x => x != null), Is.True, "Unknown object must not be destroyed");
++                guard.Invoke(fixture, new object[] { managers[0] });
++                Assert.That(Assert.Throws<TargetInvocationException>(() => guard.Invoke(fixture, new object[] { managers[1] })).InnerException,
++                    Is.InstanceOf<NUnit.Framework.AssertionException>());
++                Assert.That(hosts.All(x => x != null), Is.True);
++                Assert.That(ReferenceEquals(MoreMountains.Tools.MMSoundManager.Current, singletonBefore), Is.True);
++                SaveEnvelope("unknown-manager-guard", new { unknownPreserved = true, changedKnownRejected = true,
++                    originalAccepted = true, singletonUnchanged = true, scope = "No audio decode, isolated real-component ownership guard only" });
++            }
++            finally
++            {
++                foreach (var host in hosts) if (host != null) UnityEngine.Object.DestroyImmediate(host);
++            }
++        }
++
+     }
+ }
+ #endif

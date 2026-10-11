@@ -1,0 +1,16 @@
+{
+  "type": "run_tests",
+  "params": {
+    "mode": "EditMode",
+    "testNames": [
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralSubmission_PrepareCapacity_PrewarmsFrozenFrameStorage",
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.CentralOnly_CapturesBeforeMaterializingCommands",
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.RepeatedCameraSubmissionWithoutNewPublication_DoesNotRebuild",
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.ResetRuntime_DropsPendingWorldAndPreventsStaleMaterialization",
+      "NTSD.Animation.Rendering.Editor.BattleCentralLatestFrameMaterializationEditorTests.WorldSwitchAfterMaterialization_DoesNotSubmitPreviousWorldInSameUnityFrame",
+      "NTSD.Test.BattlePresentationDisplayMotionEditorTests.CapturedCommands_UseCategoryOffsets_WithoutChangingPublishedFrame",
+      "NTSD.Test.BattlePresentationDisplayMotionEditorTests.Lookup_RejectsGenerationRelationAndSkippedTick",
+      "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion"
+    ]
+  }
+}

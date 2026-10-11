@@ -1,0 +1,23 @@
+{
+  "status": "DIAGNOSTIC_ONLY_NOT_LIFECYCLE_ADMISSION",
+  "rows": [
+    {
+      "enabled": false,
+      "callbackDeliveredInEditMode": false,
+      "flagAfterDestroy": false,
+      "explicitlyDisposed": true,
+      "flagAfterExplicitCleanup": false,
+      "stagedResourcesAfterCleanup": 0
+    },
+    {
+      "enabled": true,
+      "callbackDeliveredInEditMode": false,
+      "flagAfterDestroy": true,
+      "explicitlyDisposed": true,
+      "flagAfterExplicitCleanup": false,
+      "stagedResourcesAfterCleanup": 0
+    }
+  ],
+  "loadedPublication": false,
+  "originalFailureRetained": true
+}

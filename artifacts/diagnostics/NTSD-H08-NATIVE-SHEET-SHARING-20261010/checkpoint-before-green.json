@@ -1,0 +1,11 @@
+{
+  "time": "2026-10-10T20:40:40.794944+08:00",
+  "status": "CODE_WRITTEN_COMPILE_PENDING",
+  "redJob": "58e689ae525a45c19f6cf8505f8135c4",
+  "red": "expected_missing_switch_failure",
+  "production": "three common helpers and pernative groups, defaultOFF",
+  "diagnostics": "coldswitch/groupworkerboundaries/all56grouping and Explicit fourmemorygroups written",
+  "atomicAgent": "01a125c8-4c8a-7722-974f-2412544fe8ca owns only atomic test file; wait compile-ready before refresh",
+  "memoryStarted": false,
+  "defaultPromotionAuthorized": false
+}

@@ -1,0 +1,28 @@
+{
+  "rows": [
+    {
+      "relative": "data/001.wav",
+      "sourceId": -1241050,
+      "outputId": -1241052,
+      "sourceAliveWhenDestroyRequested": true,
+      "sourceRetiredAfterFrame": true,
+      "outputAlive": true
+    },
+    {
+      "relative": "c/kim/w/a1.wav",
+      "sourceId": -1241182,
+      "outputId": -1241182,
+      "sourceAliveWhenDestroyRequested": true,
+      "sourceRetiredAfterFrame": false,
+      "outputAlive": true
+    }
+  ],
+  "aliveAtStage5Return": 2,
+  "allTrackedOwnedDestroyedAfterFrame": true,
+  "voiceBindingsCleared": true,
+  "coldReentryIssuedReleaseBeforeWait": true,
+  "newLoadBlockedUntilOldDestroy": true,
+  "coldReentryCancelledBeforeBuiltinLoads": true,
+  "globalCacheUnchanged": true,
+  "noAppOrBattleStarted": true
+}

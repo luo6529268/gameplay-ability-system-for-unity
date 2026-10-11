@@ -1,0 +1,33 @@
+> **2026-10-10 H07同因跨模块复核进展：局部诊断 NTSD-H07-NATIVE-ROUTING-COST-PROBE-001 VERIFIED（仅诊断），性能结论 INCONCLUSIVE。** 已沿Native输入路由、状态解析、动作写入、legacy/AI/InputState镜像及快照尾部检查。有效千人合成idle/walk/run共12窗、12语义例、384测量轮0B/各40轮checksum一致/容量1024无拒绝、原Menu clean8与2361保护稳定；首版400槽错误整组INVALID，不能用旧NUnit PASS冒称有效。减少状态解析未在三场景稳定获益，无新生产优化或派发。主Task NTSD-H07-AI-DECISION-WORK-REVIEW-20261010 仍 IN_PROGRESS / CAUSAL_CHAIN_REVIEW，完整方案尚未形成，不称H07/12ms优化完成。新报告 artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/native-routing-cost-probe/REPORT.md。下方状态均为此前时点，最新修正优先。
+
+> **2026-10-10 用户更正：按同一问题的因果链确定优化范围。** 用户明确：“如果检验过程，发现其他范围会影响到同一种情况，那就应该优化，而不是跳过啊”。NTSD-H07-AI-DECISION-WORK-REVIEW-20261010恢复IN_PROGRESS / CAUSAL_CHAIN_REVIEW。原H07角色输入耗时为目标；其它模块只要直接导致/放大同一耗时或阻断该优化，应纳入同一方案，不能仅因目录、旧写域或历史Q06标签跳过。调查可沿直接相关方法展开；实际修改仍须形成完整方案、声明准确路径与验证后交执行会话。下方窄域NO_HANDOFF及“后继不展开Q06”是此前时点，不再构成相关因果链分析的绝对禁令。历史失败/暂缓不抹去、旧候选不自动重跑，完整方案后再派发约定保持。精确决定见docs/ai/OPTIMIZATION-REVIEW-20261009/DECISIONS.md最新更正。
+
+## 2026-10-10 人类范围更正：同一输入问题的关联模块必须纳入
+
+用户原文：“如果检验过程，发现其他范围会影响到同一种情况，那就应该优化，而不是跳过啊”。这修正了此前将OPTIMIZATION_PLAN_ONLY等同于固定文件白名单的过窄解释。
+
+1. 原目标保持H07角色输入/AI输入阶段耗时；以真实调用、数据依赖和测量关系确定调查边界。直接导致、放大同一耗时，或直接阻断该改进的其它模块，属于本问题应查的范围。
+2. 发现关联先追到具体操作、读写方/可见边界；若证据支持优化，就纳入同一完整方案，明确如何减少工作以及为什么不改变规则。不能仅以“不在之前两/五文件中”“是另一个模块”“带Q06历史编号”为理由跳过。直接相关Q06方法可按本次新授权具名窄读；不将本次授权追溯成之前误读已获授权，不整体展开无关Q06。
+3. 调查范围可以跨模块，实施仍为最小充分改动。原任务的文件白名单是一次候选执行边界，不能反过来限制后续根因调查；完整方案应重新准确列明必要文件，不能让实施会话猜范围。
+4. 已暂停/无收益/失败候选保留真实状态，不自动恢复旧实验。若新证据证明其中具体操作是同一问题的因果环节，应写清新证据和恢复理由并纳入评审，不能机械忽略，也不能把旧方案原样重跑当新优化。
+5. 与本次输入问题无关的顺手优化继续不做；不恢复34项队列或旧Goal。战斗规则/顺序、33ms、输入双RNG/checksum、publication只读、容量与有序关闭等正确性合同不变。纯移计时范围、滤GC或降低验收标准不算优化。
+6. 本讨论会话继续调查和整合；形成完整可实施方案后才发送既有“处理优化方案”会话。此次更正本身没有派发实施任务、恢复监测或修改生产代码。
+
+### 已核实的直接关联入口
+
+Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs:82-198 的ProcessNativeSampledState直接串接输入重映射/组合状态处理、CharacterActionWriter的combo/three-button/direction/builtins、legacy投影、AI canonical同步和InputState同步。这是同一角色输入流程的后半段，虽分散到不同模块，不能仅按文件范围排除。该调用链证明关联，不单独证明哪段存在冗余或可节省多少；本轮没有新性能测量或收益结论。
+
+下一复核按这条实际链补齐数据读写和重复工作判断，复用既有细分数据；不因前面窄域未找到候选而把整个H07调查判为结束。
+
+# NTSD-H07-AI-DECISION-WORK-REVIEW-20261010
+
+状态：SCOPED_SOURCE_REVIEW_COMPLETE / NO_JUSTIFIED_IMPLEMENTATION_HANDOFF。
+父项：H07-INPUT / 原H-07；优化仍OPEN，不新增父项或包数。
+用户授权：“那你先继续处理，等有完整的优化方案后，再给那个会话处理”。
+执行者：当前讨论会话；执行会话未收到新任务。
+范围：只读AI决策实际调用链、输入Store/Writer、RNG游标与已有成本；文档保存及恢复入口追加。无脚本改动，Change不适用。
+验收：核实真实多余工作/可见性/既有候选区别/成本证据；满足才输出准确实施指令，不满足给出带出处的缺口，不包装READY。
+结果：当前未找到同时具备正确性闭合与成本根据的新方案。详artifacts/diagnostics/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/REPORT.md。
+Operation：docs/ai/FILE-OPERATIONS/NTSD-H07-AI-DECISION-WORK-REVIEW-20261010/RECORD.md。7份真实dirty备份及源指纹保留。
+验证：本次只读源码和旧JSON，无新增编译/测试/运行/收益证据；文档后缀保留/源指纹/差异检查见audit.json。
+限制：相邻Q06片段误读已披露，后继不展开/不据此扩权。现有暂缓/失败/默认路径和最终门保持。不会后台继续测量或自动派发。

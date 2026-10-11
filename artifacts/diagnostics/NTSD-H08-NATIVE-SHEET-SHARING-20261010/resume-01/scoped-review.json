@@ -1,0 +1,28 @@
+{
+  "scopedDiffExit": 0,
+  "scripts": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "changed": false,
+      "sha256": "ce7acf52f9f7ed1fa37f2f4bb5bacfee674a974d7ba7bef02191418dea2c5a09"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/H08ResidentVisualMemoryDiagnostics.cs",
+      "changed": true,
+      "sha256": "bf97c82c9b97075f4bb178c565f5dc419d19d252e94faf2f7338713174df44be"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "changed": true,
+      "sha256": "3d0a48bade8a56e8231ab4bba397f10491c021b1695b550a4f5af98c2b0a0fd2"
+    }
+  ],
+  "originalEvidenceCount": 55,
+  "originalEvidenceChanged": [
+    "artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/REPORT.md"
+  ],
+  "originalReportBodyPreserved": true,
+  "memoryStartFiles": 1,
+  "memoryResultFiles": 1,
+  "auditHelperNote": "Initial closure helper also used mixed-slash dictionary key; corrected normalization in audit only, no test or memory repeat."
+}

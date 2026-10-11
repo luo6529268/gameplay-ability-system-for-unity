@@ -1,0 +1,29 @@
+{
+  "actualStreamingGetDataFailure": true,
+  "rows": [
+    {
+      "laterClip": false,
+      "error": "Cannot prepare battle PCM: H10Failure_c50e133c67244f8d922806891a030b4c_stream",
+      "unchangedNativeIds": [
+        -1221162,
+        -1221160,
+        -1221158,
+        -1221156
+      ],
+      "ownedCount": 1
+    },
+    {
+      "laterClip": true,
+      "error": "Cannot prepare battle PCM: H10Failure_c50e133c67244f8d922806891a030b4c_stream",
+      "unchangedNativeIds": [
+        -1221162,
+        -1221160,
+        -1221158,
+        -1221156
+      ],
+      "ownedCount": 1
+    }
+  ],
+  "laterBlockReadFailure": "source-proof only; valid readable clip does not expose deterministic later-block failure",
+  "targetSetDataFailure": "source-proof only; no production fault injection"
+}

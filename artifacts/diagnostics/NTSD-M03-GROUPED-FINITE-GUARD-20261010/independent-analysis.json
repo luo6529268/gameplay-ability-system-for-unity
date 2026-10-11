@@ -1,0 +1,103 @@
+{
+  "status": "COMPLETED_NO_ADMISSION_DEFAULT_OFF",
+  "rows": [
+    {
+      "quads": 2000,
+      "enabled": false,
+      "order": 0,
+      "meanMs": 2.44105,
+      "p95Ms": 2.5703,
+      "p99Ms": 2.6774,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 2000,
+      "enabled": true,
+      "order": 1,
+      "meanMs": 2.197246875,
+      "p95Ms": 2.3776,
+      "p99Ms": 2.5125,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 2000,
+      "enabled": true,
+      "order": 2,
+      "meanMs": 2.433021875,
+      "p95Ms": 3.5605,
+      "p99Ms": 3.5987,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 2000,
+      "enabled": false,
+      "order": 3,
+      "meanMs": 2.401609375,
+      "p95Ms": 2.504,
+      "p99Ms": 2.8655,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 4097,
+      "enabled": false,
+      "order": 0,
+      "meanMs": 5.22790625,
+      "p95Ms": 7.0562,
+      "p99Ms": 7.5456,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 4097,
+      "enabled": true,
+      "order": 1,
+      "meanMs": 4.770296875,
+      "p95Ms": 5.5702,
+      "p99Ms": 5.956,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 4097,
+      "enabled": true,
+      "order": 2,
+      "meanMs": 4.540009375,
+      "p95Ms": 5.2092,
+      "p99Ms": 6.5456,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    },
+    {
+      "quads": 4097,
+      "enabled": false,
+      "order": 3,
+      "meanMs": 5.063975,
+      "p95Ms": 7.3515,
+      "p99Ms": 7.368,
+      "recordMatches": true,
+      "payloadPublicationCapacityStable": true
+    }
+  ],
+  "gates": [
+    {
+      "quads": 2000,
+      "meanGate": false,
+      "p95Gate": false,
+      "p99Gate": false
+    },
+    {
+      "quads": 4097,
+      "meanGate": true,
+      "p95Gate": true,
+      "p99Gate": true
+    }
+  ],
+  "scopeCount": 256,
+  "allScopeValid": true,
+  "allocationEvents": 0,
+  "prePostCalibrationPass": true
+}

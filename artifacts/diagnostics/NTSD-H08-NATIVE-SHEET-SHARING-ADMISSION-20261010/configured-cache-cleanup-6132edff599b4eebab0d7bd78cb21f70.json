@@ -1,0 +1,6 @@
+{
+  "test": "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.CancelDuringInputCapture_DoesNotPublishOrStoreLateCandidate",
+  "baselineEntries": 0,
+  "finalEntries": 0,
+  "restored": true
+}

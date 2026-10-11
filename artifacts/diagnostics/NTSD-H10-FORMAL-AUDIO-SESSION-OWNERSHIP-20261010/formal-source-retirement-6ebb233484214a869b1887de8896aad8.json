@@ -1,0 +1,39 @@
+{
+  "test": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+  "evidence": [
+    {
+      "relative": "c/jira/w/e3.wav",
+      "sourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\jira\\w\\e3.wav",
+      "sourceInstanceId": -1228230,
+      "sourceSamples": 329244,
+      "sourceChannels": 1,
+      "sourceFrequency": 96000,
+      "sourceHash": "4A827D7BBA9754A1BD48E0D156BB712ADD8F8C08AE172F65C493A86BED6C09A3",
+      "playbackInstanceId": -1228232,
+      "playbackSamples": 329244,
+      "playbackChannels": 2,
+      "playbackFrequency": 96000,
+      "playbackHash": "D1283BBAD00B03C764CD674986F948A3096309813EA45253CBF655D1524DFDBF",
+      "generation": 0,
+      "formalIdentity": "c\\jira\\w\\e3.wav",
+      "sourceRetired": true,
+      "cueSourceCleared": true,
+      "playbackReleased": true,
+      "pendingFormalLoads": 0,
+      "ownedFormalSources": 0,
+      "formalAudioLoadCount": 1,
+      "staleFormalReleases": 0,
+      "shutdownCompleted": true,
+      "preparationInProgress": false,
+      "globalCacheUnchanged": true,
+      "scope": "One real formal mono WAV; production load, conversion, stage1/stage5 shutdown, source/output ownership only. Cold allocation is allowed; no public whole-catalog prewarm, cost group, Player or device claim."
+    },
+    {
+      "failure": null,
+      "globalCacheUnchanged": true,
+      "configRestored": true,
+      "outputKind": "CreateNew GUID JSON"
+    }
+  ],
+  "cacheBefore": []
+}

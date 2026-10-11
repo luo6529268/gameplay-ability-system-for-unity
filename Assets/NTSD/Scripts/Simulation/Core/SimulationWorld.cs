@@ -1353,6 +1353,28 @@ namespace NTSD.Simulation
             battleEcsCharacterFrameTickPass.SetMode(mode);
         }
 
+        public bool NativeOwnedCompatibilitySkipEnabledForDiagnostics =>
+            battleEcsCharacterInputPass.NativeOwnedCompatibilitySkipEnabled;
+
+        public long NativeOwnedCompatibilityFastSkipCountForDiagnostics =>
+            battleEcsCharacterInputPass.NativeOwnedCompatibilityFastSkipCount;
+
+        public void ConfigureNativeOwnedCompatibilitySkipForDiagnostics(bool enabled)
+        {
+            if (_ticking || CurrentTickIndex != 0)
+                throw new System.InvalidOperationException(
+                    "Native-owned compatibility skip can only change at a reset boundary.");
+            battleEcsCharacterInputPass.NativeOwnedCompatibilitySkipEnabled = enabled;
+        }
+
+        internal void DisableNativeOwnedCompatibilitySkipForDiagnostics()
+        {
+            if (_ticking)
+                throw new System.InvalidOperationException(
+                    "Native-owned compatibility skip cannot be restored during a tick.");
+            battleEcsCharacterInputPass.NativeOwnedCompatibilitySkipEnabled = false;
+        }
+
         public void ConfigureBattleEcsCharacterInputPassForDiagnostics(
             BattleEcsCharacterInputPassMode mode)
         {

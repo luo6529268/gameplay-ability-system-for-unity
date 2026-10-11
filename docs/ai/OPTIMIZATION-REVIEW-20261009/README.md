@@ -1,3 +1,22 @@
+## 2026-10-10 最新阶段与排程（NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010）
+
+2026-10-10 用户更正：Android真机/GPU认证、IL2CPP/ARM64属于后期；AB部署、Android构建和正式发布随平台交付后置。当前按战斗CPU、CPU侧渲染工作和驻留内存问题排序。原34项ID及历史12高/14中/8低保留，原风险重要性不再冒充当前执行顺序。
+当前P1：M-03 → H-08 → H-10；P2：M-12 → M-05 → M-01 → M-02 → M-06。此顺序是评审/投入顺序，不是收益排名，也不代表每项已确认必须改代码。
+H07输入约12ms尚未解决、当前无新有据方案而暂缓；H07-LATE已评审暂无必要优化。H06既有成果保留，不续Role精确配对；producer暂缓、95和旧候选不自动开启。只处理原方案，不恢复旧Goal或34项自动队列。
+本轮已先评审M03历史证据和当前生产入口。相同显示采样复用已存在；剩余先看命令物化与顶点准备是否有可消除重复，不能因GPU证书未完成就追加设备任务。脚本/资源/设置未改，未跑Unity或新测试/测量，未发送执行指令；监测不恢复。
+
+优先级总表和34单项卡已同步，原证据/暂缓/失败保持。
+
+完整排程：Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md；唯一进度：Assets/NTSD/Docs/battle-optimization-progress-tracker.md；本轮报告：artifacts/diagnostics/NTSD-OPTIMIZATION-CURRENT-STAGE-PRIORITIES-20261010/REPORT.md。
+
+以下均保留此前时点；旧排程与当前状态冲突时以本段及当前总表为准。
+
+---
+
+> **2026-10-10 当前排序：[优先级总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)优先于编号顺序。** 首项[H07-INPUT角色输入与AI输入计算](H07-INPUT.md)仅进入实现策略讨论；H-01本地AB后移至Android阶段。已完成/暂缓/待决策/伴随验收分别登记，额外方向不跟进。下方旧H-01或Role“下一项”保留历史，不作为当前排程；未授权实施/运行/派发任务。[决定](DECISIONS.md) · [进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)。
+
+> **2026-10-10 最新执行边界：[OPTIMIZATION_PLAN_ONLY](DECISIONS.md)。** 用户要求所有优化按既有方案处理，额外发现的方向一律不跟进。当前第一项为[H-01内容部署](../../../Assets/NTSD/Docs/android-mobile-readiness/h-01-content-deployment.md)，仅策略讨论/待确认；不继续H06-ROLE-EXACT诊断，不发送执行指令或恢复监测。下方旧“下一项”均为历史，当前状态以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准。
+
 > **2026-10-10 最新决定：** producer快照复用[用户暂缓/生产OFF](IMPLEMENTATION-RECORDS/H07-PRODUCER-SNAPSHOT-REUSE.md)，下一项[H06-ROLE-EXACT](H06-ROLE-EXACT.md)仅静态分析/方案；Role限定准入成果保持。当前排程以[唯一进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)为准，下方旧状态按日期保留；不恢复旧自动目标。
 
 > **2026-10-09 独立实施说明已补充：** [代码前后对照记录与固定格式](IMPLEMENTATION-RECORDS/README.md) · [优化点 A：FindEffect 临时分配修复](IMPLEMENTATION-RECORDS/H06-FIND-EFFECT-ALLOCATION.md)。记录已完成的具体改法及验证范围；当前排程仍以唯一进度为准，不恢复执行。
@@ -13,7 +32,7 @@
 1. 先读[当前权威](../CURRENT-AUTHORITY.md)及[AGENTS](../../../AGENTS.md)。
 2. [总清单](../../../Assets/NTSD/Docs/android-mobile-readiness-priority-risk-register.md)文首是全部34父项及6个子方案的导航（2026-10-10增加H06-ROLE-EXACT方案），不能以数量代表收益。
 3. [进度](../../../Assets/NTSD/Docs/battle-optimization-progress-tracker.md)文首是当前/完成范围/下一项。下面批次原文为历史证据。
-4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。新热点作为父项子方案，不伪装成新增父项。
+4. 每个优化点只用原独立方案，文首增加本轮评审卡；原设计/验收/证据不删除。2026-10-10用户新决定取代旧“新热点作为父项子方案”约定：额外发现的优化方向一律不新增、不调查、不实施；既有依赖仅说明，不自动启动。
 5. [依赖](DEPENDENCIES.md)统一描述跨项前置；方案卡只摘要。先满足需要的前置阶段，不要求前置父项全关闭。
 6. [待决策](DECISIONS.md)记录会改变实施边界的选择。[新会话提示词](NEXT-SESSION-PROMPT.md)已按D1=A定稿，供用户发到新会话启动具名任务。
 7. Task/Change Record/FILE-OPERATIONS继续沿用，方案和进度不替代实施审计。

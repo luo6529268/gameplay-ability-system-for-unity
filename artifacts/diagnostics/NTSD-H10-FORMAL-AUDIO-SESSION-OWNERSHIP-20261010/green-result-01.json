@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "e2537d1a90b145a58b0ed15799a6451b",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1791646904032,
+      "finished_unix_ms": 1791646913068,
+      "last_update_unix_ms": 1791646913068,
+      "progress": {
+        "completed": 1,
+        "total": 10703,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1791646911796,
+        "last_finished_test_full_name": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+        "last_finished_unix_ms": 1791646912370,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.4677311,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+            "fullName": "NTSD.Test.Editor.H10ResidentClosureDiagnostics.FormalAudioSourceRetirement_UsesProductionLoadConversionAndShutdown",
+            "state": "Passed",
+            "durationSeconds": 0.5696716,
+            "message": null,
+            "stackTrace": null,
+            "output": "artifacts/diagnostics/NTSD-H10-FORMAL-AUDIO-SESSION-OWNERSHIP-20261010\\formal-source-retirement-6ebb233484214a869b1887de8896aad8.json\r\n"
+          }
+        ]
+      }
+    }
+  }
+}

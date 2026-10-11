@@ -1,3 +1,25 @@
+> **2026-10-10 H08正常默认接入完成：SCOPED_DEFAULT_ADMISSION_VERIFIED。** Task NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010 / Change NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-001 VERIFIED仅限定默认准入。生产仅新manager初始值true；实际public配置入口验证默认共享→缓存重入→新owner显式OFF→新owner默认ON，几何/目录/像素一致；原Editor2/2+9/9通过。502条owned资源记录已释放、缓存/配置/单例恢复，Menu clean8。旧唯一四组内存与未受影响像素证据复用，不重跑或外推整局；H08父项/H07/Android仍OPEN。下一只审阅本报告，不自动H10/Goal/队列。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-ADMISSION-20261010/REPORT.md；下方DEFAULT_OFF等为此前阶段历史。
+
+> **2026-10-10 H08同Task恢复完成：SCOPED_MEMORY_GAIN_VERIFIED / 默认OFF。** NTSD-H08-NATIVE-SHEET-SHARING-20261010 / Change NTSD-H08-NATIVE-SHEET-SHARING-001 VERIFIED仅限定候选。生产代码冻结；两个Editor夹具修复后8/8，loaded publication OFF/ON实际Unity销毁回调释放40/39 owned对象、borrowed保留；原唯一四组source-worker内存1/1，纹理5→1/2→1/2→1、对象内存降80%/50%/50%，唯一负控1→1/5328B不变，像素/几何与本次精确资源释放全部通过。旧native残留UNKNOWN未清理，非整局/峰值收益；旧176.232MiB仍估计。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/resume-01/REPORT.md。下一仅审查限定接线，不自动推广/H10/Goal/队列；H08父项、H07及Android门保持。下方BLOCKED为修复前历史。
+
+> **2026-10-10 H08 源sheet共享候选：BLOCKED_VALIDATION_HARNESS / FINITE_TASK_STOPPED / 默认OFF。** Task NTSD-H08-NATIVE-SHEET-SHARING-20261010；Change NTSD-H08-NATIVE-SHEET-SHARING-001 BLOCKED。原Editor首组8/8通过、补充1/3通过2失败；一次空OFF/ON诊断确认当前EditMode夹具未触达OnDestroy，显式清理不能替代已加载publication销毁验收；另有旧Temp缺图夹具前置缺失。共享算法缺陷尚未证实，完整生命周期/零残留门未过，四组内存比较NOT_STARTED，无收益或准入结论。通过的像素/ownership/取消/lease子证据及失败原件保留，不重测挑PASS。报告 artifacts/diagnostics/NTSD-H08-NATIVE-SHEET-SHARING-20261010/REPORT.md。下一仅审查同任务验证入口/可追溯清理；不自动推广/转H10/恢复Goal或队列，H08父项及H07/Android等最终门保持。下方为此前时点。
+
+[本候选代码前后、实际验证与阻塞说明](../../../../docs/ai/OPTIMIZATION-REVIEW-20261009/IMPLEMENTATION-RECORDS/H08-NATIVE-SHEET-SHARING.md)
+
+> **2026-10-10 NTSD-H08-NATIVE-SHEET-SHARING-20261010 IN_PROGRESS / NTSD-H08-NATIVE-SHEET-SHARING-001 PLANNED.** 三脚本native同publication源sheet共享候选默认OFF；先真实正确性/取消/lease，再唯一有界4组资源内存比较。无资源修改/ATLAS迁移/默认推广/旧Goal恢复。
+
+## 2026-10-10 当前阶段更正：H-08
+
+| 当前阶段 | 当前次序 | 原风险等级 |
+|---|---|---|
+| P1／当前优先评审 | 2 | 高 |
+
+第2项：先核当前纹理、图集、解码暂存的实际驻留与生命周期；预印/ATLAS资源实施另有准确范围，不等待AB整体迁移。
+
+本表覆盖下方旧评审卡的建议优先级/排程，技术证据与原验收范围保留。当前排序不证明收益、不自动授权跨域实施。[完整34项当前排程](../android-mobile-readiness-priority-risk-register.md) · [唯一进度](../battle-optimization-progress-tracker.md)。
+
+---
+
 <!-- OPTIMIZATION-REVIEW-20261009 -->
 # H-08 当前评审卡（2026-10-09）
 
